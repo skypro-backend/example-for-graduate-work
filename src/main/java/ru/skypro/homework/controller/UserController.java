@@ -23,11 +23,11 @@ public class UserController {
     public ResponseEntity<Collection<User>> getUsers(){
         return ResponseEntity.ok(null);
     }
-    @PostMapping("set_password")
+    @PostMapping("/set_password")
     public ResponseEntity<NewPassword>setPassword(@RequestBody NewPassword newPassword) {
         return ResponseEntity.ok(newPassword);
     }
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User>getUser(@PathVariable("id") int id){
         return ResponseEntity.ok(new User());
     }
