@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class AdsComment {
+public class AdsCommentDto {
     private int author;
     private LocalDateTime createdAt;
     private int pk;
