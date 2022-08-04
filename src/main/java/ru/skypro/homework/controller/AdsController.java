@@ -4,8 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
 
-import java.util.Collection;
-
 @RestController
 @RequestMapping("/ads")
 @CrossOrigin(value = "http://localhost:3000")
@@ -17,8 +15,8 @@ public class AdsController {
     }
 
     @PostMapping
-    public ResponseEntity<Ads> addAds(@RequestBody CreateAds createAds) {
-        return ResponseEntity.ok(new Ads());
+    public ResponseEntity<AdsDto> addAds(@RequestBody CreateAds createAds) {
+        return ResponseEntity.ok(new AdsDto());
     }
 
     @GetMapping("/me")
@@ -36,33 +34,33 @@ public class AdsController {
     }
 
     @PostMapping("/{ad_pk}/comment")
-    public ResponseEntity<AdsComment> addAdsComment(@PathVariable("ad_pk") String adPk, @RequestBody AdsComment adsComment) {
-        return ResponseEntity.ok(adsComment);
+    public ResponseEntity<AdsCommentDto> addAdsComment(@PathVariable("ad_pk") String adPk, @RequestBody AdsCommentDto adsCommentDto) {
+        return ResponseEntity.ok(adsCommentDto);
     }
 
     @DeleteMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsComment> deleteAdsComment(@PathVariable("ad_pk") String adPk,
-                                                       @PathVariable int id) {
+    public ResponseEntity<AdsCommentDto> deleteAdsComment(@PathVariable("ad_pk") String adPk,
+                                                          @PathVariable int id) {
         return ResponseEntity.ok().build();
     }
 
 
     @GetMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsComment> getAdsComment(@PathVariable("ad_pk") String adPk,
-                                                    @PathVariable int id) {
-        return ResponseEntity.ok(new AdsComment());
+    public ResponseEntity<AdsCommentDto> getAdsComment(@PathVariable("ad_pk") String adPk,
+                                                       @PathVariable int id) {
+        return ResponseEntity.ok(new AdsCommentDto());
     }
 
 
     @PatchMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsComment> updateAdsComment(@PathVariable("ad_pk") String adPk,
-                                                       @PathVariable int id,
-                                                       @RequestBody AdsComment adsComment) {
-        return ResponseEntity.ok(adsComment);
+    public ResponseEntity<AdsCommentDto> updateAdsComment(@PathVariable("ad_pk") String adPk,
+                                                          @PathVariable int id,
+                                                          @RequestBody AdsCommentDto adsCommentDto) {
+        return ResponseEntity.ok(adsCommentDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Ads> removeAds(@PathVariable int id) {
+    public ResponseEntity<AdsDto> removeAds(@PathVariable int id) {
         return ResponseEntity.ok().build();
     }
 
@@ -74,7 +72,7 @@ public class AdsController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Ads> updateAds(@PathVariable int id, @RequestBody Ads ads) {
-        return ResponseEntity.ok(ads);
+    public ResponseEntity<AdsDto> updateAds(@PathVariable int id, @RequestBody AdsDto adsDto) {
+        return ResponseEntity.ok(adsDto);
     }
 }
