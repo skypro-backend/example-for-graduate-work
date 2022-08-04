@@ -14,6 +14,7 @@ import java.util.List;
 public interface AdsMapper {
     AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
+
     @Mapping(source = "ads.description", target = "description")
     AdsDto modelToDto(Ads ads);
 

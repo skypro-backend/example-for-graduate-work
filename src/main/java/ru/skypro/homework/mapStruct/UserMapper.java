@@ -14,6 +14,7 @@ import java.util.List;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
+
     @Mapping(source = "user.role", target = "role")
     @Mapping(source = "user.userName", target = "userName")
     @Mapping(source = "user.password", target = "password")
