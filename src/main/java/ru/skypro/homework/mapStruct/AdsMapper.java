@@ -1,20 +1,32 @@
 package ru.skypro.homework.mapStruct;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
+import ru.skypro.homework.dto.AdsCommentDto;
 import ru.skypro.homework.dto.AdsDto;
+import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.entity.Ads;
+import ru.skypro.homework.entity.AdsComment;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface AdsMapper {
-    AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
+    AdsDto adsToAdsDto(Ads ads);
 
-    @Mapping(source = "ads.description", target = "description")
-    AdsDto modelToDto(Ads ads);
+    List<AdsDto> adsToAdsDto(List<Ads> ads);
 
-    List<AdsDto> modelsToDTOs(List<Ads> adsList);
+    Ads adsDtoToAds(AdsDto adsDto);
+
+    List<Ads> adsDtoToAds(List<AdsDto> adsDto);
+
+    Ads createAdsToAds(CreateAds createAds);
+
+    AdsCommentDto adsCommentToAdsCommentDto(AdsComment adsComment);
+
+    List<AdsCommentDto> adsCommentToAdsCommentDto(List<AdsComment> adsComment);
+
+    AdsComment adsCommentDtoToAdsComment(AdsCommentDto adsCommentDto);
+
+    List<AdsComment> adsCommentDtoToAdsComment(List<AdsCommentDto> adsCommentDto);
 }

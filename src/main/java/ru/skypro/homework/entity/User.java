@@ -3,15 +3,13 @@ package ru.skypro.homework.entity;
 import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity(name = "users")
 public class User {
     @Id
+    @GeneratedValue
     private int id;
     private String email;
     private String firstName;
