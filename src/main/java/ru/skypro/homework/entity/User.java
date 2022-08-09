@@ -9,8 +9,8 @@ import javax.persistence.*;
 @Entity(name = "users")
 public class User {
     @Id
-    @GeneratedValue
-    private int id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer id;
     private String email;
     private String firstName;
     private String lastName;

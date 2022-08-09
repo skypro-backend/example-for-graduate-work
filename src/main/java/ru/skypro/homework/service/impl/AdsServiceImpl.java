@@ -81,22 +81,22 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdsCommentDto deleteAdsComment(int pk, int id) {
-        AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndAuthor(pk, id);
+        AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndAuthor(pk, id).orElseThrow(NoSuchElementException::new);
         adsCommentRepository.deleteById(adsComment.getId());
         return mapper.adsCommentToAdsCommentDto(adsComment);
     }
 
     @Override
     public AdsCommentDto getAdsComment(int pk, int id) {
-        AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndAuthor(pk, id);
+        AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndAuthor(pk, id).orElseThrow(NoSuchElementException::new);
         return mapper.adsCommentToAdsCommentDto(adsComment);
     }
 
     @Override
     public AdsCommentDto updateAdsComment(int pk, int id, AdsCommentDto adsCommentDto) {
-        AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndAuthor(pk, id);
-        adsComment.setAuthor(adsCommentDto.getAuthor());
-        adsComment.setPk(adsCommentDto.getPk());
+        AdsComment adsComment = adsCommentRepository.findAdsCommentByPkAndAuthor(pk, id).orElseThrow(NoSuchElementException::new);
+        adsComment.setAuthor(userRepository.findById(id).orElseThrow(NoSuchElementException::new));
+        adsComment.setPk(adsCommentRepository.findById(pk).orElseThrow(NoSuchElementException::new).getPk());
         adsComment.setText(adsCommentDto.getText());
         adsComment.setCreatedAt(adsCommentDto.getCreatedAt());
         adsCommentRepository.save(adsComment);
@@ -113,7 +113,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public FullAds getAds(int id) {
         Ads ads = adsRepository.findById(id).orElseThrow(NoSuchElementException::new);
-        User user = userRepository.findById(ads.getAuthor()).orElseThrow(NoSuchElementException::new);
+        User user = userRepository.findById(ads.getAuthor().getId()).orElseThrow(NoSuchElementException::new);
         FullAds fullAds = new FullAds();
         fullAds.setAuthorFirstName(user.getFirstName());
         fullAds.setAuthorLastName(user.getLastName());
