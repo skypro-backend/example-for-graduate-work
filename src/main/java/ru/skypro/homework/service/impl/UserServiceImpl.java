@@ -44,11 +44,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto userDto) {
-        User user = mapper.userDtoToUser(userDto);
-        if (userRepository.findById(userDto.getId()).isPresent()) {
-            userRepository.save(user);
-        }
-        return null;
+        User user = userRepository.findById(userDto.getId()).orElseThrow(NoSuchElementException::new);
+        return mapper.userToUserDto(user);
     }
 
     @Override
