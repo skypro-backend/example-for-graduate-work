@@ -1,161 +1,104 @@
 package ru.skypro.homework.controller;
 
-import org.springframework.http.HttpStatus;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.CommentService;
+/**
+ * Контроллер обработки запросов по объявлениям и комментариям, размещенным на сайте.
+ */
 
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
-@CrossOrigin(value = "http://localhost:3000")
 public class AdsController {
-    private final AdsService adsService;
 
-    public AdsController(AdsService adsService) {
+    private final AdsService adsService;
+    private final CommentService commentService;
+
+    public AdsController(AdsService adsService, CommentService commentService) {
         this.adsService = adsService;
+        this.commentService = commentService;
     }
+
+
 
     @GetMapping
     public ResponseEntity<ResponseWrapperAds> getAllAds() {
-        ResponseWrapperAds allAds = adsService.getAllAds();
-        if (allAds.getCount() == 0) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(allAds);
+        return ResponseEntity.ok(adsService.getAllAds());
     }
+
 
     @PostMapping
-    public ResponseEntity<AdsDto> addAds(@RequestBody CreateAds createAds) {
-        if (createAds == null) {
-            return ResponseEntity.notFound().build();
-        }
-        AdsDto adsDto = adsService.addAds(createAds);
-        if (adsDto == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        return ResponseEntity.ok(adsDto);
+    public ResponseEntity<AdsDto> addAds(@RequestBody CreateAds ads) {
+        return ResponseEntity.ok(adsService.createAds(ads));
     }
+
 
     @GetMapping("/me")
-    public ResponseEntity<ResponseWrapperAds> getAdsMe(@RequestParam(value = "authenticated", required = false) Boolean authenticated,
-                                                       @RequestParam(value = "authorities[0].authority", required = false) String authorities0Authority,
-                                                       @RequestParam(value = "credentials", required = false) Object credentials,
-                                                       @RequestParam(value = "details", required = false) Object details,
-                                                       @RequestParam(value = "principal", required = false) Object principal) {
-        ResponseWrapperAds Ads = adsService.getAdsMe(authenticated, authorities0Authority, credentials, details, principal);
-        if (Ads.getCount() == 0) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(Ads);
+    public ResponseEntity<ResponseWrapperAds> getAdsMe() {
+        return ResponseEntity.ok(new ResponseWrapperAds());
     }
 
-    @GetMapping("/{ad_pk}/comment")
-    public ResponseEntity<ResponseWrapperAdsComment> getAdsComments(@PathVariable("ad_pk") String adPk) {
-        int pk = Integer.parseInt(adPk);
-        if (pk < 0) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        ResponseWrapperAdsComment adsComment = adsService.getAdsComments(pk);
-        if (adsComment.getCount() == 0) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(adsComment);
+
+    @GetMapping(params = {"search"})
+    public ResponseEntity<ResponseWrapperAds> findAds(@RequestParam(required = false) String search) {
+        return ResponseEntity.ok(adsService.findAds(search));
     }
 
-    @PostMapping("/{ad_pk}/comment")
-    public ResponseEntity<AdsCommentDto> addAdsComment(@PathVariable("ad_pk") String adPk, @RequestBody AdsCommentDto adsCommentDto) {
-        int pk = Integer.parseInt(adPk);
-        if (pk < 0 || adsCommentDto == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        AdsCommentDto adsComment = adsService.addAdsComment(pk, adsCommentDto);
-        if (adsComment == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        return ResponseEntity.ok(adsComment);
-    }
 
-    @DeleteMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity deleteAdsComment(@PathVariable("ad_pk") String adPk,
-                                           @PathVariable int id) {
-        int pk = Integer.parseInt(adPk);
-        if (pk < 0 || id < 0) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        AdsCommentDto adsCommentDto = adsService.deleteAdsComment(pk, id);
-        if (adsCommentDto == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> removeAds(@PathVariable int id) {
+        adsService.removeAds(id);
         return ResponseEntity.ok().build();
     }
 
 
-    @GetMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsCommentDto> getAdsComment(@PathVariable("ad_pk") String adPk,
-                                                       @PathVariable int id) {
-        int pk = Integer.parseInt(adPk);
-        if (pk < 0 || id < 0) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        AdsCommentDto adsCommentDto = adsService.getAdsComment(pk, id);
-        if (adsCommentDto == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(adsCommentDto);
-    }
-
-
-    @PatchMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsCommentDto> updateAdsComment(@PathVariable("ad_pk") String adPk,
-                                                          @PathVariable int id,
-                                                          @RequestBody AdsCommentDto adsCommentDto) {
-        int pk = Integer.parseInt(adPk);
-        if (pk < 0 || id < 0) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        AdsCommentDto adsComment = adsService.updateAdsComment(pk, id, adsCommentDto);
-        if (adsCommentDto == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(adsComment);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<AdsDto> removeAds(@PathVariable int id) {
-        if (id < 0) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        AdsDto adsDto = adsService.removeAds(id);
-        if (adsDto == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok().build();
-    }
-
-
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<FullAds> getAds(@PathVariable int id) {
-        if (id < 0) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        FullAds fullAds = adsService.getAds(id);
-        if (fullAds == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(fullAds);
+        return ResponseEntity.ok(adsService.getAds(id));
     }
 
 
-    @PatchMapping("/{id}")
+    @PatchMapping("{id}")
     public ResponseEntity<AdsDto> updateAds(@PathVariable int id, @RequestBody AdsDto adsDto) {
-        if (id < 0) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        AdsDto ads = adsService.updateAds(id, adsDto);
-        if (ads == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(adsDto);
+        return ResponseEntity.ok(adsService.updateAdvert(id, adsDto));
+    }
+
+
+    @GetMapping("{ad_pk}/comment")
+    public ResponseEntity<ResponseWrapperAdsComment> getAdsComments(@PathVariable int ad_pk) {
+        return ResponseEntity.ok(commentService.getAdsAllComments(ad_pk));
+    }
+
+
+    @PostMapping("{ad_pk}/comment")
+    public ResponseEntity<AdsCommentDto> addAdsComment(@PathVariable int ad_pk, @RequestBody AdsCommentDto adsCommentDto) {
+        return ResponseEntity.ok(commentService.createComment(ad_pk, adsCommentDto));
+    }
+
+
+    @DeleteMapping("{ad_pk}/comment/{id}")
+    public ResponseEntity<Void> deleteAdsComment(@PathVariable int ad_pk,
+                                                    @PathVariable int id) {
+        commentService.deleteAdsComment(ad_pk, id);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("{ad_pk}/comment/{id}")
+    public ResponseEntity<AdsCommentDto> getAdsComment(@PathVariable int ad_pk,
+                                                       @PathVariable int id) {
+        return ResponseEntity.ok(commentService.getAdsComment(ad_pk, id));
+    }
+
+
+    @PatchMapping("{ad_pk}/comment/{id}")
+    public ResponseEntity<AdsCommentDto> updateAdsComment(@PathVariable int ad_pk,
+                                                          @PathVariable int id,
+                                                          @RequestBody AdsCommentDto comment) {
+        return ResponseEntity.ok(commentService.updateAdsComment(ad_pk, id, comment));
     }
 }

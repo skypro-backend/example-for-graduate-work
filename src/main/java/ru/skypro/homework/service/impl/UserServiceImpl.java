@@ -1,56 +1,52 @@
 package ru.skypro.homework.service.impl;
 
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.CreateUser;
 import ru.skypro.homework.dto.ResponseWrapperUser;
 import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.entity.User;
-import ru.skypro.homework.mapStruct.UserMapper;
+import ru.skypro.homework.entity.Users;
+import ru.skypro.homework.exception.UserNotFoundException;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
-    public UserServiceImpl(UserRepository userRepository) {
+    private final UserMapper userMapper;
+
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
-    public UserDto addUser(CreateUser createUser) {
-        User user = mapper.createUserToUser(createUser);
-        userRepository.save(user);
-        return mapper.userToUserDto(user);
-    }
-
-    @Override
-    public ResponseWrapperUser getUsers() {
-        List<User> userList = userRepository.findAll();
-        List<UserDto> userDtoList = mapper.userToUserDto(userList);
+    public ResponseWrapperUser getAllUsers() {
+        List<UserDto> userDtoDtoList = userMapper.usersEntitiesToUserDtos(userRepository.findAllUsers());
         ResponseWrapperUser responseWrapperUser = new ResponseWrapperUser();
-        if (!userDtoList.isEmpty()) {
-            responseWrapperUser.setCount(userDtoList.size());
-            responseWrapperUser.setResults(userDtoList);
-        }
+        responseWrapperUser.setCount(userDtoDtoList.size());
+        responseWrapperUser.setResults(userDtoDtoList);
         return responseWrapperUser;
     }
 
     @Override
     public UserDto updateUser(UserDto userDto) {
-        User user = userRepository.findById(userDto.getId()).orElseThrow(NoSuchElementException::new);
-        return mapper.userToUserDto(user);
+        Users users = userRepository.findById(userDto.getId()).orElseThrow(UserNotFoundException::new);
+        users.setEmail(userDto.getEmail());
+        users.setFirstName(userDto.getFirstName());
+        users.setLastName(userDto.getLastName());
+        users.setPhone(userDto.getPhone());
+        users.setUsername(userDto.getEmail());
+        userRepository.save(users);
+        return userDto;
     }
 
     @Override
-    public UserDto getUser(int id) {
-        User user = userRepository.findById(id).orElseThrow(NoSuchElementException::new);
-        return mapper.userToUserDto(user);
+    public UserDto getUser(Integer id) {
+        Users users = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        return userMapper.usersEntityToUserDto(users);
     }
 }

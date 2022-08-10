@@ -1,27 +1,22 @@
 package ru.skypro.homework.service;
 
-import ru.skypro.homework.dto.*;
+
+import ru.skypro.homework.dto.AdsDto;
+import ru.skypro.homework.dto.CreateAds;
+import ru.skypro.homework.dto.FullAds;
+import ru.skypro.homework.dto.ResponseWrapperAds;
 
 public interface AdsService {
+
     ResponseWrapperAds getAllAds();
 
-    AdsDto addAds(CreateAds createAds);
+    AdsDto createAds(CreateAds createAdsDto);
 
-    ResponseWrapperAds getAdsMe(Boolean authenticated, String authorities0Authority, Object credentials, Object details, Object principal);
+    FullAds getAds(Integer id);
 
-    ResponseWrapperAdsComment getAdsComments(int pk);
+    void removeAds(Integer id);
 
-    AdsCommentDto addAdsComment(int pk, AdsCommentDto adsCommentDto);
+    AdsDto updateAdvert(Integer id, AdsDto adsDto);
 
-    AdsCommentDto deleteAdsComment(int pk, int id);
-
-    AdsCommentDto getAdsComment(int pk, int id);
-
-    AdsCommentDto updateAdsComment(int pk, int id, AdsCommentDto adsCommentDto);
-
-    AdsDto removeAds(int id);
-
-    FullAds getAds(int id);
-
-    AdsDto updateAds(int id, AdsDto adsDto);
+    ResponseWrapperAds findAds(String search);
 }

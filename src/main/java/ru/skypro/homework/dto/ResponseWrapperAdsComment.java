@@ -5,7 +5,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ResponseWrapperAdsComment {
-    private int count;
-    private List<AdsCommentDto> results;
+public class ResponseWrapperAdsComment   {
+
+  private Integer count;
+  private List<AdsCommentDto> results;
+
 }

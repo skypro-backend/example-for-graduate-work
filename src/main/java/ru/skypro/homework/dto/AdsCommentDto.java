@@ -2,12 +2,15 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
+import java.time.OffsetDateTime;
+/**
+ * Сущность, описывающая структуру данных комментария к объявлению.
+ */
 @Data
 public class AdsCommentDto {
-    private int author;
-    private LocalDateTime createdAt;
-    private int pk;
-    private String text;
+  private Integer author;
+  private OffsetDateTime createdAt;
+  private Integer pk;
+  private String text;
+
 }
