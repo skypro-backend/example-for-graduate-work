@@ -6,7 +6,7 @@ import ru.skypro.homework.dto.CreateUser;
 import ru.skypro.homework.dto.ResponseWrapperUser;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.mapStruct.UserMapper;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 

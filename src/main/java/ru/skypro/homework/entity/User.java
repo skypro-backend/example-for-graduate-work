@@ -4,6 +4,7 @@ import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity(name = "users")
@@ -19,4 +20,8 @@ public class User {
     private Role role;
     private String username;
     private String password;
+    @OneToMany
+    List<Ads> adsList;
+    @OneToMany
+    List<AdsComment> adsCommentList;
 }

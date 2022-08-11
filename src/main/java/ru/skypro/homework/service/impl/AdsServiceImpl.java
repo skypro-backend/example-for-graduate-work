@@ -6,7 +6,7 @@ import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.AdsComment;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.mapStruct.AdsMapper;
+import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.repository.AdsCommentRepository;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.UserRepository;
