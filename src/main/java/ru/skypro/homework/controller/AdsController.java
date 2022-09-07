@@ -4,7 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.models.dto.*;
+import ru.skypro.homework.service.AdsCommentsService;
+import ru.skypro.homework.service.AdsService;
+
+import java.util.List;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -13,81 +17,84 @@ import ru.skypro.homework.dto.*;
 @RequestMapping("ads")
 public class AdsController {
 
+    private final AdsService adsService;
+    private final AdsCommentsService adsCommentsService;
+
     @GetMapping
-    public ResponseEntity<ResponseWrapper<Ads>> getALLAds() {
-        System.out.println("getallads");
-
-        Ads ads = new Ads();
-        ads.setAuthor(6);
-        ads.setImage("image");
-        ads.setPrice(5);
-        ads.setPk(1);
-        ads.setTitle("title");
-
-        return ResponseEntity.ok(new ResponseWrapper(ads));
+    public ResponseEntity<ResponseWrapper<AdsDto>> getALLAds() {
+        List<AdsDto> list = adsService.getALLAds();
+        // if ... exception
+        return ResponseEntity.ok(new ResponseWrapper(list));
     }
 
     @PostMapping
-    public ResponseEntity<Ads> addAds(@RequestBody CreateAds ads) {
-        System.out.println("addAds");
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AdsDto> addAds(@RequestBody CreateAdsDto ads) {
+        AdsDto adsDto = adsService.addAds(ads);
+        // if ... exception
+        return ResponseEntity.ok(adsDto);
     }
 
     @GetMapping("me")
-    public ResponseEntity<ResponseWrapper<Ads>> getAdsMe(@RequestParam(required = false) Boolean authenticated,
-                                      @RequestParam(required = false) String authority,
-                                      @RequestParam(required = false) Object credentials,
-                                      @RequestParam(required = false) Object details,
-                                      @RequestParam(required = false) Object principal) {
-        System.out.println("getAdsMe");
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ResponseWrapper<AdsDto>> getAdsMe(@RequestParam(required = false) Boolean authenticated,
+                                                            @RequestParam(required = false) String authority,
+                                                            @RequestParam(required = false) Object credentials,
+                                                            @RequestParam(required = false) Object details,
+                                                            @RequestParam(required = false) Object principal) {
+        List<AdsDto> list = adsService.getAdsMe(authenticated, authority, credentials, details, principal);
+        // if ... exception
+        return ResponseEntity.ok(new ResponseWrapper(list));
     }
 
     @GetMapping("{ad_pk}/comment")
-    public ResponseEntity<ResponseWrapper<AdsComment>> getAdsComments(@PathVariable  String ad_pk) {
-        System.out.println("getAdsComments");
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ResponseWrapper<AdsCommentDto>> getAdsComments(@PathVariable  String ad_pk) {
+        List<AdsCommentDto> list = adsCommentsService.getAdsComments(ad_pk);
+        // if ... exception
+        return ResponseEntity.ok(new ResponseWrapper(list));
     }
 
     @PostMapping("{ad_pk}/comment")
-    public ResponseEntity<AdsComment> addAdsComments(@PathVariable  String ad_pk, @RequestBody AdsComment comment) {
-        System.out.println("addAdsComments");
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AdsCommentDto> addAdsComments(@PathVariable  String ad_pk, @RequestBody AdsCommentDto comment) {
+        AdsCommentDto result = adsCommentsService.addAdsComments(ad_pk, comment);
+        // if ... exception
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("{ad_pk}/comment/{id}")
     public void deleteAdsComments(@PathVariable  String ad_pk, @PathVariable Integer id) {
-        System.out.println("deleteAdsComments");
+        adsCommentsService.deleteAdsComments(ad_pk, id);
     }
 
     @GetMapping("{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsComment> getAdsComments(@PathVariable  String ad_pk, @PathVariable Integer id) {
-        System.out.println("getAdsComments");
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AdsCommentDto> getAdsComments(@PathVariable  String ad_pk, @PathVariable Integer id) {
+        AdsCommentDto result = adsCommentsService.getAdsComments(ad_pk, id);
+        // if ... exception
+        return ResponseEntity.ok(result);
     }
 
     @PatchMapping("{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsComment> updateAdsComments(@PathVariable  String ad_pk, @PathVariable Integer id, @RequestBody AdsComment comment) {
-        System.out.println("updayeAdsComments");
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AdsCommentDto> updateAdsComments(@PathVariable  String ad_pk, @PathVariable Integer id, @RequestBody AdsCommentDto comment) {
+        AdsCommentDto result = adsCommentsService.updateAdsComments(ad_pk, id, comment);
+        // if ... exception
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("{id}")
     public void removeAds(@PathVariable Integer id) {
-        System.out.println("removeAds");
+        adsService.removeAds(id);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<FullAds> getAds(@PathVariable Integer id) {
-        System.out.println("getAds");
-        return ResponseEntity.ok().build();
+    public ResponseEntity<FullAdsDto> getAds(@PathVariable Integer id) {
+        FullAdsDto result = adsService.getAds(id);
+        // if ... exception
+        return ResponseEntity.ok(result);
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<Ads> updateAds(@PathVariable Integer id, @RequestBody Ads ads) {
-        System.out.println("updateAds");
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id, @RequestBody AdsDto ads) {
+        AdsDto result = adsService.updateAds(id, ads);
+        // if ... exception
+        return ResponseEntity.ok(result);
     }
-
 
 }

@@ -1,10 +1,10 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.models.dto;
 
 import lombok.Data;
 
 @Data
-public class Ads {
-    private Integer author;
+public class CreateAdsDto {
+    private String description;
     private String image;
     private Integer pk;
     private Integer price;
