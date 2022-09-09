@@ -1,9 +1,9 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.models.dto;
 
 import lombok.Data;
 
 @Data
-public class CreateUser {
+public class CreateUserDto {
     private String email;
     private String firstName;
     private String lastName;

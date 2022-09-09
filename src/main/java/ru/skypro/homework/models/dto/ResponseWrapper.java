@@ -1,4 +1,4 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.models.dto;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;

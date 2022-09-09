@@ -2,14 +2,15 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.CreateUser;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.ResponseWrapper;
-import ru.skypro.homework.dto.User;
-import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.models.dto.CreateUserDto;
+import ru.skypro.homework.models.dto.NewPasswordDto;
+import ru.skypro.homework.models.dto.ResponseWrapper;
+import ru.skypro.homework.models.dto.UserDto;
+import ru.skypro.homework.service.UserService;
+
+import java.util.List;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -18,43 +19,41 @@ import ru.skypro.homework.service.AuthService;
 @RequestMapping("users")
 public class UserController {
 
+    private final UserService userService;
+
     @PostMapping
-    public ResponseEntity<CreateUser> addUser(@RequestBody CreateUser user) {
-        System.out.println("addUser");
-        return ResponseEntity.ok().build();
+    public ResponseEntity<CreateUserDto> addUser(@RequestBody CreateUserDto user) {
+        CreateUserDto result = userService.addUser(user);
+        // if ... exception
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("me")
-    public ResponseEntity<ResponseWrapper<User>> getUsers() {
-        System.out.println("getUsers");
-
-        User user = new User();
-        user.setId(1);
-        user.setFirstName("first");
-
-        User user2 = new User();
-        user2.setId(2);
-        user2.setFirstName("second");
-
-        return ResponseEntity.ok(new ResponseWrapper(user, user2));
+    public ResponseEntity<ResponseWrapper<UserDto>> getUsers() {
+        List<UserDto> list = userService.getUsers();
+        // if ... exception
+        return ResponseEntity.ok(new ResponseWrapper(list));
     }
 
     @PatchMapping("me")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        System.out.println("updateUser");
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto user) {
+        UserDto result = userService.updateUser(user);
+        // if ... exception
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("set_password")
-    public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPassword) {
-        System.out.println("setPassword");
-        return ResponseEntity.ok().build();
+    public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPassword) {
+        NewPasswordDto result = userService.setPassword(newPassword);
+        // if ... exception
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<User> getUser(@PathVariable Integer id) {
-        System.out.println("getUser");
-        return ResponseEntity.ok(new User());
+    public ResponseEntity<UserDto> getUser(@PathVariable Integer id) {
+        UserDto result = userService.getUser(id);
+        // if ... exception
+        return ResponseEntity.ok(result);
     }
 
 
