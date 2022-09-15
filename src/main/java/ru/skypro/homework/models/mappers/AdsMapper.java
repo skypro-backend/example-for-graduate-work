@@ -13,7 +13,7 @@ public interface AdsMapper {
 
     AdsDto toAdsDto(Ads ads);
     CreateAdsDto toCreateAdsDto(Ads ads);
-    FullAdsDto toDullAdsDto(Ads ads);
+    FullAdsDto toFullAdsDto(Ads ads);
     Ads toAds(AdsDto adsDto);
     Ads fromCreateAdsToAds(CreateAdsDto createAdsDto);
     Ads fromFullAdsToAds(FullAdsDto fullAdsDto);

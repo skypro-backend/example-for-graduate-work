@@ -28,8 +28,8 @@ public class AdsController {
     }
 
     @PostMapping
-    public ResponseEntity<AdsDto> addAds(@RequestBody CreateAdsDto ads) {
-        AdsDto adsDto = adsService.addAds(ads);
+    public ResponseEntity<CreateAdsDto> addAds(@RequestBody CreateAdsDto ads) {
+        CreateAdsDto adsDto = adsService.addAds(ads);
         // if ... exception
         return ResponseEntity.ok(adsDto);
     }

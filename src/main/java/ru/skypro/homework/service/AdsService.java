@@ -1,6 +1,5 @@
 package ru.skypro.homework.service;
 
-import ru.skypro.homework.models.dto.AdsCommentDto;
 import ru.skypro.homework.models.dto.AdsDto;
 import ru.skypro.homework.models.dto.CreateAdsDto;
 import ru.skypro.homework.models.dto.FullAdsDto;
@@ -11,7 +10,7 @@ public interface AdsService {
 
     List<AdsDto> getALLAds();
 
-    AdsDto addAds(CreateAdsDto ads);
+    CreateAdsDto addAds(CreateAdsDto ads);
 
     List<AdsDto> getAdsMe(Boolean authenticated, String authority, Object credentials, Object details, Object principal);
 
