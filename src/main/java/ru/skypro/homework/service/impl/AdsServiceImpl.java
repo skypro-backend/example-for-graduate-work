@@ -7,6 +7,7 @@ import ru.skypro.homework.models.dto.CreateAdsDto;
 import ru.skypro.homework.models.dto.FullAdsDto;
 import ru.skypro.homework.models.entity.Ads;
 import ru.skypro.homework.models.mappers.AdsMapper;
+import ru.skypro.homework.models.mappers.CommentsMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.service.AdsService;
 
@@ -20,7 +21,7 @@ public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
 
-    private final AdsMapper adsMapper;
+    private final AdsMapper adsMapper = AdsMapper.INSTANCE;
 
     @Override
     public List<AdsDto> getALLAds() {

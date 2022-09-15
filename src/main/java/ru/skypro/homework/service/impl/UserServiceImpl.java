@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final UserMapper userMapper = UserMapper.INSTANCE;
 
     @Override
     public CreateUserDto addUser(CreateUserDto user) {
