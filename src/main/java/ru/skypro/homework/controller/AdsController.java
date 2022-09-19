@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.models.dto.*;
 import ru.skypro.homework.service.AdsCommentsService;
 import ru.skypro.homework.service.AdsService;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Slf4j
@@ -28,10 +31,10 @@ public class AdsController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateAdsDto> addAds(@RequestBody CreateAdsDto ads) {
+    public ResponseEntity<AdsDto> addAds(@RequestPart("properties") @Valid CreateAdsDto ads, @Valid @NotNull MultipartFile file) {
         CreateAdsDto adsDto = adsService.addAds(ads);
         // if ... exception
-        return ResponseEntity.ok(adsDto);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("me")
