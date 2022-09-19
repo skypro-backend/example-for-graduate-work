@@ -8,7 +8,7 @@ import ru.skypro.homework.models.dto.CreateAdsDto;
 import ru.skypro.homework.models.dto.FullAdsDto;
 import ru.skypro.homework.models.entity.Ads;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AdsMapper {
     AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
