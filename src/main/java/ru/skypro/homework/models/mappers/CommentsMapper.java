@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CommentsMapper {
     CommentsMapper INSTANCE = Mappers.getMapper(CommentsMapper.class);
     @Mapping(target = "author", source = "author.id")

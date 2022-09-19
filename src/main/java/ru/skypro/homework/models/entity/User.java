@@ -25,4 +25,8 @@ public class User {
     @OneToMany(mappedBy = "author")
     @JsonIgnore
     private List<Comments> commentsList;
+
+    @OneToMany(mappedBy = "author")
+    @JsonIgnore
+    private List<Ads> adsList;
 }

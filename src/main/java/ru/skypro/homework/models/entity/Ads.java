@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,8 +17,16 @@ public class Ads {
     private String title;
     private String description;
 
-    @Column(name = "image_id")
-    private Integer image;
-    @Column(name = "author_id")
-    private Integer author;
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Images image;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
+
+    @OneToMany(mappedBy = "ads")
+    private List<Comments> comments;
+
+
 }
