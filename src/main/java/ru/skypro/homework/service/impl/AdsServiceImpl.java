@@ -8,6 +8,7 @@ import ru.skypro.homework.models.dto.CreateAdsDto;
 import ru.skypro.homework.models.dto.FullAdsDto;
 import ru.skypro.homework.models.entity.Ads;
 import ru.skypro.homework.models.entity.Images;
+import ru.skypro.homework.models.entity.User;
 import ru.skypro.homework.models.mappers.AdsMapper;
 import ru.skypro.homework.models.mappers.CommentsMapper;
 import ru.skypro.homework.repository.AdsRepository;
@@ -40,8 +41,8 @@ public class AdsServiceImpl implements AdsService {
     public AdsDto addAds(CreateAdsDto ads, MultipartFile file) throws IOException {
         Ads newAds = adsMapper.fromCreateAdsToAds(ads);
         Images images = imageService.addImage(file);
-        newAds.setImage(images.getPk());
-        newAds.setAuthor(1); //FIXME: should be a real author id!!
+        newAds.setImage(images);
+        newAds.setAuthor(new User()); //FIXME: should be a real author!!
         return adsMapper.toAdsDto(adsRepository.save(newAds));
     }
 
@@ -63,7 +64,7 @@ public class AdsServiceImpl implements AdsService {
     public FullAdsDto getAds(Integer id) {
         Optional<Ads> ads = adsRepository.findById(id);
         if(ads.isPresent()) {
-            return adsMapper.toFullAdsDto(ads.get());
+            return adsMapper.toDullAdsDto(ads.get());
         }
         return null;
     }
