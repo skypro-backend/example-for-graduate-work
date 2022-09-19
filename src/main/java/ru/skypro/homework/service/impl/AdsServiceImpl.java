@@ -2,15 +2,19 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.models.dto.AdsDto;
 import ru.skypro.homework.models.dto.CreateAdsDto;
 import ru.skypro.homework.models.dto.FullAdsDto;
 import ru.skypro.homework.models.entity.Ads;
+import ru.skypro.homework.models.entity.Images;
 import ru.skypro.homework.models.mappers.AdsMapper;
 import ru.skypro.homework.models.mappers.CommentsMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.ImageService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,6 +24,7 @@ import java.util.stream.Collectors;
 public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
+    private final ImageService imageService;
 
     private final AdsMapper adsMapper = AdsMapper.INSTANCE;
 
@@ -32,10 +37,12 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public CreateAdsDto addAds(CreateAdsDto ads) {
+    public AdsDto addAds(CreateAdsDto ads, MultipartFile file) throws IOException {
         Ads newAds = adsMapper.fromCreateAdsToAds(ads);
-        adsRepository.save(newAds);
-        return ads;
+        Images images = imageService.addImage(file);
+        newAds.setImage(images.getPk());
+        newAds.setAuthor(1); //FIXME: should be a real author id!!
+        return adsMapper.toAdsDto(adsRepository.save(newAds));
     }
 
     @Override

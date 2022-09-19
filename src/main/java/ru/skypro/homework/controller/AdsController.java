@@ -11,6 +11,7 @@ import ru.skypro.homework.service.AdsService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -31,10 +32,13 @@ public class AdsController {
     }
 
     @PostMapping
-    public ResponseEntity<AdsDto> addAds(@RequestPart("properties") @Valid CreateAdsDto ads, @Valid @NotNull MultipartFile file) {
-        CreateAdsDto adsDto = adsService.addAds(ads);
-        // if ... exception
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AdsDto> addAds(@RequestPart("properties") @Valid CreateAdsDto ads, @RequestPart("image") @Valid @NotNull MultipartFile file) {
+        try {
+            AdsDto adsDto = adsService.addAds(ads, file);
+            return ResponseEntity.ok(adsDto);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping("me")
