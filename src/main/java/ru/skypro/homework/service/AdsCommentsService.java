@@ -10,10 +10,10 @@ public interface AdsCommentsService {
 
     AdsCommentDto addAdsComments(String adPk, AdsCommentDto adsCommentDto);
 
-    void deleteAdsComments(String adPk, Integer id);
+    void deleteAdsComment(String adPk, Integer id);
 
-    AdsCommentDto getAdsComments(String adPk, Integer id);
+    AdsCommentDto getAdsComment(String adPk, Integer id);
 
-    AdsCommentDto updateAdsComments(String adPk, Integer id, AdsCommentDto adsCommentDto);
+    AdsCommentDto updateAdsComment(String adPk, Integer id, AdsCommentDto adsCommentDto);
 
 }

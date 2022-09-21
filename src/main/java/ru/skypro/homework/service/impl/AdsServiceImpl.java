@@ -1,10 +1,9 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 import ru.skypro.homework.models.dto.AdsDto;
 import ru.skypro.homework.models.dto.CreateAdsDto;
@@ -15,82 +14,97 @@ import ru.skypro.homework.models.entity.User;
 import ru.skypro.homework.models.mappers.AdsMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.service.AdsService;
-import ru.skypro.homework.service.ImageService;
+import ru.skypro.homework.service.UserService;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AdsServiceImpl implements AdsService {
 
-    private final Logger logger = LoggerFactory.getLogger(AdsServiceImpl.class);
+    private final UserService userService;
     private final AdsRepository adsRepository;
-    private final ImageService imageService;
     private final AdsMapper adsMapper;
 
     @Override
     public List<AdsDto> getALLAds() {
-        logger.info("Trying to get all ads");
-        return adsRepository.findAll()
-                .stream()
+        log.info("Trying to get all ads");
+        List<Ads> allAds = adsRepository.findAll();
+        if (allAds.isEmpty()) {
+            log.warn("Ads not found");
+            throw new NotFoundException("Ads not found");
+        }
+
+        return allAds.stream()
                 .map(adsMapper::toAdsDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public AdsDto addAds(CreateAdsDto ads, MultipartFile file) throws IOException {
-        logger.info("Trying to add new ad");
-        Images images = imageService.addImage(file);
-        Ads newAds = adsMapper.fromCreateAds(ads, new User(), images);
+    public AdsDto addAds(CreateAdsDto ads, Images images) {
+        log.info("Trying to add new ad");
+        User user = userService.getUser(0);//todo заменить на текущего авторизованного юзера
+        Ads newAds = adsMapper.fromCreateAds(ads, user, images);
         Ads response = adsRepository.save(newAds);
-        logger.info("The ad with pk = {} was saved ", response.getPk());
+        log.info("The ad with pk = {} was saved ", response.getPk());
+
         return adsMapper.toAdsDto(response);
     }
 
     @Override
     public List<AdsDto> getAdsMe(Boolean authenticated, String authority, Object credentials, Object details, Object principal) {
         // FIXME: Just returns all
+        log.info("Trying to get all user's ads");
 
-        logger.info("Trying to get all user's ads");
         return adsRepository.findAll()
                 .stream()
                 .map(adsMapper::toAdsDto)
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public void removeAds(Integer id) {
-        logger.info("Trying to remove the ad with id = {}", id);
-        checkOnExistingAds(id);
+        log.info("Trying to remove the ad with id = {}", id);
+        getAds(id);
         adsRepository.deleteById(id);
-        logger.info("The ad with id = {} was removed", id);
+        log.info("The ad with id = {} was removed", id);
     }
 
     @Override
-    public FullAdsDto getAds(Integer id) {
-        logger.info("Trying to get the ad with id = {}", id);
-        checkOnExistingAds(id);
-        Ads ads = adsRepository.findById(id).orElseThrow();
-        logger.info("The ad with id = {} was found", id);
+    public FullAdsDto getFullAds(Integer id) {
+        Ads ads = getAds(id);
+
         return adsMapper.toFullAdsDto(ads);
     }
 
+    @Transactional
     @Override
-    public AdsDto updateAds(Integer id, AdsDto ads) {
-        logger.info("Trying to update the ad with id = {}", id);
-        checkOnExistingAds(id);
-        adsRepository.save(adsMapper.toAds(ads)); // FIXME: it seems won't work
-        logger.info("The ad with id = {} was updated ", id);
-        return ads;
+    public AdsDto updateAds(Integer id, CreateAdsDto adsDto) {
+        log.info("Trying to update the ad with id = {}", id);
+        Ads ads = getAds(id);
+        User user = userService.getUser(0);//todo использовать текущего юзера
+        Ads updatedAds = adsMapper.fromCreateAds(adsDto, user, ads.getImage());
+        updatedAds.setComments(List.copyOf(ads.getComments()));
+        updatedAds.setPk(id);
+        Ads saveAds = adsRepository.save(updatedAds);
+        log.info("The ad with id = {} was updated ", id);
+
+        return adsMapper.toAdsDto(saveAds);
     }
 
-    //  FIXME: The same method as in AdsCommentsServiceImpl
-    private void checkOnExistingAds(Integer ad_pk) {
-        if (adsRepository.findById(ad_pk).isEmpty()) {
-            logger.warn("The ad with id = {} does not exist", ad_pk);
-            throw new NotFoundException("Ad with id = " + ad_pk + " does not exist");
-        }
+    @Override
+    public Ads getAds(Integer ad_pk) {
+        log.info("Trying to get the ad with id = {}", ad_pk);
+        Ads ads = adsRepository.findById(ad_pk)
+                .orElseThrow(() -> {
+                    log.warn("The ad with id = {} does not exist", ad_pk);
+                    return new NotFoundException("Ad with id = " + ad_pk + " does not exist");
+                });
+        log.info("The ad with id = {} was found", ad_pk);
+
+        return ads;
     }
 }

@@ -1,25 +1,26 @@
 package ru.skypro.homework.service;
 
-import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.models.dto.AdsDto;
 import ru.skypro.homework.models.dto.CreateAdsDto;
 import ru.skypro.homework.models.dto.FullAdsDto;
+import ru.skypro.homework.models.entity.Ads;
+import ru.skypro.homework.models.entity.Images;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface AdsService {
 
     List<AdsDto> getALLAds();
 
-    AdsDto addAds(CreateAdsDto ads, MultipartFile file) throws IOException;
+    AdsDto addAds(CreateAdsDto ads, Images image);
 
     List<AdsDto> getAdsMe(Boolean authenticated, String authority, Object credentials, Object details, Object principal);
 
     void removeAds(Integer id);
 
-    FullAdsDto getAds(Integer id);
+    FullAdsDto getFullAds(Integer id);
 
-    AdsDto updateAds(Integer id, AdsDto ads);
+    AdsDto updateAds(Integer id, CreateAdsDto ads);
 
+    Ads getAds(Integer id);
 }

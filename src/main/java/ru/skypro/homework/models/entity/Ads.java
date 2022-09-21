@@ -25,8 +25,6 @@ public class Ads {
     @JoinColumn(name = "author_id")
     private User author;
 
-    @OneToMany(mappedBy = "ads")
+    @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL)
     private List<Comments> comments;
-
-
 }

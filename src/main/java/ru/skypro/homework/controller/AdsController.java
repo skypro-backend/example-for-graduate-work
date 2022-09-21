@@ -1,17 +1,24 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.models.dto.*;
+import ru.skypro.homework.models.dto.AdsCommentDto;
+import ru.skypro.homework.models.dto.AdsDto;
+import ru.skypro.homework.models.dto.CreateAdsDto;
+import ru.skypro.homework.models.dto.FullAdsDto;
+import ru.skypro.homework.models.dto.ResponseWrapper;
+import ru.skypro.homework.models.entity.Images;
 import ru.skypro.homework.service.AdsCommentsService;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.ImageService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -23,62 +30,61 @@ public class AdsController {
 
     private final AdsService adsService;
     private final AdsCommentsService adsCommentsService;
+    private final ImageService imageService;
 
     @GetMapping
-    public ResponseEntity<ResponseWrapper<AdsDto>> getALLAds() {
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseWrapper<AdsDto> getALLAds() {
         List<AdsDto> list = adsService.getALLAds();
-        return ResponseEntity.ok(new ResponseWrapper(list));
 
+        return new ResponseWrapper<>(list);
     }
 
-    @PostMapping
-    public ResponseEntity<AdsDto> addAds(@RequestPart("properties") @Valid CreateAdsDto ads, @RequestPart("image") @Valid @NotNull MultipartFile file) {
-        try {
-            AdsDto adsDto = adsService.addAds(ads, file);
-            return ResponseEntity.ok(adsDto);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public AdsDto addAds(@Valid @RequestPart("properties") @Parameter(schema = @Schema(type = "string", format = "binary")) CreateAdsDto ads,
+                         @RequestPart("image") MultipartFile file) {
+        Images images = imageService.addImage(file);
+
+        return adsService.addAds(ads, images);
     }
 
     @GetMapping("me")
-    public ResponseEntity<ResponseWrapper<AdsDto>> getAdsMe(@RequestParam(required = false) Boolean authenticated,
-                                                            @RequestParam(required = false) String authority,
-                                                            @RequestParam(required = false) Object credentials,
-                                                            @RequestParam(required = false) Object details,
-                                                            @RequestParam(required = false) Object principal) {
+    public ResponseWrapper<AdsDto> getAdsMe(@RequestParam(required = false) Boolean authenticated,
+                                            @RequestParam(required = false) String authority,
+                                            @RequestParam(required = false) Object credentials,
+                                            @RequestParam(required = false) Object details,
+                                            @RequestParam(required = false) Object principal) {
         List<AdsDto> list = adsService.getAdsMe(authenticated, authority, credentials, details, principal);
-        return ResponseEntity.ok(new ResponseWrapper(list));
 
+        return new ResponseWrapper<>(list);
     }
 
-    @GetMapping("{ad_pk}/comment")
-    public ResponseEntity<ResponseWrapper<AdsCommentDto>> getAdsComments(@PathVariable  String ad_pk) {
+    @GetMapping("{ad_pk}/comments")
+    public ResponseWrapper<AdsCommentDto> getAdsComments(@PathVariable String ad_pk) {
         List<AdsCommentDto> list = adsCommentsService.getAdsComments(ad_pk);
-        return ResponseEntity.ok(new ResponseWrapper(list));
+
+        return new ResponseWrapper<>(list);
     }
 
-    @PostMapping("{ad_pk}/comment")
-    public ResponseEntity<AdsCommentDto> addAdsComments(@PathVariable  String ad_pk, @RequestBody AdsCommentDto comment) {
-        AdsCommentDto result = adsCommentsService.addAdsComments(ad_pk, comment);
-        return ResponseEntity.ok(result);
+    @PostMapping("{ad_pk}/comments")
+    public AdsCommentDto addAdsComments(@PathVariable String ad_pk, @RequestBody AdsCommentDto comment) {
+        return adsCommentsService.addAdsComments(ad_pk, comment);
     }
 
-    @DeleteMapping("{ad_pk}/comment/{id}")
-    public void deleteAdsComments(@PathVariable  String ad_pk, @PathVariable Integer id) {
-        adsCommentsService.deleteAdsComments(ad_pk, id);
+    @DeleteMapping("{ad_pk}/comments/{id}")
+    public void deleteAdsComments(@PathVariable String ad_pk, @PathVariable Integer id) {
+        adsCommentsService.deleteAdsComment(ad_pk, id);
     }
 
-    @GetMapping("{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsCommentDto> getAdsComments(@PathVariable  String ad_pk, @PathVariable Integer id) {
-        AdsCommentDto result = adsCommentsService.getAdsComments(ad_pk, id);
-        return ResponseEntity.ok(result);
+    @GetMapping("{ad_pk}/comments/{id}")
+    public AdsCommentDto getAdsComments(@PathVariable String ad_pk, @PathVariable Integer id) {
+        return adsCommentsService.getAdsComment(ad_pk, id);
     }
 
-    @PatchMapping("{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsCommentDto> updateAdsComments(@PathVariable  String ad_pk, @PathVariable Integer id, @RequestBody AdsCommentDto comment) {
-        AdsCommentDto result = adsCommentsService.updateAdsComments(ad_pk, id, comment);
-        return ResponseEntity.ok(result);
+    @PatchMapping("{ad_pk}/comments/{id}")
+    public AdsCommentDto updateAdsComments(@PathVariable String ad_pk, @PathVariable Integer id, @RequestBody AdsCommentDto comment) {
+        return adsCommentsService.updateAdsComment(ad_pk, id, comment);
     }
 
     @DeleteMapping("{id}")
@@ -87,17 +93,12 @@ public class AdsController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<FullAdsDto> getAds(@PathVariable Integer id) {
-        FullAdsDto result = adsService.getAds(id);
-        return ResponseEntity.ok(result);
-
+    public FullAdsDto getAds(@PathVariable Integer id) {
+        return adsService.getFullAds(id);
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id, @RequestBody AdsDto ads) {
-        AdsDto result = adsService.updateAds(id, ads);
-        return ResponseEntity.ok(result);
-
+    public AdsDto updateAds(@PathVariable Integer id, @Valid @RequestBody CreateAdsDto ads) {
+        return adsService.updateAds(id, ads);
     }
-
 }
