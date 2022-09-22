@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
@@ -13,9 +14,13 @@ public class Comments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pk;
 
-    @Column(name = "author_id")
-    private Integer author;
-    private Integer ads_pk;
-    private String createdAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private User author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ads_pk")
+    private Ads ads;
+
+    private Timestamp createdAt;
     private String text;
 }

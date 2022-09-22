@@ -1,21 +1,41 @@
 package ru.skypro.homework.models.mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.*;
 import ru.skypro.homework.models.dto.AdsDto;
 import ru.skypro.homework.models.dto.CreateAdsDto;
 import ru.skypro.homework.models.dto.FullAdsDto;
 import ru.skypro.homework.models.entity.Ads;
+import ru.skypro.homework.models.entity.Images;
+import ru.skypro.homework.models.entity.User;
+import ru.skypro.homework.repository.ImagesRepository;
+import ru.skypro.homework.repository.UserRepository;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AdsMapper {
-    AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
+    @Mapping(target = "author", source = "ads.author.id")
+    @Mapping(target = "image", expression = "java(\"/image/\" + ads.getImage().getPk())")
     AdsDto toAdsDto(Ads ads);
-    CreateAdsDto toCreateAdsDto(Ads ads);
-    FullAdsDto toDullAdsDto(Ads ads);
-    Ads toAds(AdsDto adsDto);
-    Ads fromCreateAdsToAds(CreateAdsDto createAdsDto);
-    Ads fromFullAdsToAds(FullAdsDto fullAdsDto);
+
+    @Mapping(target = "authorFirstName", source = "author.firstName")
+    @Mapping(target = "authorLastName", source = "author.lastName")
+    @Mapping(target = "email", source = "author.email")
+    @Mapping(target = "phone", source = "author.phone")
+    @Mapping(target = "image", expression = "java(\"/image/\" + ads.getImage().getPk())")
+    FullAdsDto toFullAdsDto(Ads ads);
+
+    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "description", ignore = true)
+    @Mapping(target = "image", ignore = true)
+    Ads fromAdsDto(AdsDto adsDto, @Context UserRepository repository, @Context ImagesRepository imagesRepository);
+
+    @Mapping(target = "pk", ignore = true)
+    Ads fromCreateAds(CreateAdsDto createAdsDto, User author, Images image);
+
+    @AfterMapping
+    default void fromAdsDto(@MappingTarget Ads ads, AdsDto adsDto, @Context UserRepository repository, @Context ImagesRepository imagesRepository) {
+        ads.setAuthor(repository.findById(adsDto.getAuthor()).get());
+        ads.setImage(imagesRepository.findImagesByData(adsDto.getImage().getBytes()));
+    }
 
 }

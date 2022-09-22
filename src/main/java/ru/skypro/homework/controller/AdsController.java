@@ -24,7 +24,7 @@ public class AdsController {
     public ResponseEntity<ResponseWrapper<AdsDto>> getALLAds() {
         List<AdsDto> list = adsService.getALLAds();
         // if ... exception
-        return ResponseEntity.ok(new ResponseWrapper(list));
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping
@@ -42,7 +42,7 @@ public class AdsController {
                                                             @RequestParam(required = false) Object principal) {
         List<AdsDto> list = adsService.getAdsMe(authenticated, authority, credentials, details, principal);
         // if ... exception
-        return ResponseEntity.ok(new ResponseWrapper(list));
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("{ad_pk}/comment")
@@ -55,7 +55,7 @@ public class AdsController {
     @PostMapping("{ad_pk}/comment")
     public ResponseEntity<AdsCommentDto> addAdsComments(@PathVariable  String ad_pk, @RequestBody AdsCommentDto comment) {
         AdsCommentDto result = adsCommentsService.addAdsComments(ad_pk, comment);
-        // if ... exception
+
         return ResponseEntity.ok(result);
     }
 
@@ -87,14 +87,14 @@ public class AdsController {
     public ResponseEntity<FullAdsDto> getAds(@PathVariable Integer id) {
         FullAdsDto result = adsService.getAds(id);
         // if ... exception
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("{id}")
     public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id, @RequestBody AdsDto ads) {
         AdsDto result = adsService.updateAds(id, ads);
         // if ... exception
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok().build();
     }
 
 }
