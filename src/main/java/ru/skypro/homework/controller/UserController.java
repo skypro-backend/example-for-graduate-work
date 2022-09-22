@@ -24,35 +24,30 @@ public class UserController {
     @PostMapping
     public ResponseEntity<CreateUserDto> addUser(@RequestBody CreateUserDto user) {
         CreateUserDto result = userService.addUser(user);
-        // if ... exception
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("me")
-    public ResponseEntity<ResponseWrapper<UserDto>> getUsers() {
+    public ResponseWrapper<UserDto> getUsers() {
         List<UserDto> list = userService.getUsers();
-        // if ... exception
-        return ResponseEntity.ok(new ResponseWrapper(list));
+        return new ResponseWrapper(list);
     }
 
     @PatchMapping("me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto user) {
         UserDto result = userService.updateUser(user);
-        // if ... exception
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("set_password")
     public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPassword) {
         NewPasswordDto result = userService.setPassword(newPassword);
-        // if ... exception
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Integer id) {
         UserDto result = userService.getUser(id);
-        // if ... exception
         return ResponseEntity.ok(result);
     }
 
