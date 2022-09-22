@@ -1,43 +1,41 @@
 package ru.skypro.homework.models.mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.*;
 import ru.skypro.homework.models.dto.AdsDto;
 import ru.skypro.homework.models.dto.CreateAdsDto;
 import ru.skypro.homework.models.dto.FullAdsDto;
 import ru.skypro.homework.models.entity.Ads;
+import ru.skypro.homework.models.entity.Images;
+import ru.skypro.homework.models.entity.User;
+import ru.skypro.homework.repository.ImagesRepository;
+import ru.skypro.homework.repository.UserRepository;
 
 @Mapper(componentModel = "spring")
 public interface AdsMapper {
-    AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
-    @Mapping(target = "author", source = "author.id")
-    @Mapping(target = "image", source = "image.pk")
+    @Mapping(target = "author", source = "ads.author.id")
+    @Mapping(target = "image", expression = "java(\"/image/\" + ads.getImage().getPk())")
     AdsDto toAdsDto(Ads ads);
-
-    @Mapping(target = "image", source = "image.pk")
-    CreateAdsDto toCreateAdsDto(Ads ads);
 
     @Mapping(target = "authorFirstName", source = "author.firstName")
     @Mapping(target = "authorLastName", source = "author.lastName")
     @Mapping(target = "email", source = "author.email")
     @Mapping(target = "phone", source = "author.phone")
-    @Mapping(target = "image", source = "image.pk")
-    FullAdsDto toDullAdsDto(Ads ads);
+    @Mapping(target = "image", expression = "java(\"/image/\" + ads.getImage().getPk())")
+    FullAdsDto toFullAdsDto(Ads ads);
 
-    @Mapping(target = "author.id", source = "author")
-    @Mapping(target = "image.pk", source = "image")
-    Ads toAds(AdsDto adsDto);
+    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "description", ignore = true)
+    @Mapping(target = "image", ignore = true)
+    Ads fromAdsDto(AdsDto adsDto, @Context UserRepository repository, @Context ImagesRepository imagesRepository);
 
-    @Mapping(target = "image.pk", source = "image")
-    Ads fromCreateAdsToAds(CreateAdsDto createAdsDto);
+    @Mapping(target = "pk", ignore = true)
+    Ads fromCreateAds(CreateAdsDto createAdsDto, User author, Images image);
 
-    @Mapping(target = "image.pk", source = "image")
-    @Mapping(target = "author.firstName", source = "authorFirstName")
-    @Mapping(target = "author.lastName", source = "authorLastName")
-    @Mapping(target = "author.email", source = "authorLastName")
-    @Mapping(target = "author.phone", source = "phone")
-    Ads fromFullAdsToAds(FullAdsDto fullAdsDto);
+    @AfterMapping
+    default void fromAdsDto(@MappingTarget Ads ads, AdsDto adsDto, @Context UserRepository repository, @Context ImagesRepository imagesRepository) {
+        ads.setAuthor(repository.findById(adsDto.getAuthor()).get());
+        ads.setImage(imagesRepository.findImagesByData(adsDto.getImage().getBytes()));
+    }
 
 }

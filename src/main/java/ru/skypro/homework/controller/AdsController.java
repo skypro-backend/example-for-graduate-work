@@ -28,6 +28,7 @@ public class AdsController {
     public ResponseEntity<ResponseWrapper<AdsDto>> getALLAds() {
         List<AdsDto> list = adsService.getALLAds();
         return ResponseEntity.ok(new ResponseWrapper(list));
+
     }
 
     @PostMapping
@@ -48,6 +49,7 @@ public class AdsController {
                                                             @RequestParam(required = false) Object principal) {
         List<AdsDto> list = adsService.getAdsMe(authenticated, authority, credentials, details, principal);
         return ResponseEntity.ok(new ResponseWrapper(list));
+
     }
 
     @GetMapping("{ad_pk}/comment")
@@ -88,12 +90,14 @@ public class AdsController {
     public ResponseEntity<FullAdsDto> getAds(@PathVariable Integer id) {
         FullAdsDto result = adsService.getAds(id);
         return ResponseEntity.ok(result);
+
     }
 
     @PatchMapping("{id}")
     public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id, @RequestBody AdsDto ads) {
         AdsDto result = adsService.updateAds(id, ads);
         return ResponseEntity.ok(result);
+
     }
 
 }

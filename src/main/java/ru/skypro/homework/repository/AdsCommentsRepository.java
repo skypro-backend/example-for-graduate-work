@@ -5,11 +5,11 @@ import org.springframework.stereotype.Repository;
 import ru.skypro.homework.models.entity.Ads;
 import ru.skypro.homework.models.entity.Comments;
 
-import java.util.Collection;
+import java.util.List;
 
 @Repository
 public interface AdsCommentsRepository extends JpaRepository<Comments, Integer> {
-    Collection<Comments> findCommentsByAds(Ads ads);
+    List<Comments> findCommentsByAds(Ads ads);
 
     Comments findCommentsByPk(Integer id);
 

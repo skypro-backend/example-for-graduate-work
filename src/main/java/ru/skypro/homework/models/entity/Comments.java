@@ -14,10 +14,10 @@ public class Comments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pk;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private User author;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ads_pk")
     private Ads ads;
 
