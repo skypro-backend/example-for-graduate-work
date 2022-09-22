@@ -22,17 +22,17 @@ import java.util.List;
 public class AdsCommentsServiceImpl implements AdsCommentsService {
 
     private final Logger logger = LoggerFactory.getLogger(AdsCommentsServiceImpl.class);
-
     private final AdsCommentsRepository adsCommentsRepository;
     private final AdsRepository adsRepository;
     private final UserRepository userRepository;
+    private final CommentsMapper commentsMapper;
 
     @Override
     public List<AdsCommentDto> getAdsComments(String ad_pk) {
         Integer ad_pk_int = Integer.parseInt(ad_pk);
         checkOnExistingAds(ad_pk_int);
         Ads ads = adsRepository.findById(ad_pk_int).orElse(new Ads());
-        List<Comments> commentsList = (List<Comments>) adsCommentsRepository.findCommentsByAds(ads);
+        List<Comments> commentsList = adsCommentsRepository.findCommentsByAds(ads);
         if (commentsList.isEmpty()) {
             logger.warn("Ads comments are not exist");
             throw new NotFoundException("Comments to ads with id " + ad_pk + " are not found");
@@ -41,7 +41,7 @@ public class AdsCommentsServiceImpl implements AdsCommentsService {
         List<AdsCommentDto> commentsDtoList = new ArrayList<>();
         for (Comments comment :
                 commentsList) {
-            commentsDtoList.add(CommentsMapper.INSTANCE.toCommentsDto(comment));
+            commentsDtoList.add(commentsMapper.toCommentsDto(comment));
         }
         return commentsDtoList;
     }
@@ -52,13 +52,13 @@ public class AdsCommentsServiceImpl implements AdsCommentsService {
         checkOnExistingAds(ad_pk_int);
         checkOnExistingAuthor(adsCommentDto);
 
-        Comments comment = CommentsMapper.INSTANCE.toComments(adsCommentDto);
+        Comments comment = commentsMapper.toComments(adsCommentDto);
         Ads ads = adsRepository.findById(ad_pk_int).orElse(new Ads());
         comment.setAds(ads);
 
         Comments savedComment = adsCommentsRepository.save(comment);
         logger.info("Comment with pk {} was saved ", savedComment.getPk());
-        return CommentsMapper.INSTANCE.toCommentsDto(savedComment);
+        return commentsMapper.toCommentsDto(savedComment);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class AdsCommentsServiceImpl implements AdsCommentsService {
         checkOnExistingComment(id);
         Comments comments = adsCommentsRepository.findCommentsByPk(id);
         logger.info("ads comment with id = {} was found", id);
-        return CommentsMapper.INSTANCE.toCommentsDto(comments);
+        return commentsMapper.toCommentsDto(comments);
     }
 
     @Override
@@ -86,14 +86,14 @@ public class AdsCommentsServiceImpl implements AdsCommentsService {
         Integer ad_pk_int = Integer.parseInt(ad_pk);
         checkOnExistingAds(ad_pk_int);
         checkOnExistingAuthor(comment);
-        Comments commentsModel = CommentsMapper.INSTANCE.toComments(comment);
+        Comments commentsModel = commentsMapper.toComments(comment);
 
         Ads ads = adsRepository.findById(ad_pk_int).orElse(new Ads());
         commentsModel.setAds(ads);
         commentsModel.setPk(id);
         adsCommentsRepository.save(commentsModel);
         logger.info("ads comment with id = {} was changed", id);
-        return CommentsMapper.INSTANCE.toCommentsDto(commentsModel);
+        return commentsMapper.toCommentsDto(commentsModel);
     }
 
     private void checkOnExistingAds(Integer ad_pk) {
@@ -101,7 +101,6 @@ public class AdsCommentsServiceImpl implements AdsCommentsService {
             logger.warn("Ads does not exist");
             throw new NotFoundException("Ad with id " + ad_pk + " does not exist");
         }
-
     }
 
     private void checkOnExistingAuthor(AdsCommentDto adsCommentDto) {
@@ -109,7 +108,6 @@ public class AdsCommentsServiceImpl implements AdsCommentsService {
             logger.warn("Author does not exist");
             throw new NotFoundException("Author with id " + adsCommentDto.getAuthor() + " does not exist");
         }
-
     }
 
     private void checkOnExistingComment(Integer id) {
