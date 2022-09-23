@@ -15,8 +15,8 @@ public class ResponseWrapper<T> {
     private int count;
     private List<T> results;
 
-    public ResponseWrapper(T... object) {
-        this.count = object.length;
-        this.results = Arrays.asList(object);
+    public ResponseWrapper(List<T> object) {
+        this.count = object.size();
+        this.results = object;
     }
 }
