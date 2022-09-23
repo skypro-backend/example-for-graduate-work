@@ -28,7 +28,7 @@ public class AdsServiceImpl implements AdsService {
     private final Logger logger = LoggerFactory.getLogger(AdsServiceImpl.class);
     private final AdsRepository adsRepository;
     private final ImageService imageService;
-    private final AdsMapper adsMapper = AdsMapper.INSTANCE;
+    private final AdsMapper adsMapper;
 
     @Override
     public List<AdsDto> getALLAds() {
@@ -42,10 +42,8 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsDto addAds(CreateAdsDto ads, MultipartFile file) throws IOException {
         logger.info("Trying to add new ad");
-        Ads newAds = adsMapper.fromCreateAdsToAds(ads);
         Images images = imageService.addImage(file);
-        newAds.setImage(images);
-        newAds.setAuthor(new User()); //FIXME: should be a real author!!
+        Ads newAds = adsMapper.fromCreateAds(ads, new User(), images);
         Ads response = adsRepository.save(newAds);
         logger.info("The ad with pk = {} was saved ", response.getPk());
         return adsMapper.toAdsDto(response);
@@ -76,14 +74,14 @@ public class AdsServiceImpl implements AdsService {
         checkOnExistingAds(id);
         Ads ads = adsRepository.findById(id).orElseThrow();
         logger.info("The ad with id = {} was found", id);
-        return adsMapper.toDullAdsDto(ads);
+        return adsMapper.toFullAdsDto(ads);
     }
 
     @Override
     public AdsDto updateAds(Integer id, AdsDto ads) {
         logger.info("Trying to update the ad with id = {}", id);
         checkOnExistingAds(id);
-        adsRepository.save(adsMapper.toAds(ads));
+        adsRepository.save(adsMapper.toAds(ads)); // FIXME: it seems won't work
         logger.info("The ad with id = {} was updated ", id);
         return ads;
     }
@@ -94,6 +92,5 @@ public class AdsServiceImpl implements AdsService {
             logger.warn("The ad with id = {} does not exist", ad_pk);
             throw new NotFoundException("Ad with id = " + ad_pk + " does not exist");
         }
-
     }
 }

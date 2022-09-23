@@ -7,7 +7,7 @@ import ru.skypro.homework.models.dto.FullAdsDto;
 import ru.skypro.homework.models.entity.Ads;
 import ru.skypro.homework.models.entity.Images;
 import ru.skypro.homework.models.entity.User;
-import ru.skypro.homework.repository.ImagesRepository;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 
 @Mapper(componentModel = "spring")
@@ -27,15 +27,17 @@ public interface AdsMapper {
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "description", ignore = true)
     @Mapping(target = "image", ignore = true)
-    Ads fromAdsDto(AdsDto adsDto, @Context UserRepository repository, @Context ImagesRepository imagesRepository);
+    Ads fromAdsDto(AdsDto adsDto, @Context UserRepository repository, @Context ImageRepository imagesRepository);
 
     @Mapping(target = "pk", ignore = true)
     Ads fromCreateAds(CreateAdsDto createAdsDto, User author, Images image);
 
     @AfterMapping
-    default void fromAdsDto(@MappingTarget Ads ads, AdsDto adsDto, @Context UserRepository repository, @Context ImagesRepository imagesRepository) {
+    default void fromAdsDto(@MappingTarget Ads ads, AdsDto adsDto, @Context UserRepository repository, @Context ImageRepository imagesRepository) {
         ads.setAuthor(repository.findById(adsDto.getAuthor()).get());
-        ads.setImage(imagesRepository.findImagesByData(adsDto.getImage().getBytes()));
+        // ads.setImage(imagesRepository.find(adsDto.getImage()));
     }
+
+    Ads toAds(AdsDto adsDto);
 
 }
