@@ -35,9 +35,11 @@ public interface AdsMapper {
     @AfterMapping
     default void fromAdsDto(@MappingTarget Ads ads, AdsDto adsDto, @Context UserRepository repository, @Context ImageRepository imagesRepository) {
         ads.setAuthor(repository.findById(adsDto.getAuthor()).get());
-        // ads.setImage(imagesRepository.find(adsDto.getImage()));
+        //  ads.setImage(imagesRepository.findImagesByData(adsDto.getImage().getBytes()));
     }
 
+    @Mapping(target = "author.id", source = "author")
+    @Mapping(target = "image.pk", source = "image")
     Ads toAds(AdsDto adsDto);
 
 }
