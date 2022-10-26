@@ -13,9 +13,9 @@ servers:
 tags:
 - description: Auth Controller
   name: Авторизация
-- description: Ads Controller
+- description: AdsDto Controller
   name: Объявления
-- description: User Controller
+- description: UserDto Controller
   name: Пользователи
 paths:
   /ads:
@@ -618,7 +618,7 @@ paths:
         "404":
           content: {}
           description: Not Found
-      summary: getUser
+      summary: getUsers
       tags:
       - Пользователи
       x-accepts: '*/*'
@@ -645,7 +645,7 @@ components:
           type: integer
         title:
           type: string
-      title: Ads
+      title: AdsDto
       type: object
     AdsComment:
       example:
@@ -665,7 +665,7 @@ components:
           type: integer
         text:
           type: string
-      title: AdsComment
+      title: AdsCommentDto
       type: object
     CreateAds:
       example:
@@ -802,7 +802,7 @@ components:
           items:
             $ref: '#/components/schemas/AdsComment'
           type: array
-      title: ResponseWrapper«AdsComment»
+      title: ResponseWrapper«AdsCommentDto»
       type: object
     ResponseWrapper«Ads»:
       example:
@@ -826,7 +826,7 @@ components:
           items:
             $ref: '#/components/schemas/Ads'
           type: array
-      title: ResponseWrapper«Ads»
+      title: ResponseWrapper«AdsDto»
       type: object
     ResponseWrapper«User»:
       example:
@@ -850,7 +850,7 @@ components:
           items:
             $ref: '#/components/schemas/User'
           type: array
-      title: ResponseWrapper«User»
+      title: ResponseWrapper«UserDto»
       type: object
     User:
       example:
@@ -871,7 +871,7 @@ components:
           type: string
         phone:
           type: string
-      title: User
+      title: UserDto
       type: object
 x-original-swagger-version: "2.0"
 
