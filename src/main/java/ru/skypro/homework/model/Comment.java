@@ -1,20 +1,25 @@
 package ru.skypro.homework.model;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-
 import javax.annotation.Generated;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.Objects;
 
 /**
  * Comment
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-01-16T21:17:34.091476600+03:00[Europe/Moscow]")
+@Entity
+@Table(name = "comments")
 public class Comment {
 
   @JsonProperty("author")
+  @Id
   private Integer author;
 
   @JsonProperty("createdAt")
