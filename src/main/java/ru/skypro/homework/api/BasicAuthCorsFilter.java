@@ -1,6 +1,7 @@
-package ru.skypro.homework.controller;
+package ru.skypro.homework.api;
 
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -14,7 +15,7 @@ import java.io.IOException;
 public class BasicAuthCorsFilter extends OncePerRequestFilter {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest,
+    protected void doFilterInternal(@NotNull HttpServletRequest httpServletRequest,
                                     HttpServletResponse httpServletResponse,
                                     FilterChain filterChain)
             throws ServletException, IOException {
