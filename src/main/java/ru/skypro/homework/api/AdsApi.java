@@ -5,12 +5,6 @@
  */
 package ru.skypro.homework.api;
 
-import ru.skypro.homework.model.Ads;
-import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.model.CreateAds;
-import ru.skypro.homework.model.FullAds;
-import ru.skypro.homework.model.ResponseWrapperAds;
-import ru.skypro.homework.model.ResponseWrapperComment;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,10 +18,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.model.entity.*;
 
+import javax.annotation.Generated;
 import javax.validation.Valid;
 import java.util.Optional;
-import javax.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-01-16T21:17:34.091476600+03:00[Europe/Moscow]")
 @Validated

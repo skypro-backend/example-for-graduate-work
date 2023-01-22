@@ -5,8 +5,8 @@
  */
 package ru.skypro.homework.api;
 
-import ru.skypro.homework.model.NewPassword;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.model.entity.NewPassword;
+import ru.skypro.homework.model.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

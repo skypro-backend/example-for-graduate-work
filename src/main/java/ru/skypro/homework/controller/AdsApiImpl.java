@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.api.AdsApi;
-import ru.skypro.homework.model.*;
+import ru.skypro.homework.model.entity.*;
 
 import java.util.Optional;
 
