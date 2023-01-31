@@ -5,6 +5,11 @@
  */
 package ru.skypro.homework.api;
 
+import ru.skypro.homework.model.Ads;
+import ru.skypro.homework.model.Comment;
+import ru.skypro.homework.model.FullAds;
+import ru.skypro.homework.model.ResponseWrapperAds;
+import ru.skypro.homework.model.ResponseWrapperComment;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

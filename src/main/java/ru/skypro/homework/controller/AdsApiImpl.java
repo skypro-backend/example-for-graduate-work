@@ -112,6 +112,7 @@ public class AdsApiImpl implements AdsApi {
     public ResponseEntity<ResponseWrapperAdsDto> getAdsMeUsingGET(Boolean authenticated, String authorities0Authority, Object credentials, Object details, Object principal) {
         return getAdsMeUsingGET(authenticated, authorities0Authority, credentials, details, principal);
     }
+
     /**
      * GET /ads/{ad_pk}/comments : getComments
      *
