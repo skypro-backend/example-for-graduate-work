@@ -22,7 +22,7 @@ public class ResponseWrapperComment {
 
   @JsonProperty("results")
   @Valid
-  private List<Comment> results = null;
+  private List<Comment> results;
 
   public ResponseWrapperComment count(Integer count) {
     this.count = count;

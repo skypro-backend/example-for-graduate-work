@@ -4,6 +4,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Entity;
 import javax.validation.Valid;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -13,7 +14,7 @@ import javax.annotation.Generated;
 /**
  * Ads
  */
-
+@Entity
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-01-16T21:17:34.091476600+03:00[Europe/Moscow]")
 public class Ads {
 
