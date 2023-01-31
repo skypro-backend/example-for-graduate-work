@@ -1,8 +1,8 @@
-package ru.skypro.homework.mappers;
+package ru.skypro.homework.model.mapper;
 
 import org.mapstruct.Mapper;
-import ru.skypro.homework.dto.ResponseWrapperCommentDto;
-import ru.skypro.homework.model.ResponseWrapperComment;
+import ru.skypro.homework.model.dto.ResponseWrapperCommentDto;
+import ru.skypro.homework.model.entity.ResponseWrapperComment;
 
 @Mapper
 public interface ResponseWrapperCommentMapper {

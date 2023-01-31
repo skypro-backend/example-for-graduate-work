@@ -1,7 +1,6 @@
 package ru.skypro.homework.model.dto;
 
 import lombok.Data;
-import ru.skypro.homework.model.Ads;
 
 import java.util.List;
 
@@ -9,5 +8,5 @@ import java.util.List;
 public class ResponseWrapperAdsDto {
     private Integer count;
 
-    private List<Ads> results;
+    private List<AdsDto> results;
 }

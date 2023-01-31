@@ -1,8 +1,8 @@
-package ru.skypro.homework.mappers;
+package ru.skypro.homework.model.mapper;
 
 import org.mapstruct.Mapper;
-import ru.skypro.homework.dto.CommentDto;
-import ru.skypro.homework.model.Comment;
+import ru.skypro.homework.model.dto.CommentDto;
+import ru.skypro.homework.model.entity.Comment;
 
 @Mapper
 public interface CommentMapper {

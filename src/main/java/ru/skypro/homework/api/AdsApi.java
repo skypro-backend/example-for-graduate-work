@@ -4,7 +4,6 @@
  * Do not edit the class manually.
  */
 package ru.skypro.homework.api;
-import ru.skypro.homework.dto.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.model.dto.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -47,7 +47,7 @@ public interface AdsApi {
         tags = { "Объявления" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Created", content = {
-                @Content(mediaType = "*/*", schema = @Schema(implementation = Ads.class))
+                @Content(mediaType = "*/*", schema = @Schema(implementation = AdsDto.class))
             }),
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
@@ -79,7 +79,7 @@ public interface AdsApi {
         tags = { "Объявления" },
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                @Content(mediaType = "*/*", schema = @Schema(implementation = Comment.class))
+                @Content(mediaType = "*/*", schema = @Schema(implementation = CommentDto.class))
             }),
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
@@ -135,7 +135,7 @@ public interface AdsApi {
         tags = { "Объявления" },
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                @Content(mediaType = "*/*", schema = @Schema(implementation = ResponseWrapperAds.class))
+                @Content(mediaType = "*/*", schema = @Schema(implementation = ResponseWrapperAdsDto.class))
             })
         }
     )
@@ -157,7 +157,7 @@ public interface AdsApi {
         tags = { "Объявления" },
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                @Content(mediaType = "*/*", schema = @Schema(implementation = FullAds.class))
+                @Content(mediaType = "*/*", schema = @Schema(implementation = FullAdsDto.class))
             }),
             @ApiResponse(responseCode = "404", description = "Not Found")
         }
@@ -189,7 +189,7 @@ public interface AdsApi {
         tags = { "Объявления" },
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                @Content(mediaType = "*/*", schema = @Schema(implementation = ResponseWrapperAds.class))
+                @Content(mediaType = "*/*", schema = @Schema(implementation = ResponseWrapperAdsDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
@@ -219,7 +219,7 @@ public interface AdsApi {
         tags = { "Объявления" },
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                @Content(mediaType = "*/*", schema = @Schema(implementation = ResponseWrapperComment.class))
+                @Content(mediaType = "*/*", schema = @Schema(implementation = ResponseWrapperCommentDto.class))
             }),
             @ApiResponse(responseCode = "404", description = "Not Found")
         }
@@ -246,7 +246,7 @@ public interface AdsApi {
         tags = { "Объявления" },
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                @Content(mediaType = "*/*", schema = @Schema(implementation = Comment.class))
+                @Content(mediaType = "*/*", schema = @Schema(implementation = CommentDto.class))
             }),
             @ApiResponse(responseCode = "404", description = "Not Found")
         }
@@ -302,7 +302,7 @@ public interface AdsApi {
         tags = { "Объявления" },
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                @Content(mediaType = "*/*", schema = @Schema(implementation = Ads.class))
+                @Content(mediaType = "*/*", schema = @Schema(implementation = AdsDto.class))
             }),
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
@@ -333,7 +333,7 @@ public interface AdsApi {
         tags = { "Объявления" },
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                @Content(mediaType = "*/*", schema = @Schema(implementation = Comment.class))
+                @Content(mediaType = "*/*", schema = @Schema(implementation = CommentDto.class))
             }),
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),

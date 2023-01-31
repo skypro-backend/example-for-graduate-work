@@ -1,8 +1,8 @@
-package ru.skypro.homework.mappers;
+package ru.skypro.homework.model.mapper;
 
 import org.mapstruct.Mapper;
-import ru.skypro.homework.dto.ResponseWrapperAdsDto;
-import ru.skypro.homework.model.ResponseWrapperAds;
+import ru.skypro.homework.model.dto.ResponseWrapperAdsDto;
+import ru.skypro.homework.model.entity.ResponseWrapperAds;
 
 @Mapper
 public interface ResponseWrapperAdsMapper {

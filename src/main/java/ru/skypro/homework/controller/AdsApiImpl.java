@@ -8,7 +8,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.api.AdsApi;
 import ru.skypro.homework.model.dto.*;
-import ru.skypro.homework.mappers.*;
+import ru.skypro.homework.model.mapper.*;
 
 import java.util.Optional;
 

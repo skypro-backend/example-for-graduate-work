@@ -1,8 +1,8 @@
-package ru.skypro.homework.mappers;
+package ru.skypro.homework.model.mapper;
 
 import org.mapstruct.Mapper;
-import ru.skypro.homework.dto.FullAdsDto;
-import ru.skypro.homework.model.FullAds;
+import ru.skypro.homework.model.dto.FullAdsDto;
+import ru.skypro.homework.model.entity.FullAds;
 
 @Mapper
 public interface FullAdsMapper {
