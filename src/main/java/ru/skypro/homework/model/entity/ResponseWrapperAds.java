@@ -22,7 +22,7 @@ public class ResponseWrapperAds {
 
   @JsonProperty("results")
   @Valid
-  private List<Ads> results = null;
+  private List<Ads> results;
 
   public ResponseWrapperAds count(Integer count) {
     this.count = count;

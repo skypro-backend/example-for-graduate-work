@@ -31,7 +31,7 @@ public class FullAds {
 
   @JsonProperty("image")
   @Valid
-  private List<String> image = null;
+  private List<String> image;
 
   @JsonProperty("phone")
   private String phone;

@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.api.AdsApi;
-import ru.skypro.homework.model.entity.*;
+import ru.skypro.homework.model.dto.*;
+import ru.skypro.homework.model.mapper.*;
 
 import java.util.Optional;
 
@@ -15,6 +16,13 @@ import java.util.Optional;
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
 public class AdsApiImpl implements AdsApi {
+    private AdsMapper mapperAds;
+    private CreateAdsMapper mapperCreateAds;
+
+    private CommentMapper mapperComment;
+    private ResponseWrapperAdsMapper mapperResponseWrapperAdsMapper;
+    private FullAdsMapper mapperFullAds;
+    private ResponseWrapperCommentMapper responseWrapperCommentMapper;
     @Override
     public Optional<NativeWebRequest> getRequest() {
         return AdsApi.super.getRequest();
@@ -31,8 +39,8 @@ public class AdsApiImpl implements AdsApi {
      * or Unauthorized (status code 401)
      */
     @Override
-    public ResponseEntity<Ads> addAds(CreateAds properties, MultipartFile image) {
-        return AdsApi.super.addAds(properties, image);
+    public ResponseEntity<AdsDto> addAds(CreateAdsDto properties, MultipartFile image) {
+        return addAds(properties, image);
     }
 
     /**
@@ -46,8 +54,8 @@ public class AdsApiImpl implements AdsApi {
      * or Unauthorized (status code 401)
      */
     @Override
-    public ResponseEntity<Comment> addComments(String adPk, Comment comment) {
-        return AdsApi.super.addComments(adPk, comment);
+    public ResponseEntity<CommentDto> addComments(String adPk, CommentDto comment) {
+        return addComments(adPk, comment);
     }
 
     /**
@@ -62,7 +70,7 @@ public class AdsApiImpl implements AdsApi {
      */
     @Override
     public ResponseEntity<Void> deleteComments(String adPk, Integer id) {
-        return AdsApi.super.deleteComments(adPk, id);
+        return deleteComments(adPk, id);
     }
 
     /**
@@ -71,8 +79,8 @@ public class AdsApiImpl implements AdsApi {
      * @return OK (status code 200)
      */
     @Override
-    public ResponseEntity<ResponseWrapperAds> getALLAds() {
-        return AdsApi.super.getALLAds();
+    public ResponseEntity<ResponseWrapperAdsDto> getALLAds() {
+        return getALLAds();
     }
 
     /**
@@ -83,8 +91,8 @@ public class AdsApiImpl implements AdsApi {
      * or Not Found (status code 404)
      */
     @Override
-    public ResponseEntity<FullAds> getAds(Integer id) {
-        return AdsApi.super.getAds(id);
+    public ResponseEntity<FullAdsDto> getAds(Integer id) {
+        return getAds(id);
     }
 
     /**
@@ -101,8 +109,8 @@ public class AdsApiImpl implements AdsApi {
      * or Not Found (status code 404)
      */
     @Override
-    public ResponseEntity<ResponseWrapperAds> getAdsMeUsingGET(Boolean authenticated, String authorities0Authority, Object credentials, Object details, Object principal) {
-        return AdsApi.super.getAdsMeUsingGET(authenticated, authorities0Authority, credentials, details, principal);
+    public ResponseEntity<ResponseWrapperAdsDto> getAdsMeUsingGET(Boolean authenticated, String authorities0Authority, Object credentials, Object details, Object principal) {
+        return getAdsMeUsingGET(authenticated, authorities0Authority, credentials, details, principal);
     }
 
     /**
@@ -113,8 +121,8 @@ public class AdsApiImpl implements AdsApi {
      * or Not Found (status code 404)
      */
     @Override
-    public ResponseEntity<ResponseWrapperComment> getComments(String adPk) {
-        return AdsApi.super.getComments(adPk);
+    public ResponseEntity<ResponseWrapperCommentDto> getComments(String adPk) {
+        return getComments(adPk);
     }
 
     /**
@@ -126,8 +134,8 @@ public class AdsApiImpl implements AdsApi {
      * or Not Found (status code 404)
      */
     @Override
-    public ResponseEntity<Comment> getComments1(String adPk, Integer id) {
-        return AdsApi.super.getComments1(adPk, id);
+    public ResponseEntity<CommentDto> getComments1(String adPk, Integer id) {
+        return getComments1(adPk, id);
     }
 
     /**
@@ -140,7 +148,7 @@ public class AdsApiImpl implements AdsApi {
      */
     @Override
     public ResponseEntity<Void> removeAds(Integer id) {
-        return AdsApi.super.removeAds(id);
+        return removeAds(id);
     }
 
     /**
@@ -154,8 +162,8 @@ public class AdsApiImpl implements AdsApi {
      * or Unauthorized (status code 401)
      */
     @Override
-    public ResponseEntity<Ads> updateAds(Integer id, CreateAds createAds) {
-        return AdsApi.super.updateAds(id, createAds);
+    public ResponseEntity<AdsDto> updateAds(Integer id, CreateAdsDto createAds) {
+        return updateAds(id, createAds);
     }
 
     /**
@@ -170,7 +178,7 @@ public class AdsApiImpl implements AdsApi {
      * or Unauthorized (status code 401)
      */
     @Override
-    public ResponseEntity<Comment> updateComments(String adPk, Integer id, Comment comment) {
-        return AdsApi.super.updateComments(adPk, id, comment);
+    public ResponseEntity<CommentDto> updateComments(String adPk, Integer id, CommentDto comment) {
+        return updateComments(adPk, id, comment);
     }
 }
