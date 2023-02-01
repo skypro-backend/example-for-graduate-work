@@ -5,7 +5,7 @@
  */
 package ru.skypro.homework.api;
 
-import ru.skypro.homework.model.RegisterReq;
+import ru.skypro.homework.model.entity.RegisterReq;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

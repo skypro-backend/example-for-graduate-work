@@ -1,4 +1,4 @@
-package ru.skypro.homework.model;
+package ru.skypro.homework.model.entity;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,7 +31,7 @@ public class FullAds {
 
   @JsonProperty("image")
   @Valid
-  private List<String> image = null;
+  private List<String> image;
 
   @JsonProperty("phone")
   private String phone;

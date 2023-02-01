@@ -1,4 +1,4 @@
-package ru.skypro.homework.model;
+package ru.skypro.homework.model.entity;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,7 +22,7 @@ public class ResponseWrapperAds {
 
   @JsonProperty("results")
   @Valid
-  private List<Ads> results = null;
+  private List<Ads> results;
 
   public ResponseWrapperAds count(Integer count) {
     this.count = count;

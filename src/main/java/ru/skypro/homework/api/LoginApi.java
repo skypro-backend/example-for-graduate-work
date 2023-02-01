@@ -5,7 +5,7 @@
  */
 package ru.skypro.homework.api;
 
-import ru.skypro.homework.model.LoginReq;
+import ru.skypro.homework.model.entity.LoginReq;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

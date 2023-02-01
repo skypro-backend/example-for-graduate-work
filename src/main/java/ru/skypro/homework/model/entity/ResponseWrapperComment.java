@@ -1,4 +1,4 @@
-package ru.skypro.homework.model;
+package ru.skypro.homework.model.entity;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,7 +22,7 @@ public class ResponseWrapperComment {
 
   @JsonProperty("results")
   @Valid
-  private List<Comment> results = null;
+  private List<Comment> results;
 
   public ResponseWrapperComment count(Integer count) {
     this.count = count;
