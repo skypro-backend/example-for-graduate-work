@@ -1,29 +1,44 @@
 package ru.skypro.homework.model.entity;
 
+
+import lombok.Data;
+
+import javax.annotation.Generated;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.annotation.Generated;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Objects;
+
 
 /**
  * Comment
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-01-16T21:17:34.091476600+03:00[Europe/Moscow]")
-@Entity
+
+@Data
 @Table(name = "comments")
 public class Comment {
-  @Id
-  private Integer author;
-  private String createdAt;
 
-  private Integer pk;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  private String text;
+    @Column(name = "ads_id")
+    private Long adsId;
+
+    @Column(name = "user_profile_id")
+    private Long author;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "text")
+
 
   public Comment author(Integer author) {
     this.author = author;

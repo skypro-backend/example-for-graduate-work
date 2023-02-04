@@ -1,12 +1,15 @@
 package ru.skypro.homework.model.entity;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.annotation.Generated;
+import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.annotation.Generated;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.validation.Valid;
 import java.util.Objects;
 
@@ -15,16 +18,33 @@ import java.util.Objects;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-01-16T21:17:34.091476600+03:00[Europe/Moscow]")
-@Entity
 @Table(name = "ads")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ads {
+
     @Id
-    private Integer author;
-    @Valid
-    private String image;
-    private Integer pk;
-    private Integer price;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_profile_id")
+    private User author;
+
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "price")
+    private int price;
+
+    @Column(name = "description")
+    private String description;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
+
 
 
     public Ads author(Integer author) {
@@ -175,5 +195,6 @@ public class Ads {
         }
         return o.toString().replace("\n", "\n    ");
     }
+
 }
 
