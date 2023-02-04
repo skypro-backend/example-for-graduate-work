@@ -1,47 +1,60 @@
 package ru.skypro.homework.model.entity;
 
+
+import lombok.Data;
+import org.hibernate.annotations.Type;
+
+import javax.annotation.Generated;
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.annotation.Generated;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
+
 
 /**
  * User
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-01-16T21:17:34.091476600+03:00[Europe/Moscow]")
-@Entity
+@Data
 @Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_profile_id")
+    private Long id;
 
-    @JsonProperty("email")
+    @Column(name = "email")
     private String email;
 
-    @JsonProperty("firstName")
+    @Column(name = "first_name")
     private String firstName;
 
-    @JsonProperty("id")
-    @Id
-    private Integer id;
-
-    @JsonProperty("lastName")
+    @Column(name = "last_name")
     private String lastName;
 
-    @JsonProperty("phone")
+    @Column(name = "phone")
     private String phone;
 
-    @JsonProperty("regDate")
-    private String regDate;
+    @OneToMany(mappedBy = "author")
+    private Set<Ads> ads;
 
-    @JsonProperty("city")
+    @Column(name = "reg_date")
+    private LocalDate regDate;
+
+    @Column(name = "city")
     private String city;
 
-    @JsonProperty("image")
-    private String image;
+
+    @Lob
+    @Column(name = "avatar")
+    @Type(type = "org.hibernate.type.BinaryType")
+    private byte[] avatar;
 
     public User email(String email) {
         this.email = email;

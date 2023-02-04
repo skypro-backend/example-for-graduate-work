@@ -5,7 +5,7 @@
  */
 package ru.skypro.homework.api;
 
-import ru.skypro.homework.model.entity.NewPassword;
+import ru.skypro.homework.model.dto.NewPasswordDto;
 import ru.skypro.homework.model.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -92,7 +92,7 @@ public interface UsersApi {
         tags = { "Пользователи" },
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                @Content(mediaType = "*/*", schema = @Schema(implementation = NewPassword.class))
+                @Content(mediaType = "*/*", schema = @Schema(implementation = NewPasswordDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
@@ -105,8 +105,8 @@ public interface UsersApi {
         produces = { "*/*" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<NewPassword> setPassword(
-        @Parameter(name = "NewPassword", description = "", required = true) @Valid @RequestBody NewPassword newPassword
+    default ResponseEntity<NewPasswordDto> setPassword(
+        @Parameter(name = "NewPassword", description = "", required = true) @Valid @RequestBody NewPasswordDto newPassword
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
