@@ -6,7 +6,6 @@ import ru.skypro.homework.model.entity.Comment;
 
 @Mapper
 public interface CommentMapper {
-    CommentDto toCommentDTO (Comment comment);
-
-    Comment toComment(CommentDto commentDto);
+    CommentDto commentToCommentDto (Comment comment);
+    Comment CommentDtoToComment(CommentDto commentDto);
 }

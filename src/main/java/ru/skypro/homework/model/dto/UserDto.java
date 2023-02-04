@@ -9,4 +9,7 @@ public class UserDto {
     public String lastName;
     public String email;
     public String phone;
+    private String regDate;
+    private String city;
+    private String avatar;
 }

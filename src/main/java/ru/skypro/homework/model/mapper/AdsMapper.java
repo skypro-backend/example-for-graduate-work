@@ -6,6 +6,6 @@ import ru.skypro.homework.model.entity.Ads;
 
 @Mapper
 public interface AdsMapper {
-    AdsDto toAdsDTO (Ads Ads);
-    Ads toAds(AdsDto dto);
+    AdsDto adsToAdsDto (Ads Ads);
+    Ads AdsDtoToAds(AdsDto dto);
 }

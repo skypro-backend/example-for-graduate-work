@@ -7,9 +7,10 @@ import ru.skypro.homework.model.entity.User;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface UserMapper {
 
-    User toEntity(UserDto userDto);
-    UserDto toDto(User user);
+    User userToUserDto(UserDto userDto);
+    UserDto UserDtoToUser(User user);
 
-    @BeanMapping (nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @BeanMapping (nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+            nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     void partialUpdate(UserDto userDto, @MappingTarget User user);
 }

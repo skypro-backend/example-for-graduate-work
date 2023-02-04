@@ -12,6 +12,7 @@ public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "file_size")
     Long id;
 
     @Column(name = "file_size")
@@ -24,10 +25,8 @@ public class Image {
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] data;
 
-    public Image() {
-    }
-
-    @OneToOne(mappedBy = "image")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "ads")
     private Ads ads;
 
 }
