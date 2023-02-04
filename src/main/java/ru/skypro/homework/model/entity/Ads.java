@@ -18,22 +18,12 @@ import java.util.Objects;
 @Entity
 @Table(name = "ads")
 public class Ads {
-
-    @JsonProperty("author")
     @Id
     private Integer author;
-
-    @JsonProperty("image")
     @Valid
     private String image;
-
-    @JsonProperty("pk")
     private Integer pk;
-
-    @JsonProperty("price")
     private Integer price;
-
-    @JsonProperty("title")
     private String title;
 
 

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.api.UsersApi;
-import ru.skypro.homework.model.entity.NewPassword;
+import ru.skypro.homework.model.dto.NewPasswordDto;
 import ru.skypro.homework.model.entity.User;
 
 import java.util.Optional;
@@ -46,7 +46,7 @@ public class UsersApiImpl implements UsersApi {
      * or Not Found (status code 404)
      */
     @Override
-    public ResponseEntity<NewPassword> setPassword(NewPassword newPassword) {
+    public ResponseEntity<NewPasswordDto> setPassword(NewPasswordDto newPassword) {
         return UsersApi.super.setPassword(newPassword);
     }
 

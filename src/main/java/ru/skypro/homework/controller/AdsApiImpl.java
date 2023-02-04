@@ -17,12 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AdsApiImpl implements AdsApi {
     private AdsMapper mapperAds;
-    private CreateAdsMapper mapperCreateAds;
-
     private CommentMapper mapperComment;
-    private ResponseWrapperAdsMapper mapperResponseWrapperAdsMapper;
-    private FullAdsMapper mapperFullAds;
-    private ResponseWrapperCommentMapper responseWrapperCommentMapper;
     @Override
     public Optional<NativeWebRequest> getRequest() {
         return AdsApi.super.getRequest();
