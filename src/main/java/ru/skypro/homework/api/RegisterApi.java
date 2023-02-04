@@ -5,7 +5,6 @@
  */
 package ru.skypro.homework.api;
 
-import ru.skypro.homework.model.entity.RegisterReq;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
+import ru.skypro.homework.model.dto.RegisterReqDto;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -55,7 +55,7 @@ public interface RegisterApi {
         consumes = { "application/json" }
     )
     default ResponseEntity<Void> register(
-        @Parameter(name = "RegisterReq", description = "", required = true) @Valid @RequestBody RegisterReq registerReq
+        @Parameter(name = "RegisterReq", description = "", required = true) @Valid @RequestBody RegisterReqDto registerReq
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 

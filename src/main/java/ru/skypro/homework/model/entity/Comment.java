@@ -38,7 +38,7 @@ public class Comment {
     private LocalDateTime createdAt;
 
     @Column(name = "text")
-    private String text;
+
 
   public Comment author(Integer author) {
     this.author = author;

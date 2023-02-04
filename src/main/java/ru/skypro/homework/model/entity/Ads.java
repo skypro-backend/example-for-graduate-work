@@ -46,6 +46,7 @@ public class Ads {
     private Image image;
 
 
+
     public Ads author(Integer author) {
         this.author = author;
         return this;
