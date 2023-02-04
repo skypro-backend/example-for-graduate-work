@@ -5,7 +5,6 @@
  */
 package ru.skypro.homework.api;
 
-import ru.skypro.homework.model.entity.LoginReq;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
+import ru.skypro.homework.model.dto.LoginReqDto;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -60,7 +60,7 @@ public interface LoginApi {
         consumes = { "application/json" }
     )
     default ResponseEntity<Object> login(
-        @Parameter(name = "LoginReq", description = "", required = true) @Valid @RequestBody LoginReq loginReq
+        @Parameter(name = "LoginReq", description = "", required = true) @Valid @RequestBody LoginReqDto loginReqDto
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 

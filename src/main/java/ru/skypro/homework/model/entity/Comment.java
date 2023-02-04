@@ -17,18 +17,12 @@ import java.util.Objects;
 @Entity
 @Table(name = "comments")
 public class Comment {
-
-  @JsonProperty("author")
   @Id
   private Integer author;
-
-  @JsonProperty("createdAt")
   private String createdAt;
 
-  @JsonProperty("pk")
   private Integer pk;
 
-  @JsonProperty("text")
   private String text;
 
   public Comment author(Integer author) {
