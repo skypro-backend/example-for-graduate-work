@@ -8,7 +8,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.api.UsersApi;
 import ru.skypro.homework.model.dto.NewPasswordDto;
-import ru.skypro.homework.model.entity.User;
+import ru.skypro.homework.model.entity.ProfileUser;
 
 import java.util.Optional;
 
@@ -32,7 +32,7 @@ public class UsersApiImpl implements UsersApi {
      * or Not Found (status code 404)
      */
     @Override
-    public ResponseEntity<User> getUser1() {
+    public ResponseEntity<ProfileUser> getUser1() {
         return UsersApi.super.getUser1();
     }
 
@@ -53,7 +53,7 @@ public class UsersApiImpl implements UsersApi {
     /**
      * PATCH /users/me : updateUser
      *
-     * @param user (required)
+     * @param profileUser (required)
      * @return OK (status code 200)
      * or No Content (status code 204)
      * or Unauthorized (status code 401)
@@ -61,8 +61,8 @@ public class UsersApiImpl implements UsersApi {
      * or Not Found (status code 404)
      */
     @Override
-    public ResponseEntity<User> updateUser(User user) {
-        return UsersApi.super.updateUser(user);
+    public ResponseEntity<ProfileUser> updateUser(ProfileUser profileUser) {
+        return UsersApi.super.updateUser(profileUser);
     }
 
     /**

@@ -3,7 +3,6 @@ package ru.skypro.homework.model.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 /**
  * Comment
@@ -22,11 +21,11 @@ public class Comment {
     @Column(name = "ads_id")
     private Long adsId;
 
-    @Column(name = "user_profile_id")
+    @Column(name = "author_id")
     private Long author;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     @Column(name = "text")
     private String text;

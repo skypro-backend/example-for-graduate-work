@@ -5,10 +5,9 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "image")
 @Data
-public class Image {
+@Entity
+public class Avatar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +23,6 @@ public class Image {
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] data;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Ads ads;
-
+    @OneToOne(mappedBy = "avatar")
+    private ProfileUser profileUser;
 }

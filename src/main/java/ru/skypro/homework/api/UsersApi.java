@@ -6,7 +6,7 @@
 package ru.skypro.homework.api;
 
 import ru.skypro.homework.model.dto.NewPasswordDto;
-import ru.skypro.homework.model.entity.User;
+import ru.skypro.homework.model.entity.ProfileUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -48,7 +48,7 @@ public interface UsersApi {
         tags = { "Пользователи" },
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                @Content(mediaType = "*/*", schema = @Schema(implementation = User.class))
+                @Content(mediaType = "*/*", schema = @Schema(implementation = ProfileUser.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
@@ -60,7 +60,7 @@ public interface UsersApi {
         value = "/users/me",
         produces = { "*/*" }
     )
-    default ResponseEntity<User> getUser1(
+    default ResponseEntity<ProfileUser> getUser1(
         
     ) {
         getRequest().ifPresent(request -> {
@@ -125,7 +125,7 @@ public interface UsersApi {
     /**
      * PATCH /users/me : updateUser
      *
-     * @param user  (required)
+     * @param profileUser  (required)
      * @return OK (status code 200)
      *         or No Content (status code 204)
      *         or Unauthorized (status code 401)
@@ -138,7 +138,7 @@ public interface UsersApi {
         tags = { "Пользователи" },
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                @Content(mediaType = "*/*", schema = @Schema(implementation = User.class))
+                @Content(mediaType = "*/*", schema = @Schema(implementation = ProfileUser.class))
             }),
             @ApiResponse(responseCode = "204", description = "No Content"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
@@ -152,8 +152,8 @@ public interface UsersApi {
         produces = { "*/*" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<User> updateUser(
-        @Parameter(name = "User", description = "", required = true) @Valid @RequestBody User user
+    default ResponseEntity<ProfileUser> updateUser(
+        @Parameter(name = "User", description = "", required = true) @Valid @RequestBody ProfileUser profileUser
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {

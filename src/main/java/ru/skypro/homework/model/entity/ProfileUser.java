@@ -1,22 +1,20 @@
 package ru.skypro.homework.model.entity;
 
 import lombok.Data;
-import org.hibernate.annotations.Type;
+import ru.skypro.homework.model.dto.RoleEnum;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.Set;
 
 import javax.persistence.Table;
-
 /**
  * User
  */
 
 @Entity
 @Data
-@Table(name = "user")
-public class User {
+@Table(name = "profile_user")
+public class ProfileUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_profile_id")
@@ -38,14 +36,15 @@ public class User {
     private Set<Ads> ads;
 
     @Column(name = "reg_date")
-    private LocalDate regDate;
-
+    private String regDate;
     @Column(name = "city")
     private String city;
+    @Column(name = "pass")
+    private String password;
+    @Column(name = "role")
+    private RoleEnum role;
 
-    @Lob
-    @Column(name = "avatar")
-    @Type(type = "org.hibernate.type.BinaryType")
-    private byte[] avatar;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Avatar avatar;
 
 }

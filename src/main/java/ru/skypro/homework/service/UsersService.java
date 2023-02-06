@@ -1,10 +1,10 @@
 package ru.skypro.homework.service;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.model.entity.User;
+import ru.skypro.homework.model.entity.ProfileUser;
 @Service
 public class UsersService {
-    public User getInfo() {
+    public ProfileUser getInfo() {
         //TO DO
     return null;
     }
