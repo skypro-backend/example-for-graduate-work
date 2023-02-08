@@ -83,49 +83,6 @@ public class UserController {
       @PathVariable(required = true, name = "id") int id) {
     return ResponseEntity.ok(userService.getUser(id));
   }
-
-  //  @ApiResponses({
-//      @ApiResponse(
-//          responseCode = "200",
-//          description = "OK"
-//      ),
-//      @ApiResponse(
-//          responseCode = "204",
-//          description = "No Content"
-//      ),
-//      @ApiResponse(
-//          responseCode = "401",
-//          description = "Unauthorized"
-//      ),
-//      @ApiResponse(
-//          responseCode = "403",
-//          description = "Forbidden"
-//      )
-//  })
-//  @PatchMapping(value = "/me")
-//  public ResponseEntity<UserDto> updateUser(
-//      @Parameter(description = "first Name", example = "someFirstName")
-//      @RequestParam(required = false, name = "firstName")
-//      @NotBlank(message = "firstName не должен быть пустым") String firstName,
-//
-//      @Parameter(description = "last Name", example = "someLastName")
-//      @RequestParam(required = false, name = "lastName")
-//      @NotBlank(message = "lastName не должен быть пустым") String lastName,
-//
-//      @Parameter(description = "phone", example = "somePhone")
-//      @RequestParam(required = false, name = "phone")
-//      @NotBlank(message = "phone не должен быть пустым") String phone,
-//
-//      @Parameter(description = "first Name", example = "someId")
-//      @RequestParam(required = true, name = "id")
-//      @NotBlank(message = "id не должен быть пустым")
-//      @Min(value = 1, message = "Идентификатор должен быть больше 0") int id,
-//
-//      @Parameter(description = "email", example = "someEmail")
-//      @RequestParam(required = false, name = "email")
-//      @NotBlank(message = "email не должен быть пустым") String email) {
-//    return ResponseEntity.ok(userService.updateUser(id, firstName, lastName, phone, email));
-//  }
   @Operation(summary = "updateUser")
   @ApiResponses({
       @ApiResponse(
