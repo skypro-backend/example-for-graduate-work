@@ -79,7 +79,7 @@ public class UserController {
       @Min(value = 1, message = "Идентификатор должен быть больше 0")
       @NotBlank(message = "id не должен быть пустым")
       @PathVariable(required = true, name = "id") int id) {
-    return ResponseEntity.ok(userService.getUser());
+    return ResponseEntity.ok(userService.getUser(id));
   }
 
   @ApiResponses({
@@ -148,7 +148,7 @@ public class UserController {
           description = "Not Found"
       )
   })
-  @PostMapping(value = "/me/setPassword")
+  @PostMapping(value = "/setPassword")
   public void setPassword(
       @Parameter(description = "New password")
       @RequestParam(required = true,name = "newPassword")

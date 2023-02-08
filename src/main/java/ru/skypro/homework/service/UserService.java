@@ -7,7 +7,7 @@ public interface UserService {
 
   Collection<User> getUsers();
 
-  User getUser();
+  User getUser(int id);
 
   User updateUser(int id, String firstName, String lastName, String phone, String email);
 
