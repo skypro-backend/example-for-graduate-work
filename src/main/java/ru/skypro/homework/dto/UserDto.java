@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
+public class UserDto {
 
   Integer id;
   String firstName;
