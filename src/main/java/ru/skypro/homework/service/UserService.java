@@ -9,7 +9,9 @@ public interface UserService {
 
   User getUser(int id);
 
-  User updateUser(int id, String firstName, String lastName, String phone, String email);
+  User updateUser(User user);
 
   String setPassword(String newPassword, String currentPassword);
+
+
 }

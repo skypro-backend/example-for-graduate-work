@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User updateUser(int id, String firstName, String lastName, String phone, String email) {
+  public User updateUser(User user) {
     return null;
   }
 
@@ -28,4 +28,6 @@ public class UserServiceImpl implements UserService {
   public String setPassword(String newPassword, String currentPassword) {
     return null;
   }
+
+
 }
