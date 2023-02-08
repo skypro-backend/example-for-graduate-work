@@ -19,6 +19,7 @@ import javax.validation.constraints.NotBlank;
 @RequestMapping("/ads")
 @Tag(name = "Объявления")
 @Slf4j
+@CrossOrigin(value = "http://localhost:3000")
 public class AdsController {
 
     private final AdsService adsService;
