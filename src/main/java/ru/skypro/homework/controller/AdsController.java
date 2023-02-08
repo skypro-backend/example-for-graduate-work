@@ -2,6 +2,7 @@ package ru.skypro.homework.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -40,22 +41,86 @@ public class AdsController {
                             @Content(
                                     mediaType = "application/json",
                                     array = @ArraySchema(schema = @Schema(implementation = Comment.class)))
-                    })
+                    }),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Not Found"
+            )
+
     })
     @GetMapping("/{ad_pk}/comment")
-    public ResponseEntity<Collection<Comment>> getAdsComments(@PathVariable(name = "ad_pk") @NonNull Integer pk) {
+    public ResponseEntity<Collection<Comment>> getAdsComments(@PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk) {
         return ResponseEntity.ok().body(adsService.getAdsComments(pk));
     }
 
+    @Operation(summary = "Добавление комментария к объявлению")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Comment added",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = Comment.class)))
+                    }),
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Created"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Not Found"
+            )
+
+    })
     @PostMapping("/{ad_pk}/comment")
-    public ResponseEntity<?> addAdsComments(@PathVariable(name = "ad_pk") @NonNull Integer pk) {
+    public ResponseEntity<?> addAdsComments(@PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk) {
         adsService.addAdsComments(pk);
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Удаление комментария пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Comment added",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = Comment.class)))
+                    }),
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "No Content"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden"
+            )
+    })
     @DeleteMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<?> deleteAdsComment(@PathVariable(name = "ad_pk") @NonNull Integer pk,
-                                              @PathVariable(name = "id") @NonNull Integer id) {
+    public ResponseEntity<?> deleteAdsComment(@PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk,
+                                              @PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id) {
         adsService.deleteAdsComment(pk, id);
         return ResponseEntity.ok().build();
     }
