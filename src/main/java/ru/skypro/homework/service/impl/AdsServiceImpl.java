@@ -15,4 +15,9 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public void deleteComments(String adPk, int id) {
     }
+
+    @Override
+    public Comment updateComments(String adPk, int id, Comment comment) {
+        return comment;
+    }
 }

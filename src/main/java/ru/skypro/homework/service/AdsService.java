@@ -20,4 +20,6 @@ public interface AdsService {
      * @param id    - идентификатор комментария
      */
     void deleteComments(String adPk, int id);
+
+    Comment updateComments(String adPk, int id, Comment comment);
 }

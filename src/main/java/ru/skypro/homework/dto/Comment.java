@@ -13,11 +13,11 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Comment {
     //Id автора комментария
-    int authorId;
+    int author;
     //Дата создания комментария
     String createdAt;
     //Id объявления
-    int adsPk;
+    int pk;
     //Текст комментария
     String text;
 }
