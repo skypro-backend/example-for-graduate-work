@@ -16,12 +16,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
 
-  String description;
   Integer id;
   String firstName;
   String lastName;
   String phone;
   String email;
-
 
 }

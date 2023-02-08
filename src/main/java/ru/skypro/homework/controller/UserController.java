@@ -74,7 +74,7 @@ public class UserController {
           description = "Not Found"
       )
   })
-  @GetMapping(value = "&{id}")
+  @GetMapping(value = "{id}")
   public ResponseEntity<User> getUser(
       @Min(value = 1, message = "Идентификатор должен быть больше 0")
       @NotBlank(message = "id не должен быть пустым")
