@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.Collection;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UserService;
@@ -76,7 +78,7 @@ public class UserController {
   public ResponseEntity<User> getUser(
       @Min(value = 1, message = "Идентификатор должен быть больше 0")
       @NotBlank(message = "id не должен быть пустым")
-      @PathVariable(name = "id") int id) {
+      @PathVariable(required = true, name = "id") int id) {
     return ResponseEntity.ok(userService.getUser());
   }
 
@@ -100,21 +102,26 @@ public class UserController {
   })
   @PatchMapping(value = "/me")
   public ResponseEntity<User> updateUser(
-      @PathVariable(name = "firstName")
-      @NotBlank(message = "ad_pk не должен быть пустым") String firstName,
+      @Parameter(description = "first Name", example = "someFirstName")
+      @RequestParam(required = false, name = "firstName")
+      @NotBlank(message = "firstName не должен быть пустым") String firstName,
 
-      @PathVariable(name = "lastName")
-      @NotBlank(message = "ad_pk не должен быть пустым") String lastName,
+      @Parameter(description = "last Name", example = "someLastName")
+      @RequestParam(required = false, name = "lastName")
+      @NotBlank(message = "lastName не должен быть пустым") String lastName,
 
-      @PathVariable(name = "phone")
-      @NotBlank(message = "ad_pk не должен быть пустым") String phone,
+      @Parameter(description = "phone", example = "somePhone")
+      @RequestParam(required = false, name = "phone")
+      @NotBlank(message = "phone не должен быть пустым") String phone,
 
-      @PathVariable(name = "id")
+      @Parameter(description = "first Name", example = "someId")
+      @RequestParam(required = true, name = "id")
       @NotBlank(message = "id не должен быть пустым")
       @Min(value = 1, message = "Идентификатор должен быть больше 0") int id,
 
-      @PathVariable(name = "email")
-      @NotBlank(message = "ad_pk не должен быть пустым") String email) {
+      @Parameter(description = "email", example = "someEmail")
+      @RequestParam(required = false, name = "email")
+      @NotBlank(message = "email не должен быть пустым") String email) {
     return ResponseEntity.ok(userService.updateUser(id, firstName, lastName, phone, email));
   }
 
@@ -143,10 +150,13 @@ public class UserController {
   })
   @PostMapping(value = "/me/setPassword")
   public void setPassword(
-      @PathVariable(name = "newPassword")
-      @NotBlank(message = "ad_pk не должен быть пустым") String newPassword,
-      @PathVariable(name = "currentPassword")
-      @NotBlank(message = "ad_pk не должен быть пустым") String currentPassword) {
+      @Parameter(description = "New password")
+      @RequestParam(required = true,name = "newPassword")
+      @NotBlank(message = "newPassword не должен быть пустым") String newPassword,
+
+      @Parameter(description = "current password")
+      @RequestParam(required = true, name = "currentPassword")
+      @NotBlank(message = "currentPassword не должен быть пустым") String currentPassword) {
     userService.setPassword(newPassword, currentPassword);
   }
 
