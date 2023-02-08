@@ -12,7 +12,7 @@ public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Integer id;
 
     @Column(name = "file_size")
     private long fileSize;

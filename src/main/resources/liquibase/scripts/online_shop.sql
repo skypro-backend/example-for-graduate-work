@@ -29,7 +29,8 @@ CREATE TABLE profile_user
 );
 
 ALTER TABLE profile_user
-    ADD CONSTRAINT FK_PROFILE_USER_ON_AVATAR FOREIGN KEY (avatar_id) REFERENCES avatar (id);
+    ADD CONSTRAINT FK_PROFILE_USER_ON_AVATAR FOREIGN KEY (avatar_id) REFERENCES avatar (id)
+on delete cascade on update cascade ;
 ALTER TABLE profile_user
     ADD constraint unique_email unique (email);
 
@@ -47,14 +48,17 @@ CREATE TABLE ads
 );
 
 ALTER TABLE ads
-    ADD CONSTRAINT FK_ADS_ON_USER FOREIGN KEY (user_id) REFERENCES profile_user (user_profile_id);
+    ADD CONSTRAINT FK_ADS_ON_USER FOREIGN KEY (user_id) REFERENCES profile_user (user_profile_id)
+        on delete cascade on update cascade ;
 
 
 --changeset ShilovaNatalia:comments_add_fk and comments_add_fk_to_user
 alter table comments
-    add constraint fk_ads_user_profiles foreign key (author_id) references profile_user (user_profile_id);
+    add constraint fk_ads_user_profiles foreign key (author_id) references profile_user (user_profile_id)
+        on delete cascade on update cascade ;
 alter table comments
-    add constraint fk_ads foreign key (ads_id) references ads (id);
+    add constraint fk_ads foreign key (ads_id) references ads (id)
+        on delete cascade on update cascade ;
 
 --changeset ShilovaNatalia:image_table
 
@@ -69,7 +73,8 @@ CREATE TABLE image
 );
 
 ALTER TABLE image
-    ADD CONSTRAINT FK_IMAGE_ON_ADS FOREIGN KEY (ads_id) REFERENCES ads (id);
+    ADD CONSTRAINT FK_IMAGE_ON_ADS FOREIGN KEY (ads_id) REFERENCES ads (id)
+        on delete cascade on update cascade ;
 
 --changeset ShilovaNatalia:avatar_table
 CREATE TABLE avatar
@@ -79,4 +84,19 @@ CREATE TABLE avatar
     media_type VARCHAR(255),
     data       BYTEA,
     CONSTRAINT pk_avatar PRIMARY KEY (id)
+);
+
+--changeset ShilovaNatalia:tables users and authorities
+create table users
+(
+    username    varchar(50) not null primary key ,
+    password    varchar(120) not null,
+    enabled     boolean not null
+);
+
+create table authorities
+(
+    username varchar(50) not null,
+    authority varchar(50) not null,
+    foreign key (username) references users (username)
 );

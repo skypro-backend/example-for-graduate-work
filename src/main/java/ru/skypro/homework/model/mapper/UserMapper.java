@@ -7,7 +7,7 @@ import ru.skypro.homework.model.dto.RegisterReqDto;
 import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.ProfileUser;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,componentModel = "spring")
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
     @Mapping(target = "avatar.id", source = "avatar")
