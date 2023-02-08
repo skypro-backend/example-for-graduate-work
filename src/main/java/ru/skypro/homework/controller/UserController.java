@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.util.Collection;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Min.List;
 import javax.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Parameter;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UserService;
 
 @RestController
@@ -39,7 +42,7 @@ public class UserController {
           description = "OK",
           content = {
               @Content(
-                  schema = @Schema(implementation = Comment.class))
+                  schema = @Schema(implementation = User.class))
           }
       ),
       @ApiResponse(
@@ -47,18 +50,10 @@ public class UserController {
           description = "Not Found"
       )
   })
-  @GetMapping(value = "/{ad_pk}/comments/{id}")
-  public ResponseEntity<Comment> getUsers(@PathVariable(name = "ad_pk")
-  @NotBlank(message = "ad_pk не должен быть пустым")
-  @Min(value = 1, message = "Идентификатор должен быть больше 0")
-  @Parameter(description = "Идентификатор объявления",
-      example = "1") String adPk,
-      @PathVariable(name = "id")
-      @NotBlank(message = "id не должен быть пустым")
-      @Min(value = 1, message = "Идентификатор должен быть больше 0")
-      @Parameter(description = "Идентификатор комментария",
-          example = "1") int id) {
-    return ResponseEntity.ok(adsService.getComments(adPk, id));
+  @GetMapping(value = "/me")
+  public ResponseEntity<Collection<User>> getUsers(@PathVariable(name = "ad_pk") {
+
+    return ResponseEntity.ok(userService.getUsers());
   }
 
   @ApiResponses({

@@ -7,5 +7,8 @@ import ru.skypro.homework.service.UserService;
 public class UserServiceImpl implements UserService {
 
 
-
+  @Override
+  public Object getUsers() {
+    return null;
+  }
 }
