@@ -48,7 +48,7 @@ public class UserController {
       )
   })
   @GetMapping(value = "/{ad_pk}/comments/{id}")
-  public ResponseEntity<Comment> getComments(@PathVariable(name = "ad_pk")
+  public ResponseEntity<Comment> getUsers(@PathVariable(name = "ad_pk")
   @NotBlank(message = "ad_pk не должен быть пустым")
   @Min(value = 1, message = "Идентификатор должен быть больше 0")
   @Parameter(description = "Идентификатор объявления",
