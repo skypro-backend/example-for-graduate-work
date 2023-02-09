@@ -23,11 +23,11 @@ public interface AdsService {
      * @return          - обнволенный комментарий
      */
     AdsDto updateAds( int id);
-     * Возвращает комментарий
-      * @param adPk - идентификатор объявления
-     * @param id    - идентификатор комментария
-     * @return      - комментарий
-     */
+     /**Возвращает комментарий
+      @param adPk - идентификатор объявления
+     @param id    - идентификатор комментария
+     @return      - комментарий
+      */
     Comment getComments(String adPk, int id);
 
     /**
