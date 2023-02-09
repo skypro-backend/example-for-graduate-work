@@ -10,6 +10,11 @@ public class UserServiceImpl implements UserService {
 
 
   @Override
+  public UserDto addUser(UserDto userDto) {
+    return null;
+  }
+
+  @Override
   public Collection<UserDto> getUsers() {
     return null;
   }
