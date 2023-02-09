@@ -1,38 +1,146 @@
 package ru.skypro.homework.controller;
 
-import lombok.RequiredArgsConstructor;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.util.Collection;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.RequestContext;
-import ru.skypro.homework.Data.UserData;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.service.UserService;
 
-import javax.ws.rs.core.Response;
-
+@RestController
+@RequestMapping("/users")
+//@Tag(name = "Объявления")
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
-@RequiredArgsConstructor
-@RestController
 public class UserController {
-    private static UserData userData = new UserData();
 
-//    public ResponseContext createUser(final RequestContext request, final UserDto user) {
-//        if (user == null) {
-//            return new ResponseContext()
-//                    .status(Response.Status.BAD_REQUEST)
-//                    .entity("No User provided. Try again?");
-//        }
-//
-//        userData.addUser(user);
-//        return new ResponseContext()
-//                .contentType(Util.getMediaType(request))
-//                .entity(user);
-//    }
-//
-//    public ResponseContext createUser(final long id, final String firstName, final String lastName, final String email,
-//                                      final String city, final String phone,final String regDate,final String image, final int userStatus) {
-//        final UserDto user = UserData.createUser(id,  firstName, lastName, email,city, phone,regDate, image,userStatus);
-//        return createUser(request, user);
-//    }
+
+  private final UserService userService;
+
+  public UserController(UserService userService) {
+    this.userService = userService;
+  }
+
+  @Operation(summary = "getUsers")
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          description = "OK"
+      ),
+      @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized"
+      ),
+      @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden"
+      ),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Not Found"
+      )
+  })
+  @GetMapping(value = "/me")
+  public ResponseEntity<Collection<UserDto>> getUsers() {
+    return ResponseEntity.ok(userService.getUsers());
+  }
+
+  @Operation(summary = "getUser")
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          description = "OK"
+      ),
+      @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized"
+      ),
+      @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden"
+      ),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Not Found"
+      )
+  })
+  @GetMapping(value = "{id}")
+  public ResponseEntity<UserDto> getUser(
+      @Min(value = 1, message = "Идентификатор должен быть больше 0")
+      @NotBlank(message = "id не должен быть пустым")
+      @PathVariable(required = true, name = "id") int id) {
+    return ResponseEntity.ok(userService.getUser(id));
+  }
+  @Operation(summary = "updateUser")
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          description = "OK"
+      ),
+      @ApiResponse(
+          responseCode = "204",
+          description = "No Content"
+      ),
+      @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized"
+      ),
+      @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden"
+      )
+  })
+  @PatchMapping(value = "/me")
+  public ResponseEntity<UserDto> updateUser(
+      @RequestBody
+      @NotBlank(message = "updateUser не должен быть пустым") UserDto userDto) {
+    return ResponseEntity.ok(userService.updateUser(userDto));
+  }
+
+  @Operation(summary = "setPassword")
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          description = "OK"
+      ),
+      @ApiResponse(
+          responseCode = "201",
+          description = "Created"
+      ),
+      @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized"
+      ),
+      @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden"
+      ),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Not Found"
+      )
+  })
+  @PostMapping(value = "/setPassword")
+  public ResponseEntity<String> setPassword(
+      @RequestBody
+      @NotBlank(message = "newPassword не должен быть пустым") String newPassword,
+
+      @RequestBody
+      @NotBlank(message = "currentPassword не должен быть пустым") String currentPassword) {
+    String s = userService.setPassword(newPassword, currentPassword);
+    return ResponseEntity.ok(s);
+  }
+
 }
