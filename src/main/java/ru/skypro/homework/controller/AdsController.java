@@ -78,7 +78,7 @@ public class AdsController {
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<AdsDto> addAds(@NotNull Authentication authentication,
                                          @RequestPart("properties") @Valid @javax.validation.constraints.NotNull @NotBlank CreateAdsDto properties,
-                                         @RequestPart("image") @Valid @javax.validation.constraints.NotNull @NotBlank MultipartFile image
+                                         @RequestPart("image") MultipartFile image
     ) {
         return ResponseEntity.ok(adsService.save(properties, authentication.getName(), image));
     }
@@ -278,7 +278,7 @@ public class AdsController {
             }
     )
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+  //  @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<FullAdsDto> getAds(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(adsService.getFullAds(id));
     }

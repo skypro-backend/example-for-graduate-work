@@ -3,7 +3,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-package ru.skypro.homework.api;
+package ru.skypro.homework.component;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -65,7 +65,7 @@ public interface ImageApi {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf(""))) {
                     String exampleString = "";
-                    ApiUtil.setExampleResponse(request, "", exampleString);
+  //                  ApiUtil.setExampleResponse(request, "", exampleString);
                     break;
                 }
             }
