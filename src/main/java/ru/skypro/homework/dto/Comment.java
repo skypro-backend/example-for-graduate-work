@@ -1,10 +1,11 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
 
+import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 public class Comment {
@@ -29,4 +30,24 @@ public class Comment {
      */
     private String text;
 
+}
+
+
+/**
+ * DTO для комментариев
+ */
+@Getter
+@ToString
+@AllArgsConstructor
+@EqualsAndHashCode
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Comment {
+    //Id автора комментария
+    int author;
+    //Дата создания комментария
+    String createdAt;
+    //Id объявления
+    int pk;
+    //Текст комментария
+    String text;
 }
