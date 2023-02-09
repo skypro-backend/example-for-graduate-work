@@ -5,16 +5,15 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.record.AdRecord;
-import ru.skypro.homework.service.AdService;
-import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.service.AdsService;
 
 
 import java.util.Collection;
 
+
 /**
- * Сервис для объявлений
+ * Реализация {@link ru.skypro.homework.service.AdsService}
  */
 @Service
 public class AdsServiceImpl implements AdsService {
@@ -48,12 +47,6 @@ public class AdsServiceImpl implements AdsService {
 
     }
 
-/**
- * Реализация {@link ru.skypro.homework.service.AdService}
- */
-
-@Service
-public class AdsServiceImpl implements AdService {
 
   @Override
   public Map<String, Object> getALLAds() {
