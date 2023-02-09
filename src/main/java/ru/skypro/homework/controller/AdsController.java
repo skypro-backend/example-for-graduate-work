@@ -2,6 +2,8 @@ package ru.skypro.homework.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.NonNull;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +29,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.service.AdsService;
-
+import java.util.Collection;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+
+
 
 @RestController
 @RequestMapping("/ads")
@@ -184,6 +189,26 @@ public class AdsController {
                     responseCode = "404",
                     description = "Not Found"
             )
+
+    })
+    @GetMapping("/{ad_pk}/comment")
+    public ResponseEntity<Collection<Comment>> getAdsComments(@PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk) {
+        return ResponseEntity.ok().body(adsService.getAdsComments(pk));
+    }
+
+    @Operation(summary = "Добавление комментария к объявлению")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Comment added",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = Comment.class)))
+                    }),
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Created"
     })
     @DeleteMapping(value = "/{ad_pk}/comments/{id}")
     public void deleteComments(@PathVariable(name = "ad_pk")
@@ -220,6 +245,24 @@ public class AdsController {
                     responseCode = "404",
                     description = "Not Found"
             )
+
+    })
+    @PostMapping("/{ad_pk}/comment")
+    public ResponseEntity<?> addAdsComments(@PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk) {
+        adsService.addAdsComments(pk);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Удаление комментария пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Comment added",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = Comment.class)))
+                    }),
     })
     @PatchMapping(value = "/{ad_pk}/comments/{id}")
     public ResponseEntity<Comment> updateComments(@PathVariable(name = "ad_pk")
@@ -250,6 +293,13 @@ public class AdsController {
                     description = "Forbidden"
             )
     })
+    @DeleteMapping("/{ad_pk}/comment/{id}")
+    public ResponseEntity<?> deleteAdsComment(@PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk,
+                                              @PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id) {
+        adsService.deleteAdsComment(pk, id);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping(value = "/{id}")
     public void removeAds(@PathVariable(name = "id")
                                @NotBlank(message = "id не должен быть пустым")
@@ -258,4 +308,5 @@ public class AdsController {
                                        example = "1") int id) {
         adsService.removeAds(id);
     }
+
 }
