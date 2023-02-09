@@ -33,6 +33,31 @@ public class UserController {
     this.userService = userService;
   }
 
+    @Operation(summary = "addUser")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK"
+            ),
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "No Content"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden"
+            )
+    })
+    @PatchMapping()
+    public ResponseEntity<UserDto> addUser(
+            @RequestBody
+            @NotBlank(message = "addUser не должен быть пустым") UserDto userDto) {
+        return ResponseEntity.ok(userService.addUser(userDto));
+    }
   @Operation(summary = "getUsers")
   @ApiResponses({
       @ApiResponse(

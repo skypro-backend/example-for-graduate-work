@@ -4,6 +4,7 @@ import java.util.Collection;
 import ru.skypro.homework.dto.UserDto;
 
 public interface UserService {
+  UserDto addUser(UserDto userDto);
 
   Collection<UserDto> getUsers();
 
