@@ -18,6 +18,7 @@ import ru.skypro.homework.model.mapper.CommentMapper;
 import ru.skypro.homework.model.repository.AdsRepository;
 import ru.skypro.homework.model.repository.CommentRepository;
 import ru.skypro.homework.model.repository.UserRepository;
+import ru.skypro.homework.service.AdsService;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -27,7 +28,7 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Slf4j
 @Service
-public class AdsServiceImpl implements ru.skypro.homework.service.AdsService {
+public class AdsServiceImpl implements AdsService {
 
     private final CommentRepository commentRepository;
     private final AdsRepository adsRepository;

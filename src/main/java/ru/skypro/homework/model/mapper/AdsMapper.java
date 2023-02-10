@@ -13,9 +13,13 @@ import java.util.Collection;
 public interface AdsMapper {
     AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
-    @Mapping(source = "id", target = "pk")
+    @Mapping(source = "pk", target = "id")
     @Mapping(target = "author", source = "author.id")
     AdsDto adsToAdsDto(Ads Ads);
+
+    @Mapping(source = "id", target = "pk")
+    @Mapping(target = "author", source = "author.id")
+    Ads adsDtoToAds(AdsDto adsDto);
 
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "phone", source = "author.phone")
