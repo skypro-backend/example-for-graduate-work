@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.UserService;
 
 @RestController
@@ -53,9 +53,9 @@ public class UserController {
             )
     })
     @PatchMapping()
-    public ResponseEntity<UserDto> addUser(
+    public ResponseEntity<UserDTO> addUser(
             @RequestBody
-            @NotBlank(message = "addUser не должен быть пустым") UserDto userDto) {
+            @NotBlank(message = "addUser не должен быть пустым") UserDTO userDto) {
         return ResponseEntity.ok(userService.addUser(userDto));
     }
   @Operation(summary = "getUsers")
@@ -78,7 +78,7 @@ public class UserController {
       )
   })
   @GetMapping(value = "/me")
-  public ResponseEntity<Collection<UserDto>> getUsers() {
+  public ResponseEntity<Collection<UserDTO>> getUsers() {
     return ResponseEntity.ok(userService.getUsers());
   }
 
@@ -102,7 +102,7 @@ public class UserController {
       )
   })
   @GetMapping(value = "{id}")
-  public ResponseEntity<UserDto> getUser(
+  public ResponseEntity<UserDTO> getUser(
       @Min(value = 1, message = "Идентификатор должен быть больше 0")
       @NotBlank(message = "id не должен быть пустым")
       @PathVariable(required = true, name = "id") int id) {
@@ -128,9 +128,9 @@ public class UserController {
       )
   })
   @PatchMapping(value = "/me")
-  public ResponseEntity<UserDto> updateUser(
+  public ResponseEntity<UserDTO> updateUser(
       @RequestBody
-      @NotBlank(message = "updateUser не должен быть пустым") UserDto userDto) {
+      @NotBlank(message = "updateUser не должен быть пустым") UserDTO userDto) {
     return ResponseEntity.ok(userService.updateUser(userDto));
   }
 

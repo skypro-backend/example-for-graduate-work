@@ -23,7 +23,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Ad {
+public class AdEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

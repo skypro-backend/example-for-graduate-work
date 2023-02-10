@@ -5,7 +5,7 @@ Content-Type: application/json
 Authorization: Basic userDto password
 
 ###
-GET http://localhost:8080/ads/asddsfsdf/comment
+GET http://localhost:8080/adEntities/asddsfsdf/commentDTO
 Content-Type: application/json
 Authorization: Basic userDto password
 
@@ -31,7 +31,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/ads/me
+GET http://localhost:8080/adEntities/me
 Content-Type: application/json
 Authorization: Basic userDto password
 
@@ -59,7 +59,7 @@ Content-Type: application/json
 Authorization: Basic userDto password
 
 ###
-GET http://localhost:8080/ads
+GET http://localhost:8080/adEntities
 Content-Type: application/json
 Authorization: Basic userDto password
 
@@ -75,7 +75,7 @@ Authorization: Basic userDto password
 }
 
 ###
-POST http://localhost:8080/ads
+POST http://localhost:8080/adEntities
 Content-Type: application/json
 Authorization: Basic userDto password
 
@@ -88,7 +88,7 @@ Authorization: Basic userDto password
 }
 
 ###
-GET http://localhost:8080/ads
+GET http://localhost:8080/adEntities
 Content-Type: application/json
 Authorization: Basic userDto password
 
