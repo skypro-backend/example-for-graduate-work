@@ -3,7 +3,7 @@ package ru.skypro.homework.service;
 import java.util.Collection;
 import java.util.Map;
 import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.CommentDTO;
 
 /**
  * Сервис объявлений
@@ -26,7 +26,7 @@ public interface AdsService {
      @param id    - идентификатор комментария
      @return      - комментарий
       */
-    Comment getComments(String adPk, int id);
+    CommentDTO getComments(String adPk, int id);
 
     /**
      * Удаляет комментарий
@@ -39,15 +39,15 @@ public interface AdsService {
      * Обновляет комментарий
      * @param adPk      - идентификатор объявления
      * @param id        - идентификатор комментария
-     * @param comment   - новый комментарий
+     * @param commentDTO   - новый комментарий
      * @return          - обнволенный комментарий
      */
-    Comment updateComments(String adPk, int id, Comment comment);
+    CommentDTO updateComments(String adPk, int id, CommentDTO commentDTO);
 
     void removeAds(int id);
 
 
-    Collection<Comment> getAdsComments (Integer pk);
+    Collection<CommentDTO> getAdsComments (Integer pk);
 
 
     void addAdsComments (Integer pk);

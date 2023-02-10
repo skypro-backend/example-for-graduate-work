@@ -12,9 +12,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import ru.skypro.homework.entity.AdEntity;
 
 /**
- * A DTO for the {@link ru.skypro.homework.entity.Ad} entity
+ * A DTO for the {@link AdEntity} entity
  */
 @Getter
 @Setter

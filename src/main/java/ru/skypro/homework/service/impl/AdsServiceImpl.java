@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.service.AdsService;
 
 /**
@@ -21,7 +21,7 @@ public class AdsServiceImpl implements AdsService {
    * @return
    */
   @Override
-  public Collection<Comment> getAdsComments(Integer pk) {
+  public Collection<CommentDTO> getAdsComments(Integer pk) {
     return null;
   }
 
@@ -66,8 +66,8 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public Comment getComments(String adPk, int id) {
-    return new Comment(1, "20.02.2023", Integer.parseInt(adPk), "Еще продается?");
+  public CommentDTO getComments(String adPk, int id) {
+    return new CommentDTO(1, "20.02.2023", Integer.parseInt(adPk), "Еще продается?");
   }
 
   @Override
@@ -75,7 +75,7 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public Comment updateComments(String adPk, int id, Comment comment) {
+  public CommentDTO updateComments(String adPk, int id, CommentDTO commentDTO) {
     return null;
   }
 

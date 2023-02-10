@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.service.AdsService;
 
 
@@ -145,7 +145,7 @@ public class AdsController {
           description = "OK",
           content = {
               @Content(
-                  schema = @Schema(implementation = Comment.class))
+                  schema = @Schema(implementation = CommentDTO.class))
           }
       ),
       @ApiResponse(
@@ -154,7 +154,7 @@ public class AdsController {
       )
   })
   @GetMapping(value = "/{ad_pk}/comments/{id}")
-  public ResponseEntity<Comment> getComments(@PathVariable(name = "ad_pk")
+  public ResponseEntity<CommentDTO> getComments(@PathVariable(name = "ad_pk")
   @NotBlank(message = "ad_pk не должен быть пустым")
   @Min(value = 1, message = "Идентификатор должен быть больше 0")
   @Parameter(description = "Идентификатор объявления",
@@ -242,7 +242,7 @@ public class AdsController {
 
   })
   @GetMapping("/{ad_pk}/comment")
-  public ResponseEntity<Collection<Comment>> getAdsComments(
+  public ResponseEntity<Collection<CommentDTO>> getAdsComments(
       @PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk) {
     return ResponseEntity.ok().body(adsService.getAdsComments(pk));
   }
@@ -253,7 +253,7 @@ public class AdsController {
           description = "OK",
           content = {
               @Content(
-                  schema = @Schema(implementation = Comment.class))
+                  schema = @Schema(implementation = CommentDTO.class))
           }
       ),
       @ApiResponse(
@@ -281,15 +281,15 @@ public class AdsController {
   @ApiResponses(value = {
       @ApiResponse(
           responseCode = "200",
-          description = "Comment added",
+          description = "CommentDTO added",
           content = {
               @Content(
                   mediaType = "application/json",
-                  array = @ArraySchema(schema = @Schema(implementation = Comment.class)))
+                  array = @ArraySchema(schema = @Schema(implementation = CommentDTO.class)))
           }),
   })
   @PatchMapping(value = "/{ad_pk}/comments/{id}")
-  public ResponseEntity<Comment> updateComments(@PathVariable(name = "ad_pk")
+  public ResponseEntity<CommentDTO> updateComments(@PathVariable(name = "ad_pk")
   @NotBlank(message = "ad_pk не должен быть пустым")
   @Min(value = 1, message = "Идентификатор должен быть больше 0")
   @Parameter(description = "Идентификатор объявления",
@@ -299,8 +299,8 @@ public class AdsController {
       @Min(value = 1, message = "Идентификатор должен быть больше 0")
       @Parameter(description = "Идентификатор комментария",
           example = "1") int id,
-      @RequestBody Comment comment) {
-    return ResponseEntity.ok(adsService.updateComments(adPk, id, comment));
+      @RequestBody CommentDTO commentDTO) {
+    return ResponseEntity.ok(adsService.updateComments(adPk, id, commentDTO));
   }
 
   @ApiResponses({
