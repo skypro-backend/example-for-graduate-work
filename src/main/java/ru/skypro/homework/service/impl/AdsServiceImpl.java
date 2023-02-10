@@ -4,9 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.AdsDto;
+import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.Comment;
-import ru.skypro.homework.record.AdRecord;
 import ru.skypro.homework.service.AdsService;
 
 /**
@@ -51,19 +50,19 @@ public class AdsServiceImpl implements AdsService {
   @Override
   public Map<String, Object> getALLAds() {
     return Map.of("count", 1, "result",
-        List.of(new AdRecord(1L, "sda", 1, 2, 3, "sad")));
+        List.of(new AdsDTO(1L, "sda", 1, 2, 3, "sad")));
   }
 
   @Override
-  public AdRecord addAds(AdRecord ad) {
-    return new AdRecord(1L, "sda", 1, 2, 3, "sad");
+  public AdsDTO addAds(AdsDTO ad) {
+    return new AdsDTO(1L, "sda", 1, 2, 3, "sad");
   }
 
   @Override
   public Map<String, Object> getAdsMe(boolean authenticated, String authorities, Object credentials,
       Object details, Object principal) {
     return Map.of("count", 1, "result",
-        List.of(new AdRecord(1L, "sda", 1, 2, 3, "sad")));
+        List.of(new AdsDTO(1L, "sda", 1, 2, 3, "sad")));
   }
 
   @Override
@@ -85,12 +84,12 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public AdsDto getAds(int id) {
-    return new AdsDto();
+  public AdsDTO getAds(int id) {
+    return new AdsDTO();
   }
 
   @Override
-  public AdsDto updateAds(int id) {
+  public AdsDTO updateAds(int id) {
     return null;
   }
 

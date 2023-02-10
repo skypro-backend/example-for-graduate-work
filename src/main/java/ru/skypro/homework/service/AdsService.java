@@ -1,11 +1,9 @@
 package ru.skypro.homework.service;
 
-import java.util.Map;
-import ru.skypro.homework.dto.Comment;
-
 import java.util.Collection;
-import ru.skypro.homework.record.AdRecord;
-import ru.skypro.homework.dto.AdsDto;
+import java.util.Map;
+import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.dto.Comment;
 
 /**
  * Сервис объявлений
@@ -16,13 +14,13 @@ public interface AdsService {
      * @param id    - идентификатор объявления
      * @return      - комментарий
      */
-    AdsDto getAds(int id);
+    AdsDTO getAds(int id);
     /**
      * Обновляет объявление
      * @param id      - идентификатор объявления
      * @return          - обнволенный комментарий
      */
-    AdsDto updateAds( int id);
+    AdsDTO updateAds( int id);
      /**Возвращает комментарий
       @param adPk - идентификатор объявления
      @param id    - идентификатор комментария
@@ -69,7 +67,7 @@ public interface AdsService {
      *
      * @return мапу где ключ по имени столбца в таблице каунт и резалт
      */
-    AdRecord addAds(AdRecord adRecord);
+    AdsDTO addAds(AdsDTO adDto);
 
 
     /**

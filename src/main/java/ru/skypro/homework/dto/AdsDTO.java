@@ -1,4 +1,4 @@
-package ru.skypro.homework.record;
+package ru.skypro.homework.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.validation.constraints.Min;
@@ -23,7 +23,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AdRecord {
+public class AdsDTO {
 
   @JsonIgnore
   Long id;

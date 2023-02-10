@@ -26,8 +26,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.Comment;
-import ru.skypro.homework.record.AdRecord;
 import ru.skypro.homework.service.AdsService;
 
 
@@ -79,7 +79,7 @@ public class AdsController {
           description = "OK",
           content = {
               @Content(
-                  array = @ArraySchema(schema = @Schema(implementation = AdRecord.class)))
+                  array = @ArraySchema(schema = @Schema(implementation = AdsDTO.class)))
           }
       ),
       @ApiResponse(
@@ -100,8 +100,8 @@ public class AdsController {
       )
   })
   @PostMapping
-  public ResponseEntity<AdRecord> createAds(@RequestBody AdRecord adRecord) {
-    return ResponseEntity.ok(adsService.addAds(adRecord));
+  public ResponseEntity<AdsDTO> createAds(@RequestBody AdsDTO adDto) {
+    return ResponseEntity.ok(adsService.addAds(adDto));
   }
 
   @Operation(summary = "Получить объявления по заданным параметрам")
