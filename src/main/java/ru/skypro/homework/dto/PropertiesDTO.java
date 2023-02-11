@@ -1,8 +1,5 @@
 package ru.skypro.homework.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.List;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -13,11 +10,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import ru.skypro.homework.entity.AdEntity;
 
 /**
- * A DTO for the {@link AdEntity} entity
+ * Класс сущности "properties" в таблице
  */
+
 @Getter
 @Setter
 @ToString
@@ -25,29 +22,18 @@ import ru.skypro.homework.entity.AdEntity;
 @NoArgsConstructor
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AdsDTO {
-
-  @JsonIgnore
-  Long id;
+public class PropertiesDTO {
 
   @NotNull(message = "Обязательно нужно заполнить поле")
-  @Size(message = "Длина не должна быть меньше 2 знаков и не больше 30", min = 1, max = 30)
-  List<String> image;
+  @Size(message = "Длина не должна быть меньше 2 знаков и не больше 30", min = 2, max = 30)
+  String description;
 
-  @NotNull
-  @Min(value = 1)
-  int author;
-
-  @NotNull
-  @Min(value = 1)
+  @NotNull(message = "Обязательно нужно заполнить поле")
   int price;
-
-  @NotNull
-  @Min(value = 1)
-  int pk;
 
   @NotNull(message = "Обязательно нужно заполнить поле")
   @Size(message = "Длина не должна быть меньше 2 знаков и не больше 30", min = 2, max = 30)
   String title;
+
 
 }
