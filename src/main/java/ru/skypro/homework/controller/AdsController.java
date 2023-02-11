@@ -222,38 +222,36 @@ public class AdsController {
     adsService.removeAds(id);
   }
 
-  @ApiResponses({
-      @ApiResponse(
-          responseCode = "200",
-          description = "OK"
-      ),
-      @ApiResponse(
-          responseCode = "401",
-          description = "Unauthorized"
-      ),
-      @ApiResponse(
-          responseCode = "403",
-          description = "Forbidden"
-      ),
-      @ApiResponse(
-          responseCode = "404",
-          description = "Not Found"
-      )
-
-  })
-  @GetMapping("/{ad_pk}/comment")
-  public ResponseEntity<Collection<CommentDTO>> getAdsComments(
-      @PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk) {
-    return ResponseEntity.ok().body(adsService.getAdsComments(pk));
-  }
-
+  @Operation(summary = "Получить комментарий объявления")
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
           description = "OK",
           content = {
               @Content(
-                  schema = @Schema(implementation = CommentDTO.class))
+                  schema = @Schema(ref = "#/components/schemas/ResponseWrapperComment"))
+          }
+      ),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Not Found"
+      )
+  })
+  @GetMapping("/{ad_pk}/comments")
+  public ResponseEntity<Collection<CommentDTO>> getAdsComments(
+      @PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk) {
+    return ResponseEntity.ok().body(adsService.getAdsComments(pk));
+  }
+
+
+  @Operation(summary = "Добавить комментарий к объявлению")
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          description = "OK",
+          content = {
+              @Content(
+                  schema = @Schema(ref = "#/components/schemas/Comment"))
           }
       ),
       @ApiResponse(
@@ -268,11 +266,10 @@ public class AdsController {
           responseCode = "404",
           description = "Not Found"
       )
-
   })
-  @PostMapping("/{ad_pk}/comment")
-  public ResponseEntity<?> addAdsComments(
-      @PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk) {
+  @PostMapping("/{ad_pk}/comments")
+  public ResponseEntity<CommentDTO> addAdsComments(
+      @PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk, @RequestBody CommentDTO commentDTO) {
     adsService.addAdsComments(pk);
     return ResponseEntity.ok().build();
   }
@@ -323,6 +320,54 @@ public class AdsController {
       @PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id) {
     adsService.deleteAdsComment(pk, id);
     return ResponseEntity.ok().build();
+  }
+
+  @Operation(summary = "Получить объявление")
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          description = "OK",
+          content = {
+              @Content(
+                  schema = @Schema(ref = "#/components/schemas/FullAds"))
+          }
+      ),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Not Found"
+      )
+  })
+  @GetMapping("{id}")
+  public ResponseEntity<?> getAds (@PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id) {
+    return ResponseEntity.ok().body(adsService.getAds(id));
+  }
+
+  @Operation(summary = "Обновить объявление")
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          description = "OK",
+          content = {
+              @Content(
+                  schema = @Schema(ref = "#/components/schemas/Ads"))
+          }
+      ),
+      @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized"
+      ),
+      @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden"
+      ),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Not Found"
+      )
+  })
+  @PatchMapping("{id}")
+  public ResponseEntity<?> updateAds (@PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id, @RequestBody AdsDTO adsDTO) {
+    return ResponseEntity.ok().body(adsService.updateAds(id));
   }
 
 
