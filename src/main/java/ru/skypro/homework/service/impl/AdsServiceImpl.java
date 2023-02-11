@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,11 +79,13 @@ public class AdsServiceImpl implements AdsService {
     adsDTO.setTitle(properties.getTitle());
     adsDTO.setPrice(properties.getPrice());
     List<String> listOfImage = new ArrayList<>();
+    String content = null;
     try {
-      listOfImage.add(Arrays.toString(multipartFile.getBytes()));
+       content = new String(multipartFile.getBytes(), StandardCharsets.UTF_8);
     } catch (IOException e) {
       log.error(FormLogInfo.getCatch());
     }
+    listOfImage.add(content);
     adsDTO.setImage(listOfImage);
     return adsDTO;
   }
