@@ -1,6 +1,8 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +30,7 @@ import ru.skypro.homework.service.UserService;
 @RequestMapping("/users")
 @Tag(name = "Пользователи")
 @Slf4j
-//@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(value = "http://localhost:3000")
 public class UserController {
 
 
@@ -41,7 +44,8 @@ public class UserController {
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
-          description = "OK"
+          description = "OK",
+          content = @Content(schema = @Schema())
       ),
       @ApiResponse(
           responseCode = "401",
@@ -69,7 +73,8 @@ public class UserController {
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
-          description = "OK"
+          description = "OK",
+          content = @Content(schema = @Schema())
       ),
       @ApiResponse(
           responseCode = "401",
@@ -94,7 +99,8 @@ public class UserController {
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
-          description = "OK"
+          description = "OK",
+          content = @Content(schema = @Schema())
       ),
       @ApiResponse(
           responseCode = "204",
@@ -125,7 +131,8 @@ public class UserController {
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
-          description = "OK"
+          description = "OK",
+          content = @Content(schema = @Schema())
       ),
       @ApiResponse(
           responseCode = "404",
