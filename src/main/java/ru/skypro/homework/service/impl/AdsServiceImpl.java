@@ -75,18 +75,21 @@ public class AdsServiceImpl implements AdsService {
   @Override
   public AdsDTO addAds(PropertiesDTO properties, MultipartFile multipartFile){
     log.info(FormLogInfo.getInfo());
+
     AdsDTO adsDTO = new AdsDTO();
     adsDTO.setTitle(properties.getTitle());
     adsDTO.setPrice(properties.getPrice());
     List<String> listOfImage = new ArrayList<>();
     String content = null;
     try {
-       content = new String(multipartFile.getBytes(), StandardCharsets.UTF_8);
+       content = new String(multipartFile.getBytes(),StandardCharsets.UTF_8);
     } catch (IOException e) {
       log.error(FormLogInfo.getCatch());
     }
     listOfImage.add(content);
     adsDTO.setImage(listOfImage);
+    // Раскомментить когда будут таблицы
+    //adsRepository.save(adMapper.toEntity(adsDTO));
     return adsDTO;
   }
 

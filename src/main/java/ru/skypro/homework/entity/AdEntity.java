@@ -35,7 +35,7 @@ public class AdEntity {
   Long id;
   @ElementCollection
   @CollectionTable(name = "id", joinColumns = @JoinColumn(name = "id"))
-  @Column(name = "list_if_doc")
+  @Column(name = "image")
   List<String> image;
   int author;
   int price;
