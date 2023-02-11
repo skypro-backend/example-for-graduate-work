@@ -3,21 +3,21 @@ package ru.skypro.homework.mapper;
 
 import java.util.Collection;
 import org.mapstruct.Mapper;
-import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.record.AdRecord;
+import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.entity.AdEntity;
 
 /**
- * маппер для {@link Ad} готовый рекорд {@link ru.skypro.homework.record.AdRecord}
+ * маппер для {@link AdEntity} готовый рекорд {@link AdsDTO}
  */
 
 @Mapper(componentModel = "spring")
 public interface AdMapper {
 
-  Ad toEntity(AdRecord adRecord);
+  AdEntity toEntity(AdsDTO adDto);
 
-  AdRecord toRecord(Ad ad);
+  AdsDTO toDTO(AdEntity adEntity);
 
-  Collection<Ad> toEntityList(Collection<AdRecord> adRecords);
+  Collection<AdEntity> toEntityList(Collection<AdsDTO> adDTOS);
 
-  Collection<AdRecord> toRecordList(Collection<Ad> ads);
+  Collection<AdsDTO> toDTOList(Collection<AdEntity> adEntities);
 }

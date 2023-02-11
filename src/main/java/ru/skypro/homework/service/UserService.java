@@ -1,16 +1,16 @@
 package ru.skypro.homework.service;
 
 import java.util.Collection;
-import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.dto.UserDTO;
 
 public interface UserService {
-  UserDto addUser(UserDto userDto);
+  UserDTO addUser(UserDTO userDto);
 
-  Collection<UserDto> getUsers();
+  Collection<UserDTO> getUsers();
 
-  UserDto getUser(int id);
+  UserDTO getUser(int id);
 
-  UserDto updateUser(UserDto userDto);
+  UserDTO updateUser(UserDTO userDto);
 
   String setPassword(String newPassword, String currentPassword);
 
