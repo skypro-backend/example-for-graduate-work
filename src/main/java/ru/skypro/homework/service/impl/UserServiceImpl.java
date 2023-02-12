@@ -44,7 +44,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserDTO getUser() {
     log.info(FormLogInfo.getInfo());
-    return null;
+    long id = 0;//todo исправить id
+    return findById(id);
   }
 
   @Override
@@ -81,11 +82,10 @@ public class UserServiceImpl implements UserService {
   public byte[] updateUserImage(MultipartFile image) {
     log.info(FormLogInfo.getInfo());
 
-    long id = 0;//todo где взять id?
+    long id = 0;//todo исправить id
 
     UserEntity userEntity = null;
     Path filePath = Path.of("");
-
 
     try (InputStream is = image.getInputStream();
         OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
