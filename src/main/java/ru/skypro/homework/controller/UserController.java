@@ -11,7 +11,6 @@ import java.util.Objects;
 import javax.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -148,7 +147,7 @@ public class UserController {
           responseCode = "200",
           description = "OK",
           content = @Content(
-              array = @ArraySchema(schema = @Schema(implementation = UserDTO.class)))
+              array = @ArraySchema())
       ),
       @ApiResponse(
           responseCode = "404",
@@ -157,7 +156,7 @@ public class UserController {
       )
   })
   @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<byte[]> updateUserImage(@RequestBody MultipartFile image) {
+  public ResponseEntity updateUserImage(@RequestBody MultipartFile image) {
     log.info(FormLogInfo.getInfo());
 
     UserDTO userDTO = new UserDTO();
@@ -166,7 +165,8 @@ public class UserController {
         MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
     headers.setContentLength(image.getSize());
     byte[] body = userService.updateUserImage(image);
-    return ResponseEntity.status(HttpStatus.OK).headers(headers).body(body);
+//    return ResponseEntity.status(HttpStatus.OK).headers(headers).body(body);
+    return ResponseEntity.ok().build();
 
   }
 
