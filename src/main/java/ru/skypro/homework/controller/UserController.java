@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,24 +41,29 @@ public class UserController {
     this.userService = userService;
   }
 
-  @Operation(summary = "setPassword")
+  @Operation(summary = "Установить новый пароль")
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
           description = "OK",
-          content = @Content(schema = @Schema())
+          content =
+          @Content(
+              array = @ArraySchema(schema = @Schema(implementation = NewPasswordDTO.class)))
       ),
       @ApiResponse(
           responseCode = "401",
-          description = "Unauthorized"
+          description = "Unauthorized",
+          content = @Content(schema = @Schema())
       ),
       @ApiResponse(
           responseCode = "403",
-          description = "Forbidden"
+          description = "Forbidden",
+          content = @Content(schema = @Schema())
       ),
       @ApiResponse(
           responseCode = "404",
-          description = "Not Found"
+          description = "Not Found",
+          content = @Content(schema = @Schema())
       )
   })
   @PostMapping(value = "/setPassword")
@@ -69,24 +75,28 @@ public class UserController {
     return ResponseEntity.ok(newPasswordDTO);
   }
 
-  @Operation(summary = "getUser")
+  @Operation(summary = "Получить пользователя")
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
           description = "OK",
-          content = @Content(schema = @Schema())
+          content = @Content(
+              array = @ArraySchema(schema = @Schema(implementation = UserDTO.class)))
       ),
       @ApiResponse(
           responseCode = "401",
-          description = "Unauthorized"
+          description = "Unauthorized",
+          content = @Content(schema = @Schema())
       ),
       @ApiResponse(
           responseCode = "403",
-          description = "Forbidden"
+          description = "Forbidden",
+          content = @Content(schema = @Schema())
       ),
       @ApiResponse(
           responseCode = "404",
-          description = "Not Found"
+          description = "Not Found",
+          content = @Content(schema = @Schema())
       )
   })
   @GetMapping(value = "/me")
@@ -95,28 +105,33 @@ public class UserController {
     return ResponseEntity.ok(userService.getUser());
   }
 
-  @Operation(summary = "updateUser")
+  @Operation(summary = "Обновить пользователя")
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
           description = "OK",
-          content = @Content(schema = @Schema())
+          content = @Content(
+              array = @ArraySchema(schema = @Schema(implementation = UserDTO.class)))
       ),
       @ApiResponse(
           responseCode = "204",
-          description = "No Content"
+          description = "No Content",
+          content = @Content(schema = @Schema())
       ),
       @ApiResponse(
           responseCode = "401",
-          description = "Unauthorized"
+          description = "Unauthorized",
+          content = @Content(schema = @Schema())
       ),
       @ApiResponse(
           responseCode = "403",
-          description = "Forbidden"
+          description = "Forbidden",
+          content = @Content(schema = @Schema())
       ),
       @ApiResponse(
           responseCode = "404",
-          description = "Not Found"
+          description = "Not Found",
+          content = @Content(schema = @Schema())
       )
   })
   @PatchMapping(value = "/me")
@@ -127,16 +142,18 @@ public class UserController {
     return ResponseEntity.ok(userService.updateUser(userDto));
   }
 
-  @Operation(summary = "updateUserImage")
+  @Operation(summary = "Обновить изображение пользователя")
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
           description = "OK",
-          content = @Content(schema = @Schema())
+          content = @Content(
+              array = @ArraySchema(schema = @Schema(implementation = UserDTO.class)))
       ),
       @ApiResponse(
           responseCode = "404",
-          description = "Not Found"
+          description = "Not Found",
+          content = @Content(schema = @Schema())
       )
   })
   @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
