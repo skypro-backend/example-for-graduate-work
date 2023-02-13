@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
+import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.model.dto.AdsDto;
 import ru.skypro.homework.model.dto.CommentDto;
 import ru.skypro.homework.model.dto.CreateAdsDto;
@@ -59,7 +60,7 @@ public class AdsServiceImpl implements AdsService {
     public AdsDto save(CreateAdsDto ads, String email, MultipartFile image) {
 
         Ads newAds = AdsMapper.INSTANCE.createAdsToAds(ads);
-        newAds.setAuthor(userRepository.findByEmail(email));
+        newAds.setAuthor(userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new));
         log.info("Save ads: " + newAds);
         adsRepository.save(newAds);
 

@@ -1,7 +1,6 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,8 +13,6 @@ import ru.skypro.homework.model.dto.LoginReqDto;
 import ru.skypro.homework.model.dto.RegisterReqDto;
 import ru.skypro.homework.model.dto.RoleEnum;
 import ru.skypro.homework.service.AuthService;
-
-import javax.validation.Valid;
 
 import static ru.skypro.homework.model.dto.RoleEnum.USER;
 
@@ -30,16 +27,16 @@ public class AuthController {
     /**
      * POST /login : login
      *
-     * @param req  (LoginReqDto)
+     * @param req (LoginReqDto)
      * @return OK (status code 200)
-     *         or Not Found (status code 404)
-     *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
+     * or Not Found (status code 404)
+     * or Unauthorized (status code 401)
+     * or Forbidden (status code 403)
      */
     @Operation(
             operationId = "login",
             summary = "login",
-            tags = { "Авторизация" },
+            tags = {"Авторизация"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                             @Content(mediaType = "*/*", schema = @Schema(implementation = Object.class))
@@ -58,8 +55,29 @@ public class AuthController {
         }
     }
 
+
+    /**
+     * POST /register : register
+     *
+     * @param req (RegisterReqDto)
+     * @return Not Found (status code 404)
+     * or Created (status code 201)
+     * or Unauthorized (status code 401)
+     * or Forbidden (status code 403)
+     */
+    @Operation(
+            operationId = "register",
+            summary = "register",
+            tags = {"Авторизация"},
+            responses = {
+                    @ApiResponse(responseCode = "404", description = "Not Found"),
+                    @ApiResponse(responseCode = "201", description = "Created"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden")
+            })
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterReqDto req) {
+
         RoleEnum roleEnum = req.getRoleEnum() == null ? USER : req.getRoleEnum();
         if (authService.register(req, roleEnum)) {
             return ResponseEntity.ok().build();

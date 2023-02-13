@@ -1,11 +1,11 @@
 package ru.skypro.homework.service;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.model.entity.ProfileUser;
+import ru.skypro.homework.model.dto.UserDto;
 @Service
-public class UsersService {
-    public ProfileUser getInfo() {
-        //TO DO
-    return null;
-    }
+public interface UsersService {
+
+    UserDto update(UserDto user,String email);
+    void updateUserImage();
+    UserDto getUser(String email);
 }

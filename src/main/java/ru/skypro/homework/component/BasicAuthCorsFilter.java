@@ -1,4 +1,4 @@
-package ru.skypro.homework.api;
+package ru.skypro.homework.component;
 
 
 import org.jetbrains.annotations.NotNull;

@@ -35,7 +35,7 @@ public class Ads {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Image> images;
 
 }

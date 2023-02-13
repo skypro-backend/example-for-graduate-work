@@ -2,7 +2,6 @@ package ru.skypro.homework.model.mapper;
 
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
-import ru.skypro.homework.model.dto.LoginReqDto;
 import ru.skypro.homework.model.dto.RegisterReqDto;
 import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.ProfileUser;
@@ -12,17 +11,20 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
     @Mapping(target = "avatar.id", source = "avatar")
     @Mapping(target = "id", source = "id")
-    ProfileUser userToUserDto(UserDto userDto);
+    ProfileUser userDtoToUser(UserDto userDto);
     @Mapping(source = "avatar.id", target = "avatar")
     @Mapping(target = "id", source = "id")
-    UserDto UserDtoToUser(ProfileUser profileUser);
+    UserDto userToUserDto(ProfileUser profileUser);
 
     @BeanMapping (nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
             nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-//    void partialUpdate(UserDto userDto, @MappingTarget ProfileUser profileUser);
+    @Mapping(target = "avatar.id", source = "avatar")
+    @Mapping(target = "id", source = "id")
+    void partialUpdate(UserDto userDto, @MappingTarget ProfileUser profileUser);
+
 
     @Mapping(source = "roleEnum", target = "role")
+    @Mapping(source = "username", target = "email")
     ProfileUser registerReqDtoToUser(RegisterReqDto registerReqDto);
-    @Mapping(target = "username", source = "email")
-    LoginReqDto UserToLoginRegDto (ProfileUser user);
+
 }

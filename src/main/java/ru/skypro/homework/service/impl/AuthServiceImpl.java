@@ -69,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(userProfile);
         return true;
     }
-
+    @Override
     public boolean changePassword(NewPasswordDto newPassword, String username) {
         if (login(username, newPassword.getCurrentPassword())) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

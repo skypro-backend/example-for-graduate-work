@@ -32,7 +32,7 @@ public class ProfileUser {
     @Column(name = "phone")
     private String phone;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author",fetch = FetchType.LAZY)
     private Set<Ads> ads;
 
     @Column(name = "reg_date")
@@ -44,7 +44,7 @@ public class ProfileUser {
     @Column(name = "role")
     private RoleEnum role;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Avatar avatar;
 
 }
