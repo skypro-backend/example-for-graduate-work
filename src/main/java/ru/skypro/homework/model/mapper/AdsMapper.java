@@ -8,18 +8,15 @@ import ru.skypro.homework.model.dto.FullAdsDto;
 import ru.skypro.homework.model.entity.Ads;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface AdsMapper {
     AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
-    @Mapping(source = "pk", target = "id")
-    @Mapping(target = "author", source = "author.id")
-    AdsDto adsToAdsDto(Ads Ads);
-
     @Mapping(source = "id", target = "pk")
     @Mapping(target = "author", source = "author.id")
-    Ads adsDtoToAds(AdsDto adsDto);
+    AdsDto adsToAdsDto(Ads Ads);
 
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "phone", source = "author.phone")
@@ -33,5 +30,4 @@ public interface AdsMapper {
     Ads createAdsToAds(CreateAdsDto createAdsDto);
 
     Collection<AdsDto> adsCollectionToAdsDto(Collection<Ads> adsCollection);
-
 }

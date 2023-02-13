@@ -19,11 +19,10 @@ public interface UserMapper {
 
     @BeanMapping (nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
             nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-    void partialUpdate(UserDto userDto, @MappingTarget ProfileUser profileUser);
+//    void partialUpdate(UserDto userDto, @MappingTarget ProfileUser profileUser);
 
     @Mapping(source = "roleEnum", target = "role")
     ProfileUser registerReqDtoToUser(RegisterReqDto registerReqDto);
     @Mapping(target = "username", source = "email")
     LoginReqDto UserToLoginRegDto (ProfileUser user);
-
 }
