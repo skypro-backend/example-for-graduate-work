@@ -1,18 +1,38 @@
 package ru.skypro.homework.service.impl;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.text.Normalizer.Form;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
+import java.util.Properties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.PropertiesDTO;
+import ru.skypro.homework.loger.FormLogInfo;
+import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.service.AdsService;
 
 /**
  * Реализация {@link ru.skypro.homework.service.AdsService}
  */
 @Service
+@Slf4j
 public class AdsServiceImpl implements AdsService {
+
+  private AdsRepository adsRepository;
+  private AdMapper adMapper;
+
+  public AdsServiceImpl(AdsRepository adsRepository, AdMapper adMapper) {
+    this.adsRepository = adsRepository;
+    this.adMapper = adMapper;
+  }
 
   /**
    * Получение всех комментариев объявления
@@ -46,24 +66,33 @@ public class AdsServiceImpl implements AdsService {
 
   }
 
-
   @Override
-  public Map<String, Object> getALLAds() {
-    return Map.of("count", 1, "result",
-        List.of(new AdsDTO(1L, "sda", 1, 2, 3, "sad")));
+  public Collection<AdsDTO> getALLAds() {
+    log.info(FormLogInfo.getInfo());
+    return adMapper.toDTOList(adsRepository.findAll());
   }
 
   @Override
-  public AdsDTO addAds(AdsDTO ad) {
-    return new AdsDTO(1L, "sda", 1, 2, 3, "sad");
+  public AdsDTO addAds(PropertiesDTO properties, MultipartFile multipartFile){
+    log.info(FormLogInfo.getInfo());
+
+    AdsDTO adsDTO = new AdsDTO();
+    adsDTO.setTitle(properties.getTitle());
+    adsDTO.setPrice(properties.getPrice());
+    List<String> listOfImage = new ArrayList<>();
+    String content = null;
+    try {
+       content = new String(multipartFile.getBytes(),StandardCharsets.UTF_8);
+    } catch (IOException e) {
+      log.error(FormLogInfo.getCatch());
+    }
+    listOfImage.add(content);
+    adsDTO.setImage(listOfImage);
+    // Раскомментить когда будут таблицы
+    //adsRepository.save(adMapper.toEntity(adsDTO));
+    return adsDTO;
   }
 
-  @Override
-  public Map<String, Object> getAdsMe(boolean authenticated, String authorities, Object credentials,
-      Object details, Object principal) {
-    return Map.of("count", 1, "result",
-        List.of(new AdsDTO(1L, "sda", 1, 2, 3, "sad")));
-  }
 
   @Override
   public CommentDTO getComments(String adPk, int id) {
