@@ -29,11 +29,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import org.springframework.web.bind.annotation.*;
+
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.PropertiesDTO;
 import ru.skypro.homework.service.AdsService;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import java.util.Collection;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/ads")
@@ -262,12 +269,12 @@ public class AdsController {
   @Min(value = 1, message = "Идентификатор должен быть больше 0")
   @Parameter(description = "Идентификатор объявления",
       example = "1") String adPk,
-      @PathVariable(name = "id")
+                                                   @PathVariable(name = "id")
       @NotBlank(message = "id не должен быть пустым")
       @Min(value = 1, message = "Идентификатор должен быть больше 0")
       @Parameter(description = "Идентификатор комментария",
           example = "1") int id,
-      @RequestBody CommentDTO commentDTO) {
+                                                   @RequestBody CommentDTO commentDTO) {
     return ResponseEntity.ok(adsService.updateComments(adPk, id, commentDTO));
   }
 
