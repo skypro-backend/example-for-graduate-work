@@ -56,18 +56,6 @@ public class AdsController {
               @Content(
                   array = @ArraySchema(schema = @Schema(implementation = AdsDTO.class)))
           }
-      ),
-      @ApiResponse(responseCode = "401", description = "Error",
-      content = {@Content(array = @ArraySchema(schema =@Schema()))}),
-      @ApiResponse(
-          responseCode = "403",
-          description = "Forbidden",
-          content = {@Content(array = @ArraySchema(schema =@Schema()))}
-      ),
-      @ApiResponse(
-          responseCode = "404",
-          description = "Not Found",
-          content = {@Content(array = @ArraySchema(schema =@Schema()))}
       )
   })
   @GetMapping
