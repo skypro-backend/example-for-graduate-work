@@ -23,4 +23,9 @@
     </changeSet>
     <include file="v-1.0/03-create-table-comments.sql" relativeToChangelogFile="true"/>
 
+    <changeSet id="4" author="anton_graf">
+        <tagDatabase tag="add_column_to_table_ads"/>
+    </changeSet>
+    <include file="v-1.0/04-add-column-to-table-ads.sql" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>
