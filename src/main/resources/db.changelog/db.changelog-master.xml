@@ -18,4 +18,9 @@
     </changeSet>
     <include file="v-1.0/02-create-table-ads.sql" relativeToChangelogFile="true"/>
 
+    <changeSet id="3" author="anton_graf">
+        <tagDatabase tag="create_table_comments"/>
+    </changeSet>
+    <include file="v-1.0/03-create-table-comments.sql" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>
