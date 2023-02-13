@@ -13,6 +13,7 @@ import java.util.Collection;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Null;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -26,21 +27,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import org.springframework.web.bind.annotation.*;
-
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.PropertiesDTO;
 import ru.skypro.homework.service.AdsService;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import java.util.Collection;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/ads")
@@ -65,17 +57,17 @@ public class AdsController {
                   array = @ArraySchema(schema = @Schema(implementation = AdsDTO.class)))
           }
       ),
-      @ApiResponse(
-          responseCode = "401",
-          description = "Unauthorized"
-      ),
+      @ApiResponse(responseCode = "401", description = "Error",
+      content = {@Content(array = @ArraySchema(schema =@Schema()))}),
       @ApiResponse(
           responseCode = "403",
-          description = "Forbidden"
+          description = "Forbidden",
+          content = {@Content(array = @ArraySchema(schema =@Schema()))}
       ),
       @ApiResponse(
           responseCode = "404",
-          description = "Not Found"
+          description = "Not Found",
+          content = {@Content(array = @ArraySchema(schema =@Schema()))}
       )
   })
   @GetMapping
@@ -95,18 +87,21 @@ public class AdsController {
       ),
       @ApiResponse(
           responseCode = "401",
-          description = "Unauthorized"
+          description = "Unauthorized",
+          content = {@Content(array = @ArraySchema(schema =@Schema()))}
       ),
       @ApiResponse(
           responseCode = "403",
-          description = "Forbidden"
+          description = "Forbidden",
+          content = {@Content(array = @ArraySchema(schema =@Schema()))}
       ),
       @ApiResponse(
           responseCode = "404",
-          description = "Not Found"
+          description = "Not Found",
+          content = {@Content(array = @ArraySchema(schema =@Schema()))}
       )
   })
-  @PostMapping( consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<AdsDTO> createAds(
       @Valid PropertiesDTO propertiesDTO,
       @RequestParam MultipartFile image) {
@@ -246,7 +241,8 @@ public class AdsController {
   })
   @PostMapping("/{ad_pk}/comments")
   public ResponseEntity<CommentDTO> addAdsComments(
-      @PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk, @RequestBody CommentDTO commentDTO) {
+      @PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk,
+      @RequestBody CommentDTO commentDTO) {
     adsService.addAdsComments(pk);
     return ResponseEntity.ok().build();
   }
@@ -268,12 +264,12 @@ public class AdsController {
   @Min(value = 1, message = "Идентификатор должен быть больше 0")
   @Parameter(description = "Идентификатор объявления",
       example = "1") String adPk,
-                                                   @PathVariable(name = "id")
+      @PathVariable(name = "id")
       @NotBlank(message = "id не должен быть пустым")
       @Min(value = 1, message = "Идентификатор должен быть больше 0")
       @Parameter(description = "Идентификатор комментария",
           example = "1") int id,
-                                                   @RequestBody CommentDTO commentDTO) {
+      @RequestBody CommentDTO commentDTO) {
     return ResponseEntity.ok(adsService.updateComments(adPk, id, commentDTO));
   }
 
@@ -293,7 +289,8 @@ public class AdsController {
       )
   })
   @GetMapping("{id}")
-  public ResponseEntity<?> getAds (@PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id) {
+  public ResponseEntity<?> getAds(
+      @PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id) {
     return ResponseEntity.ok().body(adsService.getAds(id));
   }
 
@@ -321,7 +318,9 @@ public class AdsController {
       )
   })
   @PatchMapping("{id}")
-  public ResponseEntity<?> updateAds (@PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id, @RequestBody AdsDTO adsDTO) {
+  public ResponseEntity<?> updateAds(
+      @PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id,
+      @RequestBody AdsDTO adsDTO) {
     return ResponseEntity.ok().body(adsService.updateAds(id));
   }
 
