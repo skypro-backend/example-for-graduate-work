@@ -29,9 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.PropertiesDTO;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 
 @RestController
@@ -182,19 +180,20 @@ public class AdsController {
     adsService.removeAds(id);
   }
 
-  @Operation(summary = "Получить комментарий объявления")
+  @Operation(summary = "Получить комментарии объявления")
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
           description = "OK",
-          content = {
-              @Content(
-                  schema = @Schema(ref = "#/components/schemas/ResponseWrapperComment"))
-          }
+              content = {
+                      @Content(
+                              schema = @Schema(implementation = CommentDTO.class))
+              }
       ),
       @ApiResponse(
           responseCode = "404",
-          description = "Not Found"
+          description = "Not Found",
+              content = {@Content(array = @ArraySchema(schema =@Schema()))}
       )
   })
   @GetMapping("/{ad_pk}/comments")
@@ -204,27 +203,30 @@ public class AdsController {
   }
 
 
-  @Operation(summary = "Добавить комментарий к объявлению")
+  @Operation(summary = "Добавить комментарии к объявлению")
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
           description = "OK",
-          content = {
-              @Content(
-                  schema = @Schema(ref = "#/components/schemas/Comment"))
-          }
+              content = {
+                      @Content(
+                              schema = @Schema(implementation = CommentDTO.class))
+              }
       ),
       @ApiResponse(
           responseCode = "401",
-          description = "Unauthorized"
+          description = "Unauthorized",
+              content = {@Content(array = @ArraySchema(schema =@Schema()))}
       ),
       @ApiResponse(
           responseCode = "403",
-          description = "Forbidden"
+          description = "Forbidden",
+              content = {@Content(array = @ArraySchema(schema =@Schema()))}
       ),
       @ApiResponse(
           responseCode = "404",
-          description = "Not Found"
+          description = "Not Found",
+              content = {@Content(array = @ArraySchema(schema =@Schema()))}
       )
   })
   @PostMapping("/{ad_pk}/comments")
@@ -268,7 +270,7 @@ public class AdsController {
           description = "OK",
           content = {
               @Content(
-                  schema = @Schema(ref = "#/components/schemas/FullAds"))
+                      array = @ArraySchema(schema = @Schema(implementation = FullAds.class)))
           }
       ),
       @ApiResponse(
@@ -289,7 +291,7 @@ public class AdsController {
           description = "OK",
           content = {
               @Content(
-                  schema = @Schema(ref = "#/components/schemas/Ads"))
+                      array = @ArraySchema(schema = @Schema(implementation = AdsDTO.class)))
           }
       ),
       @ApiResponse(
@@ -308,7 +310,7 @@ public class AdsController {
   @PatchMapping("{id}")
   public ResponseEntity<?> updateAds(
       @PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id,
-      @RequestBody AdsDTO adsDTO) {
+      @RequestBody CreateAds CreateAds) {
     return ResponseEntity.ok().body(adsService.updateAds(id));
   }
 
