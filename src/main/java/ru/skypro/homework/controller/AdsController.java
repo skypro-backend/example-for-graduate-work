@@ -62,7 +62,7 @@ public class AdsController {
           description = "OK",
           content = {
               @Content(
-                  schema = @Schema(ref = "#/components/schemas/ResponseWrapper«Ads»"))
+                  array = @ArraySchema(schema = @Schema(implementation = AdsDTO.class)))
           }
       ),
       @ApiResponse(
@@ -113,7 +113,7 @@ public class AdsController {
     return ResponseEntity.ok(adsService.addAds(propertiesDTO, image));
   }
 
-
+  @Operation(summary = "Получить комментарий по id объявления и id комментария")
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
@@ -142,6 +142,7 @@ public class AdsController {
     return ResponseEntity.ok(adsService.getComments(adPk, id));
   }
 
+  @Operation(summary = "Удалить комментарий по id объявления и id комментария")
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
@@ -174,6 +175,7 @@ public class AdsController {
     adsService.deleteComments(adPk, id);
   }
 
+  @Operation(summary = "Удалить объявление по id")
   @ApiResponses({
       @ApiResponse(
           responseCode = "204",
@@ -249,7 +251,7 @@ public class AdsController {
     return ResponseEntity.ok().build();
   }
 
-  @Operation(summary = "Удаление комментария пользователя")
+  @Operation(summary = "Изменение комментария пользователя")
   @ApiResponses(value = {
       @ApiResponse(
           responseCode = "200",
@@ -273,28 +275,6 @@ public class AdsController {
           example = "1") int id,
                                                    @RequestBody CommentDTO commentDTO) {
     return ResponseEntity.ok(adsService.updateComments(adPk, id, commentDTO));
-  }
-
-  @ApiResponses({
-      @ApiResponse(
-          responseCode = "204",
-          description = "No Content"
-      ),
-      @ApiResponse(
-          responseCode = "401",
-          description = "Unauthorized"
-      ),
-      @ApiResponse(
-          responseCode = "403",
-          description = "Forbidden"
-      )
-  })
-  @DeleteMapping("/{ad_pk}/comment/{id}")
-  public ResponseEntity<?> deleteAdsComment(
-      @PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk,
-      @PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id) {
-    adsService.deleteAdsComment(pk, id);
-    return ResponseEntity.ok().build();
   }
 
   @Operation(summary = "Получить объявление")

@@ -31,7 +31,7 @@ public class AdsDTO {
   Long id;
 
   @NotNull(message = "Обязательно нужно заполнить поле")
-  @Size(message = "Длина не должна быть меньше 2 знаков и не больше 30", min = 1, max = 30)
+  @Size(message = "Длина не должна быть меньше 1 знаков и не больше 30", min = 1, max = 30)
   List<String> image;
 
   @NotNull

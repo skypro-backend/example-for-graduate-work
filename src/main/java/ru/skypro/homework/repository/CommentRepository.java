@@ -7,6 +7,6 @@ import ru.skypro.homework.dto.CommentDTO;
 /**
  * Репозиторий для комментариев
  */
-@Repository
-public interface CommentRepository extends JpaRepository<CommentDTO, Long> {
-}
+//@Repository
+//public interface CommentRepository extends JpaRepository<CommentDTO, Long> {
+//}
