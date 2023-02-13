@@ -48,7 +48,7 @@ public class ImageController {
             )
     })
     @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "{id}")
-    public ResponseEntity<?> uploadImage(@RequestParam (name = "id") Integer id, @RequestBody ImageDTO imageDTO) {
+    public ResponseEntity<?> uploadImage(@PathVariable (name = "id") Integer id, @RequestBody ImageDTO imageDTO) {
         imageService.uploadImage(id);
         return ResponseEntity.ok().build();
     }
