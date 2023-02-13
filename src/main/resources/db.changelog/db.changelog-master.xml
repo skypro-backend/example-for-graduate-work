@@ -13,9 +13,4 @@
     </changeSet>
     <include file="v-1.0/01-create-table-users.sql" relativeToChangelogFile="true"/>
 
-    <changeSet id="2" author="anton_graf">
-        <tagDatabase tag="create_table_ads"/>
-    </changeSet>
-    <include file="v-1.0/02-create-table-ads.sql" relativeToChangelogFile="true"/>
-
 </databaseChangeLog>
