@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.PropertiesDTO;
+import ru.skypro.homework.dto.Properties;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.Collection;
@@ -62,7 +62,7 @@ public class AdsServiceMockImpl implements AdsService {
     }
 
     @Override
-    public AdsDTO addAds(PropertiesDTO properties, MultipartFile multipartFile) {
+    public AdsDTO addAds(Properties properties, MultipartFile multipartFile) {
         return null;
     }
 }

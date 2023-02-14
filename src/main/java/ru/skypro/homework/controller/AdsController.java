@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
@@ -89,9 +90,9 @@ public class AdsController {
   })
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<AdsDTO> createAds(
-      @Valid PropertiesDTO propertiesDTO,
+      @RequestPart @Valid Properties properties,
       @RequestParam MultipartFile image) {
-    return ResponseEntity.ok(adsService.addAds(propertiesDTO, image));
+    return ResponseEntity.ok(adsService.addAds(properties, image));
   }
 
   @Operation(summary = "Получить комментарий по id объявления и id комментария")
