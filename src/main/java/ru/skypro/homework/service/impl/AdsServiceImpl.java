@@ -1,8 +1,10 @@
-package ru.skypro.homework.service.impl;
-
-/**
- * Реализация {@link ru.skypro.homework.service.AdsService}
- */
+//package ru.skypro.homework.service.impl;
+//
+//import ru.skypro.homework.dto.CommentDTO;
+//
+///**
+// * Реализация {@link ru.skypro.homework.service.AdsService}
+// */
 //@Service
 //@Slf4j
 //public class AdsServiceImpl implements AdsService {
@@ -23,7 +25,7 @@ package ru.skypro.homework.service.impl;
 //   */
 //  @Override
 //  public Collection<CommentDTO> getAdsComments(Integer pk) {
-//    return null;
+//    return  commentMapper.toDTO(CommentRepository.findById(pk));
 //  }
 //
 //  /**
@@ -75,9 +77,9 @@ package ru.skypro.homework.service.impl;
 //  }
 //
 //
-//  @Override
 //  public CommentDTO getComments(String adPk, int id) {
-//    return new CommentDTO(1, "20.02.2023", Integer.parseInt(adPk), "Еще продается?");
+//     CommentDTO commentDTO = adsRepository.findByAuthorAndId(adPk,id);
+//      return commentMapper.toDTO(commentDTO);
 //  }
 //
 //  @Override
@@ -95,7 +97,7 @@ package ru.skypro.homework.service.impl;
 //
 //  @Override
 //  public AdsDTO getAds(int id) {
-//    return new AdsDTO();
+//    return adMapper.toDTO(AdsRepository.findById(id));
 //  }
 //
 //  @Override
