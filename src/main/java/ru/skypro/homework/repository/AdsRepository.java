@@ -9,6 +9,6 @@ import ru.skypro.homework.entity.AdEntity;
  */
 
 @Repository
-public interface AdsRepository extends JpaRepository<AdEntity, Long> {
+public interface AdsRepository extends JpaRepository<AdEntity, Integer> {
 
 }

@@ -4,7 +4,6 @@ CREATE TABLE users
     email TEXT,
     first_name TEXT,
     last_name TEXT,
-    password TEXT,
     phone TEXT,
     reg_date TIMESTAMP,
     city TEXT,

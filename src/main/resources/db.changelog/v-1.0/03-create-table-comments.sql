@@ -2,7 +2,7 @@ CREATE TABLE comments
 (
     id  serial PRIMARY KEY ,
     author_id int,
-    createdAt TIMESTAMP,
+    created_at TIMESTAMP,
     pk_ads int,
     text TEXT,
     constraint fk_author_id foreign key (author_id) references users (id),

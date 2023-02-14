@@ -1,17 +1,13 @@
 package ru.skypro.homework.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Сущность пользователя
@@ -22,6 +18,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "users")
 @Entity
 public class UserEntity {
 
@@ -31,66 +28,92 @@ public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  Long id;
+  int id;
+
   /**
    * Имя пользователя
    */
+  @Column(name = "first_name")
   String firstName;
+
   /**
    * Фамилия пользователя
    */
+  @Column(name = "last_name")
   String lastName;
+
   /**
    * почта пользователя
    */
+  @Column(name = "email")
   String email;
+
   /**
    * телефон пользователя
    */
+  @Column(name = "phone")
   String phone;
+
   /**
    * дата регистрации пользователя
    */
-  String regDate;
+  @Column(name = "reg_date")
+  LocalDateTime regDate;
+
   /**
    * город пользователя
    */
+  @Column(name = "city")
   String city;
+
   /**
    * фото пользователя
    */
-  String image;
+  @Column(name = "image")
+  byte[] image;
 
+  /**
+   * Список объявлений пользователя
+   */
+  @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+  @JsonBackReference
+  List<AdEntity> adEntities;
+
+  @OneToMany(mappedBy = "author")
+  @JsonBackReference
+  List<CommentEntity> commentEntities;
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
     UserEntity that = (UserEntity) o;
 
-    if (!id.equals(that.id)) {
-      return false;
-    }
-    if (!firstName.equals(that.firstName)) {
-      return false;
-    }
-    if (!lastName.equals(that.lastName)) {
-      return false;
-    }
-    return email.equals(that.email);
+    if (id != that.id) return false;
+    if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
+    if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
+    if (email != null ? !email.equals(that.email) : that.email != null) return false;
+    if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+    if (regDate != null ? !regDate.equals(that.regDate) : that.regDate != null) return false;
+    if (city != null ? !city.equals(that.city) : that.city != null) return false;
+    if (!Arrays.equals(image, that.image)) return false;
+    if (adEntities != null ? !adEntities.equals(that.adEntities) : that.adEntities != null) return false;
+    return commentEntities != null ? commentEntities.equals(that.commentEntities) : that.commentEntities == null;
   }
 
   @Override
   public int hashCode() {
-    int result = id.hashCode();
-    result = 31 * result + firstName.hashCode();
-    result = 31 * result + lastName.hashCode();
-    result = 31 * result + email.hashCode();
+    int result = id;
+    result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+    result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+    result = 31 * result + (email != null ? email.hashCode() : 0);
+    result = 31 * result + (phone != null ? phone.hashCode() : 0);
+    result = 31 * result + (regDate != null ? regDate.hashCode() : 0);
+    result = 31 * result + (city != null ? city.hashCode() : 0);
+    result = 31 * result + Arrays.hashCode(image);
+    result = 31 * result + (adEntities != null ? adEntities.hashCode() : 0);
+    result = 31 * result + (commentEntities != null ? commentEntities.hashCode() : 0);
     return result;
   }
 }

@@ -1,19 +1,19 @@
 package ru.skypro.homework.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
  * DTO для комментариев
  */
-//@Entity
+@Entity
+@Table(name = "comments")
 @Getter
 @ToString
 @NoArgsConstructor
@@ -24,15 +24,26 @@ public class CommentEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  private Long id;
+  private int id;
 
   /**Id автора комментария */
-  int author;
+  @ManyToOne
+  @JsonIgnore
+  @JoinColumn(name = "author_id")
+  UserEntity author;
+
   /**Дата создания комментария  */
-  String createdAt;
+  @Column(name = "created_at")
+  LocalDateTime createdAt;
+
   /**Id объявления          */
-  int pk;
+  @ManyToOne
+  @JsonIgnore
+  @JoinColumn(name = "pk_ads")
+  AdEntity pk;
+
   /**Текст комментария */
+  @Column(name = "text")
   String text;
 
   @Override

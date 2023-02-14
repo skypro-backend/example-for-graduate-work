@@ -1,16 +1,16 @@
 package ru.skypro.homework.mapper;
 
 
-import java.util.Collection;
-import org.mapstruct.Mapper;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.entity.UserEntity;
+
+import java.util.Collection;
 
 /**
  * маппер для {@link UserEntity} готовый dto {@link UserDTO}
  */
 
-@Mapper(componentModel = "spring")
+//@Mapper(componentModel = "spring")
 public interface UserMapper {
 
   UserEntity toEntity(UserDTO userDto);
