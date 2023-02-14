@@ -28,4 +28,9 @@
     </changeSet>
     <include file="v-1.0/04-add-column-to-table-ads.sql" relativeToChangelogFile="true"/>
 
+    <changeSet id="5" author="igor_br">
+        <tagDatabase tag="add_column_to_table_ads"/>
+    </changeSet>
+    <include file="v-1.0/data/igorBr_01_Insert_User.sql" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>
