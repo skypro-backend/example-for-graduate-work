@@ -1,5 +1,6 @@
 package ru.skypro.homework.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.skypro.homework.entity.AdEntity;
@@ -51,9 +52,9 @@ public class UserDTO {
    * фото пользователя
    */
   String image;
-
+  @JsonIgnore
   List<AdEntity> adEntities;
-
+  @JsonIgnore
   List<CommentEntity> commentEntities;
 
 }
