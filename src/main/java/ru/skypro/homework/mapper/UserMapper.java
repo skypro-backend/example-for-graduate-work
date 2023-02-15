@@ -12,7 +12,7 @@ import java.util.Collection;
  * маппер для {@link UserEntity} готовый dto {@link UserDTO}
  */
 
-@Mapper(componentModel = "spring", uses = ImageMapper.class)
+@Mapper(componentModel = "spring")
 public interface UserMapper {
 
   @Mapping(target = "regDate", source = "regDate", dateFormat = "dd-MM-yyyy HH:mm:ss")
