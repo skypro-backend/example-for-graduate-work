@@ -1,3 +1,4 @@
+/*
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
@@ -28,3 +29,4 @@ public class UserServiceMockImpl implements UserService {
         return new byte[0];
     }
 }
+*/

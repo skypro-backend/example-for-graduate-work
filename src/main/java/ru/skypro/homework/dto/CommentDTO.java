@@ -1,12 +1,15 @@
 package ru.skypro.homework.dto;
 
 
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.UserEntity;
 
 /**
  * DTO для комментариев
@@ -19,11 +22,11 @@ import lombok.experimental.FieldDefaults;
 public class CommentDTO {
 
   /**Id автора комментария */
-  int author;
-  /**Дата создания комментария  */
-  String createdAt;
-  /**Id объявления          */
-  int pk;
+  Integer id;
+  UserEntity author;
+  LocalDateTime createdAt;
+  AdEntity pk;
   /**Текст комментария */
   String text;
+
 }

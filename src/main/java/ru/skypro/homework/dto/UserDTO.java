@@ -1,13 +1,11 @@
 package ru.skypro.homework.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.CommentEntity;
+
+import java.util.List;
 
 /**
  * DTO сущности
@@ -24,7 +22,7 @@ public class UserDTO {
   /**
    * id пользователя
    */
-  Long id;
+  Integer id;
   /**
    * Имя пользователя
    */
@@ -53,5 +51,9 @@ public class UserDTO {
    * фото пользователя
    */
   String image;
+
+  List<AdEntity> adEntities;
+
+  List<CommentEntity> commentEntities;
 
 }
