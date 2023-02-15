@@ -28,4 +28,14 @@
     </changeSet>
     <include file="v-1.0/04-add-column-to-table-ads.sql" relativeToChangelogFile="true"/>
 
+    <changeSet id="5" author="anton_graf">
+        <tagDatabase tag="change_column_type_on_table_users"/>
+    </changeSet>
+    <include file="v-1.0/05-change-column-type-on-table-users.sql" relativeToChangelogFile="true"/>
+
+    <changeSet id="6" author="anton_graf">
+        <tagDatabase tag="create_table_ads_images"/>
+    </changeSet>
+    <include file="v-1.0/06-create-table-ads-images.sql" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

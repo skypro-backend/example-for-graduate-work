@@ -4,7 +4,7 @@ import java.util.Collection;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.PropertiesDTO;
+import ru.skypro.homework.dto.Properties;
 
 /**
  * Сервис объявлений
@@ -75,6 +75,6 @@ public interface AdsService {
    *
    * @return возвращает созданное объявление
    */
-  AdsDTO addAds(PropertiesDTO properties, MultipartFile multipartFile);
+  AdsDTO addAds(Properties properties, MultipartFile multipartFile);
 
 }

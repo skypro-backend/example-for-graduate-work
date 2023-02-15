@@ -3,11 +3,12 @@ package ru.skypro.homework.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Сущность пользователя
@@ -28,7 +29,7 @@ public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  int id;
+  Integer id;
 
   /**
    * Имя пользователя
@@ -70,50 +71,31 @@ public class UserEntity {
    * фото пользователя
    */
   @Column(name = "image")
-  byte[] image;
+  String image;
 
   /**
    * Список объявлений пользователя
    */
   @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
   @JsonBackReference
+  @ToString.Exclude
   List<AdEntity> adEntities;
 
   @OneToMany(mappedBy = "author")
   @JsonBackReference
+  @ToString.Exclude
   List<CommentEntity> commentEntities;
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
     UserEntity that = (UserEntity) o;
-
-    if (id != that.id) return false;
-    if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
-    if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-    if (email != null ? !email.equals(that.email) : that.email != null) return false;
-    if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
-    if (regDate != null ? !regDate.equals(that.regDate) : that.regDate != null) return false;
-    if (city != null ? !city.equals(that.city) : that.city != null) return false;
-    if (!Arrays.equals(image, that.image)) return false;
-    if (adEntities != null ? !adEntities.equals(that.adEntities) : that.adEntities != null) return false;
-    return commentEntities != null ? commentEntities.equals(that.commentEntities) : that.commentEntities == null;
+    return id != null && Objects.equals(id, that.id);
   }
 
   @Override
   public int hashCode() {
-    int result = id;
-    result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-    result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-    result = 31 * result + (email != null ? email.hashCode() : 0);
-    result = 31 * result + (phone != null ? phone.hashCode() : 0);
-    result = 31 * result + (regDate != null ? regDate.hashCode() : 0);
-    result = 31 * result + (city != null ? city.hashCode() : 0);
-    result = 31 * result + Arrays.hashCode(image);
-    result = 31 * result + (adEntities != null ? adEntities.hashCode() : 0);
-    result = 31 * result + (commentEntities != null ? commentEntities.hashCode() : 0);
-    return result;
+    return getClass().hashCode();
   }
 }

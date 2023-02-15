@@ -40,11 +40,6 @@ public class FullAds {
     String image;
 
     /**
-     * Наименование продоваемого объекта
-     */
-    String items;
-
-    /**
      * телефон пользователя
      */
     String phone;
