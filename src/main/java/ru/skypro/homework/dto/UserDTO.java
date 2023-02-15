@@ -21,21 +21,21 @@ import java.util.List;
 public class UserDTO {
 
   /**
-   * id пользователя
+   * почта пользователя
    */
-  Integer id;
+  String email;
   /**
    * Имя пользователя
    */
   String firstName;
   /**
+   * id пользователя
+   */
+  Integer id;
+  /**
    * Фамилия пользователя
    */
   String lastName;
-  /**
-   * почта пользователя
-   */
-  String email;
   /**
    * телефон пользователя
    */
