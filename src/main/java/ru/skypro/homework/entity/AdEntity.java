@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -25,7 +27,7 @@ public class AdEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  int pk;
+  Integer pk;
 
   @ManyToOne
   @JsonIgnore
@@ -33,7 +35,7 @@ public class AdEntity {
   UserEntity author;
 
   @Column(name = "price")
-  int price;
+  Integer price;
 
   @Column(name = "title")
   String title;
@@ -43,10 +45,24 @@ public class AdEntity {
 
   @OneToMany(mappedBy = "pk")
   @JsonBackReference
+  @ToString.Exclude
   List<CommentEntity> commentEntities;
 
   @OneToMany(mappedBy = "ad")
   @JsonBackReference
+  @ToString.Exclude
   List<ImageEntity> imageEntities;
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+    AdEntity adEntity = (AdEntity) o;
+    return pk != null && Objects.equals(pk, adEntity.pk);
+  }
+
+  @Override
+  public int hashCode() {
+    return getClass().hashCode();
+  }
 }

@@ -8,6 +8,7 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Сущность пользователя
@@ -28,7 +29,7 @@ public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  int id;
+  Integer id;
 
   /**
    * Имя пользователя
@@ -90,7 +91,7 @@ public class UserEntity {
     if (this == o) return true;
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
     UserEntity that = (UserEntity) o;
-    return false;
+    return id != null && Objects.equals(id, that.id);
   }
 
   @Override

@@ -4,6 +4,7 @@ package ru.skypro.homework.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public class CommentEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  private int id;
+  private Integer id;
 
   /**Id автора комментария */
   @ManyToOne
@@ -49,13 +50,13 @@ public class CommentEntity {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof CommentEntity)) return false;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
     CommentEntity that = (CommentEntity) o;
-    return getAuthor() == that.getAuthor() && getPk() == that.getPk() && Objects.equals(getId(), that.getId()) && Objects.equals(getCreatedAt(), that.getCreatedAt()) && Objects.equals(getText(), that.getText());
+    return id != null && Objects.equals(id, that.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getId(), getAuthor(), getCreatedAt(), getPk(), getText());
+    return getClass().hashCode();
   }
 }
