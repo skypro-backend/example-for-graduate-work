@@ -1,12 +1,6 @@
 package ru.skypro.homework.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 /**
@@ -24,7 +18,7 @@ public class UserDTO {
   /**
    * id пользователя
    */
-  Long id;
+  Integer id;
   /**
    * Имя пользователя
    */
