@@ -23,7 +23,9 @@ public class CommentDTO {
 
   /**Id автора комментария */
   Integer id;
+  /** автор комментария */
   UserEntity author;
+  /**Дата комментария */
   LocalDateTime createdAt;
   AdEntity pk;
   /**Текст комментария */
