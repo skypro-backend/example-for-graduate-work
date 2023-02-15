@@ -51,22 +51,21 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserDTO updateUser(UserDTO newUserDto) {
+  public UserDTO updateUser(UserDTO newUserDto) throws ElemNotFoundChecked {
     log.info(FormLogInfo.getInfo());
 
     int id = newUserDto.getId();
 
-    UserEntity oldUser = null;
-    try {
-      oldUser = userRepository.findById(id).orElseThrow(ElemNotFoundChecked::new);
-    } catch (ElemNotFoundChecked e) {
-      throw new RuntimeException(e);
-    }
+    UserEntity oldUser = findById(id);
+    oldUser.setEmail(newUserDto.getEmail());
     oldUser.setFirstName(newUserDto.getFirstName());
     oldUser.setLastName(newUserDto.getLastName());
-    oldUser.setEmail(newUserDto.getEmail());
     oldUser.setPhone(newUserDto.getPhone());
-    oldUser.setRegDate(LocalDateTime.parse(newUserDto.getRegDate()));
+    try {
+      oldUser.setRegDate(LocalDateTime.parse(newUserDto.getRegDate()));
+    } catch (Exception e) {
+      log.info("Ошибка изменения даты регистрации");
+    }
     oldUser.setCity(newUserDto.getCity());
     oldUser.setImage(newUserDto.getImage());
     userRepository.save(oldUser);
@@ -113,11 +112,28 @@ public class UserServiceImpl implements UserService {
       } catch (IOException ex) {
         throw new RuntimeException(ex);
       }
-//      throw new RuntimeException(e);
     }
 
   }
 
+  /**
+   * найти пользователя по id
+   *
+   * @param id id пользователя
+   * @return пользователь
+   * @throws ElemNotFoundChecked пользователь не найден
+   */
+  private UserEntity findById(int id) throws ElemNotFoundChecked {
+    log.info(FormLogInfo.getInfo());
+    return userRepository.findById(id).orElseThrow(ElemNotFoundChecked::new);
+  }
+
+  /**
+   * найти пользователя по email - логину
+   *
+   * @param email email - логину пользователя
+   * @return пользователь
+   */
   private UserEntity findEntityByEmail(String email) {
     log.info(FormLogInfo.getInfo());
     UserEntity user = userRepository.findByEmail(email);
