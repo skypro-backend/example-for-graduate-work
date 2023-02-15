@@ -3,6 +3,7 @@ package ru.skypro.homework.mapper;
 
 import org.mapstruct.Mapper;
 import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.dto.FullAds;
 import ru.skypro.homework.entity.AdEntity;
 
 import java.util.Collection;
@@ -16,6 +17,8 @@ public interface AdMapper {
   AdEntity toEntity(AdsDTO adDto);
 
   AdsDTO toDTO(AdEntity adEntity);
+
+  FullAds toFullAds(AdEntity adEntity);
 
   Collection<AdEntity> toEntityList(Collection<AdsDTO> adDTOS);
 
