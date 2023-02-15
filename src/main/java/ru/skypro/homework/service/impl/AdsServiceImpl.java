@@ -2,18 +2,15 @@ package ru.skypro.homework.service.impl;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.text.Normalizer.Form;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.PropertiesDTO;
+import ru.skypro.homework.dto.Properties;
 import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdsRepository;
@@ -73,7 +70,7 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public AdsDTO addAds(PropertiesDTO properties, MultipartFile multipartFile){
+  public AdsDTO addAds(Properties properties, MultipartFile multipartFile){
     log.info(FormLogInfo.getInfo());
 
     AdsDTO adsDTO = new AdsDTO();
@@ -82,12 +79,12 @@ public class AdsServiceImpl implements AdsService {
     List<String> listOfImage = new ArrayList<>();
     String content = null;
     try {
-       content = new String(multipartFile.getBytes(),StandardCharsets.UTF_8);
+       content = new String(multipartFile.getBytes(), StandardCharsets.UTF_8);
     } catch (IOException e) {
       log.error(FormLogInfo.getCatch());
     }
     listOfImage.add(content);
-    adsDTO.setImage(listOfImage);
+    //adsDTO.setImage(listOfImage);
     // Раскомментить когда будут таблицы
     //adsRepository.save(adMapper.toEntity(adsDTO));
     return adsDTO;
@@ -96,7 +93,8 @@ public class AdsServiceImpl implements AdsService {
 
   @Override
   public CommentDTO getComments(String adPk, int id) {
-    return new CommentDTO(1, "20.02.2023", Integer.parseInt(adPk), "Еще продается?");
+    return null;
+    //return new CommentDTO(1, "20.02.2023", Integer.parseInt(adPk), "Еще продается?");
   }
 
   @Override

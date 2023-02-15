@@ -22,7 +22,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PropertiesDTO {
+public class Properties {
 
   @NotNull(message = "Обязательно нужно заполнить поле")
   @Size(message = "Длина не должна быть меньше 2 знаков и не больше 30", min = 2, max = 30)

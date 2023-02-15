@@ -1,17 +1,14 @@
 package ru.skypro.homework.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.Hibernate;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Сущность пользователя
@@ -22,6 +19,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "users")
 @Entity
 public class UserEntity {
 
@@ -31,66 +29,73 @@ public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  Long id;
+  Integer id;
+
   /**
    * Имя пользователя
    */
+  @Column(name = "first_name")
   String firstName;
+
   /**
    * Фамилия пользователя
    */
+  @Column(name = "last_name")
   String lastName;
+
   /**
    * почта пользователя
    */
+  @Column(name = "email")
   String email;
+
   /**
    * телефон пользователя
    */
+  @Column(name = "phone")
   String phone;
+
   /**
    * дата регистрации пользователя
    */
-  String regDate;
+  @Column(name = "reg_date")
+  LocalDateTime regDate;
+
   /**
    * город пользователя
    */
+  @Column(name = "city")
   String city;
+
   /**
    * фото пользователя
    */
+  @Column(name = "image")
   String image;
 
+  /**
+   * Список объявлений пользователя
+   */
+  @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+  @JsonBackReference
+  @ToString.Exclude
+  List<AdEntity> adEntities;
+
+  @OneToMany(mappedBy = "author")
+  @JsonBackReference
+  @ToString.Exclude
+  List<CommentEntity> commentEntities;
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
+    if (this == o) return true;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
     UserEntity that = (UserEntity) o;
-
-    if (!id.equals(that.id)) {
-      return false;
-    }
-    if (!firstName.equals(that.firstName)) {
-      return false;
-    }
-    if (!lastName.equals(that.lastName)) {
-      return false;
-    }
-    return email.equals(that.email);
+    return id != null && Objects.equals(id, that.id);
   }
 
   @Override
   public int hashCode() {
-    int result = id.hashCode();
-    result = 31 * result + firstName.hashCode();
-    result = 31 * result + lastName.hashCode();
-    result = 31 * result + email.hashCode();
-    return result;
+    return getClass().hashCode();
   }
 }

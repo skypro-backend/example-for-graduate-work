@@ -11,12 +11,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 import java.util.Objects;
-import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.webjars.NotFoundException;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.entity.UserEntity;
@@ -24,7 +23,6 @@ import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
-
 
 @Service
 @Slf4j
@@ -120,16 +118,16 @@ public class UserServiceImpl implements UserService {
   public UserDTO findById(Long id) {
     log.info(FormLogInfo.getInfo());
 
-    UserEntity user = userRepository.findById(id).orElseThrow(
-        () -> new NotFoundException("user with this id not found"));//todo исправить исключение
-    return userMapper.toDTO(user);
+   /* UserEntity user = userRepository.findById(id).orElseThrow(
+        () -> new NotFoundException("user with this id not found"))*/;//todo исправить исключение
+    return userMapper.toDTO(new UserEntity());
   }
 
   @NotNull
   private UserEntity findEntityById(Long id) throws Exception {
     log.info(FormLogInfo.getInfo());
 
-    UserEntity user = userRepository.findById(id).orElseThrow(
+    UserEntity user = userRepository.findById(1).orElseThrow(
         () -> new Exception("user with this id not found"));//todo исправить исключение
     return user;
   }
