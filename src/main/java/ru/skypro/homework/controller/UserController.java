@@ -156,9 +156,10 @@ public class UserController {
       )
   })
   @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity updateUserImage(@RequestParam MultipartFile image, Authentication authentication) {
+  public ResponseEntity updateUserImage(@RequestParam MultipartFile image,
+      Authentication authentication) {
     log.info(FormLogInfo.getInfo());
-   userService.updateUserImage(image, authentication);
+    userService.updateUserImage(image, authentication);
     return ResponseEntity.ok().build();
   }
 

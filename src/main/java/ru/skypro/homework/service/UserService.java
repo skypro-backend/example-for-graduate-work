@@ -4,7 +4,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserDTO;
-import ru.skypro.homework.exception.ElemNotFoundChecked;
 
 /**
  * сервис пользователя
@@ -19,7 +18,7 @@ public interface UserService {
   /**
    * обновить пользователя
    */
-  UserDTO updateUser(UserDTO userDto) throws ElemNotFoundChecked;
+  UserDTO updateUser(UserDTO userDto) ;
 
   /**
    * установить новый пароль пользователя
@@ -29,5 +28,5 @@ public interface UserService {
   /**
    * обновить фото пользователя
    */
-  byte[] updateUserImage(MultipartFile image, Authentication authentication);
+  void updateUserImage(MultipartFile image, Authentication authentication);
 }

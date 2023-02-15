@@ -4,7 +4,6 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -20,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.entity.UserEntity;
-import ru.skypro.homework.exception.ElemNotFoundChecked;
+import ru.skypro.homework.exception.ElemNotFound;
 import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
@@ -51,12 +50,14 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserDTO updateUser(UserDTO newUserDto) throws ElemNotFoundChecked {
+  public UserDTO updateUser(UserDTO newUserDto) {
     log.info(FormLogInfo.getInfo());
 
     int id = newUserDto.getId();
 
-    UserEntity oldUser = findById(id);
+    UserEntity oldUser = null;
+
+    oldUser = findById(id);
     oldUser.setEmail(newUserDto.getEmail());
     oldUser.setFirstName(newUserDto.getFirstName());
     oldUser.setLastName(newUserDto.getLastName());
@@ -80,7 +81,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public byte[] updateUserImage(MultipartFile image, Authentication authentication) {
+  public void updateUserImage(MultipartFile image, Authentication authentication) {
     log.info(FormLogInfo.getInfo());
 
     String nameEmail = authentication.getName();
@@ -104,14 +105,9 @@ public class UserServiceImpl implements UserService {
       String photo = Base64.getEncoder().encodeToString(image.getBytes());
       userEntity.setPhone(photo);
       userRepository.save(userEntity);
-      return image.getBytes();
 
     } catch (Exception e) {
-      try {
-        return image.getBytes();
-      } catch (IOException ex) {
-        throw new RuntimeException(ex);
-      }
+      log.info("Ошибка сохранения файла");
     }
 
   }
@@ -121,11 +117,10 @@ public class UserServiceImpl implements UserService {
    *
    * @param id id пользователя
    * @return пользователь
-   * @throws ElemNotFoundChecked пользователь не найден
    */
-  private UserEntity findById(int id) throws ElemNotFoundChecked {
+  private UserEntity findById(int id) {
     log.info(FormLogInfo.getInfo());
-    return userRepository.findById(id).orElseThrow(ElemNotFoundChecked::new);
+    return userRepository.findById(id).orElseThrow(ElemNotFound::new);
   }
 
   /**
@@ -136,8 +131,7 @@ public class UserServiceImpl implements UserService {
    */
   private UserEntity findEntityByEmail(String email) {
     log.info(FormLogInfo.getInfo());
-    UserEntity user = userRepository.findByEmail(email);
-    return user;
+    return userRepository.findByEmail(email);
   }
 
   /**
