@@ -25,7 +25,7 @@ public class CommentEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  private Integer id;
+  Integer id;
 
   /**Id автора комментария */
   @ManyToOne

@@ -1,7 +1,11 @@
 package ru.skypro.homework.dto;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.CommentEntity;
 
 /**
  * DTO сущности
@@ -38,7 +42,7 @@ public class UserDTO {
   /**
    * дата регистрации пользователя
    */
-  String regDate;
+  LocalDateTime regDate;
   /**
    * город пользователя
    */
@@ -47,5 +51,9 @@ public class UserDTO {
    * фото пользователя
    */
   String image;
+
+  List<AdEntity> adEntities;
+
+  List<CommentEntity> commentEntities;
 
 }

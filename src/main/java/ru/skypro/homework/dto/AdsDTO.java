@@ -1,10 +1,8 @@
 package ru.skypro.homework.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -14,6 +12,9 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.CommentEntity;
+import ru.skypro.homework.entity.ImageEntity;
+import ru.skypro.homework.entity.UserEntity;
 
 /**
  * A DTO for the {@link AdEntity} entity
@@ -27,27 +28,18 @@ import ru.skypro.homework.entity.AdEntity;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AdsDTO {
 
-  @JsonIgnore
-  Long id;
-
+  Integer pk;
+  UserEntity author;
+  @NotNull
+  @Min(value = 1)
+  Integer price;
   @NotNull(message = "Обязательно нужно заполнить поле")
-  @Size(message = "Длина не должна быть меньше 1 знаков и не больше 30", min = 1, max = 30)
-  List<String> image;
-
-  @NotNull
-  @Min(value = 1)
-  int author;
-
-  @NotNull
-  @Min(value = 1)
-  int price;
-
-  @NotNull
-  @Min(value = 1)
-  int pk;
-
-  @NotNull(message = "Обязательно нужно заполнить поле")
-  @Size(message = "Длина не должна быть меньше 2 знаков и не больше 30", min = 2, max = 30)
   String title;
+
+  List<CommentEntity> commentEntities;
+  List<ImageEntity> imageEntities;
+
+
+
 
 }
