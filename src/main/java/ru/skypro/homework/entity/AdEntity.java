@@ -1,21 +1,14 @@
 package ru.skypro.homework.entity;
 
-import java.util.List;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.Hibernate;
+
+import javax.persistence.*;
+import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -27,19 +20,49 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "ads")
 @Entity
 public class AdEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long id;
-  @ElementCollection
-  @CollectionTable(name = "id", joinColumns = @JoinColumn(name = "id"))
-  @Column(name = "image")
-  List<String> image;
-  int author;
-  int price;
-  int pk;
+  @Column(name = "id", nullable = false)
+  Integer pk;
+
+  @ManyToOne
+  @JsonIgnore
+  @JoinColumn(name = "author_id")
+  UserEntity author;
+
+  @Column(name = "price")
+  Integer price;
+
+  @Column(name = "title")
   String title;
 
+  @Column(name = "description")
+  String description;
+
+  @OneToMany(mappedBy = "pk")
+  @JsonBackReference
+  @ToString.Exclude
+  List<CommentEntity> commentEntities;
+
+  @OneToMany(mappedBy = "ad")
+  @JsonBackReference
+  @ToString.Exclude
+  List<ImageEntity> imageEntities;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+    AdEntity adEntity = (AdEntity) o;
+    return pk != null && Objects.equals(pk, adEntity.pk);
+  }
+
+  @Override
+  public int hashCode() {
+    return getClass().hashCode();
+  }
 }

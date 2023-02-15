@@ -1,24 +1,20 @@
 package ru.skypro.homework.entity;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.Hibernate;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
  * DTO для комментариев
  */
 @Entity
+@Table(name = "comments")
 @Getter
 @ToString
 @NoArgsConstructor
@@ -29,27 +25,38 @@ public class CommentEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  private Long id;
+  private Integer id;
 
   /**Id автора комментария */
-  int author;
+  @ManyToOne
+  @JsonIgnore
+  @JoinColumn(name = "author_id")
+  UserEntity author;
+
   /**Дата создания комментария  */
-  String createdAt;
+  @Column(name = "created_at")
+  LocalDateTime createdAt;
+
   /**Id объявления          */
-  int pk;
+  @ManyToOne
+  @JsonIgnore
+  @JoinColumn(name = "pk_ads")
+  AdEntity pk;
+
   /**Текст комментария */
+  @Column(name = "text")
   String text;
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof CommentEntity)) return false;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
     CommentEntity that = (CommentEntity) o;
-    return getAuthor() == that.getAuthor() && getPk() == that.getPk() && Objects.equals(getId(), that.getId()) && Objects.equals(getCreatedAt(), that.getCreatedAt()) && Objects.equals(getText(), that.getText());
+    return id != null && Objects.equals(id, that.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getId(), getAuthor(), getCreatedAt(), getPk(), getText());
+    return getClass().hashCode();
   }
 }
