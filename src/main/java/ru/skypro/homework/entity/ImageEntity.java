@@ -1,8 +1,11 @@
 package ru.skypro.homework.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import javax.persistence.*;
 
 
 /**
@@ -15,8 +18,20 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "ads_images")
+@Entity
 public class ImageEntity {
 
-    String image;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    int id;
 
+    @Column(name = "path")
+    String path;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "ads_id")
+    AdEntity ad;
 }

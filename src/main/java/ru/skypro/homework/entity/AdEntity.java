@@ -45,11 +45,8 @@ public class AdEntity {
   @JsonBackReference
   List<CommentEntity> commentEntities;
 
-  @Column(name = "image")
-  byte[] image;
-//  @ElementCollection
-//  @CollectionTable(name = "id", joinColumns = @JoinColumn(name = "id"))
-//  @Column(name = "image")
-//  List<String> image;
+  @OneToMany(mappedBy = "ad")
+  @JsonBackReference
+  List<ImageEntity> imageEntities;
 
 }
