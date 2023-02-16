@@ -1,5 +1,6 @@
 package ru.skypro.homework.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,21 +17,21 @@ import lombok.experimental.FieldDefaults;
 public class UserDTO {
 
   /**
-   * id пользователя
+   * почта пользователя
    */
-  Integer id;
+  String email;
   /**
    * Имя пользователя
    */
   String firstName;
   /**
+   * id пользователя
+   */
+  Integer id;
+  /**
    * Фамилия пользователя
    */
   String lastName;
-  /**
-   * почта пользователя
-   */
-  String email;
   /**
    * телефон пользователя
    */
@@ -47,4 +48,5 @@ public class UserDTO {
    * фото пользователя
    */
   String image;
+
 }
