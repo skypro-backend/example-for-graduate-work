@@ -21,7 +21,7 @@ public class CreateAds {
     /**
      * цена
      */
-    int price;
+    Integer price;
 
     /**
      * Название

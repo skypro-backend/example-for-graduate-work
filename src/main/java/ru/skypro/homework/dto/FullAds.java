@@ -18,13 +18,13 @@ public class FullAds {
     /**
      * Имя пользователя
      */
-    String firstName;
+    String authorFirstName;
 
 
     /**
      * Фамилия пользователя
      */
-    String lastName;
+    String authorLastName;
 
     /**
      * Описание продаваемого объекта
