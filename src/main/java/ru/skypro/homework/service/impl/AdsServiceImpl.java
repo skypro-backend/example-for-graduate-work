@@ -66,7 +66,8 @@ public class AdsServiceImpl implements AdsService {
   @Override
   public Collection<AdsDTO> getALLAds() {
     log.info(FormLogInfo.getInfo());
-    return adMapper.toDTOList(adsRepository.findAll());
+//    return adMapper.toDTOList(adsRepository.findAll());
+    return  null;
   }
 
   @Override
