@@ -3,7 +3,7 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.NewPasswordDTO;
+import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.UserService;
 
@@ -20,7 +20,7 @@ public class UserServiceMockImpl implements UserService {
     }
 
     @Override
-    public NewPasswordDTO setPassword(NewPasswordDTO newPassword) {
+    public NewPassword setPassword(NewPassword newPassword) {
         return null;
     }
 

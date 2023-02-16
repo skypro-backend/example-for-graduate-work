@@ -7,7 +7,7 @@ import ru.skypro.homework.entity.UserEntity;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
-
+  UserEntity findByEmail(String email);
 
 
 }
