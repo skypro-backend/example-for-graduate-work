@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 import java.io.BufferedInputStream;
@@ -11,6 +12,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Objects;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -24,6 +26,14 @@ import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Base64;
+import java.util.Objects;
+
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 @Slf4j
@@ -62,11 +72,13 @@ public class UserServiceImpl implements UserService {
     oldUser.setFirstName(newUserDto.getFirstName());
     oldUser.setLastName(newUserDto.getLastName());
     oldUser.setPhone(newUserDto.getPhone());
+
     try {
       oldUser.setRegDate(LocalDateTime.parse(newUserDto.getRegDate()));
     } catch (Exception e) {
       log.info("Ошибка изменения даты регистрации");
     }
+
     oldUser.setCity(newUserDto.getCity());
     oldUser.setImage(newUserDto.getImage());
     userRepository.save(oldUser);
