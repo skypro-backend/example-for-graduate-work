@@ -1,23 +1,25 @@
 package ru.skypro.homework.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.entity.CommentEntity;
 
-import java.util.Collection;
-
 /**
- * маппер для {@link CommentEntity}
- * готовый dto {@link CommentDTO}
+ * маппер для {@link CommentEntity} готовый dto {@link CommentDTO}
  */
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
-    CommentEntity toEntity(CommentDTO commentDTO);
 
-    CommentDTO toDTO(CommentEntity commentEntity);
+  @Mapping(target = "createdAt", source = "createdAt", dateFormat = "dd-MM-yyyy HH:mm:ss")
+  @Mapping(target = "author.id", source = "author")
+  @Mapping(target = "pk.id", source = "pk")
+  CommentEntity toEntity(CommentDTO commentDTO);
 
-    Collection<CommentEntity> toEntityList(Collection<CommentDTO> CommentDTOS);
+//  CommentDTO toDTO(CommentEntity commentEntity);
 
-    Collection<CommentDTO> toDTOList(Collection<CommentEntity> CommentEntities);
+//    Collection<CommentEntity> toEntityList(Collection<CommentDTO> CommentDTOS);
+
+//    Collection<CommentDTO> toDTOList(Collection<CommentEntity> CommentEntities);
 
 }
