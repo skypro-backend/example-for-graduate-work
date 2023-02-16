@@ -19,7 +19,7 @@ import lombok.experimental.FieldDefaults;
 public class CommentDTO {
 
   /**Id автора комментария */
-  Integer id;
+//  Integer id;
   Integer author;
   String createdAt;
   Integer pk;
