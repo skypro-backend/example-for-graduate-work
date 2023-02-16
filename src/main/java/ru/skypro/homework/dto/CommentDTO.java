@@ -13,10 +13,11 @@ import lombok.experimental.FieldDefaults;
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentDTO {
-  //  Integer id;
+
   /**Id автора комментария */
   Integer author;
   String createdAt;
+  //Id комментария
   Integer pk;
   /**Текст комментария */
   String text;

@@ -15,7 +15,7 @@ public interface CommentMapper {
 
     @Mapping(target = "createdAt", source = "createdAt", dateFormat = "dd-MM-yyyy HH:mm:ss")
     @Mapping(target = "author", source = "author.id")
-    @Mapping(target = "pk", source = "pk.pk")
+    @Mapping(target = "pk", source = "id")
     CommentDTO toDTO(CommentEntity commentEntity);
 
 //    Collection<CommentEntity> toEntityList(Collection<CommentDTO> CommentDTOS);
