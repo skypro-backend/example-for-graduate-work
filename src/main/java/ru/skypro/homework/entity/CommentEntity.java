@@ -16,6 +16,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "comments")
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
