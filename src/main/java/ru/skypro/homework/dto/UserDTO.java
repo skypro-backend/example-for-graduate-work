@@ -2,10 +2,6 @@ package ru.skypro.homework.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.skypro.homework.entity.AdEntity;
-import ru.skypro.homework.entity.CommentEntity;
-
-import java.util.List;
 
 /**
  * DTO сущности
@@ -51,9 +47,4 @@ public class UserDTO {
    * фото пользователя
    */
   String image;
-
-  List<AdEntity> adEntities;
-
-  List<CommentEntity> commentEntities;
-
 }
