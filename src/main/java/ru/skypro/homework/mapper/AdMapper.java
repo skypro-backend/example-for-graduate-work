@@ -2,16 +2,14 @@ package ru.skypro.homework.mapper;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.FullAds;
 import ru.skypro.homework.dto.CreateAds;
+import ru.skypro.homework.dto.FullAds;
 import ru.skypro.homework.entity.AdEntity;
-import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
@@ -22,39 +20,27 @@ import ru.skypro.homework.entity.UserEntity;
 @Mapper(componentModel = "spring", uses = {UserEntity.class, CommentEntity.class, ImageEntity.class})
 public interface AdMapper {
 
-
-
-//  @Mapping(target = "imageEntities", ignore = true)
-//  AdEntity toEntity(AdsDTO adDto);
-//
-//
-//  @Mapping(target = "pk", ignore = true)
-//  AdsDTO toDTO(AdEntity adEntity);
-
-//  @Mapping(target = "pk", source = "UserEntity.id", qualifiedBy = )
-//  @Mapping(target = "phone", source = "UserEntity.phone")
-//  @Mapping(target = "image", source = "ImageEntity.path")
-//  @Mapping(target = "email", source = "email")
-//  @Mapping(target = "price", source = "price")
-//  @Mapping(target = "title", source = "title")
-//  @Mapping(target = "description", source = "description")
-//  @Mapping(target = "authorFirstName", source = "firstName")
-//  @Mapping(target = "authorLastName", source = "lastName")
-//  FullAds toFullAds(AdEntity adEntity);
+  @Mapping(target = "image", source = "imageEntities")
+  @Mapping(target = "pk", source = "author.id")
+  @Mapping(target = "phone", source = "author.phone")
+  @Mapping(target = "email", source = "author.email")
+  @Mapping(target = "price", source = "adEntity.price")
+  @Mapping(target = "title", source = "adEntity.title")
+  @Mapping(target = "description", source = "adEntity.description")
+  @Mapping(target = "authorFirstName", source = "author.firstName")
+  @Mapping(target = "authorLastName", source = "author.lastName")
+  FullAds toFullAds(AdEntity adEntity);
 
   @Mapping(target = "description", source = "description")
   @Mapping(target = "price", source = "price")
   @Mapping(target = "title", source = "title")
   CreateAds toCreateAds(AdEntity adEntity);
 
-//  Collection<AdEntity> toEntityList(Collection<AdsDTO> adDTOS);
-//
-//  Collection<AdsDTO> toDTOList(Collection<AdEntity> adEntities);
 
-  @Mapping(target = "author.id", source = "author")
-  @Mapping(target = "description", constant = "Неполная реклама")
-  @Mapping(target = "imageEntities", expression = "java(setImageEntities(adDto.getImage()))")
-  AdEntity toEntity(AdsDTO adDto);
+//  @Mapping(target = "author.id", source = "author")
+//  @Mapping(target = "description", constant = "Неполная реклама")
+//  @Mapping(target = "imageEntities", expression = "java(setImageEntities(adDto.getImage()))")
+//  AdEntity toEntity(AdsDTO adDto);
 
 
   @Mapping(target = "author", source = "author.id")
@@ -84,10 +70,7 @@ public interface AdMapper {
     return imageEntities;
   }
 
-
-  FullAds toFullAds(AdEntity adEntity);
-
-  Collection<AdEntity> toEntityList(Collection<AdsDTO> adDTOS);
-
-  Collection<AdsDTO> toDTOList(Collection<AdEntity> adEntities);
+//  Collection<AdEntity> toEntityList(Collection<AdsDTO> adDTOS);
+//
+//  Collection<AdsDTO> toDTOList(Collection<AdEntity> adEntities);
 }
