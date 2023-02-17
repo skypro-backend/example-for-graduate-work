@@ -1,15 +1,10 @@
 package ru.skypro.homework.dto;
 
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.FieldDefaults;
 
 /**
  * Класс сущности "properties" в таблице
@@ -29,7 +24,7 @@ public class Properties {
   String description;
 
   @NotNull(message = "Обязательно нужно заполнить поле")
-  int price;
+  Integer price;
 
   @NotNull(message = "Обязательно нужно заполнить поле")
   @Size(message = "Длина не должна быть меньше 2 знаков и не больше 30", min = 2, max = 30)

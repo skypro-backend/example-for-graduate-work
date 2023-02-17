@@ -7,12 +7,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Objects;
 import javax.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.NewPasswordDTO;
+import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.service.UserService;
@@ -48,7 +47,7 @@ public class UserController {
           description = "OK",
           content =
           @Content(
-              array = @ArraySchema(schema = @Schema(implementation = NewPasswordDTO.class)))
+              array = @ArraySchema(schema = @Schema(implementation = NewPassword.class)))
       ),
       @ApiResponse(
           responseCode = "401",
@@ -67,11 +66,11 @@ public class UserController {
       )
   })
   @PostMapping(value = "/setPassword")
-  public ResponseEntity<NewPasswordDTO> setPassword(
+  public ResponseEntity<NewPassword> setPassword(
       @RequestBody
-      @NotBlank(message = "newPassword не должен быть пустым") NewPasswordDTO newPassword) {
+      @NotBlank(message = "newPassword не должен быть пустым") NewPassword newPassword) {
     log.info(FormLogInfo.getInfo());
-    NewPasswordDTO newPasswordDTO = userService.setPassword(newPassword);
+    NewPassword newPasswordDTO = userService.setPassword(newPassword);
     return ResponseEntity.ok(newPasswordDTO);
   }
 
@@ -100,9 +99,9 @@ public class UserController {
       )
   })
   @GetMapping(value = "/me")
-  public ResponseEntity<UserDTO> getUser() {
+  public ResponseEntity<UserDTO> getUser(Authentication authentication) {
     log.info(FormLogInfo.getInfo());
-    return ResponseEntity.ok(userService.getUser());
+    return ResponseEntity.ok(userService.getUser(authentication));
   }
 
   @Operation(summary = "Обновить пользователя")
@@ -157,18 +156,11 @@ public class UserController {
       )
   })
   @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity updateUserImage(@RequestParam MultipartFile image) {
+  public ResponseEntity<MultipartFile> updateUserImage(@RequestParam MultipartFile image,
+      Authentication authentication) {
     log.info(FormLogInfo.getInfo());
-
-    UserDTO userDTO = new UserDTO();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(
-        MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
-    headers.setContentLength(image.getSize());
-    byte[] body = userService.updateUserImage(image);
-//    return ResponseEntity.status(HttpStatus.OK).headers(headers).body(body);
+    userService.updateUserImage(image, authentication);
     return ResponseEntity.ok().build();
-
   }
 
 

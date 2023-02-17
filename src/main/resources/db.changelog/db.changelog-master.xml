@@ -38,4 +38,9 @@
     </changeSet>
     <include file="v-1.0/06-create-table-ads-images.sql" relativeToChangelogFile="true"/>
 
+    <changeSet id="7" author="igor_br">
+        <tagDatabase tag="add_column_to_table_ads"/>
+    </changeSet>
+    <include file="v-1.0/data/igorBr_01_Insert_User.sql" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

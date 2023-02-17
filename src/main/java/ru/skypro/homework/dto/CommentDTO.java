@@ -1,15 +1,14 @@
 package ru.skypro.homework.dto;
 
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.skypro.homework.entity.AdEntity;
-import ru.skypro.homework.entity.UserEntity;
 
 /**
  * DTO для комментариев
@@ -21,13 +20,13 @@ import ru.skypro.homework.entity.UserEntity;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentDTO {
 
+
   /**Id автора комментария */
-  Integer id;
-  /** автор комментария */
-  UserEntity author;
-  /**Дата комментария */
-  LocalDateTime createdAt;
-  AdEntity pk;
+  Integer author;
+  /**Дата создания комментария  */
+  String createdAt;
+  /**Id объявления  */
+  Integer pk;
   /**Текст комментария */
   String text;
 

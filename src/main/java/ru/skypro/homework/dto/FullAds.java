@@ -4,6 +4,8 @@ package ru.skypro.homework.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -16,13 +18,13 @@ public class FullAds {
     /**
      * Имя пользователя
      */
-    String firstName;
+    String authorFirstName;
 
 
     /**
      * Фамилия пользователя
      */
-    String lastName;
+    String authorLastName;
 
     /**
      * Описание продаваемого объекта
@@ -37,7 +39,7 @@ public class FullAds {
     /**
      * картинка
      */
-    String image;
+    List<String> image;
 
     /**
      * телефон пользователя
@@ -47,12 +49,12 @@ public class FullAds {
     /**
      * id пользователя
      */
-    int pk;
+    Integer pk;
 
     /**
      * цена
      */
-    int price;
+    Integer price;
 
     /**
      * Название

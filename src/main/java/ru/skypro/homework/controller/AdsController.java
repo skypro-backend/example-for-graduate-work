@@ -9,28 +9,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Collection;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/ads")
@@ -253,7 +244,7 @@ public class AdsController {
   @NotBlank(message = "ad_pk не должен быть пустым")
   @Min(value = 1, message = "Идентификатор должен быть больше 0")
   @Parameter(description = "Идентификатор объявления",
-      example = "1") String adPk,
+      example = "1") int adPk,
       @PathVariable(name = "id")
       @NotBlank(message = "id не должен быть пустым")
       @Min(value = 1, message = "Идентификатор должен быть больше 0")
@@ -291,7 +282,7 @@ public class AdsController {
           description = "OK",
           content = {
               @Content(
-                      array = @ArraySchema(schema = @Schema(implementation = AdsDTO.class)))
+                      schema = @Schema(ref = "#/components/schemas/AdsDTO"))
           }
       ),
       @ApiResponse(
@@ -310,8 +301,8 @@ public class AdsController {
   @PatchMapping("{id}")
   public ResponseEntity<?> updateAds(
       @PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id,
-      @RequestBody CreateAds CreateAds) {
-    return ResponseEntity.ok().body(adsService.updateAds(id));
+      @RequestBody CreateAds createAds) {
+    return ResponseEntity.ok().body(adsService.updateAds(id, createAds));
   }
 
 
