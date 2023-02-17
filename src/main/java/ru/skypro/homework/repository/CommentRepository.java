@@ -9,5 +9,5 @@ import ru.skypro.homework.entity.CommentEntity;
  */
 @Repository
 public interface CommentRepository extends JpaRepository<CommentEntity, Integer> {
-    CommentEntity findByIdAndPk_Pk(Integer id, Integer pk);
+    CommentEntity findByPkAndAd_Pk(Integer commentPk, Integer adPk);
 }

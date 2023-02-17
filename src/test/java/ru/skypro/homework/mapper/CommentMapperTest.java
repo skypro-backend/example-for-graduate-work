@@ -20,8 +20,8 @@ class CommentMapperTest {
     @Test
     void toDTO() {
         CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setId(1);
-        commentEntity.setPk(getAdEntity());
+        commentEntity.setPk(1);
+        commentEntity.setAd(getAdEntity());
         commentEntity.setCreatedAt(LocalDateTime.of(2023, 02, 16, 14,30, 22));
         commentEntity.setAuthor(getAuthor());
         commentEntity.setText("Test text");
