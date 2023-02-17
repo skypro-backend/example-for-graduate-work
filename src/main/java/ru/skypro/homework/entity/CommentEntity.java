@@ -16,6 +16,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "comments")
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +26,7 @@ public class CommentEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  Integer id;
+  Integer pk;
 
   /**Id автора комментария */
   @ManyToOne
@@ -41,7 +42,7 @@ public class CommentEntity {
   @ManyToOne
   @JsonIgnore
   @JoinColumn(name = "pk_ads")
-  AdEntity pk;
+  AdEntity ad;
 
   /**Текст комментария */
   @Column(name = "text")
@@ -52,7 +53,7 @@ public class CommentEntity {
     if (this == o) return true;
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
     CommentEntity that = (CommentEntity) o;
-    return id != null && Objects.equals(id, that.id);
+    return pk != null && Objects.equals(pk, that.pk);
   }
 
   @Override
