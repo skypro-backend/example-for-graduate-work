@@ -43,7 +43,7 @@ public class AdEntity {
   @Column(name = "description")
   String description;
 
-  @OneToMany(mappedBy = "pk")
+  @OneToMany(mappedBy = "ad")
   @JsonBackReference
   @ToString.Exclude
   List<CommentEntity> commentEntities;
