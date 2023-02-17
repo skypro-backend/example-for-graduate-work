@@ -6,16 +6,25 @@ import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.entity.CommentEntity;
 
 /**
- * маппер для {@link CommentEntity}
- * готовый dto {@link CommentDTO}
+ * маппер для {@link CommentEntity} готовый dto {@link CommentDTO}
  */
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
+
+
+  @Mapping(target = "createdAt", source = "createdAt", dateFormat = "dd-MM-yyyy HH:mm:ss")
+  @Mapping(target = "author.id", source = "author")
+  @Mapping(target = "pk.id", source = "pk")
+  CommentEntity toEntity(CommentDTO commentDTO);
+
+//  CommentDTO toDTO(CommentEntity commentEntity);
+
 //    CommentEntity toEntity(CommentDTO commentDTO);
 
     @Mapping(target = "createdAt", source = "createdAt", dateFormat = "dd-MM-yyyy HH:mm:ss")
     @Mapping(target = "author", source = "author.id")
     CommentDTO toDTO(CommentEntity commentEntity);
+
 
 //    Collection<CommentEntity> toEntityList(Collection<CommentDTO> CommentDTOS);
 

@@ -12,6 +12,15 @@ import ru.skypro.homework.entity.AdEntity;
 public interface AdMapper {
 
 //  AdEntity toEntity(AdsDTO adDto);
+
+
+//  AdsDTO toDTO(AdEntity adEntity);
+
+//  FullAds toFullAds(AdEntity adEntity);
+
+//  Collection<AdEntity> toEntityList(Collection<AdsDTO> adDTOS);
+
+
 //
 //  AdsDTO toDTO(AdEntity adEntity);
 //
@@ -19,5 +28,6 @@ public interface AdMapper {
 //
 //  Collection<AdEntity> toEntityList(Collection<AdsDTO> adDTOS);
 //
+
 //  Collection<AdsDTO> toDTOList(Collection<AdEntity> adEntities);
 }
