@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 /**
@@ -20,8 +21,6 @@ import lombok.experimental.FieldDefaults;
 public class CommentDTO {
 
 
-  @JsonIgnore
-  Integer id;
   /**Id автора комментария */
   Integer author;
   /**Дата создания комментария  */

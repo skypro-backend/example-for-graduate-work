@@ -1,20 +1,27 @@
 package ru.skypro.homework.service.impl;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.Properties;
+import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.exception.ElemNotFound;
 import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdsRepository;
+import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Реализация {@link ru.skypro.homework.service.AdsService}
@@ -24,11 +31,13 @@ import ru.skypro.homework.service.AdsService;
 public class AdsServiceImpl implements AdsService {
 
   private AdsRepository adsRepository;
+  private CommentRepository commentRepository;
+  private UserRepository userRepository;
   private AdMapper adMapper;
 
-  public AdsServiceImpl(AdsRepository adsRepository, AdMapper adMapper) {
+  public AdsServiceImpl(AdsRepository adsRepository) {
     this.adsRepository = adsRepository;
-    this.adMapper = adMapper;
+//    this.adMapper = adMapper;
   }
 
   /**
@@ -67,7 +76,7 @@ public class AdsServiceImpl implements AdsService {
   public Collection<AdsDTO> getALLAds() {
     log.info(FormLogInfo.getInfo());
 //    return adMapper.toDTOList(adsRepository.findAll());
-    return  null;
+    return Collections.EMPTY_LIST;
   }
 
   @Override
@@ -103,7 +112,10 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public CommentDTO updateComments(String adPk, int id, CommentDTO commentDTO) {
+  public CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO) {
+//    CommentEntity commentEntity = commentRepository.findByIdAndPk_Pk(id, adPk);
+//    UserEntity author = userRepository.findById(commentDTO.)
+//    commentEntity.setAuthor();
     return null;
   }
 
@@ -117,8 +129,15 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public AdsDTO updateAds(int id) {
+  public AdsDTO updateAds(int id, CreateAds createAds) {
+    AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
+    adEntity.setDescription(createAds.getDescription());
+    adEntity.setPrice(createAds.getPrice());
+    adEntity.setTitle(createAds.getTitle());
     return null;
+//    TODO: Восстановить, когда появится adMapper
+//    AdsDTO savedAdsDTO = adMapper.toDTO(adsRepository.save(adEntity));
+//    return savedAdsDTO;
   }
 
 }
