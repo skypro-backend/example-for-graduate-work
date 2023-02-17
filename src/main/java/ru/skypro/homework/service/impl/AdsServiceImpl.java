@@ -8,6 +8,7 @@ import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.Properties;
 import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.exception.ElemNotFound;
 import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.mapper.AdMapper;
@@ -62,14 +63,17 @@ public class AdsServiceImpl implements AdsService {
   }
 
   /**
-   * Удаление комментария конкретного пользователя у объявления
+   * Удалить комментарий по id объявления и id комментария
    *
    * @param pk
    * @param id
    */
   @Override
-  public void deleteAdsComment(Integer pk, Integer id) {
-
+  public void deleteComments(Integer pk, Integer id) {
+    log.info(FormLogInfo.getInfo());
+    AdEntity adEntity = adsRepository.findById(pk).orElseThrow(ElemNotFound::new);
+    Collection<CommentEntity> commentEntities = commentRepository.getCommentEntitiesByAuthor(adEntity.getId());
+    commentRepository.deleteByAuthor_Id(id);
   }
 
   @Override
@@ -108,10 +112,6 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public void deleteComments(String adPk, int id) {
-  }
-
-  @Override
   public CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO) {
 //    CommentEntity commentEntity = commentRepository.findByIdAndPk_Pk(id, adPk);
 //    UserEntity author = userRepository.findById(commentDTO.)
@@ -119,8 +119,15 @@ public class AdsServiceImpl implements AdsService {
     return null;
   }
 
+  /**
+   * Удаление объявления по id
+   * @param id
+   */
   @Override
   public void removeAds(int id) {
+    log.info(FormLogInfo.getInfo());
+    AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
+    adsRepository.delete(adEntity);
   }
 
   @Override

@@ -138,7 +138,7 @@ public class AdsController {
   @NotBlank(message = "ad_pk не должен быть пустым")
   @Min(value = 1, message = "Идентификатор должен быть больше 0")
   @Parameter(description = "Идентификатор объявления",
-      example = "1") String adPk,
+      example = "1") Integer adPk,
       @PathVariable(name = "id")
       @NotBlank(message = "id не должен быть пустым")
       @Min(value = 1, message = "Идентификатор должен быть больше 0")
