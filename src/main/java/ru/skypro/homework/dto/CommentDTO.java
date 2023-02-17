@@ -1,11 +1,7 @@
 package ru.skypro.homework.dto;
 
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 /**
@@ -19,9 +15,9 @@ import lombok.experimental.FieldDefaults;
 public class CommentDTO {
 
   /**Id автора комментария */
-  Integer id;
   Integer author;
   String createdAt;
+  //Id комментария
   Integer pk;
   /**Текст комментария */
   String text;
