@@ -26,7 +26,7 @@ public class CommentEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  Integer pk;
+  Integer id;
 
   /**Id автора комментария */
   @ManyToOne
@@ -53,7 +53,7 @@ public class CommentEntity {
     if (this == o) return true;
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
     CommentEntity that = (CommentEntity) o;
-    return pk != null && Objects.equals(pk, that.pk);
+    return id != null && Objects.equals(id, that.id);
   }
 
   @Override
