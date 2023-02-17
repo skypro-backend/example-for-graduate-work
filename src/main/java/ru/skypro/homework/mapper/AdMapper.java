@@ -20,16 +20,24 @@ import ru.skypro.homework.entity.UserEntity;
 @Mapper(componentModel = "spring", uses = {UserEntity.class, CommentEntity.class, ImageEntity.class})
 public interface AdMapper {
 
-  @Mapping(target = "image", source = "imageEntities")
-  @Mapping(target = "pk", source = "author.id")
-  @Mapping(target = "phone", source = "author.phone")
-  @Mapping(target = "email", source = "author.email")
-  @Mapping(target = "price", source = "adEntity.price")
-  @Mapping(target = "title", source = "adEntity.title")
-  @Mapping(target = "description", source = "adEntity.description")
-  @Mapping(target = "authorFirstName", source = "author.firstName")
-  @Mapping(target = "authorLastName", source = "author.lastName")
-  FullAds toFullAds(AdEntity adEntity);
+
+
+  default FullAds toFullAds(AdEntity adEntity, UserEntity userEntity, ImageEntity imageEntity) {
+    if (adEntity == null) {
+      return null;
+    }
+    FullAds fullAds = new FullAds();
+    fullAds.setAuthorFirstName(userEntity.getFirstName());
+    fullAds.setAuthorLastName(userEntity.getLastName());
+    fullAds.setDescription(adEntity.getDescription());
+    fullAds.setPk(userEntity.getId());
+    fullAds.setEmail(userEntity.getEmail());
+    fullAds.setPrice(adEntity.getPrice());
+    fullAds.setPhone(userEntity.getPhone());
+    fullAds.setImage(List.of(imageEntity.getPath()));
+    fullAds.setTitle(adEntity.getTitle());
+    return fullAds;
+  }
 
   @Mapping(target = "description", source = "description")
   @Mapping(target = "price", source = "price")

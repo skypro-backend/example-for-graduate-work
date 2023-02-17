@@ -143,7 +143,7 @@ public class AdsController {
       @NotBlank(message = "id не должен быть пустым")
       @Min(value = 1, message = "Идентификатор должен быть больше 0")
       @Parameter(description = "Идентификатор комментария",
-          example = "1") int id) {
+          example = "1") Integer id) {
     adsService.deleteComments(adPk, id);
   }
 

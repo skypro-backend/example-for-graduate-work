@@ -1,5 +1,12 @@
 package ru.skypro.homework.service.impl;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,13 +24,6 @@ import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * Реализация {@link ru.skypro.homework.service.AdsService}
  */
@@ -31,7 +31,7 @@ import java.util.List;
 @Slf4j
 public class AdsServiceImpl implements AdsService {
 
-  private AdsRepository adsRepository;
+  private final AdsRepository adsRepository;
   private CommentRepository commentRepository;
   private UserRepository userRepository;
   private AdMapper adMapper;
@@ -72,8 +72,11 @@ public class AdsServiceImpl implements AdsService {
   public void deleteComments(Integer pk, Integer id) {
     log.info(FormLogInfo.getInfo());
     AdEntity adEntity = adsRepository.findById(pk).orElseThrow(ElemNotFound::new);
-    Collection<CommentEntity> commentEntities = commentRepository.getCommentEntitiesByAuthor(adEntity.getId());
-    commentRepository.deleteByAuthor_Id(id);
+    CommentEntity comment = commentRepository.findById(id).orElseThrow(ElemNotFound::new);
+    if (Objects.equals(adEntity.getAuthor().getId(), comment.getAuthor().getId())) {
+      commentRepository.deleteById(comment.getId());
+    }
+    throw new ElemNotFound();
   }
 
   @Override

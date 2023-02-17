@@ -25,7 +25,7 @@ class AdMapperTest {
   @Test
   void toDTO() {
     CreateAds createAds = adMapper.toCreateAds(getAd());
-    FullAds fullAds = adMapper.toFullAds(getAd());
+    FullAds fullAds = adMapper.toFullAds(getAd(), getUser(), getImage());
     assertNotNull(createAds);
     assertEquals(createAds.getPrice(), getAd().getPrice());
     assertEquals(createAds.getTitle(), getAd().getTitle());
@@ -56,6 +56,15 @@ class AdMapperTest {
     adEntity.setCommentEntities(List.of(new CommentEntity()));
     adEntity.setImageEntities(List.of(imageEntity));
     return adEntity;
+  }
+
+  UserEntity getUser() {
+    return new UserEntity(1, "firstname", "lastname", "email@.mail.ru", "+79999992211",
+        LocalDateTime.now(), "nsk", "/path/to/image/1", null, null);
+  }
+
+  ImageEntity getImage() {
+    return new ImageEntity(1, "/path/to/image/1", new AdEntity());
   }
 
 
