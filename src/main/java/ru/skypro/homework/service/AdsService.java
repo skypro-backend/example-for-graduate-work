@@ -8,6 +8,7 @@ import ru.skypro.homework.dto.Properties;
 
 import java.util.Collection;
 
+
 /**
  * Сервис объявлений
  */

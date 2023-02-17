@@ -1,5 +1,8 @@
 package ru.skypro.homework.mapper;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -7,10 +10,6 @@ import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
-
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class CommentMapperTest {
@@ -20,7 +19,7 @@ class CommentMapperTest {
     @Test
     void toDTO() {
         CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setPk(1);
+        commentEntity.setId(1);
         commentEntity.setAd(getAdEntity());
         commentEntity.setCreatedAt(LocalDateTime.of(2023, 02, 16, 14,30, 22));
         commentEntity.setAuthor(getAuthor());
@@ -33,7 +32,7 @@ class CommentMapperTest {
     }
     private AdEntity getAdEntity() {
         AdEntity adEntity = new AdEntity();
-        adEntity.setPk(1);
+        adEntity.setId(1);
         adEntity.setTitle("afsdf");
         adEntity.setPrice(123);
         adEntity.setDescription("asfsdf");
