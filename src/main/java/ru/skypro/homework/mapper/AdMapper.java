@@ -10,33 +10,14 @@ import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.FullAds;
 import ru.skypro.homework.entity.AdEntity;
-import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 
 /**
  * маппер для {@link AdEntity} готовый рекорд {@link AdsDTO}
  */
-@Mapper(componentModel = "spring", uses = {UserEntity.class, CommentEntity.class, ImageEntity.class})
+@Mapper(componentModel = "spring")
 public interface AdMapper {
-
-
-  default FullAds toFullAds(AdEntity adEntity, UserEntity userEntity, ImageEntity imageEntity) {
-    if (adEntity == null) {
-      return null;
-    }
-    FullAds fullAds = new FullAds();
-    fullAds.setAuthorFirstName(userEntity.getFirstName());
-    fullAds.setAuthorLastName(userEntity.getLastName());
-    fullAds.setDescription(adEntity.getDescription());
-    fullAds.setPk(userEntity.getId());
-    fullAds.setEmail(userEntity.getEmail());
-    fullAds.setPrice(adEntity.getPrice());
-    fullAds.setPhone(userEntity.getPhone());
-    fullAds.setImage(List.of(imageEntity.getPath()));
-    fullAds.setTitle(adEntity.getTitle());
-    return fullAds;
-  }
 
   @Mapping(target = "description", source = "description")
   @Mapping(target = "price", source = "price")
@@ -78,6 +59,24 @@ public interface AdMapper {
       imageEntities.add(imageEntity);
     }
     return imageEntities;
+  }
+
+
+  default FullAds toFullAds(AdEntity adEntity, UserEntity userEntity, ImageEntity imageEntity) {
+    if (adEntity == null) {
+      return null;
+    }
+    FullAds fullAds = new FullAds();
+    fullAds.setAuthorFirstName(userEntity.getFirstName());
+    fullAds.setAuthorLastName(userEntity.getLastName());
+    fullAds.setDescription(adEntity.getDescription());
+    fullAds.setPk(userEntity.getId());
+    fullAds.setEmail(userEntity.getEmail());
+    fullAds.setPrice(adEntity.getPrice());
+    fullAds.setPhone(userEntity.getPhone());
+    fullAds.setImage(List.of(imageEntity.getPath()));
+    fullAds.setTitle(adEntity.getTitle());
+    return fullAds;
   }
 
 //  Collection<AdEntity> toEntityList(Collection<AdsDTO> adDTOS);
