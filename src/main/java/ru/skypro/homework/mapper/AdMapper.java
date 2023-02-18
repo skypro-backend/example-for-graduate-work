@@ -16,7 +16,7 @@ import ru.skypro.homework.entity.ImageEntity;
 /**
  * маппер для {@link AdEntity} готовый рекорд {@link AdsDTO}
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {ImageMapper.class})
 public interface AdMapper {
 
   @Mapping(target = "description", source = "description")
