@@ -47,7 +47,7 @@ public class FullAds {
     String phone;
 
     /**
-     * id пользователя
+     * id объявления
      */
     Integer pk;
 

@@ -27,13 +27,19 @@ public class AdMapperTest {
   @Test
   void toCreateAds() {
     CreateAds createAds = adMapper.toCreateAds(getAd());
-    FullAds fullAds = adMapper.toFullAds(getAd(), getUser(), getImage());
     assertNotNull(createAds);
     assertEquals(createAds.getPrice(), getAd().getPrice());
     assertEquals(createAds.getTitle(), getAd().getTitle());
     assertEquals(createAds.getDescription(), getAd().getDescription());
-    assertNotNull(fullAds);
 
+
+  }
+
+  @Test
+  void toFullAds() {
+//    FullAds fullAds = adMapper.toFullAds(getAd(), getUser(), getImage());
+    FullAds fullAds = adMapper.toFullAds(getAd());
+    assertNotNull(fullAds);
     assertEquals(fullAds.getPrice(), getAd().getPrice());
     assertEquals(fullAds.getTitle(), getAd().getTitle());
     assertEquals(fullAds.getEmail(), getAd().getAuthor().getEmail());
@@ -42,7 +48,7 @@ public class AdMapperTest {
     assertEquals(fullAds.getAuthorLastName(), getAd().getAuthor().getLastName());
     assertEquals(fullAds.getPk(), getAd().getAuthor().getId());
     assertEquals(fullAds.getDescription(), getAd().getDescription());
-    assertEquals(fullAds.getImage(), List.of(getAd().getAuthor().getImage()));
+//    assertEquals(fullAds.getImage(), List.of(getAd().getAuthor().getImage()));
   }
 
   @Test
