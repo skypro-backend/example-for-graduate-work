@@ -45,7 +45,7 @@ public interface AdsService {
    * @param adPk - идентификатор объявления
    * @param id   - идентификатор комментария
    */
-  void deleteComments(String adPk, int id);
+  void deleteComments(Integer adPk, Integer id);
 
   /**
    * Обновляет комментарий
@@ -65,8 +65,6 @@ public interface AdsService {
 
   void addAdsComments(Integer pk);
 
-
-  void deleteAdsComment(Integer pk, Integer id);
 
   /**
    * @return все объявления
