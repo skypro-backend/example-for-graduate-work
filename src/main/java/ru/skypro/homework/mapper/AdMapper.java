@@ -21,7 +21,6 @@ import ru.skypro.homework.entity.UserEntity;
 public interface AdMapper {
 
 
-
   default FullAds toFullAds(AdEntity adEntity, UserEntity userEntity, ImageEntity imageEntity) {
     if (adEntity == null) {
       return null;
@@ -45,13 +44,16 @@ public interface AdMapper {
   CreateAds toCreateAds(AdEntity adEntity);
 
 
-//  @Mapping(target = "author.id", source = "author")
-//  @Mapping(target = "description", constant = "Неполная реклама")
-//  @Mapping(target = "imageEntities", expression = "java(setImageEntities(adDto.getImage()))")
-//  AdEntity toEntity(AdsDTO adDto);
+  @Mapping(target = "author.id", source = "author")
+  @Mapping(target = "id", source = "pk")
+  @Mapping(target = "description", constant = "Неполная реклама")
+  @Mapping(target = "imageEntities", expression = "java(setImageEntities(adDto.getImage()))")
+  AdEntity toEntity(AdsDTO adDto);
+
 
 
   @Mapping(target = "author", source = "author.id")
+  @Mapping(target = "pk", source = "id")
   @Mapping(target = "image", expression = "java(setImage(adEntity.getImageEntities()))")
   AdsDTO toDTO(AdEntity adEntity);
 
