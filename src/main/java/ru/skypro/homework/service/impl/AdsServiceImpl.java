@@ -78,8 +78,7 @@ public class AdsServiceImpl implements AdsService {
     CommentEntity comment = commentRepository.findById(1).orElseThrow(ElemNotFound::new);
     if (Objects.equals(adEntity.getAuthor().getId(), comment.getAuthor().getId())) {
       commentRepository.deleteById(comment.getId());
-    }
-    throw new ElemNotFound();
+    } else throw new ElemNotFound();
   }
 
   @Override
