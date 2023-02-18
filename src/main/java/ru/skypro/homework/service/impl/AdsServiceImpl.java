@@ -36,9 +36,12 @@ public class AdsServiceImpl implements AdsService {
   private UserRepository userRepository;
   private AdMapper adMapper;
 
-  public AdsServiceImpl(AdsRepository adsRepository) {
+  public AdsServiceImpl(AdsRepository adsRepository, CommentRepository commentRepository,
+      UserRepository userRepository, AdMapper adMapper) {
     this.adsRepository = adsRepository;
-//    this.adMapper = adMapper;
+    this.commentRepository = commentRepository;
+    this.userRepository = userRepository;
+    this.adMapper = adMapper;
   }
 
   /**
@@ -71,8 +74,8 @@ public class AdsServiceImpl implements AdsService {
   @Override
   public void deleteComments(Integer pk, Integer id) {
     log.info(FormLogInfo.getInfo());
-    AdEntity adEntity = adsRepository.findById(pk).orElseThrow(ElemNotFound::new);
-    CommentEntity comment = commentRepository.findById(id).orElseThrow(ElemNotFound::new);
+    AdEntity adEntity = adsRepository.findById(1).orElseThrow(ElemNotFound::new);
+    CommentEntity comment = commentRepository.findById(1).orElseThrow(ElemNotFound::new);
     if (Objects.equals(adEntity.getAuthor().getId(), comment.getAuthor().getId())) {
       commentRepository.deleteById(comment.getId());
     }
@@ -87,7 +90,7 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public AdsDTO addAds(Properties properties, MultipartFile multipartFile){
+  public AdsDTO addAds(Properties properties, MultipartFile multipartFile) {
     log.info(FormLogInfo.getInfo());
 
     AdsDTO adsDTO = new AdsDTO();
@@ -96,14 +99,13 @@ public class AdsServiceImpl implements AdsService {
     List<String> listOfImage = new ArrayList<>();
     String content = null;
     try {
-       content = new String(multipartFile.getBytes(), StandardCharsets.UTF_8);
+      content = new String(multipartFile.getBytes(), StandardCharsets.UTF_8);
     } catch (IOException e) {
       log.error(FormLogInfo.getCatch());
     }
     listOfImage.add(content);
-    //adsDTO.setImage(listOfImage);
-    // Раскомментить когда будут таблицы
-    //adsRepository.save(adMapper.toEntity(adsDTO));
+    adsDTO.setImage(listOfImage);
+    adsRepository.save(adMapper.toEntity(adsDTO));
     return adsDTO;
   }
 
@@ -124,6 +126,7 @@ public class AdsServiceImpl implements AdsService {
 
   /**
    * Удаление объявления по id
+   *
    * @param id
    */
   @Override
