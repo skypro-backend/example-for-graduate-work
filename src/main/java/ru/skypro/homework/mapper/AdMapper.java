@@ -20,12 +20,14 @@ public interface AdMapper {
 
 
   @Mapping(target = "author.id", source = "author")
+  @Mapping(target = "id", source = "pk")
   @Mapping(target = "description", constant = "Неполная реклама")
   @Mapping(target = "imageEntities", expression = "java(setImageEntities(adDto.getImage()))")
   AdEntity toEntity(AdsDTO adDto);
 
 
   @Mapping(target = "author", source = "author.id")
+  @Mapping(target = "pk", source = "id")
   @Mapping(target = "image", expression = "java(setImage(adEntity.getImageEntities()))")
   AdsDTO toDTO(AdEntity adEntity);
 
