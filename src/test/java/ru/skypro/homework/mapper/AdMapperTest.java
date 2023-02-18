@@ -49,6 +49,7 @@ public class AdMapperTest {
     assertEquals(fullAds.getPk(), getAd().getAuthor().getId());
     assertEquals(fullAds.getDescription(), getAd().getDescription());
 //    assertEquals(fullAds.getImage(), List.of(getAd().getAuthor().getImage()));
+    assertEquals(fullAds.getImage(), getAd().getImageEntities());
   }
 
   @Test

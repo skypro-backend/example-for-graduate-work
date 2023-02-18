@@ -2,6 +2,7 @@ package ru.skypro.homework.mapper;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
@@ -65,7 +66,9 @@ public interface AdMapper {
   @Mapping(target = "authorLastName", source = "author.lastName")
   @Mapping(target = "description", source = "adEntity.description")
   @Mapping(target = "email", source = "author.email")
-  @Mapping(target = "image", ignore = true)
+//  @Mapping(target = "image", expression = "java(imageEntities.stream().map(ImageEntity::getPath).collect(Collectors.toList()))")
+//  @Mapping(target = "image", expression = "java(adEntity.getImageEntities().stream().map(imageEntity -> imageEntity.getPath()).collect(Collectors.toUnmodifiableList()))")
+  @Mapping(target = "image", source = "imageEntities")
   @Mapping(target = "phone", source = "author.phone")
   @Mapping(target = "price", source = "adEntity.price")
   @Mapping(target = "title", source = "adEntity.title")
@@ -88,7 +91,7 @@ public interface AdMapper {
 //    return fullAds;
 //  }
 
-//  Collection<AdEntity> toEntityList(Collection<AdsDTO> adDTOS);
-//
-//  Collection<AdsDTO> toDTOList(Collection<AdEntity> adEntities);
+  Collection<AdEntity> toEntityList(Collection<AdsDTO> adDTOS);
+
+  Collection<AdsDTO> toDTOList(Collection<AdEntity> adEntities);
 }
