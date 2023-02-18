@@ -1,12 +1,12 @@
 package ru.skypro.homework.service;
 
+
+import java.util.Collection;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.Properties;
-
-import java.util.Collection;
 
 
 /**

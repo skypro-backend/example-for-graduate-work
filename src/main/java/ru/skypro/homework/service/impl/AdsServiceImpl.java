@@ -19,6 +19,7 @@ import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.exception.ElemNotFound;
 import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.mapper.AdsOtherMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
@@ -35,13 +36,15 @@ public class AdsServiceImpl implements AdsService {
   private CommentRepository commentRepository;
   private UserRepository userRepository;
   private AdMapper adMapper;
+  private AdsOtherMapper adsOtherMapper;
 
   public AdsServiceImpl(AdsRepository adsRepository, CommentRepository commentRepository,
-      UserRepository userRepository, AdMapper adMapper) {
+      UserRepository userRepository, AdMapper adMapper, AdsOtherMapper adsOtherMapper) {
     this.adsRepository = adsRepository;
     this.commentRepository = commentRepository;
     this.userRepository = userRepository;
     this.adMapper = adMapper;
+    this.adsOtherMapper = adsOtherMapper;
   }
 
   /**
