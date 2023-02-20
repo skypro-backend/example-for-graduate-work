@@ -46,20 +46,20 @@ public class UserServiceImpl implements UserService {
   public UserDTO getUser(Authentication authentication) {
     log.info(FormLogInfo.getInfo());
     String nameEmail = authentication.getName();
-    boolean authenticated = authentication.isAuthenticated();
     UserEntity userEntity = findEntityByEmail(nameEmail);
     return userMapper.toDTO(userEntity);
   }
 
   @Override
-  public UserDTO updateUser(UserDTO newUserDto) {
+  public UserDTO updateUser(UserDTO newUserDto, Authentication authentication) {
     log.info(FormLogInfo.getInfo());
 
-    int id = newUserDto.getId();
+    String nameEmail = authentication.getName();
+    UserEntity userEntity = findEntityByEmail(nameEmail);
+    int id = userEntity.getId();
 
-    UserEntity oldUser = null;
+    UserEntity oldUser = findById(id);
 
-    oldUser = findById(id);
     oldUser.setEmail(newUserDto.getEmail());
     oldUser.setFirstName(newUserDto.getFirstName());
     oldUser.setLastName(newUserDto.getLastName());
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     oldUser.setImage(newUserDto.getImage());
     userRepository.save(oldUser);
 
-    return newUserDto;
+    return  userMapper.toDTO(oldUser);
   }
 
   @Override
