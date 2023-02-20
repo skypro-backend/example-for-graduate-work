@@ -29,10 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.CreateAds;
-import ru.skypro.homework.dto.FullAds;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 
 @RestController
@@ -55,13 +52,13 @@ public class AdsController {
           description = "OK",
           content = {
               @Content(
-                  array = @ArraySchema(schema = @Schema(implementation = AdsDTO.class)))
+                  array = @ArraySchema(schema = @Schema(implementation = ResponseWrapperAds.class)))
           }
       )
   })
   @GetMapping
-  public ResponseEntity<Collection<AdsDTO>> getALLAds() {
-    return ResponseEntity.ok(adsService.getALLAds());
+  public ResponseEntity<ResponseWrapperAds> getAds() {
+    return ResponseEntity.ok(adsService.getAds());
   }
 
   @Operation(summary = "Добавить объявление")
@@ -191,7 +188,7 @@ public class AdsController {
           description = "OK",
               content = {
                       @Content(
-                              schema = @Schema(implementation = CommentDTO.class))
+                              schema = @Schema(implementation = ResponseWrapperComment.class))
               }
       ),
       @ApiResponse(
@@ -201,7 +198,7 @@ public class AdsController {
       )
   })
   @GetMapping("/{ad_pk}/comments")
-  public ResponseEntity<Collection<CommentDTO>> getAdsComments(
+  public ResponseEntity<ResponseWrapperComment> getAdsComments(
       @PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk) {
     return ResponseEntity.ok().body(adsService.getAdsComments(pk));
   }
@@ -286,7 +283,7 @@ public class AdsController {
   @GetMapping("{id}")
   public ResponseEntity<?> getAds(
       @PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id) {
-    return ResponseEntity.ok().body(adsService.getAds(id));
+    return ResponseEntity.ok().body(adsService.getAdById(id));
   }
 
   @Operation(summary = "Обновить объявление")
