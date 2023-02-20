@@ -4,11 +4,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.skypro.homework.entity.CommentEntity;
 
+import java.util.Optional;
+
 /**
  * Репозиторий для комментариев
  */
 @Repository
 public interface CommentRepository extends JpaRepository<CommentEntity, Integer> {
-    CommentEntity findByIdAndAd_Id(Integer commentId, Integer adId);
+    Optional<CommentEntity> findByIdAndAd_Id(Integer commentId, Integer adId);
 
 }
