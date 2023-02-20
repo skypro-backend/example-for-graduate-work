@@ -71,9 +71,9 @@ public class AdsServiceImpl implements AdsService {
 
 
   public AdsServiceImpl(AdsRepository adsRepository, CommentRepository commentRepository,
-      UserRepository userRepository, AdMapper adMapper, CommentMapper commentMapper,
-      ImageRepository imageRepository, ImageMapper imageMapper, UserServiceImpl userService,
-      UserMapper userMapper, AdsOtherMapper adsOtherMapper) {
+                        UserRepository userRepository, AdMapper adMapper, CommentMapper commentMapper,
+                        ImageRepository imageRepository, ImageMapper imageMapper, UserServiceImpl userService,
+                        UserMapper userMapper, AdsOtherMapper adsOtherMapper) {
     this.adsRepository = adsRepository;
     this.commentRepository = commentRepository;
     this.userRepository = userRepository;
@@ -94,7 +94,7 @@ public class AdsServiceImpl implements AdsService {
    */
   @Override
   public Collection<CommentDTO> getAdsComments(Integer pk) {
-    return null;
+    return commentMapper.toDTOList(commentRepository.findAllById(Collections.singleton(pk)));
   }
 
   /**
@@ -144,8 +144,7 @@ public class AdsServiceImpl implements AdsService {
   @Override
   public Collection<AdsDTO> getALLAds() {
     log.info(FormLogInfo.getInfo());
-//    return adMapper.toDTOList(adsRepository.findAll());
-    return Collections.EMPTY_LIST;
+    return adMapper.toDTOList(adsRepository.findAll());
   }
 
   /**
@@ -254,9 +253,8 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public CommentDTO getComments(String adPk, int id) {
-    return null;
-    //return new CommentDTO(1, "20.02.2023", Integer.parseInt(adPk), "Еще продается?");
+  public CommentDTO getComments(int adPk, int id) {
+    return commentMapper.toDTO(commentRepository.findByIdAndAd_Id(id, adPk).orElseThrow(ElemNotFound::new));
   }
 
   @Override
@@ -290,7 +288,7 @@ public class AdsServiceImpl implements AdsService {
 
   @Override
   public AdsDTO getAds(int id) {
-    return new AdsDTO();
+    return adMapper.toDTO(adsRepository.findById(id).orElseThrow(ElemNotFound::new));
   }
 
   @Override
@@ -301,6 +299,8 @@ public class AdsServiceImpl implements AdsService {
     adEntity.setTitle(createAds.getTitle());
     return adMapper.toDTO(adsRepository.save(adEntity));
   }
+
+
 
 
 }

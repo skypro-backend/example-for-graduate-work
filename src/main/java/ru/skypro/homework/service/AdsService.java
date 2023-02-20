@@ -39,7 +39,7 @@ public interface AdsService {
    * @param id   - идентификатор комментария
    * @return - комментарий
    */
-  CommentDTO getComments(String adPk, int id);
+  CommentDTO getComments(int adPk, int id);
 
   /**
    * Удаляет комментарий
