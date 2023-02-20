@@ -5,10 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.CreateAds;
-
+import ru.skypro.homework.dto.*;
 
 
 /**
@@ -22,7 +19,7 @@ public interface AdsService {
    * @param id - идентификатор объявления
    * @return - комментарий
    */
-  AdsDTO getAds(int id);
+  AdsDTO getAdById(int id);
 
   /**
    * Обновляет объявление
@@ -62,7 +59,7 @@ public interface AdsService {
   void removeAds(int id);
 
 
-  Collection<CommentDTO> getAdsComments(Integer pk);
+  ResponseWrapperComment getAdsComments(Integer pk);
 
 
   CommentDTO addAdsComments(Integer pk,CommentDTO  commentDTO,Authentication authentication);
@@ -71,7 +68,7 @@ public interface AdsService {
   /**
    * @return все объявления
    */
-  Collection<AdsDTO> getALLAds();
+  ResponseWrapperAds getAds();
 
   /**
    * Добавляем новое объявление

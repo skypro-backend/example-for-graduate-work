@@ -24,11 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.CreateAds;
-import ru.skypro.homework.dto.ImageDTO;
-import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.ImageEntity;
@@ -93,8 +89,10 @@ public class AdsServiceImpl implements AdsService {
    * @return
    */
   @Override
-  public Collection<CommentDTO> getAdsComments(Integer pk) {
-    return commentMapper.toDTOList(commentRepository.findAllById(Collections.singleton(pk)));
+  public ResponseWrapperComment getAdsComments(Integer pk) {
+    Collection<CommentDTO> commentDTOS = commentMapper.toDTOList(commentRepository.findAllById(Collections.singleton(pk)));
+    int count = commentDTOS.size();
+    return new ResponseWrapperComment(count,commentDTOS);
   }
 
   /**
@@ -142,9 +140,12 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public Collection<AdsDTO> getALLAds() {
+  public ResponseWrapperAds getAds() {
     log.info(FormLogInfo.getInfo());
-    return adMapper.toDTOList(adsRepository.findAll());
+    Collection<AdsDTO> adsAll = adMapper.toDTOList(adsRepository.findAll());
+    int count = adsAll.size();
+    ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds(count,adsAll);
+    return responseWrapperAds;
   }
 
   /**
@@ -290,7 +291,7 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public AdsDTO getAds(int id) {
+  public AdsDTO getAdById(int id) {
     return adMapper.toDTO(adsRepository.findById(id).orElseThrow(ElemNotFound::new));
   }
 
