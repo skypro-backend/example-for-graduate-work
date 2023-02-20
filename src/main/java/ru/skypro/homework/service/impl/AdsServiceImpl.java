@@ -291,8 +291,8 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public AdsDTO getAdById(int id) {
-    return adMapper.toDTO(adsRepository.findById(id).orElseThrow(ElemNotFound::new));
+  public FullAds getAdById(int id) {
+    return adsOtherMapper.toFullAds(adsRepository.findById(id).orElseThrow(ElemNotFound::new));
   }
 
   @Override
