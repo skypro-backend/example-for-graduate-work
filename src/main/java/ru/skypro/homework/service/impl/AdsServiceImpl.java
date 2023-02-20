@@ -157,10 +157,7 @@ public class AdsServiceImpl implements AdsService {
     adEntity.setDescription(createAds.getDescription());
     adEntity.setPrice(createAds.getPrice());
     adEntity.setTitle(createAds.getTitle());
-    return null;
-//    TODO: Восстановить, когда появится adMapper
-//    AdsDTO savedAdsDTO = adMapper.toDTO(adsRepository.save(adEntity));
-//    return savedAdsDTO;
+    return adMapper.toDTO(adsRepository.save(adEntity));
   }
 
 }
