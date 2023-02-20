@@ -1,5 +1,12 @@
 package ru.skypro.homework.service.impl;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,6 +15,7 @@ import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.Properties;
 import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.exception.ElemNotFound;
 import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.mapper.AdMapper;
@@ -16,13 +24,6 @@ import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * Реализация {@link ru.skypro.homework.service.AdsService}
  */
@@ -30,14 +31,17 @@ import java.util.List;
 @Slf4j
 public class AdsServiceImpl implements AdsService {
 
-  private AdsRepository adsRepository;
+  private final AdsRepository adsRepository;
   private CommentRepository commentRepository;
   private UserRepository userRepository;
   private AdMapper adMapper;
 
-  public AdsServiceImpl(AdsRepository adsRepository) {
+  public AdsServiceImpl(AdsRepository adsRepository, CommentRepository commentRepository,
+      UserRepository userRepository, AdMapper adMapper) {
     this.adsRepository = adsRepository;
-//    this.adMapper = adMapper;
+    this.commentRepository = commentRepository;
+    this.userRepository = userRepository;
+    this.adMapper = adMapper;
   }
 
   /**
@@ -62,14 +66,20 @@ public class AdsServiceImpl implements AdsService {
   }
 
   /**
-   * Удаление комментария конкретного пользователя у объявления
+   * Удалить комментарий по id объявления и id комментария
    *
    * @param pk
    * @param id
    */
   @Override
-  public void deleteAdsComment(Integer pk, Integer id) {
-
+  public void deleteComments(Integer pk, Integer id) {
+    log.info(FormLogInfo.getInfo());
+    AdEntity adEntity = adsRepository.findById(1).orElseThrow(ElemNotFound::new);
+    CommentEntity comment = commentRepository.findById(1).orElseThrow(ElemNotFound::new);
+    if (Objects.equals(adEntity.getAuthor().getId(), comment.getAuthor().getId())) {
+      commentRepository.deleteById(comment.getId());
+    }
+    throw new ElemNotFound();
   }
 
   @Override
@@ -80,7 +90,7 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public AdsDTO addAds(Properties properties, MultipartFile multipartFile){
+  public AdsDTO addAds(Properties properties, MultipartFile multipartFile) {
     log.info(FormLogInfo.getInfo());
 
     AdsDTO adsDTO = new AdsDTO();
@@ -89,14 +99,13 @@ public class AdsServiceImpl implements AdsService {
     List<String> listOfImage = new ArrayList<>();
     String content = null;
     try {
-       content = new String(multipartFile.getBytes(), StandardCharsets.UTF_8);
+      content = new String(multipartFile.getBytes(), StandardCharsets.UTF_8);
     } catch (IOException e) {
       log.error(FormLogInfo.getCatch());
     }
     listOfImage.add(content);
-    //adsDTO.setImage(listOfImage);
-    // Раскомментить когда будут таблицы
-    //adsRepository.save(adMapper.toEntity(adsDTO));
+    adsDTO.setImage(listOfImage);
+    adsRepository.save(adMapper.toEntity(adsDTO));
     return adsDTO;
   }
 
@@ -108,10 +117,6 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public void deleteComments(String adPk, int id) {
-  }
-
-  @Override
   public CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO) {
 //    CommentEntity commentEntity = commentRepository.findByIdAndPk_Pk(id, adPk);
 //    UserEntity author = userRepository.findById(commentDTO.)
@@ -119,8 +124,16 @@ public class AdsServiceImpl implements AdsService {
     return null;
   }
 
+  /**
+   * Удаление объявления по id
+   *
+   * @param id
+   */
   @Override
   public void removeAds(int id) {
+    log.info(FormLogInfo.getInfo());
+    AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
+    adsRepository.delete(adEntity);
   }
 
   @Override

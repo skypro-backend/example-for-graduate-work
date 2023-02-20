@@ -43,4 +43,16 @@
     </changeSet>
     <include file="v-1.0/data/igorBr_01_Insert_User.sql" relativeToChangelogFile="true"/>
 
+    <changeSet id="8" author="igor_br">
+        <tagDatabase tag="add_data_to_table_ads"/>
+    </changeSet>
+    <include file="v-1.0/data/Dima_01_insert_toTableAds.sql" relativeToChangelogFile="true"/>
+
+    <changeSet id="9" author="sergei_lupaev">
+        <tagDatabase tag="add_data_to_table_comments"/>
+    </changeSet>
+    <include file="v-1.0/data/insert_data_for_comment_table.sql" relativeToChangelogFile="true"/>
+
+
+
 </databaseChangeLog>
