@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Objects;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -26,14 +25,6 @@ import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
-
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Base64;
-import java.util.Objects;
-
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 @Slf4j
@@ -151,7 +142,7 @@ public class UserServiceImpl implements UserService {
    *
    * @return расширение файла
    */
-  private String getExtension(String fileName) {
+  String getExtension(String fileName) {
     log.info(FormLogInfo.getInfo());
 
     return fileName.substring(fileName.lastIndexOf(".") + 1);

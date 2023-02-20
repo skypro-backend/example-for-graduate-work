@@ -20,7 +20,8 @@ public interface AdMapper {
 
 
 
-  @Mapping(target = "author.id", source = "author")
+
+  @Mapping(target = "author", ignore = true)
   @Mapping(target = "id", source = "pk")
   @Mapping(target = "description", constant = "Неполная реклама")
   @Mapping(target = "imageEntities", expression = "java(setImageEntities(adDto.getImage()))")

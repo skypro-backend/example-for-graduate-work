@@ -1,6 +1,6 @@
 CREATE TABLE ads
 (
-    id  serial PRIMARY KEY ,
+    id  integer generated always as identity primary key,
     author_id int,
     image BYTEA,
     price int,

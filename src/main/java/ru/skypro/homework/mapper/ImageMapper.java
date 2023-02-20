@@ -1,17 +1,15 @@
 package ru.skypro.homework.mapper;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import ru.skypro.homework.dto.ImageDTO;
 import ru.skypro.homework.entity.ImageEntity;
 
-import java.util.List;
-import java.util.stream.Collectors;
+@Mapper(componentModel = "spring")
+public interface ImageMapper {
+  @Mapping(target = "path", source = "image")
+  ImageEntity toEntity(ImageDTO imageDTO);
+  @Mapping(target = "image", source = "path")
+  ImageDTO toDTO(ImageEntity imageEntity);
 
-@Component
-public class ImageMapper {
-
-    List<String> toListPathString(List<ImageEntity> imageEntities) {
-        return imageEntities.stream()
-                .map(ImageEntity::getPath)
-                .collect(Collectors.toList());
-    }
 }
