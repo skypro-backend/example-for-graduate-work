@@ -2,10 +2,14 @@ package ru.skypro.homework.service;
 
 
 import java.io.IOException;
-import java.util.Collection;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CreateAds;
+import ru.skypro.homework.dto.FullAds;
+import ru.skypro.homework.dto.ResponseWrapperAds;
+import ru.skypro.homework.dto.ResponseWrapperComment;
 
 
 /**
@@ -19,7 +23,7 @@ public interface AdsService {
    * @param id - идентификатор объявления
    * @return - комментарий
    */
-  AdsDTO getAdById(int id);
+  FullAds getAdById(int id);
 
   /**
    * Обновляет объявление
