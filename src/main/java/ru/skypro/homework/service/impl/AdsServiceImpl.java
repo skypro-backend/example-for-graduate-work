@@ -1,11 +1,11 @@
 package ru.skypro.homework.service.impl;
 
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.type.LocalDateType;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,20 +17,35 @@ import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.Properties;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
+
+import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exception.ElemNotFound;
+import ru.skypro.homework.loger.FormLogInfo;
+import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.mapper.CommentMapper;
+
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.exception.ElemNotFound;
 import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.mapper.AdsOtherMapper;
+
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
 
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import javax.transaction.Transactional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
+
 
 /**
  * Реализация {@link ru.skypro.homework.service.AdsService}
@@ -44,18 +59,27 @@ public class AdsServiceImpl implements AdsService {
   private CommentRepository commentRepository;
   private UserRepository userRepository;
   private AdMapper adMapper;
+
+  private CommentMapper commentMapper;
+
+  public AdsServiceImpl(AdsRepository adsRepository, CommentRepository commentRepository,
+                        UserRepository userRepository, AdMapper adMapper, CommentMapper commentMapper) {
+
   private AdsOtherMapper adsOtherMapper;
 
   private ImageRepository imageRepository;
 
   public AdsServiceImpl(AdsRepository adsRepository, CommentRepository commentRepository,
                         UserRepository userRepository, AdMapper adMapper, AdsOtherMapper adsOtherMapper, ImageRepository imageRepository) {
+
     this.adsRepository = adsRepository;
     this.commentRepository = commentRepository;
     this.userRepository = userRepository;
     this.adMapper = adMapper;
+    this.commentMapper = commentMapper;
     this.adsOtherMapper = adsOtherMapper;
     this.imageRepository = imageRepository;
+
   }
 
   @Value("${image.ads.dir.path}")
@@ -181,10 +205,17 @@ public class AdsServiceImpl implements AdsService {
 
   @Override
   public CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO) {
-//    CommentEntity commentEntity = commentRepository.findByIdAndPk_Pk(id, adPk);
-//    UserEntity author = userRepository.findById(commentDTO.)
-//    commentEntity.setAuthor();
-    return null;
+    CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk).orElseThrow(ElemNotFound::new);
+
+    UserEntity author = userRepository.findById(commentDTO.getAuthor()).orElseThrow(ElemNotFound::new);
+    commentEntity.setAuthor(author);
+
+    commentEntity.setText(commentDTO.getText());
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    commentEntity.setCreatedAt(LocalDateTime.parse(commentDTO.getCreatedAt(),formatter));
+
+    return commentMapper.toDTO(commentRepository.save(commentEntity));
   }
 
   /**
@@ -210,10 +241,7 @@ public class AdsServiceImpl implements AdsService {
     adEntity.setDescription(createAds.getDescription());
     adEntity.setPrice(createAds.getPrice());
     adEntity.setTitle(createAds.getTitle());
-    return null;
-//    TODO: Восстановить, когда появится adMapper
-//    AdsDTO savedAdsDTO = adMapper.toDTO(adsRepository.save(adEntity));
-//    return savedAdsDTO;
+    return adMapper.toDTO(adsRepository.save(adEntity));
   }
 
 
