@@ -4,12 +4,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.type.LocalDateType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -137,7 +135,7 @@ public class AdsServiceImpl implements AdsService {
     log.info(FormLogInfo.getInfo());
     AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
 
-    Path filePath = Path.of(imageDir, adEntity.getId() + "." + getExtension(image.getOriginalFilename()));
+    Path filePath = Path.of(imageDir, getFileUniqueName() + "." + getExtension(image.getOriginalFilename()));
     Files.createDirectories(filePath.getParent());
     Files.deleteIfExists(filePath);
 
@@ -152,12 +150,8 @@ public class AdsServiceImpl implements AdsService {
     imageEntity.setAd(adEntity);
     imageEntity.setPath(filePath.toString());
     adEntity.setImageEntities(List.of(imageEntity));
-//    pet.setFilePath(filePath.toString());
-//    pet.setFileSize(image.getSize());
-//    pet.setMediaType(image.getContentType());
-//    pet.setPhoto(image.getBytes());
+
     imageRepository.save(imageEntity);
-//    adsRepository.save(adEntity);
   }
 
   /**
@@ -167,6 +161,15 @@ public class AdsServiceImpl implements AdsService {
    */
   private String getExtension(String fileName) {
     return fileName.substring(fileName.lastIndexOf(".") + 1);
+  }
+
+  /**
+   * вспомогательный медот для получения уникального имени
+   * @return
+   */
+
+  private String getFileUniqueName() {
+    return UUID.randomUUID().toString();
   }
 
 
