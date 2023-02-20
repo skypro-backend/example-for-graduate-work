@@ -27,12 +27,12 @@ import ru.skypro.homework.repository.CommentRepository;
 class AdsServiceTest {
 
   @InjectMocks
-  private AdsService adsService;
+  AdsService adsService;
 
   @InjectMocks
-  private UserService userService;
+  UserService userService;
   @InjectMocks
-  private ImageService imageService;
+  ImageService imageService;
 
   @Mock
   private CommentRepository commentRepository;
