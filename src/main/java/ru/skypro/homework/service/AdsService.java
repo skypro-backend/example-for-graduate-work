@@ -1,12 +1,13 @@
 package ru.skypro.homework.service;
 
+
+import java.io.IOException;
+import java.util.Collection;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.Properties;
-
-import java.util.Collection;
 
 
 /**
@@ -77,5 +78,12 @@ public interface AdsService {
    * @return возвращает созданное объявление
    */
   AdsDTO addAds(Properties properties, MultipartFile multipartFile);
+
+  /**
+   * Добавление фото в объявление
+   * @param id
+   * @param image
+   */
+  void uploadImage (Integer id, MultipartFile image) throws IOException;
 
 }
