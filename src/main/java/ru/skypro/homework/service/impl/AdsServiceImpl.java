@@ -1,13 +1,14 @@
 package ru.skypro.homework.service.impl;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.type.LocalDateType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDTO;
@@ -16,33 +17,49 @@ import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.Properties;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
+import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.exception.ElemNotFound;
 import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.mapper.AdsOtherMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
+
+import javax.transaction.Transactional;
+
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 /**
  * Реализация {@link ru.skypro.homework.service.AdsService}
  */
 @Service
 @Slf4j
+@Transactional
 public class AdsServiceImpl implements AdsService {
 
   private final AdsRepository adsRepository;
   private CommentRepository commentRepository;
   private UserRepository userRepository;
   private AdMapper adMapper;
+  private AdsOtherMapper adsOtherMapper;
+
+  private ImageRepository imageRepository;
 
   public AdsServiceImpl(AdsRepository adsRepository, CommentRepository commentRepository,
-      UserRepository userRepository, AdMapper adMapper) {
+                        UserRepository userRepository, AdMapper adMapper, AdsOtherMapper adsOtherMapper, ImageRepository imageRepository) {
     this.adsRepository = adsRepository;
     this.commentRepository = commentRepository;
     this.userRepository = userRepository;
     this.adMapper = adMapper;
+    this.adsOtherMapper = adsOtherMapper;
+    this.imageRepository = imageRepository;
   }
+
+  @Value("${image.ads.dir.path}")
+  private String imageDir;
 
   /**
    * Получение всех комментариев объявления
@@ -74,12 +91,11 @@ public class AdsServiceImpl implements AdsService {
   @Override
   public void deleteComments(Integer pk, Integer id) {
     log.info(FormLogInfo.getInfo());
-    AdEntity adEntity = adsRepository.findById(1).orElseThrow(ElemNotFound::new);
-    CommentEntity comment = commentRepository.findById(1).orElseThrow(ElemNotFound::new);
+    AdEntity adEntity = adsRepository.findById(pk).orElseThrow(ElemNotFound::new);
+    CommentEntity comment = commentRepository.findById(id).orElseThrow(ElemNotFound::new);
     if (Objects.equals(adEntity.getAuthor().getId(), comment.getAuthor().getId())) {
       commentRepository.deleteById(comment.getId());
-    }
-    throw new ElemNotFound();
+    } else throw new ElemNotFound();
   }
 
   @Override
@@ -107,6 +123,53 @@ public class AdsServiceImpl implements AdsService {
     adsDTO.setImage(listOfImage);
     adsRepository.save(adMapper.toEntity(adsDTO));
     return adsDTO;
+  }
+
+  /**
+   * Добавление фото в объявление
+   * @param id
+   * @param image
+   */
+  @Override
+  public void uploadImage(Integer id, MultipartFile image) throws IOException {
+    log.info(FormLogInfo.getInfo());
+    AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
+
+    Path filePath = Path.of(imageDir, getFileUniqueName() + "." + getExtension(image.getOriginalFilename()));
+    Files.createDirectories(filePath.getParent());
+    Files.deleteIfExists(filePath);
+
+    try (InputStream is = image.getInputStream();
+         OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
+         BufferedInputStream bis = new BufferedInputStream(is, 1024);
+         BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+    ) {
+      bis.transferTo(bos);
+    }
+    ImageEntity imageEntity = new ImageEntity();
+    imageEntity.setAd(adEntity);
+    imageEntity.setPath(filePath.toString());
+    adEntity.setImageEntities(List.of(imageEntity));
+
+    imageRepository.save(imageEntity);
+  }
+
+  /**
+   * вспомогательный медот для загрузки фотографий
+   *
+   * @return расширение файла
+   */
+  private String getExtension(String fileName) {
+    return fileName.substring(fileName.lastIndexOf(".") + 1);
+  }
+
+  /**
+   * вспомогательный медот для получения уникального имени
+   * @return
+   */
+
+  private String getFileUniqueName() {
+    return UUID.randomUUID().toString();
   }
 
 
@@ -152,5 +215,7 @@ public class AdsServiceImpl implements AdsService {
 //    AdsDTO savedAdsDTO = adMapper.toDTO(adsRepository.save(adEntity));
 //    return savedAdsDTO;
   }
+
+
 
 }

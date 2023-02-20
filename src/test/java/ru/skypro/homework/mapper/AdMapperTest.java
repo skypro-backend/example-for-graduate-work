@@ -23,26 +23,35 @@ public class AdMapperTest {
 
   @Autowired
   private AdMapper adMapper;
+  @Autowired
+  private AdsOtherMapper adsOtherMapper;
+
 
   @Test
   void toCreateAds() {
-    CreateAds createAds = adMapper.toCreateAds(getAd());
-    FullAds fullAds = adMapper.toFullAds(getAd(), getUser(), getImage());
+    CreateAds createAds = adsOtherMapper.toCreateAds(getAd());
     assertNotNull(createAds);
     assertEquals(createAds.getPrice(), getAd().getPrice());
     assertEquals(createAds.getTitle(), getAd().getTitle());
     assertEquals(createAds.getDescription(), getAd().getDescription());
-    assertNotNull(fullAds);
 
-    assertEquals(fullAds.getPrice(), getAd().getPrice());
-    assertEquals(fullAds.getTitle(), getAd().getTitle());
-    assertEquals(fullAds.getEmail(), getAd().getAuthor().getEmail());
-    assertEquals(fullAds.getPhone(), getAd().getAuthor().getPhone());
-    assertEquals(fullAds.getAuthorFirstName(), getAd().getAuthor().getFirstName());
-    assertEquals(fullAds.getAuthorLastName(), getAd().getAuthor().getLastName());
-    assertEquals(fullAds.getPk(), getAd().getAuthor().getId());
-    assertEquals(fullAds.getDescription(), getAd().getDescription());
-    assertEquals(fullAds.getImage(), List.of(getAd().getAuthor().getImage()));
+
+  }
+
+  @Test
+  void toFullAds() {
+    AdEntity adEntity = getAd();
+    FullAds fullAds = adsOtherMapper.toFullAds(getAd());
+    assertNotNull(fullAds);
+    assertEquals(fullAds.getPrice(), adEntity.getPrice());
+    assertEquals(fullAds.getTitle(), adEntity.getTitle());
+    assertEquals(fullAds.getEmail(), adEntity.getAuthor().getEmail());
+    assertEquals(fullAds.getPhone(), adEntity.getAuthor().getPhone());
+    assertEquals(fullAds.getAuthorFirstName(), adEntity.getAuthor().getFirstName());
+    assertEquals(fullAds.getAuthorLastName(), adEntity.getAuthor().getLastName());
+    assertEquals(fullAds.getPk(), adEntity.getAuthor().getId());
+    assertEquals(fullAds.getDescription(), adEntity.getDescription());
+    assertEquals(fullAds.getImage(), toListPathString(adEntity.getImageEntities()));
   }
 
   @Test
@@ -129,8 +138,12 @@ public class AdMapperTest {
   private AdEntity getAd() {
     UserEntity userEntity = new UserEntity(1, "firstname", "lastname", "email@.mail.ru",
         "+79999992211",
-        LocalDateTime.now(), "nsk", "/path/to/image/1", null, null);
-    ImageEntity imageEntity = new ImageEntity(1, "/path/to/image/1", new AdEntity());
+        LocalDateTime.now(), "nsk", "/path/to/image/avatar", null, null);
+    ImageEntity imageEntity = new ImageEntity(1, "/path/to/image/1", getAdEntity());
+    ImageEntity imageEntity1 = new ImageEntity(2, "/path/to/image/2", getAdEntity());
+    ImageEntity imageEntity2 = new ImageEntity(3, "/path/to/image/3", getAdEntity());
+    ImageEntity imageEntity3 = new ImageEntity(4, "/path/to/image/4", getAdEntity());
+    ImageEntity imageEntity4 = new ImageEntity(5, "/path/to/image/5", getAdEntity());
     AdEntity adEntity = new AdEntity();
     adEntity.setId(1);
     adEntity.setAuthor(userEntity);
@@ -138,18 +151,17 @@ public class AdMapperTest {
     adEntity.setTitle("title");
     adEntity.setDescription("description");
     adEntity.setCommentEntities(List.of(new CommentEntity()));
-    adEntity.setImageEntities(List.of(imageEntity));
+    adEntity.setImageEntities(List.of(imageEntity, imageEntity1, imageEntity2, imageEntity3, imageEntity4));
     return adEntity;
   }
 
-  private UserEntity getUser() {
-    return new UserEntity(1, "firstname", "lastname", "email@.mail.ru", "+79999992211",
-        LocalDateTime.now(), "nsk", "/path/to/image/1", null, null);
+  private List<String> toListPathString(List<ImageEntity> imageEntities) {
+    return imageEntities.stream()
+        .map(ImageEntity::getPath)
+        .collect(Collectors.toList());
   }
 
-  private ImageEntity getImage() {
-    return new ImageEntity(1, "/path/to/image/1", new AdEntity());
-  }
+
 
 
 

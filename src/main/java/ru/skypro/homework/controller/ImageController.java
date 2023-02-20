@@ -12,24 +12,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ImageDTO;
 import ru.skypro.homework.service.AdsService;
-import ru.skypro.homework.service.ImageService;
 
-import java.util.Map;
+import java.io.IOException;
 
 @RestController
-@RequestMapping("/image")
+@RequestMapping("/ads/image")
 @Tag(name = "Изображение")
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 public class ImageController {
 
-    private final ImageService imageService;
+    private AdsService adsService;
 
-    public ImageController (ImageService imageService) {
-        this.imageService = imageService;
+    public ImageController(AdsService adsService) {
+        this.adsService = adsService;
     }
+
 
     @Operation(summary = "Загрузить картинку в объявление")
     @ApiResponses({
@@ -47,9 +48,9 @@ public class ImageController {
                     description = "Not Found"
             )
     })
-    @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "{id}")
-    public ResponseEntity<?> uploadImage(@PathVariable (name = "id") Integer id, @RequestBody ImageDTO imageDTO) {
-        imageService.uploadImage(id);
+    @PatchMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadImage(@PathVariable (name = "id") Integer id, @RequestParam(name = "image") MultipartFile image) throws IOException {
+        adsService.uploadImage(id, image);
         return ResponseEntity.ok().build();
     }
 
