@@ -29,7 +29,7 @@ public class AdEntity {
   @Column(name = "id", nullable = false)
   Integer id;
 
-  @ManyToOne(cascade = {CascadeType.ALL})
+  @ManyToOne
   @JsonIgnore
   @JoinColumn(name = "author_id")
   UserEntity author;

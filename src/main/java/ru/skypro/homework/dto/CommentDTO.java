@@ -21,6 +21,7 @@ public class CommentDTO {
   /**Id автора комментария */
 //  Integer id;
   Integer author;
+
   String createdAt;
   Integer pk;
   /**Текст комментария */

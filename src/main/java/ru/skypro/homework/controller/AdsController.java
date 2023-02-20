@@ -9,14 +9,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.io.IOException;
 import java.util.Collection;
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,7 +33,6 @@ import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.FullAds;
-import ru.skypro.homework.dto.Properties;
 import ru.skypro.homework.service.AdsService;
 
 @RestController
@@ -93,9 +92,10 @@ public class AdsController {
   })
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<AdsDTO> createAds(
-      @RequestPart(name = "properties")@Valid Properties properties,
-      @RequestParam MultipartFile image) {
-    return ResponseEntity.ok(adsService.addAds(properties, image));
+      @RequestPart("image") MultipartFile file,
+      @RequestPart("properties") CreateAds createAds,
+      Authentication authentication) throws IOException {
+    return ResponseEntity.ok(adsService.addAds(createAds, file,authentication));
   }
 
   @Operation(summary = "Получить комментарий по id объявления и id комментария")
@@ -236,8 +236,9 @@ public class AdsController {
   @PostMapping("/{ad_pk}/comments")
   public ResponseEntity<CommentDTO> addAdsComments(
       @PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk,
-      @RequestBody CommentDTO commentDTO) {
-    adsService.addAdsComments(pk);
+      @RequestBody CommentDTO commentDTO,
+      Authentication authentication) {
+    adsService.addAdsComments(pk,commentDTO,authentication);
     return ResponseEntity.ok().build();
   }
 
