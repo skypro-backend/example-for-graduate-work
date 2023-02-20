@@ -162,7 +162,7 @@ public class AdsServiceImpl implements AdsService {
       Authentication authentication) throws IOException {
     log.info(FormLogInfo.getInfo());
 
-    Path filePath = Path.of(imageAdsDir, getFileUniqueName() + "." + userService.getExtension(
+    Path filePath = Path.of(imageAdsDir, getFileUniqueName() + "." + getExtension(
         Objects.requireNonNull(multipartFile.getOriginalFilename())));
     Files.createDirectories(filePath.getParent());
     Files.deleteIfExists(filePath);

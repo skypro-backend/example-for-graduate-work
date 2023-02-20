@@ -136,9 +136,9 @@ public class UserController {
   @PatchMapping(value = "/me")
   public ResponseEntity<UserDTO> updateUser(
       @RequestBody
-      @NotBlank(message = "updateUser не должен быть пустым") UserDTO userDto) {
+      @NotBlank(message = "updateUser не должен быть пустым") UserDTO userDto, Authentication authentication) {
     log.info(FormLogInfo.getInfo());
-    return ResponseEntity.ok(userService.updateUser(userDto));
+    return ResponseEntity.ok(userService.updateUser(userDto, authentication));
   }
 
   @Operation(summary = "Обновить изображение пользователя")

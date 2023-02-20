@@ -18,7 +18,7 @@ public interface UserService {
   /**
    * обновить пользователя
    */
-  UserDTO updateUser(UserDTO userDto) ;
+  UserDTO updateUser(UserDTO userDto, Authentication authentication) ;
 
   /**
    * установить новый пароль пользователя
