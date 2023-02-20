@@ -27,7 +27,7 @@ public class AdEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  Integer pk;
+  Integer id;
 
   @ManyToOne
   @JsonIgnore
@@ -43,7 +43,7 @@ public class AdEntity {
   @Column(name = "description")
   String description;
 
-  @OneToMany(mappedBy = "pk")
+  @OneToMany(mappedBy = "ad")
   @JsonBackReference
   @ToString.Exclude
   List<CommentEntity> commentEntities;
@@ -58,7 +58,7 @@ public class AdEntity {
     if (this == o) return true;
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
     AdEntity adEntity = (AdEntity) o;
-    return pk != null && Objects.equals(pk, adEntity.pk);
+    return id != null && Objects.equals(id, adEntity.id);
   }
 
   @Override

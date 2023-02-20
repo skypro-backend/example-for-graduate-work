@@ -1,10 +1,15 @@
 package ru.skypro.homework.service;
 
+
+import java.io.IOException;
 import java.util.Collection;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.Properties;
+import ru.skypro.homework.dto.CreateAds;
+
+
 
 /**
  * Сервис объявлений
@@ -25,7 +30,7 @@ public interface AdsService {
    * @param id - идентификатор объявления
    * @return - обнволенный комментарий
    */
-  AdsDTO updateAds(int id);
+  AdsDTO updateAds(int id, CreateAds createAd);
 
   /**
    * Возвращает комментарий
@@ -34,7 +39,7 @@ public interface AdsService {
    * @param id   - идентификатор комментария
    * @return - комментарий
    */
-  CommentDTO getComments(String adPk, int id);
+  CommentDTO getComments(int adPk, int id);
 
   /**
    * Удаляет комментарий
@@ -42,7 +47,7 @@ public interface AdsService {
    * @param adPk - идентификатор объявления
    * @param id   - идентификатор комментария
    */
-  void deleteComments(String adPk, int id);
+  void deleteComments(Integer adPk, Integer id);
 
   /**
    * Обновляет комментарий
@@ -52,7 +57,7 @@ public interface AdsService {
    * @param commentDTO - новый комментарий
    * @return - обнволенный комментарий
    */
-  CommentDTO updateComments(String adPk, int id, CommentDTO commentDTO);
+  CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO);
 
   void removeAds(int id);
 
@@ -60,10 +65,8 @@ public interface AdsService {
   Collection<CommentDTO> getAdsComments(Integer pk);
 
 
-  void addAdsComments(Integer pk);
+  CommentDTO addAdsComments(Integer pk,CommentDTO  commentDTO,Authentication authentication);
 
-
-  void deleteAdsComment(Integer pk, Integer id);
 
   /**
    * @return все объявления
@@ -75,6 +78,14 @@ public interface AdsService {
    *
    * @return возвращает созданное объявление
    */
-  AdsDTO addAds(Properties properties, MultipartFile multipartFile);
+  AdsDTO addAds(CreateAds createAds, MultipartFile multipartFile, Authentication authentication)
+      throws IOException;
+
+  /**
+   * Добавление фото в объявление
+   * @param id
+   * @param image
+   */
+  void uploadImage (Integer id, MultipartFile image) throws IOException;
 
 }

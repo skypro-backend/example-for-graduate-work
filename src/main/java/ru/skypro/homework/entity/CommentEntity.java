@@ -16,6 +16,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "comments")
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,7 +42,7 @@ public class CommentEntity {
   @ManyToOne
   @JsonIgnore
   @JoinColumn(name = "pk_ads")
-  AdEntity pk;
+  AdEntity ad;
 
   /**Текст комментария */
   @Column(name = "text")

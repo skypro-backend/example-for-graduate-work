@@ -1,30 +1,25 @@
 package ru.skypro.homework.dto;
 
-
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
-/**
- * DTO для комментариев
- */
 @Getter
+@Setter
 @ToString
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CommentDTO {
+public class ResponseWrapperComment {
 
-  /**Id автора комментария */
-//  Integer id;
-  Integer author;
-
-  String createdAt;
-  Integer pk;
-  /**Текст комментария */
-  String text;
+  Integer count;
+  List<CommentDTO> results;
 
 }

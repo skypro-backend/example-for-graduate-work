@@ -18,4 +18,6 @@ public class ImageDTO {
 
     String image;
 
+
+
 }

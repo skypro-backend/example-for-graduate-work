@@ -12,30 +12,31 @@
         <tagDatabase tag="create_table_users"/>
     </changeSet>
     <include file="v-1.0/01-create-table-users.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/05-change-column-type-on-table-users.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/data/igorBr_01_Insert_User.sql" relativeToChangelogFile="true"/>
+
 
     <changeSet id="2" author="anton_graf">
         <tagDatabase tag="create_table_ads"/>
     </changeSet>
     <include file="v-1.0/02-create-table-ads.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/04-add-column-to-table-ads.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/data/Dima_01_insert_toTableAds.sql" relativeToChangelogFile="true"/>
 
     <changeSet id="3" author="anton_graf">
         <tagDatabase tag="create_table_comments"/>
     </changeSet>
     <include file="v-1.0/03-create-table-comments.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/data/insert_data_for_comment_table.sql" relativeToChangelogFile="true"/>
 
-    <changeSet id="4" author="anton_graf">
-        <tagDatabase tag="add_column_to_table_ads"/>
-    </changeSet>
-    <include file="v-1.0/04-add-column-to-table-ads.sql" relativeToChangelogFile="true"/>
 
     <changeSet id="5" author="anton_graf">
-        <tagDatabase tag="change_column_type_on_table_users"/>
-    </changeSet>
-    <include file="v-1.0/05-change-column-type-on-table-users.sql" relativeToChangelogFile="true"/>
-
-    <changeSet id="6" author="anton_graf">
         <tagDatabase tag="create_table_ads_images"/>
     </changeSet>
     <include file="v-1.0/06-create-table-ads-images.sql" relativeToChangelogFile="true"/>
+
+
+
+
 
 </databaseChangeLog>

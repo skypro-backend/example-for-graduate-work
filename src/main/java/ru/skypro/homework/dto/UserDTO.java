@@ -1,11 +1,8 @@
 package ru.skypro.homework.dto;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.skypro.homework.entity.AdEntity;
-import ru.skypro.homework.entity.CommentEntity;
 
 /**
  * DTO сущности
@@ -20,21 +17,21 @@ import ru.skypro.homework.entity.CommentEntity;
 public class UserDTO {
 
   /**
-   * id пользователя
+   * почта пользователя
    */
-  Integer id;
+  String email;
   /**
    * Имя пользователя
    */
   String firstName;
   /**
+   * id пользователя
+   */
+  Integer id;
+  /**
    * Фамилия пользователя
    */
   String lastName;
-  /**
-   * почта пользователя
-   */
-  String email;
   /**
    * телефон пользователя
    */
@@ -42,7 +39,7 @@ public class UserDTO {
   /**
    * дата регистрации пользователя
    */
-  LocalDateTime regDate;
+  String regDate;
   /**
    * город пользователя
    */
@@ -51,9 +48,5 @@ public class UserDTO {
    * фото пользователя
    */
   String image;
-
-  List<AdEntity> adEntities;
-
-  List<CommentEntity> commentEntities;
 
 }

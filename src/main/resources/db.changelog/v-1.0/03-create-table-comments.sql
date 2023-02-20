@@ -1,6 +1,6 @@
 CREATE TABLE comments
 (
-    id  serial PRIMARY KEY ,
+    id  integer generated always as identity primary key,
     author_id int,
     created_at TIMESTAMP,
     pk_ads int,
