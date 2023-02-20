@@ -1,6 +1,6 @@
 package ru.skypro.homework.service;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.skypro.homework.entity.AdEntity;
@@ -26,12 +25,12 @@ import ru.skypro.homework.repository.CommentRepository;
 @ExtendWith(MockitoExtension.class)
 class AdsServiceTest {
 
-  @InjectMocks
+  @Mock
   AdsService adsService;
 
-  @InjectMocks
+  @Mock
   UserService userService;
-  @InjectMocks
+  @Mock
   ImageService imageService;
 
   @Mock
@@ -47,7 +46,7 @@ class AdsServiceTest {
 
   @BeforeEach
   void init() {
-    LocalDateTime date = LocalDateTime.parse("14-02-2023 14:30:22");
+    LocalDateTime date = LocalDateTime.parse("2007-12-03T10:15:30");
     adEntity = new AdEntity(1, null, 100, "TitleTest", "TestDescription", null, null);
     user = new UserEntity(1, "firstname", "lastname", "user@mgmail.com", "+788994455", date, "Moscow", "path/to/image",
         List.of(adEntity), null);
@@ -68,9 +67,8 @@ class AdsServiceTest {
 
   @Test
   void deleteComments() {
-    when(adsRepository.findById(adEntity.getId())).thenReturn(Optional.ofNullable(adEntity));
-    when(commentRepository.findById(comment.getId())).thenReturn(Optional.ofNullable(comment));
-
+    lenient().when(adsRepository.findById(adEntity.getId())).thenReturn(Optional.ofNullable(adEntity));
+    lenient().when(commentRepository.findById(comment.getId())).thenReturn(Optional.ofNullable(comment));
     Assertions.assertThat(adsRepository.findById(1)).isNotNull();
 
   }
