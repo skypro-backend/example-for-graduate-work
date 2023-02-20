@@ -254,24 +254,27 @@ public class AdsServiceImpl implements AdsService {
 
   @Override
   public CommentDTO getComments(int adPk, int id) {
-    return commentMapper.toDTO(commentRepository.findByIdAndAd_Id(id, adPk).orElseThrow(ElemNotFound::new));
+    CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk).orElseThrow(ElemNotFound::new);
+    return commentMapper.toDTO(commentEntity);
+    //return null;
   }
 
   @Override
   public CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO) {
-    CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk)
+   CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk)
         .orElseThrow(ElemNotFound::new);
 
-    UserEntity author = userRepository.findById(commentDTO.getAuthor())
-        .orElseThrow(ElemNotFound::new);
-    commentEntity.setAuthor(author);
+   UserEntity author = userRepository.findById(commentDTO.getAuthor())
+       .orElseThrow(ElemNotFound::new);
+   commentEntity.setAuthor(author);
 
-    commentEntity.setText(commentDTO.getText());
+  commentEntity.setText(commentDTO.getText());
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     commentEntity.setCreatedAt(LocalDateTime.parse(commentDTO.getCreatedAt(), formatter));
 
     return commentMapper.toDTO(commentRepository.save(commentEntity));
+//    return null;
   }
 
   /**

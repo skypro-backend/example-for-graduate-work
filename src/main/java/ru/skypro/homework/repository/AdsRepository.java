@@ -11,7 +11,7 @@ import ru.skypro.homework.entity.AdEntity;
 
 @Repository
 public interface AdsRepository extends JpaRepository<AdEntity, Integer> {
-    CommentDTO findByAuthorAndId(int author,int id);
+    AdEntity findByAuthorAndId(int author,int id);
 
 
 }
