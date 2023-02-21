@@ -45,7 +45,6 @@ import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
-import ru.skypro.homework.service.UserService;
 
 
 /**
@@ -94,8 +93,10 @@ public class AdsServiceImpl implements AdsService {
    * @return
    */
   @Override
-  public Collection<CommentDTO> getAdsComments(Integer pk) {
-    return null;
+  public ResponseWrapperComment getAdsComments(Integer pk) {
+    Collection<CommentDTO> commentDTOS = commentMapper.toDTOList(commentRepository.findAllById(Collections.singleton(pk)));
+    int count = commentDTOS.size();
+    return new ResponseWrapperComment(count,commentDTOS);
   }
 
   /**
@@ -143,10 +144,12 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public Collection<AdsDTO> getALLAds() {
+  public ResponseWrapperAds getAds() {
     log.info(FormLogInfo.getInfo());
-//    return adMapper.toDTOList(adsRepository.findAll());
-    return Collections.EMPTY_LIST;
+    Collection<AdsDTO> adsAll = adMapper.toDTOList(adsRepository.findAll());
+    int count = adsAll.size();
+    ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds(count,adsAll);
+    return responseWrapperAds;
   }
 
   /**
@@ -254,20 +257,21 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public CommentDTO getComments(String adPk, int id) {
-    return null;
+  public CommentDTO getComments(int adPk, int id) {
+    CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk).orElseThrow(ElemNotFound::new);
+    return commentMapper.toDTO(commentEntity);
   }
 
   @Override
   public CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO) {
-    CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk)
+   CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk)
         .orElseThrow(ElemNotFound::new);
 
-    UserEntity author = userRepository.findById(commentDTO.getAuthor())
-        .orElseThrow(ElemNotFound::new);
-    commentEntity.setAuthor(author);
+   UserEntity author = userRepository.findById(commentDTO.getAuthor())
+       .orElseThrow(ElemNotFound::new);
+   commentEntity.setAuthor(author);
 
-    commentEntity.setText(commentDTO.getText());
+  commentEntity.setText(commentDTO.getText());
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     commentEntity.setCreatedAt(LocalDateTime.parse(commentDTO.getCreatedAt(), formatter));
@@ -288,8 +292,8 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public AdsDTO getAds(int id) {
-    return new AdsDTO();
+  public FullAds getAdById(int id) {
+    return adsOtherMapper.toFullAds(adsRepository.findById(id).orElseThrow(ElemNotFound::new));
   }
 
   @Override

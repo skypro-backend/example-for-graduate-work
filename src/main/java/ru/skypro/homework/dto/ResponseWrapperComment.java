@@ -1,5 +1,6 @@
 package ru.skypro.homework.dto;
 
+import java.util.Collection;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,6 @@ import lombok.experimental.FieldDefaults;
 public class ResponseWrapperComment {
 
   Integer count;
-  List<CommentDTO> results;
+  Collection<CommentDTO> results;
 
 }
