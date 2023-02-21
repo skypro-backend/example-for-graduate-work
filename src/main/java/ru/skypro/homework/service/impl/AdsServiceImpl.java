@@ -45,6 +45,7 @@ import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.UserService;
 
 
 /**
@@ -58,7 +59,7 @@ public class AdsServiceImpl implements AdsService {
   private ImageRepository imageRepository;
   private AdsOtherMapper adsOtherMapper;
   private UserMapper userMapper;
-  private UserServiceImpl userService;
+  private UserService userService;
   private ImageMapper imageMapper;
   private AdsRepository adsRepository;
   private CommentRepository commentRepository;
@@ -72,7 +73,7 @@ public class AdsServiceImpl implements AdsService {
 
   public AdsServiceImpl(AdsRepository adsRepository, CommentRepository commentRepository,
       UserRepository userRepository, AdMapper adMapper, CommentMapper commentMapper,
-      ImageRepository imageRepository, ImageMapper imageMapper, UserServiceImpl userService,
+      ImageRepository imageRepository, ImageMapper imageMapper, UserService userService,
       UserMapper userMapper, AdsOtherMapper adsOtherMapper) {
     this.adsRepository = adsRepository;
     this.commentRepository = commentRepository;
@@ -162,8 +163,7 @@ public class AdsServiceImpl implements AdsService {
       Authentication authentication) throws IOException {
     log.info(FormLogInfo.getInfo());
 
-    Path filePath = Path.of(imageAdsDir, getFileUniqueName() + "." + userService.getExtension(
-        Objects.requireNonNull(multipartFile.getOriginalFilename())));
+    Path filePath = Path.of(imageAdsDir, getFileUniqueName() + "." + getExtension(multipartFile.getOriginalFilename()));
     Files.createDirectories(filePath.getParent());
     Files.deleteIfExists(filePath);
 
@@ -256,7 +256,6 @@ public class AdsServiceImpl implements AdsService {
   @Override
   public CommentDTO getComments(String adPk, int id) {
     return null;
-    //return new CommentDTO(1, "20.02.2023", Integer.parseInt(adPk), "Еще продается?");
   }
 
   @Override
