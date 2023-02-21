@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import javax.transaction.Transactional;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -41,6 +43,7 @@ import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.UserService;
 
 
 /**
@@ -54,7 +57,7 @@ public class AdsServiceImpl implements AdsService {
   private ImageRepository imageRepository;
   private AdsOtherMapper adsOtherMapper;
   private UserMapper userMapper;
-  private UserServiceImpl userService;
+  private UserService userService;
   private ImageMapper imageMapper;
   private AdsRepository adsRepository;
   private CommentRepository commentRepository;
@@ -67,9 +70,9 @@ public class AdsServiceImpl implements AdsService {
 
 
   public AdsServiceImpl(AdsRepository adsRepository, CommentRepository commentRepository,
-                        UserRepository userRepository, AdMapper adMapper, CommentMapper commentMapper,
-                        ImageRepository imageRepository, ImageMapper imageMapper, UserServiceImpl userService,
-                        UserMapper userMapper, AdsOtherMapper adsOtherMapper) {
+      UserRepository userRepository, AdMapper adMapper, CommentMapper commentMapper,
+      ImageRepository imageRepository, ImageMapper imageMapper, UserService userService,
+      UserMapper userMapper, AdsOtherMapper adsOtherMapper) {
     this.adsRepository = adsRepository;
     this.commentRepository = commentRepository;
     this.userRepository = userRepository;
@@ -162,8 +165,7 @@ public class AdsServiceImpl implements AdsService {
       Authentication authentication) throws IOException {
     log.info(FormLogInfo.getInfo());
 
-    Path filePath = Path.of(imageAdsDir, getFileUniqueName() + "." + getExtension(
-        Objects.requireNonNull(multipartFile.getOriginalFilename())));
+    Path filePath = Path.of(imageAdsDir, getFileUniqueName() + "." + getExtension(multipartFile.getOriginalFilename()));
     Files.createDirectories(filePath.getParent());
     Files.deleteIfExists(filePath);
 
@@ -257,7 +259,6 @@ public class AdsServiceImpl implements AdsService {
   public CommentDTO getComments(int adPk, int id) {
     CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk).orElseThrow(ElemNotFound::new);
     return commentMapper.toDTO(commentEntity);
-    //return null;
   }
 
   @Override
@@ -275,7 +276,6 @@ public class AdsServiceImpl implements AdsService {
     commentEntity.setCreatedAt(LocalDateTime.parse(commentDTO.getCreatedAt(), formatter));
 
     return commentMapper.toDTO(commentRepository.save(commentEntity));
-//    return null;
   }
 
   /**
@@ -303,8 +303,6 @@ public class AdsServiceImpl implements AdsService {
     adEntity.setTitle(createAds.getTitle());
     return adMapper.toDTO(adsRepository.save(adEntity));
   }
-
-
 
 
 }
