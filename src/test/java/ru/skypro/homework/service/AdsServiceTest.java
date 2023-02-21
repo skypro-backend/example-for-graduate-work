@@ -114,7 +114,6 @@ class AdsServiceTest {
     lenient().when(commentRepository.findById(anyInt())).thenThrow(ElemNotFound.class);
     assertThrows(ElemNotFound.class, () -> commentRepository.findById(anyInt()));
     lenient().doNothing().when(adsService).deleteComments(anyInt(), anyInt());
-
   }
 
   @Test
