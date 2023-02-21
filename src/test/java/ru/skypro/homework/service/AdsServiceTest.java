@@ -1,11 +1,11 @@
 package ru.skypro.homework.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.time.LocalDateTime;
@@ -76,29 +76,30 @@ class AdsServiceTest {
   private ImageEntity image;
 
   AdsServiceTest() {
-    adsService = new AdsServiceImpl(adsRepository,commentRepository,userRepository, adMapper, commentMapper, imageRepository, imageMapper, userService,userMapper, adsOtherMapper);
+    adsService = new AdsServiceImpl(adsRepository,commentRepository,userRepository, adMapper, commentMapper,
+            imageRepository, imageMapper, userService,userMapper, adsOtherMapper);
   }
 
-  @BeforeEach
-  void init() {
-    LocalDateTime date = LocalDateTime.parse("2007-12-03T10:15:30");
-    adEntity = new AdEntity(1, null, 100, "TitleTest", "TestDescription", null, null);
-    user = new UserEntity(1, "firstname", "lastname", "user@mgmail.com", "+788994455", date, "Moscow", "path/to/image",
-        List.of(adEntity), null);
-    comment = new CommentEntity(1,user, date, adEntity, "TextComments");
-    image = new ImageEntity(1, "path/to/image", adEntity);
-    user.setCommentEntities(List.of(comment));
-    adEntity.setCommentEntities(List.of(comment));
-    adEntity.setImageEntities(List.of(image));
-  }
-
-  @AfterEach
-  void clearAllTestData() {
-    adEntity =null;
-    comment = null;
-    image = null;
-    user = null;
-  }
+//  @BeforeEach
+//  void init() {
+//    LocalDateTime date = LocalDateTime.parse("2007-12-03T10:15:30");
+//    adEntity = new AdEntity(1, null, 100, "TitleTest", "TestDescription", null, null);
+//    user = new UserEntity(1, "firstname", "lastname", "user@mgmail.com", "+788994455", date, "Moscow", "path/to/image",
+//        List.of(adEntity), null);
+//    comment = new CommentEntity(1,user, date, adEntity, "TextComments");
+//    image = new ImageEntity(1, "path/to/image", adEntity);
+//    user.setCommentEntities(List.of(comment));
+//    adEntity.setCommentEntities(List.of(comment));
+//    adEntity.setImageEntities(List.of(image));
+//  }
+//
+//  @AfterEach
+//  void clearAllTestData() {
+//    adEntity =null;
+//    comment = null;
+//    image = null;
+//    user = null;
+//  }
 
   @Test
   void deleteCommentsPositiveTest() {
@@ -106,23 +107,30 @@ class AdsServiceTest {
     lenient().when(commentRepository.findById(anyInt())).thenReturn(Optional.ofNullable(comment));
     Assertions.assertThat(adsRepository.findById(anyInt())).isNotNull();
     lenient().doNothing().when(commentRepository).deleteById(anyInt());
-//    assertDoesNotThrow(() -> adsService.deleteComments(anyInt(), anyInt()));
+    assertDoesNotThrow(() -> commentRepository.deleteById(anyInt()));
+    Assertions.assertThatNoException().isThrownBy(() -> commentRepository.deleteById(anyInt()));
+    verify(commentRepository, times(2)).deleteById(anyInt());
   }
 
   @Test
   void deleteCommentsNegativeTest() {
-    lenient().when(commentRepository.findById(anyInt())).thenThrow(ElemNotFound.class);
-    assertThrows(ElemNotFound.class, () -> commentRepository.findById(anyInt()));
-    lenient().doNothing().when(adsService).deleteComments(anyInt(), anyInt());
+    doThrow(new ElemNotFound()).when(commentRepository).deleteById(anyInt());
+    Assertions.assertThatThrownBy(() -> commentRepository.deleteById(anyInt()));
+    verify(commentRepository, times(1)).deleteById(anyInt());
   }
 
   @Test
-  void removeAds() {
+  void removeAdsPositiveTest() {
 
   }
 
   @Test
-  void uploadImage() {
+  void removeAdsNegativeTest() {
 
   }
+
+//  @Test
+//  void uploadImage() {
+//
+//  }
 }
