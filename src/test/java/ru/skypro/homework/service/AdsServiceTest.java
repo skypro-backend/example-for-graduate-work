@@ -40,94 +40,97 @@ import ru.skypro.homework.service.impl.AdsServiceImpl;
 class AdsServiceTest {
 
   @InjectMocks
-  private AdsService adsService;
-  @Mock
-  private UserService userService;
+  private AdsService adsService = mock(AdsService.class);
 
   @Mock
   private CommentRepository commentRepository;
 
   @Mock
   private AdsRepository adsRepository;
-  @Mock
-  private ImageRepository imageRepository;
-  @Mock
-  private UserRepository userRepository;
-
-  @Mock
-  private AdMapper adMapper;
-  @Mock
-  private CommentMapper commentMapper;
-
-  @Mock
-  private ImageMapper imageMapper;
-
-  @Mock
-  private UserMapper userMapper;
-
-  @Mock
-  private AdsOtherMapper adsOtherMapper;
-
-
-
   private AdEntity adEntity;
   private CommentEntity comment;
   private UserEntity user;
   private ImageEntity image;
 
-  AdsServiceTest() {
-    adsService = new AdsServiceImpl(adsRepository,commentRepository,userRepository, adMapper, commentMapper,
-            imageRepository, imageMapper, userService,userMapper, adsOtherMapper);
+
+
+  @BeforeEach
+  void init() {
+    LocalDateTime date = LocalDateTime.parse("2007-12-03T10:15:30");
+    adEntity = new AdEntity(1, null, 100, "TitleTest", "TestDescription", null, null);
+    user = new UserEntity(1, "firstname", "lastname", "user@mgmail.com", "+788994455", date, "Moscow", "path/to/image",
+        List.of(adEntity), null);
+    comment = new CommentEntity(1,user, date, adEntity, "TextComments");
+    image = new ImageEntity(1, "path/to/image", adEntity);
+    user.setCommentEntities(List.of(comment));
+    adEntity.setCommentEntities(List.of(comment));
+    adEntity.setImageEntities(List.of(image));
   }
 
-//  @BeforeEach
-//  void init() {
-//    LocalDateTime date = LocalDateTime.parse("2007-12-03T10:15:30");
-//    adEntity = new AdEntity(1, null, 100, "TitleTest", "TestDescription", null, null);
-//    user = new UserEntity(1, "firstname", "lastname", "user@mgmail.com", "+788994455", date, "Moscow", "path/to/image",
-//        List.of(adEntity), null);
-//    comment = new CommentEntity(1,user, date, adEntity, "TextComments");
-//    image = new ImageEntity(1, "path/to/image", adEntity);
-//    user.setCommentEntities(List.of(comment));
-//    adEntity.setCommentEntities(List.of(comment));
-//    adEntity.setImageEntities(List.of(image));
-//  }
-//
-//  @AfterEach
-//  void clearAllTestData() {
-//    adEntity =null;
-//    comment = null;
-//    image = null;
-//    user = null;
-//  }
+  @AfterEach
+  void clearAllTestData() {
+    adEntity =null;
+    comment = null;
+    image = null;
+    user = null;
+  }
 
   @Test
   void deleteCommentsPositiveTest() {
-    lenient().when(adsRepository.findById(anyInt())).thenReturn(Optional.ofNullable(adEntity));
-    lenient().when(commentRepository.findById(anyInt())).thenReturn(Optional.ofNullable(comment));
-    Assertions.assertThat(adsRepository.findById(anyInt())).isNotNull();
-    lenient().doNothing().when(commentRepository).deleteById(anyInt());
+    when(adsRepository.findById(anyInt())).thenReturn(Optional.ofNullable(adEntity));
+    when(commentRepository.findById(anyInt())).thenReturn(Optional.ofNullable(comment));
+    Assertions.assertThat(adsRepository.findById(anyInt())).isNotNull().contains(adEntity).hasValue(adEntity).containsInstanceOf(AdEntity.class);
+    Assertions.assertThat(commentRepository.findById(anyInt())).isNotNull().contains(comment).hasValue(comment).containsInstanceOf(CommentEntity.class);
+
+    doNothing().when(commentRepository).deleteById(anyInt());
     assertDoesNotThrow(() -> commentRepository.deleteById(anyInt()));
-    Assertions.assertThatNoException().isThrownBy(() -> commentRepository.deleteById(anyInt()));
-    verify(commentRepository, times(2)).deleteById(anyInt());
+
+    doNothing().when(adsService).deleteComments(anyInt(), anyInt());
+    assertDoesNotThrow(() -> adsService.deleteComments(anyInt(), anyInt()));
+
+
+    verify(commentRepository, times(1)).deleteById(anyInt());
+    verify(adsService, times(1)).deleteComments(anyInt(),anyInt());
   }
 
   @Test
   void deleteCommentsNegativeTest() {
     doThrow(new ElemNotFound()).when(commentRepository).deleteById(anyInt());
+    doThrow(new ElemNotFound()).when(adsService).deleteComments(anyInt(),anyInt());
+
     Assertions.assertThatThrownBy(() -> commentRepository.deleteById(anyInt()));
+    Assertions.assertThatThrownBy(() -> adsService.deleteComments(anyInt(), anyInt()));
+
     verify(commentRepository, times(1)).deleteById(anyInt());
+    verify(adsService, times(1)).deleteComments(anyInt(), anyInt());
   }
 
   @Test
   void removeAdsPositiveTest() {
+    when(adsRepository.findById(anyInt())).thenReturn(Optional.ofNullable(adEntity));
+    Assertions.assertThat(adsRepository.findById(anyInt())).isNotNull().contains(adEntity)
+            .hasValue(adEntity).containsInstanceOf(AdEntity.class);
 
+    doNothing().when(adsService).removeAds(anyInt());
+    assertDoesNotThrow(() -> adsService.removeAds(anyInt()));
+    doNothing().when(adsRepository).deleteById(anyInt());
+    assertDoesNotThrow(() -> adsRepository.deleteById(anyInt()));
+
+    verify(adsRepository, times(1)).deleteById(anyInt());
+    verify(adsService, times(1)).removeAds(anyInt());
   }
 
   @Test
   void removeAdsNegativeTest() {
+    doThrow(new ElemNotFound()).when(adsService).removeAds(anyInt());
+    doThrow(new ElemNotFound()).when(adsRepository).deleteById(anyInt());
 
-  }
+    Assertions.assertThatThrownBy(() -> adsService.removeAds(anyInt()));
+    Assertions.assertThatThrownBy(() -> adsRepository.deleteById(anyInt()));
+
+    verify(adsService, times(1)).removeAds(anyInt());
+    verify(adsRepository, times(1)).deleteById(anyInt());
+    }
 
 //  @Test
 //  void uploadImage() {
