@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.ImageEntity;
@@ -44,9 +48,10 @@ class AdsServiceTest {
 
   @Mock
   private CommentRepository commentRepository;
-
   @Mock
   private AdsRepository adsRepository;
+  @Mock
+  private ImageRepository imageRepository;
   private AdEntity adEntity;
   private CommentEntity comment;
   private UserEntity user;
@@ -65,6 +70,7 @@ class AdsServiceTest {
     user.setCommentEntities(List.of(comment));
     adEntity.setCommentEntities(List.of(comment));
     adEntity.setImageEntities(List.of(image));
+
   }
 
   @AfterEach
@@ -79,8 +85,10 @@ class AdsServiceTest {
   void deleteCommentsPositiveTest() {
     when(adsRepository.findById(anyInt())).thenReturn(Optional.ofNullable(adEntity));
     when(commentRepository.findById(anyInt())).thenReturn(Optional.ofNullable(comment));
-    Assertions.assertThat(adsRepository.findById(anyInt())).isNotNull().contains(adEntity).hasValue(adEntity).containsInstanceOf(AdEntity.class);
-    Assertions.assertThat(commentRepository.findById(anyInt())).isNotNull().contains(comment).hasValue(comment).containsInstanceOf(CommentEntity.class);
+    Assertions.assertThat(adsRepository.findById(anyInt())).isNotNull().contains(adEntity).hasValue(adEntity)
+            .containsInstanceOf(AdEntity.class);
+    Assertions.assertThat(commentRepository.findById(anyInt())).isNotNull().contains(comment).hasValue(comment)
+            .containsInstanceOf(CommentEntity.class);
 
     doNothing().when(commentRepository).deleteById(anyInt());
     assertDoesNotThrow(() -> commentRepository.deleteById(anyInt()));
@@ -132,8 +140,31 @@ class AdsServiceTest {
     verify(adsRepository, times(1)).deleteById(anyInt());
     }
 
-//  @Test
-//  void uploadImage() {
-//
-//  }
+  @Test
+  void uploadImagePositiveTest() throws IOException {
+    AdsService adsService = mock(AdsService.class);
+    MultipartFile file = getTestPhoto();
+    when(adsRepository.findById(1)).thenReturn(Optional.ofNullable(adEntity));
+    Assertions.assertThat(adsRepository.findById(1)).isNotNull().contains(adEntity).hasValue(adEntity)
+            .containsInstanceOf(AdEntity.class);
+    doNothing().when(adsService).uploadImage(1, file);
+    Assertions.assertThatNoException().isThrownBy(() ->adsService.uploadImage(1, file));
+    verify(adsService, times(1)).uploadImage(1, file);
+  }
+
+  @Test
+  void uploadImageNegativeTest() throws IOException {
+    MultipartFile file = getTestPhoto();
+    doThrow(ElemNotFound.class).when(adsService).uploadImage(99, file);
+    doThrow(IOException.class).when(adsService).uploadImage(1, null);
+    Assertions.assertThatThrownBy(() -> adsService.uploadImage(99, file));
+    Assertions.assertThatThrownBy(() -> adsService.uploadImage(1, null));
+    verify(adsService, times(1)).uploadImage(99, file);
+    verify(adsService, times(1)).uploadImage(1, null);
+  }
+
+  private MockMultipartFile getTestPhoto() {
+    return new MockMultipartFile("data", "photo.jpeg",
+            MediaType.MULTIPART_FORM_DATA_VALUE, "photo.jpeg".getBytes());
+  }
 }
