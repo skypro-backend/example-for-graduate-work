@@ -99,7 +99,7 @@ public class AdServiceTest1 {
         adEntity.setTitle("afsdf");
         adEntity.setPrice(123);
         adEntity.setDescription("asfsdf");
-        adEntity.setAuthor(new UserEntity());
+        adEntity.setAuthor(getAuthor());
         adEntity.setImageEntities(imageEntities);
         return adEntity;
     }
@@ -109,13 +109,13 @@ public class AdServiceTest1 {
     commentEntity.setId(id);
     commentEntity.setAuthor(getAuthor());
     commentEntity.setCreatedAt(LocalDateTime.of(2023, 02, 20, 14, 20, 10));
-    commentEntity.setAd(null);
+    commentEntity.setAd(getAdEntity(1));
     commentEntity.setText("123456789");
     return commentEntity;
     }
     private UserEntity getAuthor() {
         UserEntity author = new UserEntity();
-        author.setImage("/users/author.png");
+        author.setImage("/users/author.1");
         author.setLastName("Иванов");
         author.setFirstName("Иван");
         author.setCity("MSK");

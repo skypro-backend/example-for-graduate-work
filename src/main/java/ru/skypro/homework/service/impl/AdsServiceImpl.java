@@ -258,6 +258,7 @@ public class AdsServiceImpl implements AdsService {
   @Override
   public CommentDTO getComments(int adPk, int id) {
     CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk).orElseThrow(ElemNotFound::new);
+    System.out.println("44444444444444");
     return commentMapper.toDTO(commentEntity);
   }
 
