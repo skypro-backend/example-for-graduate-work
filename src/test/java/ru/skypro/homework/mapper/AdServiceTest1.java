@@ -40,6 +40,8 @@ public class AdServiceTest1 {
   CommentRepository commentRepository;
   @Spy
   AdMapper adMapper = new AdMapperImpl();
+  @Spy
+  AdsOtherMapper adsOtherMapper = new AdsOtherMapperImpl();
   @InjectMocks
   AdsServiceImpl adsService;
   ResponseWrapperComment responseWrapperComment;
@@ -74,35 +76,31 @@ public class AdServiceTest1 {
   @Test
   void getAdsTest() {
     ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
-    responseWrapperAds.setCount(1);
+    responseWrapperAds.setCount(2);
     List<AdEntity> adEntities = new ArrayList<>();
     adEntities.add(getAdEntity(1));
-    adEntities.add(getAdEntity(2));
+    adEntities.add(getAdEntity(1));
     responseWrapperAds.setResults(adMapper.toDTOList(adEntities));
     when(adsRepository.findAll()).thenReturn(adEntities);
     assertThat(adsService.getAds()).isEqualTo(responseWrapperAds);
-
+    verify(adsRepository,times(1)).findAll();
   }
 
   @Test
   void getCommentsTest() {
     CommentEntity commentEntity = adCommentEntity(1);
-    System.out.println(commentEntity);
     CommentDTO commentDTO = new CommentDTO(1, "20-02-2023 14:20:10", 1, "123456789");
     when(commentRepository.findByIdAndAd_Id(1, 1)).thenReturn(Optional.of(commentEntity));
     assertThat(adsService.getComments(1, 1)).isEqualTo(commentDTO);
-
+    verify(commentRepository,times(1)).findByIdAndAd_Id(any(),any());
   }
 
   @Test
   void getAdByIdTest() {
-    List<String> imageList = new ArrayList<>(
-        List.of("/path/to/image/1", "/path/to/image/2", "/path/to/image/3"));
-    FullAds fullAds = new FullAds("Иван", "Иванов", "3333", "mail@mail.ru", imageList,
-        "+79876543210", 1, 123, "3333");
+    FullAds fullAds = adsOtherMapper.toFullAds(getAdEntity(1));
     when(adsRepository.findById(1)).thenReturn(Optional.of(getAdEntity(1)));
     assertThat(adsService.getAdById(1)).isEqualTo(fullAds);
-
+    verify(adsRepository,times(1)).findById(any());
   }
 
   private AdEntity getAdEntity(int id) {
