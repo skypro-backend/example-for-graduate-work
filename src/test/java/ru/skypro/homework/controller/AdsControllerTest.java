@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
+import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exception.ElemNotFound;
 import ru.skypro.homework.mapper.*;
@@ -24,6 +25,8 @@ import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
@@ -34,10 +37,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AdsController.class)
 class AdsControllerTest {
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private MockMvc mockMvc;
     @SpyBean
     private CommentMapperImpl commentMapper;
+    @SpyBean
+    private AdMapperImpl adMapper;
     @SpyBean
     private AdsServiceImpl adsService;
     @MockBean
@@ -56,8 +62,6 @@ class AdsControllerTest {
     private CommentRepository commentRepository;
     @MockBean
     private UserRepository userRepository;
-    @MockBean
-    private AdMapper adMapper;
     @InjectMocks
     private AdsController adsController;
 
@@ -143,7 +147,57 @@ class AdsControllerTest {
     }
 
     @Test
-    void updateAds() {
+    void updateAds() throws Exception {
+        int id = 3;
+        String url = "/ads/" + id;
+
+        JSONObject CreateAdsObject = new JSONObject();
+        CreateAdsObject.put("description", "описание");
+        CreateAdsObject.put("price", 99);
+        CreateAdsObject.put("title", "заголовок");
+
+        when(adsRepository.findById(id)).thenReturn(Optional.of(getAdEntity()));
+
+        AdEntity resultAdEntity = getAdEntity();
+        resultAdEntity.setPrice(99);
+        resultAdEntity.setDescription("описание");
+        resultAdEntity.setTitle("заголовок");
+
+        when(adsRepository.save(resultAdEntity)).thenReturn(resultAdEntity);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch(
+                                url)
+                        .content(CreateAdsObject.toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.author").value(1))
+                .andExpect(jsonPath("$.image[0]").value(("/ads/image/1")))
+                .andExpect(jsonPath("$.image[1]").value(("/ads/image/2")))
+                .andExpect(jsonPath("$.pk").value(3))
+                .andExpect(jsonPath("$.title").value("заголовок"))
+                .andExpect(jsonPath("$.price").value(99));
+        
+    }
+
+    @Test
+    void updateAdsNegative() throws Exception {
+        int id = 1;
+        String url = "/ads/" + id;
+
+        JSONObject CreateAdsObject = new JSONObject();
+        CreateAdsObject.put("description", "описание");
+        CreateAdsObject.put("price", 99);
+        CreateAdsObject.put("title", "заголовок");
+
+        when(adsRepository.findById(id)).thenThrow(ElemNotFound.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch(
+                                url)
+                        .content(CreateAdsObject.toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     private CommentEntity getComment() {
@@ -159,6 +213,11 @@ class AdsControllerTest {
     private AdEntity getAdEntity() {
         AdEntity adEntity = new AdEntity();
         adEntity.setId(3);
+        adEntity.setAuthor(getNewAuthor());
+        List<ImageEntity> imageEntityList = new ArrayList<>();
+        imageEntityList.add(new ImageEntity(1, "/ads/image/1", adEntity));
+        imageEntityList.add(new ImageEntity(2, "/ads/image/2", adEntity));
+        adEntity.setImageEntities(imageEntityList);
         return adEntity;
     }
 
