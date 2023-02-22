@@ -14,6 +14,7 @@ import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.impl.AdsServiceImpl;
 
 
 import java.time.LocalDateTime;
@@ -30,8 +31,8 @@ public class AdServiceTest1 {
     CommentRepository commentRepository;
     @Mock
     AdMapper adMapper;
-
-    AdsService adsService;
+    @InjectMocks
+    AdsServiceImpl adsService;
     ResponseWrapperComment responseWrapperComment;
     CommentMapper commentMapper;
 
@@ -53,8 +54,7 @@ public class AdServiceTest1 {
     System.out.println(commentEntityList);
     System.out.println(commentDTOList);
     when(commentRepository.findAllById(Collections.singleton(1))).thenReturn(commentEntityList);
-    responseWrapperComment.setCount(commentEntityList.size());
-    System.out.println(adsService.getAdsComments(1));
+//    System.out.println(adsService.getAdsComments(1));
     assertThat(adsService.getAdsComments(1)).isEqualTo(responseWrapperComment1);
 
     }
@@ -67,13 +67,13 @@ public class AdServiceTest1 {
     adEntities.add(getAdEntity(2));
     responseWrapperAds.setResults(adMapper.toDTOList(adEntities));
     when(adsRepository.findAll()).thenReturn(adEntities);
-    responseWrapperAds.setCount(adEntities.size());
     assertThat(adsService.getAds()).isEqualTo(responseWrapperAds);
 
     }
 @Test
     void getCommentsTest() {
     CommentEntity commentEntity = adCommentEntity(1);
+    System.out.println(commentEntity);
     CommentDTO commentDTO = new CommentDTO(1,"20-02-2023 14:20:10",1,"123456789");
     when(commentRepository.findByIdAndAd_Id(1,1)).thenReturn(Optional.of(commentEntity));
     assertThat(adsService.getComments(1,1)).isEqualTo(commentDTO);
