@@ -164,7 +164,8 @@ class AdsServiceTest {
   }
 
   private MockMultipartFile getTestPhoto() {
-    return new MockMultipartFile("data", "photo.jpeg",
-            MediaType.MULTIPART_FORM_DATA_VALUE, "photo.jpeg".getBytes());
+    return new MockMultipartFile("image", "image.jpeg",
+            MediaType.MULTIPART_FORM_DATA_VALUE, "image.jpeg".getBytes());
+
   }
 }
