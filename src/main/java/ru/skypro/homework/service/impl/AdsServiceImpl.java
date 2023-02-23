@@ -98,7 +98,8 @@ public class AdsServiceImpl implements AdsService {
    */
   @Override
   public ResponseWrapperComment getAdsComments(Integer pk) {
-    Collection<CommentDTO> commentDTOS = commentMapper.toDTOList(commentRepository.findAllById(Collections.singleton(pk)));
+    Collection<CommentEntity> allAd = commentRepository.findAllById(Collections.singleton(pk));
+    Collection<CommentDTO> commentDTOS = commentMapper.toDTOList(allAd);
     int count = commentDTOS.size();
     return new ResponseWrapperComment(count,commentDTOS);
   }
