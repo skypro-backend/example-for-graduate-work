@@ -9,9 +9,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.security.UserDetailServiceImpl;
 
 @Configuration
 public class WebSecurityConfig {
@@ -24,10 +24,10 @@ public class WebSecurityConfig {
       "/webjars/**",
       "/login", "/register"
   };
-  private final UserDetailServiceImpl userDetailService;
+  private final UserDetailsService userDetailService;
 
   public WebSecurityConfig(
-      @Qualifier("UserDetailServiceImpl") UserDetailServiceImpl userDetailService) {
+      @Qualifier("UserDetailServiceImpl") UserDetailsService userDetailService) {
     this.userDetailService = userDetailService;
   }
 
