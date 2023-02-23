@@ -322,6 +322,17 @@ public class AdsController {
   }
 
 
+  @Operation(summary = "Получаем только свои объявления")
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          description = "OK",
+          content = {
+              @Content(
+                  array = @ArraySchema(schema = @Schema(implementation = ResponseWrapperAds.class)))
+          }
+      )
+  })
   @GetMapping("/me")
   public ResponseEntity<ResponseWrapperAds>
   getAdsMe(Authentication authentication) {

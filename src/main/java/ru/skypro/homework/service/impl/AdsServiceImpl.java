@@ -243,6 +243,11 @@ public class AdsServiceImpl implements AdsService {
     imageRepository.save(imageEntity);
   }
 
+  /**
+   * Получаем только свои объявления
+   * @param authentication данные о пользователе
+   * @return общий подсчет своих объявлений + объявления
+   */
   @Override
   public ResponseWrapperAds getAdsMe(Authentication authentication) {
     log.info(FormLogInfo.getInfo());

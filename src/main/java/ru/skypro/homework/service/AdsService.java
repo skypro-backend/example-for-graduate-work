@@ -89,6 +89,11 @@ public interface AdsService {
    */
   void uploadImage (Integer id, MultipartFile image) throws IOException;
 
+  /**
+   * Получаем только свои объявления
+   * @param authentication данные о пользователе
+   * @return общий подсчет своих объявлений + объявления
+   */
   ResponseWrapperAds getAdsMe(Authentication authentication);
 
 }
