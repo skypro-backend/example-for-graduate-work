@@ -50,6 +50,12 @@ public class UserEntity {
   String email;
 
   /**
+   * пароль пользователя
+   */
+  @Column(name = "password")
+  String password;
+
+  /**
    * телефон пользователя
    */
   @Column(name = "phone")

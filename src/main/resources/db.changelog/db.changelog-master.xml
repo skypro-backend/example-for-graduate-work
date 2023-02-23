@@ -14,6 +14,7 @@
     <include file="v-1.0/01-create-table-users.sql" relativeToChangelogFile="true"/>
     <include file="v-1.0/05-change-column-type-on-table-users.sql" relativeToChangelogFile="true"/>
     <include file="v-1.0/data/igorBr_01_Insert_User.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/addColumn_Password.sql" relativeToChangelogFile="true"/>
 
 
     <changeSet id="2" author="anton_graf">

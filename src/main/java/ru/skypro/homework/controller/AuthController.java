@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,20 +16,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.LoginReq;
 import ru.skypro.homework.dto.RegisterReq;
-import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.service.AuthService;
-
-import static ru.skypro.homework.dto.Role.USER;
+import ru.skypro.homework.security.UserDetailServiceImpl;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @Tag(name = "Авторизация")
 @RestController
-@RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+    private final UserDetailServiceImpl userDetailService;
 
+    public AuthController(
+        @Qualifier("UserDetailServiceImpl") UserDetailServiceImpl userDetailService) {
+        this.userDetailService = userDetailService;
+    }
     @Operation(summary = "Авторизация на сайте")
     @ApiResponses({
         @ApiResponse(
@@ -55,7 +55,7 @@ public class AuthController {
     })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReq req) {
-        if (authService.login(req.getUsername(), req.getPassword())) {
+        if (userDetailService.login(req.getUsername(), req.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -91,8 +91,7 @@ public class AuthController {
     })
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterReq req) {
-        Role role = req.getRole() == null ? USER : req.getRole();
-        if (authService.register(req, role)) {
+        if (userDetailService.register(req)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

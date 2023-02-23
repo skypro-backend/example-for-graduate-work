@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
    */
   private UserEntity findEntityByEmail(String email) {
     log.info(FormLogInfo.getInfo());
-    return userRepository.findByEmail(email);
+    return userRepository.findByEmail(email).get();
   }
 
 

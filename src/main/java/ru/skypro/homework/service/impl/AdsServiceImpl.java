@@ -19,14 +19,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import javax.transaction.Transactional;
-
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CreateAds;
+import ru.skypro.homework.dto.FullAds;
+import ru.skypro.homework.dto.ImageDTO;
+import ru.skypro.homework.dto.ResponseWrapperAds;
+import ru.skypro.homework.dto.ResponseWrapperComment;
+import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.ImageEntity;
@@ -234,6 +239,21 @@ public class AdsServiceImpl implements AdsService {
     adEntity.setImageEntities(List.of(imageEntity));
 
     imageRepository.save(imageEntity);
+  }
+
+  @Override
+  public ResponseWrapperAds getAdsMe() {
+      log.info(FormLogInfo.getInfo());
+
+      /*Collection<UserDTO> userDTOS = userMapper.toDTOList(userRepository.findAll());
+      int id = userDTOS.stream()
+          .filter(x -> x.getEmail().equals(email))
+          .findFirst()
+          .get().getId();
+      Collection<AdsDTO> adsAll = adMapper.toDTOList(adsRepository.findAll());
+      Integer count = Math.toIntExact(adsAll.stream().filter(x -> x.getAuthor().equals(id)).count());*/
+      /*return new ResponseWrapperAds(count,adsAll);*/
+    return null;
   }
 
   /**

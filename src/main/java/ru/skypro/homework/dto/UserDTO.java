@@ -1,7 +1,12 @@
 package ru.skypro.homework.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 /**
@@ -20,6 +25,12 @@ public class UserDTO {
    * почта пользователя
    */
   String email;
+
+  /**
+   * пароль пользователя
+   */
+  String password;
+
   /**
    * Имя пользователя
    */
