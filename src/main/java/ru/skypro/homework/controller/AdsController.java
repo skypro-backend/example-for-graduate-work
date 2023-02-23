@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
-import java.util.Collection;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import lombok.NonNull;
@@ -29,7 +28,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CreateAds;
+import ru.skypro.homework.dto.FullAds;
+import ru.skypro.homework.dto.ResponseWrapperAds;
+import ru.skypro.homework.dto.ResponseWrapperComment;
 import ru.skypro.homework.service.AdsService;
 
 @RestController
@@ -74,17 +78,17 @@ public class AdsController {
       @ApiResponse(
           responseCode = "401",
           description = "Unauthorized",
-          content = {@Content(array = @ArraySchema(schema =@Schema()))}
+          content = {@Content(array = @ArraySchema(schema = @Schema()))}
       ),
       @ApiResponse(
           responseCode = "403",
           description = "Forbidden",
-          content = {@Content(array = @ArraySchema(schema =@Schema()))}
+          content = {@Content(array = @ArraySchema(schema = @Schema()))}
       ),
       @ApiResponse(
           responseCode = "404",
           description = "Not Found",
-          content = {@Content(array = @ArraySchema(schema =@Schema()))}
+          content = {@Content(array = @ArraySchema(schema = @Schema()))}
       )
   })
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -92,7 +96,7 @@ public class AdsController {
       @RequestPart("image") MultipartFile file,
       @RequestPart("properties") CreateAds createAds,
       Authentication authentication) throws IOException {
-    return ResponseEntity.ok(adsService.addAds(createAds, file,authentication));
+    return ResponseEntity.ok(adsService.addAds(createAds, file, authentication));
   }
 
   @Operation(summary = "Получить комментарий по id объявления и id комментария")
@@ -186,15 +190,15 @@ public class AdsController {
       @ApiResponse(
           responseCode = "200",
           description = "OK",
-              content = {
-                      @Content(
-                              schema = @Schema(implementation = ResponseWrapperComment.class))
-              }
+          content = {
+              @Content(
+                  schema = @Schema(implementation = ResponseWrapperComment.class))
+          }
       ),
       @ApiResponse(
           responseCode = "404",
           description = "Not Found",
-              content = {@Content(array = @ArraySchema(schema =@Schema()))}
+          content = {@Content(array = @ArraySchema(schema = @Schema()))}
       )
   })
   @GetMapping("/{ad_pk}/comments")
@@ -209,25 +213,25 @@ public class AdsController {
       @ApiResponse(
           responseCode = "200",
           description = "OK",
-              content = {
-                      @Content(
-                              schema = @Schema(implementation = CommentDTO.class))
-              }
+          content = {
+              @Content(
+                  schema = @Schema(implementation = CommentDTO.class))
+          }
       ),
       @ApiResponse(
           responseCode = "401",
           description = "Unauthorized",
-              content = {@Content(array = @ArraySchema(schema =@Schema()))}
+          content = {@Content(array = @ArraySchema(schema = @Schema()))}
       ),
       @ApiResponse(
           responseCode = "403",
           description = "Forbidden",
-              content = {@Content(array = @ArraySchema(schema =@Schema()))}
+          content = {@Content(array = @ArraySchema(schema = @Schema()))}
       ),
       @ApiResponse(
           responseCode = "404",
           description = "Not Found",
-              content = {@Content(array = @ArraySchema(schema =@Schema()))}
+          content = {@Content(array = @ArraySchema(schema = @Schema()))}
       )
   })
   @PostMapping("/{ad_pk}/comments")
@@ -235,7 +239,7 @@ public class AdsController {
       @PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk,
       @RequestBody CommentDTO commentDTO,
       Authentication authentication) {
-    adsService.addAdsComments(pk,commentDTO,authentication);
+    adsService.addAdsComments(pk, commentDTO, authentication);
     return ResponseEntity.ok().build();
   }
 
@@ -272,7 +276,7 @@ public class AdsController {
           description = "OK",
           content = {
               @Content(
-                      array = @ArraySchema(schema = @Schema(implementation = FullAds.class)))
+                  array = @ArraySchema(schema = @Schema(implementation = FullAds.class)))
           }
       ),
       @ApiResponse(
@@ -293,7 +297,7 @@ public class AdsController {
           description = "OK",
           content = {
               @Content(
-                      schema = @Schema(ref = "#/components/schemas/AdsDTO"))
+                  schema = @Schema(ref = "#/components/schemas/AdsDTO"))
           }
       ),
       @ApiResponse(
@@ -313,8 +317,15 @@ public class AdsController {
   public ResponseEntity<?> updateAds(
       @PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id,
       @RequestBody CreateAds createAds) {
+
     return ResponseEntity.ok().body(adsService.updateAds(id, createAds));
   }
 
+
+  @GetMapping("/me")
+  public ResponseEntity<ResponseWrapperAds>
+  getAdsMe() {
+    return ResponseEntity.ok(adsService.getAdsMe());
+  }
 
 }
