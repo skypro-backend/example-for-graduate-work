@@ -27,11 +27,6 @@ public class UserDTO {
   String email;
 
   /**
-   * пароль пользователя
-   */
-  String password;
-
-  /**
    * Имя пользователя
    */
   String firstName;

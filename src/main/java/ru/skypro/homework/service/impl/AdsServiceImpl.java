@@ -244,17 +244,10 @@ public class AdsServiceImpl implements AdsService {
 
   @Override
   public ResponseWrapperAds getAdsMe() {
-      log.info(FormLogInfo.getInfo());
-
-      /*Collection<UserDTO> userDTOS = userMapper.toDTOList(userRepository.findAll());
-      int id = userDTOS.stream()
-          .filter(x -> x.getEmail().equals(email))
-          .findFirst()
-          .get().getId();
-      Collection<AdsDTO> adsAll = adMapper.toDTOList(adsRepository.findAll());
-      Integer count = Math.toIntExact(adsAll.stream().filter(x -> x.getAuthor().equals(id)).count());*/
-      /*return new ResponseWrapperAds(count,adsAll);*/
-    return null;
+    log.info(FormLogInfo.getInfo());
+    Collection<AdsDTO> adsAll = adMapper.toDTOList(adsRepository.findAll());
+    int count = adsAll.size();
+    return new ResponseWrapperAds(count,adsAll);
   }
 
   /**
