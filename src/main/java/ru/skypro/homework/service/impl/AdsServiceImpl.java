@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -243,11 +244,14 @@ public class AdsServiceImpl implements AdsService {
   }
 
   @Override
-  public ResponseWrapperAds getAdsMe() {
+  public ResponseWrapperAds getAdsMe(Authentication authentication) {
     log.info(FormLogInfo.getInfo());
+    UserDTO userDTO = userService.getUser(authentication);
     Collection<AdsDTO> adsAll = adMapper.toDTOList(adsRepository.findAll());
-    int count = adsAll.size();
-    return new ResponseWrapperAds(count,adsAll);
+    Collection<AdsDTO> adsMe = adsAll.stream().
+        filter(x -> x.getAuthor().equals(userDTO.getId())).collect(Collectors.toList());
+    int count = adsMe.size();
+    return new ResponseWrapperAds(count,adsMe);
   }
 
   /**

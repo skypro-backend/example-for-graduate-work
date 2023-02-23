@@ -324,8 +324,8 @@ public class AdsController {
 
   @GetMapping("/me")
   public ResponseEntity<ResponseWrapperAds>
-  getAdsMe() {
-    return ResponseEntity.ok(adsService.getAdsMe());
+  getAdsMe(Authentication authentication) {
+    return ResponseEntity.ok(adsService.getAdsMe(authentication));
   }
 
 }

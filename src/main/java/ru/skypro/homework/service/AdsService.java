@@ -89,6 +89,6 @@ public interface AdsService {
    */
   void uploadImage (Integer id, MultipartFile image) throws IOException;
 
-  ResponseWrapperAds getAdsMe();
+  ResponseWrapperAds getAdsMe(Authentication authentication);
 
 }
