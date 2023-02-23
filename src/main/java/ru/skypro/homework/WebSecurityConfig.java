@@ -10,7 +10,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.skypro.homework.security.UserDetailServiceImpl;
 
@@ -35,7 +34,7 @@ public class WebSecurityConfig {
   @Bean
   protected DaoAuthenticationProvider daoAuthenticationProvider() {
     DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-    daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+    daoAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
     daoAuthenticationProvider.setUserDetailsService(userDetailService);
     return daoAuthenticationProvider;
   }
@@ -57,8 +56,8 @@ public class WebSecurityConfig {
           try {
             authz
                 .mvcMatchers(AUTH_WHITELIST).permitAll()
-                .mvcMatchers(HttpMethod.GET,"/ads").permitAll()
-                .mvcMatchers( "/ads/**","/users/**")
+                .mvcMatchers(HttpMethod.GET, "/ads").permitAll()
+                .mvcMatchers("/ads/**", "/users/**")
                 .authenticated();
           } catch (Exception e) {
             throw new RuntimeException(e);
@@ -69,11 +68,6 @@ public class WebSecurityConfig {
     return http.build();
   }
 
-
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
 
 }
 

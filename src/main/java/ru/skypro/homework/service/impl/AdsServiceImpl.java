@@ -102,17 +102,18 @@ public class AdsServiceImpl implements AdsService {
     Collection<CommentEntity> allAd = commentRepository.findAllById(Collections.singleton(pk));
     Collection<CommentDTO> commentDTOS = commentMapper.toDTOList(allAd);
     int count = commentDTOS.size();
-    return new ResponseWrapperComment(count,commentDTOS);
+    return new ResponseWrapperComment(count, commentDTOS);
   }
 
   /**
    * Добавление коментария к объявлению
    *
-   * @param pk id объявления
+   * @param pk         id объявления
    * @param commentDTO коммент
    */
   @Override
-  public CommentDTO addAdsComments(Integer pk, CommentDTO commentDTO,Authentication authentication) {
+  public CommentDTO addAdsComments(Integer pk, CommentDTO commentDTO,
+      Authentication authentication) {
     log.info(FormLogInfo.getInfo());
     if (commentDTO == null || pk < 1) {
       throw new ElemNotFound();
@@ -121,10 +122,9 @@ public class AdsServiceImpl implements AdsService {
     CommentEntity comment = commentMapper.toEntity(commentDTO);
     comment.setAd(adEntity);
 
-
     UserDTO userDTO = userService.getUser(authentication);
     comment.setAuthor(userMapper.toEntity(userDTO));
-
+    comment.setCreatedAt(LocalDateTime.now());
 
     commentRepository.save(comment);
 
@@ -154,7 +154,7 @@ public class AdsServiceImpl implements AdsService {
     log.info(FormLogInfo.getInfo());
     Collection<AdsDTO> adsAll = adMapper.toDTOList(adsRepository.findAll());
     int count = adsAll.size();
-    ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds(count,adsAll);
+    ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds(count, adsAll);
     return responseWrapperAds;
   }
 
@@ -172,7 +172,8 @@ public class AdsServiceImpl implements AdsService {
       Authentication authentication) throws IOException {
     log.info(FormLogInfo.getInfo());
 
-    Path filePath = Path.of(imageAdsDir, getFileUniqueName() + "." + getExtension(multipartFile.getOriginalFilename()));
+    Path filePath = Path.of(imageAdsDir,
+        getFileUniqueName() + "." + getExtension(multipartFile.getOriginalFilename()));
     Files.createDirectories(filePath.getParent());
     Files.deleteIfExists(filePath);
 
@@ -245,6 +246,7 @@ public class AdsServiceImpl implements AdsService {
 
   /**
    * Получаем только свои объявления
+   *
    * @param authentication данные о пользователе
    * @return общий подсчет своих объявлений + объявления
    */
@@ -256,7 +258,7 @@ public class AdsServiceImpl implements AdsService {
     Collection<AdsDTO> adsMe = adsAll.stream().
         filter(x -> x.getAuthor().equals(userDTO.getId())).collect(Collectors.toList());
     int count = adsMe.size();
-    return new ResponseWrapperAds(count,adsMe);
+    return new ResponseWrapperAds(count, adsMe);
   }
 
   /**
@@ -280,20 +282,21 @@ public class AdsServiceImpl implements AdsService {
 
   @Override
   public CommentDTO getComments(int adPk, int id) {
-    CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk).orElseThrow(ElemNotFound::new);
+    CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk)
+        .orElseThrow(ElemNotFound::new);
     return commentMapper.toDTO(commentEntity);
   }
 
   @Override
   public CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO) {
-   CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk)
+    CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk)
         .orElseThrow(ElemNotFound::new);
 
-   UserEntity author = userRepository.findById(commentDTO.getAuthor())
-       .orElseThrow(ElemNotFound::new);
-   commentEntity.setAuthor(author);
+    UserEntity author = userRepository.findById(commentDTO.getAuthor())
+        .orElseThrow(ElemNotFound::new);
+    commentEntity.setAuthor(author);
 
-  commentEntity.setText(commentDTO.getText());
+    commentEntity.setText(commentDTO.getText());
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     commentEntity.setCreatedAt(LocalDateTime.parse(commentDTO.getCreatedAt(), formatter));

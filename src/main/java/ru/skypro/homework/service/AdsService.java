@@ -66,7 +66,10 @@ public interface AdsService {
   ResponseWrapperComment getAdsComments(Integer pk);
 
 
-  CommentDTO addAdsComments(Integer pk,CommentDTO  commentDTO,Authentication authentication);
+  /**
+   * Добавляем комментарий к объявлению
+   */
+  CommentDTO addAdsComments(Integer pk, CommentDTO commentDTO, Authentication authentication);
 
 
   /**
@@ -84,13 +87,15 @@ public interface AdsService {
 
   /**
    * Добавление фото в объявление
+   *
    * @param id
    * @param image
    */
-  void uploadImage (Integer id, MultipartFile image) throws IOException;
+  void uploadImage(Integer id, MultipartFile image) throws IOException;
 
   /**
    * Получаем только свои объявления
+   *
    * @param authentication данные о пользователе
    * @return общий подсчет своих объявлений + объявления
    */
