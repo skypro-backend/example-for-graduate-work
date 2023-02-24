@@ -23,31 +23,38 @@ import java.util.Objects;
 @Table(name = "ads")
 @Entity
 public class AdEntity {
-
+  /** Id Объявления
+   * @param id  */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   Integer id;
-
+  /** Автор Объявления
+   * @param author  */
   @ManyToOne
   @JsonIgnore
   @JoinColumn(name = "author_id")
   UserEntity author;
-
+  /** Стоимость Объявления
+   * @param price  */
   @Column(name = "price")
   Integer price;
-
+  /** Заголовок Объявления
+   * @param title  */
   @Column(name = "title")
   String title;
-
+  /** Описание Объявления
+   * @param description  */
   @Column(name = "description")
   String description;
-
+  /** Комментарии Объявления
+   */
   @OneToMany(mappedBy = "ad")
   @JsonBackReference
   @ToString.Exclude
   List<CommentEntity> commentEntities;
-
+  /** Фото Объявления
+    */
   @OneToMany(mappedBy = "ad")
   @JsonBackReference
   @ToString.Exclude

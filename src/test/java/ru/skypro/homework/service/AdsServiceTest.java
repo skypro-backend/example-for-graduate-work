@@ -83,7 +83,7 @@ class AdsServiceTest {
   void init() {
     LocalDateTime date = LocalDateTime.parse("2007-12-03T10:15:30");
     adEntity = new AdEntity(1, null, 100, "TitleTest", "TestDescription", null, null);
-    user = new UserEntity(1, "firstname", "lastname", "user@mgmail.com", "+788994455", date, "Moscow", "path/to/image",
+    user = new UserEntity(1, "firstname", "lastname", "user@mgmail.com","rytu", "+788994455", date, "Moscow", "path/to/image",
         List.of(adEntity), null);
     comment = new CommentEntity(1,user, date, adEntity, "TextComments");
     image = new ImageEntity(1, "path/to/image", adEntity);

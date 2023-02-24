@@ -8,7 +8,7 @@ import ru.skypro.homework.entity.CommentEntity;
 import java.util.Collection;
 
 /**
- * маппер для {@link CommentEntity} готовый dto {@link CommentDTO}
+ * маппер для {@link CommentEntity} готовый DTO {@link CommentDTO}
  */
 @Mapper(componentModel = "spring")
 public interface CommentMapper {

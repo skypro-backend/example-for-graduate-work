@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * DTO для комментариев
+ * Сущность  комментариев
  */
 @Entity
 @Table(name = "comments")
@@ -22,29 +22,34 @@ import java.util.Objects;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentEntity {
-
+  /**Id автора комментария
+   * @param id */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   Integer id;
 
-  /**Id автора комментария */
+  /**Id автора комментария
+   * @param author */
   @ManyToOne
   @JsonIgnore
   @JoinColumn(name = "author_id")
   UserEntity author;
 
-  /**Дата создания комментария  */
+  /**Дата создания комментария
+   * @param createdAt  */
   @Column(name = "created_at")
   LocalDateTime createdAt;
 
-  /**Id объявления          */
+  /**Id объявления
+   *  @param ad  */
   @ManyToOne
   @JsonIgnore
   @JoinColumn(name = "pk_ads")
   AdEntity ad;
 
-  /**Текст комментария */
+  /**Текст комментария
+   *  @param text  */
   @Column(name = "text")
   String text;
 
