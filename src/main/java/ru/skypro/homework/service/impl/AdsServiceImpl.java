@@ -171,9 +171,14 @@ public class AdsServiceImpl implements AdsService {
   public AdsDTO addAds(CreateAds createAds, MultipartFile multipartFile,
       Authentication authentication) throws IOException {
     log.info(FormLogInfo.getInfo());
+    if(createAds == null || multipartFile == null){
+      log.error(FormLogInfo.getException());
+      throw new IllegalArgumentException();
+    }
 
     Path filePath = Path.of(imageAdsDir,
-        getFileUniqueName() + "." + getExtension(multipartFile.getOriginalFilename()));
+        getFileUniqueName() + "." + getExtension(
+            Objects.requireNonNull(multipartFile.getOriginalFilename())));
     Files.createDirectories(filePath.getParent());
     Files.deleteIfExists(filePath);
 
