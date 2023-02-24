@@ -26,11 +26,12 @@ import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.service.UserService;
 
-@RestController
+
 @RequestMapping("/users")
-@Tag(name = "Пользователи")
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
+@Tag(name = "Пользователи")
+@RestController
 public class UserController {
 
 
