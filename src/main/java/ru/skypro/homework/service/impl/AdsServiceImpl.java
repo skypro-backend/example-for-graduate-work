@@ -128,7 +128,7 @@ public class AdsServiceImpl implements AdsService {
 
     commentRepository.save(comment);
 
-    return commentDTO;
+    return commentMapper.toDTO(comment);
   }
 
   /**

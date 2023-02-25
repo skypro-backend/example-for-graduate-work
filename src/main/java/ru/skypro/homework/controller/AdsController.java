@@ -238,10 +238,9 @@ public class AdsController {
   @PostMapping("/{ad_pk}/comments")
   public ResponseEntity<CommentDTO> addAdsComments(
       @PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk,
-      @RequestBody CommentDTO commentDTO,
+      @RequestBody @Valid CommentDTO commentDTO,
       Authentication authentication) {
-    adsService.addAdsComments(pk, commentDTO, authentication);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(adsService.addAdsComments(pk, commentDTO, authentication));
   }
 
   @Operation(summary = "Изменение комментария пользователя")

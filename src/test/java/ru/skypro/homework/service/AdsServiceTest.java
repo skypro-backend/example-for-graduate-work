@@ -128,10 +128,10 @@ class AdsServiceTest {
     authentication = Mockito.mock(Authentication.class);
     file
         = new MockMultipartFile(
-        "file",
-        "hello.txt",
-        MediaType.TEXT_PLAIN_VALUE,
-        "Hello, World!".getBytes()
+        "image",
+        "image.jpeg",
+        MediaType.MULTIPART_FORM_DATA_VALUE,
+        "image.jpeg!".getBytes()
     );
     userDTO = new UserDTO("dmitry@gmail.com"
         , "Dmitry", 1, "Pospelov"
@@ -219,7 +219,7 @@ class AdsServiceTest {
     when(userService.getUser(any(Authentication.class))).thenReturn(userDTO);
     when(userMapper.toEntity(any(UserDTO.class))).thenReturn(user);
     when(commentRepository.save(comment)).thenReturn(comment);
-
+    when(commentMapper.toDTO(comment)).thenReturn(commentDTO);
     CommentDTO actual = adsService.addAdsComments(user.getId(),commentDTO,authentication);
 
     CommentDTO expected = new CommentDTO(user.getId(),"20-02-2023 10:12:13",adEntity.getId(),"testText");
