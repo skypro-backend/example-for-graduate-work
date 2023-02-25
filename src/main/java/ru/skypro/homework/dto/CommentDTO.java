@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto;
 
 
+import javax.validation.constraints.Min;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -23,6 +24,8 @@ public class CommentDTO {
   Integer author;
 
   String createdAt;
+
+  @Min(1)
   Integer pk;
   /**Текст комментария */
   String text;
