@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import lombok.NonNull;
@@ -94,7 +95,7 @@ public class AdsController {
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<AdsDTO> createAds(
       @RequestPart("image") MultipartFile file,
-      @RequestPart("properties") CreateAds createAds,
+      @RequestPart("properties") @Valid CreateAds createAds,
       Authentication authentication) throws IOException {
     return ResponseEntity.ok(adsService.addAds(createAds, file, authentication));
   }
@@ -237,10 +238,9 @@ public class AdsController {
   @PostMapping("/{ad_pk}/comments")
   public ResponseEntity<CommentDTO> addAdsComments(
       @PathVariable(name = "ad_pk") @NonNull @Parameter(description = "Больше 0, Например 1") Integer pk,
-      @RequestBody CommentDTO commentDTO,
+      @RequestBody @Valid CommentDTO commentDTO,
       Authentication authentication) {
-    adsService.addAdsComments(pk, commentDTO, authentication);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(adsService.addAdsComments(pk, commentDTO, authentication));
   }
 
   @Operation(summary = "Изменение комментария пользователя")
