@@ -1,5 +1,12 @@
 package ru.skypro.homework.mapper;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,14 +17,6 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 public class AdMapperTest {
@@ -137,8 +136,8 @@ public class AdMapperTest {
 
 
   private AdEntity getAd() {
-    UserEntity userEntity = new UserEntity(1, "firstname", "lastname", "email@.mail.ru",
-            "password","+79999992211",
+    UserEntity userEntity = new UserEntity(1, "firstname", "lastname", "email@.mail.ru","11111111",
+        "+79999992211",
         LocalDateTime.now(), "nsk", "/path/to/image/avatar", null, null);
     ImageEntity imageEntity = new ImageEntity(1, "/path/to/image/1", getAdEntity());
     ImageEntity imageEntity1 = new ImageEntity(2, "/path/to/image/2", getAdEntity());
