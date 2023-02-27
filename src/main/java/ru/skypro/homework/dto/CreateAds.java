@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto;
 
 
+import javax.validation.constraints.Min;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,6 +22,7 @@ public class CreateAds {
     /**
      * цена
      */
+    @Min(1)
     Integer price;
 
     /**

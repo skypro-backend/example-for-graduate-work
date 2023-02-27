@@ -136,7 +136,7 @@ public class AdMapperTest {
 
 
   private AdEntity getAd() {
-    UserEntity userEntity = new UserEntity(1, "firstname", "lastname", "email@.mail.ru",
+    UserEntity userEntity = new UserEntity(1, "firstname", "lastname", "email@.mail.ru","11111111",
         "+79999992211",
         LocalDateTime.now(), "nsk", "/path/to/image/avatar", null, null);
     ImageEntity imageEntity = new ImageEntity(1, "/path/to/image/1", getAdEntity());
