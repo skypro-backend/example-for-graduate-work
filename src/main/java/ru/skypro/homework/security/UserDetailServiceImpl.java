@@ -1,9 +1,6 @@
 package ru.skypro.homework.security;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
