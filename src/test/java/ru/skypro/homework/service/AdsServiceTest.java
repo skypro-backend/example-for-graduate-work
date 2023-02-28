@@ -1,15 +1,11 @@
 package ru.skypro.homework.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -164,14 +160,14 @@ class AdsServiceTest {
     lenient().when(commentRepository.findById(anyInt())).thenReturn(Optional.ofNullable(comment));
     Assertions.assertThat(adsRepository.findById(anyInt())).isNotNull();
     lenient().doNothing().when(commentRepository).deleteById(anyInt());
-//    assertDoesNotThrow(() -> adsService.deleteComments(anyInt(), anyInt()));
   }
 
   @Test
   void deleteCommentsNegativeTest() {
+    lenient().when(adsRepository.findById(anyInt())).thenReturn(Optional.ofNullable(adEntity));
     lenient().when(commentRepository.findById(anyInt())).thenThrow(ElemNotFound.class);
     assertThrows(ElemNotFound.class, () -> commentRepository.findById(anyInt()));
-    lenient().doNothing().when(adsService).deleteComments(anyInt(), anyInt());
+    assertThatExceptionOfType(ElemNotFound.class).isThrownBy( () -> adsService.deleteComments(1,1));
   }
 
 
