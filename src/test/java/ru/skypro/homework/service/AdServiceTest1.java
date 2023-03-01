@@ -102,15 +102,16 @@ public class AdServiceTest1 {
 
   @Test
   void getAdByIdTest() {
-//    UserEntity author = getAuthor();
-//    List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-//    authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-//    Authentication authentication = new TestingAuthenticationToken(author.getEmail(), author.getPassword(), authorities);
-//    authentication.setAuthenticated(true);
-//    FullAds fullAds = adsOtherMapper.toFullAds(getAdEntity(1));
-//    when(adsRepository.findById(1)).thenReturn(Optional.of(getAdEntity(1)));
-//    assertThat(adsService.getAdById(1,authentication)).isEqualTo(fullAds);
-//    verify(adsRepository,times(1)).findById(any());
+    UserEntity author = getAuthor();
+    List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+    authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+    Authentication authentication = new TestingAuthenticationToken(author.getEmail(), author.getPassword(), authorities);
+    authentication.setAuthenticated(true);
+    FullAds fullAds = adsOtherMapper.toFullAds(getAdEntity(1));
+    when(adsRepository.findById(1)).thenReturn(Optional.of(getAdEntity(1)));
+    when(securityService.isAdsUpdateAvailable(any(Authentication.class),any(AdEntity.class))).thenReturn(true);
+    assertThat(adsService.getAdById(1,authentication)).isEqualTo(fullAds);
+    verify(adsRepository,times(1)).findById(any());
   }
 
   @Test
