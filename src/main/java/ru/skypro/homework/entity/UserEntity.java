@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.Hibernate;
+import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -91,6 +92,11 @@ public class UserEntity {
   @JsonBackReference
   @ToString.Exclude
   List<CommentEntity> commentEntities;
+
+  @Column(name = "role")
+  @Enumerated(EnumType.STRING)
+  private Role role;
+
 
   @Override
   public boolean equals(Object o) {

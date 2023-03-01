@@ -1,15 +1,11 @@
 package ru.skypro.homework.service;
 
 
-import java.io.IOException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.CreateAds;
-import ru.skypro.homework.dto.FullAds;
-import ru.skypro.homework.dto.ResponseWrapperAds;
-import ru.skypro.homework.dto.ResponseWrapperComment;
+import ru.skypro.homework.dto.*;
+
+import java.io.IOException;
 
 
 /**
@@ -31,7 +27,7 @@ public interface AdsService {
    * @param id - идентификатор объявления
    * @return - обнволенный комментарий
    */
-  AdsDTO updateAds(int id, CreateAds createAd);
+  AdsDTO updateAds(int id, CreateAds createAd, Authentication authentication);
 
   /**
    * Возвращает комментарий
@@ -53,12 +49,13 @@ public interface AdsService {
   /**
    * Обновляет комментарий
    *
-   * @param adPk       - идентификатор объявления
-   * @param id         - идентификатор комментария
-   * @param commentDTO - новый комментарий
+   * @param adPk            - идентификатор объявления
+   * @param id              - идентификатор комментария
+   * @param commentDTO      - новый комментарий
+   * @param authentication  - аутентификация
    * @return - обнволенный комментарий
    */
-  CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO);
+  CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO, Authentication authentication);
 
   void removeAds(int id);
 

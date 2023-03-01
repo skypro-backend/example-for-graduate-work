@@ -5,6 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CreateAds;
@@ -41,6 +45,8 @@ class AdsServiceImplTest {
     @Mock
     CommentRepository commentRepository;
     @Mock
+    SecurityService securityService;
+    @Mock
     UserRepository userRepository;
     @Mock
     AdMapper adMapper;
@@ -56,7 +62,10 @@ class AdsServiceImplTest {
         int sourceAdsId = 1;
         CommentDTO sourceCommentDTO = getCommentDTO();
         CommentEntity commentEntity = getCommentEntity();
+        Authentication authentication = getTestAuthentication();
 
+        lenient().when(securityService.isCommentUpdateAvailable(
+                any(Authentication.class),any(CommentEntity.class),any(CommentDTO.class))).thenReturn(true);
         lenient().when(commentRepository.findByIdAndAd_Id(sourceCommentId, sourceAdsId))
                 .thenReturn(Optional.of(getCommentEntity()));
         lenient().when(userRepository.findById(3)).thenReturn(Optional.of(getNewCommentAuthor()));
@@ -68,7 +77,7 @@ class AdsServiceImplTest {
         lenient().when(commentRepository.save(commentEntity)).thenReturn(commentEntity);
         lenient().when(commentMapper.toDTO(commentEntity)).thenReturn(commentImplMapper.toDTO(commentEntity));
 
-        CommentDTO excepted = out.updateComments(sourceAdsId, sourceCommentId, sourceCommentDTO);
+        CommentDTO excepted = out.updateComments(sourceAdsId, sourceCommentId, sourceCommentDTO, authentication);
         CommentDTO actual = getCommentDTO();
 
         assertEquals(excepted,actual);
@@ -76,26 +85,47 @@ class AdsServiceImplTest {
 
     @Test
     void updateCommentsNegativeNotFoundComment() {
+        Authentication authentication = getTestAuthentication();
+
         lenient().when(commentRepository.findByIdAndAd_Id(anyInt(), anyInt()))
                 .thenReturn(Optional.of(getCommentEntity()));
         lenient().when(userRepository.findById(anyInt())).thenThrow(ElemNotFound.class);
-        assertThrows(ElemNotFound.class, () -> out.updateComments(1,1, getCommentDTO()));
+        lenient().when(securityService.isCommentUpdateAvailable(any(Authentication.class),
+                any(CommentEntity.class), any(CommentDTO.class))).thenReturn(true);
+
+        assertThrows(ElemNotFound.class, () -> out.updateComments(1,1, getCommentDTO(), authentication));
     }
 
     @Test
     void updateCommentsNegativeNotFoundUser() {
+        UserEntity author = getAuthor();
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        Authentication authentication = new TestingAuthenticationToken(author.getEmail(), author.getPassword(), authorities);
+        authentication.setAuthenticated(true);
         lenient().when(commentRepository.findByIdAndAd_Id(anyInt(),anyInt())).thenThrow(ElemNotFound.class);
-        assertThrows(ElemNotFound.class, () -> out.updateComments(1,1, getCommentDTO()));
+        lenient().when(securityService.isAdmin(any(Authentication.class))).thenReturn(true);
+        assertThrows(ElemNotFound.class, () -> out.updateComments(1,1, getCommentDTO(), authentication));
     }
 
     @Test
     void updateAds() {
         CreateAds sourceCreateAds = getCreateAds();
+        UserEntity author = getAuthor();
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        Authentication authentication = new TestingAuthenticationToken(author.getEmail(), author.getPassword(), authorities);
+        authentication.setAuthenticated(true);
         int sourceId = 1;
         lenient().when(adsRepository.findById(anyInt())).thenReturn(Optional.of(getAdEntity()));
         lenient().when(adsRepository.save(any(AdEntity.class))).thenReturn(getResultAdEntity());
         lenient().when(adMapper.toDTO(getResultAdEntity())).thenReturn(adImplMapper.toDTO(getResultAdEntity()));
-        AdsDTO excepted = out.updateAds(sourceId, sourceCreateAds);
+        lenient().when(securityService.isAdsUpdateAvailable(any(Authentication.class),any(AdEntity.class))).thenReturn(true);
+        AdsDTO excepted = out.updateAds(sourceId, sourceCreateAds, authentication);
         AdsDTO actual = getResultAdsDTO();
 
         assertEquals(excepted,actual);
@@ -103,8 +133,14 @@ class AdsServiceImplTest {
 
     @Test
     void updateAdsNegativeTest() {
+        UserEntity author = getAuthor();
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        Authentication authentication = new TestingAuthenticationToken(author.getEmail(), author.getPassword(), authorities);
         lenient().when(adsRepository.findById(anyInt())).thenReturn(Optional.empty());
-        assertThrows(ElemNotFound.class, () -> out.updateAds(1, getCreateAds()));
+        assertThrows(ElemNotFound.class, () -> out.updateAds(1, getCreateAds(),authentication));
     }
 
     private CreateAds getCreateAds() {
@@ -200,5 +236,11 @@ class AdsServiceImplTest {
 
     private CommentDTO getCommentDTO() {
         return new CommentDTO(3,"20-02-2023 10:12:13",2, "Реклама");
+    }
+
+    private Authentication getTestAuthentication() {
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        UserEntity author = getAuthor();
+        return new TestingAuthenticationToken(author.getEmail(), author.getPassword(), authorities);
     }
 }
