@@ -24,6 +24,7 @@ import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
+import ru.skypro.homework.service.impl.SecurityService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -45,6 +46,9 @@ class AdsServiceTest {
   private AdsService adsService;
   @Mock
   private UserService userService;
+
+  @Mock
+  private SecurityService securityService;
 
   @Mock
   private CommentRepository commentRepository;
@@ -93,7 +97,7 @@ class AdsServiceTest {
 
   AdsServiceTest() {
     adsService = new AdsServiceImpl(adsRepository, commentRepository, userRepository, adMapper,
-        commentMapper, imageRepository, imageMapper, userService, userMapper, adsOtherMapper);
+        commentMapper, imageRepository, imageMapper, userService, userMapper, adsOtherMapper, securityService);
   }
 
   @BeforeEach
