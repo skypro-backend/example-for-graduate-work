@@ -19,16 +19,16 @@ public class SecurityService {
     public SecurityService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
+    /** Проверка пользователя на авторство */
     public boolean checkAuthor(int id, UserEntity user) {
         return id == user.getId();
     }
-
+    /** Проверка автора объявления на электронную почту */
     public boolean checkAuthor(int id, String email) {
         UserEntity user = userRepository.findByEmail(email).orElseThrow(ElemNotFound::new);
         return checkAuthor(id, user);
     }
-
+    /** Проверка пользователя на электронную почту */
     public boolean isAuthorAuthenticated(String email, Authentication authentication) {
         return authentication.getName().equals(email) && authentication.isAuthenticated();
     }
@@ -41,7 +41,7 @@ public class SecurityService {
     public boolean isAuthorAuthenticated(UserEntity user, Authentication authentication) {
         return isAuthorAuthenticated(user.getEmail(), authentication);
     }
-
+    /** Проверка пользователя на роль администратора */
     public boolean isAdmin(UserEntity user) {
         return user.getRole().equals(Role.ADMIN);
     }
@@ -60,7 +60,7 @@ public class SecurityService {
         return authentication.isAuthenticated() &&
                 authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
-
+    /** Проверка законности доступа к методам комментариям */
     public boolean isCommentUpdateAvailable(Authentication authentication, CommentEntity commentEntity,
                                             CommentDTO commentDTO) {
         if (!authentication.isAuthenticated()) {
@@ -77,6 +77,7 @@ public class SecurityService {
         return false;
     }
 
+    /** Проверка законности доступа к методам объявлений */
     public boolean isAdsUpdateAvailable(Authentication authentication, AdEntity adEntity) {
         if (!authentication.isAuthenticated()) {
             return false;

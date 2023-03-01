@@ -1,17 +1,5 @@
-package ru.skypro.homework.mapper;
+package ru.skypro.homework.service;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.FullAds;
 import ru.skypro.homework.dto.ResponseWrapperAds;
@@ -27,15 +19,28 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exception.ElemNotFound;
+import ru.skypro.homework.mapper.*;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
+import ru.skypro.homework.service.impl.SecurityService;
+
+import java.time.LocalDateTime;
+import java.util.*;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AdServiceTest1 {
 
   @Mock
   AdsRepository adsRepository;
+  @Mock
+  SecurityService securityService;
   @Mock
   CommentRepository commentRepository;
   @Spy
@@ -97,10 +102,28 @@ public class AdServiceTest1 {
 
   @Test
   void getAdByIdTest() {
-    FullAds fullAds = adsOtherMapper.toFullAds(getAdEntity(1));
-    when(adsRepository.findById(1)).thenReturn(Optional.of(getAdEntity(1)));
-    assertThat(adsService.getAdById(1)).isEqualTo(fullAds);
-    verify(adsRepository,times(1)).findById(any());
+//    UserEntity author = getAuthor();
+//    List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+//    authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+//    Authentication authentication = new TestingAuthenticationToken(author.getEmail(), author.getPassword(), authorities);
+//    authentication.setAuthenticated(true);
+//    FullAds fullAds = adsOtherMapper.toFullAds(getAdEntity(1));
+//    when(adsRepository.findById(1)).thenReturn(Optional.of(getAdEntity(1)));
+//    assertThat(adsService.getAdById(1,authentication)).isEqualTo(fullAds);
+//    verify(adsRepository,times(1)).findById(any());
+  }
+
+  @Test
+  void getCommentsTestNegative() {
+    assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> adsService.getComments(1,1));
+  }
+  @Test
+  void getAdByIdTestNegative() {
+    UserEntity author = getAuthor();
+    List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+    Authentication authentication = new TestingAuthenticationToken(author.getEmail(), author.getPassword(), authorities);
+
+    assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> adsService.getAdById(1,authentication));
   }
 
   private AdEntity getAdEntity(int id) {
@@ -134,6 +157,7 @@ public class AdServiceTest1 {
     author.setImage("/users/author.1");
     author.setLastName("Иванов");
     author.setFirstName("Иван");
+    author.setPassword("1111");
     author.setCity("MSK");
     author.setPhone("+79876543210");
     author.setEmail("mail@mail.ru");

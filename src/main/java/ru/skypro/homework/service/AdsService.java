@@ -19,7 +19,7 @@ public interface AdsService {
    * @param id - идентификатор объявления
    * @return - комментарий
    */
-  FullAds getAdById(int id);
+  FullAds getAdById(int id, Authentication authentication);
 
   /**
    * Обновляет объявление

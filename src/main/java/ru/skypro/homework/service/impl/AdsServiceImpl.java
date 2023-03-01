@@ -316,8 +316,14 @@ public class AdsServiceImpl implements AdsService {
 /** Получить объявление по id
  * @param id */
   @Override
-  public FullAds getAdById(int id) {
-    return adsOtherMapper.toFullAds(adsRepository.findById(id).orElseThrow(ElemNotFound::new));
+  public FullAds getAdById(int id, Authentication authentication) {
+    AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
+
+    if (!securityService.isAdsUpdateAvailable(authentication, adEntity)) {
+      throw new SecurityAccessException();
+
+    }
+    return adsOtherMapper.toFullAds(adEntity);
   }
 /** Обновить объявление по id
  * @param id */
