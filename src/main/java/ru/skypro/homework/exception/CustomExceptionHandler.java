@@ -1,10 +1,8 @@
 package ru.skypro.homework.exception;
 
 import io.swagger.v3.oas.annotations.Hidden;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNullApi;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -82,6 +80,16 @@ public class CustomExceptionHandler {
         String badRequest = "Элемент уже есть в базе";
         ErrorResponse error = new ErrorResponse(badRequest,ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * эксепш, если элемента нет в базе
+     */
+    @ExceptionHandler(SecurityAccessException.class)
+    public final ResponseEntity<ErrorResponse> handleSecurityException(SecurityAccessException ex) {
+        String incorrectRequest = "Нет прав доступа";
+        ErrorResponse error = new ErrorResponse(incorrectRequest,ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 
 }

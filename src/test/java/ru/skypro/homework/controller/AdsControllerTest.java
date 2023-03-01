@@ -1,18 +1,5 @@
 package ru.skypro.homework.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
 import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,17 +23,28 @@ import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exception.ElemNotFound;
-import ru.skypro.homework.mapper.AdMapperImpl;
-import ru.skypro.homework.mapper.AdsOtherMapper;
-import ru.skypro.homework.mapper.CommentMapperImpl;
-import ru.skypro.homework.mapper.ImageMapper;
-import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.mapper.*;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
+import ru.skypro.homework.service.impl.SecurityService;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(AdsController.class)
@@ -69,6 +67,8 @@ class AdsControllerTest {
   private ImageMapper imageMapper;
   @MockBean
   private UserService userService;
+  @MockBean
+  private SecurityService securityService;
   @MockBean
   private UserMapper userMapper;
   @MockBean
@@ -177,6 +177,7 @@ class AdsControllerTest {
     when(commentRepository.findByIdAndAd_Id(id, adPk)).thenReturn(Optional.of(getComment()));
     when(userRepository.findById(1)).thenReturn(Optional.of(getNewAuthor()));
     when(commentRepository.save(savedCommentEntity)).thenReturn(savedCommentEntity);
+    when(securityService.isCommentUpdateAvailable(any(),any(),any())).thenReturn(true);
 
     mockMvc.perform(MockMvcRequestBuilders.patch(
                 url)
@@ -203,7 +204,8 @@ class AdsControllerTest {
     commentObject.put("pk", 2);
     commentObject.put("text", "text");
 
-    when(commentRepository.findByIdAndAd_Id(id, adPk)).thenThrow(ElemNotFound.class);
+    when(securityService.isCommentUpdateAvailable(any(),any(),any())).thenReturn(true);
+    when(commentRepository.findByIdAndAd_Id(any(), any())).thenThrow(ElemNotFound.class);
 
     mockMvc.perform(MockMvcRequestBuilders.patch(
                 url)
@@ -225,8 +227,9 @@ class AdsControllerTest {
     commentObject.put("pk", 2);
     commentObject.put("text", "text");
 
-    when(commentRepository.findByIdAndAd_Id(id, adPk)).thenReturn(Optional.of(getComment()));
-    when(userRepository.findById(1)).thenThrow(ElemNotFound.class);
+    when(commentRepository.findByIdAndAd_Id(any(), any())).thenReturn(Optional.of(getComment()));
+    when(securityService.isCommentUpdateAvailable(any(),any(),any())).thenReturn(true);
+    when(userRepository.findById(anyInt())).thenThrow(ElemNotFound.class);
 
     mockMvc.perform(MockMvcRequestBuilders.patch(
                 url)
@@ -254,6 +257,7 @@ class AdsControllerTest {
     resultAdEntity.setTitle("заголовок");
 
     when(adsRepository.save(resultAdEntity)).thenReturn(resultAdEntity);
+    when(securityService.isAdsUpdateAvailable(any(),any())).thenReturn(true);
 
     mockMvc.perform(MockMvcRequestBuilders.patch(
                 url)
