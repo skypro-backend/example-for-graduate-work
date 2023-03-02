@@ -2,11 +2,10 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
-import java.util.Collection;
+import java.util.List;
 
 @Data
 public class ResponseWrapperAds {
-    Integer count;
-    // пока коллекцию поставила, вроде там не понятно сколько будет объявлений
-    Collection<Ads> results;
+    private Integer count;
+    private List<Ads> results;
 }
