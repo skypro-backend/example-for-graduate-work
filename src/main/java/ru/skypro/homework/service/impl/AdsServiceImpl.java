@@ -131,7 +131,7 @@ public class AdsServiceImpl implements AdsService {
       throw new ElemNotFound();
     }
   }
-
+/** Получить все объявления */
   @Override
   public ResponseWrapperAds getAds() {
     log.info(FormLogInfo.getInfo());
@@ -268,6 +268,9 @@ public class AdsServiceImpl implements AdsService {
     return UUID.randomUUID().toString();
   }
 
+  /** Получить комментарий по adPk объявления и id комментария
+   * @param adPk
+   * @param id  */
   @Override
   public CommentDTO getComments(int adPk, int id) {
     CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk)
@@ -275,6 +278,9 @@ public class AdsServiceImpl implements AdsService {
     return commentMapper.toDTO(commentEntity);
   }
 
+  /** Изменение комментария пользователя
+   * @param adPk
+   * @param id*/
   @Override
   public CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO, Authentication authentication) {
     CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk)
@@ -307,12 +313,20 @@ public class AdsServiceImpl implements AdsService {
     AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
     adsRepository.delete(adEntity);
   }
-
+/** Получить объявление по id
+ * @param id */
   @Override
-  public FullAds getAdById(int id) {
-    return adsOtherMapper.toFullAds(adsRepository.findById(id).orElseThrow(ElemNotFound::new));
-  }
+  public FullAds getAdById(int id, Authentication authentication) {
+    AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
 
+    if (!securityService.isAdsUpdateAvailable(authentication, adEntity)) {
+      throw new SecurityAccessException();
+
+    }
+    return adsOtherMapper.toFullAds(adEntity);
+  }
+/** Обновить объявление по id
+ * @param id */
   @Override
   public AdsDTO updateAds(int id, CreateAds createAds, Authentication authentication) {
     AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);

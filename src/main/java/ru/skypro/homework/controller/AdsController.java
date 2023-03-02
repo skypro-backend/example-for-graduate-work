@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
@@ -274,8 +275,9 @@ public class AdsController {
   })
   @GetMapping("{id}")
   public ResponseEntity<?> getAds(
-      @PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id) {
-    return ResponseEntity.ok().body(adsService.getAdById(id));
+          @PathVariable(name = "id") @NonNull @Parameter(description = "Больше 0, Например 1") Integer id,
+          @RequestBody Authentication authentication) {
+    return ResponseEntity.ok().body(adsService.getAdById(id, authentication));
   }
 
   @Operation(summary = "Обновить объявление")

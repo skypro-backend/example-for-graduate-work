@@ -12,7 +12,7 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.ImageEntity;
 
 /**
- * маппер для {@link AdEntity} готовый рекорд {@link AdsDTO}
+ * маппер для {@link AdEntity} готовый DTO {@link AdsDTO}
  */
 @Mapper(componentModel = "spring")
 public interface AdMapper {

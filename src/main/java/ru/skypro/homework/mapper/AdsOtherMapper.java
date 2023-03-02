@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.FullAds;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.ImageEntity;
-
+/**
+ * дополнительный маппер для объявлений
+ */
 @Mapper(componentModel = "spring", uses = {ImageMapper.class})
 public interface AdsOtherMapper {
 

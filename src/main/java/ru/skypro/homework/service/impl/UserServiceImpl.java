@@ -27,6 +27,7 @@ import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
+/**  Сервис пользователей  */
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
     this.userRepository = userRepository;
     this.userMapper = userMapper;
   }
-
+ /** Получить данные пользователя */
   @Override
   public UserDTO getUser(Authentication authentication) {
     log.info(FormLogInfo.getInfo());
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
     UserEntity userEntity = findEntityByEmail(nameEmail);
     return userMapper.toDTO(userEntity);
   }
-
+  /** Обновить данные пользователя */
   @Override
   public UserDTO updateUser(UserDTO newUserDto, Authentication authentication) {
     log.info(FormLogInfo.getInfo());
@@ -77,13 +78,13 @@ public class UserServiceImpl implements UserService {
 
     return  userMapper.toDTO(oldUser);
   }
-
+  /** Установить пароль пользователя */
   @Override
   public NewPassword setPassword(NewPassword newPassword) {
     log.info(FormLogInfo.getInfo());
     return null;
   }
-
+  /** загрузить аватарку пользователя */
   @Override
   public void updateUserImage(MultipartFile image, Authentication authentication) {
     log.info(FormLogInfo.getInfo());
