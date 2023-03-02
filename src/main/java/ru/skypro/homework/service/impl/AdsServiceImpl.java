@@ -121,11 +121,11 @@ public class AdsServiceImpl implements AdsService {
    * @param id
    */
   @Override
-  public void deleteComments(Integer pk, Integer id) {
+  public void deleteComments(Integer pk, Integer id, Authentication authentication) {
     log.info(FormLogInfo.getInfo());
     AdEntity adEntity = adsRepository.findById(pk).orElseThrow(ElemNotFound::new);
     CommentEntity comment = commentRepository.findById(id).orElseThrow(ElemNotFound::new);
-    if (Objects.equals(adEntity.getAuthor().getId(), comment.getAuthor().getId())) {
+    if (securityService.isAdmin(authentication) || Objects.equals(adEntity.getAuthor().getId(), comment.getAuthor().getId())) {
       commentRepository.deleteById(comment.getId());
     } else {
       throw new ElemNotFound();
@@ -302,10 +302,13 @@ public class AdsServiceImpl implements AdsService {
    * @param id
    */
   @Override
-  public void removeAds(int id) {
+  public void removeAds(int id, Authentication authentication) {
     log.info(FormLogInfo.getInfo());
     AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
-    adsRepository.delete(adEntity);
+    if (securityService.isAdmin(authentication) || securityService.checkAuthor(id, adEntity.getAuthor())) {
+      adsRepository.delete(adEntity);
+    } else throw new SecurityAccessException();
+
   }
 
   @Override
