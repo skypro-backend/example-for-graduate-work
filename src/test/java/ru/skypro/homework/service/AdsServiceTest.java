@@ -1,5 +1,23 @@
 package ru.skypro.homework.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyCollection;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,29 +30,29 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CreateAds;
+import ru.skypro.homework.dto.ImageDTO;
+import ru.skypro.homework.dto.ResponseWrapperAds;
+import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exception.ElemNotFound;
-import ru.skypro.homework.mapper.*;
+import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.mapper.AdsOtherMapper;
+import ru.skypro.homework.mapper.CommentMapper;
+import ru.skypro.homework.mapper.ImageMapper;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
 import ru.skypro.homework.service.impl.SecurityService;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.*;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
 /**
  * Юнит тесты для сервиса
@@ -158,7 +176,7 @@ class AdsServiceTest {
     lenient().when(adsRepository.findById(anyInt())).thenReturn(Optional.ofNullable(adEntity));
     lenient().when(commentRepository.findById(anyInt())).thenThrow(ElemNotFound.class);
     assertThrows(ElemNotFound.class, () -> commentRepository.findById(anyInt()));
-    assertThatExceptionOfType(ElemNotFound.class).isThrownBy( () -> adsService.deleteComments(1,1));
+    assertThatExceptionOfType(ElemNotFound.class).isThrownBy( () -> adsService.deleteComments(1,1,authentication));
   }
 
 
