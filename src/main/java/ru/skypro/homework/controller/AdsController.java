@@ -146,8 +146,8 @@ public class AdsController {
       @NotBlank(message = "id не должен быть пустым")
       @Min(value = 1, message = "Идентификатор должен быть больше 0")
       @Parameter(description = "Идентификатор комментария",
-          example = "1") Integer id) {
-    adsService.deleteComments(adPk, id);
+          example = "1") Integer id, Authentication authentication) {
+    adsService.deleteComments(adPk, id, authentication);
   }
 
   @Operation(summary = "Удалить объявление по id")
@@ -170,8 +170,8 @@ public class AdsController {
   @NotBlank(message = "id не должен быть пустым")
   @Min(value = 1, message = "Идентификатор должен быть больше 0")
   @Parameter(description = "Идентификатор объявления",
-      example = "1") int id) {
-    adsService.removeAds(id);
+      example = "1") int id, Authentication authentication) {
+    adsService.removeAds(id, authentication);
   }
 
   @Operation(summary = "Получить комментарии объявления")

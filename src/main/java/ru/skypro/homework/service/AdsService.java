@@ -44,7 +44,7 @@ public interface AdsService {
    * @param adPk - идентификатор объявления
    * @param id   - идентификатор комментария
    */
-  void deleteComments(Integer adPk, Integer id);
+  void deleteComments(Integer adPk, Integer id, Authentication authentication);
 
   /**
    * Обновляет комментарий
@@ -57,7 +57,7 @@ public interface AdsService {
    */
   CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO, Authentication authentication);
 
-  void removeAds(int id);
+  void removeAds(int id, Authentication authentication);
 
 
   ResponseWrapperComment getAdsComments(Integer pk);
