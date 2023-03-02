@@ -31,7 +31,7 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @GetMapping
-    public ResponseEntity<Object> getAllAds() {
+    public ResponseEntity<ResponseWrapperAds> getAllAds() {
         return ResponseEntity.ok().build();
     }
 
@@ -46,7 +46,7 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @PostMapping
-    public ResponseEntity<Object> addAds(@RequestBody Object ads) {
+    public ResponseEntity<Ads> addAds(@RequestBody Ads ads) {
         return ResponseEntity.ok().build();
     }
 
@@ -60,7 +60,7 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @GetMapping("/me")
-    public ResponseEntity<Object> getAllMeAds() {
+    public ResponseEntity<ResponseWrapperAds> getAllMeAds() {
         return ResponseEntity.ok().build();
     }
 
@@ -74,7 +74,7 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @GetMapping("/{ad_pk}/comment")
-    public ResponseEntity<Object> getAdsComment(@PathVariable Integer ad_pk) {
+    public ResponseEntity<ResponseWrapperAdsComment> getAdsComment(@PathVariable Integer ad_pk) {
         return ResponseEntity.ok().build();
     }
 
@@ -89,8 +89,8 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @PostMapping("/{ad_pk}/comment")
-    public ResponseEntity<Object> addAdsComment(@PathVariable Integer ad_pk,
-                                @RequestBody Object comment) {
+    public ResponseEntity<AdsComment> addAdsComment(@PathVariable Integer ad_pk,
+                                @RequestBody AdsComment comment) {
         return ResponseEntity.ok().build();
     }
 
@@ -104,7 +104,7 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @DeleteMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<Object> deleteAdsComment(@PathVariable Integer ad_pk,
+    public ResponseEntity<AdsComment> deleteAdsComment(@PathVariable Integer ad_pk,
                                    @PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
@@ -119,7 +119,7 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @GetMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<Object> getAdsComment(@PathVariable Integer ad_pk,
+    public ResponseEntity<AdsComment> getAdsComment(@PathVariable Integer ad_pk,
                                    @PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
@@ -134,7 +134,7 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> removeAds(@PathVariable Integer id) {
+    public ResponseEntity<Ads> removeAds(@PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
 
@@ -148,7 +148,7 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getAds(@PathVariable Integer id) {
+    public ResponseEntity<Ads> getAds(@PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
 
@@ -163,7 +163,8 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @PatchMapping("/{id}")
-    public ResponseEntity<Object> updateAds(@PathVariable Integer id) {
+    public ResponseEntity<Ads> updateAds(@PathVariable Integer id,
+                                            @RequestBody Ads ads) {
         return ResponseEntity.ok().build();
     }
 }
