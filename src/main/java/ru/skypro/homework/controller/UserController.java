@@ -12,12 +12,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.CreateUser;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.impl.UserServiceImpl;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -31,22 +33,22 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Operation(summary = "addUser", description = "Добавление пользователя", tags = {"Пользователи"})
+    @Operation(summary = "setPassword", description = "Установка пароля", tags = {"Пользователи"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = CreateUser.class))),
-            @ApiResponse(responseCode = "201", description = "Created"),
+                    schema = @Schema(implementation = NewPassword.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")})
-    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE},
+    @PostMapping(value = "set_password",
+            produces = {MediaType.APPLICATION_JSON_VALUE},
             consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CreateUser> addUserUsingPOST(CreateUser body) {
-        return ResponseEntity.ok(userService.addUser(body));
+    public ResponseEntity<NewPassword> setPassword(NewPassword body) {
+        return ResponseEntity.ok(userService.setPassword(body));
     }
 
-    @Operation(summary = "getUsers", description = "Получение пользователей", tags = {"Пользователи"})
+    @Operation(summary = "getUser", description = "Получение пользователя", tags = {"Пользователи"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -54,9 +56,8 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")})
-    @GetMapping(value = "me",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<User> getUsersUsingGET() {
+    @GetMapping(value = "me", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<User> getUser() {
         return ResponseEntity.ok(userService.getUsers());
     }
 
@@ -67,41 +68,20 @@ public class UserController {
                     schema = @Schema(implementation = User.class))),
             @ApiResponse(responseCode = "204", description = "No Content"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "403", description = "Forbidden")})
-    @PatchMapping(value = "me",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<User> updateUserUsingPATCH(
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not Found")})
+    @PatchMapping(value = "me", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<User> updateUser(
             @Parameter(in = ParameterIn.DEFAULT, required = true, schema = @Schema()) @Valid @RequestBody User body) {
         return ResponseEntity.ok(userService.updateUser(body));
     }
 
-    @Operation(summary = "setPassword", description = "Установка пароля", tags = {"Пользователи"})
+    @Operation(summary = "updateUserImage", description = "UpdateUserImage", tags = "Пользователи")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = NewPassword.class))),
-            @ApiResponse(responseCode = "201", description = "Created"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "Not Found")})
-    @PostMapping(value = "set_password",
-            produces = {MediaType.APPLICATION_JSON_VALUE},
-            consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<NewPassword> setPasswordUsingPOST(NewPassword body) {
-        return ResponseEntity.ok(userService.setPassword(body));
-    }
-
-    @Operation(summary = "getUser", description = "Получение пользователя по ID", tags = {"Пользователи"})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = User.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found")})
-    @GetMapping(value = "{id}",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<User> getUserUsingGET(@PathVariable Integer id) {
-        return ResponseEntity.ok(userService.getUser(id));
+    @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Void> updateUserImage(MultipartFile image) throws IOException {
+        return userService.updateUserImage(image);
     }
 }

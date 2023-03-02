@@ -1,7 +1,8 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.CreateUser;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.User;
 
@@ -9,12 +10,12 @@ import ru.skypro.homework.dto.User;
 public class UserServiceImpl {
 
     /**
-     * Метод добавления пользователя
+     * Метод установки пароля
      *
-     * @param user - пользователь на добавление
-     * @return возвращает добавленного пользователя
+     * @param password - новый пароль
+     * @return возвращает установленный пароль
      */
-    public CreateUser addUser(CreateUser user) {
+    public NewPassword setPassword(NewPassword password) {
         return null;
     }
 
@@ -36,22 +37,9 @@ public class UserServiceImpl {
     }
 
     /**
-     * Метод установки пароля
-     *
-     * @param password - новый пароль
-     * @return возвращает установленный пароль
+     * Метод обновления изображения пользователя
      */
-    public NewPassword setPassword(NewPassword password) {
-        return null;
-    }
-
-    /**
-     * Метод получения пользователя
-     *
-     * @param id - ID пользователя
-     * @return возвращает найденного пользователя
-     */
-    public User getUser(Integer id) {
+    public ResponseEntity<Void> updateUserImage(MultipartFile image) {
         return null;
     }
 }
