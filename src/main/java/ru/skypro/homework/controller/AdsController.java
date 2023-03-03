@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.AdsComment;
 import ru.skypro.homework.dto.ResponseWrapperAds;
@@ -25,10 +26,7 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = ResponseWrapperAds.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
+                    schema = @Schema(implementation = ResponseWrapperAds.class)))
     })
     @GetMapping
     public ResponseEntity<ResponseWrapperAds> getAllAds() {
@@ -40,8 +38,8 @@ public class AdsController {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = Ads.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "201", description = "Created"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
@@ -57,7 +55,6 @@ public class AdsController {
                     schema = @Schema(implementation = ResponseWrapperAds.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @GetMapping("/me")
     public ResponseEntity<ResponseWrapperAds> getAllMeAds() {
@@ -69,12 +66,10 @@ public class AdsController {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ResponseWrapperAdsComment.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @GetMapping("/{ad_pk}/comment")
-    public ResponseEntity<ResponseWrapperAdsComment> getAdsComment(@PathVariable Integer ad_pk) {
+    @GetMapping("/{id}/comment")
+    public ResponseEntity<ResponseWrapperAdsComment> getAdsComment(@PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
 
@@ -88,9 +83,9 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @PostMapping("/{ad_pk}/comment")
-    public ResponseEntity<AdsComment> addAdsComment(@PathVariable Integer ad_pk,
-                                @RequestBody AdsComment comment) {
+    @PostMapping("/{id}/comment")
+    public ResponseEntity<AdsComment> addAdsComment(@PathVariable Integer id,
+                                                    @RequestBody AdsComment comment) {
         return ResponseEntity.ok().build();
     }
 
@@ -103,9 +98,22 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @DeleteMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsComment> deleteAdsComment(@PathVariable Integer ad_pk,
-                                   @PathVariable Integer id) {
+    @DeleteMapping("/{id}/comment/{commentId}")
+    public ResponseEntity<AdsComment> deleteAdsComment(@PathVariable Integer id,
+                                                       @PathVariable Integer commentId) {
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "getAdsComment", tags = {"Объявления"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = AdsComment.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found")
+    })
+    @GetMapping("/{id}/comment/{commentId}")
+    public ResponseEntity<AdsComment> getAdsComment(@PathVariable Integer id,
+                                                    @PathVariable Integer commentId) {
         return ResponseEntity.ok().build();
     }
 
@@ -118,9 +126,9 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @GetMapping("/{ad_pk}/comment/{id}")
-    public ResponseEntity<AdsComment> getAdsComment(@PathVariable Integer ad_pk,
-                                   @PathVariable Integer id) {
+    @PatchMapping("/{id}/comment/{commentId}")
+    public ResponseEntity<AdsComment> updateComments(@PathVariable Integer id,
+                                                     @PathVariable Integer commentId) {
         return ResponseEntity.ok().build();
     }
 
@@ -133,8 +141,8 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Ads> removeAds(@PathVariable Integer id) {
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Ads> removeAds(@PathVariable Integer commentId) {
         return ResponseEntity.ok().build();
     }
 
@@ -144,11 +152,10 @@ public class AdsController {
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = Ads.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
+            @ApiResponse(responseCode = "403", description = "Forbidden")
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<Ads> getAds(@PathVariable Integer id) {
+    @GetMapping("/{commentId}")
+    public ResponseEntity<Ads> getAds(@PathVariable Integer commentId) {
         return ResponseEntity.ok().build();
     }
 
@@ -162,9 +169,22 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
-    @PatchMapping("/{id}")
-    public ResponseEntity<Ads> updateAds(@PathVariable Integer id,
-                                            @RequestBody Ads ads) {
+    @PatchMapping("/{commentId}")
+    public ResponseEntity<Ads> updateAds(@PathVariable Integer commentId,
+                                         @RequestBody Ads ads) {
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "updateAdsImage", tags = {"Объявления"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(
+                    mediaType = MediaType.IMAGE_PNG_VALUE
+            )),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @PatchMapping(value = "/{commentId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateAdsImage(@PathVariable Integer commentId,
+                                              @RequestPart MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 }
