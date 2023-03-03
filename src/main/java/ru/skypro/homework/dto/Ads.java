@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class Ads {
-   private Integer id; // pk
+    private Integer id;
     private String image;
-    private Integer author; // это author(user)_id
+    private Integer author;
     private Integer price;
     private String title;
 }
