@@ -58,19 +58,19 @@ public class AdsController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "getAdsComments", tags = {"Объявления"})
+    @Operation(summary = "getComments", tags = {"Объявления"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ResponseWrapperComment.class))),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @GetMapping("/{id}/comment")
+    @GetMapping("/{id}/comments")
     public ResponseEntity<ResponseWrapperComment> getComment(@PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "addAdsComments", tags = {"Объявления"})
+    @Operation(summary = "addComments", tags = {"Объявления"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -80,13 +80,13 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @PostMapping("/{id}/comment")
-    public ResponseEntity<Comment> addAdsComment(@PathVariable Integer id,
-                                                    @RequestBody Comment comment) {
+    @PostMapping("/{id}/comments")
+    public ResponseEntity<Comment> addComment(@PathVariable Integer id,
+                                                    @RequestBody Comment comments) {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "deleteAdsComment", tags = {"Объявления"})
+    @Operation(summary = "deleteComment", tags = {"Объявления"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -95,26 +95,26 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @DeleteMapping("/{id}/comment/{commentId}")
-    public ResponseEntity<Comment> deleteAdsComment(@PathVariable Integer id,
+    @DeleteMapping("/{id}/comments/{commentId}")
+    public ResponseEntity<Comment> deleteComment(@PathVariable Integer id,
                                                        @PathVariable Integer commentId) {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "getAdsComment", tags = {"Объявления"})
+    @Operation(summary = "getComment", tags = {"Объявления"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = Comment.class))),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @GetMapping("/{id}/comment/{commentId}")
-    public ResponseEntity<Comment> getAdsComment(@PathVariable Integer id,
+    @GetMapping("/{id}/comments/{commentId}")
+    public ResponseEntity<Comment> getComment(@PathVariable Integer id,
                                                     @PathVariable Integer commentId) {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "getAdsComment", tags = {"Объявления"})
+    @Operation(summary = "getComment", tags = {"Объявления"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -123,7 +123,7 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @PatchMapping("/{id}/comment/{commentId}")
+    @PatchMapping("/{id}/comments/{commentId}")
     public ResponseEntity<Comment> updateComments(@PathVariable Integer id,
                                                      @PathVariable Integer commentId) {
         return ResponseEntity.ok().build();
