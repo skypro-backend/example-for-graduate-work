@@ -9,4 +9,6 @@ public class User {
     private String lastName;
     private String phone;
     private Integer id;
+    private String regDate;
+    private String image;
 }
