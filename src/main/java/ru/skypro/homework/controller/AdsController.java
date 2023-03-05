@@ -41,7 +41,8 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @PostMapping
-    public ResponseEntity<Ads> addAds(@RequestBody Ads ads) {
+    public ResponseEntity<Ads> addAds(@RequestBody Ads ads,
+                                      @RequestPart MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 
@@ -82,7 +83,7 @@ public class AdsController {
     })
     @PostMapping("/{id}/comments")
     public ResponseEntity<Comment> addComment(@PathVariable Integer id,
-                                                    @RequestBody Comment comments) {
+                                              @RequestBody Comment comments) {
         return ResponseEntity.ok().build();
     }
 
@@ -97,7 +98,7 @@ public class AdsController {
     })
     @DeleteMapping("/{id}/comments/{commentId}")
     public ResponseEntity<Comment> deleteComment(@PathVariable Integer id,
-                                                       @PathVariable Integer commentId) {
+                                                 @PathVariable Integer commentId) {
         return ResponseEntity.ok().build();
     }
 
@@ -110,7 +111,7 @@ public class AdsController {
     })
     @GetMapping("/{id}/comments/{commentId}")
     public ResponseEntity<Comment> getComment(@PathVariable Integer id,
-                                                    @PathVariable Integer commentId) {
+                                              @PathVariable Integer commentId) {
         return ResponseEntity.ok().build();
     }
 
@@ -125,7 +126,8 @@ public class AdsController {
     })
     @PatchMapping("/{id}/comments/{commentId}")
     public ResponseEntity<Comment> updateComments(@PathVariable Integer id,
-                                                     @PathVariable Integer commentId) {
+                                                  @PathVariable Integer commentId,
+                                                  @RequestBody Comment comment) {
         return ResponseEntity.ok().build();
     }
 
@@ -138,8 +140,8 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @DeleteMapping("/{commentId}")
-    public ResponseEntity<Ads> removeAds(@PathVariable Integer commentId) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Ads> removeAds(@PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
 
@@ -151,8 +153,8 @@ public class AdsController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden")
     })
-    @GetMapping("/{commentId}")
-    public ResponseEntity<Ads> getAds(@PathVariable Integer commentId) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Ads> getAds(@PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
 
@@ -166,8 +168,8 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
-    @PatchMapping("/{commentId}")
-    public ResponseEntity<Ads> updateAds(@PathVariable Integer commentId,
+    @PatchMapping("/{id}")
+    public ResponseEntity<Ads> updateAds(@PathVariable Integer id,
                                          @RequestBody Ads ads) {
         return ResponseEntity.ok().build();
     }
@@ -175,13 +177,13 @@ public class AdsController {
     @Operation(summary = "updateAdsImage", tags = {"Объявления"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
-                    mediaType = MediaType.IMAGE_PNG_VALUE
-            )),
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Ads.class))),
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
-    @PatchMapping(value = "/{commentId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> updateAdsImage(@PathVariable Integer commentId,
-                                              @RequestPart MultipartFile image) {
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateAdsImage(@PathVariable Integer id,
+                                                 @RequestPart MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 }
