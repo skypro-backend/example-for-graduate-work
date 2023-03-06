@@ -1,19 +1,5 @@
 package ru.skypro.homework.service;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,16 +20,20 @@ import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exception.ElemNotFound;
-import ru.skypro.homework.mapper.AdMapper;
-import ru.skypro.homework.mapper.AdMapperImpl;
-import ru.skypro.homework.mapper.AdsOtherMapper;
-import ru.skypro.homework.mapper.AdsOtherMapperImpl;
-import ru.skypro.homework.mapper.CommentMapper;
-import ru.skypro.homework.mapper.CommentMapperImpl;
+import ru.skypro.homework.mapper.*;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
 import ru.skypro.homework.service.impl.SecurityService;
+
+import java.time.LocalDateTime;
+import java.util.*;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AdServiceTest1 {
@@ -120,7 +110,7 @@ public class AdServiceTest1 {
     authentication.setAuthenticated(true);
     FullAds fullAds = adsOtherMapper.toFullAds(getAdEntity(1));
     when(adsRepository.findById(1)).thenReturn(Optional.of(getAdEntity(1)));
-    lenient().when(securityService.isAdsUpdateAvailable(any(Authentication.class),any(AdEntity.class))).thenReturn(true);
+    lenient().when(securityService.isAdsUpdateAvailable(any(Authentication.class),anyInt())).thenReturn(true);
     assertThat(adsService.getAdById(1,authentication)).isEqualTo(fullAds);
     verify(adsRepository,times(1)).findById(any());
   }
