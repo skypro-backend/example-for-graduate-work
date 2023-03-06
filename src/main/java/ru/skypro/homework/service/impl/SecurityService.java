@@ -9,10 +9,12 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exception.ElemNotFound;
+import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.UserRepository;
 
 @Service
 public class SecurityService {
+    AdsRepository adsRepository;
 
     private UserRepository userRepository;
 
@@ -27,6 +29,12 @@ public class SecurityService {
     public boolean checkAuthor(int id, String email) {
         UserEntity user = userRepository.findByEmail(email).orElseThrow(ElemNotFound::new);
         return checkAuthor(id, user);
+    }
+    /** Проверка авторства объявления по Authentication */
+    public boolean checkAuthorEmailAndAdsId(int id, Authentication authentication) {
+        UserEntity user = userRepository.findByEmail(authentication.getName()).orElseThrow(ElemNotFound::new);
+        AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
+        return user.getId()==adEntity.getAuthor().getId();
     }
     /** Проверка пользователя на электронную почту */
     public boolean isAuthorAuthenticated(String email, Authentication authentication) {
