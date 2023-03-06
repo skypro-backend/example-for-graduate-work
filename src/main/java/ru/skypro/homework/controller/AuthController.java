@@ -1,8 +1,13 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +25,19 @@ import static ru.skypro.homework.dto.Role.USER;
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
-
     private final AuthService authService;
-
+    @Operation (summary = "login", description = "Авторизация пользователя", tags = {"Авторизация"},
+              requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                        description = "Логин и пароль",
+                        content = @Content(
+                                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                schema = @Schema(implementation = LoginReq.class))),
+              responses = {
+                        @ApiResponse(responseCode = "200", description = "OK"),
+                        @ApiResponse(responseCode = "404", description = "Not Found"),
+                        @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                        @ApiResponse(responseCode = "403", description = "Forbidden")
+            })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReq req) {
         if (authService.login(req.getUsername(), req.getPassword())) {
@@ -31,6 +46,18 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+    @Operation(summary = "register", description = "Регистрация пользователя", tags = {"Авторизация"},
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                        description = "Данные пользователя для регистрации",
+                        content = @Content(
+                                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                schema = @Schema(implementation = RegisterReq.class))),
+            responses = {
+                        @ApiResponse(responseCode = "404", description = "Not Found"),
+                        @ApiResponse(responseCode = "201", description = "Created"),
+                        @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                        @ApiResponse(responseCode = "403", description = "Forbidden")
+            })
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterReq req) {
