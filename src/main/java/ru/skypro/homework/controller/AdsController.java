@@ -40,8 +40,8 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @PostMapping
-    public ResponseEntity<Ads> addAds(@RequestBody Ads ads,
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Ads> addAds(@RequestPart Ads properties,
                                       @RequestPart MultipartFile image) {
         return ResponseEntity.ok().build();
     }
