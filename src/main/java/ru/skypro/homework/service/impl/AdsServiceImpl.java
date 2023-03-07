@@ -66,7 +66,7 @@ public class AdsServiceImpl implements AdsService {
   private UserMapper userMapper;
   private UserService userService;
   private ImageMapper imageMapper;
-  private AdsRepository adsRepository;
+  private AdsRepository adsRepository ;
   private CommentRepository commentRepository;
   private UserRepository userRepository;
   private AdMapper adMapper;
@@ -340,6 +340,7 @@ public class AdsServiceImpl implements AdsService {
  * @param id */
   @Override
   public FullAds getAdById(int id, Authentication authentication) {
+    log.info(FormLogInfo.getInfo());
     AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
     if ( !securityService.checkAuthorEmailAndAdsId(id, authentication)) {
       throw new SecurityAccessException();
