@@ -16,11 +16,13 @@ import ru.skypro.homework.repository.UserRepository;
 public class SecurityService {
     AdsRepository adsRepository;
 
-    private UserRepository userRepository;
-
-    public SecurityService(UserRepository userRepository) {
+    public SecurityService(AdsRepository adsRepository, UserRepository userRepository) {
+        this.adsRepository = adsRepository;
         this.userRepository = userRepository;
     }
+
+    private UserRepository userRepository;
+
     /** Проверка пользователя на авторство */
     public boolean checkAuthor(int id, UserEntity user) {
         return id == user.getId();
