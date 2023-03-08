@@ -122,6 +122,7 @@ public class AdServiceTest1 {
     FullAds fullAds = adsOtherMapper.toFullAds(getAdEntity(1));
     when(adsRepository.findById(idTest)).thenReturn(Optional.of(getAdEntity(1)));
     when(securityService.checkAuthorEmailAndAdsId(idTest,authentication)).thenReturn(true);
+    when(securityService.checkAuthorRoleFromAuthentication(authentication)).thenReturn(true);
     assertThat(adsService.getAdById(idTest,authentication)).isEqualTo(fullAds);
     verify(adsRepository,times(1)).findById(any());
   }
