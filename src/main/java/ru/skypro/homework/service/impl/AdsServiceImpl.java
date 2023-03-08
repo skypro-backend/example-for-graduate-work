@@ -341,9 +341,6 @@ public class AdsServiceImpl implements AdsService {
   @Override
   public FullAds getAdById(int id, Authentication authentication) {
     log.info(FormLogInfo.getInfo());
-    if ( !securityService.checkAuthorEmailAndAdsId(id, authentication)||!securityService.checkAuthorRoleFromAuthentication(authentication)) {
-      throw new SecurityAccessException();
-    }
     return adsOtherMapper.toFullAds(adsRepository.findById(id).orElseThrow(ElemNotFound::new));
   }
 
