@@ -38,6 +38,11 @@ public class SecurityService {
         AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
         return user.getId()==adEntity.getAuthor().getId();
     }
+    /** Проверка роли администратора по Authentication */
+    public boolean checkAuthorRoleFromAuthentication(Authentication authentication) {
+        UserEntity user = userRepository.findByEmail(authentication.getName()).orElseThrow(ElemNotFound::new);
+        return isAdmin(user);
+    }
     /** Проверка пользователя на электронную почту */
     public boolean isAuthorAuthenticated(String email, Authentication authentication) {
         return authentication.getName().equals(email) && authentication.isAuthenticated();
