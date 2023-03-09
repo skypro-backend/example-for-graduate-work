@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,8 +57,8 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")})
     @GetMapping(value = "me", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<User> getUser() {
-        return ResponseEntity.ok(userService.getUsers());
+    public ResponseEntity<User> getUser(Authentication authentication) {
+        return ResponseEntity.ok(userService.getUsers(authentication.getName()));
     }
 
     @Operation(summary = "updateUser", description = "Изменение пользователя", tags = {"Пользователи"})
@@ -70,9 +71,9 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")})
     @PatchMapping(value = "me", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<User> updateUser(
+    public ResponseEntity<User> updateUser(Authentication authentication,
             @Parameter(in = ParameterIn.DEFAULT, required = true, schema = @Schema()) @Valid @RequestBody User body) {
-        return ResponseEntity.ok(userService.updateUser(body));
+        return ResponseEntity.ok(userService.updateUser(authentication.getName(), body));
     }
 
     @Operation(summary = "updateUserImage", description = "UpdateUserImage", tags = "Пользователи")
@@ -80,7 +81,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "Not Found")})
     @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Void> updateUserImage(MultipartFile image) throws IOException {
-        return userService.updateUserImage(image);
+    public ResponseEntity<Void> updateUserImage(Authentication authentication, MultipartFile image) throws IOException {
+        return userService.updateUserImage(authentication.getName(), image);
     }
 }
