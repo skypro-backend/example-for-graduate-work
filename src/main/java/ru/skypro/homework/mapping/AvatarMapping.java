@@ -11,14 +11,14 @@ public interface AvatarMapping {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "path", target = "path")
-    AvatarEntity toModel(Avatar dto);
+    AvatarEntity toEntity(Avatar dto);
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "path", target = "path")
     Avatar toDto(AvatarEntity entity);
 
-    List<Avatar> toAvatarDtoList(List<AvatarEntity> entityList);
+    List<Avatar> toDtoList(List<AvatarEntity> entityList);
 
-    List<AvatarEntity> toAvatarEntityList(List<Avatar> dtoList);
+    List<AvatarEntity> toEntityList(List<Avatar> dtoList);
 }
