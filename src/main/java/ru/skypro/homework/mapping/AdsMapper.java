@@ -11,13 +11,13 @@ import java.util.List;
 public interface AdsMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(target = "description", ignore = true)
-    @Mapping(target = "user", ignore = true)
-  //  @Mapping(target = "imageEntity", )
+    @Mapping(target = "author", source = "author")
+    @Mapping(target = "imageId", source = "imageId")
     AdsEntity toModel(Ads dto);
 
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "user", target = "author")
-    // @Mapping(target = "image", )
+    @Mapping(source = "author", target = "author")
+    @Mapping(target = "imageId", source = "imageId")
     Ads toDto(AdsEntity entity);
 
     List<Ads> toAdsDtoList(List<AdsEntity> entityList);
