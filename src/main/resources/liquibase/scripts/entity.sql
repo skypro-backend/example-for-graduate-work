@@ -1,5 +1,15 @@
 -- liquibase formatted sql
 
+--changeset mara:1
+
+create table ads(
+    id          BIGSERIAL PRIMARY KEY,
+    title       TEXT,
+    price       INTEGER,
+    description TEXT,
+    imageId     INTEGER
+);
+
 -- changeSet andrew:2
 CREATE TABLE users
 (
@@ -13,3 +23,7 @@ CREATE TABLE users
     password   TEXT,
     username   TEXT
 );
+
+--changeset mara:2
+ALTER TABLE ads
+ADD COLUMN author_id BIGINT REFERENCES users(id);

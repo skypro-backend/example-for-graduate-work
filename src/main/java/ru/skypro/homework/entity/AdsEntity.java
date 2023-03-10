@@ -1,28 +1,24 @@
 package ru.skypro.homework.entity;
 
 import lombok.Data;
-import org.hibernate.annotations.Table;
-import ru.skypro.homework.dto.Comment;
-
 import javax.persistence.*;
-import java.util.List;
-
 @Entity
-// @Table(name = "Ads")
 @Data
+@Table(name = "ads")
+
 public class AdsEntity {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+        private Integer id;
         private String title;
-        private String image;
+        private Integer imageId;
         private int price;
         private String description;
 
-        // @ManyToOne
-        // @JoinColumn(name = "user_id")
-        private UserEntity user; // когда присоединим user
+      //  private Integer authorId;
+       @ManyToOne
+       @JoinColumn(name = "author_id")
+       private UserEntity author;
        // @OneToMany(mappedBy = "commentEntity")
-       // private List<Comment> results; // присоединение comment
-
+       // private List<CommentEntity> results; // присоединение comment
 }
