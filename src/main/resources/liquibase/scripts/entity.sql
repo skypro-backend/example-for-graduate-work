@@ -13,3 +13,12 @@ CREATE TABLE users
     password   TEXT,
     username   TEXT
 );
+
+-- changeSet igor:1
+Create TABLE comment
+(
+    id SERIAL NOT NULL PRIMARY KEY,
+    author INTEGER,
+    text TEXT,
+    createdAt TEXT
+);
