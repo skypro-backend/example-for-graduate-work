@@ -3,10 +3,7 @@ package ru.skypro.homework.service.impl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.entity.AdEntity;
-import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exception.ElemNotFound;
 import ru.skypro.homework.repository.AdsRepository;
@@ -76,31 +73,35 @@ public class SecurityService {
                 authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
     /** Проверка законности доступа к методам комментариям */
-    public boolean isCommentUpdateAvailable(Authentication authentication, CommentEntity commentEntity,
-                                            CommentDTO commentDTO) {
-        if (!authentication.isAuthenticated()) {
-            return false;
-        }
-
-        if (isAdmin(authentication)) {
+    public boolean isCommentUpdateAvailable(Authentication authentication, int commentEntityAuthorId,
+                                            int commentDTOAuthorId) {
+        if (isUpdateAvailable(authentication)) {
             return true;
         }
-        if (checkAuthor(commentEntity.getAuthor().getId(), authentication.getName()) &&
-                commentEntity.getAuthor().getId() == commentDTO.getAuthor()) {
+        if (checkAuthor(commentEntityAuthorId, authentication.getName()) &&
+                commentEntityAuthorId == commentDTOAuthorId) {
             return true;
         }
         return false;
     }
 
     /** Проверка законности доступа к методам объявлений */
-    public boolean isAdsUpdateAvailable(Authentication authentication, AdEntity adEntity) {
+    public boolean isAdsUpdateAvailable(Authentication authentication, int adEntityAuthorId) {
+        if (isUpdateAvailable(authentication)) {
+            return true;
+        }
+        if (checkAuthor(adEntityAuthorId, authentication.getName())) {
+            return true;
+        }
+        return false;
+    }
+
+    /** Проверка возможности обновления */
+    private boolean isUpdateAvailable(Authentication authentication) {
         if (!authentication.isAuthenticated()) {
             return false;
         }
         if (isAdmin(authentication)) {
-            return true;
-        }
-        if (checkAuthor(adEntity.getAuthor().getId(), authentication.getName())) {
             return true;
         }
         return false;

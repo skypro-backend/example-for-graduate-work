@@ -65,7 +65,7 @@ class AdsServiceImplTest {
         Authentication authentication = getTestAuthentication();
 
         lenient().when(securityService.isCommentUpdateAvailable(
-                any(Authentication.class),any(CommentEntity.class),any(CommentDTO.class))).thenReturn(true);
+                any(Authentication.class),anyInt(),anyInt())).thenReturn(true);
         lenient().when(commentRepository.findByIdAndAd_Id(sourceCommentId, sourceAdsId))
                 .thenReturn(Optional.of(getCommentEntity()));
         lenient().when(userRepository.findById(3)).thenReturn(Optional.of(getNewCommentAuthor()));
@@ -91,7 +91,7 @@ class AdsServiceImplTest {
                 .thenReturn(Optional.of(getCommentEntity()));
         lenient().when(userRepository.findById(anyInt())).thenThrow(ElemNotFound.class);
         lenient().when(securityService.isCommentUpdateAvailable(any(Authentication.class),
-                any(CommentEntity.class), any(CommentDTO.class))).thenReturn(true);
+                anyInt(), anyInt())).thenReturn(true);
 
         assertThrows(ElemNotFound.class, () -> out.updateComments(1,1, getCommentDTO(), authentication));
     }
@@ -124,7 +124,7 @@ class AdsServiceImplTest {
         lenient().when(adsRepository.findById(anyInt())).thenReturn(Optional.of(getAdEntity()));
         lenient().when(adsRepository.save(any(AdEntity.class))).thenReturn(getResultAdEntity());
         lenient().when(adMapper.toDTO(getResultAdEntity())).thenReturn(adImplMapper.toDTO(getResultAdEntity()));
-        lenient().when(securityService.isAdsUpdateAvailable(any(Authentication.class),any(AdEntity.class))).thenReturn(true);
+        lenient().when(securityService.isAdsUpdateAvailable(any(Authentication.class),anyInt())).thenReturn(true);
         AdsDTO excepted = out.updateAds(sourceId, sourceCreateAds, authentication);
         AdsDTO actual = getResultAdsDTO();
 
