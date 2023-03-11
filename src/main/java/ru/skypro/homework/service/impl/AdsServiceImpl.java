@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ads;
@@ -28,14 +27,13 @@ public class AdsServiceImpl implements AdsService {
     private final FullAdsMapper fullAdsMapper;
 
     private final AdsRepository adsRepository;
-    private final UserRepository userRepository;
+    private final UserServiceImpl userServiceImpl;
 
     @Override
-    public Ads addAds(CreateAds properties, MultipartFile image, Authentication authentication) {
+    public Ads addAds(CreateAds properties, MultipartFile image, String username) {
 
         // mapping from dto to entity
-        UserEntity author = userRepository.findUserEntityByUsername(authentication.getName())
-                .orElseThrow(() -> new UserNotFoundException(authentication.getName()));
+        UserEntity author = userServiceImpl.getUserByUserName(username);
         AdsEntity adsEntity = createAdsMapper.toModel(properties);
         adsEntity.setAuthor(author);
         //TODO картинка
@@ -49,7 +47,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ads updateAds(Integer id, CreateAds createAds, Authentication authentication) {
+    public Ads updateAds(Integer id, CreateAds createAds) {
         AdsEntity adsEntity = adsRepository.findById(id).orElseThrow(() -> new AdsNotFoundException(id));
         adsEntity.setDescription(createAds.getDescription());
         adsEntity.setTitle(createAds.getTitle());
@@ -73,10 +71,9 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public ResponseWrapperAds getAdsMe(Authentication authentication) {
+    public ResponseWrapperAds getAdsMe(String username) {
 
-        UserEntity author = userRepository.findUserEntityByUsername(authentication.getName())
-                .orElseThrow(() -> new UserNotFoundException(authentication.getName()));
+        UserEntity author = userServiceImpl.getUserByUserName(username);;
         ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
         responseWrapperAds.setResults(adsMapper.toAdsDtoList(adsRepository.findAdsEntityByAuthor_Id(author.getId())));
         responseWrapperAds.setCount(responseWrapperAds.getResults().size());

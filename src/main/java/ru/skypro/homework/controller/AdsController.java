@@ -46,7 +46,7 @@ public class AdsController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Ads> addAds(@RequestPart CreateAds properties,
                                       @RequestPart MultipartFile image, Authentication authentication) {
-        return ResponseEntity.ok(adsServiceImpl.addAds(properties, image, authentication));
+        return ResponseEntity.ok(adsServiceImpl.addAds(properties, image, authentication.getName()));
     }
 
     @Operation(summary = "getAdsMe", tags = {"Объявления"})
@@ -59,7 +59,7 @@ public class AdsController {
     })
     @GetMapping("/me")
     public ResponseEntity<ResponseWrapperAds> getAllMeAds(Authentication authentication) {
-        return ResponseEntity.ok(adsServiceImpl.getAdsMe(authentication));
+        return ResponseEntity.ok(adsServiceImpl.getAdsMe(authentication.getName()));
     }
 
     @Operation(summary = "getComments", tags = {"Объявления"})
@@ -156,7 +156,7 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<FullAds> getFullAd(@PathVariable Integer id, Authentication authentication) {
+    public ResponseEntity<FullAds> getFullAd(@PathVariable Integer id) {
         return ResponseEntity.ok(adsServiceImpl.getFullAds(id));
     }
 
@@ -172,8 +172,8 @@ public class AdsController {
     })
     @PatchMapping("/{id}")
     public ResponseEntity<Ads> updateAds(@PathVariable Integer id,
-                                         @RequestBody CreateAds createAds, Authentication authentication) {
-        return ResponseEntity.ok(adsServiceImpl.updateAds(id, createAds, authentication));
+                                         @RequestBody CreateAds createAds) {
+        return ResponseEntity.ok(adsServiceImpl.updateAds(id, createAds));
     }
 
     @Operation(summary = "updateAdsImage", tags = {"Объявления"}) // пока не сделала

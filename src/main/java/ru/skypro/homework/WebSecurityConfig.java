@@ -41,7 +41,7 @@ public class WebSecurityConfig {
                                 .mvcMatchers("/ads/**", "/users/**").authenticated()
 
                 )
-                .cors().disable() // вот тут Дима вроде говорил надо изменить на and
+                .cors().and()
                 .httpBasic(withDefaults());
         return http.build();
     }

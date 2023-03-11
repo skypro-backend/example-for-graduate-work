@@ -20,10 +20,10 @@ public interface AdsService {
      *
      * @param properties     {@link CreateAds}
      * @param image
-     * @param authentication
+     * @param username
      * @return Созданное объявление
      */
-    Ads addAds(CreateAds properties, MultipartFile image, Authentication authentication);
+    Ads addAds(CreateAds properties, MultipartFile image, String username);
 
     /**
      * Удаляет запись из БД по id
@@ -40,7 +40,7 @@ public interface AdsService {
      * @param createAds
      * @return
      */
-    Ads updateAds(Integer id, CreateAds createAds, Authentication authentication);
+    Ads updateAds(Integer id, CreateAds createAds);
 
     /**
      * Получает объявление по id
@@ -60,9 +60,9 @@ public interface AdsService {
     /**
      * Возвращает объявления конкретного пользователя
      *
-     * @param authentication
+     * @param username
      * @return
      */
-    ResponseWrapperAds getAdsMe(Authentication authentication);
+    ResponseWrapperAds getAdsMe(String username);
 }
 
