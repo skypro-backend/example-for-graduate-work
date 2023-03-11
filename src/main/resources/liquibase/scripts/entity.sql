@@ -1,15 +1,5 @@
 -- liquibase formatted sql
 
---changeset mara:1
-
-create table ads(
-    id          BIGSERIAL PRIMARY KEY,
-    title       TEXT,
-    price       INTEGER,
-    description TEXT,
-    imageId     INTEGER
-);
-
 -- changeSet andrew:2
 CREATE TABLE users
 (
@@ -24,22 +14,16 @@ CREATE TABLE users
     username   TEXT
 );
 
--- changeSet martell:3
-CREATE TABLE avatars
+-- changeSet igor:1
+Create TABLE comment
 (
-    id         SERIAL PRIMARY KEY,
-    user_id    INTEGER,
-    path       STRING
+    id SERIAL NOT NULL PRIMARY KEY,
+    author INTEGER,
+    text TEXT,
+    createdAt TEXT
 );
+-- changeSet igor:2
+ALTER TABLE comment MODIFY COLUMN createdAt DATE;
 
--- changeSet martell:4
-CREATE TABLE posters
-(
-    id         SERIAL PRIMARY KEY,
-    ads_id     INTEGER,
-    path       STRING
-);
-
---changeset mara:5
-ALTER TABLE ads
-ADD COLUMN author_id BIGINT REFERENCES users(id);
+-- changeSet igor:3
+ALTER TABLE comment DROP author;

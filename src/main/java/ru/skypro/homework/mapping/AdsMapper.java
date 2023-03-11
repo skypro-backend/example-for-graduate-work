@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AdsMapper {
-    @Mapping(source = "id", target = "id")
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "description", ignore = true)
     @Mapping(target = "author.id", source = "author")
     @Mapping(target = "imageId", source = "imageId")
