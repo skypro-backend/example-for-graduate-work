@@ -15,9 +15,9 @@ public interface AdsMapper {
     @Mapping(target = "imageId", source = "imageId")
     AdsEntity toModel(Ads dto);
 
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "author", expression = "java(entity.getId())")
-    @Mapping(target = "imageId", source = "imageId")
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "author.id", target = "author")
+    @Mapping(source = "imageId", target = "imageId")
     Ads toDto(AdsEntity entity);
 
     List<Ads> toAdsDtoList(List<AdsEntity> entityList);
