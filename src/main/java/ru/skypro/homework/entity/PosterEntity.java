@@ -17,9 +17,9 @@ import javax.persistence.Id;
 public class PosterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    private Long adsId;
+    private Integer adsId;
 
     private String path;
 }

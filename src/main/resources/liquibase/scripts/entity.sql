@@ -24,3 +24,19 @@ create table ads
     image_id    INTEGER,
     author_id   INTEGER REFERENCES users (id)
 );
+
+-- changeSet martell:3
+CREATE TABLE avatars
+(
+    id         SERIAL PRIMARY KEY,
+    user_id    INTEGER,
+    path       STRING
+);
+
+-- changeSet martell:4
+CREATE TABLE posters
+(
+    id         SERIAL PRIMARY KEY,
+    ads_id     INTEGER,
+    path       STRING
+);
