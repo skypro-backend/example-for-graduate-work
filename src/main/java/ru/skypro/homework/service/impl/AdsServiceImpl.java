@@ -12,8 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -79,9 +77,9 @@ public class AdsServiceImpl implements AdsService {
 
 
   public AdsServiceImpl(AdsRepository adsRepository, CommentRepository commentRepository,
-                        UserRepository userRepository, AdMapper adMapper, CommentMapper commentMapper,
-                        ImageRepository imageRepository, ImageMapper imageMapper, UserService userService,
-                        UserMapper userMapper, AdsOtherMapper adsOtherMapper, SecurityService securityService) {
+      UserRepository userRepository, AdMapper adMapper, CommentMapper commentMapper,
+      ImageRepository imageRepository, ImageMapper imageMapper, UserService userService,
+      UserMapper userMapper, AdsOtherMapper adsOtherMapper, SecurityService securityService) {
     this.adsRepository = adsRepository;
     this.commentRepository = commentRepository;
     this.userRepository = userRepository;
@@ -146,13 +144,17 @@ public class AdsServiceImpl implements AdsService {
     log.info(FormLogInfo.getInfo());
     AdEntity adEntity = adsRepository.findById(pk).orElseThrow(ElemNotFound::new);
     CommentEntity comment = commentRepository.findById(id).orElseThrow(ElemNotFound::new);
-    if (securityService.isAdmin(authentication) || Objects.equals(adEntity.getAuthor().getId(), comment.getAuthor().getId())) {
+    if (securityService.isAdmin(authentication) || Objects.equals(adEntity.getAuthor().getId(),
+        comment.getAuthor().getId())) {
       commentRepository.deleteById(comment.getId());
     } else {
       throw new ElemNotFound();
     }
   }
-/** Получить все объявления */
+
+  /**
+   * Получить все объявления
+   */
   @Override
   public ResponseWrapperAds getAds() {
     log.info(FormLogInfo.getInfo());
@@ -174,50 +176,46 @@ public class AdsServiceImpl implements AdsService {
   @Override
   public AdsDTO addAds(CreateAds createAds, MultipartFile multipartFile,
       Authentication authentication) throws IOException {
+
     log.info(FormLogInfo.getInfo());
-    if(createAds == null || multipartFile == null){
+
+    if (createAds == null || multipartFile == null) {
       log.error(FormLogInfo.getException());
       throw new IllegalArgumentException();
     }
 
-    Path filePath = Path.of(imageAdsDir,
-        getFileUniqueName() + "." + getExtension(
-            Objects.requireNonNull(multipartFile.getOriginalFilename())));
+    UserDTO userDTO = userService.getUser(authentication);
+    int count = adsRepository.findAll().size();
+    Path filePath = getPath(imageAdsDir, count);
+
+    String linkToGetImage = getLinkToGetImage(imageAdsDir,count);
+
     Files.createDirectories(filePath.getParent());
     Files.deleteIfExists(filePath);
 
     try (InputStream is = multipartFile.getInputStream();
         OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
         BufferedInputStream bis = new BufferedInputStream(is, 1024);
-        BufferedOutputStream bos = new BufferedOutputStream(os, 1024)) {
+        BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+    ) {
       bis.transferTo(bos);
-    } catch (Exception e) {
-      log.info("Ошибка сохранения файла");
     }
-
-    UserDTO userDTO = userService.getUser(authentication);
 
     AdsDTO adsDTO = new AdsDTO();
     adsDTO.setTitle(createAds.getTitle());
     adsDTO.setPrice(createAds.getPrice());
-    List<String> listOfImage = new ArrayList<>();
-    String content = null;
-    try {
-      content = Base64.getEncoder().encodeToString(multipartFile.getBytes());
-    } catch (IOException e) {
-      log.error(FormLogInfo.getCatch());
-    }
-    listOfImage.add(content);
-    adsDTO.setImage(listOfImage.get(0));
+    adsDTO.setImage(linkToGetImage);
+
     AdEntity adEntity = adMapper.toEntity(adsDTO);
     adEntity.setAuthor(userMapper.toEntity(userDTO));
-    adsRepository.save(adEntity);
-
     ImageDTO imageDTO = new ImageDTO();
-    imageDTO.setImage(filePath.toString());
+    imageDTO.setImage(linkToGetImage);
     ImageEntity imageEntity = imageMapper.toEntity(imageDTO);
     imageEntity.setAd(adEntity);
+    imageEntity.setPath(linkToGetImage);
     imageRepository.save(imageEntity);
+    adEntity.setImageEntities(List.of(imageEntity));
+    adsRepository.save(adEntity);
 
     return adsDTO;
   }
@@ -232,12 +230,17 @@ public class AdsServiceImpl implements AdsService {
   public void uploadImage(Integer id, MultipartFile image) throws IOException {
     log.info(FormLogInfo.getInfo());
     AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
-    Path filePath = Path.of(imageAdsDir,
-        Objects.requireNonNull(String.valueOf(adEntity.getId())));
+    Path filePath = getPath(imageAdsDir, adEntity.getId());
+
+    if(!adEntity.getImageEntities().isEmpty()){
+      int idAds = adEntity.getImageEntities().get(0).getId();
+      imageRepository
+          .deleteById(idAds);
+      adEntity.getImageEntities().clear();
+    }
 
     String linkToGetImage = "/ads" + imageAdsDir.substring(1) + "/"
         + adEntity.getId();
-
 
     Files.createDirectories(filePath.getParent());
     Files.deleteIfExists(filePath);
@@ -276,6 +279,7 @@ public class AdsServiceImpl implements AdsService {
 
   /**
    * получить аватарку объявления
+   *
    * @param id объявления
    * @return байтовое представление картинки
    */
@@ -310,9 +314,12 @@ public class AdsServiceImpl implements AdsService {
     return UUID.randomUUID().toString();
   }
 
-  /** Получить комментарий по adPk объявления и id комментария
+  /**
+   * Получить комментарий по adPk объявления и id комментария
+   *
    * @param adPk
-   * @param id  */
+   * @param id
+   */
   @Override
   public CommentDTO getComments(int adPk, int id) {
     CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk)
@@ -320,15 +327,20 @@ public class AdsServiceImpl implements AdsService {
     return commentMapper.toDTO(commentEntity);
   }
 
-  /** Изменение комментария пользователя
+  /**
+   * Изменение комментария пользователя
+   *
    * @param adPk
-   * @param id*/
+   * @param id
+   */
   @Override
-  public CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO, Authentication authentication) {
+  public CommentDTO updateComments(int adPk, int id, CommentDTO commentDTO,
+      Authentication authentication) {
     CommentEntity commentEntity = commentRepository.findByIdAndAd_Id(id, adPk)
         .orElseThrow(ElemNotFound::new);
 
-    if (!securityService.isCommentUpdateAvailable(authentication, commentEntity.getAuthor().getId(), commentDTO.getAuthor())) {
+    if (!securityService.isCommentUpdateAvailable(authentication, commentEntity.getAuthor().getId(),
+        commentDTO.getAuthor())) {
       throw new SecurityAccessException();
     }
 
@@ -353,19 +365,30 @@ public class AdsServiceImpl implements AdsService {
   public void removeAds(int id, Authentication authentication) {
     log.info(FormLogInfo.getInfo());
     AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
-    if (securityService.isAdmin(authentication) || securityService.checkAuthor(id, adEntity.getAuthor())) {
+    if (securityService.isAdmin(authentication) || securityService.checkAuthor(id,
+        adEntity.getAuthor())) {
       adsRepository.delete(adEntity);
-    } else throw new SecurityAccessException();
+    } else {
+      throw new SecurityAccessException();
+    }
 
   }
-/** Получить объявление по id
- * @param id */
+
+  /**
+   * Получить объявление по id
+   *
+   * @param id
+   */
   @Override
   public FullAds getAdById(int id, Authentication authentication) {
     return adsOtherMapper.toFullAds(adsRepository.findById(id).orElseThrow(ElemNotFound::new));
   }
-/** Обновить объявление по id
- * @param id */
+
+  /**
+   * Обновить объявление по id
+   *
+   * @param id
+   */
   @Override
   public AdsDTO updateAds(int id, CreateAds createAds, Authentication authentication) {
     AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
@@ -378,6 +401,17 @@ public class AdsServiceImpl implements AdsService {
     adEntity.setPrice(createAds.getPrice());
     adEntity.setTitle(createAds.getTitle());
     return adMapper.toDTO(adsRepository.save(adEntity));
+  }
+
+  //
+  private Path getPath(String nameDir, Integer id) {
+    return Path.of(nameDir,
+        Objects.requireNonNull(String.valueOf(id)));
+  }
+
+  private String getLinkToGetImage(String nameDir, Integer id) {
+    return "/ads" + nameDir.substring(1) + "/"
+        + id;
   }
 
 

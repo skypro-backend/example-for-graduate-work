@@ -9,6 +9,6 @@ import ru.skypro.homework.entity.ImageEntity;
  */
 @Repository
 @Transactional
-public interface ImageRepository  extends JpaRepository<ImageEntity, Long> {
+public interface ImageRepository  extends JpaRepository<ImageEntity, Integer> {
 
 }
