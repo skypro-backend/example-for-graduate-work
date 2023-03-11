@@ -19,7 +19,7 @@ CREATE TABLE avatars
 (
     id         SERIAL PRIMARY KEY,
     user_id    INTEGER,
-    path       STRING
+    path       TEXT
 );
 
 -- changeSet martell:4
@@ -27,5 +27,5 @@ CREATE TABLE posters
 (
     id         SERIAL PRIMARY KEY,
     ads_id     INTEGER,
-    path       STRING
+    path       TEXT
 );
