@@ -11,7 +11,7 @@ import java.util.List;
 public interface AdsMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "description", ignore = true)
-    @Mapping(target = "author", source = "author", ignore = true)
+    @Mapping(target = "author.id", source = "author")
     @Mapping(target = "imageId", source = "imageId")
     AdsEntity toModel(Ads dto);
 

@@ -9,7 +9,8 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class UserEntity {
@@ -38,19 +39,6 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<AdsEntity> adsList;
-
-    public UserEntity(Integer id, String email, String firstName, String lastName, String phone, LocalDate regDate, AvatarEntity avatar, String username, String password, List<AdsEntity> adsList) {
-        this.id = id;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
-        this.regDate = regDate;
-        this.avatar = avatar;
-        this.username = username;
-        this.password = password;
-        this.adsList = adsList;
-    }
 
     @Override
     public boolean equals(Object o) {
