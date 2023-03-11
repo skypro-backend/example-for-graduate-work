@@ -12,4 +12,5 @@ public class User {
     private String lastName;
     private String phone;
     private String regDate;
+    private String image;
 }
