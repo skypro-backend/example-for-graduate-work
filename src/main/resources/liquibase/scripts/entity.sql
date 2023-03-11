@@ -24,6 +24,8 @@ CREATE TABLE users
     username   TEXT
 );
 
+-- changeSet igor:1
+Create TABLE comment
 -- changeSet martell:3
 CREATE TABLE avatars
 (
@@ -38,8 +40,13 @@ CREATE TABLE posters
     id         SERIAL PRIMARY KEY,
     ads_id     INTEGER,
     path       TEXT
+    id SERIAL NOT NULL PRIMARY KEY,
+    author INTEGER,
+    text TEXT,
+    createdAt TEXT
 );
+-- changeSet igor:2
+ALTER TABLE comment MODIFY COLUMN createdAt DATE;
 
---changeset mara:5
-ALTER TABLE ads
-ADD COLUMN author_id BIGINT REFERENCES users(id);
+-- changeSet igor:3
+ALTER TABLE comment DROP author;
