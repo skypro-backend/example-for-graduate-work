@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeSet andrew:2
+-- changeSet andrew:1
 CREATE TABLE users
 (
     id         SERIAL NOT NULL PRIMARY KEY,
@@ -39,7 +39,7 @@ CREATE TABLE avatars
 (
     id         SERIAL PRIMARY KEY,
     user_id    INTEGER,
-    path       STRING
+    path       TEXT
 );
 
 -- changeSet martell:4
@@ -47,5 +47,5 @@ CREATE TABLE posters
 (
     id         SERIAL PRIMARY KEY,
     ads_id     INTEGER,
-    path       STRING
+    path       TEXT
 );
