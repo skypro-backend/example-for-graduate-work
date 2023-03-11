@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,4 +25,6 @@ public class UserEntity {
     private LocalDate regDate;
     private String password;
     private String username;
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    private List<AdsEntity> adsList;
 }

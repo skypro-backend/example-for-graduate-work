@@ -11,11 +11,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "comment")
 public class CommentEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String text;
-    private String createdAt;
-    private Integer author;
-
+    private LocalDateTime createdAt;
+    private Integer author_id;
+    @ManyToOne
+    @JoinColumn(name = "ads_id")
+    private AdsEntity ads;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity author; 
 }
