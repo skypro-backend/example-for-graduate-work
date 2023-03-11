@@ -3,6 +3,7 @@ package ru.skypro.homework.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -15,7 +16,13 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String text;
-    private String createdAt;
+    private Date createdAt;
     private Integer author;
 
+    @ManyToOne
+    @JoinColumn (name = "ads_id")
+    private AdsEntity ads;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 }

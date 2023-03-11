@@ -6,6 +6,8 @@ import org.mapstruct.Mapping;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.entity.CommentEntity;
 
+import java.util.List;
+
 
 @Mapper(componentModel = "spring")
 public interface  CommentMapper {
@@ -22,4 +24,7 @@ public interface  CommentMapper {
     @Mapping(target = "createdAt", source = "createdAt")
      Comment CommentEntityToDto(CommentEntity commentEntity);
 
+    List<CommentEntity> dtoToModel(List<Comment> comments);
+
+    List<Comment> modelToDto (List<CommentEntity> comments);
 }

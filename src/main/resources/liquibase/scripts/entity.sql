@@ -22,3 +22,8 @@ Create TABLE comment
     text TEXT,
     createdAt TEXT
 );
+-- changeSet igor:2
+ALTER TABLE comment MODIFY COLUMN createdAt DATE;
+
+-- changeSet igor:3
+ALTER TABLE comment DROP author;
