@@ -160,8 +160,7 @@ public class AdsServiceImpl implements AdsService {
     log.info(FormLogInfo.getInfo());
     Collection<AdsDTO> adsAll = adMapper.toDTOList(adsRepository.findAll());
     int count = adsAll.size();
-    ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds(count, adsAll);
-    return responseWrapperAds;
+    return new ResponseWrapperAds(count, adsAll);
   }
 
   /**
