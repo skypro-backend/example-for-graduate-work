@@ -9,16 +9,16 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PosterMapping {
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "adsId", target = "adsId")
+    @Mapping(source = "userId", target = "adsId")
     @Mapping(source = "path", target = "path")
-    PosterEntity toModel(Poster dto);
+    PosterEntity toEntity(Poster dto);
 
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "adsId", target = "adsId")
+    @Mapping(source = "adsId", target = "userId")
     @Mapping(source = "path", target = "path")
     Poster toDto(PosterEntity entity);
 
-    List<Poster> toPosterDtoList(List<PosterEntity> entityList);
+    List<Poster> toDtoList(List<PosterEntity> entityList);
 
-    List<PosterEntity> toPosterEntityList(List<Poster> dtoList);
+    List<PosterEntity> toEntityList(List<Poster> dtoList);
 }

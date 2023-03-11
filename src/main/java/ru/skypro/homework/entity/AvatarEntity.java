@@ -14,9 +14,9 @@ import javax.persistence.*;
 public class AvatarEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    private Long userId;
+    private Integer userId;
 
     private String path;
 }

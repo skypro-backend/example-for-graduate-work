@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class Poster{
-    private Long id;
+    private Integer id;
 
-    private Long userId;
+    private Integer adsId;
 
     private String path;
 }

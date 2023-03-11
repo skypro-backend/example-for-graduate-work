@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.User;
-import ru.skypro.homework.service.impl.UserServiceImpl;
+import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -27,9 +27,9 @@ import java.io.IOException;
 @Validated
 @RequestMapping(value = "users")
 public class UserController {
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

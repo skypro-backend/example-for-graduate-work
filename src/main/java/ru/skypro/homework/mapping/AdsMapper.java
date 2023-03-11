@@ -9,15 +9,15 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AdsMapper {
-    @Mapping(source = "id", target = "id")
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "description", ignore = true)
-    @Mapping(target = "user", ignore = true)
-  //  @Mapping(target = "imageEntity", )
+    @Mapping(target = "author.id", source = "author")
+    @Mapping(target = "imageId", source = "imageId")
     AdsEntity toModel(Ads dto);
 
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "user", target = "author")
-    // @Mapping(target = "image", )
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "author", expression = "java(entity.getId())")
+    @Mapping(target = "imageId", source = "imageId")
     Ads toDto(AdsEntity entity);
 
     List<Ads> toAdsDtoList(List<AdsEntity> entityList);
