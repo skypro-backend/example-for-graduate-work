@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Avatar;
 import ru.skypro.homework.entity.AvatarEntity;
 import ru.skypro.homework.exception.AvatarNotFoundException;
-import ru.skypro.homework.mapping.AvatarMapping;
+import ru.skypro.homework.mapping.AvatarMapper;
 import ru.skypro.homework.repository.AvatarRepository;
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AvatarService {
     private final AvatarRepository avatarRepository;
-    private final AvatarMapping avatarMapping;
+    private final AvatarMapper avatarMapping;
 
     public AvatarEntity getAvatarById(Integer id) {
         return avatarRepository.findById(id).orElseThrow(AvatarNotFoundException::new);

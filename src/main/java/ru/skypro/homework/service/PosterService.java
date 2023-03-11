@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Poster;
 import ru.skypro.homework.entity.PosterEntity;
 import ru.skypro.homework.exception.PosterNotFoundException;
-import ru.skypro.homework.mapping.PosterMapping;
+import ru.skypro.homework.mapping.PosterMapper;
 import ru.skypro.homework.repository.PosterRepository;
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PosterService {
     private final PosterRepository posterRepository;
-    private final PosterMapping posterMapping;
+    private final PosterMapper posterMapping;
     
     public PosterEntity getById(Integer id) {
         return posterRepository.findById(id).orElseThrow(PosterNotFoundException::new);
