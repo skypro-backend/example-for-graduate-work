@@ -9,9 +9,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.service.impl.AdsServiceImpl;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -19,6 +21,7 @@ import ru.skypro.homework.dto.*;
 @RequiredArgsConstructor
 @RequestMapping("/ads")
 public class AdsController {
+    private final AdsServiceImpl adsServiceImpl;
     @Operation(summary = "getALLAds", tags = {"Объявления"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
@@ -27,7 +30,7 @@ public class AdsController {
     })
     @GetMapping
     public ResponseEntity<ResponseWrapperAds> getAllAds() {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(adsServiceImpl.getAllAds());
     }
 
     @Operation(summary = "addAds", tags = {"Объявления"})
@@ -41,9 +44,9 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Ads> addAds(@RequestPart Ads properties,
-                                      @RequestPart MultipartFile image) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Ads> addAds(@RequestPart CreateAds properties,
+                                      @RequestPart MultipartFile image, Authentication authentication) {
+        return ResponseEntity.ok(adsServiceImpl.addAds(properties, image, authentication));
     }
 
     @Operation(summary = "getAdsMe", tags = {"Объявления"})
@@ -55,8 +58,8 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
     })
     @GetMapping("/me")
-    public ResponseEntity<ResponseWrapperAds> getAllMeAds() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ResponseWrapperAds> getAllMeAds(Authentication authentication) {
+        return ResponseEntity.ok(adsServiceImpl.getAdsMe(authentication));
     }
 
     @Operation(summary = "getComments", tags = {"Объявления"})
@@ -70,7 +73,6 @@ public class AdsController {
     public ResponseEntity<ResponseWrapperComment> getComment(@PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
-
     @Operation(summary = "addComments", tags = {"Объявления"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
@@ -130,7 +132,6 @@ public class AdsController {
                                                   @RequestBody Comment comment) {
         return ResponseEntity.ok().build();
     }
-
     @Operation(summary = "removeAds", tags = {"Объявления"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
@@ -142,10 +143,11 @@ public class AdsController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Ads> removeAds(@PathVariable Integer id) {
-        return ResponseEntity.ok().build();
+        adsServiceImpl.deleteAds(id);
+        return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "getAds", tags = {"Объявления"})
+    @Operation(summary = "getFullAd", tags = {"Объявления"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -154,11 +156,11 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Ads> getAds(@PathVariable Integer id) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<FullAds> getFullAd(@PathVariable Integer id, Authentication authentication) {
+        return ResponseEntity.ok(adsServiceImpl.getFullAds(id));
     }
 
-    @Operation(summary = "getAds", tags = {"Объявления"})
+    @Operation(summary = "updateAds", tags = {"Объявления"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -170,11 +172,11 @@ public class AdsController {
     })
     @PatchMapping("/{id}")
     public ResponseEntity<Ads> updateAds(@PathVariable Integer id,
-                                         @RequestBody Ads ads) {
-        return ResponseEntity.ok().build();
+                                         @RequestBody CreateAds createAds, Authentication authentication) {
+        return ResponseEntity.ok(adsServiceImpl.updateAds(id, createAds, authentication));
     }
 
-    @Operation(summary = "updateAdsImage", tags = {"Объявления"})
+    @Operation(summary = "updateAdsImage", tags = {"Объявления"}) // пока не сделала
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,

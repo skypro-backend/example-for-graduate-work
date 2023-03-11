@@ -15,7 +15,6 @@ public class AdsEntity {
         private int price;
         private String description;
 
-      //  private Integer authorId;
        @ManyToOne
        @JoinColumn(name = "author_id")
        private UserEntity author;
