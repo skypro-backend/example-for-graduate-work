@@ -14,12 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ImageDTO;
+import ru.skypro.homework.loger.FormLogInfo;
 import ru.skypro.homework.service.AdsService;
 
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/ads/image")
+@RequestMapping("/ads")
 @Tag(name = "Изображение")
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -48,10 +49,35 @@ public class ImageController {
                     description = "Not Found"
             )
     })
-    @PatchMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadImage(@PathVariable (name = "id") Integer id, @RequestParam(name = "image") MultipartFile image) throws IOException {
         adsService.uploadImage(id, image);
         return ResponseEntity.ok().build();
     }
+
+  @Operation(summary = "Получить аватарку объявления")
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          description = "OK"
+      ),
+      @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized"
+      ),
+      @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden"
+      ),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Not Found"
+      )
+  })
+  @GetMapping(value = "/ads_photo_dir/{id}", produces = MediaType.IMAGE_PNG_VALUE)
+  public ResponseEntity<byte[]> getAdsImage(@PathVariable(value = "id") Integer id) {
+    log.info(FormLogInfo.getInfo());
+    return ResponseEntity.ok(adsService.getPhotoById(id));
+  }
 
 }

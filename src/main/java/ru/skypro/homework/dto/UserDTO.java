@@ -53,6 +53,7 @@ public class UserDTO {
   /**
    * фото пользователя
    */
+
   String image;
 
 }

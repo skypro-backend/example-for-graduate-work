@@ -98,4 +98,10 @@ public interface AdsService {
    */
   ResponseWrapperAds getAdsMe(Authentication authentication);
 
+  /**
+   * получить аватарку объявления
+   * @param id объявления
+   * @return байтовое представление картинки
+   */
+  byte[] getPhotoById(Integer id);
 }

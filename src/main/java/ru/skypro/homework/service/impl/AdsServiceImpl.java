@@ -1,11 +1,39 @@
 package ru.skypro.homework.service.impl;
 
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CreateAds;
+import ru.skypro.homework.dto.FullAds;
+import ru.skypro.homework.dto.ImageDTO;
+import ru.skypro.homework.dto.ResponseWrapperAds;
+import ru.skypro.homework.dto.ResponseWrapperComment;
+import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.ImageEntity;
@@ -13,24 +41,17 @@ import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exception.ElemNotFound;
 import ru.skypro.homework.exception.SecurityAccessException;
 import ru.skypro.homework.loger.FormLogInfo;
-import ru.skypro.homework.mapper.*;
+import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.mapper.AdsOtherMapper;
+import ru.skypro.homework.mapper.CommentMapper;
+import ru.skypro.homework.mapper.ImageMapper;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.UserService;
-
-import javax.transaction.Transactional;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 
 /**
@@ -187,7 +208,7 @@ public class AdsServiceImpl implements AdsService {
       log.error(FormLogInfo.getCatch());
     }
     listOfImage.add(content);
-    adsDTO.setImage(listOfImage);
+    adsDTO.setImage(listOfImage.get(0));
     AdEntity adEntity = adMapper.toEntity(adsDTO);
     adEntity.setAuthor(userMapper.toEntity(userDTO));
     adsRepository.save(adEntity);
@@ -211,9 +232,13 @@ public class AdsServiceImpl implements AdsService {
   public void uploadImage(Integer id, MultipartFile image) throws IOException {
     log.info(FormLogInfo.getInfo());
     AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
-
     Path filePath = Path.of(imageAdsDir,
-        getFileUniqueName() + "." + getExtension(image.getOriginalFilename()));
+        Objects.requireNonNull(String.valueOf(adEntity.getId())));
+
+    String linkToGetImage = "/ads" + imageAdsDir.substring(1) + "/"
+        + adEntity.getId();
+
+
     Files.createDirectories(filePath.getParent());
     Files.deleteIfExists(filePath);
 
@@ -226,7 +251,7 @@ public class AdsServiceImpl implements AdsService {
     }
     ImageEntity imageEntity = new ImageEntity();
     imageEntity.setAd(adEntity);
-    imageEntity.setPath(filePath.toString());
+    imageEntity.setPath(linkToGetImage);
     adEntity.setImageEntities(List.of(imageEntity));
 
     imageRepository.save(imageEntity);
@@ -247,6 +272,23 @@ public class AdsServiceImpl implements AdsService {
         filter(x -> x.getAuthor().equals(userDTO.getId())).collect(Collectors.toList());
     int count = adsMe.size();
     return new ResponseWrapperAds(count, adsMe);
+  }
+
+  /**
+   * получить аватарку объявления
+   * @param id объявления
+   * @return байтовое представление картинки
+   */
+  public byte[] getPhotoById(Integer id) {
+    String linkToGetImage = "ads_photo_dir/" + id;
+    byte[] bytes;
+    try {
+      bytes = Files.readAllBytes(Paths.get(linkToGetImage));
+    } catch (IOException e) {
+      log.info(FormLogInfo.getCatch());
+      throw new RuntimeException(e);
+    }
+    return bytes;
   }
 
   /**
