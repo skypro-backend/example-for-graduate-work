@@ -24,6 +24,22 @@ CREATE TABLE users
     username   TEXT
 );
 
---changeset mara:2
+-- changeSet martell:3
+CREATE TABLE avatars
+(
+    id         SERIAL PRIMARY KEY,
+    user_id    INTEGER,
+    path       STRING
+);
+
+-- changeSet martell:4
+CREATE TABLE posters
+(
+    id         SERIAL PRIMARY KEY,
+    ads_id     INTEGER,
+    path       STRING
+);
+
+--changeset mara:5
 ALTER TABLE ads
 ADD COLUMN author_id BIGINT REFERENCES users(id);
