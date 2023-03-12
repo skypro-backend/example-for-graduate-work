@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "avatars")
 public class AvatarEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -24,8 +24,6 @@ CREATE TABLE users
     username   TEXT
 );
 
--- changeSet igor:1
-Create TABLE comment
 -- changeSet martell:3
 CREATE TABLE avatars
 (
@@ -45,8 +43,12 @@ CREATE TABLE posters
     text TEXT,
     createdAt TEXT
 );
--- changeSet igor:2
-ALTER TABLE comment MODIFY COLUMN createdAt DATE;
 
--- changeSet igor:3
-ALTER TABLE comment DROP author;
+-- changeSet igor:5
+Create TABLE comment
+(
+    id SERIAL NOT NULL PRIMARY KEY,
+    author INTEGER,
+    text TEXT,
+    createdAt DATE
+);
