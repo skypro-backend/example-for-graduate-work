@@ -38,14 +38,10 @@ CREATE TABLE posters
     id         SERIAL PRIMARY KEY,
     ads_id     INTEGER,
     path       TEXT
-    id SERIAL NOT NULL PRIMARY KEY,
-    author INTEGER,
-    text TEXT,
-    createdAt TEXT
 );
 
 -- changeSet igor:5
-Create TABLE comment
+Create TABLE comments
 (
     id SERIAL NOT NULL PRIMARY KEY,
     author INTEGER,
