@@ -13,7 +13,6 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -99,12 +98,36 @@ public class AdsServiceImpl implements AdsService {
    * @param pk
    * @return
    */
-  @Override
   public ResponseWrapperComment getAdsComments(Integer pk) {
-    Collection<CommentEntity> allAd = commentRepository.findAllById(Collections.singleton(pk));
+    Collection<CommentEntity> allAd = commentRepository.findAllByAd_Id(pk);
     Collection<CommentDTO> commentDTOS = commentMapper.toDTOList(allAd);
     int count = commentDTOS.size();
     return new ResponseWrapperComment(count, commentDTOS);
+  }
+
+
+
+  /**
+   * Удалить комментарий по id объявления и id комментария
+   *
+   * @param pk
+   * @param id
+   */
+  @Override
+  public void deleteComments(Integer pk, Integer id, Authentication authentication) {
+    log.info(FormLogInfo.getInfo());
+    AdEntity adEntity = adsRepository.findById(pk).orElseThrow(ElemNotFound::new);
+    CommentEntity comment = commentRepository.findById(id).orElseThrow(ElemNotFound::new);
+    UserEntity user = userMapper.toEntity(userService.getUser(authentication));
+    if (securityService.isAdmin(authentication)) {
+      commentRepository.deleteById(comment.getId());
+    } else if (Objects.equals(adEntity.getAuthor().getId(), user.getId())) {
+      commentRepository.deleteById(comment.getId());
+    } else if (Objects.equals(user.getId(), comment.getAuthor().getId())) {
+      commentRepository.deleteById(comment.getId());
+    } else {
+      throw new ElemNotFound();
+    }
   }
 
   /**
@@ -133,24 +156,7 @@ public class AdsServiceImpl implements AdsService {
     return commentMapper.toDTO(comment);
   }
 
-  /**
-   * Удалить комментарий по id объявления и id комментария
-   *
-   * @param pk
-   * @param id
-   */
-  @Override
-  public void deleteComments(Integer pk, Integer id, Authentication authentication) {
-    log.info(FormLogInfo.getInfo());
-    AdEntity adEntity = adsRepository.findById(pk).orElseThrow(ElemNotFound::new);
-    CommentEntity comment = commentRepository.findById(id).orElseThrow(ElemNotFound::new);
-    if (securityService.isAdmin(authentication) || Objects.equals(adEntity.getAuthor().getId(),
-        comment.getAuthor().getId())) {
-      commentRepository.deleteById(comment.getId());
-    } else {
-      throw new ElemNotFound();
-    }
-  }
+
 
   /**
    * Получить все объявления
@@ -364,12 +370,12 @@ public class AdsServiceImpl implements AdsService {
   public void removeAds(int id, Authentication authentication) {
     log.info(FormLogInfo.getInfo());
     AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
-    if (securityService.isAdmin(authentication) || securityService.checkAuthor(id,
-        adEntity.getAuthor())) {
+    UserEntity user = userMapper.toEntity(userService.getUser(authentication));
+    if (securityService.isAdmin(authentication)) {
       adsRepository.delete(adEntity);
-    } else {
-      throw new SecurityAccessException();
-    }
+    } else if (Objects.equals(adEntity.getAuthor(), user)) {
+      adsRepository.delete(adEntity);
+    } else throw new SecurityAccessException();
 
   }
 

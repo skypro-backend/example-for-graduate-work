@@ -5,6 +5,6 @@ CREATE TABLE comments
     created_at TIMESTAMP,
     pk_ads int,
     text TEXT,
-    constraint fk_author_id foreign key (author_id) references users (id),
-    constraint fk_pk_ads foreign key (pk_ads) references ads (id)
+    constraint fk_author_id foreign key (author_id) references users (id) ,
+    constraint fk_pk_ads foreign key (pk_ads) references ads (id) on delete cascade
 );
