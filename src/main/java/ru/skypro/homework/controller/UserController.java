@@ -158,7 +158,7 @@ public class UserController {
       )
   })
   @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<MultipartFile> updateUserImage(@RequestParam MultipartFile image,
+  public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image,
       Authentication authentication) {
     log.info(FormLogInfo.getInfo());
     userService.updateUserImage(image, authentication);
@@ -185,7 +185,7 @@ public class UserController {
           description = "Not Found"
       )
   })
-  @GetMapping(value = "/user_photo_dir/{id}", produces = MediaType.IMAGE_PNG_VALUE)
+  @GetMapping(value = "{id}", produces = MediaType.IMAGE_PNG_VALUE)
   public ResponseEntity<byte[]> getUserImage(@PathVariable(value = "id") Integer id) {
     log.info(FormLogInfo.getInfo());
     return ResponseEntity.ok(userService.getPhotoById(id));

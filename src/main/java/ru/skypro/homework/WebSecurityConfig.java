@@ -23,8 +23,8 @@ public class WebSecurityConfig {
       "/v3/api-docs",
       "/webjars/**",
       "/login", "/register",
-      "/ads/ads_photo_dir/*",
-      "/users/user_photo_dir/*"
+      "/ads/*",
+      "/users/*"
   };
   private final UserDetailsService userDetailService;
 

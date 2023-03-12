@@ -184,10 +184,11 @@ public class AdsServiceImpl implements AdsService {
     }
 
     UserDTO userDTO = userService.getUser(authentication);
-    int count = adsRepository.findAll().size();
-    Path filePath = getPath(imageAdsDir, count);
+    int count = adsRepository.findMaxID();
+    int countReal = count + 1;
+    Path filePath = getPath(imageAdsDir, countReal);
 
-    String linkToGetImage = getLinkToGetImage(imageAdsDir,count);
+    String linkToGetImage = getLinkToGetImage(countReal);
 
     Files.createDirectories(filePath.getParent());
     Files.deleteIfExists(filePath);
@@ -222,13 +223,12 @@ public class AdsServiceImpl implements AdsService {
   /**
    * Добавление фото в объявление
    *
-   * @param id
-   * @param image
    */
   @Override
   public void uploadImage(Integer id, MultipartFile image) throws IOException {
     log.info(FormLogInfo.getInfo());
     AdEntity adEntity = adsRepository.findById(id).orElseThrow(ElemNotFound::new);
+
     Path filePath = getPath(imageAdsDir, adEntity.getId());
 
     if(!adEntity.getImageEntities().isEmpty()){
@@ -236,10 +236,10 @@ public class AdsServiceImpl implements AdsService {
       imageRepository
           .deleteById(idAds);
       adEntity.getImageEntities().clear();
+      Files.deleteIfExists(filePath);
     }
 
-    String linkToGetImage = "/ads" + imageAdsDir.substring(1) + "/"
-        + adEntity.getId();
+    String linkToGetImage = getLinkToGetImage(adEntity.getId());
 
     Files.createDirectories(filePath.getParent());
     Files.deleteIfExists(filePath);
@@ -408,9 +408,8 @@ public class AdsServiceImpl implements AdsService {
         Objects.requireNonNull(String.valueOf(id)));
   }
 
-  private String getLinkToGetImage(String nameDir, Integer id) {
-    return "/ads" + nameDir.substring(1) + "/"
-        + id;
+  private String getLinkToGetImage(Integer id) {
+    return "/ads" + "/" + id;
   }
 
 

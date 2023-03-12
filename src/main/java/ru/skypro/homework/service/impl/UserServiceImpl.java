@@ -11,7 +11,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,19 +68,20 @@ public class UserServiceImpl implements UserService {
 
     UserEntity oldUser = findById(id);
 
-    oldUser.setEmail(newUserDto.getEmail());
+    oldUser.setEmail(userEntity.getEmail());
+    oldUser.setAdEntities(userEntity.getAdEntities());
     oldUser.setFirstName(newUserDto.getFirstName());
     oldUser.setLastName(newUserDto.getLastName());
     oldUser.setPhone(newUserDto.getPhone());
 
     try {
-      oldUser.setRegDate(LocalDateTime.parse(newUserDto.getRegDate()));
+      oldUser.setRegDate(userEntity.getRegDate());
     } catch (Exception e) {
       log.info("Ошибка изменения даты регистрации");
     }
 
     oldUser.setCity(newUserDto.getCity());
-    oldUser.setImage(newUserDto.getImage());
+    oldUser.setImage(userEntity.getImage());
     userRepository.save(oldUser);
 
     return userMapper.toDTO(oldUser);
@@ -105,9 +105,20 @@ public class UserServiceImpl implements UserService {
 
     String nameEmail = authentication.getName();
     UserEntity userEntity = findEntityByEmail(nameEmail);
-    String linkToGetImage = "/users" + userPhotoDir.substring(1) + "/" + userEntity.getId();
+    String linkToGetImage = "/users" + "/" + userEntity.getId();
     Path filePath = Path.of(userPhotoDir,
         Objects.requireNonNull(String.valueOf(userEntity.getId())));
+
+    if(userEntity.getImage() != null){
+      try {
+        Files.deleteIfExists(filePath);
+        userEntity.setImage(null);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+
+    }
+
 
     try {
       Files.createDirectories(filePath.getParent());
