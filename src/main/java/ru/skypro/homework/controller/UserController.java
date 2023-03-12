@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -157,12 +158,39 @@ public class UserController {
       )
   })
   @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<MultipartFile> updateUserImage(@RequestParam MultipartFile image,
+  public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image,
       Authentication authentication) {
     log.info(FormLogInfo.getInfo());
     userService.updateUserImage(image, authentication);
     return ResponseEntity.ok().build();
   }
+
+
+  @Operation(summary = "Получить аватарку юзера")
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          description = "OK"
+      ),
+      @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized"
+      ),
+      @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden"
+      ),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Not Found"
+      )
+  })
+  @GetMapping(value = "{id}", produces = MediaType.IMAGE_PNG_VALUE)
+  public ResponseEntity<byte[]> getUserImage(@PathVariable(value = "id") Integer id) {
+    log.info(FormLogInfo.getInfo());
+    return ResponseEntity.ok(userService.getPhotoById(id));
+  }
+
 
 
 }

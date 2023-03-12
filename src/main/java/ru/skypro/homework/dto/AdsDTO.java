@@ -1,12 +1,16 @@
 package ru.skypro.homework.dto;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-import ru.skypro.homework.entity.AdEntity;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
+import ru.skypro.homework.entity.AdEntity;
 
 /**
  * A DTO for the {@link AdEntity} entity
@@ -21,7 +25,7 @@ import java.util.List;
 public class AdsDTO {
 
   Integer author;
-  List<String> image;
+  String image;
   Integer pk;
   @NotNull
   @Min(value = 1)

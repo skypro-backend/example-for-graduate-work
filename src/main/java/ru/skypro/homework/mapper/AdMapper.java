@@ -4,7 +4,6 @@ package ru.skypro.homework.mapper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.skypro.homework.dto.AdsDTO;
@@ -34,26 +33,20 @@ public interface AdMapper {
   @Mapping(target = "image", expression = "java(setImage(adEntity.getImageEntities()))")
   AdsDTO toDTO(AdEntity adEntity);
 
-  default List<String> setImage(List<ImageEntity> imageEntities) {
+  default String setImage(List<ImageEntity> imageEntities) {
     if (imageEntities == null || imageEntities.size() == 0) {
       return null;
     }
-    return imageEntities
-        .stream()
-        .map(ImageEntity::getPath)
-        .collect(Collectors.toList());
+    return imageEntities.get(0).getPath();
   }
 
-  default List<ImageEntity> setImageEntities(List<String> image) {
-    if (image == null || image.size() == 0) {
-      return null;
-    }
+  default List<ImageEntity> setImageEntities(String path) {
+
     List<ImageEntity> imageEntities = new ArrayList<>();
-    for (String s : image) {
       ImageEntity imageEntity = new ImageEntity();
-      imageEntity.setPath(s);
+      imageEntity.setPath(path);
       imageEntities.add(imageEntity);
-    }
+
     return imageEntities;
   }
 

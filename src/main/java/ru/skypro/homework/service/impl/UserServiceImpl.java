@@ -10,8 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.util.Base64;
+import java.nio.file.Paths;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +26,9 @@ import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
-/**  Сервис пользователей  */
+/**
+ * Сервис пользователей
+ */
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
@@ -42,7 +43,10 @@ public class UserServiceImpl implements UserService {
     this.userRepository = userRepository;
     this.userMapper = userMapper;
   }
- /** Получить данные пользователя */
+
+  /**
+   * Получить данные пользователя
+   */
   @Override
   public UserDTO getUser(Authentication authentication) {
     log.info(FormLogInfo.getInfo());
@@ -50,7 +54,10 @@ public class UserServiceImpl implements UserService {
     UserEntity userEntity = findEntityByEmail(nameEmail);
     return userMapper.toDTO(userEntity);
   }
-  /** Обновить данные пользователя */
+
+  /**
+   * Обновить данные пользователя
+   */
   @Override
   public UserDTO updateUser(UserDTO newUserDto, Authentication authentication) {
     log.info(FormLogInfo.getInfo());
@@ -61,38 +68,58 @@ public class UserServiceImpl implements UserService {
 
     UserEntity oldUser = findById(id);
 
-    oldUser.setEmail(newUserDto.getEmail());
+    oldUser.setEmail(userEntity.getEmail());
+    oldUser.setAdEntities(userEntity.getAdEntities());
     oldUser.setFirstName(newUserDto.getFirstName());
     oldUser.setLastName(newUserDto.getLastName());
     oldUser.setPhone(newUserDto.getPhone());
 
     try {
-      oldUser.setRegDate(LocalDateTime.parse(newUserDto.getRegDate()));
+      oldUser.setRegDate(userEntity.getRegDate());
     } catch (Exception e) {
       log.info("Ошибка изменения даты регистрации");
     }
 
     oldUser.setCity(newUserDto.getCity());
-    oldUser.setImage(newUserDto.getImage());
+    oldUser.setImage(userEntity.getImage());
     userRepository.save(oldUser);
 
-    return  userMapper.toDTO(oldUser);
+    return userMapper.toDTO(oldUser);
   }
-  /** Установить пароль пользователя */
+
+  /**
+   * Установить пароль пользователя
+   */
   @Override
   public NewPassword setPassword(NewPassword newPassword) {
     log.info(FormLogInfo.getInfo());
     return null;
   }
-  /** загрузить аватарку пользователя */
+
+  /**
+   * загрузить аватарку пользователя
+   */
   @Override
   public void updateUserImage(MultipartFile image, Authentication authentication) {
     log.info(FormLogInfo.getInfo());
 
     String nameEmail = authentication.getName();
     UserEntity userEntity = findEntityByEmail(nameEmail);
+    String linkToGetImage = "/users" + "/" + userEntity.getId();
+    Path filePath = Path.of(userPhotoDir,
+        Objects.requireNonNull(String.valueOf(userEntity.getId())));
 
-    Path filePath = Path.of(userPhotoDir, Objects.requireNonNull(image.getOriginalFilename()));
+    if(userEntity.getImage() != null){
+      try {
+        Files.deleteIfExists(filePath);
+        userEntity.setImage(null);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+
+    }
+
+
     try {
       Files.createDirectories(filePath.getParent());
       Files.deleteIfExists(filePath);
@@ -107,14 +134,30 @@ public class UserServiceImpl implements UserService {
 
       bis.transferTo(bos);
 
-      String photo = Base64.getEncoder().encodeToString(image.getBytes());
-      userEntity.setImage(photo);
+      userEntity.setImage(linkToGetImage);
       userRepository.save(userEntity);
 
     } catch (Exception e) {
       log.info("Ошибка сохранения файла");
     }
 
+  }
+
+  /**
+   * получить фото пользователя
+   *
+   * @return фото конвертированная в массив байтов
+   */
+  public byte[] getPhotoById(Integer id) {
+    String linkToGetImage = "user_photo_dir/" + id;
+    byte[] bytes;
+    try {
+      bytes = Files.readAllBytes(Paths.get(linkToGetImage));
+    } catch (IOException e) {
+      log.info(FormLogInfo.getCatch());
+      throw new RuntimeException(e);
+    }
+    return bytes;
   }
 
   /**

@@ -29,4 +29,10 @@ public interface UserService {
    * обновить фото пользователя
    */
   void updateUserImage(MultipartFile image, Authentication authentication);
+
+
+  /**
+   * получить фото пользователя
+   */
+  byte[] getPhotoById(Integer id);
 }
