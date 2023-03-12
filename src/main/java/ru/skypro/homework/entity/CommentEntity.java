@@ -16,5 +16,6 @@ public class CommentEntity {
     private Integer id;
     private String text;
     private String createdAt;
+    private Integer adsId;
     private Integer author;
 }
