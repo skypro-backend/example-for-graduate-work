@@ -3,7 +3,7 @@
 --changeset mara:1
 
 create table ads(
-    id          BIGSERIAL PRIMARY KEY,
+    id          SERIAL PRIMARY KEY,
     title       TEXT,
     price       INTEGER,
     description TEXT,
@@ -43,8 +43,8 @@ CREATE TABLE posters
 -- changeSet igor:5
 Create TABLE comments
 (
-    id SERIAL NOT NULL PRIMARY KEY,
-    author INTEGER,
-    text TEXT,
-    createdAt DATE
+    id         SERIAL NOT NULL PRIMARY KEY,
+    author     INTEGER,
+    text       TEXT,
+    createdAt  DATE
 );
