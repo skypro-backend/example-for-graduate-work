@@ -11,12 +11,15 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "avatars")
 public class AvatarEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer userId;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
     private String path;
 }

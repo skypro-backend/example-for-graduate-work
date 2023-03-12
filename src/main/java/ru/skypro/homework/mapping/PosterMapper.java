@@ -7,14 +7,14 @@ import ru.skypro.homework.entity.PosterEntity;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface PosterMapping {
+public interface PosterMapper {
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "userId", target = "adsId")
+    @Mapping(source = "adsId", target = "ads.id")
     @Mapping(source = "path", target = "path")
     PosterEntity toEntity(Poster dto);
 
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "adsId", target = "userId")
+    @Mapping(source = "ads.id", target = "adsId")
     @Mapping(source = "path", target = "path")
     Poster toDto(PosterEntity entity);
 

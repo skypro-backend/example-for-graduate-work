@@ -7,14 +7,14 @@ import ru.skypro.homework.entity.AvatarEntity;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface AvatarMapping {
+public interface AvatarMapper {
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "userId", target = "userId")
+    @Mapping(target = "user.id", source = "userId")
     @Mapping(source = "path", target = "path")
     AvatarEntity toEntity(Avatar dto);
 
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "userId", target = "userId")
+    @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "path", target = "path")
     Avatar toDto(AvatarEntity entity);
 

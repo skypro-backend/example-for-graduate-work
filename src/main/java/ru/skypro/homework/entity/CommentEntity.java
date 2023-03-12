@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "comment")
+@Table(name = "comments")
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,5 +17,4 @@ public class CommentEntity {
     private String text;
     private String createdAt;
     private Integer author;
-
 }
