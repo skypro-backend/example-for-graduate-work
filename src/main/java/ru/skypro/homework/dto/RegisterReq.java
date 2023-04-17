@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto;
 
 import lombok.Data;
+import ru.skypro.homework.dto.enums.Role;
 
 @Data
 public class RegisterReq {
