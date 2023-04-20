@@ -8,5 +8,5 @@ public class AdsDto {
     private int author;
     private String title;
     private int price;
-    private String[] image;
+    private String image;
 }
