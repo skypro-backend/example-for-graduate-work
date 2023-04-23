@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/ads")
 @CrossOrigin(value = "http://localhost:3000")
 public class AdsController {
-    @Operation(summary = "Get the whole list of Ads", tags = "Ads")
+    @Operation(summary = "Get the whole list of Ads", tags = "Объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of Ads",
                     content = {@Content(mediaType = "application/json",
@@ -29,7 +29,7 @@ public class AdsController {
     public ResponseEntity<List<AdsDto>> getAdsAll() {
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @Operation(summary = "Adding an ad", tags = "Ads")
+    @Operation(summary = "Adding an ad", tags = "Объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ads Adding",
                     content = {@Content(mediaType = "application/json",
@@ -40,7 +40,7 @@ public class AdsController {
     public AdsDto addAd(@RequestBody AdsDto adsDto) {
         return new AdsDto();
     }
-    @Operation(summary = "Getting information about the ad by id", tags = "Ads")
+    @Operation(summary = "Getting information about the ad by id", tags = "Объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of Ads",
                     content = {@Content(mediaType = "application/json",
@@ -51,7 +51,7 @@ public class AdsController {
     public ResponseEntity<List<AdsDto>> getAds(@PathVariable Long id) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @Operation(summary = "Deleting an ad by id", tags = "Ads")
+    @Operation(summary = "Deleting an ad by id", tags = "Объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ad removed",
                     content = {@Content(mediaType = "application/json",
@@ -62,7 +62,7 @@ public class AdsController {
     public ResponseEntity<AdsDto> deleteAds(@PathVariable Long id) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @Operation(summary = "Updating information about the ad by id", tags = "Ads")
+    @Operation(summary = "Updating information about the ad by id", tags = "Объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "the ad has been updated",
                     content = {@Content(mediaType = "application/json",
@@ -73,7 +73,7 @@ public class AdsController {
     public AdsDto updateAds(@PathVariable Long id) {
         return new AdsDto();
     }
-    @Operation(summary = "We receive ads from an authorized user", tags = "Ads")
+    @Operation(summary = "We receive ads from an authorized user", tags = "Объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ad received",
                     content = {@Content(mediaType = "application/json",
@@ -84,7 +84,7 @@ public class AdsController {
     public ResponseEntity<AdsDto> getAdsAuthorizedUser() {
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @Operation(summary = "update the ad image", tags = "Ads")
+    @Operation(summary = "update the ad image", tags = "Объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "the picture has been updated",
                     content = {@Content(mediaType = "application/json",
