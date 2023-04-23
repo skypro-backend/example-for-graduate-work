@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.AdsDto;
+import ru.skypro.homework.dto.CommentDto;
 
 
 import java.util.List;
@@ -93,6 +94,103 @@ public class AdsController {
     @PatchMapping("/id/image")
     public AdsDto updateImage(@PathVariable Long id) {
         return new AdsDto();
+    }
+
+    /**
+     * Viktor
+     * @return
+     */
+    @Operation(summary = "Get ad comments", tags = "Комментарии")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of comments",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )}),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )})
+    })
+    @GetMapping("/{id}/comments")
+    public CommentDto getCommentsAds(@RequestBody CommentDto commentDto) {
+        System.out.println("Comments");
+        return new CommentDto();
+    }
+
+    @Operation(summary = "Add comments to the ad", tags = "Комментарии")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Comment Adding",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )}),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )}),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )})
+
+    })
+    @PostMapping("/{id}/comments")
+    public CommentDto addCommentAds(@RequestBody CommentDto commentDto) {
+        System.out.println("Comment add");
+        return new CommentDto();
+    }
+
+    @Operation(summary = "Delete a comment in an ad by number id", tags = "Комментарии")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Comment Deleted",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )}),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )}),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )})
+    })
+    @DeleteMapping("/{adId}/comments/{commentId}")
+    public CommentDto deleteCommentAds(@RequestBody CommentDto commentDto) {
+        System.out.println("Comment deleted");
+        return new CommentDto();
+    }
+
+    @Operation(summary = "Updating a comment in an ad by number id", tags = "Комментарии")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Comment Updated",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )}),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )}),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDto.class)
+                    )})
+    })
+    @PatchMapping("/{adId}/comments/{commentId}")
+    public CommentDto updateCommentAds(@RequestBody CommentDto commentDto) {
+        System.out.println("Update comment");
+        return new CommentDto();
     }
 
 }
