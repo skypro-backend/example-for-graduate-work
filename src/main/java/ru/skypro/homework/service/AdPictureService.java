@@ -1,11 +1,9 @@
 package ru.skypro.homework.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.exception.NotFoundException;
 import ru.skypro.homework.model.AdPicture;
-import ru.skypro.homework.model.Picture;
 import ru.skypro.homework.repository.AdPictureRepository;
 
 @Service

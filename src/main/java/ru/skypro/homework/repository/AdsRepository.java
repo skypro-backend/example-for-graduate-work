@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface AdsRepository extends JpaRepository<Ad, Long> {
     List<Ad> findAllByOrderByPublishDateTimeDesc();
-    List<Ad> findByAuthor(User user);
+    List<Ad> findByAuthorOrderByPublishDateTimeDesc(User user);
 }

@@ -20,5 +20,6 @@ public class Comment {
     private Ad ad;
     @Column(name = "creation_date_time")
     private Instant creationDateTime;
+    @Column(nullable = false)
     private String text;
 }

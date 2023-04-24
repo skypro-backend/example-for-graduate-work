@@ -16,4 +16,5 @@ public class RegisterReqDTO {
     private String phone;
     // Роль пользователя
     private Role role;
+
 }

@@ -3,7 +3,6 @@ package ru.skypro.homework.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.service.AdPictureService;
 import ru.skypro.homework.service.AvatarService;
 
 @RestController

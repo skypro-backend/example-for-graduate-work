@@ -42,11 +42,12 @@ public class AdsService {
         return responseDTO;
     }
 
-    public AdsDTO postAd(CreateAdsDTO createAdsDTO, MultipartFile imageFile) {
+    public AdsDTO postAd(CreateAdsDTO createAdsDTO, MultipartFile imageFile,
+                         Long userId) {
         Ad ad = createAdsDTO.toAd();
-        // ad.setId(null);
-        // todo Исправить
-        ad.setAuthor(usersRepository.findById(1L).orElse(new User()));
+        ad.setAuthor(usersRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с ид. " +
+                        userId + " не найден")));
 
         ad.setImage(savePicture(imageFile));
         ad.setPublishDateTime(Instant.now());
@@ -90,10 +91,10 @@ public class AdsService {
         return AdsDTO.fromAd(savedAd);
     }
 
-    // todo исправить
-    public ResponseWrapperAdsDTO getAuthorisedUserAds() {
-        User user = usersRepository.findById(1L).orElseThrow(() -> new NotFoundException("getAuthorisedUserAds()"));
-        List<Ad> ads = adsRepository.findByAuthor(user);
+    public ResponseWrapperAdsDTO getAuthorisedUserAds(Long userId) {
+        User user = usersRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с ид. " + userId + " не найден"));
+        List<Ad> ads = adsRepository.findByAuthorOrderByPublishDateTimeDesc(user);
         List<AdsDTO> adsDTOList = ads.stream()
                 .map(AdsDTO::fromAd)
                 .collect(Collectors.toList());
@@ -101,5 +102,31 @@ public class AdsService {
         responseDTO.setResults(adsDTOList);
         responseDTO.setCount(adsDTOList.size());
         return responseDTO;
+    }
+
+    public byte[] updateAdImage(Long id, MultipartFile image) {
+        Ad ad = adsRepository.findById(id).orElseThrow(() -> new NotFoundException("Объявление с идентификатором " +
+                id + " не найдено"));
+
+        String pictureId = ad.getImage();
+        AdPicture picture = new AdPicture();
+        if (pictureId == null) {
+            picture = null;
+        } else {
+            picture = adPictureRepository.findById(pictureId).orElse(null);
+        }
+        if (picture == null) {
+            String newPictureId = savePicture(image);
+            picture = adPictureRepository.getReferenceById(newPictureId);
+            ad.setImage(newPictureId);
+            adsRepository.save(ad);
+        }
+        try {
+            picture.setData(image.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return adPictureRepository.save(picture).getData();
     }
 }

@@ -2,21 +2,19 @@ package ru.skypro.homework.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.ResponseWrapperAdsDTO;
-import ru.skypro.homework.dto.ResponseWrapperCommentDTO;
+import ru.skypro.homework.dto.*;
+import ru.skypro.homework.exception.ForbiddenException;
 import ru.skypro.homework.exception.NotFoundException;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentsRepository;
+import ru.skypro.homework.repository.UsersRepository;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,12 +22,16 @@ import java.util.stream.Collectors;
 public class CommentsService {
     private final CommentsRepository commentsRepository;
     private final AdsRepository adsRepository;
+    private final UsersRepository usersRepository;
 
     public ResponseWrapperCommentDTO getAdComments(Long adId) {
         List<Comment> comments = commentsRepository.findAllByAdIdOrderByCreationDateTimeAsc(adId);
-        if (comments.isEmpty()) {
-            throw new NotFoundException("Комментарии к объявлению " + adId + " не найдены");
-        }
+// ВАЖНО: закомментировано вопреки спецификации, чтобы не вызывать исключение при открытии
+// объявления с 0 комментариев - фронтэнд некорректно отрабатывает такие случаи
+// и не отображает объявление корректно, пока не добавишь к нему хоть один комментарий.
+//        if (comments.isEmpty()) {
+//            throw new NotFoundException("Комментарии к объявлению " + adId + " не найдены");
+//        }
         List<CommentDTO> commentDTOList = comments.stream()
                 .map(CommentDTO::fromComment)
                 .collect(Collectors.toList());
@@ -39,18 +41,16 @@ public class CommentsService {
         return responseDTO;
     }
 
-    public CommentDTO addComment(Long adId, CommentDTO commentDTO) {
+    public CommentDTO addComment(Long adId, CommentDTO commentDTO, Long userId) {
         Comment comment = commentDTO.toComment();
         Ad ad = adsRepository.findById(adId).orElseThrow(() -> new NotFoundException("Объявление "+ adId +
                 " не найдено"));
         comment.setId(null);
         comment.setAd(ad);
-        // todo comment.setAuthor();
-        User user = new User();
-        user.setId(1L);
+        User user = usersRepository.findById(userId)
+                        .orElseThrow(() -> new NotFoundException("Пользователь с ид. " + userId + " не найден"));
         comment.setAuthor(user);
         comment.setCreationDateTime(Instant.now());
-        //
         Comment savedComment = commentsRepository.save(comment);
         return CommentDTO.fromComment(savedComment);
     }
@@ -59,17 +59,27 @@ public class CommentsService {
         commentsRepository.deleteById(commentId);
     }
 
-    public CommentDTO updateComment(Long adId, Long commentId, CommentDTO commentDTO) {
+    public CommentDTO updateComment(Long adId, Long commentId, CommentDTO commentDTO, Long userId) {
+        User user = usersRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с ид. " + userId + " не найден"));
+
         Comment comment = commentsRepository.findById(commentId).orElseThrow(() ->
                 new NotFoundException("Комментарий "+ commentId +
                 " не найден"));
-        comment.setText(commentDTO.getText());
-        // todo comment.setAuthor();
-//        User user = new User();
-//        user.setId(1L);
-//        comment.setAuthor(user);
-        //
+
+        boolean isAdmin = user.getRole() == Role.ADMIN;
+        if (!Objects.equals(comment.getAuthor().getId(), userId) && !isAdmin) {
+            throw new ForbiddenException("У пользователя с ид. " + userId + " нет прав редактировать " +
+                    "данный комментарий");
+        }
+        String newText = commentDTO.getText();
+        if (isAdmin) {
+            newText = newText + "\n\nОтредактировано пользователем " + user.getFirstName() +
+                    " в " + Instant.now();
+        }
+        comment.setText(newText);
         Comment savedComment = commentsRepository.save(comment);
         return CommentDTO.fromComment(savedComment);
     }
+
 }

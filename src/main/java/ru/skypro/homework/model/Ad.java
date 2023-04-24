@@ -13,10 +13,12 @@ public class Ad {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author_id", nullable = false)
     private User author;
+    @Column(nullable = false)
     private String title;
     private String description;
+    @Column(nullable = false)
     private Integer price;
     private String image;
     @JoinColumn(name = "publish_date_time")
