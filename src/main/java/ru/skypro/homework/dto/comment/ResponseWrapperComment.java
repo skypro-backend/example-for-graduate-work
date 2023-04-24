@@ -1,9 +1,11 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.dto.comment;
 
 import lombok.Data;
+
 import java.util.List;
+
 @Data
 public class ResponseWrapperComment {
-    private Long count;
+    private Integer count;
     private List<Comment> results;
 }
