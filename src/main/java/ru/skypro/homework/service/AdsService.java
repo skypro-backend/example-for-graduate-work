@@ -9,14 +9,13 @@ import ru.skypro.homework.dto.ads.CreateAds;
 import ru.skypro.homework.dto.ads.FullAds;
 import ru.skypro.homework.dto.ads.ResponseWrapperAds;
 import ru.skypro.homework.dto.enums.Role;
+import ru.skypro.homework.dto.user.MyUserDetails;
 import ru.skypro.homework.exception.*;
 import ru.skypro.homework.exception.notFound.AdsNotFoundException;
 import ru.skypro.homework.exception.notFound.AvatarNotFoundException;
-import ru.skypro.homework.exception.notFound.UserNotFoundException;
 import ru.skypro.homework.model.AdsModel;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.repository.AdsRepository;
-import ru.skypro.homework.repository.UserRepository;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,11 +24,10 @@ import java.util.stream.Collectors;
 @Service
 public class AdsService {
     private final AdsRepository adsRepository;
-    private final UserRepository userRepository;
 
-    public AdsService( AdsRepository adsRepository, UserRepository userRepository ) {
+
+    public AdsService( AdsRepository adsRepository) {
         this.adsRepository = adsRepository;
-        this.userRepository = userRepository;
     }
 
     public ResponseWrapperAds getAllAds() {
@@ -44,14 +42,12 @@ public class AdsService {
     }
 
     public Ads addAd( CreateAds createAds, MultipartFile image, Authentication authentication ) {
-        UserModel user = userRepository.findByUsername(authentication.getName()).orElseThrow(UserNotFoundException::new);
+        UserModel userModel = ((MyUserDetails) authentication.getPrincipal()).getUser();
 
-        if (user == null) {
+        if (userModel == null) {
             throw new NotAuthorizedException();
         }
-        if (user.getAds().size() > 25) {
-            throw new PaymentRequiredException();
-        }
+
         if (createAds == null) {
             throw new AdsNotFoundException();
         }
@@ -64,7 +60,7 @@ public class AdsService {
             throw new RuntimeException(e);
         }
 
-        newAd.setUser(user);
+        newAd.setUser(userModel);
         newAd.setDescription(createAds.getDescription());
         newAd.setPrice(createAds.getPrice());
         newAd.setTitle(createAds.getTitle());
@@ -78,14 +74,13 @@ public class AdsService {
     }
 
     public Ads updateAds( Integer id, CreateAds createAds, Authentication authentication ) {
-        UserModel currentUser = userRepository.findByUsername(authentication.getName()).orElseThrow(UserNotFoundException::new);
-        if (currentUser == null) {
+        if (!authentication.isAuthenticated()) {
             throw new NotAuthorizedException();
         }
         AdsModel founded = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
-
-        if (currentUser.getRole().equals(Role.USER)) {
-            if (currentUser.getPk().equals(founded.getUser().getPk())) {
+        UserModel userModel = ((MyUserDetails) authentication.getPrincipal()).getUser();
+        if (userModel.getRole().equals(Role.USER)) {
+            if (userModel.getPk().equals(founded.getUser().getPk())) {
                 founded.setDescription(createAds.getDescription());
                 founded.setPrice(createAds.getPrice());
                 founded.setTitle(createAds.getTitle());
@@ -104,14 +99,13 @@ public class AdsService {
     }
 
     public void deleteAds( Integer id, Authentication authentication ) {
-        UserModel currentUser = userRepository.findByUsername(authentication.getName()).orElseThrow();
         if (!authentication.isAuthenticated()) {
             throw new NotAuthorizedException();
         }
         AdsModel target = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
-
-        if (currentUser.getRole().equals(Role.USER)) {
-            if (target.getUser().getPk().equals(currentUser.getPk())) {
+        UserModel userModel = ((MyUserDetails) authentication.getPrincipal()).getUser();
+        if (userModel.getRole().equals(Role.USER)) {
+            if (target.getUser().getPk().equals(userModel.getPk())) {
                 adsRepository.deleteById(id);
             } else {
                 throw new AccessDeniedException("Недостаточно прав для удаления объявления другого пользователя!");
@@ -122,16 +116,13 @@ public class AdsService {
     }
 
     public ResponseWrapperAds getMyAds( Authentication authentication ) {
-        UserModel currentUser = userRepository.findByUsername(authentication.getName()).orElseThrow(UserNotFoundException::new);
         if (!authentication.isAuthenticated()) {
             throw new NotAuthorizedException();
         }
-        if (currentUser == null) {
-            throw new AccessDeniedException("Недостаточно прав для доступа к странице!");
-        }
+        UserModel userModel = ((MyUserDetails) authentication.getPrincipal()).getUser();
         ResponseWrapperAds rwa = new ResponseWrapperAds();
 
-        List<Ads> founded = adsRepository.findAllByUser_Pk(currentUser.getPk())
+        List<Ads> founded = adsRepository.findAllByUser_Pk(userModel.getPk())
                 .stream()
                 .map(Ads::fromModel)
                 .collect(Collectors.toList());
@@ -142,9 +133,9 @@ public class AdsService {
 
     public MultipartFile updateImage( Integer id, MultipartFile image, Authentication authentication ) {
         AdsModel founded = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
-        UserModel currentUser = userRepository.findByUsername(authentication.getName()).orElseThrow(UserNotFoundException::new);
-        if (currentUser.getRole().equals(Role.USER)) {
-            if (founded.getUser().getPk().equals(currentUser.getPk())) {
+        UserModel userModel = ((MyUserDetails) authentication.getPrincipal()).getUser();
+        if (userModel.getRole().equals(Role.USER)) {
+            if (founded.getUser().getPk().equals(userModel.getPk())) {
                 try {
                     byte[] bytes = image.getBytes();
                     founded.setImage(bytes);

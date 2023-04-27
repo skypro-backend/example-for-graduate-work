@@ -10,14 +10,11 @@ import ru.skypro.homework.dto.enums.Role;
 import ru.skypro.homework.exception.notFound.AdsNotFoundException;
 import ru.skypro.homework.exception.notFound.CommentNotFoundException;
 import ru.skypro.homework.exception.NotAuthorizedException;
-import ru.skypro.homework.exception.notFound.UserNotFoundException;
 import ru.skypro.homework.model.AdsModel;
 import ru.skypro.homework.model.CommentModel;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.UserRepository;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,12 +23,10 @@ import java.util.stream.Collectors;
 public class CommentService {
     private final AdsRepository adsRepository;
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
-
-    public CommentService( AdsRepository adsRepository, CommentRepository commentRepository, UserRepository userRepository ) {
+    public CommentService( AdsRepository adsRepository, CommentRepository commentRepository) {
         this.adsRepository = adsRepository;
         this.commentRepository = commentRepository;
-        this.userRepository = userRepository;
+
     }
 
     public ResponseWrapperComment getComments( Integer id ) {
@@ -50,9 +45,7 @@ public class CommentService {
         UserModel user = ((MyUserDetails) authentication.getPrincipal()).toModel();
 
         if (!authentication.isAuthenticated()) {
-            throw new AccessDeniedException("Недостаточно прав для перехода на страницу!");
-        }
-        if (user == null) {
+
             throw new NotAuthorizedException();
         }
 
@@ -68,16 +61,15 @@ public class CommentService {
     }
 
     public Comment updateComment( Integer adId, Integer commentId, Comment comment, Authentication authentication ) {
-        UserModel currentUser = userRepository.findByUsername(authentication.getName()).orElseThrow(UserNotFoundException::new);
-        if (currentUser == null) {
+        UserModel currentUser = ((MyUserDetails) authentication.getPrincipal()).toModel();
+        if (!authentication.isAuthenticated()) {
             throw new NotAuthorizedException();
         }
-        AdsModel neededAds = adsRepository.findById(adId).orElseThrow(AdsNotFoundException::new);
-        CommentModel prevComment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        CommentModel prevComment = commentRepository.findByIdAndAds_Id(commentId, adId).orElseThrow(CommentNotFoundException::new);
         if (currentUser.getRole().equals(Role.USER)) {
             if (prevComment.getUser().getPk().equals(currentUser.getPk())) {
                 CommentModel newComment = comment.toModel();
-                newComment.setAds(neededAds);
+                newComment.setAds(prevComment.getAds());
                 newComment.setId(commentId);
                 newComment.setUser(prevComment.getUser());
                 commentRepository.save(newComment);
@@ -87,7 +79,7 @@ public class CommentService {
             }
         } else {
             CommentModel newComment = comment.toModel();
-            newComment.setAds(neededAds);
+            newComment.setAds(prevComment.getAds());
             newComment.setId(commentId);
             newComment.setUser(prevComment.getUser());
             commentRepository.save(newComment);

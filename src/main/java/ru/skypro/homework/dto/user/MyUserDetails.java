@@ -1,38 +1,32 @@
 package ru.skypro.homework.dto.user;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.skypro.homework.dto.enums.Role;
 import ru.skypro.homework.model.UserModel;
-
 import java.util.Collection;
 import java.util.List;
 
-@Data
+@RequiredArgsConstructor
+@Getter
 public class MyUserDetails implements UserDetails {
-    private Integer pk;
-    private String firstName;
-    private String lastName;
-    private String phone;
-    private String username;
-    private String password;
-    private Role role;
+    private final UserModel user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
     @Override
     public String getPassword() {
-        return this.password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.username;
+        return user.getUsername();
     }
 
     @Override
@@ -57,25 +51,13 @@ public class MyUserDetails implements UserDetails {
 
     public UserModel toModel() {
         UserModel userModel = new UserModel();
-        userModel.setPk(this.getPk());
-        userModel.setUsername(this.getUsername());
-        userModel.setFirstName(this.getFirstName());
-        userModel.setLastName(this.getLastName());
-        userModel.setPhone(this.getPhone());
-        userModel.setPassword(this.getPassword());
-        userModel.setRole(this.getRole());
+        userModel.setPk(this.user.getPk());
+        userModel.setUsername(this.user.getUsername());
+        userModel.setFirstName(this.user.getFirstName());
+        userModel.setLastName(this.user.getLastName());
+        userModel.setPhone(this.user.getPhone());
+        userModel.setPassword(this.user.getPassword());
+        userModel.setRole(this.user.getRole());
         return userModel;
-    }
-
-    public static MyUserDetails fromModel( UserModel model ) {
-        MyUserDetails myUserDetails = new MyUserDetails();
-        myUserDetails.setPk(model.getPk());
-        myUserDetails.setRole(model.getRole());
-        myUserDetails.setPassword(model.getPassword());
-        myUserDetails.setPhone(model.getPhone());
-        myUserDetails.setUsername(model.getUsername());
-        myUserDetails.setFirstName(model.getFirstName());
-        myUserDetails.setLastName(model.getLastName());
-        return myUserDetails;
     }
 }

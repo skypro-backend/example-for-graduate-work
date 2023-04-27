@@ -56,6 +56,7 @@ public class AdsController {
             }
     )
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Transactional
     public ResponseEntity<Ads> addAd( @RequestPart("properties") CreateAds createAds,
                                       @RequestPart("image") MultipartFile image,
                                       Authentication authentication ) {
@@ -139,7 +140,7 @@ public class AdsController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/{id}/avatar")
+    @GetMapping("/avatar/{id}")
     public ResponseEntity<byte[]> getAdsAvatar( @PathVariable Integer id ) {
         byte[] result = adsService.getAdsAvatarById(id);
         return ResponseEntity.ok(result);

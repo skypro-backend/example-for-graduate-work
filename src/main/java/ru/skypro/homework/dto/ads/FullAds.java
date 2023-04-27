@@ -22,7 +22,7 @@ public class FullAds {
         fullAds.setAuthorLastName(model.getUser().getLastName());
         fullAds.setDescription(model.getDescription());
         fullAds.setEmail(model.getUser().getUsername());
-        fullAds.setImage("/ads/" + model.getId().toString() + "/avatar");
+        fullAds.setImage("/ads/avatar/" + model.getId().toString());
         fullAds.setPhone(model.getUser().getPhone());
         fullAds.setPrice(model.getPrice());
         fullAds.setTitle(model.getTitle());

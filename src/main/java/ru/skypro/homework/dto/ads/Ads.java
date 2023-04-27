@@ -14,7 +14,7 @@ public class Ads {
     public static Ads fromModel( AdsModel model ) {
         Ads ads = new Ads();
         ads.setAuthor(model.getUser().getPk());
-        ads.setImage("/ads/" + model.getId() + "/avatar");
+        ads.setImage("/ads/avatar/" + model.getId());
         ads.setPk(model.getId());
         ads.setPrice(model.getPrice());
         ads.setTitle(model.getTitle());

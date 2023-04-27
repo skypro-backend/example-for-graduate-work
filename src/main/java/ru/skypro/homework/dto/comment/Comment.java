@@ -17,7 +17,7 @@ public class Comment {
     public static Comment fromModel( CommentModel model ) {
         Comment comment = new Comment();
         comment.setAuthor(model.getUser().getPk());
-        comment.setAuthorImage("/users/" + model.getUser().getPk() + "/avatar");
+        comment.setAuthorImage("/users/avatar/" + model.getUser().getPk());
         comment.setAuthorFirstName(model.getUser().getFirstName());
         comment.setCreatedAt(model.getCreatedAt());
         comment.setPk(model.getId());

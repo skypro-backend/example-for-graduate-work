@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
         if (manager.userExists(registerReq.getUsername())) {
             return false;
         }
-        manager.createUser(MyUserDetails.fromModel(userModel));
+        manager.createUser(registerReq);
         return true;
     }
 

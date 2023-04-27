@@ -36,7 +36,7 @@ public class UsersController {
     @PostMapping("/set_password")
     public ResponseEntity<?> setPassword( @RequestBody NewPassword newPassword, Authentication authentication ) {
         NewPassword resultPass = new NewPassword();
-        userService.changePassword(authentication.getName(), newPassword.getCurrentPassword(), newPassword.getNewPassword(), authentication);
+        userService.changePassword(newPassword.getCurrentPassword(), newPassword.getNewPassword(), authentication);
         resultPass.setCurrentPassword(newPassword.getCurrentPassword());
         resultPass.setNewPassword(newPassword.getNewPassword());
         return ResponseEntity.ok(resultPass);
@@ -61,7 +61,7 @@ public class UsersController {
     }
 
 
-    @GetMapping("/{id}/avatar")
+    @GetMapping("/avatar/{id}")
     public ResponseEntity<byte[]> getUsersAvatar( @PathVariable Integer id ) {
         byte[] founded = userService.getAvatarByUserId(id);
         return ResponseEntity.ok(founded);
