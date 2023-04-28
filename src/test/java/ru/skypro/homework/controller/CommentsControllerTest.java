@@ -85,7 +85,7 @@ class CommentsControllerTest {
 
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
-        auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
+        auth = new UsernamePasswordAuthenticationToken(userDetails,
                 userDetails.getPassword(),
                 userDetails.getAuthorities());
     }
@@ -168,7 +168,7 @@ class CommentsControllerTest {
 
         user.setRole(Role.ADMIN);
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
-        auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
+        auth = new UsernamePasswordAuthenticationToken(userDetails,
                 userDetails.getPassword(),
                 userDetails.getAuthorities());
 

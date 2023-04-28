@@ -77,9 +77,10 @@ class AdsControllerTest {
         adId = ad.getId().toString();
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
-        auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
+        auth = new UsernamePasswordAuthenticationToken(userDetails,
                 userDetails.getPassword(),
                 userDetails.getAuthorities());
+
     }
 
     @AfterEach

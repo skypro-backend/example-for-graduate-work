@@ -55,7 +55,6 @@ public class UsersService {
 
     public UserDTO getAuthorisedUser(Authentication authentication) {
         User user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
-//        User user = usersRepository.findByEmail(authentication.getPrincipal().toString()).orElse(null);
         if (user == null) {
             throw new NotFoundException("Пользователь " + authentication.getName() + " не найден");
         }
