@@ -26,12 +26,7 @@ public class CommentsService {
 
     public ResponseWrapperCommentDTO getAdComments(Long adId) {
         List<Comment> comments = commentsRepository.findAllByAdIdOrderByCreationDateTimeAsc(adId);
-// ВАЖНО: закомментировано вопреки спецификации, чтобы не вызывать исключение при открытии
-// объявления с 0 комментариев - фронтэнд некорректно отрабатывает такие случаи
-// и не отображает объявление корректно, пока не добавишь к нему хоть один комментарий.
-//        if (comments.isEmpty()) {
-//            throw new NotFoundException("Комментарии к объявлению " + adId + " не найдены");
-//        }
+
         List<CommentDTO> commentDTOList = comments.stream()
                 .map(CommentDTO::fromComment)
                 .collect(Collectors.toList());
@@ -80,6 +75,11 @@ public class CommentsService {
         comment.setText(newText);
         Comment savedComment = commentsRepository.save(comment);
         return CommentDTO.fromComment(savedComment);
+    }
+
+    public String getUsername(Long adId) {
+        return commentsRepository.findById(adId).orElseThrow(() -> new NotFoundException(""))
+                .getAuthor().getEmail();
     }
 
 }

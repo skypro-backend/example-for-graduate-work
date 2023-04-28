@@ -7,19 +7,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.apache.catalina.filters.AddDefaultCharsetFilter;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.UsersService;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -32,7 +31,6 @@ public class AdsController {
     private final AdsService adsService;
     private final UsersService usersService;
 
-    // Получить все объявления
     @Operation(
             summary = "Получить все объявления", tags = "Объявления",
             responses = {
@@ -48,7 +46,6 @@ public class AdsController {
         return ResponseEntity.ok(adsService.getAllAds());
     }
 
-    // Добавить объявление
     @Operation(
             summary = "Добавить объявление", tags = "Объявления",
             responses = {
@@ -62,16 +59,16 @@ public class AdsController {
             }
     )
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @RolesAllowed({"USER", "ADMIN"})
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     ResponseEntity<AdsDTO> postAd(@Valid
                                   @RequestPart("properties") CreateAdsDTO properties, @Valid
                                   @RequestPart("image") MultipartFile image,
                                   Authentication authentication) {
-        UserDTO userDTO = usersService.getAuthorisedUser(authentication.getName());
+
+        UserDTO userDTO = usersService.getAuthorisedUser(authentication);
         return ResponseEntity.ok(adsService.postAd(properties, image, userDTO.getId()));
     }
 
-    // Получить информацию об объявлении
     @Operation(
             summary = "Получить информацию об объявлении", tags = "Объявления",
             responses = {
@@ -83,12 +80,11 @@ public class AdsController {
             }
     )
     @GetMapping("/{id}")
-    @RolesAllowed({"USER", "ADMIN"})
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     ResponseEntity<FullAdsDTO> getAdInfo(@PathVariable(name = "id") Long adId) {
         return ResponseEntity.ok(adsService.getAdInfo(adId));
     }
 
-    // Удалить объявление
     @Operation(
             summary = "Удалить объявление", tags = "Объявления",
             responses = {
@@ -99,13 +95,13 @@ public class AdsController {
             }
     )
     @DeleteMapping("/{id}")
-    @RolesAllowed({"USER", "ADMIN"})
+    @PreAuthorize("@adsService.getAdInfo(#adId).getEmail()" +
+            "== authentication.name or hasAuthority('ADMIN')")
     ResponseEntity<?> deleteAd(@PathVariable(name = "id") Long adId) {
         adsService.deleteAd(adId);
         return ResponseEntity.ok().build();
     }
 
-    // Обновить информацию об объявлении
     @Operation(
             summary = "Обновить информацию об объявлении", tags = "Объявления",
             responses = {
@@ -119,7 +115,8 @@ public class AdsController {
             }
     )
     @PatchMapping("/{id}")
-    @RolesAllowed({"USER", "ADMIN"})
+    @PreAuthorize("@adsService.getAdInfo(#adId).getEmail()" +
+            "== authentication.name or hasAuthority('ADMIN')")
     ResponseEntity<AdsDTO> updateAd(@PathVariable(name = "id") Long adId,
                                     @RequestBody CreateAdsDTO createAdsDTO) {
 
@@ -127,7 +124,6 @@ public class AdsController {
         return ResponseEntity.ok(adsService.updateAd(adId, createAdsDTO));
     }
 
-    // Получить объявления авторизованного пользователя
     @Operation(
             summary = "Получить объявления авторизованного пользователя", tags = "Объявления",
             responses = {
@@ -140,13 +136,11 @@ public class AdsController {
             }
     )
     @GetMapping("/me")
-    @RolesAllowed({"USER", "ADMIN"})
     ResponseEntity<ResponseWrapperAdsDTO> getAuthorisedUserAds(Authentication authentication) {
-        UserDTO dto = usersService.getAuthorisedUser(authentication.getName());
+        UserDTO dto = usersService.getAuthorisedUser(authentication);
         return ResponseEntity.ok(adsService.getAuthorisedUserAds(dto.getId()));
     }
 
-    // Обновить картинку объявления
     @Operation(
             summary = "Обновить картинку объявления", tags = "Объявления",
             responses = {
@@ -158,7 +152,8 @@ public class AdsController {
             }
     )
     @PatchMapping(value = "/{id}/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    @RolesAllowed({"USER", "ADMIN"})
+    @PreAuthorize("@adsService.getAdInfo(#id).getEmail()" +
+            "== authentication.name or hasAuthority('ADMIN')")
     ResponseEntity<byte[]> updateAdImage(@PathVariable Long id,
                                          @RequestPart("image") MultipartFile image) {
         byte[] bytes = adsService.updateAdImage(id, image);

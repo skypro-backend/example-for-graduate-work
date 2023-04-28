@@ -4,16 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
 public class Avatar {
     @Id
-    String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     @Lob
     @Type(type = "org.hibernate.type.ImageType")
     private byte[] data;

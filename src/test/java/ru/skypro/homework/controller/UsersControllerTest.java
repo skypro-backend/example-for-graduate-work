@@ -48,7 +48,7 @@ class UsersControllerTest {
             = new MockPart("image", "avatar", "avatar".getBytes());
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
 
         user.setEmail("test_username@mail_te.st");
         user.setPassword(encoder.encode("test_password"));

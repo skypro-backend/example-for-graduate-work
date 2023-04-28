@@ -12,7 +12,7 @@ public class AvatarService {
 
     private final AvatarRepository repository;
 
-    public byte[] getImageAsBytes(String imageId) {
+    public byte[] getImageAsBytes(Long imageId) {
         Avatar picture = repository.findById(imageId)
                 .orElseThrow(() -> new NotFoundException("Аватар с ид. " + imageId + " не найден"));
         return picture.getData();

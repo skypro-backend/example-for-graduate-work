@@ -26,7 +26,6 @@ public class UsersController {
 
     private final UsersService usersService;
 
-    // Обновление пароля
     @Operation(
             summary = "Обновление пароля", tags = "Пользователи",
             responses = {
@@ -42,12 +41,11 @@ public class UsersController {
     @PostMapping("/set_password")
     public ResponseEntity<?> setPassword(@RequestBody NewPasswordDTO newPasswordDTO,
                                          Authentication authentication) {
-        UserDTO dto = usersService.getAuthorisedUser(authentication.getName());
+        UserDTO dto = usersService.getAuthorisedUser(authentication);
         usersService.setPassword(dto.getId(), newPasswordDTO);
         return ResponseEntity.ok().build();
     }
 
-    // Получить информацию об авторизованном пользователе
     @Operation(
             summary = "Получить информацию об авторизованном пользователе", tags = "Пользователи",
             responses = {
@@ -62,17 +60,15 @@ public class UsersController {
     )
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getAuthorisedUserInfo(Authentication authentication) {
-        UserDTO dto = usersService.getAuthorisedUser(authentication.getName());
+        UserDTO dto = usersService.getAuthorisedUser(authentication);
         return ResponseEntity.ok(dto);
     }
 
-    // Обновить информацию об авторизованном пользователе
     @PatchMapping("/me")
     public ResponseEntity<UserDTO> setAuthorisedUserInfo(@RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(usersService.updateUser(userDTO));
     }
 
-    // Обновить аватар авторизованного пользователя
     @Operation(
             summary = "Обновить информацию об авторизованном пользователе", tags = "Пользователи",
             responses = {
@@ -89,7 +85,7 @@ public class UsersController {
     @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> setAuthorisedUserAvatar(@RequestPart("image") MultipartFile image,
                                                      Authentication authentication) {
-        UserDTO dto = usersService.getAuthorisedUser(authentication.getName());
+        UserDTO dto = usersService.getAuthorisedUser(authentication);
         usersService.setAvatar(dto.getId(), image);
         return ResponseEntity.ok().build();
     }

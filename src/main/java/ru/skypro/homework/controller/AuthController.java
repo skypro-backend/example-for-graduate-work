@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.LoginReqDTO;
 import ru.skypro.homework.dto.RegisterReqDTO;
-import ru.skypro.homework.security.CustomUserDetailsService;
+import ru.skypro.homework.exception.UnauthorizedException;
 import ru.skypro.homework.service.AuthService;
 
 @Slf4j
@@ -24,11 +24,9 @@ import ru.skypro.homework.service.AuthService;
 @Tag(name = "Авторизация")
 public class AuthController {
 
-    private final CustomUserDetailsService service;
     private final AuthService authService;
 
 
-    // Авторизация пользователя
     @Operation(summary = "Авторизация пользователя", tags = "Авторизация",
             responses = {
                     @ApiResponse(
@@ -42,10 +40,12 @@ public class AuthController {
     )
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReqDTO reqDTO) {
-            return ResponseEntity.ok(authService.login(reqDTO.getUsername(), reqDTO.getPassword()));
+        if (!authService.login(reqDTO.getUsername(), reqDTO.getPassword())) {
+            throw new UnauthorizedException("Неверный пароль");
+        }
+        return ResponseEntity.ok().build();
     }
 
-    // Регистрация пользователя
     @Operation(summary = "Регистрация пользователя", tags = "Регистрация",
             responses = {
                     @ApiResponse(

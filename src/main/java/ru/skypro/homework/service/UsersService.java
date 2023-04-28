@@ -1,7 +1,7 @@
 package ru.skypro.homework.service;
 
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +13,7 @@ import ru.skypro.homework.model.Avatar;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.UsersRepository;
+import ru.skypro.homework.security.CustomUserDetails;
 
 import java.io.IOException;
 
@@ -47,16 +48,17 @@ public class UsersService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        String id = "/avatar/" + RandomStringUtils.randomAlphabetic(4);
-        avatar.setId(id);
         Avatar savedAvatar = avatarRepository.save(avatar);
 
-        return savedAvatar.getId();
+        return "/avatar/" + savedAvatar.getId().toString();
     }
 
-    public UserDTO getAuthorisedUser(String username) {
-        User user = usersRepository.findByEmail(username).orElseThrow(() ->
-                new NotFoundException("Пользователь " + username + " не найден"));
+    public UserDTO getAuthorisedUser(Authentication authentication) {
+        User user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
+//        User user = usersRepository.findByEmail(authentication.getPrincipal().toString()).orElse(null);
+        if (user == null) {
+            throw new NotFoundException("Пользователь " + authentication.getName() + " не найден");
+        }
 
         return UserDTO.fromUser(user);
     }

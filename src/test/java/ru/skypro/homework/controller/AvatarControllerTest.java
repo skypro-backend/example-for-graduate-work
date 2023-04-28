@@ -36,22 +36,25 @@ class AvatarControllerTest {
 
     private User user = new User();
     private Avatar avatar = new Avatar();
+    private String avatarId;
 
     @BeforeEach
     void setUp() {
+        final byte[] bytes = {1, 1, 1, 1};
+        avatar.setData(bytes);
+        avatar = avatarRepository.save(avatar);
+        avatarId = avatar.getId().toString();
+
         user.setEmail("test_username@mail_te.st");
         user.setFirstName("test_first_name");
         user.setLastName("test_last_name");
         user.setRole(Role.USER);
         user.setPassword(encoder.encode("password"));
         user.setPhone("123456");
-        user.setImage("/avatar/123");
+        user.setImage("/avatar/" + avatarId);
         user = usersRepository.save(user);
 
-        avatar.setId("/avatar/123");
-        final byte[] bytes = {1, 1, 1, 1};
-        avatar.setData(bytes);
-        avatar = avatarRepository.save(avatar);
+
     }
 
     @AfterEach
@@ -62,7 +65,7 @@ class AvatarControllerTest {
 
     @Test
     void getAvatar() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/avatar/123"))
+        MvcResult mvcResult = mockMvc.perform(get("/avatar/" + avatarId))
                 .andExpect(status().isOk()).andReturn();
         byte[] bytesReceived = mvcResult.getResponse().getContentAsByteArray();
         final byte[] bytesExpected = {1, 1, 1, 1};

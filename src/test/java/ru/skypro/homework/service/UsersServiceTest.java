@@ -5,7 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UserDTO;
@@ -16,8 +17,8 @@ import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.UsersRepository;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -33,8 +34,6 @@ class UsersServiceTest {
     UsersRepository usersRepository;
     @Mock
     AvatarRepository avatarRepository;
-    @Mock
-    PasswordEncoder passwordEncoder;
     @InjectMocks
     UsersService usersService;
 
@@ -74,31 +73,69 @@ class UsersServiceTest {
             }
 
             @Override
-            public byte[] getBytes() throws IOException {
+            public byte[] getBytes() {
                 return new byte[0];
             }
 
             @Override
-            public InputStream getInputStream() throws IOException {
+            public InputStream getInputStream() {
                 return null;
             }
 
             @Override
-            public void transferTo(File dest) throws IOException, IllegalStateException {
+            public void transferTo(File dest) throws IllegalStateException {
 
             }
         };
         when(usersRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
-        when(avatarRepository.save(any(Avatar.class))).thenReturn(new  Avatar());
+        when(avatarRepository.save(any(Avatar.class))).thenReturn(new Avatar() {
+            @Override
+            public Long getId() {
+                return 1L;
+            }
+        });
 
         assertDoesNotThrow(() -> usersService.setAvatar(1L, image));
     }
 
     @Test
     void getAuthorisedUser() {
-        assertThrows(NotFoundException.class, () -> usersService.getAuthorisedUser("TEST"));
-        when(usersRepository.findByEmail("TEST")).thenReturn(Optional.of(new User()));
-        assertDoesNotThrow(() -> usersService.getAuthorisedUser("TEST"));
+        assertThrows(NotFoundException.class, () -> usersService.getAuthorisedUser(new Authentication() {
+            @Override
+            public Collection<? extends GrantedAuthority> getAuthorities() {
+                return null;
+            }
+
+            @Override
+            public Object getCredentials() {
+                return "test";
+            }
+
+            @Override
+            public Object getDetails() {
+                return "test";
+            }
+
+            @Override
+            public Object getPrincipal() {
+                return "test";
+            }
+
+            @Override
+            public boolean isAuthenticated() {
+                return true;
+            }
+
+            @Override
+            public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+
+            }
+
+            @Override
+            public String getName() {
+                return "test";
+            }
+        }));
     }
 
     @Test

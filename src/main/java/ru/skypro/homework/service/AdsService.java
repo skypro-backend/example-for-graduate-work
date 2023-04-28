@@ -1,7 +1,6 @@
 package ru.skypro.homework.service;
 
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDTO;
@@ -64,11 +63,9 @@ public class AdsService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        String id = "/picture/" + RandomStringUtils.randomAlphabetic(4);
-        picture.setId(id);
         AdPicture savedPicture = adPictureRepository.save(picture);
 
-        return savedPicture.getId();
+        return "/picture/" + savedPicture.getId().toString();
     }
 
     public  FullAdsDTO getAdInfo(Long adId) {
@@ -109,15 +106,16 @@ public class AdsService {
                 id + " не найдено"));
 
         String pictureId = ad.getImage();
-        AdPicture picture = new AdPicture();
+        AdPicture picture;
         if (pictureId == null) {
             picture = null;
         } else {
-            picture = adPictureRepository.findById(pictureId).orElse(null);
+            picture = adPictureRepository.findById(Long.parseLong(pictureId.replace("/picture/", "")))
+                    .orElse(null);
         }
         if (picture == null) {
             String newPictureId = savePicture(image);
-            picture = adPictureRepository.getReferenceById(newPictureId);
+            picture = adPictureRepository.getReferenceById(Long.parseLong(newPictureId.replace("/picture/", "")));
             ad.setImage(newPictureId);
             adsRepository.save(ad);
         }

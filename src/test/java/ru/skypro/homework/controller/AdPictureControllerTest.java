@@ -42,17 +42,23 @@ class AdPictureControllerTest {
     private User user = new User();
     private Ad ad = new Ad();
     private AdPicture picture = new AdPicture();
+    private String pictureId;
 
 
     @BeforeEach
     void setUp() {
+        final byte[] bytes = {2, 2, 2, 2};
+        picture.setData(bytes);
+        picture = adPictureRepository.save(picture);
+        pictureId = picture.getId().toString();
+
         user.setEmail("test_username@mail_te.st");
         user.setFirstName("test_first_name");
         user.setLastName("test_last_name");
         user.setRole(Role.USER);
         user.setPassword(encoder.encode("password"));
         user.setPhone("123456");
-        user.setImage("/picture/123");
+        user.setImage("/picture/" + pictureId);
         user = usersRepository.save(user);
 
         ad.setTitle("Test ad title");
@@ -62,10 +68,6 @@ class AdPictureControllerTest {
         ad.setPrice(2500);
         ad = adsRepository.save(ad);
 
-        picture.setId("/picture/123");
-        final byte[] bytes = {2, 2, 2, 2};
-        picture.setData(bytes);
-        picture = adPictureRepository.save(picture);
     }
 
     @AfterEach
@@ -77,7 +79,7 @@ class AdPictureControllerTest {
 
     @Test
     void getPicture() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/picture/123"))
+        MvcResult mvcResult = mockMvc.perform(get("/picture/" + pictureId))
                 .andExpect(status().isOk()).andReturn();
         byte[] bytesReceived = mvcResult.getResponse().getContentAsByteArray();
         final byte[] bytesExpected = {2, 2, 2, 2};

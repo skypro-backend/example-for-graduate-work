@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.skypro.homework.model.AdPicture;
 
 @Repository
-public interface AdPictureRepository extends JpaRepository<AdPicture, String> {
+public interface AdPictureRepository extends JpaRepository<AdPicture, Long> {
 }

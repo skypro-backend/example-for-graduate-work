@@ -12,7 +12,7 @@ public class AdPictureService {
 
     private final AdPictureRepository repository;
 
-    public byte[] getImageAsBytes(String imageId) {
+    public byte[] getImageAsBytes(Long imageId) {
         AdPicture picture = repository.findById(imageId)
                 .orElseThrow(() -> new NotFoundException("Изображение с ид. " + imageId + " не найдено"));
         return picture.getData();

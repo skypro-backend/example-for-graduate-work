@@ -13,9 +13,8 @@ public class AdPictureController {
 
     private final AdPictureService service;
 
-    @GetMapping(value = "/{id}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE,
-    MediaType.IMAGE_GIF_VALUE})
+    @GetMapping(value = "/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getPicture(@PathVariable String id) {
-        return service.getImageAsBytes("/picture/" + id);
+        return service.getImageAsBytes(Long.parseLong(id));
     }
 }

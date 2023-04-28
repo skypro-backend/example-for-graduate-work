@@ -5,23 +5,14 @@ import ru.skypro.homework.model.Ad;
 
 @Data
 public class FullAdsDTO {
-    // id объявления
     private Long pk;
-    // Имя автора объявления
     private String authorFirstName;
-    // Фамилия автора объявления
     private String authorLastName;
-    // Описание объявления
     private String description;
-    // Логин автора объявления
     private String email;
-    // Ссылка на картинку объявления
     private String image;
-    // Телефон автора объявления
     private String phone;
-    // Цена объявления
     private Integer price;
-    // Заголовок объявления
     private String title;
 
     public static FullAdsDTO fromAd(Ad ad) {

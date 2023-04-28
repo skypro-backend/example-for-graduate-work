@@ -5,17 +5,11 @@ import ru.skypro.homework.model.User;
 
 @Data
 public class UserDTO {
-    // id пользователя
     private Long id;
-    // Логин пользователя
     private String email;
-    // Имя пользователя
     private String firstName;
-    // Фамлия пользователя
     private String lastName;
-    // Телефон пользователя
     private String phone;
-    // Ссылка на аватар пользователя
     private String image;
 
     public User toUser() {

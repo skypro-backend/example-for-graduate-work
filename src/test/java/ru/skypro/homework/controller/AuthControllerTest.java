@@ -8,17 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UsersRepository;
-import ru.skypro.homework.security.CustomUserDetailsService;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,10 +28,7 @@ class AuthControllerTest {
     private UsersRepository usersRepository;
     @Autowired
     private PasswordEncoder encoder;
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
 
-    private Authentication auth;
     private User user = new User();
 
     @BeforeEach
@@ -85,20 +78,15 @@ class AuthControllerTest {
         jsonLogin.put("username", "test2");
         jsonLogin.put("password", "222");
 
-        MvcResult mvcResult = mockMvc.perform(post("/login")
+        mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonLogin.toString()))
-                        .andReturn();
-        String response = mvcResult.getResponse().getContentAsString();
-        assertEquals("false", response);
+                        .content(jsonLogin.toString())).andExpect(status().is4xxClientError());
 
         jsonLogin.put("password", "password2");
 
-        mvcResult = mockMvc.perform(post("/login")
+        mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonLogin.toString()))
-                .andExpect(status().isOk()).andReturn();
-        response = mvcResult.getResponse().getContentAsString();
-        assertEquals("true", response);
+                .andExpect(status().isOk());
     }
 }

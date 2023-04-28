@@ -7,17 +7,11 @@ import java.time.Instant;
 
 @Data
 public class CommentDTO {
-    // id автора комментария
     private Long author;
-    // Ссылка на аватар автора комментария
     private String authorImage;
-    // Имя автора комментария
     private String authorFirstName;
-    // Дата и время создания комментария
     private Instant createdAt;
-    // id комментария
     private Long pk;
-    // Текст комментария
     private String text;
 
     public Comment toComment() {

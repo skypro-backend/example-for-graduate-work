@@ -21,6 +21,6 @@ public class Ad {
     @Column(nullable = false)
     private Integer price;
     private String image;
-    @JoinColumn(name = "publish_date_time")
+    @Column(name = "publish_date_time")
     private Instant publishDateTime;
 }
