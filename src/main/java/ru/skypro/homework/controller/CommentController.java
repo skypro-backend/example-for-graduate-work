@@ -18,9 +18,10 @@ import java.util.Collection;
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
+@RequestMapping("/ads")
 @Tag(name = "Комментарии")
 public class CommentController {
-    @PostMapping("/adds/{id}/comments")
+    @PostMapping("/{id}/comments")
     @Operation(summary = "Добавить комментарий к объявлению", responses = {
             @ApiResponse(responseCode = "201", content = {@Content(schema = @Schema(
                     implementation = CommentDto.class), mediaType = MediaType.APPLICATION_JSON_VALUE)}),
@@ -31,7 +32,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/adds/{adId}/comments/{commentId}")
+    @DeleteMapping("/{adId}/comments/{commentId}")
     @Operation(summary = "Удалить комментарий", responses = {
             @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema())}),
             @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema())}),
@@ -42,7 +43,7 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/adds/{adId}/comments/{commentId}")
+    @PatchMapping("/{adId}/comments/{commentId}")
     @Operation(summary = "Обновить комментарий", responses = {
             @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(
                     implementation = CommentDto.class), mediaType = MediaType.APPLICATION_JSON_VALUE)}),
@@ -55,7 +56,7 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/adds/{id}/comments")
+    @GetMapping("/{id}/comments")
     @Operation(summary = "Получить комментарии объявления", responses = {
             @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(
                     implementation = ResponseWrapperCommentDto.class), mediaType = MediaType.APPLICATION_JSON_VALUE)}),

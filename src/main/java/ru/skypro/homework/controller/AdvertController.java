@@ -27,7 +27,7 @@ public class AdvertController {
                     implementation = AdsDto.class), mediaType = MediaType.APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema())})}
     )
-    public ResponseEntity<AdsDto> create(@RequestBody CreateAdsDto properties,
+    public ResponseEntity<AdsDto> create(@RequestParam CreateAdsDto properties,
                                          @RequestParam("image") MultipartFile image) {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

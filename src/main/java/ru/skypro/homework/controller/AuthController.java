@@ -47,7 +47,7 @@ public class AuthController {
             @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema())})}
     )
     public ResponseEntity<?> register(@RequestBody RegisterReqDto req) {
-        Role role = req.getRole() == null ? USER : req.getRole();
+        Role role = req.getRole() == null ? USER : Role.valueOf(req.getRole());
         if (authService.register(req, role)) {
             return ResponseEntity.ok().build();
         } else {
