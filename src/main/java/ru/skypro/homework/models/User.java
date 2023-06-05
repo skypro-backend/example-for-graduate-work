@@ -1,7 +1,9 @@
 package ru.skypro.homework.models;
 
+import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
+@Data
 public class User {
     private int id;
     private String email;
