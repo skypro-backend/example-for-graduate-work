@@ -1,4 +1,4 @@
-package ru.skypro.homework.models;
+package ru.skypro.homework.model;
 
 import lombok.Data;
 import ru.skypro.homework.dto.Role;
