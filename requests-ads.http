@@ -15,5 +15,27 @@ Content-Type: application/json
 Content-Disposition: form-data; name="image"; filename="image.jpeg"
 Content-Type: image/jpeg
 
-![](../../../../../../Users/Desktop/image.jpg)
+![](../../../../../../Users/Edinichkin/Desktop/Java/image.jpg)
 --WebAppBoundary
+
+### Delete advert
+DELETE http://localhost:8080/ads/1
+
+### Update advert
+PATCH http://localhost:8080/ads/1
+Content-Type: application/json
+
+{
+  "title": "title",
+  "description": "description",
+  "price": 111
+}
+
+### Find all adverts
+GET http://localhost:8080/ads
+
+### Find advert by Id
+GET http://localhost:8080/ads/1
+
+### Find adverts for user
+GET http://localhost:8080/ads/me

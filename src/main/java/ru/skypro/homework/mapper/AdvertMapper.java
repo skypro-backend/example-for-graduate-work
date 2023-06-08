@@ -21,6 +21,11 @@ public interface AdvertMapper {
     AdsDto advertToAdsDto(Advert advert);
 
     @Mapping(target = "pk", source = "id")
+    @Mapping(target = "image", constant = "link to image")
+    @Mapping(target = "authorFirstName", source = "author.firstName")
+    @Mapping(target = "authorLastName", source = "author.lastName")
+    @Mapping(target = "email", source = "author.email")
+    @Mapping(target = "phone", source = "author.phone")
     FullAdsDto advertToFullAdsDto(Advert advert);
 
     List<AdsDto> advertListToAdsDtoList(List<Advert> adverts);

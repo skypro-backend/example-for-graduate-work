@@ -98,7 +98,8 @@ public class AdvertController {
                     implementation = ResponseWrapperAdsDto.class), mediaType = MediaType.APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema())})}
     )
-    public ResponseEntity<ResponseWrapperAdsDto> findAllByAuthUser(Authentication authentication) {
-        return ResponseEntity.ok(advertService.findAllByAuthUser(authentication.getName()));
+    public ResponseEntity<ResponseWrapperAdsDto> findAllByAuthUser() {
+        ResponseWrapperAdsDto responseWrapperAdsDto = advertService.findAllByAuthUser();
+        return ResponseEntity.ok(responseWrapperAdsDto);
     }
 }

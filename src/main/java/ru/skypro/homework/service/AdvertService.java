@@ -59,9 +59,10 @@ public class AdvertService {
         return advertMapper.advertToFullAdsDto(advert);
     }
 
-    public ResponseWrapperAdsDto findAllByAuthUser(String name) {
-        log.info("Find adverts by user name: " + name);
-        //to be done
-        return null;
+    public ResponseWrapperAdsDto findAllByAuthUser() {
+        log.info("Find adverts by user name");
+        //пока возвращаем все объявления
+        List<Advert> adverts = advertRepository.findAll();
+        return advertMapper.listToRespWrapperAdsDto(adverts);
     }
 }
