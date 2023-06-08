@@ -1,0 +1,19 @@
+### Create advert
+POST http://localhost:8080/ads
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="properties"
+Content-Type: application/json
+
+{
+  "title": "title",
+  "description": "descr",
+  "price": 11
+}
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="image.jpeg"
+Content-Type: image/jpeg
+
+![](../../../../../../Users/Desktop/image.jpg)
+--WebAppBoundary

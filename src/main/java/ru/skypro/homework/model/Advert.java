@@ -1,9 +1,7 @@
 package ru.skypro.homework.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -11,25 +9,25 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-public class User {
+public class Advert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private int id;
-    private String email;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String phone;
+    private String title;
+    private String description;
+    private int price;
     private String image;
-    private Role role;
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User author;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id;
+        Advert advert = (Advert) o;
+        return id == advert.id;
     }
 
     @Override
