@@ -2,6 +2,7 @@ package ru.skypro.homework.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateAdsDto;
 import ru.skypro.homework.dto.FullAdsDto;
@@ -24,12 +25,14 @@ public class AdvertService {
         this.advertMapper = advertMapper;
     }
 
+    @Transactional
     public AdsDto create(CreateAdsDto properties) {
         log.info("Creat advert with properties: " + properties);
         Advert advert = advertMapper.createAdsDtoToAdvert(properties);
         return advertMapper.advertToAdsDto(advertRepository.save(advert));
     }
 
+    @Transactional
     public void delete(int id) {
         log.info("Delete advert with id: " + id);
         Advert advert = advertRepository.findById(id)
@@ -37,6 +40,7 @@ public class AdvertService {
         advertRepository.delete(advert);
     }
 
+    @Transactional
     public AdsDto update(int id, CreateAdsDto properties) {
         log.info("Update advert with id: " + id);
         Advert advert = advertRepository.findById(id)
