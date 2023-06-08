@@ -1,6 +1,5 @@
 package ru.skypro.homework.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import ru.skypro.homework.dto.Role;
@@ -11,17 +10,19 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private int id;
-    private String email;
     private String password;
     private String firstName;
     private String lastName;
+    private String email;
     private String phone;
     private String image;
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Override

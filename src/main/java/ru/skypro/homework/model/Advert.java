@@ -9,6 +9,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
+@Table(name = "adverts")
 public class Advert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
