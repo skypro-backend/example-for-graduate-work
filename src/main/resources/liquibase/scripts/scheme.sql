@@ -22,3 +22,13 @@ create table if not exists adverts
     image       text,
     user_id     integer references users (id)
 );
+
+-- changeSet SepMari:1
+create table if not exists comments
+(
+    id                serial primary key not null,
+    author_id         integer references users (id),
+    created_at        integer,
+    pk_id             integer references adverts (id),
+    text              text               not null
+    );
