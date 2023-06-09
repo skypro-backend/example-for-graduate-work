@@ -17,10 +17,15 @@ public class Comment {
     @Column(name = "id", nullable = false)
     private int id;
 
-    private String authorFirstName;
-    private String authorImage;
+    @ManyToOne
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    private User author;
+
+    @ManyToOne
+    @JoinColumn(name = "pk_id", referencedColumnName = "id")
+    private Advert pk;
+
     private int createdAt;
-    private int pk;
     private String text;
 
     @Override
@@ -28,11 +33,11 @@ public class Comment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Comment comment = (Comment) o;
-        return createdAt == comment.createdAt && pk == comment.pk && Objects.equals(id, comment.id) && Objects.equals(authorFirstName, comment.authorFirstName) && Objects.equals(authorImage, comment.authorImage);
+        return id == comment.id && createdAt == comment.createdAt && pk == comment.pk && Objects.equals(author, comment.author) && Objects.equals(text, comment.text);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, authorFirstName, authorImage, createdAt, pk);
+        return Objects.hash(id, author, createdAt, pk, text);
     }
 }

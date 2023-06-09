@@ -7,7 +7,7 @@ import ru.skypro.homework.model.User;
 public class CommentDto {
     private int author;
     private String authorImage;
-    private User authorFirstName;
+    private String authorFirstName;
     private int createdAt;
     private int pk;
     private String text;
