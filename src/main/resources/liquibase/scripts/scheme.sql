@@ -22,3 +22,14 @@ create table if not exists adverts
     image       text,
     user_id     integer references users (id)
 );
+
+-- changeSet SepMari:1
+create table if not exists comments
+(
+    id                serial primary key not null,
+    author_first_name varchar(70)        not null,
+    author_image      varchar(70),
+    created_At        integer,
+    pk                integer,
+    text              varchar(350)       not null
+    );
