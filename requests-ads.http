@@ -1,0 +1,41 @@
+### Create advert
+POST http://localhost:8080/ads
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="properties"
+Content-Type: application/json
+
+{
+  "title": "title",
+  "description": "descr",
+  "price": 11
+}
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="image.jpeg"
+Content-Type: image/jpeg
+
+![](../../../../../../Users/Edinichkin/Desktop/Java/image.jpg)
+--WebAppBoundary
+
+### Delete advert
+DELETE http://localhost:8080/ads/1
+
+### Update advert
+PATCH http://localhost:8080/ads/1
+Content-Type: application/json
+
+{
+  "title": "title",
+  "description": "description",
+  "price": 111
+}
+
+### Find all adverts
+GET http://localhost:8080/ads
+
+### Find advert by Id
+GET http://localhost:8080/ads/1
+
+### Find adverts for user
+GET http://localhost:8080/ads/me
