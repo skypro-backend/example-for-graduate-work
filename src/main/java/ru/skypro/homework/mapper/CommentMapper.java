@@ -11,11 +11,12 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
-    CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
-
-    @Mapping(source = "id", target = "pk")
-    CommentDto commentToCommentDto(Comment comment);
-
-    @Mapping(target = "id", source = "pk")
-    Comment commentDtoToComment(CommentDto commentDto);
+// Закомментировал так как были ошибки при запуске приложения
+//    CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
+//
+//    @Mapping(source = "id", target = "pk")
+//    CommentDto commentToCommentDto(Comment comment);
+//
+//    @Mapping(target = "id", source = "pk")
+//    Comment commentDtoToComment(CommentDto commentDto);
 }

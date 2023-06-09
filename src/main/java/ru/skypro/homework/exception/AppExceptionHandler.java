@@ -13,4 +13,9 @@ public class AppExceptionHandler {
     public ResponseEntity<Object> handlerAdvertNotFoundException(RuntimeException e, WebRequest request) {
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(UserUnauthorizedException.class)
+    public ResponseEntity<Object> handlerUserUnauthorizedException(RuntimeException e, WebRequest request) {
+        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED);
+    }
 }
