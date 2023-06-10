@@ -32,3 +32,7 @@ create table if not exists comments
     pk_id             integer references adverts (id),
     text              text               not null
     );
+
+-- changeSet akmeevd:1
+alter table comments drop column pk_id;
+alter table comments add column advert_id integer references adverts (id);

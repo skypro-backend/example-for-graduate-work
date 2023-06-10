@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -22,6 +23,8 @@ public class Advert {
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User author;
+    @OneToMany(mappedBy = "advert")
+    private List<Comment> comments;
 
     @Override
     public boolean equals(Object o) {

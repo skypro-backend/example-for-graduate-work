@@ -22,8 +22,8 @@ public class Comment {
     private User author;
 
     @ManyToOne
-    @JoinColumn(name = "pk_id", referencedColumnName = "id")
-    private Advert pk;
+    @JoinColumn(name = "advert_id", referencedColumnName = "id")
+    private Advert advert;
 
     private int createdAt;
     private String text;
@@ -33,11 +33,11 @@ public class Comment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Comment comment = (Comment) o;
-        return id == comment.id && createdAt == comment.createdAt && pk == comment.pk && Objects.equals(author, comment.author) && Objects.equals(text, comment.text);
+        return id == comment.id && createdAt == comment.createdAt && Objects.equals(author, comment.author) && Objects.equals(advert, comment.advert) && Objects.equals(text, comment.text);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, createdAt, pk, text);
+        return Objects.hash(id, author, advert, createdAt, text);
     }
 }
