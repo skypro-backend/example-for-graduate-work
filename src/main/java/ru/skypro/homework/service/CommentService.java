@@ -2,6 +2,7 @@ package ru.skypro.homework.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.ResponseWrapperCommentDto;
 import ru.skypro.homework.mapper.CommentMapper;
@@ -36,6 +37,7 @@ public class CommentService {
      * @param text
      * @return commentDto
      */
+    @Transactional
     public CommentDto create(Integer advertId, String text) {
         log.info("creating comment:" + text + " for advert with id: " + advertId);
         Comment comment = new Comment();
@@ -52,6 +54,7 @@ public class CommentService {
      * @param advertId
      * @param commentId
      */
+    @Transactional
     public void delete(Integer advertId, Integer commentId) {
         log.info("deleting comment with id: " + commentId);
         Optional<Comment> comment = commentRepository.findById(commentId);
@@ -67,6 +70,7 @@ public class CommentService {
      * @param commentDto
      *
      */
+    @Transactional
     public CommentDto update(Integer advertId, Integer commentId, CommentDto commentDto) {
         log.info("updating comment with id: " + advertId);
         Optional<Comment> comment = commentRepository.findById(commentId);
