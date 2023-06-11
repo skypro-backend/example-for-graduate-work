@@ -16,28 +16,25 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
-
+    private int createdAt;
+    private String text;
     @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User author;
-
     @ManyToOne
     @JoinColumn(name = "advert_id", referencedColumnName = "id")
     private Advert advert;
-
-    private int createdAt;
-    private String text;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Comment comment = (Comment) o;
-        return id == comment.id && createdAt == comment.createdAt && Objects.equals(author, comment.author) && Objects.equals(advert, comment.advert) && Objects.equals(text, comment.text);
+        return id == comment.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, advert, createdAt, text);
+        return Objects.hash(id);
     }
 }

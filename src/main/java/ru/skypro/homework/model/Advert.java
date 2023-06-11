@@ -20,7 +20,7 @@ public class Advert {
     private String description;
     private int price;
     private String image;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User author;
     @OneToMany(mappedBy = "advert")
