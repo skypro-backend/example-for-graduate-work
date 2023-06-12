@@ -9,11 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.ResponseWrapperCommentDto;
-
-import java.util.Collection;
+import ru.skypro.homework.service.CommentService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -21,14 +21,23 @@ import java.util.Collection;
 @RequestMapping("/ads")
 @Tag(name = "Комментарии")
 public class CommentController {
+
+    private final CommentService commentService;
+
+    public CommentController(CommentService commentService) {
+        this.commentService = commentService;
+    }
+
     @PostMapping("/{id}/comments")
     @Operation(summary = "Добавить комментарий к объявлению", responses = {
             @ApiResponse(responseCode = "201", content = {@Content(schema = @Schema(
                     implementation = CommentDto.class), mediaType = MediaType.APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema())})}
     )
-    public ResponseEntity<CommentDto> create(@PathVariable("id") Integer id,
-                                             @RequestBody String text) {
+    public ResponseEntity<CommentDto> create(Authentication auth,
+                                             @PathVariable("id") Integer id,
+                                             @RequestBody CommentDto text) {
+        commentService.create(auth, id, text);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -40,6 +49,7 @@ public class CommentController {
     )
     public ResponseEntity<?> delete(@PathVariable("adId") Integer adId,
                                     @PathVariable("commentId") Integer commentId) {
+        commentService.delete(adId, commentId);
         return ResponseEntity.ok().build();
     }
 
@@ -53,7 +63,7 @@ public class CommentController {
     public ResponseEntity<CommentDto> update(@PathVariable("adId") Integer adId,
                                              @PathVariable("commentId") Integer commentId,
                                              @RequestBody CommentDto comment) {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(commentService.update(adId, commentId, comment));
     }
 
     @GetMapping("/{id}/comments")
@@ -63,6 +73,6 @@ public class CommentController {
             @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema())})}
     )
     public ResponseEntity<ResponseWrapperCommentDto> findAllByAdvert(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(commentService.findAll(id));
     }
 }

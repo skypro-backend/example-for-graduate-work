@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class AdsDto {
-    private int author;
-    private String image;
     private int pk;
-    private int price;
     private String title;
+    private int price;
+    private String image;
+    private int author;
 }

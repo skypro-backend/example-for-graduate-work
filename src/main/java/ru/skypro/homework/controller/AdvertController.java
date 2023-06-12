@@ -9,11 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-
-import java.util.Collection;
+import ru.skypro.homework.service.AdvertService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -21,15 +21,21 @@ import java.util.Collection;
 @RequestMapping("ads")
 @Tag(name = "Объявления")
 public class AdvertController {
+    private final AdvertService advertService;
+
+    public AdvertController(AdvertService advertService) {
+        this.advertService = advertService;
+    }
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Добавить объявление", responses = {
             @ApiResponse(responseCode = "201", content = {@Content(schema = @Schema(
                     implementation = AdsDto.class), mediaType = MediaType.APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema())})}
     )
-    public ResponseEntity<AdsDto> create(@RequestParam CreateAdsDto properties,
-                                         @RequestParam("image") MultipartFile image) {
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<AdsDto> create(@RequestPart CreateAdsDto properties,
+                                         @RequestPart(name = "image") MultipartFile image) {
+        return new ResponseEntity<>(advertService.create(properties), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
@@ -39,6 +45,7 @@ public class AdvertController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema())})}
     )
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+        advertService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -51,7 +58,7 @@ public class AdvertController {
     )
     public ResponseEntity<AdsDto> update(@PathVariable("id") Integer id,
                                          @RequestBody CreateAdsDto advert) {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(advertService.update(id, advert));
     }
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -72,17 +79,17 @@ public class AdvertController {
                     implementation = ResponseWrapperAdsDto.class), mediaType = MediaType.APPLICATION_JSON_VALUE)})}
     )
     public ResponseEntity<ResponseWrapperAdsDto> findAll() {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(advertService.findAll());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Получить информацию об объявлении", responses = {
             @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(
-                    implementation = AdsDto.class), mediaType = MediaType.APPLICATION_JSON_VALUE)}),
+                    implementation = FullAdsDto.class), mediaType = MediaType.APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema())})}
     )
-    public ResponseEntity<AdsDto> findById(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<FullAdsDto> findById(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(advertService.findById(id));
     }
 
     @GetMapping("/me")
@@ -92,6 +99,7 @@ public class AdvertController {
             @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema())})}
     )
     public ResponseEntity<ResponseWrapperAdsDto> findAllByAuthUser() {
-        return ResponseEntity.ok().build();
+        ResponseWrapperAdsDto responseWrapperAdsDto = advertService.findAllByAuthUser();
+        return ResponseEntity.ok(responseWrapperAdsDto);
     }
 }

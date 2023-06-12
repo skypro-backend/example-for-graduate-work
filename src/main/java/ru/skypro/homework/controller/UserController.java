@@ -8,10 +8,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.service.UserService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -19,13 +21,20 @@ import ru.skypro.homework.dto.UserDto;
 @RequestMapping("users")
 @Tag(name = "Пользователи")
 public class UserController {
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @PostMapping("/set_password")
     @Operation(summary = "Обновление пароля", responses = {
             @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema())}),
             @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema())}),
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema())})}
     )
-    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDto newPassword) {
+    public ResponseEntity<?> setPassword(Authentication auth, @RequestBody NewPasswordDto newPassword) {
+        userService.setPassword(auth, newPassword);
         return ResponseEntity.ok().build();
     }
 
@@ -35,8 +44,8 @@ public class UserController {
                     implementation = UserDto.class), mediaType = MediaType.APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema())})}
     )
-    public ResponseEntity<UserDto> updateInfo(@RequestBody UserDto user) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UserDto> updateInfo(Authentication auth, @RequestBody UserDto user) {
+        return ResponseEntity.ok(userService.updateInfo(auth, user));
     }
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -44,7 +53,8 @@ public class UserController {
             @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema())}),
             @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema())})}
     )
-    public ResponseEntity<?> updateImage(@RequestParam("image") MultipartFile image) {
+    public ResponseEntity<?> updateImage(Authentication auth, @RequestParam("image") MultipartFile image) {
+        userService.updateImage(auth, image);
         return ResponseEntity.ok().build();
     }
 
@@ -54,7 +64,7 @@ public class UserController {
                     implementation = UserDto.class), mediaType = MediaType.APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema())})}
     )
-    public ResponseEntity<UserDto> findInfo() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UserDto> findInfo(Authentication auth) {
+        return ResponseEntity.ok(userService.findInfo(auth));
     }
 }
