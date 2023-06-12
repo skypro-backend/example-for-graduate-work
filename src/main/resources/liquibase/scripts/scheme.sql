@@ -36,3 +36,7 @@ create table if not exists comments
 -- changeSet akmeevd:1
 alter table comments drop column pk_id;
 alter table comments add column advert_id integer references adverts (id);
+
+-- changeSet 11th:2
+alter table comments drop column created_at;
+alter table comments add column created_at timestamp;

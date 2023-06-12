@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.ResponseWrapperCommentDto;
@@ -33,9 +34,10 @@ public class CommentController {
                     implementation = CommentDto.class), mediaType = MediaType.APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "401", content = {@Content(schema = @Schema())})}
     )
-    public ResponseEntity<CommentDto> create(@PathVariable("id") Integer id,
-                                             @RequestBody String text) {
-        commentService.create(id, text);
+    public ResponseEntity<CommentDto> create(Authentication auth,
+                                             @PathVariable("id") Integer id,
+                                             @RequestBody CommentDto text) {
+        commentService.create(auth, id, text);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
