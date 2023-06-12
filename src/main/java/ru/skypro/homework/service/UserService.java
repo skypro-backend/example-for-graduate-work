@@ -28,12 +28,10 @@ public class UserService {
     }
 
     public void setPassword(Authentication auth, NewPasswordDto newPassword) {
-        checkAuthenticated(auth);
         manager.changePassword(newPassword.getCurrentPassword(), encoder.encode(newPassword.getNewPassword()));
     }
 
     public UserDto updateInfo(Authentication auth, UserDto userDto) {
-        checkAuthenticated(auth);
         User user = userRepository.findByEmail(userDto.getEmail());
         if (user == null) {
             throw new UserUnauthorizedException("User not found");
@@ -44,19 +42,11 @@ public class UserService {
     }
 
     public void updateImage(Authentication auth, MultipartFile image) {
-        checkAuthenticated(auth);
         //to be done
     }
 
     public UserDto findInfo(Authentication auth) {
-        checkAuthenticated(auth);
         User user = userRepository.findByEmail(auth.getName());
         return userMapper.userToUserDto(user);
-    }
-
-    private void checkAuthenticated(Authentication auth) {
-        if (!auth.isAuthenticated()) {
-            throw new UserUnauthorizedException("Unauthorized");
-        }
     }
 }
