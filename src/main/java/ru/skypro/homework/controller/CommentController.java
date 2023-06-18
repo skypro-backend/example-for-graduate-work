@@ -28,6 +28,7 @@ public class CommentController {
     public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable("id") Integer id) {
         return ResponseEntity.ok().build();
     }
+
     @Operation(summary = "Добавить комментарий к объявлению")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -39,6 +40,7 @@ public class CommentController {
     public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id, @RequestBody Comment comment) {
         return ResponseEntity.ok().build();
     }
+
     @Operation(summary = "Удалить комментарий")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = @Content()),
@@ -50,6 +52,7 @@ public class CommentController {
     public ResponseEntity<?> deleteComment(@PathVariable("adId") Integer adId, @PathVariable("commentId") Integer commentId) {
         return ResponseEntity.ok().build();
     }
+
     @Operation(summary = "Обновить комментарий")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),

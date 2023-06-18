@@ -58,6 +58,7 @@ public class UsersController {
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         return ResponseEntity.ok().build();
     }
+
     @Operation(summary = "Обновить аватар авторизованного пользователя")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = @Content()),

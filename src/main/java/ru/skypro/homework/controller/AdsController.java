@@ -49,6 +49,7 @@ public class AdsController {
     public ResponseEntity<FullAds> getAds(@PathVariable("id") Integer id) {
         return ResponseEntity.ok().build();
     }
+
     @Operation(summary = "Удалить объявление")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "No Content", content = @Content()),
@@ -59,6 +60,7 @@ public class AdsController {
     public ResponseEntity<?> removeAd(@PathVariable("id") Integer id) {
         return ResponseEntity.ok().build();
     }
+
     @Operation(summary = "Обновить информацию об объявлении")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -70,6 +72,7 @@ public class AdsController {
     public ResponseEntity<Ads> updateAds(@PathVariable("id") Integer id, @RequestBody CreateAds ads) {
         return ResponseEntity.ok().build();
     }
+
     @Operation(summary = "Получить объявления авторизованного пользователя")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -80,6 +83,7 @@ public class AdsController {
     public ResponseEntity<ResponseWrapperAds> getAdsMe() {
         return ResponseEntity.ok().build();
     }
+
     @Operation(summary = "Обновить картинку объявления")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
