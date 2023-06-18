@@ -1,19 +1,20 @@
 package ru.skypro.homework.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
 public class RegisterReq {
-    //@Schema(description = "логин")
+    @Schema(description = "логин")
     private String username;
-    //@Schema(description = "пароль")
+    @Schema(description = "пароль")
     private String password;
-    //@Schema(description = "имя пользователя")
+    @Schema(description = "имя пользователя")
     private String firstName;
-    //@Schema(description = "фамилия пользователя")
+    @Schema(description = "фамилия пользователя")
     private String lastName;
-    //@Schema(description = "телефон пользователя")
+    @Schema(description = "телефон пользователя")
     private String phone;
-    //@Schema(description = "роль пользователя")
+    @Schema(description = "роль пользователя", enumAsRef = true)
     private Role role;
 }

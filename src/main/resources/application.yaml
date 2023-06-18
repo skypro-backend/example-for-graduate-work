@@ -1,2 +1,7 @@
 server:
   port: 3000
+
+springdoc:
+  api-docs:
+    enabled: true
+  default-produces-media-type: application/json
