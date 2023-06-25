@@ -64,13 +64,13 @@ public class AdsController {
     }
 
     //!Доработать метод
-    @GetMapping("/ads/me")
+    @GetMapping("/me")
     public ResponseEntity<ResponseWrapperAds> getAdsMe(){
         return ResponseEntity.ok(new ResponseWrapperAds());
     }
 
     //!Доработать метод .
-    @PostMapping("/ads/{id}/image")
+    @PostMapping("/{id}/image")
     public ResponseEntity<Void> updateImage(@PathVariable int id){
         return ResponseEntity.ok().build();
     }
