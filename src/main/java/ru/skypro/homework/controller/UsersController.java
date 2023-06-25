@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.User;
 
@@ -33,6 +34,12 @@ public class UsersController {
     public ResponseEntity<Void> updateUser(
             @RequestBody User user)
     {
+        return ResponseEntity.ok().build();
+    }
+
+    //!!!!Доработать внутренность
+    @PostMapping("/me/image")
+    public ResponseEntity<Void> updateUserImage(@RequestBody MultipartFile image){
         return ResponseEntity.ok().build();
     }
 
