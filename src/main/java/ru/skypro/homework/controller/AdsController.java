@@ -69,7 +69,7 @@ public class AdsController {
         return ResponseEntity.ok(new ResponseWrapperAds());
     }
 
-    //!Доработать метод
+    //!Доработать метод .
     @PostMapping("/ads/{id}/image")
     public ResponseEntity<Void> updateImage(@PathVariable int id){
         return ResponseEntity.ok().build();
