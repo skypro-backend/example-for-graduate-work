@@ -1,4 +1,7 @@
 package ru.skypro.homework.service.repository;
 
-public class AdsRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import ru.skypro.homework.model.Ad;
+
+public interface AdsRepository extends JpaRepository<Ad, Long> {
 }
