@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class Comment {
+public class CommentDTO {
     private int authorId;
     private String authorImage;
     private String authorFirstName;

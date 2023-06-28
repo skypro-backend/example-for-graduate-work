@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class ResponseWrapperComment {
     private int count;
-    private Comment[] array;
+    private CommentDTO[] array;
 
 }

@@ -30,7 +30,7 @@ public class AdsController {
     }
     //!Доработать метод
     @PostMapping("/{id}/comments")
-    public ResponseEntity<Comment> addComment(@PathVariable int id){
+    public ResponseEntity<CommentDTO> addComment(@PathVariable int id){
         return ResponseEntity.ok().build();
     }
 
@@ -48,8 +48,8 @@ public class AdsController {
 
     //!Доработать метод
     @PostMapping("/{id}")
-    public ResponseEntity<Ads> updateAds(@PathVariable int id ,@RequestBody CreateAds ads){
-       return ResponseEntity.ok(new Ads());
+    public ResponseEntity<AdsDTO> updateAds(@PathVariable int id , @RequestBody CreateAds ads){
+       return ResponseEntity.ok(new AdsDTO());
     }
     //!Доработать метод
     @DeleteMapping("/{adId}/comments/{commentId}")
@@ -59,8 +59,8 @@ public class AdsController {
 
     //!Доработать метод
     @PostMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable int adId , @PathVariable int commentId){
-        return ResponseEntity.ok(new Comment());
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId , @PathVariable int commentId){
+        return ResponseEntity.ok(new CommentDTO());
     }
 
     //!Доработать метод

@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.UserDTO;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -25,14 +25,14 @@ public class UsersController {
 
     //!!!!Доработать внутренность
     @GetMapping("/me")
-    public ResponseEntity<User> getUser() {
-        return ResponseEntity.ok(new User());
+    public ResponseEntity<UserDTO> getUser() {
+        return ResponseEntity.ok(new UserDTO());
     }
 
     //!!!!Доработать внутренность
     @PostMapping("/me")
     public ResponseEntity<Void> updateUser(
-            @RequestBody User user)
+            @RequestBody UserDTO user)
     {
         return ResponseEntity.ok().build();
     }
