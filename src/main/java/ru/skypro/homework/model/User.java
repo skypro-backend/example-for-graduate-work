@@ -32,11 +32,11 @@ public class User {
     private String mail;
     @Column(name = "role", nullable = false)
     private Role role;
-    @Column(name = "comments")
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
-    @Column(name = "ads")
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ads", cascade = CascadeType.REMOVE)
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Ad> ads = new ArrayList<>();
     //аватар
 }
