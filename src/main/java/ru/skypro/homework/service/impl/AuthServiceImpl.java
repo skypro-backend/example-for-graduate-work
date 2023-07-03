@@ -1,27 +1,30 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.AuthService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-  private final UserDetailsManager manager;
-  private final PasswordEncoder encoder;
+  private final UserService manager;
 
-  public AuthServiceImpl(UserDetailsManager manager,
-                         PasswordEncoder passwordEncoder) {
+  private final PasswordEncoder encoder;
+  private final UserMapper userMapper;
+
+  public AuthServiceImpl(UserService manager, PasswordEncoder encoder, UserMapper userMapper) {
     this.manager = manager;
-    this.encoder = passwordEncoder;
+    this.encoder = encoder;
+    this.userMapper = userMapper;
   }
 
   @Override
+  @Transactional
   public boolean login(String userName, String password) {
     if (!manager.userExists(userName)) {
       return false;
@@ -32,22 +35,18 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public boolean register(RegisterReqDto registerReq, Role role) {
-    return false;
-  }
-
-  @Override
-  public boolean register(RegisterReqDto register) {
-    if (manager.userExists(register.getUsername())) {
+    if (manager.userExists(registerReq.getUsername())) {
       return false;
     }
-    manager.createUser(
-            User.builder()
-                    .passwordEncoder(this.encoder::encode)
-                    .password(register.getPassword())
-                    .username(register.getUsername())
-                    .roles(register.getRole().name())
-                    .build());
+    registerReq.setRole(role);
+    manager.createUser(userMapper.toUser(registerReq));
+//        User.builder()
+//            .passwordEncoder(this.encoder::encode)
+//            .password(registerReq.getPassword())
+//            .username(registerReq.getUsername())
+//            .roles(role.name())
+//            .build());
+
     return true;
   }
-
 }
