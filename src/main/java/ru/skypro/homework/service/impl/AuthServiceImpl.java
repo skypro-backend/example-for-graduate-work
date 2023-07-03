@@ -13,10 +13,10 @@ import ru.skypro.homework.service.AuthService;
 public class AuthServiceImpl implements AuthService {
 
   private final UserDetailsManager manager;
-
   private final PasswordEncoder encoder;
 
-  public AuthServiceImpl(UserDetailsManager manager, PasswordEncoder passwordEncoder) {
+  public AuthServiceImpl(UserDetailsManager manager,
+                         PasswordEncoder passwordEncoder) {
     this.manager = manager;
     this.encoder = passwordEncoder;
   }
@@ -32,16 +32,22 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public boolean register(RegisterReqDto registerReq, Role role) {
-    if (manager.userExists(registerReq.getUsername())) {
+    return false;
+  }
+
+  @Override
+  public boolean register(RegisterReqDto register) {
+    if (manager.userExists(register.getUsername())) {
       return false;
     }
     manager.createUser(
-        User.builder()
-            .passwordEncoder(this.encoder::encode)
-            .password(registerReq.getPassword())
-            .username(registerReq.getUsername())
-            .roles(role.name())
-            .build());
+            User.builder()
+                    .passwordEncoder(this.encoder::encode)
+                    .password(register.getPassword())
+                    .username(register.getUsername())
+                    .roles(register.getRole().name())
+                    .build());
     return true;
   }
+
 }
