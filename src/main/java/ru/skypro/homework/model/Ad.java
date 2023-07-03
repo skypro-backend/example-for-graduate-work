@@ -19,12 +19,12 @@ public class Ad {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "user", nullable = false)
     @ManyToOne(optional = false)
+    @JoinColumn(name = "user", nullable = false)
     private User user;
 
     @Column(name = "ad", nullable = false)
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ad", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ads", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
     @Column(name = "creating_time", nullable = false)
     private LocalDateTime time;

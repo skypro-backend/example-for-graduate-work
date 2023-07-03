@@ -17,12 +17,12 @@ public class Comment {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "user", nullable = false)
     @ManyToOne(optional = false)
+    @JoinColumn(name = "user", nullable = false)
     private User user;
 
-    @Column(name = "ad", nullable = false)
     @ManyToOne
+    @JoinColumn(name = "ad", nullable = false)
     private Ad ad;
     @Column(name = "creating_time", nullable = false)
     private LocalDateTime time;

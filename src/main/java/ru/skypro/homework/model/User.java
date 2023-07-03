@@ -36,7 +36,7 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
     @Column(name = "ads")
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ad", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ads", cascade = CascadeType.REMOVE)
     private List<Ad> ads = new ArrayList<>();
     //аватар
 }
