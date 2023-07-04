@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
+
 public class User {
     @Id
     @Column(name = "id")
@@ -39,5 +39,26 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Ad> ads = new ArrayList<>();
     //аватар
+
+    public User(String userName, String password, String firstName, String lastName, String phone, Role role) {
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.mail = userName;
+        this.role = role == null? Role.USER : role;
+
+    }
+    public User(String userName, String password, String firstName, String lastName, String mail, String phone, Role role) {
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.mail = mail;
+        this.role = role == null? Role.USER : role;
+
+    }
 }
 
