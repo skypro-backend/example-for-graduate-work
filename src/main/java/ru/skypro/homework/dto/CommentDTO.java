@@ -12,4 +12,6 @@ public class CommentDTO {
     private LocalDate createAt;
     private int pk;
     private String text;
+
+
 }
