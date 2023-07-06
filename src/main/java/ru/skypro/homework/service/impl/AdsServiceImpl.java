@@ -15,23 +15,30 @@ public class AdsServiceImpl implements AdsService {
         this.adsRepository = adsRepository;
     }
 
+
+    @Override
+    public Ad createAds(Ad ad) {
+        Ad addAd =  adsRepository.saveAndFlush(ad);
+        return addAd;
+    }
+    @Override
+    public void deleteAd(int id){
+        adsRepository.deleteById(id);
+
+    }
+
     @Override
     public Ad[] getAllAds() {
         return adsRepository.findAll().toArray(new Ad[0]);
     }
 
-//    @Override
-//    public void addAd(CreateAds createAds) {
-//        Ad ad = new Ad(
-//
-//
-//    }
+
 
     @Override
     public FullAds getAdById(int adId) {
         Ad ad = null;
         try {
-            ad = adsRepository.findById((long) adId).orElseThrow(AdNotFoundException::new);
+            ad = adsRepository.findById((int) adId).orElseThrow(AdNotFoundException::new);
 
         } catch (AdNotFoundException e) {
             throw new RuntimeException(e);

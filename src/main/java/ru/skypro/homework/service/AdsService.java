@@ -5,6 +5,9 @@ import ru.skypro.homework.model.Ad;
 
 public interface AdsService {
 
+    Ad createAds(Ad ad);
+
+    void deleteAd(int id);
 
     Ad[] getAllAds();
 
