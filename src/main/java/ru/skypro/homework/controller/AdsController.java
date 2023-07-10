@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.CommentService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -12,26 +14,36 @@ import ru.skypro.homework.dto.*;
 @RequiredArgsConstructor
 @RequestMapping("/ads")
 public class AdsController {
+
+    private final AdsService adsService;
+
+    private  final CommentService commentService;
+
+
+
     //!Доработать метод
-    @GetMapping("/ads")
+    ///
+    @GetMapping("/")
     public ResponseEntity<ResponseWrapperAds> getAllAds() {
-        return ResponseEntity.ok(new ResponseWrapperAds());
+
+        return ResponseEntity.ok(adsService.getAllAds());
     }
 
     //!Доработать метод
-    @PostMapping("/ads")
+    @PostMapping("/")
     public ResponseEntity<Void> addAd(@RequestBody CreateAds ads) {
+//        adsService.createAds(ads);
        return ResponseEntity.ok().build();
     }
     //!Доработать метод
     @GetMapping("/{id}/comments")
     public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable int id){
-        return ResponseEntity.ok(new ResponseWrapperComment());
+        return ResponseEntity.ok(commentService.getUserComments(id));
     }
     //!Доработать метод
     @PostMapping("/{id}/comments")
-    public ResponseEntity<CommentDTO> addComment(@PathVariable int id){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<CommentDTO> addComment(@PathVariable int id, @RequestBody CommentDTO commentDTO){
+        return ResponseEntity.ok(commentService.addComment(id, commentDTO));
     }
 
     //!Доработать метод

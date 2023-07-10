@@ -1,9 +1,12 @@
 package ru.skypro.homework.model;
 
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -13,12 +16,12 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 
-public class User {
+public class User  {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     private String userName;
     @Column(name = "password", nullable = false)
     private String password;
@@ -31,6 +34,7 @@ public class User {
     @Column(name = "mail", nullable = false)
     private String mail;
     @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)

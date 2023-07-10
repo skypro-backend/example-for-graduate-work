@@ -1,7 +1,10 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.FullAds;
+import ru.skypro.homework.dto.ResponseWrapperAds;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.service.AdsService;
@@ -16,11 +19,22 @@ public class AdsServiceImpl implements AdsService {
     }
 
 
-    @Override
-    public Ad createAds(Ad ad) {
-        Ad addAd =  adsRepository.saveAndFlush(ad);
-        return addAd;
+//    @Override
+    public Ad createAds(CreateAds createAds) {
+
+//        Ad addAd =  adsRepository.saveAndFlush(createAds);
+        return null;
     }
+
+    @Override
+    public Ad getAdById(int id) {
+        try {
+            return adsRepository.findById(id).orElseThrow(AdNotFoundException::new);
+        } catch (AdNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public void deleteAd(int id){
         adsRepository.deleteById(id);
@@ -28,14 +42,21 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ad[] getAllAds() {
-        return adsRepository.findAll().toArray(new Ad[0]);
+    public ResponseWrapperAds getAllAds() {
+        AdsDTO[] ads = (AdsDTO[]) adsRepository.findAll().stream()
+                .map(AdsDTO::fromAd).toArray();
+
+
+        int count = ads.length;
+
+        return new ResponseWrapperAds(count, ads);
+
     }
 
 
 
     @Override
-    public FullAds getAdById(int adId) {
+    public FullAds getFullAdById(int adId) {
         Ad ad = null;
         try {
             ad = adsRepository.findById((int) adId).orElseThrow(AdNotFoundException::new);

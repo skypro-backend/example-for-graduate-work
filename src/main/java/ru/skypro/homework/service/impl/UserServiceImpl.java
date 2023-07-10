@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.UserDTO;
@@ -9,13 +10,11 @@ import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.repository.UserRepository;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public User getUser(int userId)  {
@@ -31,6 +30,19 @@ public class UserServiceImpl implements UserService {
         User user = fromRegisterReq(registerReq);
         userRepository.saveAndFlush(user);
 
+    }
+
+    @Override
+    public User findUserById(int userId) {
+        try {
+            return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        } catch (UserNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public User findUserByUserName(String username) {
+            return userRepository.findUserByUserName(username);
     }
 
 
