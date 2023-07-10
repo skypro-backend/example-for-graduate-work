@@ -1,9 +1,12 @@
 package ru.skypro.homework.model;
 
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -12,13 +15,13 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
-public class User {
+
+public class User  {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @Column(name = "username", nullable = false)
+    private int id;
+    @Column(name = "username", nullable = false, unique = true)
     private String userName;
     @Column(name = "password", nullable = false)
     private String password;
@@ -31,6 +34,7 @@ public class User {
     @Column(name = "mail", nullable = false)
     private String mail;
     @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
@@ -39,5 +43,26 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Ad> ads = new ArrayList<>();
     //аватар
+
+    public User(String userName, String password, String firstName, String lastName, String phone, Role role) {
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.mail = userName;
+        this.role = role == null? Role.USER : role;
+
+    }
+    public User(String userName, String password, String firstName, String lastName, String mail, String phone, Role role) {
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.mail = mail;
+        this.role = role == null? Role.USER : role;
+
+    }
 }
 

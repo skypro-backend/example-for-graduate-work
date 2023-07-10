@@ -18,7 +18,7 @@ public class Ad {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
     @ManyToOne
     @JoinColumn(name = "user_id",  referencedColumnName = "id")
     private User user;
@@ -33,5 +33,5 @@ public class Ad {
     @Column(name = "text")
     private String text;
     @Column(name = "price")
-    private long price;
+    private int price;
 }

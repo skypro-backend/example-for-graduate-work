@@ -8,15 +8,20 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.model.Role;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.UserService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
+  private final UserService userService;
+
   private final UserDetailsManager manager;
+
 
   private final PasswordEncoder encoder;
 
-  public AuthServiceImpl(UserDetailsManager manager, PasswordEncoder passwordEncoder) {
+  public AuthServiceImpl(UserService userService, UserDetailsManager manager, PasswordEncoder passwordEncoder) {
+    this.userService = userService;
     this.manager = manager;
     this.encoder = passwordEncoder;
   }
@@ -42,6 +47,8 @@ public class AuthServiceImpl implements AuthService {
             .username(registerReq.getUsername())
             .roles(role.name())
             .build());
+    userService.addUser(registerReq);
+
     return true;
   }
 }
