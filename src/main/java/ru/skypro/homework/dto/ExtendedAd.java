@@ -3,7 +3,7 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 
 @Data
-public class ExtendedAdDto {
+public class ExtendedAd {
 
     Integer pk;
     String authorFirstName;
