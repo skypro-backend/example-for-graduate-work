@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.ResponseWrapperComment;
+import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.service.AdsService;
@@ -41,6 +42,27 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.saveAndFlush(comment);
 
         return commentDTO;
+    }
+
+    @Override
+    public CommentDTO updateComment(int adId, int commentId, CommentDTO commentDTO) {
+        Comment comment;
+        try {
+            comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        } catch (CommentNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        comment.setText(commentDTO.getText());
+        comment.setTime(commentDTO.getCreateAt());
+
+        commentRepository.saveAndFlush(comment);
+
+        return commentDTO;
+    }
+
+    @Override
+    public void deleteComment(int adId, int commentId) {
+        commentRepository.deleteById(commentId);
     }
 //
 //

@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @NoArgsConstructor
-//@AllArgsConstructor
 @RequiredArgsConstructor
 public class Comment {
     @Id

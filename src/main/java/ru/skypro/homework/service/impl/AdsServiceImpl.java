@@ -9,6 +9,7 @@ import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.repository.AdsRepository;
+
 @Service
 public class AdsServiceImpl implements AdsService {
 
@@ -19,7 +20,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
 
-//    @Override
+    //    @Override
     public Ad createAds(CreateAds createAds) {
 
 //        Ad addAd =  adsRepository.saveAndFlush(createAds);
@@ -36,7 +37,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public void deleteAd(int id){
+    public void deleteAd(int id) {
         adsRepository.deleteById(id);
 
     }
@@ -53,13 +54,29 @@ public class AdsServiceImpl implements AdsService {
 
     }
 
+    @Override
+    public AdsDTO updateAd(int id, CreateAds createAds) {
+        Ad ad;
+        try {
+            ad = adsRepository.findById(id).orElseThrow(AdNotFoundException::new);
+        } catch (AdNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        ad.setText(createAds.getDescription());
+        ad.setPrice(createAds.getPrice());
+        ad.setTitle(createAds.getTitle());
+
+        adsRepository.saveAndFlush(ad);
+        return AdsDTO.fromAd(ad);
+    }
 
 
     @Override
     public FullAds getFullAdById(int adId) {
-        Ad ad = null;
+        Ad ad;
         try {
-            ad = adsRepository.findById((int) adId).orElseThrow(AdNotFoundException::new);
+            ad = adsRepository.findById(adId).orElseThrow(AdNotFoundException::new);
 
         } catch (AdNotFoundException e) {
             throw new RuntimeException(e);
