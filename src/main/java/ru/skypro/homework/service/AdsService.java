@@ -1,6 +1,7 @@
 package ru.skypro.homework.service;
 
 import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.FullAds;
 import ru.skypro.homework.dto.ResponseWrapperAds;
 import ru.skypro.homework.model.Ad;
@@ -15,6 +16,8 @@ public interface AdsService {
 
     ResponseWrapperAds getAllAds();
 
+
+    AdsDTO updateAd(int id, CreateAds createAds);
 
     FullAds getFullAdById(int adId);
 }
