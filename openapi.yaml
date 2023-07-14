@@ -557,6 +557,12 @@ components:
         phone:
           type: string
           description: 'телефон пользователя'
+        role:
+          type: string
+          description: 'роль пользователя'
+          enum:
+            - USER
+            - ADMIN
         image:
           type: string
           description: 'ссылка на аватар пользователя'
