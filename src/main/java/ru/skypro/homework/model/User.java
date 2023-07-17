@@ -3,7 +3,7 @@ package ru.skypro.homework.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.dto.RoleDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private Role role;
+    private RoleDto roleDto;
 
     @Column(name = "image")
     private String image;
