@@ -13,7 +13,6 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "ads")
-
 public class Ad {
 
     @Id
