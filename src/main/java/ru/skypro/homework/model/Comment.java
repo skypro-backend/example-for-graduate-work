@@ -34,5 +34,7 @@ public class Comment {
     @Column(name = "text")
     String text;
 
+    public Comment(Ad ad, User user, long toEpochMilli, String text) {
+    }
 }
 

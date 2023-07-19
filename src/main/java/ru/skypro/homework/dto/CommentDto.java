@@ -10,4 +10,7 @@ public class CommentDto {
     Long createdAt;
     Integer pk;
     String text;
+
+    public CommentDto(Integer userId, String image, String firstName, Long createdTime, Integer comments, String text) {
+    }
 }

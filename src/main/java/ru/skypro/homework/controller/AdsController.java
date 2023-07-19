@@ -2,11 +2,8 @@ package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-<<<<<<< HEAD
-=======
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
->>>>>>> origin/vik_branch_rep
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -41,13 +38,13 @@ public class AdsController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-<<<<<<< HEAD
+
     public ResponseEntity<Ad> addAd(@RequestPart CreateOrUpdateAd properties,
                                     @RequestPart("image") MultipartFile image) {
-=======
+
     public ResponseEntity<AdDto> addAd(@RequestPart CreateOrUpdateAdDto properties,
                                        @RequestPart("image") MultipartFile image) {
->>>>>>> origin/vik_branch_rep
+
         return ResponseEntity.ok(adsService.addAd(properties, image));
     }
 
@@ -57,11 +54,11 @@ public class AdsController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-<<<<<<< HEAD
+
     public ResponseEntity<ExtendedAd> getAds(@PathVariable Integer id) {
-=======
+
     public ResponseEntity<ExtendedAdDto> getAds(@PathVariable Integer id) {
->>>>>>> origin/vik_branch_rep
+
         return ResponseEntity.ok().body(adsService.getAds(id));
     }
 
@@ -91,11 +88,11 @@ public class AdsController {
     @ApiResponse(responseCode = "404",
             description = "Операция не найдена")
     public ResponseEntity<?> updateAds(@PathVariable Integer id,
-<<<<<<< HEAD
+
                                        @RequestBody CreateOrUpdateAd newAds) {
-=======
+
                                        @RequestBody CreateOrUpdateAdDto newAds) {
->>>>>>> origin/vik_branch_rep
+
         return ResponseEntity.ok().body(adsService.updateAds(id, newAds));
     }
 

@@ -8,4 +8,7 @@ import java.util.List;
 public class CommentsDto {
     Integer count;
     List<CommentDto> results;
+
+    public CommentsDto(int size, List<CommentDto> commentsDtoList) {
+    }
 }

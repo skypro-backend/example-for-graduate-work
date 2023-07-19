@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.model.User;
 import ru.skypro.homework.service.impl.UserService;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -31,8 +32,8 @@ public class UsersController {
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
     public ResponseEntity<?> getUser () {
-        UserDto userDto = userService.getUser();
-            return ResponseEntity.ok().body(userDto);
+        User user = userService.getUser();
+            return ResponseEntity.ok().body(user);
     }
 
     @PatchMapping("/me")

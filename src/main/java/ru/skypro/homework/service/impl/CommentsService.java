@@ -4,29 +4,80 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
+import ru.skypro.homework.dto.RoleDto;
+import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.Comment;
+import ru.skypro.homework.model.User;
+import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentsRepository;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentsService {
 
     private final CommentsRepository commentsRepository;
+    private final AdsRepository adsRepository;
+    private final UserService userService;
 
-    public CommentsService(CommentsRepository commentsRepository) {
+
+    public CommentsService(CommentsRepository commentsRepository, AdsRepository adsRepository, UserService userService) {
         this.commentsRepository = commentsRepository;
+        this.adsRepository = adsRepository;
+        this.userService = userService;
+            }
+
+    public CommentDto commentToCommentDto(Comment comment) {
+        return new CommentDto(
+                comment.getAuthor().getUserId(),
+                comment.getAuthor().getImage(),
+                comment.getAuthor().getFirstName(),
+                comment.getCreatedTime(),
+                comment.getComments(),
+                comment.getText());
     }
 
-    public CommentsDto getCommentsById(Integer id) {
-        return null;
+    public CommentsDto getCommentsById(Integer IdAd) {
+        Ad ad = adsRepository.findById(IdAd).orElseThrow();
+        List<Comment> commentList = commentsRepository.findByAd(ad);
+        List<CommentDto> commentsDtoList = commentList.stream()
+                .map(e -> commentToCommentDto(e))
+                .collect(Collectors.toList());
+
+        return new CommentsDto(commentsDtoList.size(), commentsDtoList);
+
     }
 
-    public CommentDto addComment(Integer id, CreateOrUpdateCommentDto text) {
-        return null;
+    public CommentDto addComment(Integer IdAd, CreateOrUpdateCommentDto text) {
+        User user = userService.getUser();
+        Ad ad = adsRepository.findById(IdAd).orElseThrow();
+        Comment comment = new Comment(ad,
+                user,
+                Instant.now().toEpochMilli(),
+                text.getText());
+        commentsRepository.save(comment);
+        return commentToCommentDto(comment);
+
     }
 
-    public void deleteComment(Integer adId, Integer commentId) {
+    public void deleteComment(Integer IdAd, Integer commentId) {
+        User user = userService.getUser();
+        Comment comment = commentsRepository.findByAdPkAndCommentId(IdAd, commentId);
+        if(user.getUserId().equals(comment.getAuthor().getUserId()) || user.getRoleDto() == RoleDto.ADMIN){
+            commentsRepository.delete(comment);
+        } else throw new RuntimeException("Такой комментарий не существует");
     }
 
-    public CommentDto updateComment(Integer adId, Integer commentId, CreateOrUpdateCommentDto newComment) {
-        return null;
+
+    public CommentDto updateComment(Integer IdAd, Integer commentId, CreateOrUpdateCommentDto newComment) {
+        User user = userService.getUser();
+        Comment comment = commentsRepository.findByAdPkAndCommentId(IdAd, commentId);
+        if(user.getUserId().equals(comment.getAuthor().getUserId()) || user.getRoleDto() == RoleDto.ADMIN){
+            comment.setText(newComment.getText());
+            commentsRepository.save(comment);
+            return commentToCommentDto(comment);
+        } else throw new RuntimeException("Такой комментарий не существует");
     }
 }

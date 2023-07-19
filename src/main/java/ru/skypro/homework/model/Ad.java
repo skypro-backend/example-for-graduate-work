@@ -13,16 +13,13 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "ads")
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/vik_branch_rep
 public class Ad {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pk_id")
-    private Integer pk;
+    private Integer pk ;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
