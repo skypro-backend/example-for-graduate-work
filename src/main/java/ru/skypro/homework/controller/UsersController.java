@@ -7,9 +7,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.NewPasswordDto;
+import ru.skypro.homework.dto.UpdateUserDto;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.impl.UserService;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -31,8 +31,8 @@ public class UsersController {
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
     public ResponseEntity<?> getUser () {
-        User user = userService.getUser();
-            return ResponseEntity.ok().body(user);
+        UserDto userDto = userService.getUser();
+            return ResponseEntity.ok().body(userDto);
     }
 
     @PatchMapping("/me")
@@ -41,9 +41,9 @@ public class UsersController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-    public ResponseEntity<?> updateUser(@RequestBody UpdateUser updateUser) {
-        userService.updateUser(updateUser);
-        return ResponseEntity.ok().body(updateUser);
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserDto updateUserDto) {
+        userService.updateUser(updateUserDto);
+        return ResponseEntity.ok().body(updateUserDto);
     }
 
     @PostMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -65,8 +65,8 @@ public class UsersController {
             description = "Ошибка авторизации")
     @ApiResponse(responseCode = "403",
             description = "Операция запрещена")
-    public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
-        userService.updatePassword(newPassword);
+    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
+        userService.updatePassword(newPasswordDto);
         return ResponseEntity.ok().build();
 
     }

@@ -13,7 +13,10 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "ads")
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/vik_branch_rep
 public class Ad {
 
     @Id

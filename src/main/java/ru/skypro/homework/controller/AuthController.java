@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.skypro.homework.dto.Login;
-import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.dto.LoginDto;
+import ru.skypro.homework.dto.RegisterDto;
 import ru.skypro.homework.service.AuthService;
 
 @Slf4j
@@ -28,8 +28,8 @@ public class AuthController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-    public ResponseEntity<?> login(@RequestBody Login login) {
-        if (authService.login(login.getUsername(), login.getPassword())) {
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
+        if (authService.login(loginDto.getUsername(), loginDto.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -42,8 +42,8 @@ public class AuthController {
             description = "Пароль создан")
     @ApiResponse(responseCode = "400",
             description = "Некорректное содержание пароля, попробуйте снова!")
-    public ResponseEntity<?> register(@RequestBody Register register) {
-        if (authService.register(register)) {
+    public ResponseEntity<?> register(@RequestBody RegisterDto registerDto) {
+        if (authService.register(registerDto)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
