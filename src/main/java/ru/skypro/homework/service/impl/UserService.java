@@ -2,21 +2,28 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.NewPasswordDto;
+import ru.skypro.homework.dto.UpdateUserDto;
+import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.repository.UserRepository;
 
 @Service
 public class UserService {
-    public User getUser() {
+
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public UserDto getUser() {
         return null;
     }
 
-    public void updatePassword(NewPassword newPassword) {
+    public void updatePassword(NewPasswordDto newPasswordDto) {
     }
 
-    public void updateUser(UpdateUser updateUser) {
-
+    public void updateUser(UpdateUserDto updateUserDto) {
     }
 
     public void updateUserImage(MultipartFile file) {

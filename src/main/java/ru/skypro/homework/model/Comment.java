@@ -11,14 +11,14 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "comment")
+@Table(name = "comments")
 
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    Long commentId;
+    Integer commentId;
 
     @ManyToOne
     @JoinColumn(name = "ad_id")
@@ -28,10 +28,8 @@ public class Comment {
     @JoinColumn(name = "user_id")
     User author;
 
-    @Column(name = "createdTime")
     Long createdTime;
 
-    @Column(name = "text")
     String text;
 
 }
