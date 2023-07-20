@@ -29,6 +29,7 @@ public class User {
     private String lastName;
 
     private String phone;
+
     private String imagePath;
     public String getImagePath() {
         return imagePath;
@@ -48,6 +49,5 @@ public class User {
     @Column(name = "role")
     private RoleDto roleDto;
 
-    private String image;
 
 }

@@ -27,7 +27,7 @@ public class CommentMapperService {
         User author = Optional.ofNullable(commentEntity.getAuthor()).orElse(new User());
         commentDTO.setAuthor(author.getUserId());
         commentDTO.setAuthorFirstName(author.getFirstName());
-        commentDTO.setAuthorImage(author.getImage());
+        commentDTO.setAuthorImage(author.getImagePath());
         commentDTO.setCreatedAt(commentEntity.getCreatedTime());
         commentDTO.setText(commentEntity.getText());
         return commentDTO;
