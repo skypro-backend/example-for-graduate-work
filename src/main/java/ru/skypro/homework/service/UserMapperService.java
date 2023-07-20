@@ -14,7 +14,7 @@ public class UserMapperService {
         userEntity.setFirstName(userDto.getFirstName());
         userEntity.setLastName(userDto.getLastName());
         userEntity.setPhone(userDto.getPhone());
-        userEntity.setImage(userDto.getImage());
+        userEntity.setImagePath(userDto.getImage());
         return userEntity;
     }
 
@@ -25,7 +25,7 @@ public class UserMapperService {
         userDto.setFirstName(userEntity.getFirstName());
         userDto.setLastName(userEntity.getLastName());
         userDto.setPhone(userEntity.getPhone());
-        userDto.setImage(userEntity.getImage());
+        userDto.setImage(userEntity.getImagePath());
         return userDto;
     }
 

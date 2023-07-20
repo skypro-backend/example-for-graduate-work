@@ -27,9 +27,9 @@ CREATE TABLE users
     first_name    VARCHAR(255) NOT NULL,
     last_name     VARCHAR(255) NOT NULL,
     phone         VARCHAR(255) NOT NULL,
+    image_path    TEXT NOT NULL,
     pk_id         INT,
     role          VARCHAR(255) NOT NULL,
-    image         TEXT NOT NULL,
     ad_id         INT
 );
 
