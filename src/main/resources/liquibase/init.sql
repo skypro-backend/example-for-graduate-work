@@ -1,8 +1,8 @@
 
 CREATE TABLE ads
 (
-    pk_id         BIGSERIAL PRIMARY KEY,
-    user_id       BIGINT NOT NULL,
+    pk_id         SERIAL PRIMARY KEY,
+    user_id       INT NOT NULL,
     image_address VARCHAR(255),
     description   VARCHAR(255),
     price         INT,
@@ -12,24 +12,24 @@ CREATE TABLE ads
 
 CREATE TABLE comments
 (
-    comment_id     BIGSERIAL PRIMARY KEY,
-    ad_id          BIGINT NOT NULL,
-    user_id        BIGINT NOT NULL,
-    created_time   BIGINT NOT NULL,
-    text           TEXT NOT NULL
+    comment_id     SERIAL PRIMARY KEY,
+    ad_id          INT NOT NULL,
+    user_id        INT NOT NULL,
+    created_time   BIGINT,
+    text           VARCHAR(255)
 );
 
 CREATE TABLE users
 (
-    user_id       BIGSERIAL PRIMARY KEY,
-    login         TEXT NOT NULL,
-    password      TEXT NOT NULL,
-    first_name    TEXT NOT NULL,
-    last_name     TEXT NOT NULL,
-    phone         TEXT NOT NULL,
-    pk_id         BIGINT,
-    role          TEXT NOT NULL,
+    user_id       SERIAL PRIMARY KEY,
+    login         VARCHAR(255) NOT NULL,
+    password      VARCHAR(255) NOT NULL,
+    first_name    VARCHAR(255) NOT NULL,
+    last_name     VARCHAR(255) NOT NULL,
+    phone         VARCHAR(255) NOT NULL,
+    pk_id         INT,
+    role          VARCHAR(255) NOT NULL,
     image         TEXT NOT NULL,
-    ad_id         BIGINT
+    ad_id         INT
 );
 
