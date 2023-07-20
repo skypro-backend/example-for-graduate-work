@@ -33,3 +33,16 @@ CREATE TABLE users
     ad_id         INT
 );
 
+CREATE TABLE user_images
+(
+    image_id      SERIAL PRIMARY KEY,
+    user_id       INT NOT NULL,
+    image_address TEXT NOT NULL
+);
+
+CREATE TABLE ads_images
+(
+    ads_image_id   SERIAL PRIMARY KEY,
+    ad_id          INT NOT NULL,
+    image_address  TEXT NOT NULL
+);
