@@ -1,8 +1,9 @@
-package ru.skypro.homework.model;
+package ru.skypro.homework.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.skypro.homework.model.Ad;
 
 import javax.persistence.*;
 
@@ -10,16 +11,16 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user_images")
-public class UserImage {
+@Table(name = "ads_images")
+public class AdsImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer imageId;
+    private Integer adsImageId;
 
-    @OneToOne()
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToOne
+    @JoinColumn(name = "ad_id")
+    private Ad ad;
 
     private String imageAddress;
 }
