@@ -1,6 +1,5 @@
 package ru.skypro.homework.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,26 +10,16 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "comments")
-
-public class Comment {
+@Table(name = "user_images")
+public class UserImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
-    Integer commentId;
+    private Integer imageId;
 
-    @ManyToOne
-    @JoinColumn(name = "ad_id")
-    Ad ad;
-
-    @ManyToOne
+    @OneToOne()
     @JoinColumn(name = "user_id")
-    User author;
+    private User user;
 
-    Long createdTime;
-
-    String text;
-
+    private String imageAddress;
 }
-

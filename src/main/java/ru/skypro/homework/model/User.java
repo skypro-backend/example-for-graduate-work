@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "authors")
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,37 +18,36 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "login")
     private String login;
 
-    @Column(name = "password")
     private String password;
 
-    @Column(name = "firstName")
     private String firstName;
 
-    @Column(name = "lastName")
     private String lastName;
 
-    @Column(name = "phone")
     private String phone;
+    private String imagePath;
+    public String getImagePath() {
+        return imagePath;
+    }
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "user_id")
-    private List<Ad> ad = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "pk_id")
+    private List<Ad> ad;
 
-    @OneToMany()
-    @JoinColumn(name = "user_id")
-    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "author")
+    private List<Comment> comments;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private RoleDto roleDto;
 
-    @Column(name = "image")
     private String image;
 
 

@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface AdsRepository extends JpaRepository<Ad, Integer> {
 
-    List<Ad> adsFindByTitle(String title);
 }
