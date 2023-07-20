@@ -30,9 +30,9 @@ public class UsersController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-    public ResponseEntity<?> getUser () {
-        UserDto userDto = userService.getUser();
-            return ResponseEntity.ok().body(userDto);
+    public ResponseEntity<UserDto> getUser(@RequestParam Integer id) {
+        UserDto userDto = userService.getUser(id);
+        return ResponseEntity.ok().body(userDto);
     }
 
     @PatchMapping("/me")
@@ -41,19 +41,19 @@ public class UsersController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-    public ResponseEntity<?> updateUser(@RequestBody UpdateUserDto updateUserDto) {
-        userService.updateUser(updateUserDto);
-        return ResponseEntity.ok().body(updateUserDto);
+    public ResponseEntity<UserDto> updateUser(@RequestParam Integer id, @RequestBody UserDto userDto) {
+        UserDto updatedUserDto = userService.updateUser(id, userDto);
+        return ResponseEntity.ok().body(updatedUserDto);
     }
 
-    @PostMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/{id}/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Обновление аватара авторизованного пользователя")
     @ApiResponse(responseCode = "200",
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-    public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile file) {
-        userService.updateUserImage(file);
+    public ResponseEntity<?> updateUserImage(@PathVariable Integer id, @RequestParam("image") MultipartFile file) {
+        userService.updateUserImage(id, file);
         return ResponseEntity.ok().build();
     }
 
@@ -65,9 +65,10 @@ public class UsersController {
             description = "Ошибка авторизации")
     @ApiResponse(responseCode = "403",
             description = "Операция запрещена")
-    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
-        userService.updatePassword(newPasswordDto);
+    public ResponseEntity<?> setPassword(@PathVariable Integer id, @RequestBody NewPasswordDto newPasswordDto) {
+        userService.updatePassword(id, newPasswordDto);
         return ResponseEntity.ok().build();
+
 
     }
 }

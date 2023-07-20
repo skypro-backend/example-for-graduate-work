@@ -29,6 +29,13 @@ public class User {
     private String lastName;
 
     private String phone;
+    private String imagePath;
+    public String getImagePath() {
+        return imagePath;
+    }
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "pk_id")
