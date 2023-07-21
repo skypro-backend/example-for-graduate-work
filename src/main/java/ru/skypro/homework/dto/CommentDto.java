@@ -13,4 +13,8 @@ public class CommentDto {
 
     public CommentDto(Integer userId, String image, String firstName, Long createdTime, Integer comments, String text) {
     }
+
+    public CommentDto() {
+
+    }
 }

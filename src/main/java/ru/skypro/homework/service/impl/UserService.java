@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UpdateUserDto;
-import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserMapperService;
@@ -53,13 +52,13 @@ public class UserService implements UserDetailsService {
 
     public void updateUserImage(MultipartFile file) {
         User user = getUser();
-        user.setImage(imageService.updateUserImage(file));
+        user.setImagePath(imageService.updateUserImage(file));
         userRepository.save(user);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByUsername(username).orElseThrow();
+        User user = userRepository.findUserByFirstName(username).orElseThrow();
         if (user == null) {
             throw new UsernameNotFoundException("Unknown user" + username);
         }

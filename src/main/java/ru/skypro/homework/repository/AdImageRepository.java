@@ -1,8 +1,11 @@
 package ru.skypro.homework.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.skypro.homework.service.impl.AdsImage;
+import org.springframework.stereotype.Repository;
+import ru.skypro.homework.model.AdsImage;
 
+
+@Repository
 public interface AdImageRepository extends JpaRepository <AdsImage, Integer> {
     String findAdImageByImageAddress(String imageAddress);
 }
