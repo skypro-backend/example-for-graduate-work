@@ -58,12 +58,12 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByFirstName(username).orElseThrow();
+        User user = userRepository.findUserByLogin(username).orElseThrow();
         if (user == null) {
             throw new UsernameNotFoundException("Unknown user" + username);
         }
         UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
-                .username(user.getFirstName())
+                .username(user.getLogin())
                 .password(user.getPassword())
                 .roles(String.valueOf(user.getRoleDto()))
                 .build();
