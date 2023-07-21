@@ -5,10 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class AdsDto {
+public class Ads {
     Integer count;
-    List<AdDto> results;
-
-    public AdsDto(List<AdDto> allAdsUser) {
-    }
+    List<Ad> results;
 }

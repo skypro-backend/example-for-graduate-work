@@ -32,5 +32,8 @@ public class Comment {
 
     String text;
 
+    public Comment(Ad ad, User user, long toEpochMilli, String text) {
+    }
 }
+
 

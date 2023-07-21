@@ -13,6 +13,7 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "ads")
+
 public class Ad {
 
     @Id
@@ -24,15 +25,27 @@ public class Ad {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "imageAddress")
     private String imageAddress;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "price")
     private Integer price;
 
+    @Column(name = "title")
     private String title;
 
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "ad_id")
     private List<Comment> comments;
+
+
+    public Ad(User user, String description, Object imageAddress, Integer price, String title) {
+    }
+
+    public Ad() {
+
+    }
 }

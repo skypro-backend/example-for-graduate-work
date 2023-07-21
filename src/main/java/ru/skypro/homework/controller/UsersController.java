@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.model.User;
 import ru.skypro.homework.service.impl.UserService;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -30,9 +31,9 @@ public class UsersController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-    public ResponseEntity<UserDto> getUser(@RequestParam Integer id) {
-        UserDto userDto = userService.getUser(id);
-        return ResponseEntity.ok().body(userDto);
+    public ResponseEntity<?> getUser () {
+        User user = userService.getUser();
+        return ResponseEntity.ok().body(user);
     }
 
     @PatchMapping("/me")
@@ -41,19 +42,19 @@ public class UsersController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-    public ResponseEntity<UserDto> updateUser(@RequestParam Integer id, @RequestBody UserDto userDto) {
-        UserDto updatedUserDto = userService.updateUser(id, userDto);
-        return ResponseEntity.ok().body(updatedUserDto);
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserDto updateUserDto) {
+        userService.updateUser(updateUserDto);
+        return ResponseEntity.ok().body(updateUserDto);
     }
 
-    @PostMapping(value = "/{id}/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Обновление аватара авторизованного пользователя")
     @ApiResponse(responseCode = "200",
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-    public ResponseEntity<?> updateUserImage(@PathVariable Integer id, @RequestParam("image") MultipartFile file) {
-        userService.updateUserImage(id, file);
+    public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile file) {
+        userService.updateUserImage(file);
         return ResponseEntity.ok().build();
     }
 
@@ -65,10 +66,9 @@ public class UsersController {
             description = "Ошибка авторизации")
     @ApiResponse(responseCode = "403",
             description = "Операция запрещена")
-    public ResponseEntity<?> setPassword(@PathVariable Integer id, @RequestBody NewPasswordDto newPasswordDto) {
-        userService.updatePassword(id, newPasswordDto);
+    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
+        userService.updatePassword(newPasswordDto);
         return ResponseEntity.ok().build();
-
 
     }
 }

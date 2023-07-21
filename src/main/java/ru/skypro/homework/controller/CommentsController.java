@@ -32,8 +32,8 @@ public class CommentsController {
             description = "Ошибка авторизации")
     @ApiResponse(responseCode = "404",
             description = "Операция не найдена")
-    public ResponseEntity<CommentsDto> getComments(@PathVariable(name = "id") Integer id) {
-        return ResponseEntity.ok().body(commentsService.getCommentsById(id));
+    public ResponseEntity<CommentsDto> getComments(@PathVariable(name = "id") Integer idAd) {
+        return ResponseEntity.ok().body(commentsService.getCommentsById(idAd));
     }
 
     @PostMapping("/{id}/comments")
