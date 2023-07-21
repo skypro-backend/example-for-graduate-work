@@ -1,15 +1,13 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.CommentDto;
-import ru.skypro.homework.dto.CommentsDto;
-import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
-import ru.skypro.homework.dto.RoleDto;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentsRepository;
+import ru.skypro.homework.service.CommentMapperService;
 
 import java.time.Instant;
 import java.util.List;
@@ -21,29 +19,22 @@ public class CommentsService {
     private final CommentsRepository commentsRepository;
     private final AdsRepository adsRepository;
     private final UserService userService;
+    private final CommentMapperService commentMapperService;
 
 
-    public CommentsService(CommentsRepository commentsRepository, AdsRepository adsRepository, UserService userService) {
+    public CommentsService(CommentsRepository commentsRepository, AdsRepository adsRepository, UserService userService, CommentMapperService commentMapperService) {
         this.commentsRepository = commentsRepository;
         this.adsRepository = adsRepository;
         this.userService = userService;
-            }
-
-    public CommentDto commentToCommentDto(Comment comment) {
-        return new CommentDto(
-                comment.getAuthor().getUserId(),
-                comment.getAuthor().getImage(),
-                comment.getAuthor().getFirstName(),
-                comment.getCreatedTime(),
-                comment.getComments(),
-                comment.getText());
+        this.commentMapperService = commentMapperService;
     }
+
 
     public CommentsDto getCommentsById(Integer IdAd) {
         Ad ad = adsRepository.findById(IdAd).orElseThrow();
         List<Comment> commentList = commentsRepository.findByAd(ad);
         List<CommentDto> commentsDtoList = commentList.stream()
-                .map(e -> commentToCommentDto(e))
+                .map(e -> commentMapperService.mapToDto(e))
                 .collect(Collectors.toList());
 
         return new CommentsDto(commentsDtoList.size(), commentsDtoList);
@@ -58,7 +49,7 @@ public class CommentsService {
                 Instant.now().toEpochMilli(),
                 text.getText());
         commentsRepository.save(comment);
-        return commentToCommentDto(comment);
+        return commentMapperService.mapToDto(comment);
 
     }
 
@@ -77,7 +68,7 @@ public class CommentsService {
         if(user.getUserId().equals(comment.getAuthor().getUserId()) || user.getRoleDto() == RoleDto.ADMIN){
             comment.setText(newComment.getText());
             commentsRepository.save(comment);
-            return commentToCommentDto(comment);
+            return commentMapperService.mapToDto(comment);
         } else throw new RuntimeException("Такой комментарий не существует");
     }
 }

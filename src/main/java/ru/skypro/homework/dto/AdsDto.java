@@ -8,4 +8,7 @@ import java.util.List;
 public class AdsDto {
     Integer count;
     List<AdDto> results;
+
+    public AdsDto(List<AdDto> allAdsUser) {
+    }
 }

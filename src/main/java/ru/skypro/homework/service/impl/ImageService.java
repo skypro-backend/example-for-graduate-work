@@ -64,5 +64,9 @@ public class ImageService {
             userImagesDir.mkdirs();
         }
     }
+
+    public String updateAdImage(Integer pk, MultipartFile file) {
+        return null;
+    }
 }
 

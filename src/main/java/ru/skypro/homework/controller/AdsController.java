@@ -38,13 +38,8 @@ public class AdsController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-
-    public ResponseEntity<Ad> addAd(@RequestPart CreateOrUpdateAd properties,
-                                    @RequestPart("image") MultipartFile image) {
-
     public ResponseEntity<AdDto> addAd(@RequestPart CreateOrUpdateAdDto properties,
                                        @RequestPart("image") MultipartFile image) {
-
         return ResponseEntity.ok(adsService.addAd(properties, image));
     }
 
@@ -54,11 +49,7 @@ public class AdsController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-
-    public ResponseEntity<ExtendedAd> getAds(@PathVariable Integer id) {
-
     public ResponseEntity<ExtendedAdDto> getAds(@PathVariable Integer id) {
-
         return ResponseEntity.ok().body(adsService.getAds(id));
     }
 
@@ -88,11 +79,7 @@ public class AdsController {
     @ApiResponse(responseCode = "404",
             description = "Операция не найдена")
     public ResponseEntity<?> updateAds(@PathVariable Integer id,
-
-                                       @RequestBody CreateOrUpdateAd newAds) {
-
                                        @RequestBody CreateOrUpdateAdDto newAds) {
-
         return ResponseEntity.ok().body(adsService.updateAds(id, newAds));
     }
 
