@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.User;
@@ -21,11 +22,12 @@ public class ImageService {
     @Value("${path.to.user.images}/")
     private String pathToUserImages;
 
+
     private final UserService userService;
     private final UserRepository userRepository;
 
 
-    public ImageService(UserService userService, UserRepository userRepository) {
+    public ImageService(@Lazy UserService userService, UserRepository userRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
     }

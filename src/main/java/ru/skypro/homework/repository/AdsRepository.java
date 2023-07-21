@@ -7,8 +7,10 @@ import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
 
 
+
 @Repository
 public interface AdsRepository extends JpaRepository<Ad, Integer> {
+
 
     List<AdDto> findAdsByUser(User user);
 }
