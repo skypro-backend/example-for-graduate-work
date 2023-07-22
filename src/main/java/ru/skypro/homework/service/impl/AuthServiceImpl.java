@@ -25,7 +25,6 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
 
     public AuthServiceImpl(UserService userService, UserDetailsManager manager, PasswordEncoder passwordEncoder) {
-
         this.userService = userService;
         this.manager = manager;
         this.encoder = passwordEncoder;
@@ -33,10 +32,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
+        if (!userService.userExists(userName)) {
             return false;
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
+        UserDetails userDetails = userService.loadUserByUsername(userName);
         return encoder.matches(password, userDetails.getPassword());
     }
 

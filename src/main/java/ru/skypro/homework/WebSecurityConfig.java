@@ -14,8 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 public class WebSecurityConfig {
+
   @Bean
   public ApplicationContext applicationContext() {
     return new AnnotationConfigApplicationContext();
@@ -31,6 +36,7 @@ public class WebSecurityConfig {
 
   @Bean
   public InMemoryUserDetailsManager userDetailsService() {
+    List<UserDetails> userDetails = new ArrayList<>();
     UserDetails user =
         User.builder()
             .username("user@gmail.com")
@@ -38,6 +44,7 @@ public class WebSecurityConfig {
             .passwordEncoder((plainText) -> passwordEncoder().encode(plainText))
             .roles("USER")
             .build();
+    userDetails.add(user);
     UserDetails admin =
             User.builder()
                 .username("admin@gmail.com")
@@ -45,7 +52,8 @@ public class WebSecurityConfig {
                 .passwordEncoder((plainText) -> passwordEncoder().encode(plainText))
                 .roles("ADMIN")
                 .build();
-    return new InMemoryUserDetailsManager(user, admin);
+    userDetails.add(admin);
+    return new InMemoryUserDetailsManager(userDetails);
   }
 
   @Bean
@@ -58,7 +66,8 @@ public class WebSecurityConfig {
                     .mvcMatchers(AUTH_WHITELIST)
                     .permitAll()
                     .mvcMatchers("/ads/**", "/users/**")
-                    .authenticated())
+                    .authenticated()
+        )
         .cors()
         .and()
         .httpBasic(withDefaults());

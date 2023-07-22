@@ -34,4 +34,13 @@ public class Ad {
     private String text;
     @Column(name = "price")
     private int price;
+
+    public Ad(User user, List<Comment> comments, LocalDateTime time, String title, String text, int price) {
+        this.user = user;
+        this.comments = comments;
+        this.time = time;
+        this.title = title;
+        this.text = text;
+        this.price = price;
+    }
 }

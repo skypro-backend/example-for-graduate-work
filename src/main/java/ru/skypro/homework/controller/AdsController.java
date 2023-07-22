@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.CommentService;
@@ -27,7 +28,7 @@ public class AdsController {
 
     //!Доработать метод
     @PostMapping("/")
-    public ResponseEntity<Void> addAd(@RequestBody CreateAds ads) {
+    public ResponseEntity<Void> addAd(@RequestPart CreateAds ads, @RequestPart("image")MultipartFile file) {
         adsService.createAds(ads);
        return ResponseEntity.ok().build();
     }

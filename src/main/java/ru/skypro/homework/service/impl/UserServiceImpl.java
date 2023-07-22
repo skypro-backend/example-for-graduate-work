@@ -1,6 +1,9 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.UserDTO;
@@ -9,11 +12,19 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
+    }
 
 
     @Override
@@ -76,5 +87,21 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public boolean userExists(String userName) {
+        return userRepository.findUserByUserName(userName)!=null;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findUserByUserName(username);
+        UserDetails userSpring =
+                org.springframework.security.core.userdetails.User.builder()
+                                                                  .username(user.getUserName())
+                                                                  .password(user.getPassword())
+                                                                  .roles(user.getRole().name())
+                                                                  .build();
+        return userSpring;
+    }
 
 }
