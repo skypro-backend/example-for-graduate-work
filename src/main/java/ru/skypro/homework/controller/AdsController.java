@@ -19,9 +19,6 @@ public class AdsController {
 
     private  final CommentService commentService;
 
-
-
-
     @GetMapping("/")
     public ResponseEntity<ResponseWrapperAds> getAllAds() {
 
@@ -31,7 +28,7 @@ public class AdsController {
     //!Доработать метод
     @PostMapping("/")
     public ResponseEntity<Void> addAd(@RequestBody CreateAds ads) {
-//        adsService.createAds(ads);
+        adsService.createAds(ads);
        return ResponseEntity.ok().build();
     }
 

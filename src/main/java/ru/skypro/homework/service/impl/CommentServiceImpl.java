@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.ResponseWrapperComment;
 import ru.skypro.homework.exception.CommentNotFoundException;
@@ -10,6 +11,7 @@ import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.repository.CommentRepository;
 
+@Service
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;

@@ -11,6 +11,8 @@ public interface UserService {
 
     void addUser(RegisterReq registerReq);
 
+    void addUser(User user);
+
     User findUserById(int userId);
 
     User findUserByUserName(String username);

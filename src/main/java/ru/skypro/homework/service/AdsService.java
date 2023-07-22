@@ -16,6 +16,8 @@ public interface AdsService {
 
     ResponseWrapperAds getAllAds();
 
+    void createAds(CreateAds ads);
+
 
     AdsDTO updateAd(int id, CreateAds createAds);
 

@@ -2,6 +2,8 @@ package ru.skypro.homework;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class WebSecurityConfig {
-
+  @Bean
+  public ApplicationContext applicationContext() {
+    return new AnnotationConfigApplicationContext();
+  }
   private static final String[] AUTH_WHITELIST = {
     "/swagger-resources/**",
     "/swagger-ui.html",
@@ -33,7 +38,14 @@ public class WebSecurityConfig {
             .passwordEncoder((plainText) -> passwordEncoder().encode(plainText))
             .roles("USER")
             .build();
-    return new InMemoryUserDetailsManager(user);
+    UserDetails admin =
+            User.builder()
+                .username("admin@gmail.com")
+                .password("password")
+                .passwordEncoder((plainText) -> passwordEncoder().encode(plainText))
+                .roles("ADMIN")
+                .build();
+    return new InMemoryUserDetailsManager(user, admin);
   }
 
   @Bean

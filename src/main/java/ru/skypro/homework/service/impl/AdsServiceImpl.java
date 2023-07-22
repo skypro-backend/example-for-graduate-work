@@ -20,11 +20,10 @@ public class AdsServiceImpl implements AdsService {
     }
 
 
-    //    @Override
-    public Ad createAds(CreateAds createAds) {
-
-//        Ad addAd =  adsRepository.saveAndFlush(createAds);
-        return null;
+    @Override
+    public void createAds(CreateAds createAds) {
+   ///    Ad addAd =  adsRepository.saveAndFlush(createAds);
+  ///      return null;
     }
 
     @Override

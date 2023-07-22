@@ -29,7 +29,10 @@ public class UserServiceImpl implements UserService {
     public void addUser(RegisterReq registerReq) {
         User user = fromRegisterReq(registerReq);
         userRepository.saveAndFlush(user);
-
+    }
+    @Override
+    public void addUser(User user) {
+        userRepository.saveAndFlush(user);
     }
 
     @Override
