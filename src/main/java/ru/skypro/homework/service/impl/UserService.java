@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByFirstName(username).orElseThrow();
+        User user = userRepository.findUserByLogin(username).orElseThrow();
         if (user == null) {
             throw new UsernameNotFoundException("Unknown user" + username);
         }
@@ -69,5 +69,9 @@ public class UserService implements UserDetailsService {
                 .build();
 
         return userDetails;
+    }
+
+    public boolean userExists(String username) { userRepository.findUserByLogin(username).isPresent();
+        return true;
     }
 }
