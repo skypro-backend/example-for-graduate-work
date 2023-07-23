@@ -22,12 +22,12 @@ CREATE TABLE comments
 CREATE TABLE users
 (
     user_id       SERIAL PRIMARY KEY,
-    login         VARCHAR(255) NOT NULL,
-    password      VARCHAR(255) NOT NULL,
-    first_name    VARCHAR(255) NOT NULL,
-    last_name     VARCHAR(255) NOT NULL,
-    phone         VARCHAR(255) NOT NULL,
-    image_path    TEXT NOT NULL,
+    login         VARCHAR(255),
+    password      VARCHAR(255),
+    first_name    VARCHAR(255),
+    last_name     VARCHAR(255),
+    phone         VARCHAR(255),
+    image_path    TEXT,
     pk_id         INT,
     role          VARCHAR(255) NOT NULL,
     ad_id         INT
@@ -36,13 +36,13 @@ CREATE TABLE users
 CREATE TABLE user_images
 (
     image_id      SERIAL PRIMARY KEY,
-    user_id       INT NOT NULL,
-    image_address TEXT NOT NULL
+    user_id       INT,
+    image_address TEXT
 );
 
 CREATE TABLE ads_images
 (
     ads_image_id   SERIAL PRIMARY KEY,
-    ad_id          INT NOT NULL,
-    image_address  TEXT NOT NULL
+    ad_id          INT,
+    image_address  TEXT
 );
