@@ -17,7 +17,6 @@ import ru.skypro.homework.service.CommentService;
 public class AdsController {
 
     private final AdsService adsService;
-
     private  final CommentService commentService;
 
     @GetMapping("/")

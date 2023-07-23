@@ -23,9 +23,12 @@ public class Ad {
     @JoinColumn(name = "user_id",  referencedColumnName = "id")
     private User user;
 
+    @OneToOne(targetEntity = Image.class, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "image_id")
+    private Image image;
+
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
-
     @Column(name = "creating_time", nullable = false)
     private LocalDateTime time;
     @Column(name = "title", nullable = false)

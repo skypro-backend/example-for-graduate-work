@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,7 +35,7 @@ public class WebSecurityConfig {
     "/register"
   };
 
-  @Bean
+  /*@Bean
   public InMemoryUserDetailsManager userDetailsService() {
     List<UserDetails> userDetails = new ArrayList<>();
     UserDetails user =
@@ -54,7 +55,7 @@ public class WebSecurityConfig {
                 .build();
     userDetails.add(admin);
     return new InMemoryUserDetailsManager(userDetails);
-  }
+  }*/
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -63,10 +64,11 @@ public class WebSecurityConfig {
         .authorizeHttpRequests(
             (authorization) ->
                 authorization
-                    .mvcMatchers(AUTH_WHITELIST)
-                    .permitAll()
-                    .mvcMatchers("/ads/**", "/users/**")
-                    .authenticated()
+                        .mvcMatchers(AUTH_WHITELIST)
+                        .permitAll()
+                        .mvcMatchers(HttpMethod.GET, "/ads/image/**", "/ads")
+                        .permitAll()
+                        .mvcMatchers("/ads/**", "/users/**").authenticated()
         )
         .cors()
         .and()

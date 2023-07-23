@@ -15,7 +15,6 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor
-
 public class User  {
     @Id
     @Column(name = "id")
@@ -43,8 +42,11 @@ public class User  {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Ad> ads = new ArrayList<>();
     //аватар
+    @OneToOne(targetEntity = Image.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "user_image_id")
+    private Image image;
 
-    public User(String userName, String password, String firstName, String lastName, String phone, Role role) {
+    public User(String userName, String password, String firstName, String lastName, String phone, Role role, Image image) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
@@ -52,7 +54,17 @@ public class User  {
         this.phone = phone;
         this.mail = userName;
         this.role = role == null? Role.USER : role;
-
+        this.image = image;
+    }
+    public User(String userName, String password, String firstName, String lastName, String mail, String phone, Role role, Image image) {
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.mail = mail;
+        this.role = role == null? Role.USER : role;
+        this.image = image;
     }
     public User(String userName, String password, String firstName, String lastName, String mail, String phone, Role role) {
         this.userName = userName;
@@ -62,7 +74,6 @@ public class User  {
         this.phone = phone;
         this.mail = mail;
         this.role = role == null? Role.USER : role;
-
     }
 }
 

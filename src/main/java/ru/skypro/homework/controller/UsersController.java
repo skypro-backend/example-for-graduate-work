@@ -2,6 +2,7 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,24 +23,26 @@ import ru.skypro.homework.service.impl.UserServiceImpl;
 public class UsersController {
 
     private final UserService userService;
-    private final AuthService authService;
 
-    //!!!!Доработать внутренность
 
     @PostMapping("/set_password")
-    public NewPassword setPassword(
+    public ResponseEntity<NewPassword> setPassword(
             @RequestBody NewPassword newPassword)
     {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        authService.changePassword(authentication.getName(), newPassword.getCurrentPassword(),
-                                   newPassword.getNewPassword());
-        return newPassword;
+        userService.updateUserPassword(newPassword);
+        return ResponseEntity.ok(newPassword);
     }
 
     //!!!!Доработать внутренность
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUser() {
-        return ResponseEntity.ok(new UserDTO());
+        UserDTO userDTO = null;
+        try {
+            userDTO = userService.getUser();
+        } catch (UserNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.ok().body(userDTO);
     }
 
     //!!!!Доработать внутренность
@@ -52,10 +55,11 @@ public class UsersController {
     }
 
     //!!!!Доработать внутренность
-    @PostMapping("/me/image")
-    public ResponseEntity<Void> updateUserImage(
-            @RequestBody MultipartFile image)
+    @PatchMapping(value ="/me/image",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateUserImage(
+            @RequestParam("image") MultipartFile image) throws UserNotFoundException
     {
+        userService.updateUserImage(image);
         return ResponseEntity.ok().build();
     }
 }
