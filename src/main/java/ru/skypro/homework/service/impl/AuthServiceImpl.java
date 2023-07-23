@@ -1,47 +1,52 @@
 package ru.skypro.homework.service.impl;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.NewPasswordDto;
-import ru.skypro.homework.exception.UserNotFoundException;
-import ru.skypro.homework.exception.UserUnauthorizedException;
-import ru.skypro.homework.model.User;
 import ru.skypro.homework.dto.RegisterDto;
 import ru.skypro.homework.dto.RoleDto;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
-import ru.skypro.homework.service.UserMapperService;
 
 @Service
-@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserService manager;
+    private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
+    private final UserService userService;
     private final UserRepository userRepository;
-    private final UserMapperService userMapperService;
+
+    public AuthServiceImpl(UserDetailsManager manager,
+                           PasswordEncoder passwordEncoder, UserService userService, UserRepository userRepository) {
+        this.manager = manager;
+        this.encoder = passwordEncoder;
+        this.userService = userService;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public boolean login(String userName, String password) {
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        String encryptedPassword = userDetails.getPassword();
-        return encoder.matches(password, encryptedPassword);
+        if (!userService.userExists(userName)) {
+            return false;
+        }
+        UserDetails userDetails = userService.loadUserByUsername(userName);
+        return encoder.matches(password, userDetails.getPassword());
     }
 
     @Override
-    public boolean register(RegisterDto registerReqDto, RoleDto roleDto) {
-        if (userRepository.findUserByUsername(registerReqDto.getUsername()).isPresent()) {
-            return false;
-        }
-        User regUser = userMapperService.mapToUser(registerReqDto);
-        regUser.setRoleDto(roleDto);
-        regUser.setPassword(encoder.encode(regUser.getPassword()));
-        userRepository.save(regUser);
+    public boolean register(RegisterDto registerDto, RoleDto roleDto) {
+        if (userService.userExists(registerDto.getUsername())) {
+            }
+        ru.skypro.homework.model.User user = new ru.skypro.homework.model.User();
+        user.setLogin(registerDto.getUsername());
+        user.setPassword(encoder.encode(registerDto.getPassword()));
+        user.setFirstName(registerDto.getFirstName());
+        user.setLastName(registerDto.getLastName());
+        user.setPhone(registerDto.getPhone());
+        user.setRoleDto(roleDto);
+        userRepository.save(user);
         return true;
     }
+
 }
