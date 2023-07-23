@@ -63,7 +63,7 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("Unknown user" + username);
         }
         UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
-                .username(user.getFirstName())
+                .username(user.getLogin())
                 .password(user.getPassword())
                 .roles(String.valueOf(user.getRoleDto()))
                 .build();
