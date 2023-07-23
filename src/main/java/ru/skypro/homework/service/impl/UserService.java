@@ -70,4 +70,8 @@ public class UserService implements UserDetailsService {
 
         return userDetails;
     }
+
+    public boolean userExists(String username) { userRepository.findUserByLogin(username).isPresent();
+        return true;
+    }
 }
