@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +17,6 @@ import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.UserMapperService;
 
 import java.util.Optional;
 
@@ -34,9 +34,7 @@ public class UserService implements UserDetailsService {
 
     public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        return user;
-
+        return userRepository.findUserByLogin(authentication.getName()).orElseThrow();
     }
 
 
@@ -66,7 +64,8 @@ public class UserService implements UserDetailsService {
                 new UsernameNotFoundException("User with username " + username + " doesn't exists"));
     }
 
-    public boolean userExists(String username) { userRepository.findUserByLogin(username).isPresent();
+    public boolean userExists(String username) {
+        userRepository.findUserByLogin(username).isPresent();
         return true;
     }
 }
