@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.dto.UserUpdateReq;
 import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
@@ -24,7 +25,9 @@ public class UsersController {
 
     private final UserService userService;
 
-
+    /**
+     * Обновление пароля пользователя
+     */
     @PostMapping("/set_password")
     public ResponseEntity<NewPassword> setPassword(
             @RequestBody NewPassword newPassword)
@@ -33,7 +36,9 @@ public class UsersController {
         return ResponseEntity.ok(newPassword);
     }
 
-    //!!!!Доработать внутренность
+    /**
+     Получение информации о пользователе
+     */
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUser() {
         UserDTO userDTO = null;
@@ -45,16 +50,20 @@ public class UsersController {
         return ResponseEntity.ok().body(userDTO);
     }
 
-    //!!!!Доработать внутренность
+    /**
+     * Изменение информации о пользователе
+     */
+
     @PostMapping("/me")
-    public ResponseEntity<Void> updateUser(
-            @RequestBody UserDTO user)
-    {
-        userService.updateUser(user);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> updateUser(
+            @RequestBody UserUpdateReq userUpdateReq) throws UserNotFoundException {
+        userService.updateUser(userUpdateReq);
+        return ResponseEntity.ok().body(userUpdateReq);
     }
 
-    //!!!!Доработать внутренность
+    /**
+     * Обновление аватара пользователя
+     */
     @PatchMapping(value ="/me/image",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUserImage(
             @RequestParam("image") MultipartFile image) throws UserNotFoundException

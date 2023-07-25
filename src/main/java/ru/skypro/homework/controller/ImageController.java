@@ -21,13 +21,13 @@ public class ImageController {
         this.adService = adService;
         this.imageService = imageService;
     }
-
-  /*  @PatchMapping("ads/{id}/image")
+/*
+    @PatchMapping("ads/{id}/image")
     public ResponseEntity<?> updateImage(@PathVariable Integer id,
                                          @RequestParam("image") MultipartFile file) {
         return ResponseEntity.ok().body(adService.updateAdImage(id, file));
-    }*/
-
+    }
+*/
     /**
      * Отдает массив байтов по ссылке на картинку объявления
      */

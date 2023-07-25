@@ -2,6 +2,8 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +21,10 @@ public class AdsController {
     private final AdsService adsService;
     private  final CommentService commentService;
 
+    /**
+     * Получение всех обьявлений
+
+     */
     @GetMapping("/")
     public ResponseEntity<ResponseWrapperAds> getAllAds() {
 
@@ -26,11 +32,12 @@ public class AdsController {
     }
 
     //!Доработать метод
-    @PostMapping("/")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> addAd(@RequestPart CreateAds ads, @RequestPart("image")MultipartFile file) {
         adsService.createAds(ads);
        return ResponseEntity.ok().build();
     }
+
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable int id){
@@ -47,10 +54,13 @@ public class AdsController {
         return ResponseEntity.ok(adsService.getFullAdById(id));
     }
 
+    /**
+     * Удаления обьявления
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeAd(@PathVariable int id){
         adsService.deleteAd(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 
@@ -58,20 +68,28 @@ public class AdsController {
     public ResponseEntity<AdsDTO> updateAds(@PathVariable int id , @RequestBody CreateAds ads){
        return ResponseEntity.ok(adsService.updateAd(id, ads));
     }
+
+    /**
+     * Удаление комментария
+     */
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable int adId , @PathVariable int commentId){
         commentService.deleteComment(adId,commentId);
-       return ResponseEntity.ok().build();
+       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    /**
+      Обновление комментария
+     */
     @PostMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId , @PathVariable int commentId, @RequestBody CommentDTO commentDTO) {
-        return ResponseEntity.ok(commentService.updateComment(adId,commentId,commentDTO));
+        return ResponseEntity.ok().body(commentService.
+                updateComment(adId, commentId, commentDTO));
     }
     //!Доработать метод
     @GetMapping("/me")
     public ResponseEntity<ResponseWrapperAds> getAdsMe(){
-        return ResponseEntity.ok(new ResponseWrapperAds());
+        return ResponseEntity.ok(adsService.getAllAds());
     }
 
     //!Доработать метод

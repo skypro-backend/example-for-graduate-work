@@ -91,6 +91,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void updateUser(UserUpdateReq req) throws UserNotFoundException {
         User user = getAuthUser();
+        if(user == null){
+            throw new UserNotFoundException();
+        }
         user.setFirstName(req.getFirstName());
         user.setLastName(req.getLastName());
         user.setPhone(req.getPhone());

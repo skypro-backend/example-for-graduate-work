@@ -75,5 +75,7 @@ public class User  {
         this.mail = mail;
         this.role = role == null? Role.USER : role;
     }
+
+
 }
 
