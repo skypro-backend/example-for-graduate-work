@@ -1,6 +1,7 @@
-package ru.skypro.homework.dto;
+package ru.skypro.flea.dto;
 
 import lombok.Data;
+import ru.skypro.flea.model.enums.Role;
 
 @Data
 public class Register {
