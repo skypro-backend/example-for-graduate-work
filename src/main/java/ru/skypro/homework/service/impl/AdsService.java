@@ -49,11 +49,10 @@ public class AdsService {
             throw new UserNotFoundException();
         }
         Ad ad = new Ad(user, properties.getDescription(), null, properties.getPrice(), properties.getTitle());
-        Ad savedAd = adsRepository.save(ad);
+        Ad saveAd = adsRepository.save(ad);
 
-        savedAd.setImageAddress(adImageRepository.findAdImageByImageAddress(imageService.updateAdImage(savedAd.getPk(), file)));
-
-        return adMapperService.mapToDto(adsRepository.save(savedAd));
+        saveAd.setImageAddress(adImageRepository.findAdImageByImageAddress(imageService.updateAdImage(saveAd.getPk(), file)));
+        return adMapperService.mapToDto(adsRepository.save(saveAd));
     }
 
     public ExtendedAdDto getAds(Integer id) {
@@ -83,7 +82,7 @@ public class AdsService {
 
         public AdsDto getAdsAllUser() {
             User user = userService.getUser();
-            List<AdDto> allAdsUser = adsRepository.findAdsByUser(user).stream().collect(Collectors.toList());
+            List<AdDto> allAdsUser = new ArrayList<>(adsRepository.findAdsByUser(user));
             return new  AdsDto(allAdsUser);
         }
 
