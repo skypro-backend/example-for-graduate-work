@@ -46,3 +46,4 @@ CREATE TABLE ads_images
     ad_id          INT NOT NULL,
     image_address  TEXT NOT NULL
 );
+

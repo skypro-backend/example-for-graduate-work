@@ -15,10 +15,11 @@ import ru.skypro.homework.dto.RegisterDto;
 import ru.skypro.homework.dto.RoleDto;
 import ru.skypro.homework.service.AuthService;
 
-@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 @RestController
 public class AuthController {
+
 
     private final AuthService authService;
 

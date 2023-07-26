@@ -12,14 +12,12 @@ import ru.skypro.homework.service.AuthService;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
+//    private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
     private final UserService userService;
     private final UserRepository userRepository;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder, UserService userService, UserRepository userRepository) {
-        this.manager = manager;
+    public AuthServiceImpl( PasswordEncoder passwordEncoder, UserService userService, UserRepository userRepository) {
         this.encoder = passwordEncoder;
         this.userService = userService;
         this.userRepository = userRepository;
@@ -37,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean register(RegisterDto registerDto, RoleDto roleDto) {
         if (userService.userExists(registerDto.getUsername())) {
+            return false;
             }
         ru.skypro.homework.model.User user = new ru.skypro.homework.model.User();
         user.setLogin(registerDto.getUsername());
