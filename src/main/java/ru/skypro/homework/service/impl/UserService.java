@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UpdateUserDto;
+import ru.skypro.homework.dto.UserDetailsDto;
+import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 
@@ -60,13 +62,8 @@ public class UserService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("Unknown user" + username);
         }
-        UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
-                .username(user.getLogin())
-                .password(user.getPassword())
-                .roles(String.valueOf(user.getRoleDto()))
-                .build();
-
-        return userDetails;
+        UserDetailsDto userDetailsDto = new UserDetailsDto(user.getLogin(), user.getPassword(), user.getUserId(), user.getRoleDto());
+        return new SecurityUserPrincipal(userDetailsDto);
     }
 
     public boolean userExists(String username) {

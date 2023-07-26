@@ -19,6 +19,7 @@ import ru.skypro.homework.service.AuthService;
 @RestController
 public class AuthController {
 
+
     private final AuthService authService;
 
     public AuthController(AuthService authService) {
