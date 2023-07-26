@@ -12,13 +12,13 @@ docker compose build
 docker compose up --detach
 ```
 
-### Rebuild the application image and run the container:
+### Rebuild the application image:
 ```bash
 docker compose rm application --stop --force
 docker compose up --build --no-deps --detach application
 ```
 
-### Rebuild the DB image and run the container:
+### Rebuild the DB image:
 ```bash
 docker compose rm database --stop --volumes --force
 docker volume rm flea-market_database-data --force
