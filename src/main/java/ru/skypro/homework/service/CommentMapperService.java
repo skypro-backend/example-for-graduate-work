@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.model.Ad;
@@ -8,7 +9,7 @@ import ru.skypro.homework.model.User;
 
 import java.util.Optional;
 
-@Service
+@Component
 public class CommentMapperService {
 
     public Comment mapToEntity(CommentDto commentDTO, User user, Ad ad) {
@@ -25,9 +26,9 @@ public class CommentMapperService {
         CommentDto commentDTO = new CommentDto();
         commentDTO.setPk(commentEntity.getCommentId());
         User author = Optional.ofNullable(commentEntity.getAuthor()).orElse(new User());
-        commentDTO.setAuthor(author.getUserId());
+        commentDTO.setAuthor(author.getId());
         commentDTO.setAuthorFirstName(author.getFirstName());
-        commentDTO.setAuthorImage(author.getImagePath());
+        commentDTO.setAuthorImage(author.getImage());
         commentDTO.setCreatedAt(commentEntity.getCreatedTime());
         commentDTO.setText(commentEntity.getText());
         return commentDTO;

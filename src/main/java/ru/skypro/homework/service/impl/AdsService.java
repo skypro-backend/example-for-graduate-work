@@ -46,7 +46,7 @@ public class AdsService {
     public AdDto addAd(CreateOrUpdateAdDto properties, MultipartFile file) {
         User user = userService.getUser();
         if (user == null) {
-            throw new UserNotFoundException("Такой пользователь не существует");
+            throw new UserNotFoundException();
         }
         Ad ad = new Ad(user, properties.getDescription(), null, properties.getPrice(), properties.getTitle());
         Ad savedAd = adsRepository.save(ad);
@@ -64,7 +64,7 @@ public class AdsService {
     public void removeAd(Integer id) {
         User user = userService.getUser();
         Ad ad = adsRepository.findById(id).orElseThrow();
-        if (user.getUserId().equals(ad.getUser().getUserId()) || user.getRoleDto() == RoleDto.ADMIN) {
+        if (user.getId().equals(ad.getUser().getId()) || user.getRoleDto() == RoleDto.ADMIN) {
             adsRepository.delete(ad);
         }
     }
@@ -72,7 +72,7 @@ public class AdsService {
     public AdDto updateAds(Integer id, CreateOrUpdateAdDto newAds) {
         User user = userService.getUser();
         Ad ad = adsRepository.findById(id).orElseThrow();
-        if (user.getUserId().equals(ad.getUser().getUserId()) || user.getRoleDto() == RoleDto.ADMIN) {
+        if (user.getId().equals(ad.getUser().getId()) || user.getRoleDto() == RoleDto.ADMIN) {
             ad.setTitle(newAds.getTitle());
             ad.setPrice(newAds.getPrice());
             ad.setDescription(newAds.getDescription());
@@ -90,7 +90,7 @@ public class AdsService {
         public AdDto updateImage(Integer id, MultipartFile image) {
             User user = userService.getUser();
             Ad ad = adsRepository.findById(id).orElseThrow();
-            if (user.getUserId().equals(ad.getUser().getUserId()) || user.getRoleDto() == RoleDto.ADMIN){
+            if (user.getId().equals(ad.getUser().getId()) || user.getRoleDto() == RoleDto.ADMIN){
                 File tempFile = new File(pathToAdImages, ad.getPk() + "_ad_image.jpg");
                 try (FileOutputStream fos = new FileOutputStream(tempFile)) {
                     fos.write(image.getBytes());

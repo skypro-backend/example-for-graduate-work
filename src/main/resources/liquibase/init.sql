@@ -21,15 +21,16 @@ CREATE TABLE comments
 
 CREATE TABLE users
 (
-    user_id       SERIAL PRIMARY KEY,
-    login         VARCHAR(255),
-    password      VARCHAR(255),
-    first_name    VARCHAR(255),
-    last_name     VARCHAR(255),
-    phone         VARCHAR(255),
-    image_path    TEXT,
+    id            SERIAL PRIMARY KEY,
+    username      VARCHAR(255) UNIQUE,
+    email         VARCHAR(255) ,
+    password      VARCHAR(255) ,
+    first_name    VARCHAR(255) ,
+    last_name     VARCHAR(255) ,
+    phone         VARCHAR(255) ,
+    image         TEXT,
     pk_id         INT,
-    role          VARCHAR(255) NOT NULL,
+    role          VARCHAR(255) ,
     ad_id         INT
 );
 
