@@ -1,11 +1,11 @@
-package ru.skypro.flea.model;
+package ru.skypro.flea.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import ru.skypro.flea.model.enums.Role;
 
 @Data
-public class User {
+public class UserDto {
 
     @Schema(description = "User's id")
     private Integer id;

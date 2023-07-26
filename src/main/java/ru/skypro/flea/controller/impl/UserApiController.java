@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.flea.controller.UserApi;
 import ru.skypro.flea.dto.NewPasswordDto;
 import ru.skypro.flea.dto.UpdateUserDto;
-import ru.skypro.flea.model.User;
+import ru.skypro.flea.dto.UserDto;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -25,7 +25,7 @@ public class UserApiController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<User> getUser() {
+    public ResponseEntity<UserDto> getUser() {
         return ResponseEntity.ok().build();
     }
 

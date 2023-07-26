@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.flea.dto.NewPasswordDto;
 import ru.skypro.flea.dto.UpdateUserDto;
-import ru.skypro.flea.model.User;
+import ru.skypro.flea.dto.UserDto;
 
 import javax.validation.Valid;
 
@@ -51,7 +51,7 @@ public interface UserApi {
                     description = "OK",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = User.class)
+                            schema = @Schema(implementation = UserDto.class)
                     )
             ),
             @ApiResponse(
@@ -65,7 +65,7 @@ public interface UserApi {
             produces = {MediaType.APPLICATION_JSON_VALUE},
             method = RequestMethod.GET
     )
-    ResponseEntity<User> getUser();
+    ResponseEntity<UserDto> getUser();
 
     @Operation(summary = "Update authorized user info")
     @ApiResponses(value = {
