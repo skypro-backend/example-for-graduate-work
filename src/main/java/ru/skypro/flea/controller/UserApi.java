@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.flea.dto.NewPassword;
-import ru.skypro.flea.dto.UpdateUser;
+import ru.skypro.flea.dto.NewPasswordDto;
+import ru.skypro.flea.dto.UpdateUserDto;
 import ru.skypro.flea.model.User;
 
 import javax.validation.Valid;
@@ -22,11 +22,15 @@ import javax.validation.Valid;
 @Validated
 public interface UserApi {
 
-    @Operation(summary = "Обновление пароля")
+    @Operation(summary = "Password update")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
                     description = "OK"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized"
             ),
             @ApiResponse(
                     responseCode = "403",
@@ -38,9 +42,9 @@ public interface UserApi {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             method = RequestMethod.POST
     )
-    ResponseEntity<Void> setPassword(@RequestBody @Valid NewPassword newPassword);
+    ResponseEntity<Void> setPassword(@RequestBody @Valid NewPasswordDto newPassword);
 
-    @Operation(summary = "Получение информации об авторизованном пользователе")
+    @Operation(summary = "Get authorized user info")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -49,6 +53,11 @@ public interface UserApi {
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = User.class)
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized",
+                    content = @Content
             )
     })
     @RequestMapping(
@@ -58,14 +67,19 @@ public interface UserApi {
     )
     ResponseEntity<User> getUser();
 
-    @Operation(summary = "Обновление информации об авторизованном пользователе")
+    @Operation(summary = "Update authorized user info")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
                     description = "OK",
                     content = @Content(
-                            schema = @Schema(implementation = UpdateUser.class)
+                            schema = @Schema(implementation = UpdateUserDto.class)
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized",
+                    content = @Content
             )
     })
     @RequestMapping(
@@ -74,13 +88,17 @@ public interface UserApi {
             produces = {MediaType.APPLICATION_JSON_VALUE},
             method = RequestMethod.PATCH
     )
-    ResponseEntity<UpdateUser> updateUser(@RequestBody @Valid UpdateUser updateUser);
+    ResponseEntity<UpdateUserDto> updateUser(@RequestBody @Valid UpdateUserDto updateUser);
 
-    @Operation(summary = "Обновление аватара авторизованного пользователя")
+    @Operation(summary = "Update authorized user avatar")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
                     description = "OK"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized"
             )
     })
     @RequestMapping(

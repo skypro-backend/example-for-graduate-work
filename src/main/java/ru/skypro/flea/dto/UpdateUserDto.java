@@ -7,22 +7,17 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
-public class UpdateUser {
+public class UpdateUserDto {
 
-    @Schema(description = "id пользователя",
-            minLength = 3,
-            maxLength = 10)
+    @Schema(description = "User's first name")
     @Size(min = 3, max = 10)
     private String firstName;
 
-    @Schema(description = "id пользователя",
-            minLength = 3,
-            maxLength = 10)
+    @Schema(description = "User's last name")
     @Size(min = 3, max = 10)
     private String lastName;
 
-    @Schema(description = "id пользователя",
-            pattern = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
+    @Schema(description = "User's phone")
     @Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
     private String phone;
 

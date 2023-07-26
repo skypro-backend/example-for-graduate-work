@@ -1,9 +1,11 @@
 package ru.skypro.flea.service;
 
-import ru.skypro.flea.dto.Register;
+import ru.skypro.flea.dto.RegisterDto;
 
 public interface AuthService {
+
     boolean login(String userName, String password);
 
-    boolean register(Register register);
+    boolean register(RegisterDto register);
+
 }
