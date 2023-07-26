@@ -3,13 +3,14 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 
 @Data
-public class Register {
+public class UserDto {
 
-    private String username;
-    private String password;
+    private Long id;
     private String firstName;
     private String lastName;
+    private String email;
     private String phone;
-    private Role role;
+    private String role;
+    private String image;
 
 }
