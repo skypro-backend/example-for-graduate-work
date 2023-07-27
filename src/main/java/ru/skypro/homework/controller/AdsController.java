@@ -38,8 +38,7 @@ public class AdsController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-    public ResponseEntity<AdDto> addAd(@RequestPart CreateOrUpdateAdDto properties,
-                                       @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<AdDto> addAd(@RequestPart CreateOrUpdateAdDto properties, MultipartFile image) {
         return ResponseEntity.ok(adsService.addAd(properties, image));
     }
 

@@ -56,7 +56,7 @@ public class CommentsService {
     public void deleteComment(Integer IdAd, Integer commentId) {
         User user = userService.getUser();
         Comment comment = commentsRepository.findByAdPkAndCommentId(IdAd, commentId);
-        if(user.getId().equals(comment.getAuthor().getId()) || user.getRoleDto() == RoleDto.ADMIN){
+        if(user.getId().equals(comment.getAuthor().getId()) || user.getRole() == Role.ADMIN){
             commentsRepository.delete(comment);
         } else throw new RuntimeException("Такой комментарий не существует");
     }
@@ -65,7 +65,7 @@ public class CommentsService {
     public CommentDto updateComment(Integer IdAd, Integer commentId, CreateOrUpdateCommentDto newComment) {
         User user = userService.getUser();
         Comment comment = commentsRepository.findByAdPkAndCommentId(IdAd, commentId);
-        if(user.getId().equals(comment.getAuthor().getId()) || user.getRoleDto() == RoleDto.ADMIN){
+        if(user.getId().equals(comment.getAuthor().getId()) || user.getRole() == Role.ADMIN){
             comment.setText(newComment.getText());
             commentsRepository.save(comment);
             return commentMapperService.mapToDto(comment);

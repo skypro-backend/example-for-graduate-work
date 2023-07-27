@@ -1,13 +1,12 @@
 package ru.skypro.homework.service;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
 
-@Component
+@Service
 public class AdMapperService {
     // Метод для преобразования DTO в сущность для сохранения в базе данных.
     public Ad mapToEntity(AdDto adDTO, User user) {
@@ -21,13 +20,13 @@ public class AdMapperService {
         return adEntity;
     }
     // Метод для преобразования сущности из базы данных в DTO для ответа клиенту.
-    public AdDto mapToDto(Ad ad) {
+    public AdDto mapToDto(Ad adEntity) {
         AdDto adDTO = new AdDto();
-        adDTO.setPk(ad.getPk());
-        adDTO.setAuthor(ad.getUser().getId());
-        adDTO.setImage(ad.getImageAddress());
-        adDTO.setPrice(ad.getPrice());
-        adDTO.setTitle(ad.getTitle());
+        adDTO.setPk(adEntity.getPk());
+        adDTO.setAuthor(adEntity.getUser().getId());
+        adDTO.setImage(adEntity.getImageAddress());
+        adDTO.setPrice(adEntity.getPrice());
+        adDTO.setTitle(adEntity.getTitle());
         return adDTO;
     }
     public ExtendedAdDto mapToExtendedDto (Ad ad){
@@ -36,7 +35,7 @@ public class AdMapperService {
         extendedAdDto.setAuthorFirstName(ad.getUser().getFirstName());
         extendedAdDto.setAuthorLastName(ad.getUser().getLastName());
         extendedAdDto.setDescription(ad.getDescription());
-        extendedAdDto.setEmail(ad.getUser().getEmail());
+        extendedAdDto.setEmail(ad.getUser().getUsername());
         extendedAdDto.setImage(ad.getImageAddress());
         extendedAdDto.setPhone(ad.getUser().getPhone());
         extendedAdDto.setPrice(ad.getPrice());

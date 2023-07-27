@@ -22,7 +22,7 @@ public class Ad {
     private Integer pk;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "imageAddress")
@@ -42,7 +42,19 @@ public class Ad {
     private List<Comment> comments;
 
 
-    public Ad(User user, String description, Object imageAddress, Integer price, String title) {
+
+
+    public Ad(User user, String description, String imageAddress, Integer price, String title) {
+    }
+
+    public Ad(Integer pk, User user, String imageAddress, String description, Integer price, String title, List<Comment> comments) {
+        this.pk = pk;
+        this.user = user;
+        this.imageAddress = imageAddress;
+        this.description = description;
+        this.price = price;
+        this.title = title;
+        this.comments = comments;
     }
 
     public Ad() {

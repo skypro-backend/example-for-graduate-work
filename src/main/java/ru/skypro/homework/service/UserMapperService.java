@@ -1,36 +1,32 @@
 package ru.skypro.homework.service;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.model.User;
 
-import java.util.Optional;
-
-@Component
+@Service
 public class UserMapperService {
 
     public User mapToEntity(UserDto userDto) {
         User userEntity = new User();
         userEntity.setId(userDto.getId());
-        userEntity.setEmail(userDto.getEmail());
+        userEntity.setUsername(userDto.getEmail());
         userEntity.setFirstName(userDto.getFirstName());
         userEntity.setLastName(userDto.getLastName());
         userEntity.setPhone(userDto.getPhone());
-        userEntity.setImage(userDto.getImage());
+        userEntity.setImagePath(userDto.getImage());
         return userEntity;
     }
 
-    public UserDto mapToDto(User user) {
+    public UserDto mapToDto(User userEntity) {
         UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setEmail(user.getEmail());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setPhone(user.getPhone());
-        userDto.setImage(user.getImage());
-        Optional.ofNullable(user.getImage()).ifPresent(image -> userDto.setImage(
-                "/users/" + user.getImage() + "/image"));
+        userDto.setId(userEntity.getId());
+        userDto.setEmail(userEntity.getUsername());
+        userDto.setFirstName(userEntity.getFirstName());
+        userDto.setLastName(userEntity.getLastName());
+        userDto.setPhone(userEntity.getPhone());
+        userDto.setImage(userEntity.getImagePath());
         return userDto;
     }
 
@@ -41,8 +37,7 @@ public class UserMapperService {
         user.setFirstName(registerDto.getFirstName());
         user.setLastName(registerDto.getLastName());
         user.setPhone(registerDto.getPhone());
-        user.setRoleDto(registerDto.getRoleDto());
-        user.setEmail(registerDto.getUsername());
+        user.setRole(registerDto.getRole());
         return user;
     }
 }
