@@ -23,7 +23,7 @@ public class AdMapperService {
     public AdDto mapToDto(Ad adEntity) {
         AdDto adDTO = new AdDto();
         adDTO.setPk(adEntity.getPk());
-        adDTO.setAuthor(adEntity.getUser().getUserId());
+        adDTO.setAuthor(adEntity.getUser().getId());
         adDTO.setImage(adEntity.getImageAddress());
         adDTO.setPrice(adEntity.getPrice());
         adDTO.setTitle(adEntity.getTitle());
@@ -35,7 +35,7 @@ public class AdMapperService {
         extendedAdDto.setAuthorFirstName(ad.getUser().getFirstName());
         extendedAdDto.setAuthorLastName(ad.getUser().getLastName());
         extendedAdDto.setDescription(ad.getDescription());
-        extendedAdDto.setEmail(ad.getUser().getLogin());
+        extendedAdDto.setEmail(ad.getUser().getUsername());
         extendedAdDto.setImage(ad.getImageAddress());
         extendedAdDto.setPhone(ad.getUser().getPhone());
         extendedAdDto.setPrice(ad.getPrice());

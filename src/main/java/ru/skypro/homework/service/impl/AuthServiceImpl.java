@@ -1,51 +1,41 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterDto;
-import ru.skypro.homework.dto.RoleDto;
+import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.UserMapperService;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-//    private final UserDetailsManager manager;
+    private final UserService manager;
     private final PasswordEncoder encoder;
     private final UserService userService;
+    private final UserMapperService userMapperService;
     private final UserRepository userRepository;
-
-    public AuthServiceImpl( PasswordEncoder passwordEncoder, UserService userService, UserRepository userRepository) {
-        this.encoder = passwordEncoder;
-        this.userService = userService;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public boolean login(String userName, String password) {
-        if (!userService.userExists(userName)) {
-            return false;
-        }
-        UserDetails userDetails = userService.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
+        UserDetails userDetails = manager.loadUserByUsername(userName);
+        String encryptedPassword = userDetails.getPassword();
+        return encoder.matches(password, encryptedPassword);
     }
 
     @Override
-    public boolean register(RegisterDto registerDto, RoleDto roleDto) {
-        if (userService.userExists(registerDto.getUsername())) {
+    public boolean register(RegisterDto registerReqDto) {
+        if (userRepository.findUserByUsername(registerReqDto.getUsername()).isPresent()) {
             return false;
-            }
-        ru.skypro.homework.model.User user = new ru.skypro.homework.model.User();
-        user.setLogin(registerDto.getUsername());
-        user.setPassword(encoder.encode(registerDto.getPassword()));
-        user.setFirstName(registerDto.getFirstName());
-        user.setLastName(registerDto.getLastName());
-        user.setPhone(registerDto.getPhone());
-        user.setRoleDto(roleDto);
-        userRepository.save(user);
+        }
+        User regUser = userMapperService.mapToUser(registerReqDto);
+        regUser.setRole(registerReqDto.getRole());
+        regUser.setPassword(encoder.encode(regUser.getPassword()));
+        userRepository.save(regUser);
         return true;
     }
-
 }

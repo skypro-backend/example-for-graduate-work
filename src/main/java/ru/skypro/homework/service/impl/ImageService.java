@@ -35,10 +35,10 @@ public class ImageService {
     public String updateUserImage(MultipartFile file) {
         init();
         User user = userService.getUser();
-        String imageAddress = "/users/photo/" + user.getUserId();
+        String imageAddress = "/users/photo/" + user.getId();
         File tempFile = new File(
                 Path.of(pathToUserImages).toAbsolutePath().toFile(),
-                user.getUserId() + "_user_image.jpg");
+                user.getId() + "_user_image.jpg");
         writeFile(tempFile, file);
         return imageAddress;
     }

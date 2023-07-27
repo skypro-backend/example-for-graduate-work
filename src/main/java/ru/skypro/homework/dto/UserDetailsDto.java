@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
         private final String password;
 
         private final Integer userId;
-        private final RoleDto roleDto;
+        private final Role role;
 
-        public UserDetailsDto(String username, String password, Integer userId, RoleDto roleDto) {
+        public UserDetailsDto(String username, String password, Integer userId, Role role) {
             this.username = username;
             this.password = password;
             this.userId = userId;
-            this.roleDto = roleDto;
+            this.role = role;
         }
     }
