@@ -20,11 +20,14 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapperService userMapperService;
     private final UserRepository userRepository;
 
+
     @Override
     public boolean login(String userName, String password) {
+        //        userRepository.findFirstUser(user);
         UserDetails userDetails = manager.loadUserByUsername(userName);
         String encryptedPassword = userDetails.getPassword();
         return encoder.matches(password, encryptedPassword);
+
     }
 
     @Override

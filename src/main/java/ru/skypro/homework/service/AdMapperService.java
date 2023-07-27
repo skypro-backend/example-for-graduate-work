@@ -2,9 +2,13 @@ package ru.skypro.homework.service;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AdMapperService {
@@ -41,5 +45,12 @@ public class AdMapperService {
         extendedAdDto.setPrice(ad.getPrice());
         extendedAdDto.setTitle(ad.getTitle());
         return extendedAdDto;
+    }
+    public List<AdDto> adListToAdDTOList(List<Ad> adList) {
+        List<AdDto> adDTOList = new ArrayList<>();
+        for (Ad ad : adList) {
+            adDTOList.add(mapToDto(ad));
+        }
+        return adDTOList;
     }
 }

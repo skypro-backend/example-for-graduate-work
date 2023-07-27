@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,9 +37,9 @@ public class AdsService {
 
 
 
-    public Object getAllAds() {
+      public AdsDto getAllAds() {
         List<Ad> allAds = adsRepository.findAll();
-        return allAds.stream().map(e -> adMapperService.mapToDto(e)).collect(Collectors.toList());
+        return new AdsDto(allAds.size(), adMapperService.adListToAdDTOList(allAds));
     }
 
     public AdDto addAd(CreateOrUpdateAdDto properties, MultipartFile file) {
@@ -56,8 +57,7 @@ adsRepository.save(ads);
     }
 
     public ExtendedAdDto getAds(Integer id) {
-        Ad ad = adsRepository.findById(id).orElseThrow();
-        return adMapperService.mapToExtendedDto(ad);
+        return adMapperService.mapToExtendedDto(adsRepository.findById(id).orElseThrow());
     }
 
     public void removeAd(Integer id) {
@@ -80,11 +80,16 @@ adsRepository.save(ads);
         return adMapperService.mapToDto(adsRepository.save(ad));
     }
 
-        public AdsDto getAdsAllUser() {
-            User user = userService.getUser();
-            List<AdDto> allAdsUser = adsRepository.findAdsByUser(user).stream().map(adMapperService::mapToDto).collect(Collectors.toList());
-            return new  AdsDto(allAdsUser);
-        }
+    public AdsDto getAdsMe() throws UserNotFoundException {
+        User user = userService.getUser();
+
+        List<Ad> myAds = adsRepository.findAll().stream()
+                .filter(ad -> ad.getUser().getId() == user.getId())
+                .collect(Collectors.toList());
+
+        return new AdsDto(myAds.size(),
+                adMapperService.adListToAdDTOList(myAds));
+    }
 
         public AdDto updateImage(Integer id, MultipartFile image) {
             User user = userService.getUser();
