@@ -89,7 +89,7 @@ public class AdsController {
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
     public ResponseEntity<?> getAdsMe() {
-        return ResponseEntity.ok().body(adsService.getAdsAllUser());
+        return ResponseEntity.ok().body(adsService.getAdsMe());
     }
 
     @PatchMapping("ads/{id}/image")

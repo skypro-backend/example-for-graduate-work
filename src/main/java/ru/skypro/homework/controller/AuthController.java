@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.LoginDto;
 import ru.skypro.homework.dto.RegisterDto;
+
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.service.AuthService;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -47,6 +49,7 @@ public class AuthController {
     @ApiResponse(responseCode = "400",
             description = "Некорректное содержание пароля, попробуйте снова!")
     public ResponseEntity<?> register(@RequestBody RegisterDto registerDto) {
+        Role role = registerDto.getRole() == null ? Role.USER : registerDto.getRole();
         if (authService.register(registerDto)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {

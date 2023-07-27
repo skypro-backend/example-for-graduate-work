@@ -11,4 +11,8 @@ public class CommentsDto {
 
     public CommentsDto(int size, List<CommentDto> commentsDtoList) {
     }
+
+    public CommentsDto() {
+
+    }
 }
