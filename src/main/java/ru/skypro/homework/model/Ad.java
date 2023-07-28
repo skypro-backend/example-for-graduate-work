@@ -13,7 +13,7 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "ads")
-
+@AllArgsConstructor
 public class Ad {
 
     @Id
@@ -37,9 +37,8 @@ public class Ad {
     @Column(name = "title")
     private String title;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "ad_id")
-    private List<Comment> comments;
+//    @OneToMany(cascade = CascadeType.REMOVE)
+//    private List<Comment> comments;
 
 
 
@@ -47,15 +46,7 @@ public class Ad {
     public Ad(User user, String description, String imageAddress, Integer price, String title) {
     }
 
-    public Ad(Integer pk, User user, String imageAddress, String description, Integer price, String title, List<Comment> comments) {
-        this.pk = pk;
-        this.user = user;
-        this.imageAddress = imageAddress;
-        this.description = description;
-        this.price = price;
-        this.title = title;
-        this.comments = comments;
-    }
+
 
     public Ad() {
 

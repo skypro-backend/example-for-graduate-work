@@ -4,71 +4,61 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.model.User;
-import ru.skypro.homework.repository.UserRepository;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Service
 public class ImageService {
-
-    @Value("${path.to.ad.images}/")
-    private String pathToAdImages;
-
-    @Value("${path.to.user.images}/")
-    private String pathToUserImages;
-
+    @Value("${path.to.user.images}") //src/main/resources/users/
+    private String userImagePath;
 
     private final UserService userService;
-    private final UserRepository userRepository;
 
-
-    public ImageService(@Lazy UserService userService, UserRepository userRepository) {
+@Lazy
+    public ImageService(UserService userService) {
         this.userService = userService;
-        this.userRepository = userRepository;
     }
 
-    public String updateUserImage(MultipartFile file) {
-        init();
+    public String uploadUserImage(MultipartFile image) throws IOException, UserNotFoundException {
         User user = userService.getUser();
-        String imageAddress = "/users/photo/" + user.getId();
-        File tempFile = new File(
-                Path.of(pathToUserImages).toAbsolutePath().toFile(),
-                user.getId() + "_user_image.jpg");
-        writeFile(tempFile, file);
-        return imageAddress;
+        Path imagePath = Path.of(userImagePath + user.getUsername(),
+                "user_image.jpg");
+        Files.createDirectories(imagePath.getParent());
+        Files.deleteIfExists(imagePath);
+
+        try (
+                InputStream is = image.getInputStream();
+                OutputStream os = Files.newOutputStream(imagePath, CREATE_NEW);
+                BufferedInputStream bis = new BufferedInputStream(is);
+                BufferedOutputStream bos = new BufferedOutputStream(os);
+        ) {
+            bis.transferTo(bos);
+        }
+        return "/" + imagePath.getParent().toString();
     }
 
+    public String uploadAdImage(MultipartFile image) throws IOException, UserNotFoundException {
+        User user = userService.getUser();
+        Path imagePath = Path.of(userImagePath + user.getUsername() + "/ads",
+                image.getOriginalFilename());
+        Files.createDirectories(imagePath.getParent());
+        Files.deleteIfExists(imagePath);
 
-    private void writeFile(File tempFile, MultipartFile file) {
-        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-            fos.write(file.getBytes());
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("File not found!");
-        } catch (
-                IOException e) {
-            throw new RuntimeException();
+        try (
+                InputStream is = image.getInputStream();
+                OutputStream os = Files.newOutputStream(imagePath, CREATE_NEW);
+                BufferedInputStream bis = new BufferedInputStream(is);
+                BufferedOutputStream bos = new BufferedOutputStream(os);
+        ) {
+            bis.transferTo(bos);
         }
-    }
-
-
-    private void init() {
-        File adImagesDir = new File(pathToAdImages);
-        File userImagesDir = new File(pathToUserImages);
-        if (!adImagesDir.exists()) {
-            adImagesDir.mkdirs();
-        }
-        if (!userImagesDir.exists()) {
-            userImagesDir.mkdirs();
-        }
-    }
-
-    public String updateAdImage(Integer pk, MultipartFile file) {
-        return null;
+        return "/" + imagePath.toString()
+                .replace("\\", "/");
     }
 }
 

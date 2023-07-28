@@ -6,8 +6,8 @@ CREATE TABLE ads
     image_address VARCHAR(255),
     description   VARCHAR(255),
     price         INT,
-    title         TEXT,
-    ad_id         BIGINT
+    title         TEXT
+
 );
 
 CREATE TABLE comments

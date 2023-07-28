@@ -20,9 +20,8 @@ public class Comment {
     @Column(name = "comment_id")
     Integer commentId;
 
-    @ManyToOne
-    @JoinColumn(name = "ad_id")
-    Ad ad;
+    @Column(name = "ad_id")
+       Integer ad;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -32,8 +31,7 @@ public class Comment {
 
     String text;
 
-    public Comment(Ad ad, User user, long toEpochMilli, String text) {
-    }
+
 }
 
 

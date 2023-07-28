@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.impl.AdsService;
 
+import java.io.IOException;
+
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -28,7 +30,7 @@ public class AdsController {
     @Operation(summary = "Получение всех объявлений")
     @ApiResponse(responseCode = "200",
             description = "Операция успешна")
-    public ResponseEntity<?> getAllAds() {
+    public ResponseEntity<AdsDto> getAllAds() {
         return ResponseEntity.ok().body(adsService.getAllAds());
     }
 
@@ -38,7 +40,7 @@ public class AdsController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-    public ResponseEntity<AdDto> addAd(@RequestPart CreateOrUpdateAdDto properties, MultipartFile image) {
+    public ResponseEntity<AdDto> addAd(@RequestPart CreateOrUpdateAdDto properties,@RequestPart("image")  MultipartFile image) throws IOException {
         return ResponseEntity.ok(adsService.addAd(properties, image));
     }
 
@@ -88,7 +90,7 @@ public class AdsController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-    public ResponseEntity<?> getAdsMe() {
+    public ResponseEntity<AdsDto> getAdsMe() {
         return ResponseEntity.ok().body(adsService.getAdsMe());
     }
 
@@ -103,7 +105,7 @@ public class AdsController {
     @ApiResponse(responseCode = "404",
             description = "Операция не найдена")
     public ResponseEntity<?> updateImage(@PathVariable Integer id,
-                                         @RequestPart("image") MultipartFile image) {
+                                         @RequestBody MultipartFile image) {
         return ResponseEntity.ok().body(adsService.updateImage(id, image));
     }
 }

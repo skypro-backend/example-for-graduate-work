@@ -13,6 +13,5 @@ public class CommentsDto {
     }
 
     public CommentsDto() {
-
     }
 }

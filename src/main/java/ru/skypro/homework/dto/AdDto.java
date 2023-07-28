@@ -9,4 +9,5 @@ public class AdDto {
     Integer pk;
     Integer price;
     String title;
+
 }

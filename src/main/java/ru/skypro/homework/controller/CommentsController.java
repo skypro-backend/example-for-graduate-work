@@ -32,8 +32,8 @@ public class CommentsController {
             description = "Ошибка авторизации")
     @ApiResponse(responseCode = "404",
             description = "Операция не найдена")
-    public ResponseEntity<CommentsDto> getComments(@PathVariable(name = "id") Integer idAd) {
-        return ResponseEntity.ok().body(commentsService.getCommentsById(idAd));
+    public ResponseEntity<CommentsDto> getComments(@PathVariable(name = "id") Integer AdId) {
+        return ResponseEntity.ok().body(commentsService.getCommentsById(AdId));
     }
 
     @PostMapping("/{id}/comments")
@@ -44,9 +44,9 @@ public class CommentsController {
             description = "Ошибка авторизации")
     @ApiResponse(responseCode = "404",
             description = "Операция не найдена")
-    public ResponseEntity<CommentDto> addComment(@PathVariable(name = "id") Integer id,
+    public ResponseEntity<CommentDto> addComment(@PathVariable(name = "id") Integer AdId,
                                                  @RequestBody CreateOrUpdateCommentDto newComment) {
-        return ResponseEntity.ok().body(commentsService.addComment(id, newComment));
+        return ResponseEntity.ok().body(commentsService.addComment(AdId, newComment));
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")

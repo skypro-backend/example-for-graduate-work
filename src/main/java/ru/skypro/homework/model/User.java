@@ -1,5 +1,4 @@
 package ru.skypro.homework.model;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 public class User {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -31,12 +32,6 @@ public class User {
     private String phone;
 
     private String imagePath;
-    public String getImagePath() {
-        return imagePath;
-    }
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "pk_id")
@@ -49,6 +44,14 @@ public class User {
     @Column(name = "role")
     private Role role;
 
-
-
+    public User(Integer id, String username, String password, String firstName, String lastName, String phone, String imagePath, Role role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.imagePath = imagePath;
+        this.role = role;
+    }
 }

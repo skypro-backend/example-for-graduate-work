@@ -9,6 +9,7 @@ import ru.skypro.homework.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AdMapperService {
@@ -47,10 +48,7 @@ public class AdMapperService {
         return extendedAdDto;
     }
     public List<AdDto> adListToAdDTOList(List<Ad> adList) {
-        List<AdDto> adDTOList = new ArrayList<>();
-        for (Ad ad : adList) {
-            adDTOList.add(mapToDto(ad));
-        }
+        List<AdDto> adDTOList = adList.stream().map(this:: mapToDto).collect(Collectors.toList());
         return adDTOList;
     }
 }

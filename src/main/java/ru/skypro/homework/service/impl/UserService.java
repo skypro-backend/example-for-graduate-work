@@ -16,19 +16,19 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.model.UserPrincipal;
 import ru.skypro.homework.repository.UserRepository;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-    private final ImageService imageService;
-
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
+    private final ImageService service;
 
     public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
-        System.out.println(name);
         return userRepository.findUserByUsername(name).orElseThrow();
     }
 
@@ -47,9 +47,9 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public void updateUserImage(MultipartFile file) {
+    public void updateUserImage(MultipartFile file) throws IOException {
         User user = getUser();
-        user.setImagePath(imageService.updateUserImage(file));
+        user.setImagePath(service.uploadUserImage(file));
         userRepository.save(user);
     }
 
@@ -60,8 +60,8 @@ public class UserService implements UserDetailsService {
         return new UserPrincipal(userDetailsDto);
     }
 
-        public boolean userExists (String username ){
-            userRepository.findUserByUsername(username).isPresent();
-            return true;
-        }
+    public boolean userExists (String username ){
+        userRepository.findUserByUsername(username).isPresent();
+        return true;
     }
+}

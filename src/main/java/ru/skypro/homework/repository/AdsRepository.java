@@ -8,10 +8,13 @@ import ru.skypro.homework.model.User;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AdsRepository extends JpaRepository<Ad, Integer> {
 
 
-    List<Ad> findAdsByUser(User user);
+//    List<Ad> findAdsByUser(User user);
+
+
 }
