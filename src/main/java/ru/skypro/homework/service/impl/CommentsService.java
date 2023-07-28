@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
@@ -56,7 +57,7 @@ public class CommentsService {
         return commentMapperService.mapToDto(comment);
 
     }
-
+    @Secured({"ADMIN", "USER"})
     public void deleteComment(Integer AdId, Integer commentId) {
         User user = userService.getUser();
         Comment comment = commentsRepository.getByCommentId(commentId);

@@ -36,7 +36,7 @@ public class AdsService {
         ads.setDescription(properties.getDescription());
         ads.setPrice(properties.getPrice());
         ads.setTitle(properties.getTitle());
-        ads.setImageAddress(imageService.uploadAdImage(image));
+        ads.setImageAddress(imageService.uploadAdImage(properties.getTitle(),image));
               return adMapperService.mapToDto(adsRepository.save(ads));
     }
 
@@ -73,8 +73,11 @@ public class AdsService {
                 adMapperService.adListToAdDTOList(myAds));
     }
 
-    public AdDto updateImage(Integer id, MultipartFile image) {
-        return null;
+    public byte[] updateImage(Integer id, MultipartFile image) throws IOException {
+        Ad ad = adsRepository.getById(id);
+        ad.setImageAddress(imageService.uploadAdImage(ad.getTitle(), image));
+        adsRepository.save(ad);
+        return image.getBytes();
     }
 
 }

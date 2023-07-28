@@ -46,6 +46,8 @@ public class WebSecurityConfig {
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
+                                        .mvcMatchers(HttpMethod.GET, "/ads/image/**", "/ads", "/users/avatar/**")
+                                        .permitAll()
                                         .mvcMatchers("/ads/**", "/users/**")
                                         .authenticated()
                 )

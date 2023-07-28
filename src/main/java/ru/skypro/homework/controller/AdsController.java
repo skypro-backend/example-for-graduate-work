@@ -6,9 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.service.impl.AdsService;
 
 import java.io.IOException;
@@ -40,7 +43,7 @@ public class AdsController {
             description = "Операция успешна")
     @ApiResponse(responseCode = "401",
             description = "Ошибка авторизации")
-    public ResponseEntity<AdDto> addAd(@RequestPart CreateOrUpdateAdDto properties,@RequestPart("image")  MultipartFile image) throws IOException {
+    public ResponseEntity<AdDto> addAd(@RequestPart CreateOrUpdateAdDto properties, @RequestPart("image") MultipartFile image) throws IOException {
         return ResponseEntity.ok(adsService.addAd(properties, image));
     }
 
@@ -54,6 +57,7 @@ public class AdsController {
         return ResponseEntity.ok().body(adsService.getAds(id));
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление объявления")
     @ApiResponse(responseCode = "204",
@@ -69,6 +73,7 @@ public class AdsController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @PatchMapping("/{id}")
     @Operation(summary = "Обновление информации об объявлении")
     @ApiResponse(responseCode = "200",
@@ -94,7 +99,7 @@ public class AdsController {
         return ResponseEntity.ok().body(adsService.getAdsMe());
     }
 
-    @PatchMapping("ads/{id}/image")
+    @PatchMapping(value = "/{id}/image", produces = {MediaType.IMAGE_PNG_VALUE})
     @Operation(summary = "Обновление картинки объявления")
     @ApiResponse(responseCode = "200",
             description = "Операция успешна")
@@ -104,8 +109,14 @@ public class AdsController {
             description = "Операция запрещена")
     @ApiResponse(responseCode = "404",
             description = "Операция не найдена")
-    public ResponseEntity<?> updateImage(@PathVariable Integer id,
-                                         @RequestBody MultipartFile image) {
-        return ResponseEntity.ok().body(adsService.updateImage(id, image));
+
+    public ResponseEntity<byte[]> updateImage(@PathVariable int id, @RequestBody MultipartFile image) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(id, image));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }

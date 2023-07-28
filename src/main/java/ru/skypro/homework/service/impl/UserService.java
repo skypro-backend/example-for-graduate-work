@@ -60,8 +60,8 @@ public class UserService implements UserDetailsService {
         return new UserPrincipal(userDetailsDto);
     }
 
-    public boolean userExists (String username ){
-        userRepository.findUserByUsername(username).isPresent();
-        return true;
-    }
+//    public boolean userExists (String username ){
+//        userRepository.findUserByUsername(username).isPresent();
+//        return true;
+//    }
 }

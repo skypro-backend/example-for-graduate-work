@@ -42,7 +42,7 @@ public class ImageService {
         return "/" + imagePath.getParent().toString();
     }
 
-    public String uploadAdImage(MultipartFile image) throws IOException, UserNotFoundException {
+    public String uploadAdImage(String title, MultipartFile image) throws IOException, UserNotFoundException {
         User user = userService.getUser();
         Path imagePath = Path.of(userImagePath + user.getUsername() + "/ads",
                 image.getOriginalFilename());
