@@ -1,0 +1,39 @@
+version: "3"
+services:
+
+  database:
+    image: postgres:13-alpine
+    container_name: database
+    volumes:
+      - database-data:/var/lib/postgresql/data
+    ports:
+      - 6543:5432
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: flea_market
+    healthcheck:
+      test: pg_isready -U postgres -d flea_market
+      interval: 1s
+      timeout: 500ms
+      start_period: 0s
+      retries: 3
+    restart: unless-stopped
+
+  application:
+    build: ./
+    container_name: application
+    ports:
+      - 8080:8080
+    environment:
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      database:
+        condition: service_healthy
+
+volumes:
+  database-data:
