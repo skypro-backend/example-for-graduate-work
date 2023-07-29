@@ -80,5 +80,14 @@ public class AdsService {
         return image.getBytes();
     }
 
+    public AdsDto searchAds(String query) {
+        List <AdDto> adList = adsRepository
+                .findAll()
+                .stream()
+                .filter(ad -> ad.getTitle().equals(query))
+                .map(adMapperService::mapToDto)
+                .collect(Collectors.toList());
+        return new AdsDto(adList.size(), adList);
+    }
 }
 
