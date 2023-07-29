@@ -37,12 +37,6 @@ public class Ad {
     @Column(name = "title")
     private String title;
 
-//    @OneToMany(cascade = CascadeType.REMOVE)
-//    private List<Comment> comments;
-
-
-
-
     public Ad(User user, String description, String imageAddress, Integer price, String title) {
     }
 

@@ -24,4 +24,5 @@ public class SearchController {
     public ResponseEntity<?> searchAds(@PathVariable String query) throws UserNotFoundException {
         return ResponseEntity.ok().body(adsService.searchAds(query));
 
+    }
 }

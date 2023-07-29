@@ -1,4 +1,3 @@
-
 CREATE TABLE ads
 (
     pk_id         SERIAL PRIMARY KEY,
@@ -23,14 +22,14 @@ CREATE TABLE users
 (
     id            SERIAL PRIMARY KEY,
     username      VARCHAR(255) UNIQUE,
-    email         VARCHAR(255),
-    password      VARCHAR(255),
-    first_name    VARCHAR(255),
-    last_name     VARCHAR(255),
-    phone         VARCHAR(255),
-    image_path    TEXT,
+    email         VARCHAR(255) ,
+    password      VARCHAR(255) ,
+    first_name    VARCHAR(255) ,
+    last_name     VARCHAR(255) ,
+    phone         VARCHAR(255) ,
+    image_path         TEXT,
     pk_id         INT,
-    role          VARCHAR(255),
+    role          VARCHAR(255) ,
     ad_id         INT
 );
 
