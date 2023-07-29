@@ -1,4 +1,4 @@
-package ru.skypro.homework.filter;
+package ru.skypro.flea.filter;
 
 
 import org.springframework.stereotype.Component;
