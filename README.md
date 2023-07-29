@@ -2,12 +2,12 @@
 
 ## Launch
 
-### Build DB and application images:
+### Build DB, application and UI images:
 ```bash
 docker compose build
 ```
 
-### Build the images (DB and application; if they have not built yet) and run the containers:
+### Build the images (DB, application and UI; if they have not built yet) and run the containers:
 ```bash
 docker compose up --detach
 ```
@@ -25,7 +25,13 @@ docker volume rm flea-market_database-data --force
 docker compose up --build --detach database
 ```
 
-### Rebuild both of the images:
+### Rebuild the UI image:
+```bash
+docker compose rm ui --stop --force
+docker compose up --build --no-deps --detach ui
+```
+
+### Rebuild all the images:
 ```bash
 docker compose down --volumes
 docker compose up --build --force-recreate --detach
