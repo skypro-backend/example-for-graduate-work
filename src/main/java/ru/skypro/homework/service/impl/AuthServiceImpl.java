@@ -10,7 +10,6 @@ import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.repository.UserRepository;
 
-import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -53,10 +52,6 @@ public class AuthServiceImpl implements AuthService {
         return true;
     }
 
-    @Override
-    public Optional<String> changePassword(String username, String currentPassword, String newPassword) {
-        return Optional.empty();
-    }
 }
 
 

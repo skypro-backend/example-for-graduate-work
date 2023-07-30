@@ -3,7 +3,9 @@ package ru.skypro.homework.dto;
 import lombok.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @ToString
 public class FullAds {
@@ -11,19 +13,11 @@ public class FullAds {
     private String authorFirstName;
     private String authorLastName;
     private String description;
-//    private String image;
+    private String email;
+    private String image;
     private String phone;
     private int price;
     private String title;
 
-    public FullAds(int pk, String authorFirstName, String authorLastName, String description, String phone, int price, String title) {
-        this.pk = pk;
-        this.authorFirstName = authorFirstName;
-        this.authorLastName = authorLastName;
-        this.description = description;
-        this.phone = phone;
-        this.price = price;
-        this.title = title;
-    }
 
 }

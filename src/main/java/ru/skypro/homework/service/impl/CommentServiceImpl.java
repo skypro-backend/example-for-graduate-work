@@ -11,6 +11,9 @@ import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.repository.CommentRepository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CommentServiceImpl implements CommentService {
 
@@ -27,14 +30,23 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ResponseWrapperComment getUserComments(int userId) {
-        CommentDTO[] comments = (CommentDTO[]) userService.findUserById(userId).getComments().stream()
-                .map(CommentDTO::fromComment)
-                .toArray();
-        int count = comments.length;
+    public ResponseWrapperComment getUserComments(int adsId) {
+        Ad ad = adsService.getAdById(adsId);
+        List<Comment> comments = commentRepository.findCommentByAd(ad);
+        List<CommentDTO> commentsDTOList = comments.stream()
+                                                      .map(this::commentToCommentDTO)
+                                                      .collect(Collectors.toList());
+        return new ResponseWrapperComment(commentsDTOList.size(), commentsDTOList);
 
-        return new ResponseWrapperComment(count, comments);
-
+    }
+    public CommentDTO commentToCommentDTO(Comment comment) {
+        return new CommentDTO(
+                comment.getUser().getId(),
+                comment.getUser().getImage() == null ? null : "/users/avatar/" + comment.getUser().getId(),
+                comment.getUser().getFirstName(),
+                comment.getTime(),
+                comment.getId(),
+                comment.getText());
     }
 
     @Override
@@ -42,7 +54,6 @@ public class CommentServiceImpl implements CommentService {
         Ad ad = adsService.getAdById(adId);
         Comment comment = new Comment(ad.getUser(), ad, commentDTO.getCreateAt(), commentDTO.getText());
         commentRepository.saveAndFlush(comment);
-
         return commentDTO;
     }
 

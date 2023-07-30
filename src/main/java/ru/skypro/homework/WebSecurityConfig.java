@@ -35,40 +35,18 @@ public class WebSecurityConfig {
     "/register"
   };
 
-  /*@Bean
-  public InMemoryUserDetailsManager userDetailsService() {
-    List<UserDetails> userDetails = new ArrayList<>();
-    UserDetails user =
-        User.builder()
-            .username("user@gmail.com")
-            .password("password")
-            .passwordEncoder((plainText) -> passwordEncoder().encode(plainText))
-            .roles("USER")
-            .build();
-    userDetails.add(user);
-    UserDetails admin =
-            User.builder()
-                .username("admin@gmail.com")
-                .password("password")
-                .passwordEncoder((plainText) -> passwordEncoder().encode(plainText))
-                .roles("ADMIN")
-                .build();
-    userDetails.add(admin);
-    return new InMemoryUserDetailsManager(userDetails);
-  }*/
-
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf()
         .disable()
         .authorizeHttpRequests(
-            (authorization) ->
-                authorization
-                        .mvcMatchers(AUTH_WHITELIST)
-                        .permitAll()
-                        .mvcMatchers(HttpMethod.GET, "/ads/image/**", "/ads")
-                        .permitAll()
-                        .mvcMatchers("/ads/**", "/users/**").authenticated()
+                authorization ->
+                        authorization
+                                .mvcMatchers(AUTH_WHITELIST)
+                                .permitAll()
+                                .mvcMatchers(HttpMethod.GET, "/ads/image/**", "/ads", "/users/avatar/**")
+                                .permitAll()
+                                .mvcMatchers("/ads/**", "/users/**").authenticated()
         )
         .cors()
         .and()

@@ -41,9 +41,9 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void updateUserImage(String username, MultipartFile file) {
+    public void updateUserImage(String userName, MultipartFile file) {
         init();
-        User user = userRepository.findUserByUserName(username);
+        User user = userRepository.findUserByUserName(userName);
         String imageName = generateRandomFileName(file);
         if (user.getImage() == null) {
             Image image = new Image(imageName);

@@ -40,4 +40,6 @@ public interface UserService {
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
     boolean updateUserImage(MultipartFile file) throws UserNotFoundException;
+
+    User getAuthUser();
 }

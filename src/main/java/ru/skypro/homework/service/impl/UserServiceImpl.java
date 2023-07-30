@@ -25,11 +25,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
-
     private final UserRepository userRepository;
-
     private final ImageService imageService;
-
     private final PasswordEncoder passwordEncoder;
 
 
@@ -91,7 +88,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void updateUser(UserUpdateReq req) throws UserNotFoundException {
         User user = getAuthUser();
-        if(user == null){
+        if (user == null) {
             throw new UserNotFoundException();
         }
         user.setFirstName(req.getFirstName());
@@ -100,6 +97,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(user);
     }
 
+    @Override
     public User getAuthUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -120,12 +118,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     @Override
     public boolean updateUserPassword(NewPassword passwordDTO) {
-        User user = getAuthUser();
-        user.setPassword(passwordDTO.getNewPassword());
-        userRepository.save(user);
-        return true;
+        if (isNotEmptyAndNotNull(passwordDTO.getNewPassword()) && isNotEmptyAndNotNull(
+                passwordDTO.getCurrentPassword()))
+        {
+            User user = getAuthUser();
+            user.setPassword(passwordEncoder.encode(passwordDTO.getNewPassword()));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 
+    private boolean isNotEmptyAndNotNull(String str) {
+        return !(str == null || str.isEmpty() || str.isBlank());
+    }
 
     private User fromRegisterReq(RegisterReq regreq) {
         User user = new User(regreq.getUsername(), regreq.getPassword(), regreq.getFirstName(), regreq.getLastName(),

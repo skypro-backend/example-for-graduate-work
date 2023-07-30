@@ -5,10 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseWrapperAds {
     private int count;
-    private AdsDTO[] array;
+    private List<AdsDTO> array;
 }

@@ -14,13 +14,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CommentDTO {
     private int authorId;
-//    private String authorImage;
+    private String authorImage;
     private String authorFirstName;
     private LocalDateTime createAt;
     private int pk;
     private String text;
 
-    public static CommentDTO fromComment(Comment comment) {
-        return new CommentDTO(comment.getUser().getId(),comment.getUser().getFirstName(), comment.getTime(), comment.getId(),comment.getText());
-    }
+
 }
