@@ -28,7 +28,9 @@ public class CommentServiceImpl implements CommentService {
         this.adsService = adsService;
         this.userService = userService;
     }
-
+    /**
+     * Получения комментария авторизованного пользователя
+     */
     @Override
     public ResponseWrapperComment getUserComments(int adsId) {
         Ad ad = adsService.getAdById(adsId);
@@ -39,6 +41,8 @@ public class CommentServiceImpl implements CommentService {
         return new ResponseWrapperComment(commentsDTOList.size(), commentsDTOList);
 
     }
+
+
     public CommentDTO commentToCommentDTO(Comment comment) {
         return new CommentDTO(
                 comment.getUser().getId(),
@@ -48,7 +52,9 @@ public class CommentServiceImpl implements CommentService {
                 comment.getId(),
                 comment.getText());
     }
-
+    /**
+     * Добавления комментария
+     */
     @Override
     public CommentDTO addComment(int adId, CommentDTO commentDTO) {
         Ad ad = adsService.getAdById(adId);
@@ -56,7 +62,9 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.saveAndFlush(comment);
         return commentDTO;
     }
-
+    /**
+     * Обновления текста комментария
+     */
     @Override
     public CommentDTO updateComment(int adId, int commentId, CommentDTO commentDTO) {
         Comment comment;
@@ -72,7 +80,9 @@ public class CommentServiceImpl implements CommentService {
 
         return commentDTO;
     }
-
+    /**
+     * Удалить комментарий
+     */
     @Override
     public void deleteComment(int adId, int commentId) {
         commentRepository.deleteById(commentId);

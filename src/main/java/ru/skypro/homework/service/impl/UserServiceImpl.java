@@ -84,7 +84,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     }
 
-
+    /**
+     * Обновление данных о пользователе
+     */
     @Override
     public void updateUser(UserUpdateReq req) throws UserNotFoundException {
         User user = getAuthUser();
@@ -96,7 +98,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPhone(req.getPhone());
         userRepository.save(user);
     }
-
+    /**
+     * Получение информации о авторизованном пользователе
+     */
     @Override
     public User getAuthUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -114,7 +118,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
     }
 
-
+    /**
+     * Обновление пароля пользователя
+     */
     @Transactional
     @Override
     public boolean updateUserPassword(NewPassword passwordDTO) {

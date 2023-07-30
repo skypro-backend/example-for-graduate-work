@@ -25,7 +25,9 @@ public class AuthServiceImpl implements AuthService {
         this.userService = userService;
         this.encoder = encoder;
     }
-
+    /**
+     * Авторизация
+     */
     @Override
     public boolean login(String userName, String password) {
         if (!userService.userExists(userName)) {
@@ -34,7 +36,9 @@ public class AuthServiceImpl implements AuthService {
         UserDetails userDetails = userService.loadUserByUsername(userName);
         return encoder.matches(password, userDetails.getPassword());
     }
-
+    /**
+     * Регистрация
+     */
     @Override
     public boolean register(RegisterReq registerReq, Role role) {
         if (userService.userExists(registerReq.getUsername())) {

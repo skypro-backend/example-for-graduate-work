@@ -31,7 +31,9 @@ public class AdsController {
         return ResponseEntity.ok(adsService.getAllAds());
     }
 
-//+
+    /**
+     * Добавления обьявления
+     */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdsDTO> addAd(
             @RequestPart("properties") CreateAds ads,
@@ -41,7 +43,9 @@ public class AdsController {
         return ResponseEntity.ok(ad);
     }
 
-//+
+    /**
+     * Получения комментария
+     */
     @GetMapping("/{id}/comments")
     public ResponseEntity<ResponseWrapperComment> getComments(
             @PathVariable int id)
@@ -49,7 +53,9 @@ public class AdsController {
         return ResponseEntity.ok(commentService.getUserComments(id));
     }
 
-    //+
+    /**
+     * Добавления комментария
+     */
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDTO> addComment(
             @PathVariable int id,
@@ -57,7 +63,9 @@ public class AdsController {
     {
         return ResponseEntity.ok(commentService.addComment(id, commentDTO));
     }
-    //+
+    /**
+     * Получения обьявления
+     */
     @GetMapping("{id}")
     public ResponseEntity<FullAds> getAds(
             @PathVariable int id)
@@ -65,7 +73,7 @@ public class AdsController {
         System.out.println("I am at getAds");
         return ResponseEntity.ok(adsService.getFullAdById(id));
     }
-    //+
+
     /**
      * Удаления обьявления
      */
@@ -77,7 +85,9 @@ public class AdsController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    //+
+    /**
+     * Обновления обьявления
+     */
     @PostMapping("{id}")
     public ResponseEntity<AdsDTO> updateAds(
             @PathVariable int id,
@@ -85,7 +95,7 @@ public class AdsController {
     {
         return ResponseEntity.ok(adsService.updateAd(id, ads));
     }
-    //+
+
     /**
      * Удаление комментария
      */
@@ -110,7 +120,9 @@ public class AdsController {
         return ResponseEntity.ok().body(commentService.updateComment(adId, commentId, commentDTO));
     }
 
-    //+
+    /**
+     * Получения обьявлений авторизованного пользователя
+     */
     @GetMapping("/me")
     public ResponseEntity<?> getAdsMe()  {
         return ResponseEntity.ok(adsService.getAllUserAds());

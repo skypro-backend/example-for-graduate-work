@@ -39,7 +39,9 @@ public class ImageServiceImpl implements ImageService {
         this.userRepository = userRepository;
         this.adRepository = adRepository;
     }
-
+    /**
+     * Обновление аватара пользователя
+     */
     @Override
     public void updateUserImage(String userName, MultipartFile file) {
         init();
@@ -59,7 +61,9 @@ public class ImageServiceImpl implements ImageService {
         File tempFile = new File(Path.of(pathToUserImages).toAbsolutePath().toFile(), imageName);
         writeFile(tempFile, file);
     }
-
+    /**
+     * Обновление изображения
+     */
     @Override
     public void updateAdImage(Integer id, MultipartFile file) {
         init();
@@ -72,7 +76,9 @@ public class ImageServiceImpl implements ImageService {
         adRepository.save(ad);
         writeFile(tempFile, file);
     }
-
+    /**
+     * Удаление аватара
+     */
     private void deleteAvatarIfExists(String fileName) {
         Path path = Paths.get(Path.of(pathToUserImages).toAbsolutePath().toString(), fileName);
 
@@ -106,7 +112,9 @@ public class ImageServiceImpl implements ImageService {
         }
         return imageName;
     }
-
+    /**
+     * Получение изображения
+     */
     @Override
     public FileSystemResource getUserImage(Integer id) throws IOException {
         User user = userRepository.findById(id).orElseThrow();

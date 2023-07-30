@@ -48,7 +48,9 @@ public class AdsServiceImpl implements AdsService {
         this.userService = userService;
     }
 
-
+    /**
+     * Метод создания обьявлений
+     */
     @Override
     public AdsDTO createAds(CreateAds createAds, MultipartFile file) throws UserNotFoundException {
         User user = userService.getAuthUser();
@@ -64,25 +66,34 @@ public class AdsServiceImpl implements AdsService {
 
 
 
-
+    /**
+     * Получения обьявления по id
+     */
 
     @Override
     public Ad getAdById(int id) {
             return adsRepository.findById(id);
     }
 
+    /**
+     * Удаление обьявления
+     */
     @Override
     public void deleteAd(int id) {
         adsRepository.deleteById(id);
 
     }
-
+    /**
+     * Получение всех обьявлений
+     */
     @Override
     public ResponseWrapperAds getAllAds() {
         List<AdsDTO> ads = adsRepository.findAll().stream().map(this::adsToDTO).collect(Collectors.toList());
         return new ResponseWrapperAds(ads.size(), ads);
     }
-
+    /**
+     * Получение всех обьявлений авторизованного пользователя
+     */
     @Override
     public ResponseWrapperAds getAllUserAds() {
         User user = userService.getAuthUser();
@@ -94,6 +105,9 @@ public class AdsServiceImpl implements AdsService {
         return new AdsDTO(ad.getUser().getId(), "/ads/image/" + ad.getId(), ad.getId(), ad.getPrice(), ad.getTitle());
     }
 
+    /**
+     * Обновление обьявления по id
+     */
     @Override
     public AdsDTO updateAd(int id, CreateAds createAds) {
         Ad ad = adsRepository.findById(id);
@@ -104,6 +118,9 @@ public class AdsServiceImpl implements AdsService {
         return adsToDTO(ad);
     }
 
+    /**
+     * Обновление фото для обьявления
+     */
     @Override
     public AdsDTO updateAdImage(Integer adId, MultipartFile file) throws UserNotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -128,7 +145,9 @@ public class AdsServiceImpl implements AdsService {
 
     }
 
-
+    /**
+     * Получение всех обьявлений
+     */
     @Override
     public FullAds getFullAdById(int adId) {
         Ad ad = adsRepository.findById(adId);

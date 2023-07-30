@@ -22,7 +22,9 @@ public class ImageController {
         this.adService = adService;
         this.imageService = imageService;
     }
-
+    /**
+     * Обновление изображения
+     */
     @PatchMapping("ads/{id}/image")
     public ResponseEntity<?> updateImage(
             @PathVariable Integer id,
