@@ -1,5 +1,8 @@
 # FLEA MARKET BACK-END
 
+## DB schema:
+
+
 ## Launch
 
 ### Build DB and application images:
