@@ -1,4 +1,4 @@
-package ru.skypro.flea.entity;
+package ru.skypro.flea.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

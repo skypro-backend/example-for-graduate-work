@@ -1,12 +1,10 @@
-package ru.skypro.flea.entity;
+package ru.skypro.flea.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.skypro.flea.converter.LocalDateTimeConverter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,10 +21,8 @@ public class Comment {
   @Column(name = "text", nullable = false)
   private String title;
 
-  @Column(name = "pubic_date")
-  @Convert(converter = LocalDateTimeConverter.class)
-  @NotNull
-  private LocalDateTime pubicDate;
+  @Column(name = "public_date")
+  private LocalDateTime publicDate;
 
   @ManyToOne
   @JoinColumn(name = "ads_id")
@@ -36,4 +32,8 @@ public class Comment {
   @JoinColumn(name = "author_id")
   private User user;
 
+  @PrePersist
+  private void onCreate() {
+    publicDate = LocalDateTime.now();
+  }
 }

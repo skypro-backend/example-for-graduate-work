@@ -27,7 +27,7 @@ CREATE TABLE comments
 (
     id            INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     text          VARCHAR NOT NULL,
-    pubic_date    TIMESTAMP NOT NULL,
+    public_date    TIMESTAMP NOT NULL,
     ads_id        INTEGER REFERENCES ads (id),
     author_id     INTEGER REFERENCES users (id)
 );
