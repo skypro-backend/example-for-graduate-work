@@ -2,6 +2,7 @@
 
 ## DB schema:
 
+![DB schema](/schema.png)
 
 ## Launch
 
