@@ -1,6 +1,12 @@
 version: "3"
 services:
 
+  ui:
+    image: ghcr.io/bizinmitya/front-react-avito:v1.19
+    container_name: ui
+    ports:
+      - 3000:3000
+
   database:
     image: postgres:13-alpine
     container_name: database
