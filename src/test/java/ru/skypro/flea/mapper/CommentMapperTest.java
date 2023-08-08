@@ -36,7 +36,7 @@ class CommentMapperTest {
 
         defaultComment = new Comment();
         defaultComment.setId(456);
-        defaultComment.setTitle("Broken after 10 minutes of use");
+        defaultComment.setText("Broken after 10 minutes of use");
         defaultComment.setPublicDate(LocalDateTime.ofInstant(
                 Instant.ofEpochMilli(defaultTimeStamp),
                 TimeZone.getDefault().toZoneId()));
@@ -87,20 +87,20 @@ class CommentMapperTest {
 
         Comment entity = mapper.createCommentFromDto(dto);
 
-        assertEquals(entity.getTitle(), dto.getText());
+        assertEquals(entity.getText(), dto.getText());
     }
 
     @Test
     public void updatingCommentFromCreateOrUpdateCommentDtoTest() {
         Comment entity = new Comment();
-        entity.setTitle("Old comment");
+        entity.setText("Old comment");
 
         CreateOrUpdateCommentDto dto = new CreateOrUpdateCommentDto();
         dto.setText("New comment");
 
         mapper.updateCommentFromDto(entity, dto);
 
-        assertEquals(entity.getTitle(), dto.getText());
+        assertEquals(entity.getText(), dto.getText());
     }
 
     private void assertEntityEqualsToDto(Comment entity, CommentDto dto) {

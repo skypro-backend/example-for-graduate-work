@@ -19,7 +19,7 @@ public class Comment {
   private Integer id;
 
   @Column(name = "text", nullable = false)
-  private String title;
+  private String text;
 
   @Column(name = "public_date")
   private LocalDateTime publicDate;

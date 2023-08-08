@@ -22,7 +22,6 @@ public interface CommentMapper {
                     ".toInstant(java.time.OffsetDateTime.now().getOffset())" +
                     ".toEpochMilli())")
     @Mapping(target = "pk", source = "id")
-    @Mapping(target = "text", source = "title")
     CommentDto toCommentDto(Comment entity);
 
     List<CommentDto> toCommentDtoList(Collection<Comment> comments);
@@ -35,10 +34,8 @@ public interface CommentMapper {
         return dto;
     }
 
-    @Mapping(target = "title", source = "text")
     Comment createCommentFromDto(CreateOrUpdateCommentDto dto);
 
-    @Mapping(target = "title", source = "text")
     void updateCommentFromDto(@MappingTarget Comment comment, CreateOrUpdateCommentDto dto);
 
 }
