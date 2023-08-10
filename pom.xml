@@ -12,11 +12,11 @@
   </parent>
 
   <groupId>ru.skypro</groupId>
-  <artifactId>ads</artifactId>
+  <artifactId>adDto</artifactId>
   <version>0.0.1-SNAPSHOT</version
   >
   <name>Ads application</name>
-  <description>Application for managing ads</description>
+  <description>Application for managing adDto</description>
 
   <properties>
     <java.version>11</java.version>
@@ -56,6 +56,10 @@
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-test</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
     </dependency>
   </dependencies>
 
