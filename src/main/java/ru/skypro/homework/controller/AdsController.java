@@ -31,12 +31,12 @@ public class AdsController {
         return ResponseEntity.ok().body(adsService.getAds());
     }
 
-    @PostMapping
-    public ResponseEntity<AdDto> addAd(@RequestBody AdDto adDto) {
-        logger.info("Adding new ad {}", adDto);
-        AdDto addedAd = adsService.addAd(adDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(addedAd);
-    }
+//    @PostMapping
+//    public ResponseEntity<AdDto> addAd(@RequestBody AdDto adDto) {
+//        logger.info("Adding new ad {}", adDto);
+//        AdDto addedAd = adsService.addAd(adDto);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(addedAd);
+//    }
 
     @PostMapping
     public ResponseEntity<AdDto> addAd(@RequestBody AdDto adDto,
