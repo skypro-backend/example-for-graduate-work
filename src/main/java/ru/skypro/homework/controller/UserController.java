@@ -127,7 +127,7 @@ public class UserController {
     @GetMapping("/me")
 
     public ResponseEntity<UserDto> getUser() {
-        UserDto currentUserDto = userService.getUserDto();
+        UserDto currentUserDto = userService.getUser();
         if (currentUserDto == null) {
             return ResponseEntity.notFound().build();
         }
@@ -216,7 +216,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-  
+
 
 
 }
