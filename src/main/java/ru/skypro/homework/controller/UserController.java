@@ -14,9 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
+import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.UserService;
-
 
 /**
  * Класс - контроллер для работы с авторизированным пользователем и его данными, содержащий набор API endpoints
@@ -146,7 +146,7 @@ public class UserController {
                     content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = UserDto.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = UpdateUserDto.class))
                             )
                     }
             ),
@@ -179,10 +179,10 @@ public class UserController {
     })
     @PatchMapping("/me")
 
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
-        UserDto newUserDto = userService.updateUserDto(userDto);
+    public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto updateUserDto) {
+        UpdateUserDto newUser = userService.updateUser(updateUserDto);
         System.out.println("Новый пользователь создан или данные о пользователе обновлены");
-        return ResponseEntity.ok(newUserDto);
+        return ResponseEntity.ok(newUser);
     }
 
     @Operation(
