@@ -3,7 +3,7 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 
 @Data
-public class PasswordDto {
-    private String oldPassword;
+public class NewPassword {
+    private String currentPassword;
     private String newPassword;
 }

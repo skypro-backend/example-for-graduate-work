@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.PasswordDto;
+import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.exception.IncorrectArgumentException;
 import ru.skypro.homework.exception.IncorrectPasswordException;
@@ -55,12 +55,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePassword(PasswordDto passwordDto, Authentication authentication) {
+    public void updatePassword(NewPassword newPassword, Authentication authentication) {
         User user = getByUsername(authentication.getName());
-        if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(newPassword.getCurrentPassword(), user.getPassword())) {
             throw new IncorrectPasswordException();
         }
-        user.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(newPassword.getNewPassword()));
         userRepository.save(user);
         log.debug("Password updated for user: {}", authentication.getName());
 
