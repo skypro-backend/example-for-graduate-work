@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class UserDto {
+public class AdsDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Integer id;
+    private Integer pk;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private String username;
-    private String firstName;
-    private String lastName;
-    private String phone;
+    private Integer author;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String image;
+    private String title;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String description;
+    private int price;
 }

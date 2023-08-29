@@ -25,7 +25,8 @@ public class Ads {
     @NotNull
     private String title;
     private String description;
-    private String price;
+    @NotNull
+    private Integer price;
     @JsonIgnore
     @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL)
     private List<Comment> comments;
