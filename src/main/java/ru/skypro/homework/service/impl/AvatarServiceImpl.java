@@ -29,13 +29,11 @@ public class AvatarServiceImpl implements ImageService<Avatar> {
         log.info("Avatar successfully uploaded with id {}", savedAvatar.getId());
         return savedAvatar;
     }
-
     @Override
     public Avatar getImageById(Integer id) {
         log.debug("Getting avatar with id: {}", id);
         return avatarRepository.findById(id).orElseThrow(ImageNotFoundException::new);
     }
-
     @Override
     public void remove(Avatar avatar) {
         log.debug("Removing avatar with id {}", avatar.getId());
