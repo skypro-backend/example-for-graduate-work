@@ -7,7 +7,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 @Data
-public class CreateOrUpdate {
+public class CreateOrUpdateAdDto {
     @Size(min = 4, max = 32)
     private String title;
     @Min(value = 0, message = "Цена не может быть отрицательной")
