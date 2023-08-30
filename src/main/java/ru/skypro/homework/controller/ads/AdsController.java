@@ -13,9 +13,7 @@ import ru.skypro.homework.dto.ads.AdsDto;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ads.ExtendedAdDto;
 import ru.skypro.homework.exceptions.NotFoundException;
-import ru.skypro.homework.service.AdsService;
-
-import java.util.List;
+import ru.skypro.homework.service.ads.AdsService;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -61,20 +59,20 @@ public class AdsController {
     public ResponseEntity<Void> removeAd(@PathVariable Integer id) {
         logger.info("Delete ad with adId: {} ", id);
 
-        if (!adsService.doesAdExist(id)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+//        if (!adsService.doesAdExist(id)) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        if (!adsService.isAuthorizedToDelete(id)) {
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//        }
+//
+//        if (!adsService.isAllowedToDelete(id)) {
+//            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//        }
 
-        if (!adsService.isAuthorizedToDelete(id)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        if (!adsService.isAllowedToDelete(id)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
-        adsService.removeAd(id);
-        return ResponseEntity.noContent().build();
+//        adsService.removeAd(id);
+//        return ResponseEntity.noContent().build();
 
         adsService.removeAd(id);
         return ResponseEntity.ok().build();

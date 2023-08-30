@@ -1,4 +1,4 @@
-package ru.skypro.homework.service.impl;
+package ru.skypro.homework.service.ads.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -6,9 +6,7 @@ import ru.skypro.homework.dto.ads.AdDto;
 import ru.skypro.homework.dto.ads.AdsDto;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ads.ExtendedAdDto;
-import ru.skypro.homework.service.AdsService;
-
-import java.util.List;
+import ru.skypro.homework.service.ads.AdsService;
 
 @Service
 public class AdsServiceImpl implements AdsService {

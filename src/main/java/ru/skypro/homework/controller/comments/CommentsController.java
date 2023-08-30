@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.comments.CommentDto;
-import ru.skypro.homework.service.CommentsService;
-
-import java.util.List;
+import ru.skypro.homework.dto.comments.CommentsDto;
+import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDto;
+import ru.skypro.homework.service.comments.CommentsService;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -25,34 +25,35 @@ public class CommentsController {
         this.commentsService = commentsService;
     }
 
-    @GetMapping("/{adId}/comments")
-    public ResponseEntity<List<CommentDto>> getComments(@PathVariable int adId) {
-        logger.info("Get comments with adId: {} ", adId);
-        return ResponseEntity.ok(commentsService.getComments(adId));
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<CommentsDto> getComments(@PathVariable Integer id) {
+        logger.info("Get comments with adId: {} ", id);
+        CommentsDto commentsDto = commentsService.getComments(id);
+        return ResponseEntity.ok(commentsDto);
     }
 
-    @PostMapping("/{adId}/comments")
-    public ResponseEntity<CommentDto> addComment(@PathVariable int adId,
-                                                 @RequestBody CommentDto commentDto) {
-        logger.info("Add comment with adId: {} and comment {} ", adId, commentDto);
-        CommentDto addComment = commentsService.addComment(adId, commentDto);
+    @PostMapping("/{id}/comments")
+    public ResponseEntity<CommentDto> addComment(@PathVariable Integer id,
+                                                 @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+        logger.info("Add comment with adId: {} and comment {} ", id, createOrUpdateCommentDto);
+        CommentDto addComment = commentsService.addComment(id, createOrUpdateCommentDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(addComment);
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<Void> deleteCommentByAdIdAndCommentId(@PathVariable int adId,
-                                                                @PathVariable int commentId) {
+    public ResponseEntity<Void> deleteComment(@PathVariable Integer adId,
+                                              @PathVariable Integer commentId) {
         logger.info("Delete comment adId {} and commentId {} ", adId, commentId);
-        commentsService.deleteCommentByAdIdAndCommentId(adId, commentId);
+        commentsService.deleteComment(adId, commentId);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<CommentDto> updateComment(@PathVariable int adId,
-                                                    @PathVariable int commentId,
-                                                    @RequestBody CommentDto commentDto) {
-        logger.info("Update comment with adId {} and commentId {} ", adId, commentId);
-        CommentDto updatedComment = commentsService.updateComment(adId, commentId, commentDto);
+    public ResponseEntity<CommentDto> updateComment(@PathVariable Integer adId,
+                                                    @PathVariable Integer commentId,
+                                                    @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+        logger.info("Update comment with adId {} and commentId {} and createOrUpdateDto {}", adId, commentId, createOrUpdateCommentDto);
+        CommentDto updatedComment = commentsService.updateComment(adId, commentId, createOrUpdateCommentDto);
         return ResponseEntity.ok(updatedComment);
     }
 }
