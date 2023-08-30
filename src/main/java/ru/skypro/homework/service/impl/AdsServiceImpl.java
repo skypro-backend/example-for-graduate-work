@@ -2,7 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.ads.AdDto;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 public class AdsServiceImpl implements AdsService {
 
     @Override
-    public List<AdDto> getAds() {
+    public List<AdDto> getAllAds() {
         return null;
     }
 

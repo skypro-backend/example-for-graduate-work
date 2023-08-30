@@ -1,7 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.CommentDto;
+import ru.skypro.homework.dto.comments.CommentDto;
 import ru.skypro.homework.service.CommentsService;
 
 import java.util.List;

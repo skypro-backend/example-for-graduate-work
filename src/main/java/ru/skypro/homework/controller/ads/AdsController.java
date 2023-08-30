@@ -1,4 +1,4 @@
-package ru.skypro.homework.controller;
+package ru.skypro.homework.controller.ads;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -7,11 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.ads.AdDto;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.List;
 
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @Slf4j
 @RequestMapping("/ads")
@@ -26,9 +27,9 @@ public class AdsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AdDto>> getAds() {
+    public ResponseEntity<List<AdDto>> getAllAds() {
         logger.info("Getting all ads");
-        return ResponseEntity.ok().body(adsService.getAds());
+        return ResponseEntity.ok().body(adsService.getAllAds());
     }
 
 //    @PostMapping

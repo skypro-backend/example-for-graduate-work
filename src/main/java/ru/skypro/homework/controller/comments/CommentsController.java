@@ -1,4 +1,4 @@
-package ru.skypro.homework.controller;
+package ru.skypro.homework.controller.comments;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -6,11 +6,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.CommentDto;
+import ru.skypro.homework.dto.comments.CommentDto;
 import ru.skypro.homework.service.CommentsService;
 
 import java.util.List;
 
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @Slf4j
 @RequestMapping("/ads")
