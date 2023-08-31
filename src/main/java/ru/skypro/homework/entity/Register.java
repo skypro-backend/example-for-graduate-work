@@ -1,7 +1,7 @@
 //package ru.skypro.homework.entity;
 //
 //import lombok.Data;
-//import ru.skypro.homework.dto.register.Role;
+//import ru.skypro.homework.dto.auth.Role;
 //
 //@Data
 //public class Register {

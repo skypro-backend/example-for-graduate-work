@@ -1,4 +1,4 @@
-package ru.skypro.homework.dto.register;
+package ru.skypro.homework.dto.auth;
 
 import lombok.Data;
 

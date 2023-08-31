@@ -1,7 +1,7 @@
 package ru.skypro.homework.dto.users;
 
 import lombok.Data;
-import ru.skypro.homework.dto.register.Role;
+import ru.skypro.homework.dto.auth.Role;
 
 import javax.validation.constraints.Email;
 
