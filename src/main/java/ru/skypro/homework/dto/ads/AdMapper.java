@@ -9,7 +9,14 @@ import java.util.List;
 public interface AdMapper {
     Ad toEntity(AdDto adDto);
 
-    List<Ad> toEntity(AdsDto adsDto);
+    List<Ad> toEntityList(List<AdDto> adDtos);
+
+//    default List<Ad> toEntity(AdsDto adsDto) {
+//        if (adsDto == null) {
+//            return null;
+//        }
+//        return toEntityList(adsDto.getResults());
+//    }
 
     Ad toEntity(CreateOrUpdateAdDto createOrUpdateAdDto);
 
@@ -17,7 +24,17 @@ public interface AdMapper {
 
     AdDto toAdDto(Ad ad);
 
-    AdsDto toAdsDto(List<Ad> ads);
+    List<AdDto> toListDto(List<Ad> adList);
+
+//    default AdsDto toAdsDto(List<Ad> ads) {
+//        if (ads == null) {
+//            return null;
+//        }
+//        AdsDto adsDto = new AdsDto();
+//        adsDto.setResults(toListDto(ads));
+//        adsDto.setCount(ads.size());
+//        return adsDto;
+//    }
 
     CreateOrUpdateAdDto toCreateOrUpdateDto(Ad ad);
 
