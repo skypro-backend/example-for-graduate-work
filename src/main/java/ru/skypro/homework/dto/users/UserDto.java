@@ -1,19 +1,22 @@
 package ru.skypro.homework.dto.users;
 
 import lombok.Data;
-import ru.skypro.homework.dto.auth.Role;
+import ru.skypro.homework.entity.users.Role;
 
 import javax.validation.constraints.Email;
 
+/**
+ * DTO for {@link ru.skypro.homework.entity.users.User}
+ */
 @Data
 public class UserDto {
     private Integer id;
-    @Email
-    private String email;
     private String firstName;
     private String lastName;
     private String phone;
-    private Role role;
+    @Email
+    private String email;
     private String image;
+    private Role role;
 
 }
