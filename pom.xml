@@ -12,11 +12,11 @@
   </parent>
 
   <groupId>ru.skypro</groupId>
-  <artifactId>adDto</artifactId>
+  <artifactId>ads</artifactId>
   <version>0.0.1-SNAPSHOT</version
   >
   <name>Ads application</name>
-  <description>Application for managing adDto</description>
+  <description>Application for managing ads</description>
 
   <properties>
     <java.version>11</java.version>
@@ -29,10 +29,10 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.boot</groupId>-->
+<!--      <artifactId>spring-boot-starter-data-jpa</artifactId>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
@@ -47,10 +47,8 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.28</version>
-      <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
-
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
@@ -91,6 +89,7 @@
       <version>${org.mapstruct.version}</version>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
