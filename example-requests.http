@@ -3,7 +3,7 @@ Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
 ###
-POST http://localhost:8080/login
+POST http://localhost:8080/loginDto
 Content-Type: application/json
 
 {
