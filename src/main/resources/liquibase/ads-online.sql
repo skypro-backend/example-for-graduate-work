@@ -42,7 +42,6 @@ price integer not null
 );
 
 
-
 create table comment
 (
 id serial primary key,
