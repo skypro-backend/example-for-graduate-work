@@ -47,7 +47,7 @@ public interface CommentMapper {
         return (int) createdAt.atZone(ZoneId.systemDefault()).toEpochSecond();
     }
 
-    abstract List<CommentDto> toCommentDtoList(List<Comment> comments);
+    List<CommentDto> toCommentDtoList(List<Comment> comments);
 
     default CommentsDto toCommentsDto(List<Comment> comments) {
         if (comments == null) {
