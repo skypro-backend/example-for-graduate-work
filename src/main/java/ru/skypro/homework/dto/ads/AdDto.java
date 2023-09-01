@@ -2,9 +2,6 @@ package ru.skypro.homework.dto.ads;
 
 import lombok.Data;
 
-/**
- * DTO for {@link ru.skypro.homework.entity.ads.Ad}
- */
 @Data
 public class AdDto {
     private Integer pk;
