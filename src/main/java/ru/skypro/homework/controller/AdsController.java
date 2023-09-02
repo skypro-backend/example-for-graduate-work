@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +37,7 @@ public class AdsController {
                             responseCode = "201", description = "Created",
                             content = {@Content(mediaType = "application/json",
                                     schema = @Schema(implementation = AdsDto.class))}),
-                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
             }
@@ -58,7 +57,7 @@ public class AdsController {
                             responseCode = "200", description = "OK",
                             content = {@Content(mediaType = "application/json",
                                     schema = @Schema(implementation = AdsDto.class))}),
-                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
             }
@@ -91,7 +90,7 @@ public class AdsController {
                             responseCode = "200", description = "OK",
                             content = {@Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseHandler.class))}),
-                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             }
     )
@@ -142,7 +141,7 @@ public class AdsController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content),
                     @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             }
     )
