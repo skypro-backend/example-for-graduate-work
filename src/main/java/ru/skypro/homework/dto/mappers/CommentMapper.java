@@ -1,14 +1,27 @@
-package ru.skypro.homework.dto.comments;
+package ru.skypro.homework.dto.mappers;
 
 import org.mapstruct.*;
+import ru.skypro.homework.dto.comments.CommentDto;
+import ru.skypro.homework.dto.comments.CommentsDto;
+import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDto;
 import ru.skypro.homework.entity.comments.Comment;
+import ru.skypro.homework.entity.users.User;
 
-import java.util.ArrayList;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = CustomMapper.class)
 public interface CommentMapper {
+
     Comment toCommentEntity(CommentDto commentDto);
+
+    default LocalDateTime mapCreatedAt(Integer createdAt) {
+        return Instant.ofEpochSecond(createdAt)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+    }
 
     List<Comment> toCommentsList(List<CommentDto> commentDtos);
 
@@ -22,6 +35,17 @@ public interface CommentMapper {
     Comment toCommentEntityFromCreateOrUpdateCommentDto(CreateOrUpdateCommentDto createOrUpdateCommentDto);
 
     CommentDto toCommentDto(Comment comment);
+
+    default Integer map(User user) {
+        if (user == null) {
+            return null;
+        }
+        return user.getId();
+    }
+
+    default Integer mapDateToInteger(LocalDateTime createdAt) {
+        return (int) createdAt.atZone(ZoneId.systemDefault()).toEpochSecond();
+    }
 
     List<CommentDto> toCommentDtoList(List<Comment> comments);
 
@@ -37,6 +61,4 @@ public interface CommentMapper {
 
     CreateOrUpdateCommentDto toCreateOrUpdateDto(Comment comment);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Comment partialUpdate(CommentDto commentDto, @MappingTarget Comment comment);
 }

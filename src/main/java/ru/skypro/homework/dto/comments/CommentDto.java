@@ -2,9 +2,6 @@ package ru.skypro.homework.dto.comments;
 
 import lombok.Data;
 
-/**
- * DTO for {@link ru.skypro.homework.entity.comments.Comment}
- */
 @Data
 public class CommentDto {
     private Integer pk;
