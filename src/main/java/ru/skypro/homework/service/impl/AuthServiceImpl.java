@@ -19,10 +19,7 @@ public class AuthServiceImpl implements AuthService {
         this.manager = manager;
         this.encoder = passwordEncoder;
     }
-/*Метод login проверяет имя и пароль пользователя,
-* в случае неправильного набора, выводит
-* в консоль false.
-**/
+
     @Override
     public boolean login(String userName, String password) {
         if (!manager.userExists(userName)) {
@@ -31,10 +28,7 @@ public class AuthServiceImpl implements AuthService {
         UserDetails userDetails = manager.loadUserByUsername(userName);
         return encoder.matches(password, userDetails.getPassword());
     }
-/* Метод register регистрирует новых
-* пользователей , в случае недопустимых
-* данных,выводит в консоль false
-* **/
+
     @Override
     public boolean register(Register register) {
         if (manager.userExists(register.getUsername())) {
