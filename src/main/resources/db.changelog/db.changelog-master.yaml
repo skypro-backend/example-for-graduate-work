@@ -1,3 +1,11 @@
 databaseChangeLog:
   - include:
       file: db.changelog/init.sql
+  - changeSet:
+      id: 1_change_user_password_datatype
+      author: AndreevSV
+      changes:
+        - modifyDataType:
+            tableName: users
+            columnName: password
+            newDataType: VARCHAR(255)

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.AdDto;
@@ -15,9 +16,12 @@ import ru.skypro.homework.dto.ads.ExtendedAdDto;
 import ru.skypro.homework.exceptions.NotFoundException;
 import ru.skypro.homework.service.ads.AdsService;
 
+import javax.validation.Valid;
+
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @Slf4j
+@Validated
 @RequestMapping("/ads")
 public class AdsController {
 
@@ -37,7 +41,7 @@ public class AdsController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDto> addAd(@RequestPart("properties") CreateOrUpdateAdDto createOrUpdateAdDto,
+    public ResponseEntity<AdDto> addAd(@RequestPart("properties") @Valid CreateOrUpdateAdDto createOrUpdateAdDto,
                                        @RequestPart("image") MultipartFile image) {
         logger.info("Adding new ad with body {} and photo {}", createOrUpdateAdDto, image);
         AdDto addedAd = adsService.addAd(createOrUpdateAdDto, image);
@@ -80,7 +84,7 @@ public class AdsController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<AdDto> updateAds(@PathVariable Integer id,
-                                           @RequestBody CreateOrUpdateAdDto createOrUpdateAdDto) {
+                                           @RequestBody @Valid CreateOrUpdateAdDto createOrUpdateAdDto) {
         logger.info("Update ad with adId: {} ", id);
         AdDto updatedAd = adsService.updateAds(id, createOrUpdateAdDto);
         return ResponseEntity.ok(updatedAd);

@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.users.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.auth.RegisterDto;
 import ru.skypro.homework.dto.mappers.UserMapper;
 import ru.skypro.homework.entity.users.User;
@@ -19,6 +20,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    @Transactional
     public void register(RegisterDto registerDto) {
         User user = userMapper.toEntity(registerDto);
         usersRepository.save(user);

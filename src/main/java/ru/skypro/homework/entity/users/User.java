@@ -41,7 +41,7 @@ public class User {
     private String username;
 
     @Column(name = "password")
-    private Integer password;
+    private String password;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Ad> ads;
