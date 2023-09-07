@@ -3,7 +3,7 @@ package ru.skypro.homework.service.users.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.auth.RegisterDto;
-import ru.skypro.homework.dto.mappers.UserMapper;
+import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.entity.users.User;
 import ru.skypro.homework.repository.users.UsersRepository;
 import ru.skypro.homework.service.users.UsersService;

@@ -4,9 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.skypro.homework.entity.ads.Ad;
 import ru.skypro.homework.entity.comments.Comment;
+import ru.skypro.homework.entity.roles.Role;
+import ru.skypro.homework.entity.roles.Roles;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,11 +37,7 @@ public class User {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "role")
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Column(name = "password")
@@ -49,4 +49,10 @@ public class User {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Roles> roles = new HashSet<>();
 }

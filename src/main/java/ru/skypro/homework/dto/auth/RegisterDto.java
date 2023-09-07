@@ -1,7 +1,7 @@
 package ru.skypro.homework.dto.auth;
 
 import lombok.Data;
-import ru.skypro.homework.entity.users.Role;
+import ru.skypro.homework.entity.roles.Role;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;

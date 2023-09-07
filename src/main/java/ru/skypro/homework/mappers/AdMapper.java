@@ -1,4 +1,4 @@
-package ru.skypro.homework.dto.mappers;
+package ru.skypro.homework.mappers;
 
 import org.mapstruct.*;
 import ru.skypro.homework.dto.ads.AdDto;

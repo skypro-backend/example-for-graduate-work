@@ -9,3 +9,9 @@ databaseChangeLog:
             tableName: users
             columnName: password
             newDataType: VARCHAR(255)
+  - changeSet:
+      id: 2_include_roles_table
+      author: AndreevSV
+      changes:
+        - sqlFile:
+            path: db.changelog/init2.sql

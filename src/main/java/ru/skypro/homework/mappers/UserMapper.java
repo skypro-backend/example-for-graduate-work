@@ -1,4 +1,4 @@
-package ru.skypro.homework.dto.mappers;
+package ru.skypro.homework.mappers;
 
 import org.mapstruct.*;
 import ru.skypro.homework.dto.auth.LoginDto;
@@ -19,26 +19,16 @@ public interface UserMapper {
 
     User toEntity(NewPasswordDto newPasswordDto);
 
-    @Mapping(target = "password", expression = "java(encodePassword(registerDto))")
+//    @Mapping(target = "password", expression = "java(encodePassword(registerDto))")
     User toEntity(RegisterDto registerDto);
 
-//    @AfterMapping
-//    @Named("encodePassword")
-//    default void encodePassword(@MappingTarget User user, RegisterDto registerDto) {
+//    default String encodePassword(RegisterDto registerDto) {
 //        if (registerDto != null) {
 //            String password = registerDto.getPassword();
-//            Integer hashCode = password.hashCode();
-//            user.setPassword(hashCode);
+//            return password;
 //        }
+//        return null;
 //    }
-
-    default Integer encodePassword(RegisterDto registerDto) {
-        if (registerDto != null) {
-            String password = registerDto.getPassword();
-            return password.hashCode();
-        }
-        return null;
-    }
 
     UserDto toUserDto(User user);
 
