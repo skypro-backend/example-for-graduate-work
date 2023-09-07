@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +15,15 @@ import ru.skypro.homework.entity.users.UserCustom;
 import ru.skypro.homework.repository.users.UsersRepository;
 
 @Service
-public class UserServiceCustom implements UserDetailsService, UserDetailsManager {
+public class UserCustomService implements UserDetailsService, UserDetailsManager {
 
     private final UsersRepository usersRepository;
 
-    public UserServiceCustom(UsersRepository usersRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserCustomService(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -38,6 +42,8 @@ public class UserServiceCustom implements UserDetailsService, UserDetailsManager
             throw new IllegalArgumentException("UserDetail должен быть экземляром класса UserCustom");
         }
         User user = ((UserCustom) userCustom).getUser();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         usersRepository.save(user);
     }
 
@@ -67,8 +73,10 @@ public class UserServiceCustom implements UserDetailsService, UserDetailsManager
         String name = currentUser.getName();
         User user = usersRepository.findByUsername(name);
         String currentPassword = user.getPassword();
-        if (currentPassword.equals(oldPassword)) {
-            user.setPassword(newPassword);
+        String encodedOldPassword = passwordEncoder.encode(oldPassword);
+        if (currentPassword.equals(encodedOldPassword)) {
+            String encodeNewPassword = passwordEncoder.encode(newPassword);
+            user.setPassword(encodeNewPassword);
             usersRepository.save(user);
         } else {
             throw new BadCredentialsException("Введенный пароль не соответствует действующему.");

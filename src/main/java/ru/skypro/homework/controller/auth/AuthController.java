@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.auth.LoginDto;
 import ru.skypro.homework.dto.auth.RegisterDto;
-import ru.skypro.homework.service.auth.AuthService;
+import ru.skypro.homework.service.users.impl.UserManagementService;
 
 import javax.validation.Valid;
 
@@ -22,11 +22,31 @@ import javax.validation.Valid;
 @Validated
 public class AuthController {
 
-    private final AuthService authService;
+//    private final AuthService authService;
+//
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody @Valid LoginDto loginDto) {
+//        if (authService.login(loginDto.getUsername(), loginDto.getPassword())) {
+//            return ResponseEntity.ok().build();
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//    }
+//
+//    @PostMapping("/register")
+//    public ResponseEntity<?> register(@RequestBody @Valid RegisterDto registerDto) {
+//        if (authService.register(registerDto)) {
+//            return ResponseEntity.status(HttpStatus.CREATED).build();
+//        } else {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//    }
+
+    private final UserManagementService userManagementService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginDto loginDto) {
-        if (authService.login(loginDto.getUsername(), loginDto.getPassword())) {
+        if (userManagementService.login(loginDto)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -35,10 +55,11 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterDto registerDto) {
-        if (authService.register(registerDto)) {
+        if (userManagementService.register(registerDto)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
 }

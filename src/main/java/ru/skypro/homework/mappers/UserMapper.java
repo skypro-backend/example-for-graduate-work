@@ -19,16 +19,7 @@ public interface UserMapper {
 
     User toEntity(NewPasswordDto newPasswordDto);
 
-//    @Mapping(target = "password", expression = "java(encodePassword(registerDto))")
     User toEntity(RegisterDto registerDto);
-
-//    default String encodePassword(RegisterDto registerDto) {
-//        if (registerDto != null) {
-//            String password = registerDto.getPassword();
-//            return password;
-//        }
-//        return null;
-//    }
 
     UserDto toUserDto(User user);
 
