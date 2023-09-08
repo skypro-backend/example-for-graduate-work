@@ -16,12 +16,19 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.entity.users.User;
+import ru.skypro.homework.exceptions.PasswordMatches;
+import ru.skypro.homework.exceptions.UserNotFoundEx;
+import ru.skypro.homework.exceptions.UserNotUpdatedEx;
+import ru.skypro.homework.service.users.UsersService;
+
+import java.io.EOFException;
+import java.io.IOException;
 
 /**
  * Класс - контроллер для работы с авторизированным пользователем и его данными, содержащий набор API endpoints
  *
- * @see UserService
+ * @see
  */
 @Slf4j
 @RestController
@@ -31,7 +38,7 @@ import ru.skypro.homework.service.UserService;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final UsersService userService;
 
     @Operation(
             summary = "Обновление пароля пользователя",
@@ -75,10 +82,17 @@ public class UserController {
                             )}
             )
     })
-    @PostMapping("/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
-        log.info("Новый пароль установлен");
-        return ResponseEntity.ok().build();
+    @PostMapping("/{id}/set_password")
+
+    public ResponseEntity setPassword(@PathVariable Integer id,@RequestBody NewPasswordDto newPasswordDto
+    ) throws UserNotFoundEx, PasswordMatches {
+
+        User user = userService.addNewPassword(id,newPasswordDto);
+        try {
+            return ResponseEntity.ok(user);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("false");
+        }
     }
 
 
@@ -126,13 +140,13 @@ public class UserController {
     })
     @GetMapping("/me")
 
-    public ResponseEntity<UserDto> getUser() {
-        UserDto currentUserDto = userService.getUser();
-        if (currentUserDto == null) {
+    public ResponseEntity getUser(@RequestBody Integer id) throws UserNotFoundEx {
+        User user = userService.getUser(id);
+        if (user == null) {
             return ResponseEntity.notFound().build();
         }
         System.out.println("Данные о пользователе получены");
-        return ResponseEntity.ok(currentUserDto);
+        return ResponseEntity.ok(user);
     }
 
     @Operation(
@@ -179,10 +193,13 @@ public class UserController {
     })
     @PatchMapping("/me")
 
-    public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto updateUserDto) {
-        UpdateUserDto newUser = userService.updateUser(updateUserDto);
-        System.out.println("Новый пользователь создан или данные о пользователе обновлены");
-        return ResponseEntity.ok(newUser);
+    public ResponseEntity updateUser(@RequestParam Integer id, @RequestBody UpdateUserDto userDto){
+
+        try {
+            return ResponseEntity.ok(userService.updateUser(id, userDto));
+        } catch (UserNotUpdatedEx ex) {
+            return   ResponseEntity.badRequest().body("User not updated");
+        }
     }
 
     @Operation(
@@ -209,11 +226,20 @@ public class UserController {
                             )}
             )
     })
-    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<byte[]> updateUserImage(@RequestPart MultipartFile image) {
+    @PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity updateUserImage(@PathVariable Integer id, @RequestBody MultipartFile image ) throws IOException {
         log.info("Аватар пользователя успешно обновлен");
-        userService.updateUserImage(image);
-        return ResponseEntity.ok().build();
+
+
+        try {
+            userService.uploadImage(id, image);
+            return ResponseEntity.ok()
+                    .build();
+
+        } catch (Exception e) {
+            throw new EOFException("Не удалось загрузть файл");
+        }
+
     }
 
 

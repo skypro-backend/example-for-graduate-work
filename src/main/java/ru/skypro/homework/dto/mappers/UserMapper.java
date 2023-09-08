@@ -17,6 +17,7 @@ public interface UserMapper {
 
     User toEntity(LoginDto loginDto);
 
+    @Mapping(target = "newPasswod", expression = "java")
     User toEntity(NewPasswordDto newPasswordDto);
 
     @Mapping(target = "password", expression = "java(encodePassword(registerDto))")
