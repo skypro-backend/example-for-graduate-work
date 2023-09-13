@@ -63,7 +63,28 @@ public class ImageServiceImpl implements ImageService {
         User author = UserService.getAuthor();
         String imagePath = author.getImage();
         String pathToStatic = pathToImagesOfAvatars.split("static")[0];
-        Path filePath = Paths.get(pathToStatic + "static" + imagePath);
-        Files.delete(filePath);
+        Path fullPathToImage = Paths.get(pathToStatic + "static" + imagePath);
+        Files.delete(fullPathToImage);
+    }
+
+    @Override
+    public Path getFullPathToImageOfGoods(String urlToImage) {
+        User author = UserService.getAuthor();
+        String imagePath = author.getImage();
+        String pathToStatic = pathToImagesOfGoods.split("static")[0];
+        return Paths.get(pathToStatic + "static" + imagePath);
+    }
+
+    @Override
+    public Path getFullPathToImageOfAvatars(String urlToImage) {
+        User author = UserService.getAuthor();
+        String imagePath = author.getImage();
+        String pathToStatic = pathToImagesOfAvatars.split("static")[0];
+        return Paths.get(pathToStatic + "static" + imagePath);
+    }
+
+    @Override
+    public byte[] imageToByteArray(Path pathToImage) throws IOException {
+        return Files.readAllBytes(pathToImage);
     }
 }

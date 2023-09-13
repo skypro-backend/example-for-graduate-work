@@ -18,7 +18,7 @@ public class WebSecurityConfig {
             "/v3/api-docs",
             "/webjars/**",
             "/login",
-            "/register"
+            "/register",
     };
 
     @Bean
@@ -33,7 +33,8 @@ public class WebSecurityConfig {
                         .authenticated())
                 .cors()
                 .and()
-                .httpBasic(withDefaults());
+                .httpBasic(withDefaults()
+                );
         return http.build();
     }
 

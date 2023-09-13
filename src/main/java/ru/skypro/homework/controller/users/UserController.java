@@ -182,7 +182,6 @@ public class UserController {
             )
     })
     @PatchMapping("/me")
-
     public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto updateUserDto) {
         UpdateUserDto newUser = userService.updateUser(updateUserDto);
         System.out.println("Новый пользователь создан или данные о пользователе обновлены");
@@ -214,8 +213,8 @@ public class UserController {
             )
     })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<byte[]> updateUserImage(@RequestPart MultipartFile image) throws IOException {
-        log.info("Аватар пользователя успешно обновлен");
+    public ResponseEntity<?> updateUserImage(@RequestPart MultipartFile image) throws IOException {
+        log.info("Обновление аватара пользователя {}", image);
         userService.updateUserImage(image);
         return ResponseEntity.ok().build();
     }

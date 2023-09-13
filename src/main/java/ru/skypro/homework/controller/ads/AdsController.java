@@ -17,6 +17,7 @@ import ru.skypro.homework.exceptions.NotFoundException;
 import ru.skypro.homework.service.ads.AdsService;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -83,7 +84,7 @@ public class AdsController {
 
     @PatchMapping("/{id}/image")
     public ResponseEntity<byte[]> updateImage(@PathVariable("id") Integer id,
-                                              @RequestPart("image") MultipartFile image) {
+                                              @RequestPart("image") MultipartFile image) throws IOException {
         byte[] updatedImage = adsService.updateImage(id, image);
         if (updatedImage == null) {
             throw new NotFoundException("Объявление с таким id " + id + "не найдено");

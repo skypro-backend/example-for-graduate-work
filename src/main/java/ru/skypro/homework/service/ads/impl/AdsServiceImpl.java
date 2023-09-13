@@ -17,6 +17,7 @@ import ru.skypro.homework.service.image.ImageService;
 import ru.skypro.homework.service.users.impl.UserService;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -109,13 +110,18 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public byte[] updateImage(Integer id, MultipartFile image) {
-        User author = UserService.getAuthor();
-
-//        imageService.consumeImage(image);
-
-        //TODO: make Image update with Image Service
-        return null;
+    public byte[] updateImage(Integer id, MultipartFile image) throws IOException {
+        Optional<Ad> adOptional = adsRepository.findByPkIs(id);
+        if (adOptional.isEmpty()) {
+            throw new NotFoundException("Объявление с таким id не найдено: " + id);
+        } else {
+            Ad ad = adOptional.get();
+            String urlToImage = ad.getImage();
+            imageService.deleteImageOfGoods(urlToImage);
+            String urlToImageOfGoods = imageService.consumeImageOfGoods(image);
+            Path fullPathToImageOfGoods = imageService.getFullPathToImageOfGoods(urlToImageOfGoods);
+            return imageService.imageToByteArray(fullPathToImageOfGoods);
+        }
     }
 
 }
