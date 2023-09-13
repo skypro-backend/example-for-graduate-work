@@ -1,4 +1,4 @@
-package ru.skypro.homework.dto.ads;
+package ru.skypro.homework.dto.ads.in;
 
 import lombok.Data;
 
@@ -14,7 +14,7 @@ public class CreateOrUpdateAdDto {
     private String title;
     @NotEmpty(message = "Поле не может быть пустым")
     @Min(value = 0, message = "Цена не может быть отрицательной")
-    @Max(value = 10_000_000, message = "Цена не может быть больше 10 млн.")
+    @Max(value = 10000000, message = "Цена не может быть больше 10 млн.")
     private Integer price;
     @NotEmpty(message = "Поле не может быть пустым")
     @Size(min = 8, max = 64, message = "Имя пользователя не может быть меньше 8 и больше 64 символов")

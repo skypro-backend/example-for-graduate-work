@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.comments.CommentDto;
-import ru.skypro.homework.dto.comments.CommentsDto;
-import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDto;
+import ru.skypro.homework.dto.comments.out.CommentDto;
+import ru.skypro.homework.dto.comments.out.CommentsDto;
+import ru.skypro.homework.dto.comments.in.CreateOrUpdateCommentDto;
 import ru.skypro.homework.service.comments.CommentsService;
 
 import javax.validation.Valid;

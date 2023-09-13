@@ -1,4 +1,4 @@
-package ru.skypro.homework.dto.comments;
+package ru.skypro.homework.dto.comments.out;
 
 import lombok.Data;
 

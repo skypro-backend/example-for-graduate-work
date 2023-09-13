@@ -1,8 +1,6 @@
 package ru.skypro.homework.service.users.impl;
 
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -69,15 +67,12 @@ public class UserCustomService implements UserDetailsService, UserDetailsManager
     @Override
     @Transactional
     public void changePassword(String oldPassword, String newPassword) {
-        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-        String name = currentUser.getName();
-        User user = usersRepository.findByUsername(name);
-        String currentPassword = user.getPassword();
-        String encodedOldPassword = passwordEncoder.encode(oldPassword);
-        if (currentPassword.equals(encodedOldPassword)) {
+        User author = UserService.getAuthor();
+        String currentPassword = author.getPassword();
+        if (passwordEncoder.matches(oldPassword, currentPassword)) {
             String encodeNewPassword = passwordEncoder.encode(newPassword);
-            user.setPassword(encodeNewPassword);
-            usersRepository.save(user);
+            author.setPassword(encodeNewPassword);
+            usersRepository.save(author);
         } else {
             throw new BadCredentialsException("Введенный пароль не соответствует действующему.");
         }

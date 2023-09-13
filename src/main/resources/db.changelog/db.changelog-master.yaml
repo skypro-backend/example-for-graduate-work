@@ -15,3 +15,9 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: db.changelog/init2.sql
+  - changeSet:
+      id: 3_fill_roles
+      author: AndreevSV
+      changes:
+        - sqlFile:
+            path: db.changelog/init3.sql

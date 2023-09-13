@@ -7,6 +7,7 @@ import ru.skypro.homework.dto.auth.LoginDto;
 import ru.skypro.homework.dto.auth.RegisterDto;
 import ru.skypro.homework.entity.users.User;
 import ru.skypro.homework.entity.users.UserCustom;
+import ru.skypro.homework.mappers.CustomUserMapper;
 import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.service.auth.AuthService;
 import ru.skypro.homework.service.users.impl.UserCustomService;
@@ -16,17 +17,22 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserCustomService userCustomService;
     private final UserMapper userMapper;
+    private final CustomUserMapper customUserMapper;
     private final PasswordEncoder encoder;
 
-    public AuthServiceImpl(UserCustomService userCustomService, UserMapper userMapper, PasswordEncoder encoder) {
+    public AuthServiceImpl(UserCustomService userCustomService,
+                           UserMapper userMapper,
+                           CustomUserMapper customUserMapper,
+                           PasswordEncoder encoder) {
         this.userCustomService = userCustomService;
         this.userMapper = userMapper;
+        this.customUserMapper = customUserMapper;
         this.encoder = encoder;
     }
 
     @Override
     public boolean register(RegisterDto registerDto) {
-        User user = userMapper.toEntity(registerDto);
+        User user = userMapper.toEntity(registerDto, customUserMapper);
         UserCustom userCustom = new UserCustom(user);
         if (!userCustomService.userExists(userCustom.getUsername())) {
             userCustomService.createUser(userCustom);

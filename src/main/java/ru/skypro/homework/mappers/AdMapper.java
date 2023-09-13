@@ -1,40 +1,46 @@
 package ru.skypro.homework.mappers;
 
 import org.mapstruct.*;
-import ru.skypro.homework.dto.ads.AdDto;
-import ru.skypro.homework.dto.ads.AdsDto;
-import ru.skypro.homework.dto.ads.CreateOrUpdateAdDto;
-import ru.skypro.homework.dto.ads.ExtendedAdDto;
+import ru.skypro.homework.dto.ads.out.AdDto;
+import ru.skypro.homework.dto.ads.out.AdsDto;
+import ru.skypro.homework.dto.ads.in.CreateOrUpdateAdDto;
+import ru.skypro.homework.dto.ads.out.ExtendedAdDto;
 import ru.skypro.homework.entity.ads.Ad;
 import ru.skypro.homework.entity.users.User;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = CustomMapper.class)
+@Mapper(componentModel = "spring", uses = CustomUserMapper.class)
 public interface AdMapper {
 
-    Ad toEntity(AdDto adDto);
+    Ad toAd(CreateOrUpdateAdDto createOrUpdateAdDto);
 
-    Ad toEntity(CreateOrUpdateAdDto createOrUpdateAdDto);
-
-    Ad toEntity(ExtendedAdDto extendedAdDto);
-
-    List<Ad> toEntityList(List<AdDto> adDtos);
-
-    default List<Ad> toEntityList(AdsDto adsDto) {
-        return toEntityList(adsDto.getResults());
-    }
-
+    @Mapping(target = "author", source = "author.id")
     AdDto toAdDto(Ad ad);
 
-    List<AdDto> toListDto(List<Ad> adList);
+    @Mappings({
+            @Mapping(target = "authorFirstName", source = "author.firstName"),
+            @Mapping(target = "authorLastName", source = "author.lastName"),
+            @Mapping(target = "phone", source = "author.phone"),
+            @Mapping(target = "email", source = "author.email")
+    })
+    ExtendedAdDto toExtendedAdDto(Ad ad);
 
-    CreateOrUpdateAdDto toCreateOrUpdateDto(Ad ad);
-
-    default Integer map(User value) {
-        return value != null ? value.getId() : null;
+    default AdsDto toAdsDto(List<Ad> adList) {
+        AdsDto adsDto = new AdsDto();
+        adsDto.setCount(adList.size());
+        adsDto.setResults(adList.stream().map(this::toAdDto).collect(Collectors.toList()));
+        return adsDto;
     }
 
-    ExtendedAdDto toExtendedAdDto(Ad ad);
+    default Integer toInteger(User user) {
+        if (user == null) {
+            return null;
+        }
+        return user.getId();
+    }
+
+    void updateAds(CreateOrUpdateAdDto createOrUpdateAdDto, @MappingTarget Ad ad);
 
 }
