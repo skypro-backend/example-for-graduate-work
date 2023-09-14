@@ -2,19 +2,21 @@ package ru.skypro.homework.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.entity.Role;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-public class WebSecurityConfig {
+public class WebSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -38,7 +40,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf()
                 .disable()
                 .authorizeHttpRequests(
@@ -46,8 +48,11 @@ public class WebSecurityConfig {
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .mvcMatchers("/ads/**", "/users/**")
-                                        .authenticated())
+                                        .mvcMatchers("/ads/**")
+                                        .permitAll() // Просмотр объявлений без авторизации
+                                        .mvcMatchers("/ads/**", "/comments/**")
+                                        .authenticated() // Авторизованным пользователям доступно редактирование и удаление объявлений и комментариев
+                )
                 .cors()
                 .and()
                 .httpBasic(withDefaults());
