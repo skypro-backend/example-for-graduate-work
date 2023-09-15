@@ -1,4 +1,4 @@
-package ru.skypro.homework.controller;
+package ru.skypro.homework.controller.users;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -11,12 +11,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.NewPasswordDto;
-import ru.skypro.homework.dto.UpdateUserDto;
-import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.dto.auth.NewPasswordDto;
+import ru.skypro.homework.dto.users.UpdateUserDto;
+import ru.skypro.homework.dto.users.UserDto;
+import ru.skypro.homework.service.users.impl.UserService;
+
+import java.io.IOException;
 
 /**
  * Класс - контроллер для работы с авторизированным пользователем и его данными, содержащий набор API endpoints
@@ -29,6 +32,7 @@ import ru.skypro.homework.service.UserService;
 @RequestMapping("/users")
 @Tag(name = "Пользователи")
 @RequiredArgsConstructor
+@Validated
 public class UserController {
 
     private final UserService userService;
@@ -78,6 +82,7 @@ public class UserController {
     @PostMapping("/set_password")
     public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
         log.info("Новый пароль установлен");
+        userService.setPassword(newPasswordDto);
         return ResponseEntity.ok().build();
     }
 
@@ -125,7 +130,6 @@ public class UserController {
             )
     })
     @GetMapping("/me")
-
     public ResponseEntity<UserDto> getUser() {
         UserDto currentUserDto = userService.getUser();
         if (currentUserDto == null) {
@@ -178,7 +182,6 @@ public class UserController {
             )
     })
     @PatchMapping("/me")
-
     public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto updateUserDto) {
         UpdateUserDto newUser = userService.updateUser(updateUserDto);
         System.out.println("Новый пользователь создан или данные о пользователе обновлены");
@@ -210,13 +213,9 @@ public class UserController {
             )
     })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<byte[]> updateUserImage(@RequestPart MultipartFile image) {
-        log.info("Аватар пользователя успешно обновлен");
+    public ResponseEntity<?> updateUserImage(@RequestPart MultipartFile image) throws IOException {
+        log.info("Обновление аватара пользователя {}", image);
         userService.updateUserImage(image);
         return ResponseEntity.ok().build();
     }
-
-
-
-
 }

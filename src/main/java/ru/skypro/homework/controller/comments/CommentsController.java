@@ -6,10 +6,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.comments.CommentDto;
-import ru.skypro.homework.dto.comments.CommentsDto;
-import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDto;
+import ru.skypro.homework.dto.comments.out.CommentDto;
+import ru.skypro.homework.dto.comments.out.CommentsDto;
+import ru.skypro.homework.dto.comments.in.CreateOrUpdateCommentDto;
 import ru.skypro.homework.service.comments.CommentsService;
+
+import javax.validation.Valid;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -34,7 +36,7 @@ public class CommentsController {
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDto> addComment(@PathVariable Integer id,
-                                                 @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+                                                 @RequestBody @Valid CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         logger.info("Add comment with adId: {} and comment {} ", id, createOrUpdateCommentDto);
         CommentDto addComment = commentsService.addComment(id, createOrUpdateCommentDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(addComment);
@@ -51,7 +53,7 @@ public class CommentsController {
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDto> updateComment(@PathVariable Integer adId,
                                                     @PathVariable Integer commentId,
-                                                    @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+                                                    @RequestBody @Valid CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         logger.info("Update comment with adId {} and commentId {} and createOrUpdateDto {}", adId, commentId, createOrUpdateCommentDto);
         CommentDto updatedComment = commentsService.updateComment(adId, commentId, createOrUpdateCommentDto);
         return ResponseEntity.ok(updatedComment);

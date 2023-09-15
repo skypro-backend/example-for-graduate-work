@@ -1,10 +1,7 @@
-package ru.skypro.homework.dto.comments;
+package ru.skypro.homework.dto.comments.out;
 
 import lombok.Data;
 
-/**
- * DTO for {@link ru.skypro.homework.entity.comments.Comment}
- */
 @Data
 public class CommentDto {
     private Integer pk;
@@ -12,6 +9,6 @@ public class CommentDto {
     private String authorImage;
     private String authorFirstName;
     private String text;
-    private Integer createdAt;
+    private Long createdAt;
 
 }

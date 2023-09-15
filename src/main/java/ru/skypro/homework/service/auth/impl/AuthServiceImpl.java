@@ -1,47 +1,57 @@
 package ru.skypro.homework.service.auth.impl;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.auth.LoginDto;
 import ru.skypro.homework.dto.auth.RegisterDto;
+import ru.skypro.homework.entity.users.User;
+import ru.skypro.homework.entity.users.UserCustom;
+import ru.skypro.homework.mappers.CustomUserMapper;
+import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.service.auth.AuthService;
+import ru.skypro.homework.service.users.impl.UserCustomService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
+    private final UserCustomService userCustomService;
+    private final UserMapper userMapper;
+    private final CustomUserMapper customUserMapper;
     private final PasswordEncoder encoder;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
-        this.encoder = passwordEncoder;
-    }
-
-    @Override
-    public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
-            return false;
-        }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
+    public AuthServiceImpl(UserCustomService userCustomService,
+                           UserMapper userMapper,
+                           CustomUserMapper customUserMapper,
+                           PasswordEncoder encoder) {
+        this.userCustomService = userCustomService;
+        this.userMapper = userMapper;
+        this.customUserMapper = customUserMapper;
+        this.encoder = encoder;
     }
 
     @Override
     public boolean register(RegisterDto registerDto) {
-        if (manager.userExists(registerDto.getUsername())) {
+        User user = userMapper.toEntity(registerDto, customUserMapper);
+        UserCustom userCustom = new UserCustom(user);
+        if (!userCustomService.userExists(userCustom.getUsername())) {
+            userCustomService.createUser(userCustom);
+            return true;
+        } else {
             return false;
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(registerDto.getPassword())
-                        .username(registerDto.getUsername())
-                        .roles(registerDto.getRole().name())
-                        .build());
-        return true;
+    }
+
+    @Override
+    public boolean login(LoginDto loginDto) {
+        String username = loginDto.getUsername();
+        if (userCustomService.userExists(username)) {
+            String currentPassword = loginDto.getPassword();
+            UserDetails userDetails = userCustomService.loadUserByUsername(username);
+            return encoder.matches(currentPassword, userDetails.getPassword());
+        } else {
+            return false;
+        }
     }
 
 }
