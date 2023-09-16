@@ -12,10 +12,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDto;
-import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.service.impl.AvatarServiceImpl;
 
 import java.io.IOException;
 
@@ -27,6 +27,7 @@ import java.io.IOException;
 public class UserController {
 
     private final UserService userService;
+    private final AvatarServiceImpl avatarService;
 
     @Operation(
             summary = "Получение информации об авторизованном пользователе", tags = "Пользователи",
@@ -34,13 +35,14 @@ public class UserController {
                     @ApiResponse(
                             responseCode = "200", description = "OK",
                             content = {@Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = ExtendedAd.class))}),
+                                    schema = @Schema(implementation = UserDto.class))}),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
             }
     )
-    @PatchMapping("/me")
-    public UserDto getUser(@RequestBody Authentication authentication) {
-        return userService.get(authentication);
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> getUser(Authentication authentication) {
+        return ResponseEntity.ok(userService.get(authentication));
     }
 
 
@@ -54,8 +56,9 @@ public class UserController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
             }
     )
-    @PatchMapping("/me{update}")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, Authentication authentication) {
+    @PatchMapping("/me")
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,
+                                              Authentication authentication) {
         return ResponseEntity.ok((userService.update(userDto, authentication)));
 
     }
@@ -71,10 +74,11 @@ public class UserController {
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             }
     )
-    @PatchMapping("/set_password")
-    public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPassword, Authentication authentication) {
+    @PostMapping("/set_password")
+    public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPassword,
+                                                   Authentication authentication) {
         userService.updatePassword(newPassword, authentication);
-        return ResponseEntity.ok(newPassword);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
@@ -88,8 +92,16 @@ public class UserController {
             }
     )
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadAvatar(@PathVariable MultipartFile avatar, @RequestParam Authentication authentication) throws IOException {
-        userService.updateAvatar(avatar, authentication);
+    public ResponseEntity<String> updateUserAvatar(@RequestPart("image") MultipartFile avatarFile,
+                                                   Authentication authentication) throws IOException {
+        userService.updateAvatar(avatarFile, authentication);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(hidden = true)
+    @GetMapping(value = "/avatar/{id}", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public byte[] getAvatar(@PathVariable("id") Integer id) {
+
+        return avatarService.getImageById(id).getData();
     }
 }

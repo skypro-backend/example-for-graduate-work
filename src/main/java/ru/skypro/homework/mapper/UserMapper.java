@@ -1,6 +1,5 @@
 package ru.skypro.homework.mapper;
 
-import liquibase.pro.packaged.A;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -9,11 +8,12 @@ import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.Avatar;
 import ru.skypro.homework.entity.User;
 
-@Mapper(componentModel = "default")
+@Mapper(componentModel = "spring")
 public interface UserMapper {
 
     String AVATAR = "/users/avatar/";
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+
     @Named("avatarMapping")
     default String avatarMapping(Avatar avatar) {
         if (avatar == null) {
@@ -21,6 +21,7 @@ public interface UserMapper {
         }
         return AVATAR + avatar.getId();
     }
+
     @Mapping(target = "image", source = "avatar", qualifiedByName = "avatarMapping")
     UserDto toDTO(User user);
 

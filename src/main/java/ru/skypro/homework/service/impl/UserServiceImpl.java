@@ -28,8 +28,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final AvatarServiceImpl avatarService;
 
-    public User getByUsername(String username) {
-        return userRepository.findByUserNameIgnoreCase(username)
+    public User getByUsername(String userName) {
+        return userRepository.findByUserNameIgnoreCase(userName)
                 .orElseThrow(UsernameNotFoundException::new);
     }
 

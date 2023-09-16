@@ -10,7 +10,7 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Image;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AdsMapper {
     String ADS_IMAGE = "/ads/image/";
     AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
@@ -24,11 +24,12 @@ public interface AdsMapper {
     @Mapping(target = "author", source = "author.id")
     @Mapping(target = "image", source = "image", qualifiedByName = "imageMapping")
     AdsDto toDto(Ads ads);
+
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "authorFirstName", source = "author.firstName")
     @Mapping(target = "authorLastName", source = "author.lastName")
     @Mapping(target = "phone", source = "author.phone")
-    @Mapping(target = "email", source = "author.username")
+    @Mapping(target = "email", source = "author.userName")
     @Mapping(target = "image", source = "image", qualifiedByName = "imageMapping")
     ExtendedAd toExtendedAds(Ads ads);
 

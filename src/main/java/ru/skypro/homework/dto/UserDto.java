@@ -8,7 +8,7 @@ public class UserDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer id;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private String username;
+    private String userName;
     private String firstName;
     private String lastName;
     private String phone;
