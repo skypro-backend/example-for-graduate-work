@@ -6,7 +6,6 @@ import ru.skypro.homework.dto.ads.out.AdsDto;
 import ru.skypro.homework.dto.ads.in.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ads.out.ExtendedAdDto;
 import ru.skypro.homework.entity.ads.Ad;
-import ru.skypro.homework.entity.users.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,13 +31,6 @@ public interface AdMapper {
         adsDto.setCount(adList.size());
         adsDto.setResults(adList.stream().map(this::toAdDto).collect(Collectors.toList()));
         return adsDto;
-    }
-
-    default Integer toInteger(User user) {
-        if (user == null) {
-            return null;
-        }
-        return user.getId();
     }
 
     void updateAds(CreateOrUpdateAdDto createOrUpdateAdDto, @MappingTarget Ad ad);

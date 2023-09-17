@@ -124,4 +124,16 @@ public class AdsServiceImpl implements AdsService {
         }
     }
 
+    @Override
+    public byte[] getImage(Integer id) throws IOException {
+        Optional<Ad> adOptional = adsRepository.findByPkIs(id);
+        if (adOptional.isEmpty()) {
+            throw new NotFoundException("Объявление с таким id{} не найдено: " + id);
+        } else {
+            String urlToImage = adOptional.get().getImage();
+            Path fullPathToImageOfGoods = imageService.getFullPathToImageOfGoods(urlToImage);
+            return imageService.imageToByteArray(fullPathToImageOfGoods);
+        }
+    }
+
 }
