@@ -1,21 +1,14 @@
 package ru.skypro.homework.dto;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class CreateOrUpdateAd {
 
-    @NotBlank
     @Size(min = 8, max = 16)
     private String title;
 
@@ -23,7 +16,6 @@ public class CreateOrUpdateAd {
     @Max(value = 10_000_000)
     private int price;
 
-    @NotBlank
     @Size(min = 8, max = 64)
     private String description;
 

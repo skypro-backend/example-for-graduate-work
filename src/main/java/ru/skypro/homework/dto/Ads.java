@@ -1,15 +1,10 @@
 package ru.skypro.homework.dto;
 
-import lombok.*;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class Ads {
 
     private int count;

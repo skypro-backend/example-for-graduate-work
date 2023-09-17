@@ -1,5 +1,6 @@
 package ru.skypro.homework.dto;
 
+<<<<<<< HEAD
 import lombok.*;
 
 @Getter
@@ -8,6 +9,11 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+=======
+import lombok.Data;
+
+@Data
+>>>>>>> 1a3f150 (CommentsController)
 public class Ad {
 
     private int author;

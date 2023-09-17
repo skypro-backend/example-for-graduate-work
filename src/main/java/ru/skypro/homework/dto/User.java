@@ -1,19 +1,11 @@
 package ru.skypro.homework.dto;
 
-import lombok.*;
+import lombok.Data;
 
-import javax.validation.constraints.Email;
-
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class User {
 
     private int id;
-    @Email
     private String email;
     private String firstName;
     private String lastName;

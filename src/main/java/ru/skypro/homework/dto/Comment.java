@@ -1,13 +1,8 @@
 package ru.skypro.homework.dto;
 
-import lombok.*;
+import lombok.Data;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class Comment {
 
     private int author;

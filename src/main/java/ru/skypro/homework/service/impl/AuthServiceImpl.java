@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
                         .passwordEncoder(this.encoder::encode)
                         .password(register.getPassword())
                         .username(register.getUsername())
-                        .roles(register.getRole().name())
+                        .roles(register.getRole())     //                         .roles(register.getRole().name())
                         .build());
         return true;
     }

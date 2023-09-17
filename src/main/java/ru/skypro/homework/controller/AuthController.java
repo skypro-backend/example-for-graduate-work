@@ -18,7 +18,7 @@ import ru.skypro.homework.service.AuthService;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthService authService = null;       //  private final AuthService authService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {

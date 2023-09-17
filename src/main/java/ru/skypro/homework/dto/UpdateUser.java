@@ -1,24 +1,16 @@
 package ru.skypro.homework.dto;
 
-import lombok.*;
+import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class UpdateUser {
 
-    @NotBlank
     @Size(min = 3, max = 10)
     private String firstName;
 
-    @NotBlank
     @Size(min = 3, max = 10)
     private String lastName;
 
