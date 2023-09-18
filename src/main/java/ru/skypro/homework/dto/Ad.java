@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import lombok.*;
 
 @Getter
@@ -14,6 +15,11 @@ import lombok.Data;
 
 @Data
 >>>>>>> 1a3f150 (CommentsController)
+=======
+import lombok.Data;
+
+@Data
+>>>>>>> origin/CommentsController
 public class Ad {
 
     private int author;
