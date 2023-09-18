@@ -1,10 +1,16 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
+import lombok.*;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class NewPassword {
 
     @NotBlank
