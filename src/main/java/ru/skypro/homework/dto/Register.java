@@ -36,5 +36,5 @@ public class Register {
     private String phone;
 
     @NotBlank
-    private String role;
+    private Role role;
 }
