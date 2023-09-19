@@ -1,6 +1,8 @@
 package ru.skypro.homework.service.users.impl;
 
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +21,8 @@ public class UserCustomService implements UserDetailsService, UserDetailsManager
 
     private final PasswordEncoder passwordEncoder;
 
-    public UserCustomService(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
+    public UserCustomService(UsersRepository usersRepository,
+                             PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -67,7 +70,9 @@ public class UserCustomService implements UserDetailsService, UserDetailsManager
     @Override
     @Transactional
     public void changePassword(String oldPassword, String newPassword) {
-        User author = UserService.getAuthor();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserCustom userCustom = (UserCustom) authentication.getPrincipal();
+        User author = userCustom.getUser();
         String currentPassword = author.getPassword();
         if (passwordEncoder.matches(oldPassword, currentPassword)) {
             String encodeNewPassword = passwordEncoder.encode(newPassword);

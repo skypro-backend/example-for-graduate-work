@@ -78,5 +78,4 @@ public class ImageServiceImpl implements ImageService {
         return Files.readAllBytes(fullPathToImage);
     }
 
-
 }
