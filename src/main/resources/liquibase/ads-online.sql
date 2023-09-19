@@ -50,7 +50,3 @@
     created_at timestamp not null,
     text text not null
     );
-
-
----- changeset MERUZHAN:2
---    alter table users add column enable BOOLEAN
