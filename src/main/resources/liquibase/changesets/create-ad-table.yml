@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-ad-table
+      author: Svetlana
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: ad
+      changes:
+        - createTable:
+            tableName: ad
+            columns:
+              - column:
+                  name: pk
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: price
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author
+                  type: int
+        - addForeignKeyConstraint:
+            baseColumnNames: author
+            baseTableName: ad
+            constraintName: fk_ad_author
+            referencedColumnNames: id
+            referencedTableName: user
