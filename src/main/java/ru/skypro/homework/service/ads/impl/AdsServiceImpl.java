@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.ads.impl;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,9 +15,10 @@ import ru.skypro.homework.mappers.AdMapper;
 import ru.skypro.homework.repository.ads.AdsRepository;
 import ru.skypro.homework.service.ads.AdsService;
 import ru.skypro.homework.service.image.ImageService;
-import ru.skypro.homework.service.users.impl.UserService;
+import ru.skypro.homework.service.users.UserService;
 
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -29,11 +31,17 @@ public class AdsServiceImpl implements AdsService {
     private final AdsRepository adsRepository;
 
     private final ImageService imageService;
+    private final UserService userService;
 
-    public AdsServiceImpl(AdMapper adMapper, AdsRepository adsRepository, ImageService imageService) {
+    public AdsServiceImpl(AdMapper adMapper,
+                          AdsRepository adsRepository,
+                          ImageService imageService,
+                          UserService userService
+    ) {
         this.adMapper = adMapper;
         this.adsRepository = adsRepository;
         this.imageService = imageService;
+        this.userService = userService;
     }
 
     @Override
@@ -48,8 +56,9 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     @Transactional
+    @PreAuthorize("isAuthenticated()")
     public AdDto addAd(CreateOrUpdateAdDto createOrUpdateAdDto, MultipartFile image) {
-        User author = UserService.getAuthor();
+        User author = userService.getAuthor();
         try {
             String imagePath = imageService.consumeImageOfGoods(image);
             Ad ad = adMapper.toAd(createOrUpdateAdDto);
@@ -63,9 +72,17 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated()")
+    public AdsDto getAdsMe() {
+        User author = userService.getAuthor();
+        List<Ad> adsList = adsRepository.findAllByAuthor(author);
+        return adMapper.toAdsDto(adsList);
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority('ADMIN') or (hasAuthority('USER') and @authServiceImpl.isUserAllowedToChangeAds(authentication, #id))")
     public ExtendedAdDto getAds(Integer id) {
-        User author = UserService.getAuthor();
-        Optional<Ad> adOptional = adsRepository.findByAuthorAndPk(author, id);
+        Optional<Ad> adOptional = adsRepository.findByPkIs(id);
         if (adOptional.isEmpty()) {
             throw new NotFoundException("Объявление с таким id не найдено: " + id);
         } else {
@@ -76,21 +93,9 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     @Transactional
-    public void removeAd(Integer id) {
-        User author = UserService.getAuthor();
-        Optional<Ad> adOptional = adsRepository.findByAuthorAndPk(author, id);
-        if (adOptional.isEmpty()) {
-            throw new NotFoundException("Объявление с таким id не найдено: " + id);
-        } else {
-            Ad ad = adOptional.get();
-            adsRepository.delete(ad);
-        }
-    }
-
-    @Override
-    @Transactional
+    @PreAuthorize("hasAuthority('ADMIN') or (hasAuthority('USER') and @authServiceImpl.isUserAllowedToChangeAds(authentication, #id))")
     public AdDto updateAds(Integer id, CreateOrUpdateAdDto createOrUpdateAdDto) {
-        User author = UserService.getAuthor();
+        User author = userService.getAuthor();
         Optional<Ad> adOptional = adsRepository.findByAuthorAndPk(author, id);
         if (adOptional.isEmpty()) {
             throw new NotFoundException("Объявление с таким id не найдено: " + id);
@@ -103,24 +108,63 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto getAdsMe() {
-        User author = UserService.getAuthor();
-        List<Ad> adsList = adsRepository.findAllByAuthor(author);
-        return adMapper.toAdsDto(adsList);
+    @Transactional
+    @PreAuthorize("hasAuthority('ADMIN') or (hasAuthority('USER') and @authServiceImpl.isUserAllowedToChangeAds(authentication, #id))")
+    public void removeAd(Integer id) {
+        User author = userService.getAuthor();
+        Optional<Ad> adOptional = adsRepository.findByAuthorAndPk(author, id);
+        if (adOptional.isEmpty()) {
+            throw new NotFoundException("Объявление с таким id не найдено: " + id);
+        } else {
+            Ad ad = adOptional.get();
+            adsRepository.delete(ad);
+        }
     }
 
     @Override
+    @Transactional
+    @PreAuthorize("hasAuthority('ADMIN') or (hasAuthority('USER') and @authServiceImpl.isUserAllowedToChangeAds(authentication, #id))")
     public byte[] updateImage(Integer id, MultipartFile image) throws IOException {
         Optional<Ad> adOptional = adsRepository.findByPkIs(id);
         if (adOptional.isEmpty()) {
             throw new NotFoundException("Объявление с таким id не найдено: " + id);
         } else {
             Ad ad = adOptional.get();
-            String urlToImage = ad.getImage();
-            imageService.deleteImageOfGoods(urlToImage);
-            String urlToImageOfGoods = imageService.consumeImageOfGoods(image);
-            Path fullPathToImageOfGoods = imageService.getFullPathToImageOfGoods(urlToImageOfGoods);
-            return imageService.imageToByteArray(fullPathToImageOfGoods);
+            String currentUrlToImage = ad.getImage();
+
+            if (currentUrlToImage != null) {
+                imageService.deleteImageOfGoods(currentUrlToImage);
+            }
+            String newUrlToImage = imageService.consumeImageOfGoods(image);
+
+            ad.setImage(newUrlToImage);
+            adsRepository.save(ad);
+
+            Path fullPathToImage = imageService.getFullPathToImageOfGoods(newUrlToImage);
+            return imageService.imageToByteArray(fullPathToImage);
+        }
+    }
+
+    @Override
+    @PreAuthorize("isAuthenticated()")
+    public byte[] getImage(Integer id) throws IOException {
+        Optional<Ad> adOptional = adsRepository.findByPkIs(id);
+        if (adOptional.isEmpty()) {
+            throw new NotFoundException("Объявление с таким id не найдено: " + id);
+        } else {
+            String urlToImage = adOptional.get().getImage();
+
+            if (urlToImage == null || urlToImage.isEmpty()) {
+                throw new NotFoundException("У данного объявления нет картинки");
+            }
+            try {
+                Path fullPathToImageOfGoods = imageService.getFullPathToImageOfGoods(urlToImage);
+                return imageService.imageToByteArray(fullPathToImageOfGoods);
+            } catch (NoSuchFileException exception) {
+                throw new NotFoundException("Файл с картинкой не найден по данному адресу" + urlToImage);
+            } catch (IOException exception) {
+                throw new IOException("Ошибка при чтении файла ", exception);
+            }
         }
     }
 

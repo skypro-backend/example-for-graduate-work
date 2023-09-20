@@ -24,4 +24,6 @@ public interface AdsService {
     AdsDto getAdsMe();
 
     byte[] updateImage(Integer id, MultipartFile image) throws IOException;
+
+    byte[] getImage(Integer id) throws IOException;
 }

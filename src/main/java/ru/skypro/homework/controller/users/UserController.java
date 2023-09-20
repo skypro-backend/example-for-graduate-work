@@ -1,14 +1,15 @@
 package ru.skypro.homework.controller.users;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,205 +18,113 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.auth.NewPasswordDto;
 import ru.skypro.homework.dto.users.UpdateUserDto;
 import ru.skypro.homework.dto.users.UserDto;
-import ru.skypro.homework.service.users.impl.UserService;
+import ru.skypro.homework.service.image.ImageService;
+import ru.skypro.homework.service.users.impl.UserServiceImpl;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-/**
- * Класс - контроллер для работы с авторизированным пользователем и его данными, содержащий набор API endpoints
- *
- * @see UserService
- */
-@Slf4j
+@Tag(name = "Users")
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
-@RequestMapping("/users")
-@Tag(name = "Пользователи")
-@RequiredArgsConstructor
+@Slf4j
 @Validated
+@RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    @Operation(
-            summary = "Обновление пароля пользователя",
-            description = "Получение нового пароля пользователя из тела запроса"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Ок. Новый пароль усешно установлен",
-                    content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = UserDto.class))
-                            )
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "Unauthorized",
-                    content = {
-                            @Content(
+    private final ImageService imageService;
 
-                            )}
+    public UserController(UserServiceImpl userService, ImageService imageService) {
+        this.userService = userService;
+        this.imageService = imageService;
+    }
 
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "Forbidden",
-                    content = {
-                            @Content(
-
-                            )}
-
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Not found",
-                    content = {
-                            @Content(
-
-                            )}
-            )
-    })
     @PostMapping("/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
-        log.info("Новый пароль установлен");
+    @Operation(summary = "Set new password")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "ОK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+    })
+    public ResponseEntity<Void> setPassword(
+            @Parameter(description = "DTO with current and new password", required = true, content = {@Content(mediaType = "application/json", schema = @Schema(implementation = NewPasswordDto.class))})
+            @RequestBody NewPasswordDto newPasswordDto) {
         userService.setPassword(newPasswordDto);
+        log.info("New password set");
         return ResponseEntity.ok().build();
     }
 
-
-    @Operation(
-            summary = "Получение информации об авторизованном пользователе",
-            description = "Для получения данных о пользоватееле ничего не нужно вводить"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Ок. Данные о пользователе успешно получены",
-                    content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = UserDto.class))
-                            )
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "Unauthorized",
-                    content = {
-                            @Content(
-
-                            )}
-
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "Forbidden",
-                    content = {
-                            @Content(
-
-                            )}
-
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Not found",
-                    content = {
-                            @Content(
-
-                            )}
-            )
-    })
     @GetMapping("/me")
+    @Operation(summary = "Get user details")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "ОK", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     public ResponseEntity<UserDto> getUser() {
         UserDto currentUserDto = userService.getUser();
         if (currentUserDto == null) {
             return ResponseEntity.notFound().build();
         }
-        System.out.println("Данные о пользователе получены");
+        log.info("Got user detail successfully");
         return ResponseEntity.ok(currentUserDto);
     }
 
-    @Operation(
-            summary = "Обновление информации об авторизованном пользователе",
-            description = "Обновление (получение) данных о пользователе через тело запроса"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Ок. Данные о пользователе успешно обновлены",
-                    content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = UpdateUserDto.class))
-                            )
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "Unauthorized",
-                    content = {
-                            @Content(
-
-                            )}
-
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "Forbidden",
-                    content = {
-                            @Content(
-
-                            )}
-
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Not found",
-                    content = {
-                            @Content(
-
-                            )}
-            )
-    })
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto updateUserDto) {
+    @Operation(summary = "Update user details")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "ОK", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UpdateUserDto.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    public ResponseEntity<UpdateUserDto> updateUser(
+            @Parameter(description = "DTO with new user data", required = true, content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UpdateUserDto.class))})
+            @RequestBody UpdateUserDto updateUserDto) {
         UpdateUserDto newUser = userService.updateUser(updateUserDto);
-        System.out.println("Новый пользователь создан или данные о пользователе обновлены");
+        log.info("User updated successfully");
         return ResponseEntity.ok(newUser);
     }
 
-    @Operation(
-            summary = "Обновление аватара авторизованного пользователя",
-            description = "Обновление аватара пользователя через тело запроса"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Ок. Аватар пользователя успешно обновлен",
-                    content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = UserDto.class))
-                            )
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Not found",
-                    content = {
-                            @Content(
-
-                            )}
-            )
-    })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateUserImage(@RequestPart MultipartFile image) throws IOException {
-        log.info("Обновление аватара пользователя {}", image);
+    @Operation(summary = "Change user's avatar")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "OK", content = @Content),
+            @ApiResponse(responseCode = "401",description = "Unauthorized", content = @Content)
+    })
+    public ResponseEntity<?> updateUserImage(
+            @Parameter(required = true, content = {@Content(mediaType = "multipart/form-data", schema = @Schema(type = "string", format = "binary"))})
+            @RequestBody MultipartFile image
+    ) throws IOException {
         userService.updateUserImage(image);
+        log.info("Avatar was successfully changed to new");
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping(value = "/me/image", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Get user's avatar")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "OK", content = {@Content(mediaType = "application/octet-stream", schema = @Schema(type = "string", format = "binary"))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
+    })
+    public ResponseEntity<byte[]> getUserImage() throws IOException {
+        byte[] imageBytes = userService.getUserImage();
+
+        UserDto userDto = userService.getUser();
+        String urlToImage = userDto.getImage();
+        Path fullPathToImageOfAvatars = imageService.getFullPathToImageOfAvatars(urlToImage);
+
+        long fileSize = Files.size(fullPathToImageOfAvatars);
+        String mediaType = Files.probeContentType(fullPathToImageOfAvatars);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.parseMediaType(mediaType));
+        httpHeaders.setContentLength(fileSize);
+
+        log.info("Avatar got successfully");
+        return new ResponseEntity<>(imageBytes, httpHeaders, HttpStatus.OK);
+    }
+
 }

@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.comments.impl;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.comments.out.CommentDto;
@@ -13,7 +14,7 @@ import ru.skypro.homework.mappers.CommentMapper;
 import ru.skypro.homework.repository.ads.AdsRepository;
 import ru.skypro.homework.repository.comments.CommentsRepository;
 import ru.skypro.homework.service.comments.CommentsService;
-import ru.skypro.homework.service.users.impl.UserService;
+import ru.skypro.homework.service.users.UserService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,14 +26,20 @@ public class CommentsServiceImpl implements CommentsService {
     private final CommentsRepository commentsRepository;
     private final AdsRepository adsRepository;
     private final CommentMapper commentMapper;
+    private final UserService userService;
 
-    public CommentsServiceImpl(CommentsRepository commentsRepository, AdsRepository adsRepository, CommentMapper commentMapper) {
+    public CommentsServiceImpl(CommentsRepository commentsRepository,
+                               AdsRepository adsRepository,
+                               CommentMapper commentMapper,
+                               UserService userService) {
         this.commentsRepository = commentsRepository;
         this.adsRepository = adsRepository;
         this.commentMapper = commentMapper;
+        this.userService = userService;
     }
 
     @Override
+    @PreAuthorize("isAuthenticated()")
     public CommentsDto getComments(Integer adId) {
         Optional<Ad> adOptional = adsRepository.findByPkIs(adId);
         if (adOptional.isEmpty()) {
@@ -45,13 +52,14 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN') or (hasAuthority('USER') and @authServiceImpl.isUserAllowedToChangeAds(authentication, #id))")
     public CommentDto addComment(Integer id, CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         Optional<Ad> adOptional = adsRepository.findById(id);
         if (adOptional.isEmpty()) {
             throw new NotFoundException("Объявление с таким id не найдено: " + id);
         } else {
             Ad ad = adOptional.get();
-            User author = UserService.getAuthor();
+            User author = userService.getAuthor();
             Comment comment = new Comment();
             comment.setText(createOrUpdateCommentDto.getText());
             comment.setCreatedAt(LocalDateTime.now());
@@ -64,18 +72,7 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     @Transactional
-    public void deleteComment(Integer adId, Integer commentId) {
-        Optional<Comment> commentOptional = commentsRepository.findByAd_PkAndPk(adId, commentId);
-        if (commentOptional.isEmpty()) {
-            throw new NotFoundException("Комментарий с таким id не найден: " + commentId);
-        } else {
-            Comment comment = commentOptional.get();
-            commentsRepository.delete(comment);
-        }
-    }
-
-    @Override
-    @Transactional
+    @PreAuthorize("hasAuthority('ADMIN') or (hasAuthority('USER') and @authServiceImpl.isUserAllowedToChangeComments(authentication, #adId, #commentId))")
     public CommentDto updateComment(Integer adId, Integer commentId, CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         Optional<Comment> commentOptional = commentsRepository.findByAd_PkAndPk(adId, commentId);
         if (commentOptional.isEmpty()) {
@@ -88,4 +85,18 @@ public class CommentsServiceImpl implements CommentsService {
             return commentMapper.toCommentDto(comment);
         }
     }
+
+    @Override
+    @Transactional
+    @PreAuthorize("hasAuthority('ADMIN') or (hasAuthority('USER') and @authServiceImpl.isUserAllowedToChangeComments(authentication, #adId, #commentId))")
+    public void deleteComment(Integer adId, Integer commentId) {
+        Optional<Comment> commentOptional = commentsRepository.findByAd_PkAndPk(adId, commentId);
+        if (commentOptional.isEmpty()) {
+            throw new NotFoundException("Комментарий с таким id не найден: " + commentId);
+        } else {
+            Comment comment = commentOptional.get();
+            commentsRepository.delete(comment);
+        }
+    }
+
 }
