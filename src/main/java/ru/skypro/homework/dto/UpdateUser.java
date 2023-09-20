@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto;
 
 import lombok.*;
+import ru.skypro.homework.entity.UserEntity;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -24,5 +25,21 @@ public class UpdateUser {
 
     @Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
     private String phone;
+
+    public static UpdateUser fromUserEntity(UserEntity userEntity) {
+        UpdateUser updateUser = new UpdateUser();
+        updateUser.setFirstName(userEntity.getFirstName());
+        updateUser.setLastName(userEntity.getLastName());
+        updateUser.setPhone(userEntity.getPhone());
+        return updateUser;
+    }
+
+    public UserEntity toUserEntity () {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setFirstName(this.getFirstName());
+        userEntity.setLastName(this.getLastName());
+        userEntity.setPassword(this.getPhone());
+        return userEntity;
+    }
 
 }
