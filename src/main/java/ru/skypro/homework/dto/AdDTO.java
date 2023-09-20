@@ -10,8 +10,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AdDTO {
     int author;
-    String image;
     int pk;
     int price;
     int title;
+    String image;
 }
