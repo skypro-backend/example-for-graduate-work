@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user-table
+      author: Svetlana
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: firstName
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lastName
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(12)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(5)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image
+                  type: varchar(255)
+                  constraints:
+                    nullable: true

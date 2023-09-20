@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-comment-table
+      author: Svetlana
+      changes:
+        - createTable:
+            tableName: comment
+            columns:
+              - column:
+                  name: pk
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: author
+                  type: int
+              - column:
+                  name: authorImage
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: authorFirstName
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: createdAt
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: author
+            baseTableName: comment
+            constraintName: fk_comment_author
+            referencedColumnNames: id
+            referencedTableName: user
