@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.exeptions.ExceptionService;
+import ru.skypro.homework.exeptions.ForbiddenException;
+import ru.skypro.homework.exeptions.UnauthorizedException;
 
 import javax.transaction.Transactional;
 
@@ -27,7 +30,7 @@ public class UserController {
         UpdateUserDTO updateUserDTO = new UpdateUserDTO();
 
         if (!isUserAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new UnauthorizedException("Вы не прошли авторизацию");
         }
 
         return ResponseEntity.ok().body(updateUserDTO);
@@ -38,12 +41,12 @@ public class UserController {
 
         NewPasswordDTO newPasswordDTO = new NewPasswordDTO();
 
-        if (!isUserAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        if (!isUserAuthorized()) {
+            throw new ForbiddenException("Доступ запрещен");
         }
 
-        if (!isUserAuthorized()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        if (!isUserAuthenticated()) {
+            throw new UnauthorizedException("Вы не прошли авторизацию");
         }
 
         return ResponseEntity.ok().build();
@@ -55,7 +58,7 @@ public class UserController {
         UserDto userDto = new UserDto();
 
         if (!isUserAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new UnauthorizedException("Вы не прошли авторизацию");
         }
 
         return ResponseEntity.ok().body(userDto);
@@ -65,7 +68,7 @@ public class UserController {
     public ResponseEntity<?> updateUserAvatar(@RequestBody String image) {
 
         if (!isUserAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new UnauthorizedException("Вы не прошли авторизацию");
         }
 
         return ResponseEntity.ok().build();
