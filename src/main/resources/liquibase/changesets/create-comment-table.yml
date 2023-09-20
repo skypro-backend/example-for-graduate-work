@@ -2,6 +2,11 @@ databaseChangeLog:
   - changeSet:
       id: create-comment-table
       author: Svetlana
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: comment
       changes:
         - createTable:
             tableName: comment
@@ -17,7 +22,7 @@ databaseChangeLog:
                   type: int
               - column:
                   name: authorImage
-                  type: varchar(255)
+                  type: varchar
                   constraints:
                     nullable: false
               - column:
@@ -27,12 +32,12 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: createdAt
-                  type: int
+                  type: bigint
                   constraints:
                     nullable: false
               - column:
                   name: text
-                  type: varchar(255)
+                  type: varchar
                   constraints:
                     nullable: false
         - addForeignKeyConstraint:

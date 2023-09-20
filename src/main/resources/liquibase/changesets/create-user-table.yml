@@ -2,6 +2,11 @@ databaseChangeLog:
   - changeSet:
       id: create-user-table
       author: Svetlana
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: user
       changes:
         - createTable:
             tableName: user
@@ -17,6 +22,7 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     nullable: false
+                    unique: true
               - column:
                   name: firstName
                   type: varchar(20)
@@ -32,6 +38,7 @@ databaseChangeLog:
                   type: varchar(12)
                   constraints:
                     nullable: false
+                    unique: true
               - column:
                   name: role
                   type: varchar(5)
@@ -39,6 +46,6 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: image
-                  type: varchar(255)
+                  type: varchar
                   constraints:
                     nullable: true
