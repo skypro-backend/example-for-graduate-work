@@ -1,9 +1,9 @@
-package ru.skypro.homework.dto.comment;
+package ru.skypro.homework.dto.ads;
 
 import lombok.Data;
 
 @Data
-public class Comment {
+public class Ad {
     private int author;
     private String image;
     private int pk;
