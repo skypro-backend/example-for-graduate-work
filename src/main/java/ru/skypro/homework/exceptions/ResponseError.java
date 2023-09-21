@@ -1,4 +1,4 @@
-package ru.skypro.homework.exeptions;
+package ru.skypro.homework.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

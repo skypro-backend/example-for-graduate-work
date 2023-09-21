@@ -1,4 +1,4 @@
-package ru.skypro.homework.exeptions;
+package ru.skypro.homework.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

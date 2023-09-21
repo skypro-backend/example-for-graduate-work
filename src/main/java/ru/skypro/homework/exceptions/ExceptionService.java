@@ -1,4 +1,4 @@
-package ru.skypro.homework.exeptions;
+package ru.skypro.homework.exceptions;
 
 import org.springframework.stereotype.Service;
 
