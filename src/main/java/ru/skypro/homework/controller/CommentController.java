@@ -18,7 +18,7 @@ import javax.transaction.Transactional;
 @RestController
 @Transactional
 @RequestMapping("/ads")
-public class CommentaryController {
+public class CommentController {
 
     @Operation(summary = "Получение комментариев объявления")
     @GetMapping("/{id}/comments")
