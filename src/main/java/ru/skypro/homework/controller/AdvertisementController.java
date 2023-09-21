@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.Ads;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
@@ -49,12 +50,12 @@ public class AdvertisementController {
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = Ad.class)
                             )),
-                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(hidden = true))),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
             }
     )
-    @PostMapping
-    public ResponseEntity<Ad> addAd(@RequestPart Ad createAd) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Ad> addAd(@RequestPart CreateOrUpdateAd properties,
+                                    @RequestPart MultipartFile image) {
         return ResponseEntity.ok(new Ad());
     }
 
@@ -144,7 +145,7 @@ public class AdvertisementController {
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
             }
     )
-    @PostMapping("/{id}/image")
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateImage(@PathVariable int id,
                                          @RequestParam String image) {
         return ResponseEntity.ok(new Ad().getImage());
