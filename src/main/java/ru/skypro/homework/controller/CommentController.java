@@ -16,21 +16,12 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RestController
-@Transactional
 @RequestMapping("/ads")
 public class CommentController {
 
     @Operation(summary = "Получение комментариев объявления")
     @GetMapping("/{id}/comments")
     public ResponseEntity<AdsDTO> receivingAdComments(@PathVariable int id) {
-
-        if (!isNotFound()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        if (!isUserAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
 
         AdsDTO adsDTO = new AdsDTO();
 
@@ -41,14 +32,6 @@ public class CommentController {
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDTO> addComment(@PathVariable int id, @RequestBody String text) {
 
-        if (!isNotFound()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        if (!isUserAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
         CommentDTO commentDTO = new CommentDTO();
 
         return ResponseEntity.ok().body(commentDTO);
@@ -58,55 +41,14 @@ public class CommentController {
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable int adId, @PathVariable int commentId) {
 
-        if (!isNotFound()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        if (!isUserAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        if (!isUserAuthorized()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Обновление комментария")
+    @Operation(summary = "Удаление комментария")
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId, @PathVariable int commentId){
 
-        if (!isNotFound()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        if (!isUserAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        if (!isUserAuthorized()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
         CommentDTO commentDTO = new CommentDTO();
         return ResponseEntity.ok().body(commentDTO);
-    }
-
-    // 401 Unauthorized (Неавторизован):
-    private boolean isUserAuthenticated() {
-        //Проверки аутентификации пользователя
-        return true;
-    }
-
-    // 403 Forbidden (Запрещено):
-    private boolean isUserAuthorized() {
-        // Ппроверка авторизации пользователя
-        return true;
-    }
-
-    // 404 Forbidden (Не найден):
-    private boolean isNotFound() {
-        return true;
     }
 }

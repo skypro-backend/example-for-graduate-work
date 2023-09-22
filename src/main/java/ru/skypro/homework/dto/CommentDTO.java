@@ -3,6 +3,9 @@ package ru.skypro.homework.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -12,7 +15,7 @@ public class CommentDTO {
     int author;
     String authorImage;
     String authorFirstName;
-    int createdAt;
+    LocalDateTime createdAt;
     int pk;
     String text;
 }
