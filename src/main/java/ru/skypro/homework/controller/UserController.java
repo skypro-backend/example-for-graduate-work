@@ -5,8 +5,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
@@ -17,7 +19,6 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RestController
-@Transactional
 @RequestMapping("/users")
 public class UserController {
 
@@ -26,14 +27,6 @@ public class UserController {
     public ResponseEntity<NewPasswordDTO> updatePassword(@RequestBody NewPasswordDTO user) {
 
         NewPasswordDTO newPasswordDTO = new NewPasswordDTO();
-
-        if (!isUserAuthorized()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        if (!isUserAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
 
         return ResponseEntity.ok().body(newPasswordDTO);
     }
@@ -44,10 +37,6 @@ public class UserController {
 
         UserDto userDto = new UserDto();
 
-        if (!isUserAuthorized()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
         return ResponseEntity.ok().body(userDto);
     }
 
@@ -57,34 +46,13 @@ public class UserController {
 
         UpdateUserDTO updateUserDTO = new UpdateUserDTO();
 
-        if (!isUserAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
         return ResponseEntity.ok().body(updateUserDTO);
     }
 
     @Operation(summary = "Обновление аватара авторизованного пользователя")
-    @PatchMapping("/me/image")
-    public ResponseEntity<?> updateUserAvatar(@RequestBody String image) {
-
-        if (!isUserAuthorized()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateUserAvatar(@RequestPart MultipartFile image) {
 
         return ResponseEntity.ok().build();
-    }
-
-    // 401 Unauthorized (Неавторизован):
-    private boolean isUserAuthenticated() {
-        //Проверки аутентификации пользователя
-        return true;
-    }
-
-    // 403 Forbidden (Запрещено):
-    private boolean isUserAuthorized() {
-
-        // Ппроверка авторизации пользователя
-        return true;
     }
 }
