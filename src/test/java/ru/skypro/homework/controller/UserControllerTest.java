@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockPart;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -61,7 +60,6 @@ public class UserControllerTest {
         user.setPhone("+79999999999");
         user.setPassword(encoder.encode("password"));
         user.setRole(Role.USER);
-        user.setEnable(true);
         userRepository.save(user);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUserName());
@@ -78,6 +76,7 @@ public class UserControllerTest {
 
     @Test
     public void testForRetrievingUserDataFromDb() throws Exception {
+
         mockMvc.perform(get("/users/me")
                         .with(authentication(auth)))
                 .andExpect(status().isOk())
@@ -105,7 +104,6 @@ public class UserControllerTest {
         user.setFirstName(newFirstName);
         user.setLastName(newLastName);
 
-
         mockMvc.perform(patch("/users/me")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user))
@@ -117,6 +115,7 @@ public class UserControllerTest {
 
     @Test
     public void testUpdateUserAvatar() throws Exception {
+
         mockMvc.perform(patch("/users/me/image")
                         .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                         .with(request -> {
@@ -141,5 +140,4 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().bytes(avatar.getData()));
     }
-
 }

@@ -7,10 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.PersonalizedUserInformation;
-import ru.skypro.homework.dto.Register;
-import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.exception.IncorrectUsernameException;
 import ru.skypro.homework.repository.UserRepository;
 
 import java.util.Optional;
@@ -33,21 +30,4 @@ public class PersonalizedUserInformationServiceImpl implements UserDetailsServic
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
     }
-
-    public void createUser(Register registerReq) {
-        if (userRepository.findByUserNameIgnoreCase(registerReq.getUserName()).isPresent()) {
-            throw new IncorrectUsernameException();
-        }
-
-        User user = new User();
-        user.setUserName(registerReq.getUserName());
-        user.setPassword(passwordEncoder.encode(registerReq.getPassword()));
-        user.setRole(Role.USER);
-        user.setFirstName(registerReq.getFirstName());
-        user.setLastName(registerReq.getLastName());
-        user.setPhone(registerReq.getPhone());
-        user.setEnable(true);
-        userRepository.save(user);
-    }
-
 }

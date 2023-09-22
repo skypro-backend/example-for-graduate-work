@@ -48,7 +48,7 @@ public class AuthController {
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "OK",
-                            content = { @Content(mediaType = "application/json",
+                            content = {@Content(mediaType = "application/json",
                                     schema = @Schema(implementation = Register.class))}),
                     @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),

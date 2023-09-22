@@ -50,8 +50,9 @@ public class AdsController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(adsService.create(imageFile, createOrUpdateAd, authentication));
     }
+
     @Operation(
-            summary = "Обновить информацию об объявлении",tags = "Объявления",
+            summary = "Обновить информацию об объявлении", tags = "Объявления",
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "OK",
@@ -67,12 +68,13 @@ public class AdsController {
                                          @RequestBody CreateOrUpdateAd createOrUpdateAd) {
         return ResponseEntity.ok(adsService.update(id, createOrUpdateAd));
     }
+
     @Operation(
-            summary = "Обновить картинку объявления",tags = "Объявления",
+            summary = "Обновить картинку объявления", tags = "Объявления",
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "OK",
-                            content = { @Content(mediaType = "application/json",
+                            content = {@Content(mediaType = "application/json",
                                     schema = @Schema(implementation = UserDto.class))}),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
             }
@@ -83,6 +85,7 @@ public class AdsController {
         adsService.updateAdsImage(id, imageFile);
         return ResponseEntity.ok().build();
     }
+
     @Operation(
             summary = "Получить объявления авторизованного пользователя", tags = "Объявления",
             responses = {

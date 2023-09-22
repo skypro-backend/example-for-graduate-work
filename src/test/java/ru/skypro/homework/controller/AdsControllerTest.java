@@ -66,11 +66,11 @@ public class AdsControllerTest {
         user.setPhone("+79999999999");
         user.setPassword(passwordEncoder.encode("PASSWORD"));
         user.setRole(Role.USER);
-        user.setEnable(true);
         userRepository.save(user);
 
         UserDetails userDetails = userInformationService.loadUserByUsername(user.getUserName());
-        authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+        authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
+                userDetails.getPassword(), userDetails.getAuthorities());
 
         ads.setTitle("ADS");
         ads.setDescription("DESC");
@@ -86,17 +86,33 @@ public class AdsControllerTest {
 
     @Test
     public void testGetAllAdsReturnsCorrectAdsList() throws Exception {
-        mockMvc.perform(get("/ads").with(authentication(authentication))).andExpect(status().isOk()).andExpect(jsonPath("$").exists()).andExpect(jsonPath("$.count").isNumber()).andExpect(jsonPath("$.results").isArray());
+
+        mockMvc.perform(get("/ads").with(authentication(authentication)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.count").isNumber())
+                .andExpect(jsonPath("$.results").isArray());
     }
 
     @Test
     public void testGetInformationAndReturnCorrectAds() throws Exception {
-        mockMvc.perform(get("/ads/{id}", ads.getId()).with(authentication(authentication))).andExpect(status().isOk()).andExpect(jsonPath("$.pk").value(ads.getId())).andExpect(jsonPath("$.email").value(user.getUserName())).andExpect(jsonPath("$.authorFirstName").value(user.getFirstName())).andExpect(jsonPath("$.authorLastName").value(user.getLastName())).andExpect(jsonPath("$.phone").value(user.getPhone())).andExpect(jsonPath("$.title").value(ads.getTitle())).andExpect(jsonPath("$.description").value(ads.getDescription())).andExpect(jsonPath("$.price").value(ads.getPrice()));
+
+        mockMvc.perform(get("/ads/{id}", ads.getId()).with(authentication(authentication)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pk").value(ads.getId()))
+                .andExpect(jsonPath("$.email").value(user.getUserName()))
+                .andExpect(jsonPath("$.authorFirstName").value(user.getFirstName()))
+                .andExpect(jsonPath("$.authorLastName").value(user.getLastName()))
+                .andExpect(jsonPath("$.phone").value(user.getPhone()))
+                .andExpect(jsonPath("$.title").value(ads.getTitle()))
+                .andExpect(jsonPath("$.description").value(ads.getDescription()))
+                .andExpect(jsonPath("$.price").value(ads.getPrice()));
     }
 
     @Test
     public void testRemoveAdsWhenRemove() throws Exception {
-        mockMvc.perform(delete("/ads/{id}", ads.getId()).with(authentication(authentication))).andExpect(status().isOk());
+
+        mockMvc.perform(delete("/ads/{id}", ads.getId()).with(authentication(authentication)))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -109,16 +125,26 @@ public class AdsControllerTest {
         ads.setPrice(newPrice);
         adsRepository.save(ads);
 
-        mockMvc.perform(patch("/ads/{id}", ads.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(ads)).with((authentication(authentication)))).andExpect(status().isOk()).andExpect(jsonPath("$.title").value(newTitle)).andExpect(jsonPath("$.description").value(newDesc)).andExpect(jsonPath("$.price").value(newPrice));
+        mockMvc.perform(patch("/ads/{id}", ads.getId()).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(ads)).with((authentication(authentication))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(newTitle))
+                .andExpect(jsonPath("$.description").value(newDesc))
+                .andExpect(jsonPath("$.price").value(newPrice));
     }
 
     @Test
     public void testGetAdsAndReturnAdsList() throws Exception {
-        mockMvc.perform(get("/ads/me").with(authentication(authentication))).andExpect(status().isOk()).andExpect(jsonPath("$").exists()).andExpect(jsonPath("$.count").isNumber()).andExpect(jsonPath("$.results").isArray());
+
+        mockMvc.perform(get("/ads/me").with(authentication(authentication)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.count").isNumber())
+                .andExpect(jsonPath("$.results").isArray());
     }
 
     @Test
     public void testUpdateAdsImage() throws Exception {
+
         mockMvc.perform(patch("/ads/{id}/image", ads.getId()).contentType(MediaType.MULTIPART_FORM_DATA_VALUE).with(request -> {
             request.addPart(imageFile);
             return request;
@@ -133,6 +159,8 @@ public class AdsControllerTest {
         ads.setImage(image);
         adsRepository.save(ads);
 
-        mockMvc.perform(get("/ads/image/{id}", image.getId()).contentType(MediaType.MULTIPART_FORM_DATA_VALUE).with(authentication(authentication))).andExpect(status().isOk()).andExpect(content().bytes(image.getData()));
+        mockMvc.perform(get("/ads/image/{id}", image.getId()).
+                        contentType(MediaType.MULTIPART_FORM_DATA_VALUE).with(authentication(authentication)))
+                .andExpect(status().isOk()).andExpect(content().bytes(image.getData()));
     }
 }
