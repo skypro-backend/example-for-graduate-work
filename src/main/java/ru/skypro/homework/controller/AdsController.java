@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 
 import javax.transaction.Transactional;
@@ -19,7 +20,6 @@ import javax.xml.crypto.OctetStreamData;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RestController
-@Transactional
 @RequestMapping("/ads")
 public class AdsController {
 
@@ -40,7 +40,7 @@ public class AdsController {
                 @ApiResponse(responseCode = "401", description = "Unauthorized")}
         )
         @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-        public ResponseEntity<AdDTO> addAd(@RequestBody AdDTO ad) {
+        public ResponseEntity<AdDTO> addAd(@RequestParam AdDTO ad, @RequestPart MultipartFile image) {
                 return ResponseEntity.ok(ad);
         }
 
@@ -99,8 +99,8 @@ public class AdsController {
                 @ApiResponse(responseCode = "403", description = "Forbidden"),
                 @ApiResponse(responseCode = "404", description = "Not found"),
         })
-        @PatchMapping(value = "/{id}/image" , consumes = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-        public ResponseEntity<OctetStreamData> updateImageByAd(@PathVariable int id, @RequestBody OctetStreamData data) {
-                return ResponseEntity.ok(data);
+        @PatchMapping(value = "/{id}/image" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+        public ResponseEntity<OctetStreamData> updateImage(@PathVariable int id, @RequestPart MultipartFile image) {
+                return ResponseEntity.ok().build();
         }
 }
