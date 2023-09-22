@@ -83,6 +83,7 @@ public class UserController {
 
     // 403 Forbidden (Запрещено):
     private boolean isUserAuthorized() {
+
         // Ппроверка авторизации пользователя
         return true;
     }
