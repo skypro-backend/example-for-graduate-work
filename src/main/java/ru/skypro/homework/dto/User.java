@@ -1,32 +1,51 @@
 package ru.skypro.homework.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 @Data
 public class User {
-    @Schema(description = "id пользователя")
-    public long id;
+    private Integer id; // ($int32)
+    private String email; //логин пользователя
+    private String firstName; //имя пользователя
+    private String lastName; //фамилия пользователя
+    private String phone; //телефон пользователя
+    private String role; //роль пользователя
+    private String image; // ссылка на аватар пользователя
 
-    @Schema(description = "Имя пользователя")
-    public String firstName;
+    public static User fromUser(User user) {
+        User dto = new User();
+        dto.setId(user.getId());
+        dto.setEmail(user.getEmail());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        dto.setPhone(user.getPhone());
+        dto.setRole(user.getRole().toString());
+        dto.setImage(user.getImage());
 
-    @Schema(description = "Фамилия пользователя")
-    public String lastName;
+        return dto;
+    }
 
-    @Schema(description = "email пользователя")
-    public String email;
 
-    @Schema(description = "Телефон пользователя")
-    public String phone;
+    public User toUser() {
+        User user = new User();
+        user.setId(this.getId());
+        user.setEmail(this.getEmail());
+        user.setFirstName(this.getFirstName());
+        user.setLastName(this.getLastName());
+        user.setPhone(this.getPhone());
+        if (this.getRole() == null) {
+            user.setRole(Role.USER.name());
+        } else {
+            user.setRole(this.getRole());
+        }
+        user.setImage(this.getImage());
 
-    @JsonProperty(value = "image")
-    @Schema(description = "Путь на аватар пользователя")
-    public String avatarPath;
-
+        return user;
+    }
 }

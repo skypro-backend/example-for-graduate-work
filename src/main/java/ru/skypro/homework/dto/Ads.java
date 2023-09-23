@@ -9,5 +9,5 @@ import java.util.List;
 @Data
 public class Ads {
     private Integer count; //($int32) общее кол-во объявлений
-    private List<Ad> results;
+    private List<AdDto> results;
 }
