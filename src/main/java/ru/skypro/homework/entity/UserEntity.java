@@ -44,6 +44,7 @@ public class UserEntity {
             message = "Введите номер в формате +7 (000) 000-00-00")
     private String phone;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     private String image;

@@ -17,6 +17,7 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.service.CommentsService;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -41,7 +42,7 @@ public class CommentsController {
     })
     @PostMapping("{id}/comments")
     public ResponseEntity<Comments> addComment(@PathVariable("id") Long id,
-                                                 @RequestBody CreateOrUpdateComment createComment) {
+                                               @Valid @RequestBody CreateOrUpdateComment createComment) {
         Optional<Comments> optionalCommentDto = commentService.createComment(SecurityContextHolder
                 .getContext()
                 .getAuthentication()
@@ -105,8 +106,8 @@ public class CommentsController {
     })
     @PatchMapping("{adId}/comments/{commentId}")
     public ResponseEntity<Comments> updateComment(@PathVariable("adId") Long adId,
-                                                    @PathVariable("commentId") Long commentId,
-                                                    @RequestBody CreateOrUpdateComment updateComment) {
+                                                  @PathVariable("commentId") Long commentId,
+                                                  @Valid @RequestBody CreateOrUpdateComment updateComment) {
         Optional<Comments> optionalCommentDto = commentService.editComment(SecurityContextHolder
                 .getContext()
                 .getAuthentication()
@@ -115,5 +116,4 @@ public class CommentsController {
         return optionalCommentDto.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
-
 }
