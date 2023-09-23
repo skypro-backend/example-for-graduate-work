@@ -11,21 +11,24 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 
+import javax.validation.Valid;
+
 @RestController
+@CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
 @RequestMapping("/ads")
 public class AdsController {
 
     //здесь будет зависимость от AdsService
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<Ads> getAllAds() {
         //здесь будет вызов сервиса
         return new ResponseEntity<>(new Ads(), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Ad> postAd(@RequestBody CreateOrUpdateAd properties,
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Ad> postAd(@RequestParam CreateOrUpdateAd properties,
                                      @RequestParam("image") MultipartFile file) {
         //здесь будет вызов сервиса
         return new ResponseEntity<>(new Ad(), HttpStatus.OK);
@@ -45,7 +48,7 @@ public class AdsController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Ad> patchAdById(@PathVariable int id,
-                                          @RequestBody CreateOrUpdateAd createOrUpdateAd) {
+                                         @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd) {
         //здесь будет вызов сервиса
         return new ResponseEntity<>(new Ad(), HttpStatus.OK);
     }

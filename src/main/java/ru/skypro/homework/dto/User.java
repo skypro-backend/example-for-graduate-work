@@ -19,7 +19,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String phone;
-    private String role;
+    private Role role;
     private String image;
 
     public static User fromUserEntity(UserEntity userEntity) {
@@ -28,7 +28,7 @@ public class User {
         user.setFirstName(userEntity.getFirstName());
         user.setLastName(userEntity.getLastName());
         user.setPhone(userEntity.getPhone());
-        user.setRole(userEntity.getRole().name());
+        user.setRole(userEntity.getRole());
         user.setImage(userEntity.getImage());
         return user;
     }
@@ -39,7 +39,7 @@ public class User {
         userEntity.setFirstName(this.getFirstName());
         userEntity.setLastName(this.getLastName());
         userEntity.setPhone(this.getPhone());
-        userEntity.setRole(Role.valueOf(this.getRole()));
+        userEntity.setRole(this.getRole());
         userEntity.setImage(this.getImage());
         return userEntity;
     }
