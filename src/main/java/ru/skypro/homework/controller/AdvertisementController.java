@@ -147,7 +147,7 @@ public class AdvertisementController {
     )
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateImage(@PathVariable int id,
-                                         @RequestParam String image) {
+                                         @RequestParam MultipartFile image) {
         return ResponseEntity.ok(new Ad().getImage());
     }
 }
