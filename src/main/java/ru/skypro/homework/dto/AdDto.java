@@ -18,7 +18,6 @@ public class AdDto {
     private Integer pk; //($int32)id объявления
     private Integer price; //($int32) цена объявления
     private String title; //заголовок объявления
-    UserRepository userRepository;
 
     public static AdDto fromAd(Ad ad) {
         AdDto dto = new AdDto();
@@ -35,7 +34,6 @@ public class AdDto {
     public Ad toAd() {
         Ad ad = new Ad();
         ad.setPk(this.getPk());
-        ad.setAuthor(userRepository.findById(this.getAuthor()).orElseThrow());
         ad.setImage(this.getImage());
         ad.setPrice(this.getPrice());
         ad.setTitle(this.getTitle());

@@ -19,7 +19,6 @@ public class CommentDto {
     private Integer createdAt; //($int32) дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
     private Integer pk; //($int32) id комментария
     private String text; // текст комментария
-    UserRepository userRepository;
 
     public static CommentDto fromComment(Comment comment) {
         CommentDto dto = new CommentDto();
@@ -37,7 +36,6 @@ public class CommentDto {
     public Comment toComment() {
         Comment comment = new Comment();
         comment.setPk(this.getPk());
-        comment.setAuthor(userRepository.findById(this.getAuthor()).orElseThrow());
         comment.setAuthorImage(this.getAuthorImage());
         comment.setAuthorFirstName(this.getAuthorFirstName());
         comment.setCreatedAt(this.getCreatedAt());
