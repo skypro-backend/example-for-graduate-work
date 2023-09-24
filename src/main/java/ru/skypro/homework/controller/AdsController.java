@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.projection.CreateOrUpdateAd;
@@ -21,6 +22,7 @@ import java.time.Instant;
 @RequestMapping("/ads")
 @RequiredArgsConstructor
 @Tag(name = "Объявления")
+@Validated
 public class AdsController {
     @GetMapping()
     @Operation(summary = "Получение всех объявлений")
@@ -32,7 +34,7 @@ public class AdsController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Created"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")})
-    public ResponseEntity<?> createAd(@RequestPart(name = "properties") @Valid @RequestBody CreateOrUpdateAd properties,
+    public ResponseEntity<?> createAd(@RequestPart(name = "properties") CreateOrUpdateAd properties,
                                       @RequestPart(name = "image") MultipartFile image) {
         return null;
     }
@@ -66,7 +68,7 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")})
     public ResponseEntity<?> updateAd(@PathVariable("id") Integer id,
-                                      @Valid @RequestBody CreateOrUpdateAd properties) {
+                                      @RequestBody CreateOrUpdateAd properties) {
         return null;
     }
 

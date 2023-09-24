@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.projection.NewPassword;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @Tag(name = "Пользователи")
+@Validated
 public class UserController {
     @PostMapping("/set_password")
     @Operation(summary = "Обновление пароля")
@@ -28,7 +30,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden")})
-    public ResponseEntity<?> setPassword(@Valid @RequestBody NewPassword newPassword) {
+    public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
         return null;
     }
     @GetMapping("/me")
@@ -44,7 +46,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")})
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUser updateUser) {
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUser updateUser) {
         return null;
     }
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
