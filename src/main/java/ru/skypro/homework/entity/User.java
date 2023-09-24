@@ -3,6 +3,7 @@ package ru.skypro.homework.entity;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "'user'")
+@Table(name = "app_user")
 @Accessors(chain = true)
 
 public class User {
@@ -30,8 +31,9 @@ public class User {
     @Column(nullable = false, length = 12)
     private String phone;
 
-    @Column(nullable = false, length = 5)
-    private String role;
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private Role role;
 
     private String image;
 

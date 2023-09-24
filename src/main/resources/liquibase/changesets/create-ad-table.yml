@@ -40,4 +40,4 @@ databaseChangeLog:
             baseTableName: ad
             constraintName: fk_ad_author
             referencedColumnNames: id
-            referencedTableName: user
+            referencedTableName: app_user

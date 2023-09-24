@@ -53,7 +53,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")})
 
-    public ResponseEntity<?> updateImage(MultipartFile image) {
+    public ResponseEntity<?> updateImage(@RequestParam MultipartFile image) {
         return null;
     }
 }

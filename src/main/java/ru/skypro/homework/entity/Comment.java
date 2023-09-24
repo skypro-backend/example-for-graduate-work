@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Data
 @AllArgsConstructor
@@ -17,20 +18,16 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pk;
 
-
     @Column(nullable = false)
-    private String authorImage;
-
-    @Column(nullable = false, length = 20)
-    private String authorFirstName;
-
-    @Column(nullable = false)
-    private Integer createdAt;
+    private Instant createdAt;
 
     @Column(nullable = false)
     private String text;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne
     @JoinColumn(name = "author")
     private User user;
+    @OneToOne
+    @JoinColumn(name = "ad")
+    private Ad ad;
 }

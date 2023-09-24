@@ -27,13 +27,13 @@ public class AdsController {
     @ApiResponse(responseCode = "200", description = "OK")
     public ResponseEntity<?> getAllAds() {return null;}
 
-    @PostMapping()
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Добавление объявления")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Created"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")})
-    public ResponseEntity<?> createAd(@Valid @RequestBody CreateOrUpdateAd properties,
-                                      MultipartFile image) {
+    public ResponseEntity<?> createAd(@RequestPart(name = "properties") @Valid @RequestBody CreateOrUpdateAd properties,
+                                      @RequestPart(name = "image") MultipartFile image) {
         return null;
     }
 
@@ -88,7 +88,7 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")})
     public ResponseEntity<?> updateImage(@PathVariable("id") Integer id,
-                                         MultipartFile image) {
+                                         @RequestParam MultipartFile image) {
         return null;
     }
 }

@@ -18,21 +18,13 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
               - column:
-                  name: author
-                  type: int
-              - column:
-                  name: authorImage
-                  type: varchar
-                  constraints:
-                    nullable: false
-              - column:
                   name: authorFirstName
                   type: varchar(20)
                   constraints:
                     nullable: false
               - column:
-                  name: createdAt
-                  type: bigint
+                  name: created_at
+                  type: timestamp
                   constraints:
                     nullable: false
               - column:
@@ -40,9 +32,21 @@ databaseChangeLog:
                   type: varchar
                   constraints:
                     nullable: false
+              - column:
+                  name: author
+                  type: int
+              - column:
+                  name: ad
+                  type: int
         - addForeignKeyConstraint:
             baseColumnNames: author
             baseTableName: comment
             constraintName: fk_comment_author
             referencedColumnNames: id
-            referencedTableName: user
+            referencedTableName: app_user
+        - addForeignKeyConstraint:
+            baseColumnNames: ad
+            baseTableName: comment
+            constraintName: fk_comment_ad
+            referencedColumnNames: pk
+            referencedTableName: ad

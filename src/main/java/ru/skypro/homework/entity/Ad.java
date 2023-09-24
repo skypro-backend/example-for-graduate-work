@@ -24,9 +24,7 @@ public class Ad {
 
     @Column(nullable = false)
     private Integer price;
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne
     @JoinColumn(name = "author")
     private User user;
-
-
 }

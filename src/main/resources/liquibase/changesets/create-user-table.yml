@@ -6,10 +6,10 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - not:
             - tableExists:
-                tableName: user
+                tableName: app_user
       changes:
         - createTable:
-            tableName: user
+            tableName: app_user
             columns:
               - column:
                   name: id
@@ -24,12 +24,12 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: firstName
+                  name: first_name
                   type: varchar(20)
                   constraints:
                     nullable: false
               - column:
-                  name: lastName
+                  name: last_name
                   type: varchar(20)
                   constraints:
                     nullable: false
