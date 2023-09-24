@@ -56,7 +56,7 @@ Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
 {
-  "newPassword": "password",
+  "newPasswordDto": "password",
   "currentPassword": "password1"
 }
 
