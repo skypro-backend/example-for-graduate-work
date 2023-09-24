@@ -11,8 +11,6 @@ public interface UserService {
 
       User getUsers (String email);
 
-      User getUserById (Integer id);
-
       List <User> allUsers ();
 
       User addUser (User user);

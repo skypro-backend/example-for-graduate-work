@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.model_dto.NewPasswordDto;
 import ru.skypro.homework.dto.model_dto.UserDto;
-import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.service.UserService;
 
@@ -18,7 +17,6 @@ import java.util.List;
 public class UserController {
 
       private final UserService userService;
-      private final UserMapper userMapper;
 
       @PostMapping
       public UserDto updatePassword(@RequestBody NewPasswordDto newPassword) {
@@ -29,13 +27,14 @@ public class UserController {
       public ResponseEntity<User> findUserById (@PathVariable("id") int userId) {
             return ResponseEntity.ok(userService.findUserById(userId));
       }
-
-      @GetMapping("/{id}")
-      public ResponseEntity<UserDto> getUser(@PathVariable("id") int id) {
-            return ResponseEntity.ok(userMapper.toDto(userService.getUserById(id)));
+      @GetMapping
+      public ResponseEntity<User> getUsers (@PathVariable String email) {
+            User userFound = userService.getUsers (email);
+            if (userFound == null) {
+                  return ResponseEntity.notFound ().build ();
+            }
+            return ResponseEntity.ok (userFound);
       }
-
-
 
       @GetMapping("/allUsers")
       public ResponseEntity<List <User>> allUsers() {
