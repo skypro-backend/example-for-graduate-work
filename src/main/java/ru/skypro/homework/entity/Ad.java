@@ -1,7 +1,6 @@
 package ru.skypro.homework.entity;
 
 import lombok.Data;
-
 import javax.persistence.*;
 @Data
 @Entity
@@ -11,7 +10,7 @@ public class Ad {
     private Integer pk;
     @ManyToOne
     //id автора объявления
-    private User author;
+    private User user;
     //ссылка на картинку объявления
     private String image;
     //цена объявления

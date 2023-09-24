@@ -9,19 +9,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Data
-public class User {
+public class UserDto {
     private Integer id; // ($int32)
-    private String email; //логин пользователя
+    private String username; //логин пользователя
+    private String password; //пароль пользователя
     private String firstName; //имя пользователя
     private String lastName; //фамилия пользователя
     private String phone; //телефон пользователя
     private String role; //роль пользователя
     private String image; // ссылка на аватар пользователя
 
-    public static User fromUser(User user) {
-        User dto = new User();
+    public static UserDto fromUser(UserDto user) {
+        UserDto dto = new UserDto();
         dto.setId(user.getId());
-        dto.setEmail(user.getEmail());
+        dto.setUsername(user.getUsername());
+        dto.setPassword(user.getPassword());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setPhone(user.getPhone());
@@ -32,10 +34,11 @@ public class User {
     }
 
 
-    public User toUser() {
-        User user = new User();
+    public UserDto toUser() {
+        UserDto user = new UserDto();
         user.setId(this.getId());
-        user.setEmail(this.getEmail());
+        user.setUsername(this.getUsername());
+        user.setPassword(user.getPassword());
         user.setFirstName(this.getFirstName());
         user.setLastName(this.getLastName());
         user.setPhone(this.getPhone());

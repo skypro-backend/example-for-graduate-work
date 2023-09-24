@@ -5,7 +5,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import ru.skypro.homework.entity.Comment;
-import ru.skypro.homework.repository.UserRepository;
+
+import java.time.LocalDateTime;
+import java.util.TimeZone;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,20 +16,22 @@ import ru.skypro.homework.repository.UserRepository;
 @Data
 public class CommentDto {
 
-    private Integer author; // ($int32) id автороа комментария
-    private String authorImage; // ссылка на аватар автора комментария
-    private String authorFirstName; // имя создателя комментария
-    private Integer createdAt; //($int32) дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
+    private Integer user; // ($int32) id автороа комментария
+    private String userImage; // ссылка на аватар автора комментария
+    private String userFirstName; // имя создателя комментария
+    private LocalDateTime createdAt; //($int32) дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
     private Integer pk; //($int32) id комментария
     private String text; // текст комментария
 
     public static CommentDto fromComment(Comment comment) {
+//        TimeZone tz = TimeZone.getDefault();
+//        LocalDateTime ldt = LocalDateTime.ofInstant(comment.getCreatedAt(), tz.toZoneId());
         CommentDto dto = new CommentDto();
         dto.setPk(comment.getPk());
-        dto.setAuthor(comment.getAuthor().getId());
-        dto.setAuthorImage(comment.getAuthorImage());
-        dto.setAuthorFirstName(comment.getAuthorFirstName());
-        dto.setCreatedAt(comment.getCreatedAt());
+        dto.setUser(comment.getUser().getId());
+        dto.setUserImage(comment.getUserImage());
+        dto.setUserFirstName(comment.getUserFirstName());
+//        dto.setCreatedAt(ldt);
         dto.setText(comment.getText());
 
         return dto;
@@ -36,9 +41,9 @@ public class CommentDto {
     public Comment toComment() {
         Comment comment = new Comment();
         comment.setPk(this.getPk());
-        comment.setAuthorImage(this.getAuthorImage());
-        comment.setAuthorFirstName(this.getAuthorFirstName());
-        comment.setCreatedAt(this.getCreatedAt());
+        comment.setUserImage(this.getUserImage());
+        comment.setUserFirstName(this.getUserFirstName());
+//        comment.setCreatedAt(this.getCreatedAt());
         comment.setText(this.getText());
 
 

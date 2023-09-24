@@ -1,20 +1,22 @@
 package ru.skypro.homework.controller;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.AdsService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/ads")
 public class AdsController {
     private final AdsService adsService;
+
+    public AdsController(AdsService adsService) {
+        this.adsService = adsService;
+    }
 
     @GetMapping
     public ResponseEntity<?> ads() {
@@ -23,25 +25,29 @@ public class AdsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createAd(@RequestBody CreateOrUpdateAd createOrUpdateAd, @RequestBody String image) {
+    public ResponseEntity<?> createAd(@RequestBody CreateOrUpdateAdDto createOrUpdateAd, @RequestBody String image) {
 //запрос в сервис
         return ResponseEntity.ok().build();
     }
+
     @GetMapping("{id}")
     public ResponseEntity<?> adDto(@PathVariable Integer id) {
 //запрос в сервис
         return ResponseEntity.ok().build();
     }
+
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteAd(@PathVariable Integer id) {
 //запрос в сервис
         return ResponseEntity.ok().build();
     }
+
     @PatchMapping("{id}")
-    public ResponseEntity<?> UpdateAd(@RequestBody CreateOrUpdateAd createOrUpdateAd, @PathVariable Integer id) {
+    public ResponseEntity<?> UpdateAd(@RequestBody CreateOrUpdateAdDto createOrUpdateAd, @PathVariable Integer id) {
 //запрос в сервис
         return ResponseEntity.ok().build();
     }
+
     @GetMapping("/me")
     public ResponseEntity<?> myAds() {
 //запрос в сервис
@@ -53,6 +59,7 @@ public class AdsController {
 //запрос в сервис
         return ResponseEntity.ok().build();
     }
+
     /**
      * Контроллеры для комментариев
      */
@@ -61,6 +68,7 @@ public class AdsController {
 //запрос в сервис
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("{id}/comments")
     public ResponseEntity<?> createComment(@RequestBody CreateOrUpdateComment createOrUpdateComment, @PathVariable Integer id) {
         //запрос в сервис
@@ -72,10 +80,11 @@ public class AdsController {
 //запрос в сервис
         return ResponseEntity.ok().build();
     }
+
     @PatchMapping("{id}/comments/{commentId}")
     public ResponseEntity<?> UpdateComment(@PathVariable Integer id,
                                            @PathVariable Integer commentId,
-                                           @RequestBody CreateOrUpdateAd createOrUpdateAd) {
+                                           @RequestBody CreateOrUpdateAdDto createOrUpdateAd) {
 //запрос в сервис
         return ResponseEntity.ok().build();
     }

@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Data
-public class UpdateUser {
+public class UpdateUserDto {
 
     @Schema(description = "Имя пользователя")
     public String firstName;

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.repository.UserRepository;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,7 +13,7 @@ import ru.skypro.homework.repository.UserRepository;
 @Data
 public class AdDto {
 
-    private Integer author; //($int32) id автора объявления
+    private Integer user; //($int32) id автора объявления
     private String image; // ссылка на картинку объявления
     private Integer pk; //($int32)id объявления
     private Integer price; //($int32) цена объявления
@@ -22,7 +22,7 @@ public class AdDto {
     public static AdDto fromAd(Ad ad) {
         AdDto dto = new AdDto();
         dto.setPk(ad.getPk());
-        dto.setAuthor(ad.getAuthor().getId());
+        dto.setUser(ad.getUser().getId());
         dto.setImage(ad.getImage());
         dto.setPrice(ad.getPrice());
         dto.setTitle(ad.getTitle());
