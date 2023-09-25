@@ -44,8 +44,8 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Удаление комментария")
-    @DeleteMapping("/{adId}/comments/{commentId}")
+    @Operation(summary = "Обновление комментария")
+    @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId, @PathVariable int commentId){
 
         CommentDTO commentDTO = new CommentDTO();
