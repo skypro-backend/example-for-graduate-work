@@ -1,13 +1,11 @@
 package ru.skypro.homework.entity;
 
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
 @Table(name = "ads")
 @NoArgsConstructor
 public class AdEntity {

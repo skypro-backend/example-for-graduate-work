@@ -1,11 +1,9 @@
 package ru.skypro.homework.entity;
 
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Data
 @Entity
 @NoArgsConstructor
 @Table(name = "comments")
