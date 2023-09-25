@@ -40,7 +40,7 @@ public class AdsController {
                 @ApiResponse(responseCode = "401", description = "Unauthorized")}
         )
         @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-        public ResponseEntity<AdDTO> addAd(@RequestParam AdDTO ad, @RequestPart MultipartFile image) {
+        public ResponseEntity<AdDTO> addAd(@RequestParam("properties") AdDTO ad, @RequestPart MultipartFile image) {
                 return ResponseEntity.ok(ad);
         }
 

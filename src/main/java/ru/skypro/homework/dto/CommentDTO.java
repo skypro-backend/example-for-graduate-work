@@ -15,7 +15,7 @@ public class CommentDTO {
     int author;
     String authorImage;
     String authorFirstName;
-    LocalDateTime createdAt;
+    long createdAt;
     int pk;
     String text;
 }
