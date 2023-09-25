@@ -52,8 +52,8 @@ public class AdsServiceImpl implements AdsService {
     public AdsDto update(Integer id, CreateOrUpdateAd createOrUpdateAd) {
         log.debug("Updating ads by id: {}", id);
 
-        if (createOrUpdateAd.getTitle() == null || createOrUpdateAd.getTitle().isBlank()
-                || createOrUpdateAd.getDescription() == null || createOrUpdateAd.getDescription().isBlank()
+        if (createOrUpdateAd.getTitle() == null
+                || createOrUpdateAd.getDescription() == null
                 || createOrUpdateAd.getPrice() == null) throw new IncorrectArgumentException();
 
         Ads ads = findAdsById(id);
