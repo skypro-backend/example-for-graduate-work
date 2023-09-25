@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import ru.skypro.homework.dto.account.User;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@Tag(name = "Пользователи")
 public class AccountController {
 
     @PostMapping("/set_password")
@@ -27,8 +29,7 @@ public class AccountController {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(hidden = true))),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(schema = @Schema(hidden = true)))
-            },
-            tags = "Пользователи"
+            }
     )
     public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
    return ResponseEntity.ok(new NewPassword());
@@ -45,8 +46,7 @@ public class AccountController {
                             schema = @Schema(implementation = User.class)
                     )),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true)))
-            },
-            tags = "Пользователи"
+            }
     )
     public ResponseEntity<User> getUser() {
         return ResponseEntity.ok(new User());
@@ -63,8 +63,7 @@ public class AccountController {
                                     schema = @Schema(implementation = User.class)
                             )),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true)))
-            },
-            tags = "Пользователи"
+            }
     )
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         return ResponseEntity.ok(new User());
@@ -76,8 +75,7 @@ public class AccountController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(hidden = true))),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true)))
-            },
-            tags = "Пользователи"
+            }
     )
     public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) {
         return ResponseEntity.ok(new Object());
