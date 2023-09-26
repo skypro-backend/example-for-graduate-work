@@ -4,13 +4,15 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.dto.UpdateUserDto;
+import ru.skypro.homework.entity.User;
 
 public interface UserService {
-    void updatePassword(String email, NewPasswordDto newPasswordDto);
+    void updatePassword(String username, NewPasswordDto newPasswordDto);
 
     UserDto getUserInformation(String email);
 
     UserDto updateUser(String email, UpdateUserDto updateUser);
 
-    UserDto updateUserAvatar(String email, MultipartFile file);
+    void updateUserAvatar (String username, MultipartFile avatar);
+
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import ru.skypro.homework.entity.User;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -11,24 +12,28 @@ import lombok.NoArgsConstructor;
 @Data
 public class UserDto {
     private Integer id; // ($int32)
-    private String username; //логин пользователя
+    private String email; //логин пользователя
     private String password; //пароль пользователя
     private String firstName; //имя пользователя
     private String lastName; //фамилия пользователя
     private String phone; //телефон пользователя
     private String role; //роль пользователя
     private String image; // ссылка на аватар пользователя
+    private boolean enabled;
 
-    public static UserDto fromUser(UserDto user) {
+    public static UserDto fromUser(User user) {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
-        dto.setUsername(user.getUsername());
-        dto.setPassword(user.getPassword());
+        dto.setEmail(user.getUsername());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setPhone(user.getPhone());
-        dto.setRole(user.getRole().toString());
-        dto.setImage(user.getImage());
+        dto.setRole(user.getRole());
+        if (user.getImage() != null) {
+            dto.setImage(String.format("/users/image/%s", user.getImage()));
+        } else {
+            dto.setImage(null);
+        }
 
         return dto;
     }
@@ -37,7 +42,7 @@ public class UserDto {
     public UserDto toUser() {
         UserDto user = new UserDto();
         user.setId(this.getId());
-        user.setUsername(this.getUsername());
+        user.setEmail(this.getEmail());
         user.setPassword(user.getPassword());
         user.setFirstName(this.getFirstName());
         user.setLastName(this.getLastName());
