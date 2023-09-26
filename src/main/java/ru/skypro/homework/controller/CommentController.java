@@ -19,7 +19,6 @@ import javax.validation.Valid;
 @RequestMapping("/ads")
 @RequiredArgsConstructor
 @Tag(name = "Комментарии")
-@Validated
 public class CommentController {
     @GetMapping("/{id}/comments")
     @Operation(summary = "Получение комментариев объявления")
@@ -37,7 +36,7 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "Not Found")})
     public ResponseEntity<?> createComment(@PathVariable("id") Integer id,
-                                           @RequestBody CreateOrUpdateComment comment) {
+                                           @RequestBody @Valid CreateOrUpdateComment comment) {
         return null;
     }
     @DeleteMapping("/{adId}/comments/{commentId}")
@@ -60,7 +59,7 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "Not Found")})
     public ResponseEntity<?> updateComment(@PathVariable("adId") Integer adId,
                                            @PathVariable("commentId") Integer commentId,
-                                           @RequestBody CreateOrUpdateComment comment) {
+                                           @RequestBody @Valid CreateOrUpdateComment comment) {
         return null;
     }
 }

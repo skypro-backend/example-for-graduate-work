@@ -27,7 +27,7 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "author")
     private User user;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "ad")
     private Ad ad;
 }

@@ -22,7 +22,6 @@ import java.time.Instant;
 @RequestMapping("/ads")
 @RequiredArgsConstructor
 @Tag(name = "Объявления")
-@Validated
 public class AdsController {
     @GetMapping()
     @Operation(summary = "Получение всех объявлений")
@@ -34,7 +33,7 @@ public class AdsController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Created"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")})
-    public ResponseEntity<?> createAd(@RequestPart(name = "properties") CreateOrUpdateAd properties,
+    public ResponseEntity<?> createAd(@RequestPart(name = "properties") @Valid CreateOrUpdateAd properties,
                                       @RequestPart(name = "image") MultipartFile image) {
         return null;
     }
@@ -68,7 +67,7 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")})
     public ResponseEntity<?> updateAd(@PathVariable("id") Integer id,
-                                      @RequestBody CreateOrUpdateAd properties) {
+                                      @RequestBody @Valid CreateOrUpdateAd properties) {
         return null;
     }
 

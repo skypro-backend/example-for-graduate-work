@@ -22,7 +22,6 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @Tag(name = "Пользователи")
-@Validated
 public class UserController {
     @PostMapping("/set_password")
     @Operation(summary = "Обновление пароля")
@@ -30,7 +29,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden")})
-    public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
+    public ResponseEntity<?> setPassword(@RequestBody @Valid NewPassword newPassword) {
         return null;
     }
     @GetMapping("/me")
@@ -46,7 +45,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")})
-    public ResponseEntity<?> updateUser(@RequestBody UpdateUser updateUser) {
+    public ResponseEntity<?> updateUser(@RequestBody @Valid UpdateUser updateUser) {
         return null;
     }
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
