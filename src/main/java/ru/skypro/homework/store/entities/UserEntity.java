@@ -20,7 +20,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    int id;
 
     @Column(name = "last_name", nullable = false)
     String lastName;
@@ -47,11 +47,8 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     Role role;
 
-    @OneToMany
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "user")
     List<CommentEntity> commentEntityList = new ArrayList<>();
-
-
 
     public static UserEntity makeDefaults(
             String lastName,
