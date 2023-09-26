@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "ad")
 @Accessors(chain = true)
-
 public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
