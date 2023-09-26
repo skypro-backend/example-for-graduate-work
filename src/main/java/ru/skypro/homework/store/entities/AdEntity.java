@@ -2,6 +2,7 @@ package ru.skypro.homework.store.entities;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.skypro.homework.dto.UserDTO;
 
 import javax.persistence.*;
 
@@ -13,18 +14,15 @@ import javax.persistence.*;
 @Entity
 @Table(name = "ad")
 public class AdEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int author;
-
-    @Column(name = "first_name", nullable = false)
-    String authorFirstName;
-
-    @Column(name = "last_name", nullable = false)
-    String authorLastName;
 
     @Column(name = "pk", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     int pk;
+
+    @ManyToOne
+    @JoinColumn(name = "id")
+    UserEntity author; //user
 
     @Column(name = "price", nullable = false)
     int price;
@@ -37,12 +35,7 @@ public class AdEntity {
 
     @Column(name = "description", nullable = false)
     String description;
-
-    @Column(name = "email", nullable = false)
-    String email;
-
     @Column(name = "phone", nullable = false)
     String phone;
-
 
 }
