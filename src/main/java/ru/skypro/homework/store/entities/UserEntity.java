@@ -20,7 +20,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    Long id;
 
     @Column(name = "last_name", nullable = false)
     String lastName;
@@ -47,8 +47,16 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     Role role;
 
-    @OneToMany(mappedBy = "user")
-    List<CommentEntity> commentEntityList = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CommentEntity> comments = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    private List<AdEntity> ads = new ArrayList<>();
+
+    @OneToOne(targetEntity = ImageIEntity.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "user_image_id")
+    private ImageIEntity imageIEntity;
+
 
     public static UserEntity makeDefaults(
             String lastName,
