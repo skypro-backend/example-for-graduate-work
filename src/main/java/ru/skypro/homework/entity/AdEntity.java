@@ -1,6 +1,8 @@
 package ru.skypro.homework.entity;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import javax.persistence.*;
 import java.util.List;
@@ -8,6 +10,8 @@ import java.util.List;
 @Entity
 @Table(name = "ads")
 @NoArgsConstructor
+@Getter
+@Setter
 public class AdEntity {
 
     private int price;
