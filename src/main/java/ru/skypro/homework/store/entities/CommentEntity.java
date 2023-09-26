@@ -18,7 +18,7 @@ public class CommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    int id;
 
     @Column(name = "count", nullable = false)
     int count;
@@ -30,9 +30,6 @@ public class CommentEntity {
     LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "first_name" , referencedColumnName = "first_name")
+    @JoinColumn(name = "user_id" , referencedColumnName = "id")
     UserEntity user;
-
-    @Column(name = "first_name", updatable = false, insertable = false)
-    String firstName;
 }
