@@ -5,6 +5,8 @@ import lombok.experimental.FieldDefaults;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -46,7 +48,10 @@ public class UserEntity {
     Role role;
 
     @OneToMany
-    @JoinColumn(name = "")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    List<CommentEntity> commentEntityList = new ArrayList<>();
+
+
 
     public static UserEntity makeDefaults(
             String lastName,
