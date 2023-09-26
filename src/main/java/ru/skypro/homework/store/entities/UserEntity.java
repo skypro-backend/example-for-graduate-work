@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @Column(name = "last_name", nullable = false)
@@ -41,7 +41,31 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     String password;
 
+    @NonNull
     @Enumerated(EnumType.STRING)
     Role role;
 
+    @OneToMany
+    @JoinColumn(name = "")
+
+    public static UserEntity makeDefaults(
+            String lastName,
+            String firstName,
+            String email,
+            String phone,
+            String image,
+            String username,
+            String password,
+            Role role) {
+        return builder()
+                .lastName(lastName)
+                .firstName(firstName)
+                .email(email)
+                .phone(phone)
+                .image(image)
+                .username(username)
+                .password(password)
+                .role(role)
+                .build();
+    }
 }
