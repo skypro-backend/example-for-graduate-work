@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 
-import javax.transaction.Transactional;
 import javax.xml.crypto.OctetStreamData;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -40,8 +39,8 @@ public class AdsController {
                 @ApiResponse(responseCode = "401", description = "Unauthorized")}
         )
         @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-        public ResponseEntity<AdDTO> addAd(@RequestParam("properties") AdDTO ad, @RequestPart MultipartFile image) {
-                return ResponseEntity.ok(ad);
+        public ResponseEntity<AdDTO> addAd(@RequestParam("adDTO") AdDTO adDTO, @RequestPart MultipartFile image) {
+                return ResponseEntity.ok(adDTO);
         }
 
         @Operation(summary = "Получение информации об объявлении")

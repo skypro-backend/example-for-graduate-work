@@ -3,7 +3,6 @@ package ru.skypro.homework.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

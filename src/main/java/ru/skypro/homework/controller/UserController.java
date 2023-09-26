@@ -4,16 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
-import ru.skypro.homework.dto.UserDto;
-
-import javax.transaction.Transactional;
+import ru.skypro.homework.dto.UserDTO;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -33,9 +30,9 @@ public class UserController {
 
     @Operation(summary = "Получение информации об авторизованном пользователе")
     @GetMapping("/me")
-    public ResponseEntity<?> getUser(@RequestBody UserDto user) {
+    public ResponseEntity<?> getUser(@RequestBody UserDTO userDTO) {
 
-        UserDto userDto = new UserDto();
+        UserDTO userDto = new UserDTO();
 
         return ResponseEntity.ok().body(userDto);
     }

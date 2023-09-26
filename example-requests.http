@@ -1,22 +1,22 @@
-GET http://localhost:8080/ads/1/comments
+GET http://localhost:8080/adsDTO/1/comments
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic userDTO@gmail.com password
 
 ###
-POST http://localhost:8080/login
+POST http://localhost:8080/loginDTO
 Content-Type: application/json
 
 {
-  "username": "user@gmail.com",
+  "username": "userDTO@gmail.com",
   "password": "password"
 }
 
 ###
-POST http://localhost:8080/register
+POST http://localhost:8080/registerDTO
 Content-Type: application/json
 
 {
-  "username": "user@gmail.com",
+  "username": "userDTO@gmail.com",
   "password": "password",
   "firstName": " asdad",
   "lastName": " asdad",
@@ -25,19 +25,19 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/ads/me
+GET http://localhost:8080/adsDTO/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic userDTO@gmail.com password
 
 ###
 GET http://localhost:8080/users/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic userDTO@gmail.com password
 
 ###
 PATCH http://localhost:8080/users/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic userDTO@gmail.com password
 
 {
   "phone": "33333",
@@ -46,24 +46,24 @@ Authorization: Basic user@gmail.com password
 }
 
 ###
-GET http://localhost:8080/ads
+GET http://localhost:8080/adsDTO
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic userDTO@gmail.com password
 
 ###
 POST http://localhost:8080/users/set_password
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic userDTO@gmail.com password
 
 {
-  "newPassword": "password",
+  "newPasswordDTO": "password",
   "currentPassword": "password1"
 }
 
 ###
-POST http://localhost:8080/ads
+POST http://localhost:8080/adsDTO
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic userDTO@gmail.com password
 
 {
   "price": 123,
