@@ -36,3 +36,14 @@ create table authorities (
 
 );
 create unique index ix_auth_username on authorities (username,authority);
+
+-- changeset 3
+alter table ad add description varchar(255);
+
+-- changeset 4
+alter table authorities drop column user_id;
+-- changeset 5
+create table if not exists image(
+    id varchar(255) primary key,
+    image bytea
+);
