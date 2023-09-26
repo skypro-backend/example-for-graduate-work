@@ -1,13 +1,13 @@
-GET http://localhost:8080/adsDTO/1/comments
+GET http://localhost:8080/ads/1/comments
 Content-Type: application/json
-Authorization: Basic userDTO@gmail.com password
+Authorization: Basic user@gmail.com password
 
 ###
 POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-  "username": "userDTO@gmail.com",
+  "username": "user@gmail.com",
   "password": "password"
 }
 
@@ -16,7 +16,7 @@ POST http://localhost:8080/register
 Content-Type: application/json
 
 {
-  "username": "userDTO@gmail.com",
+  "username": "user@gmail.com",
   "password": "password",
   "firstName": " asdad",
   "lastName": " asdad",
@@ -25,19 +25,19 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/adsDTO/me
+GET http://localhost:8080/ads/me
 Content-Type: application/json
-Authorization: Basic userDTO@gmail.com password
+Authorization: Basic user@gmail.com password
 
 ###
 GET http://localhost:8080/users/me
 Content-Type: application/json
-Authorization: Basic userDTO@gmail.com password
+Authorization: Basic user@gmail.com password
 
 ###
 PATCH http://localhost:8080/users/me
 Content-Type: application/json
-Authorization: Basic userDTO@gmail.com password
+Authorization: Basic user@gmail.com password
 
 {
   "phone": "33333",
@@ -46,24 +46,24 @@ Authorization: Basic userDTO@gmail.com password
 }
 
 ###
-GET http://localhost:8080/adsDTO
+GET http://localhost:8080/ads
 Content-Type: application/json
-Authorization: Basic userDTO@gmail.com password
+Authorization: Basic user@gmail.com password
 
 ###
 POST http://localhost:8080/users/set_password
 Content-Type: application/json
-Authorization: Basic userDTO@gmail.com password
+Authorization: Basic user@gmail.com password
 
 {
-  "newPasswordDTO": "password",
+  "newPassword": "password",
   "currentPassword": "password1"
 }
 
 ###
-POST http://localhost:8080/adsDTO
+POST http://localhost:8080/ads
 Content-Type: application/json
-Authorization: Basic userDTO@gmail.com password
+Authorization: Basic user@gmail.com password
 
 {
   "price": 123,
