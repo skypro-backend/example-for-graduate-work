@@ -1,8 +1,8 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.mappers.UserMapper;
@@ -16,8 +16,8 @@ public class UserServiceImpl {
 
     public UpdateUserDTO updateUser(UserEntity userEntity) {
         if (userEntity != null) {
-            userMapper.userEntityToUpdateuserDto(userEntity);
-            return userMapper.userEntityToUpdateuserDto(userEntity);
+            userMapper.toUpdateUserDto(userEntity);
+            return userMapper.toUpdateUserDto(userEntity);
         } else {
             throw new RuntimeException();
         }
@@ -25,8 +25,8 @@ public class UserServiceImpl {
 
     public UserDTO getUser(UserEntity userEntity) {
         if (userEntity != null) {
-            userMapper.userEntityToUserDto(userEntity);
-            return userMapper.userEntityToUserDto(userEntity);
+            userMapper.toUserDTO(userEntity);
+            return userMapper.toUserDTO(userEntity);
         } else {
             throw new RuntimeException();
         }
