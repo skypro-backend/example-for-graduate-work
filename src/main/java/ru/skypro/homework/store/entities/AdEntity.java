@@ -22,7 +22,7 @@ public class AdEntity {
 
     @ManyToOne
     @JoinColumn(name = "id")
-    UserEntity author; //user
+    UserEntity user; //user
 
     @Column(name = "price", nullable = false)
     int price;
