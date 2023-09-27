@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
@@ -25,8 +24,8 @@ public class UserServiceImpl {
 
     public UserDTO getUser(UserEntity userEntity) {
         if (userEntity != null) {
-            userMapper.toUserDTO(userEntity);
-            return userMapper.toUserDTO(userEntity);
+            userMapper.toUserDto(userEntity);
+            return userMapper.toUserDto(userEntity);
         } else {
             throw new RuntimeException();
         }

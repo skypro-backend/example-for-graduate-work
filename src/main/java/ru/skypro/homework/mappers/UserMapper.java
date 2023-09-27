@@ -2,7 +2,6 @@ package ru.skypro.homework.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
@@ -16,7 +15,7 @@ public interface UserMapper {
 
     UpdateUserDTO toUpdateUserDto(UserEntity userEntity);
 
-    UserDTO toUserDTO(UserEntity userEntity);
+    UserDTO toUserDto(UserEntity userEntity);
 
     //(Обновление пароля)
 
