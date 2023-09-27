@@ -11,6 +11,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pk;
+
     @ManyToOne
     //id автора комментария
     private User user;
@@ -23,7 +24,7 @@ public class Comment {
     //имя создателя комментария
     private String userFirstName;
     //дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
-//    private Instant createdAt;
+    private Instant createdAt;
     //текст комментария
     private String text;
 
@@ -34,7 +35,7 @@ public class Comment {
         this.ad = ad;
         this.userImage = userImage;
         this.userFirstName = userFirstName;
-//        this.createdAt = createdAt;
+        this.createdAt = createdAt;
         this.text = text;
     }
 }

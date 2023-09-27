@@ -8,10 +8,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
@@ -42,7 +42,7 @@ public class UserController {
     public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPasswordDto, Authentication authentication) {
         log.info("Was invoked set password for user method");
         userService.updatePassword(
-                authentication.name(),
+                authentication.getName(),
                 newPasswordDto);
         return ResponseEntity.ok().build();
 
@@ -62,7 +62,7 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUser(Authentication authentication) {
         log.info("Was invoked get user method");
-        return ResponseEntity.ok(userService.getUserInformation(authentication.name()));
+        return ResponseEntity.ok(userService.getUserInformation(authentication.getName()));
     }
 
     @Operation(summary = "updateUser",
@@ -82,7 +82,7 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(@RequestBody UpdateUserDto updateUserDto,
                                               Authentication authentication) {
         log.info("Was invoked update user method");
-        return ResponseEntity.ok(userService.updateUser(authentication.name(), updateUserDto));
+        return ResponseEntity.ok(userService.updateUser(authentication.getName(), updateUserDto));
     }
 
     @Operation(
@@ -96,7 +96,7 @@ public class UserController {
     @PatchMapping(value = "/me/image", consumes =  {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> image(@RequestBody MultipartFile image,
                                       Authentication authentication) {
-        userService.updateUserAvatar(authentication.name(), image);
+        userService.updateUserAvatar(authentication.getName(), image);
         return ResponseEntity.ok().build();
     }
     @Operation(summary = "getUserAvatar",
@@ -108,8 +108,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Not Found")})
     @PreAuthorize("isAuthenticated()")
 
-    @GetMapping(value = "me/image/", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
-
+    @GetMapping(value = "me/{image}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
     public byte[] getImage(@PathVariable("id") String id) {
         return imageService.getImage(id);
     }

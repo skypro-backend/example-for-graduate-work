@@ -20,7 +20,9 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final ImageService imageService;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder, ImageService imageService) {
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder encoder,
+                           ImageService imageService) {
         this.userRepository = userRepository;
         this.encoder = encoder;
         this.imageService = imageService;
