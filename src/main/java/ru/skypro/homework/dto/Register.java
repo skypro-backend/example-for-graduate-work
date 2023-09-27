@@ -1,7 +1,6 @@
 package ru.skypro.homework.dto;
 
 import lombok.*;
-import ru.skypro.homework.entity.UserEntity;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -39,14 +38,4 @@ public class Register {
     @NotBlank
     private Role role;
 
-    public UserEntity toUserEntity() {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(this.getUsername());
-        userEntity.setPassword(this.getPassword());
-        userEntity.setFirstName(this.getFirstName());
-        userEntity.setLastName(this.getLastName());
-        userEntity.setPhone(this.getPhone());
-        userEntity.setRole(this.getRole());
-        return userEntity;
-    }
 }
