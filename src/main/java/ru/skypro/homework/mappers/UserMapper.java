@@ -15,15 +15,12 @@ public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    UpdateUserDTO toUpdateUserDto(UserEntity userEntity);
 
-//    //(Обновление информации об авторизованном пользователе)
-//    UpdateUserDTO userEntityToUpdateuserDto(UserEntity userEntity);
-//
-//    //(Получение информации об авторизованном пользователе)
-//    UserDTO userEntityToUserDto(UserEntity userEntity);
-//
-//    //(Обновление пароля)
-//    NewPasswordDTO userEntityToNewPasswordDto(UserEntity userEntity);
+    UpdateUserDTO userEntityToUpdateuserDto(UserEntity userEntity);
+
+    UserDTO userEntityToUserDto(UserEntity userEntity);
+
+    //(Обновление пароля)
+    NewPasswordDTO userEntityToNewPasswordDto(UserEntity userEntity);
 
 }

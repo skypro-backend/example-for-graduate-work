@@ -33,18 +33,22 @@ public class UserController {
 
     @Operation(summary = "Обновление пароля")
     @PostMapping("/set_password")
-    public ResponseEntity<NewPasswordDTO> updatePassword(@RequestBody NewPasswordDTO user) {
+    public ResponseEntity<?> updatePassword(@RequestBody NewPasswordDTO user) {
 
-        NewPasswordDTO newPasswordDTO = null;
-
-        return ResponseEntity.ok().body(newPasswordDTO);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Получение информации об авторизованном пользователе")
     @GetMapping("/me")
-    public ResponseEntity<?> getUser(@RequestBody UserDTO user) {
+    public ResponseEntity<UserDTO> getUser(@RequestBody UserDTO user) {
 
-        return ResponseEntity.ok().body(null);
+        Optional<UserEntity> byId = userRepository.findById(1);
+        UserEntity userTest = byId.orElse(null);
+
+        UserDTO userDTO = userService.getUser(userTest);
+        log.info("User updated successfully");
+
+        return ResponseEntity.ok().body(userDTO);
     }
 
     @Operation(summary = "Обновление информации об авторизованном пользователе")
@@ -56,8 +60,8 @@ public class UserController {
 
         UpdateUserDTO userDTO1 = userService.updateUser(userTest);
         log.info("User updated successfully");
-        UpdateUserDTO updateUserDTO = null;
-        return ResponseEntity.ok().body(updateUserDTO);
+
+        return ResponseEntity.ok().body(userDTO1);
 
     }
 
