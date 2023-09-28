@@ -21,9 +21,6 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @Column(name = "count", nullable = false)
-    int count;
-
     @Column(name = "text", nullable = false)
     String text;
 
@@ -31,7 +28,7 @@ public class CommentEntity {
     Long createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id" , referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     UserEntity user;
 
     @ManyToOne

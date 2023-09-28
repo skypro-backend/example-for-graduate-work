@@ -41,9 +41,10 @@ public class CommentController {
     @GetMapping("/{id}/comments")
     public ResponseEntity<CommentsDTO> receivingAdComments(@PathVariable int id) {
 
+        CommentsDTO commentsDTO = commentService.receivingAdComments(id);
         log.info("Comment received");
 
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(commentsDTO);
     }
 
     @Operation(summary = "Добавление комментария к объявлению")
@@ -69,7 +70,7 @@ public class CommentController {
     })
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable int adId, @PathVariable int commentId) {
-
+        commentService.deleteComment(adId, commentId);
         return ResponseEntity.ok().build();
     }
 

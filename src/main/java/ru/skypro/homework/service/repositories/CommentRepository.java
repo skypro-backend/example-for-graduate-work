@@ -6,4 +6,6 @@ import ru.skypro.homework.service.entities.CommentEntity;
 public interface CommentRepository extends JpaRepository<CommentEntity, Integer> {
 
 
+    public CommentEntity deleteByIdAndAdEntity_Pk(Integer id, int adEntity_pk);
+
 }
