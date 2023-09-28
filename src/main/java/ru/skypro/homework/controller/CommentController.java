@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.projection.CreateOrUpdateComment;
+import ru.skypro.homework.service.comment.CommentService;
 
 import javax.validation.Valid;
 
@@ -20,6 +21,9 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Tag(name = "Комментарии")
 public class CommentController {
+
+    private final CommentService commentService;
+
     @GetMapping("/{id}/comments")
     @Operation(summary = "Получение комментариев объявления")
     @ApiResponses({

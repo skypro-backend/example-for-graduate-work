@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -12,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.projection.CreateOrUpdateAd;
+import ru.skypro.homework.service.ads.AdsService;
 
 import javax.validation.Valid;
 import java.time.Instant;
@@ -23,6 +25,7 @@ import java.time.Instant;
 @RequiredArgsConstructor
 @Tag(name = "Объявления")
 public class AdsController {
+    private final AdsService adsService;
     @GetMapping()
     @Operation(summary = "Получение всех объявлений")
     @ApiResponse(responseCode = "200", description = "OK")
