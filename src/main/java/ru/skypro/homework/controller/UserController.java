@@ -1,6 +1,8 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,9 +15,8 @@ import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.impl.UserServiceImpl;
-import ru.skypro.homework.store.entities.UserEntity;
-import ru.skypro.homework.mappers.UserMapper;
-import ru.skypro.homework.store.repositories.UserRepository;
+import ru.skypro.homework.service.entities.UserEntity;
+import ru.skypro.homework.service.repositories.UserRepository;
 
 import java.util.Optional;
 
@@ -32,6 +33,11 @@ public class UserController {
     UserRepository userRepository;
 
     @Operation(summary = "Обновление пароля")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden")
+    })
     @PostMapping("/set_password")
     public ResponseEntity<?> updatePassword(@RequestBody NewPasswordDTO user) {
 
@@ -39,6 +45,9 @@ public class UserController {
     }
 
     @Operation(summary = "Получение информации об авторизованном пользователе")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUser(@RequestBody UserDTO user) {
 
@@ -52,6 +61,10 @@ public class UserController {
     }
 
     @Operation(summary = "Обновление информации об авторизованном пользователе")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @PatchMapping("/me")
     public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody UpdateUserDTO user) {
 
@@ -66,6 +79,10 @@ public class UserController {
     }
 
     @Operation(summary = "Обновление аватара авторизованного пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUserAvatar(@RequestPart MultipartFile image) {
 

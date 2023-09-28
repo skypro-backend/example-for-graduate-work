@@ -1,4 +1,4 @@
-package ru.skypro.homework.store.entities;
+package ru.skypro.homework.service.entities;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

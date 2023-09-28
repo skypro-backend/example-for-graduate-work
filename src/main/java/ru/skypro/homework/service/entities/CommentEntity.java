@@ -1,10 +1,11 @@
-package ru.skypro.homework.store.entities;
+package ru.skypro.homework.service.entities;
 
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,7 +19,7 @@ public class CommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    Integer id;
 
     @Column(name = "count", nullable = false)
     int count;
@@ -27,9 +28,14 @@ public class CommentEntity {
     String text;
 
     @Column(name = "created_at", nullable = false)
-    LocalDateTime createdAt;
+    Long createdAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id" , referencedColumnName = "id")
     UserEntity user;
+
+    @ManyToOne
+    @JoinColumn(name = "ad_id", referencedColumnName = "pk")
+    AdEntity adEntity;
+
 }

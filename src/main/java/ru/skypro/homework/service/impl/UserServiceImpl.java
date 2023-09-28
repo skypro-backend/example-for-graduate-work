@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.mappers.UserMapper;
-import ru.skypro.homework.store.entities.UserEntity;
+import ru.skypro.homework.service.entities.UserEntity;
 
 @AllArgsConstructor
 @Service

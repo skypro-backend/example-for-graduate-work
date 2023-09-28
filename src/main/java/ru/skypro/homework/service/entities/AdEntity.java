@@ -1,10 +1,11 @@
-package ru.skypro.homework.store.entities;
+package ru.skypro.homework.service.entities;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.skypro.homework.dto.UserDTO;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -35,7 +36,10 @@ public class AdEntity {
 
     @Column(name = "description", nullable = false)
     String description;
+
     @Column(name = "phone", nullable = false)
     String phone;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "adEntity", cascade = CascadeType.ALL)
+    List<CommentEntity> commentEntityList = new ArrayList<>();
 }
