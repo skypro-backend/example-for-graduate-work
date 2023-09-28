@@ -37,7 +37,7 @@ public class UserTransformer {
         return userEntity;
     }
 
-    public static UpdateUser userEntityToUpdateUser(UserEntity userEntity) {
+    public UpdateUser userEntityToUpdateUser(UserEntity userEntity) {
         if (userEntity == null) {
             return null;
         }
