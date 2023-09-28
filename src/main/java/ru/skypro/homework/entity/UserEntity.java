@@ -51,10 +51,9 @@ public class UserEntity {
     private String image;
 
     @NotBlank(message = "Это поле не может быть пустым")
-    @Size(min = 8, max = 16, message = "Пароль должен содержать не менее 8 и не более 16 символов")
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AdEntity> ads;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
