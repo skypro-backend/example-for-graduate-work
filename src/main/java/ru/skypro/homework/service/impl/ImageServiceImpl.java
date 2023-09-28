@@ -20,7 +20,8 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public String uploadImage(MultipartFile image) {
         Image entity = new Image();
-        entity.setId(UUID.randomUUID().toString());
+        String name = UUID.randomUUID()+type(image);
+        entity.setId(name);
         try {
             byte[] bytes = image.getBytes();
             entity.setImage(bytes);
@@ -36,5 +37,18 @@ public class ImageServiceImpl implements ImageService {
         Image entity = new Image();
         entity = imageRepository.getReferenceById(id);
         return entity.getImage();
+    }
+
+    @Override
+    public void deleteImage(String id) {
+        imageRepository.deleteById(id);
+    }
+    private String type(MultipartFile image) {
+
+        String type = image.getContentType();
+        assert type != null;
+        type = type.replace("image/", ".");
+
+        return type;
     }
 }

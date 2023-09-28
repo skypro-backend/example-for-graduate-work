@@ -6,12 +6,13 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.dto.UpdateUserDto;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.AuthoritiesRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
 
+import java.util.NoSuchElementException;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -24,7 +25,9 @@ public class AuthServiceImpl implements AuthService {
 
     public AuthServiceImpl(UserDetailsManager manager,
                            PasswordEncoder passwordEncoder,
-                           UserService userService, UserRepository userRepository, AuthoritiesRepository authoritiesRepository) {
+                           UserService userService,
+                           UserRepository userRepository,
+                           AuthoritiesRepository authoritiesRepository) {
         this.manager = manager;
         this.encoder = passwordEncoder;
         this.userService = userService;
@@ -53,13 +56,13 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         manager.createUser(userDetails);
+        User user = userRepository.findUserByUsername(register.getUsername()).orElseThrow(NoSuchElementException::new);
+        user.setRole(Role.USER.name());
+        user.setFirstName(register.getFirstName());
+        user.setLastName(register.getLastName());
+        user.setPhone(register.getPhone());
+        userRepository.save(user);
 
-        UpdateUserDto userDto = new UpdateUserDto();
-        userDto.setFirstName(register.getFirstName());
-        userDto.setLastName(register.getLastName());
-        userDto.setPhone(register.getPhone());
-
-        userService.updateUser(register.getUsername(), userDto);
         return true;
     }
 }

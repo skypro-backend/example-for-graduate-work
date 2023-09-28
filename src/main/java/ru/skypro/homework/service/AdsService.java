@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
+import ru.skypro.homework.dto.FullAdDto;
 
 
 public interface AdsService {
@@ -13,11 +14,13 @@ public interface AdsService {
 
     AdDto getAdById(Integer id);
 
-    void removeAd(Integer id);
+    FullAdDto getFullAdById(Integer id);
 
-    AdDto updateAdById(Integer id, CreateOrUpdateAdDto createOrUpdateAdDto);
+    void removeAd(Integer id, String username);
+
+    boolean updateAdById(Integer id, CreateOrUpdateAdDto createOrUpdateAdDto, String username);
 
     AdsDto getAllAdsForUser(String userName);
 
-    AdDto updateImageById (Integer id, String image);
+    boolean updateImageById (Integer id, MultipartFile image);
 }

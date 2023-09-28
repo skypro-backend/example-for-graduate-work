@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 public class UpdateUserDto {
 
     @Schema(description = "Имя пользователя")
-    public String firstName;
+    private String firstName;
 
     @Schema(description = "Фамилия пользователя")
-    public String lastName;
+    private String lastName;
 
     @Schema(description = "Телефон пользователя")
-    public String phone;
+    private String phone;
 }

@@ -13,13 +13,11 @@ import ru.skypro.homework.entity.User;
 public class UserDto {
     private Integer id; // ($int32)
     private String email; //логин пользователя
-    private String password; //пароль пользователя
     private String firstName; //имя пользователя
     private String lastName; //фамилия пользователя
     private String phone; //телефон пользователя
     private String role; //роль пользователя
     private String image; // ссылка на аватар пользователя
-    private boolean enabled;
 
     public static UserDto fromUser(User user) {
         UserDto dto = new UserDto();
@@ -39,11 +37,10 @@ public class UserDto {
     }
 
 
-    public UserDto toUser() {
-        UserDto user = new UserDto();
+    public User toUser() {
+        User user = new User();
         user.setId(this.getId());
-        user.setEmail(this.getEmail());
-        user.setPassword(user.getPassword());
+        user.setUsername(this.getEmail());
         user.setFirstName(this.getFirstName());
         user.setLastName(this.getLastName());
         user.setPhone(this.getPhone());
@@ -56,4 +53,5 @@ public class UserDto {
 
         return user;
     }
+
 }

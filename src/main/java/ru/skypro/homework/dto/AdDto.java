@@ -1,5 +1,6 @@
 package ru.skypro.homework.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,6 +16,7 @@ public class AdDto {
 
     private Integer user; //($int32) id автора объявления
     private String image; // ссылка на картинку объявления
+    @JsonProperty("pk")
     private Integer pk; //($int32)id объявления
     private Integer price; //($int32) цена объявления
     private String title; //заголовок объявления
@@ -23,7 +25,11 @@ public class AdDto {
         AdDto dto = new AdDto();
         dto.setPk(ad.getPk());
         dto.setUser(ad.getUser().getId());
-        dto.setImage(ad.getImage());
+        if (ad.getImage() != null) {
+            dto.setImage(String.format("/ads/image/%s", ad.getImage()));
+        } else {
+            dto.setImage(null);
+        }
         dto.setPrice(ad.getPrice());
         dto.setTitle(ad.getTitle());
 
