@@ -14,4 +14,5 @@ public class UserDto {
       private String phone; //телефон пользователя
       private String email;  //логин пользователя
       private String image; //ссылка на аватар пользователя
+      private String role;
 }
