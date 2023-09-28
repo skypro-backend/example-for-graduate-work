@@ -7,6 +7,8 @@ import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 
+import javax.validation.Valid;
+
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class CommentsController {
 
     @PostMapping("/ads/{id}/comments")
     public ResponseEntity<CommentDTO> addComment(@PathVariable(name = "id") int id,
-                                                  @RequestBody CreateOrUpdateCommentDTO createCommentDTO) {
+                                                 @Valid @RequestBody CreateOrUpdateCommentDTO createCommentDTO) {
         return ResponseEntity.ok(new CommentDTO());
     }
 
@@ -32,7 +34,7 @@ public class CommentsController {
     @PatchMapping("/ads/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable(name = "adId") int adId,
                                                     @PathVariable(name = "commentId") int commentId,
-                                                    @RequestBody CreateOrUpdateCommentDTO updateCommentDTO) {
+                                                    @Valid @RequestBody CreateOrUpdateCommentDTO updateCommentDTO) {
         return ResponseEntity.ok(new CommentDTO());
     }
 

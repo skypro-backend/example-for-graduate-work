@@ -12,6 +12,8 @@ import ru.skypro.homework.dto.LoginDTO;
 import ru.skypro.homework.dto.RegisterDTO;
 import ru.skypro.homework.service.AuthService;
 
+import javax.validation.Valid;
+
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -21,7 +23,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
         if (authService.login(loginDTO.getUsername(), loginDTO.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
@@ -30,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterDTO registerDTO) {
         if (authService.register(registerDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
