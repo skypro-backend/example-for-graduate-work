@@ -1,15 +1,21 @@
 package ru.skypro.homework.entity;
 
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 @NoArgsConstructor
+@AllArgsConstructor
+
+@Entity
 @Table(name = "comments")
 public class CommentEntity {
 
-    private int createdAt;
+    private long createdAt;
     private String text;
 
     @Id

@@ -28,7 +28,7 @@ public class AdsController {
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Ad> postAd(@RequestParam CreateOrUpdateAd properties,
+    public ResponseEntity<Ad> postAd(@RequestParam ("properties") CreateOrUpdateAd properties,
                                      @RequestParam("image") MultipartFile file) {
         //здесь будет вызов сервиса
         return new ResponseEntity<>(new Ad(), HttpStatus.OK);

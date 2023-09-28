@@ -10,6 +10,8 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 
+import javax.validation.Valid;
+
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class UsersController {
     //здесь будет зависимость от UserService
 
     @PostMapping("/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword) {
+    public ResponseEntity<Void> setPassword(@Valid @RequestBody NewPassword newPassword) {
         //здесь будет вызов сервиса
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -31,7 +33,7 @@ public class UsersController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUser> patchUser(@RequestBody UpdateUser updateUser) {
+    public ResponseEntity<UpdateUser> patchUser(@Valid @RequestBody UpdateUser updateUser) {
         //здесь будет вызов сервиса
         return new ResponseEntity<>(new UpdateUser(), HttpStatus.OK);
     }

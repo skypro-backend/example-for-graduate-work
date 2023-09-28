@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 public class CreateOrUpdateAd {
 
     @NotBlank
-    @Size(min = 8, max = 16)
+    @Size(min = 4, max = 32)
     private String title;
 
     @Min(value = 0)
