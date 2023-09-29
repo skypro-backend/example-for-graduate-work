@@ -10,6 +10,7 @@ import ru.skypro.homework.service.entities.CommentEntity;
 import ru.skypro.homework.service.repositories.AdRepository;
 import ru.skypro.homework.service.repositories.CommentRepository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,13 +37,28 @@ public class CommentServiceImpl {
 
             return new CommentsDTO(commentDTOList.size(), commentDTOList);
         } else {
-            throw new NotFoundException(String.format("Объявление с индефикатором \"%s\" не найден.", adId));
+            throw new NotFoundException(String.format("Объявление с индексом \"%s\" не найдено.", adId));
         }
     }
 
     public void deleteComment(int adId, int commentId) {
-        commentRepository.deleteByIdAndAdEntity_Pk(adId, commentId);
-    }
+        Optional<AdEntity> adOptional = adRepository.findById(adId);
 
+        AdEntity adEntity = adOptional.orElseThrow(() ->
+                new NotFoundException(String.format("Объявление с индексом \"%s\" не найдено.", adId)));
+
+        List<CommentEntity> commentEntityList = adEntity.getCommentEntityList();
+
+        Optional<CommentEntity> commentOptional = commentEntityList.stream()
+                .filter(comment -> comment.getId() == commentId)
+                .findFirst();
+
+        if (commentOptional.isPresent()) {
+            CommentEntity commentToDelete = commentOptional.get();
+            commentRepository.delete(commentToDelete);
+        } else {
+            throw new NotFoundException(String.format("Комментарий с индексом \"%s\" не найден для объявления с индексом \"%s\".", commentId, adId));
+        }
+    }
 
 }

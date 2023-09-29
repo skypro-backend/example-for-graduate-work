@@ -40,6 +40,6 @@ public class AdEntity {
     @Column(name = "phone", nullable = false)
     String phone;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "adEntity", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "adEntity")
     List<CommentEntity> commentEntityList = new ArrayList<>();
 }
