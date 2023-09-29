@@ -21,9 +21,6 @@ import ru.skypro.homework.service.repositories.CommentRepository;
 @RestController
 @RequestMapping("/ads")
 public class CommentController {
-
-    CommentRepository commentRepository;
-
     CommentService commentService;
 
     @Operation(summary = "Получение комментариев объявления")

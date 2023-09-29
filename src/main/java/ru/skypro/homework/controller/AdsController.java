@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import javax.xml.crypto.OctetStreamData;
 
@@ -21,6 +22,7 @@ import javax.xml.crypto.OctetStreamData;
 @RestController
 @RequestMapping("/ads")
 public class AdsController {
+        private final AdServiceImpl adService;
 
         @Operation(summary = "Получение всех объявлений")
         @ApiResponses(value = {
@@ -28,7 +30,7 @@ public class AdsController {
         })
         @GetMapping
         public ResponseEntity<AdsDTO> getAds(){
-            return ResponseEntity.ok(new AdsDTO());
+            return ResponseEntity.ok().body(adService.getAllAds());
         }
 
         @Operation(summary = "Добавление объявления")
@@ -40,6 +42,7 @@ public class AdsController {
         )
         @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
         public ResponseEntity<AdDTO> addAd(@RequestParam("properties") AdDTO ad, @RequestPart MultipartFile image) {
+                adService.addAd(ad,image);
                 return ResponseEntity.ok(ad);
         }
 

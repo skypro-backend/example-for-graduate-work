@@ -1,13 +1,17 @@
 package ru.skypro.homework.mappers;
 
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.service.entities.AdEntity;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+
+@Component
 public class AdMapper{
 
     public AdDTO toAdDto(AdEntity ad) {
@@ -67,5 +71,18 @@ public class AdMapper{
         }
 
         return list;
+    }
+
+    public AdsDTO toAdsDto(List<AdEntity> ad) {
+        if ( ad == null ) {
+            return null;
+        }
+        List<AdDTO> adDTO = new ArrayList<AdDTO>(ad.size());
+        int count=0;
+        for (AdEntity adEntity : ad) {
+            count++;
+            adDTO.add(toAdDto(adEntity));
+        }
+        return new AdsDTO(count,adDTO);
     }
 }
