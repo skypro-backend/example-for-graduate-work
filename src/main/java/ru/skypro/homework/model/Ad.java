@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity // сущность
@@ -13,6 +14,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Ad {
+      @Id
       private Integer pk; // идентификатор объявления
       private Integer author; // идентификатор автора
       private String title; // заголовок объявления
