@@ -1,47 +1,41 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.MyDatabaseUserDetails;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.transformer.UserTransformer;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
+    private final MyDatabaseUserDetailsService myDatabaseUserDetailsService;
     private final PasswordEncoder encoder;
-
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
-        this.encoder = passwordEncoder;
-    }
+    private final UserTransformer userTransformer;
 
     @Override
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
+        if (!myDatabaseUserDetailsService.userExists(userName)) {
             return false;
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
+        UserDetails userDetails = myDatabaseUserDetailsService.loadUserByUsername(userName);
         return encoder.matches(password, userDetails.getPassword());
     }
 
     @Override
     public boolean register(Register register) {
-        if (manager.userExists(register.getUsername())) {
+        UserEntity userEntity = userTransformer.fromRegisterToUserEntity(register);
+        MyDatabaseUserDetails myDatabaseUserDetails = new MyDatabaseUserDetails(userEntity);
+        if (! myDatabaseUserDetailsService.userExists(register.getUsername())) {
+            myDatabaseUserDetailsService.createUser(myDatabaseUserDetails);
+            return true;
+        } else {
             return false;
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
-        return true;
     }
-
 }
