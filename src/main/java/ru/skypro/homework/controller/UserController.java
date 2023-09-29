@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.impl.UserServiceImpl;
 import ru.skypro.homework.service.entities.UserEntity;
 import ru.skypro.homework.service.repositories.UserRepository;
@@ -28,7 +30,7 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class UserController {
 
-    UserServiceImpl userService;
+    UserService userService;
 
     UserRepository userRepository;
 

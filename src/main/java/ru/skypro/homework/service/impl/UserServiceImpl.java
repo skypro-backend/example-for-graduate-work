@@ -5,14 +5,16 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.mappers.UserMapper;
+import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.entities.UserEntity;
 
 @AllArgsConstructor
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
+
     private final UserMapper userMapper;
 
-
+    @Override
     public UpdateUserDTO updateUser(UserEntity userEntity) {
         if (userEntity != null) {
             userMapper.toUpdateUserDto(userEntity);
@@ -21,7 +23,7 @@ public class UserServiceImpl {
             throw new RuntimeException();
         }
     }
-
+    @Override
     public UserDTO getUser(UserEntity userEntity) {
         if (userEntity != null) {
             userMapper.toUserDto(userEntity);

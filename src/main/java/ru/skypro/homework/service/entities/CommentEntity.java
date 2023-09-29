@@ -3,6 +3,7 @@ package ru.skypro.homework.service.entities;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -18,14 +19,14 @@ import java.time.LocalDateTime;
 public class CommentEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Integer id;
 
     @Column(name = "text", nullable = false)
     String text;
 
     @Column(name = "created_at", nullable = false)
-    Long createdAt;
+    LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
