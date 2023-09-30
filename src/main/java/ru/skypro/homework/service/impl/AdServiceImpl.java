@@ -1,135 +1,94 @@
 package ru.skypro.homework.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
-import ru.skypro.homework.dto.User;
-import ru.skypro.homework.entity.Image;
-import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
-import ru.skypro.homework.service.ImageService;
-import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.transformer.AdTransformer;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-public class AdServiceImpl extends AdService {
+public class AdServiceImpl implements AdService {
 
     private final AdRepository adRepository;
-    private final UserService userService;
-    private final ImageService imageService;
+    private final UserRepository usersRepository;
+    private final AdTransformer adTransformer;
 
-    @Override
-    public Ad createAd(String userLogin, MultipartFile multipartFile, CreateOrUpdateAd createAd) {
-        Optional<ru.skypro.homework.dto.User> user = userService.getUserByLogin();
-        if (user.isEmpty()) {
-            throw new RuntimeException("NOT FOUND");
-        }
-        Ad ad = new Ad();
-        ad = AdMapper.INSTANCE.createOrUpdateAdToAd(createAd, ad);
-        ad.setAuthor(user.get().getId());
-        adRepository.save(ad);
-        Image image;
-        try {
-            image = imageService.changeAdImage(ad.getId(), -1L, multipartFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        ad.setImage(String.valueOf(image));
-        adRepository.save(ad);
-        return AdMapper.INSTANCE.adToDto(ad);
+    public AdServiceImpl(AdRepository adRepository, UserRepository usersRepository, AdTransformer adTransformer) {
+        this.adRepository = adRepository;
+        this.usersRepository = usersRepository;
+        this.adTransformer = adTransformer;
     }
 
     @Override
-    public List<Ad> getAllAds() {
-        List<Ad> adDtoList = new ArrayList<>();
-        List<Ad> adList = adRepository.findAll();
-        if (adList.isEmpty()) {
-            return adList;
-        }
-        for (Ad ad : adList) {
-            adDtoList.add(AdMapper.INSTANCE.adToDto(ad));
-        }
-        return adDtoList;
+    @Transactional
+    public Ads getAllAds() {
+        Ads allAds = new Ads();
+        List<AdEntity> list = (List<AdEntity>) adRepository.findAll();
+        allAds.setCount(list.size());
+        allAds.setResults(list.stream().map(adTransformer::adEntityToAd).collect(Collectors.toList()));
+        return allAds;
     }
 
     @Override
-    public List<Ad> getMyAds(String userLogin) {
-        Optional<User> optionalUser = userService.getUserByLogin();
-        List<Ad> adList;
-        List<Ad> adsList = new ArrayList<>();
-        if (optionalUser.isEmpty()) {
-            return new ArrayList<>();
-        }
-        adList = optionalUser.get().getUserAd();
-        for (Ad ad : adList) {
-            adsList.add(AdMapper.INSTANCE.adToDto(ad));
-        }
-        return adsList;
+    @Transactional
+    public Ad postAd(CreateOrUpdateAd properties, MultipartFile file, String userName) {
+        UserEntity author = usersRepository.findByUsername(userName);
+        AdEntity adEntity = adTransformer.createOrUpdateAdToAdEntity(properties, author);
+        AdEntity createdAdEntity = adRepository.save(adEntity);
+        return adTransformer.adEntityToAd(createdAdEntity);
     }
 
     @Override
-    public Optional<ExtendedAd> getExtendedAdDto(Long id) {
-        Optional<Ad> optionalAd = adRepository.findById(id);
-        return optionalAd.map(AdMapper.INSTANCE::extendedAdToDto);
+    @Transactional
+    public ExtendedAd getAdById(int id) throws AdNotFoundException {
+        return adRepository.findById(id).map(adTransformer::adEntityToExtendedAd)
+                .orElseThrow(() -> new AdNotFoundException("Not found ad with id = " + id));
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN') or @permissionCheckServiceImpl.checkAdsUserName(#userLogin, #idAd)")
-    public Optional<Ad> updateAd(String userLogin, Long idAd, CreateOrUpdateAd updateAd) {
-        Optional<Ad> optionalAd = adRepository.findById(idAd);
-        if (optionalAd.isEmpty()) {
-            return Optional.empty();
-        }
-        Ad ad = optionalAd.get();
-        ad = AdMapper.INSTANCE.createOrUpdateAdToAd(updateAd, ad);
-        adRepository.save(ad);
-        return Optional.ofNullable(AdMapper.INSTANCE.INSTANCE.adToDto(ad));
+    @Transactional
+    public void deleteAdById(int id) {
+        adRepository.deleteById(id);
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN') or @permissionCheckServiceImpl.checkAdsUserName(authenticated.name, #idAd)")
-    public Optional<String> changeImage(Long idAd, MultipartFile multipartFile) {
-        Optional<Ad> optionalAd = adRepository.findById(idAd);
-        if (optionalAd.isEmpty()) {
-            return Optional.empty();
-        }
-        Ad ad = optionalAd.get();
-        Image image;
-        try {
-            image = imageService.changeAdImage(idAd,
-                    ad.getId(),                           //ad.getImage().getId(),
-                    multipartFile);
-            ad.setImage(String.valueOf(image));
-            adRepository.save(ad);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return Optional.ofNullable(image.getFileName());
+    @Transactional
+    public Ad patchAdById(int id, CreateOrUpdateAd createOrUpdateAd) throws AdNotFoundException {
+        AdEntity adEntity = adRepository.findById(id)
+                .orElseThrow(() -> new AdNotFoundException("Not found ad with id = " + id));
+        adEntity.setTitle(createOrUpdateAd.getTitle());
+        adEntity.setPrice(createOrUpdateAd.getPrice());
+        adEntity.setDescription(createOrUpdateAd.getDescription());
+        AdEntity updatedAdEntity = adRepository.save(adEntity);
+        return adTransformer.adEntityToAd(updatedAdEntity);
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN') or @permissionCheckServiceImpl.checkAdsUserName(#Login, #idAd)")
-    public boolean deleteByIdAd(String userLogin, Long idAd) {
-        Optional<ru.skypro.homework.dto.User> optionalUser = userService.getUserByLogin();
-        if (optionalUser.isEmpty()) {
-            return false;
-        }
-        if (!adRepository.existsById(idAd)) {
-            return false;
-        } else {
-            adRepository.deleteById(idAd);
-            return true;
-        }
+    @Transactional
+    public Ads getMyAds(String userName) {
+        UserEntity author = usersRepository.findByUsername(userName);
+        List<AdEntity> list = adRepository.findAllByAuthor(author);
+        Ads myAds = new Ads();
+        myAds.setCount(list.size());
+        myAds.setResults(list.stream().map(adTransformer::adEntityToAd).collect(Collectors.toList()));
+        return myAds;
     }
 
+    @Override
+    @Transactional
+    public void patchAdsImageById(int id, MultipartFile file) {
+        //todo: уточнить про возвращаемый октет-стрим и доделать!!!
+    }
 }
