@@ -2,6 +2,7 @@ package ru.skypro.homework.transformer;
 
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.UserEntity;
@@ -50,6 +51,20 @@ public class AdTransformer {
         extendedAd.setPrice(adEntity.getPrice());
         extendedAd.setTitle(adEntity.getTitle());
         return extendedAd;
+    }
+
+    public AdEntity createOrUpdateAdToAdEntity(CreateOrUpdateAd createOrUpdateAd, UserEntity author) {
+
+        if (createOrUpdateAd == null) {
+            return null;
+        }
+        AdEntity adEntity = new AdEntity();
+        adEntity.setPrice(createOrUpdateAd.getPrice());
+        adEntity.setTitle(createOrUpdateAd.getTitle());
+        adEntity.setAuthor(author);
+        adEntity.setImage(null);//todo: change to returning image url
+        adEntity.setDescription(createOrUpdateAd.getDescription());
+        return adEntity;
     }
 }
 

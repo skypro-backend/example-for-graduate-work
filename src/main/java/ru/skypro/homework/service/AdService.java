@@ -1,29 +1,26 @@
 package ru.skypro.homework.service;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.exceptions.AdNotFoundException;
 
-import java.util.List;
-import java.util.Optional;
+public interface AdService {
 
-public abstract class AdService {
-    public abstract Ad createAd(String userLogin, MultipartFile multipartFile, CreateOrUpdateAd createAd);
+    Ad postAd(CreateOrUpdateAd properties, MultipartFile file, String username);
 
-    public abstract List<Ad> getAllAds();
+    Ads getAllAds();
 
-    public abstract Optional<ExtendedAd> getExtendedAdDto(Long id);
+    ExtendedAd getAdById(int id) throws AdNotFoundException;
 
-    @PreAuthorize("hasRole('ADMIN') or @permissionCheckServiceImpl.checkAdsUserName(#userLogin, #idAd)")
-    public abstract boolean deleteByIdAd(String userLogin, Long idAd);
+    void deleteAdById(int id);
 
-    @PreAuthorize("hasRole('ADMIN') or @permissionCheckServiceImpl.checkAdsUserName(#userLogin, #idAd)")
-    public abstract Optional<Ad> updateAd(String userLogin, Long idAd, CreateOrUpdateAd updateAd);
+    Ad patchAdById(int id, CreateOrUpdateAd createOrUpdateAd) throws AdNotFoundException;
 
-    public abstract List<Ad> getMyAds(String userLogin);
+    Ads getMyAds(String userName);
 
-    @PreAuthorize("hasRole('ADMIN') or @permissionCheckServiceImpl.checkAdsUserName(authenticated.name, #idAd)")
-    public abstract Optional<String> changeImage(Long idAd, MultipartFile multipartFile);
+    void patchAdsImageById(int id, MultipartFile file);
+
 }
