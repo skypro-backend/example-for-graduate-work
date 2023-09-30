@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -29,7 +28,7 @@ public class AdsController {
     @GetMapping()
     @Operation(summary = "Получение всех объявлений")
     @ApiResponse(responseCode = "200", description = "OK")
-    public ResponseEntity<?> getAllAds() {return null;}
+    public ResponseEntity<?> getAllAds() {return (ResponseEntity<?>) adsService.getAllAds();}
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Добавление объявления")
