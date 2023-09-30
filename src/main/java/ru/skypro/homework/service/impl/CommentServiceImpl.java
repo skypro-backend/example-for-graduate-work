@@ -29,7 +29,7 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
     private final UserDetails userDetails;
 
-    private static final String USER_NOT_FOUND = "Пользователь не найден";
+    private static final String USER_NOT_FOUND = "User not found";
 
     public CommentServiceImpl(CommentRepository commentRepository,
                               CommentMapper commentMapper,
@@ -55,7 +55,7 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public Comment addComment(Integer id, CreateOrUpdateComment createOrUpdateComment) {
         AdEntity adEntity = adRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Объявление не найдено"));
+                .orElseThrow(() -> new IllegalArgumentException("Advertisement not found"));
         CommentEntity commentEntity = commentMapper.toCommentEntity(createOrUpdateComment, new CommentEntity());
         UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
@@ -71,8 +71,8 @@ public class CommentServiceImpl implements CommentService {
         UserEntity userEntity = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         CommentEntity commentEntity = commentRepository.findByIdAndAdEntity_Id(commentId, adId)
-                .orElseThrow(() -> new IllegalArgumentException("Комментарий не найден"));
-        if (canUserChangeComment(userEntity, commentEntity)) {
+                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
+        if (userEntity.getRole() == Role.ADMIN || commentEntity.getUserEntity().equals(userEntity)) {
             commentRepository.delete(commentEntity);
             return true;
         }
@@ -86,15 +86,11 @@ public class CommentServiceImpl implements CommentService {
         UserEntity userEntity = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         CommentEntity commentEntity = commentRepository.findByIdAndAdEntity_Id(commentId, adId)
-                .orElseThrow(() -> new IllegalArgumentException("Комментарий не найден"));
-        if (canUserChangeComment(userEntity, commentEntity)) {
+                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
+        if (userEntity.getRole() == Role.ADMIN || commentEntity.getUserEntity().equals(userEntity)) {
             return commentMapper.toComment(commentRepository.save(
                             commentMapper.toCommentEntity(createOrUpdateComment, commentEntity)));
         }
         return null;
-    }
-
-    private boolean canUserChangeComment(UserEntity userEntity, CommentEntity commentEntity) {
-        return userEntity.getRole() == Role.ADMIN || commentEntity.getUserEntity().equals(userEntity);
     }
 }
