@@ -7,20 +7,24 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.comment.Comment;
 import ru.skypro.homework.dto.comment.Comments;
 import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
+import ru.skypro.homework.service.CommentService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/ads")
+@RequestMapping("/comments")
 @Tag(name = "Комментарии")
 public class CommentController {
+
+    private final CommentService commentService;
 
     @Operation(
             summary = "Получить комментарии объявления",
@@ -37,7 +41,7 @@ public class CommentController {
     )
     @GetMapping("/{id}/comments")
     public ResponseEntity<Comments> getComments(@PathVariable(name = "id") Integer id) {
-        return ResponseEntity.ok(new Comments());
+        return ResponseEntity.ok(commentService.getComments(id));
     }
 
     @Operation(
@@ -55,8 +59,8 @@ public class CommentController {
     )
     @PostMapping("/{id}/comments")
     public ResponseEntity<Comment> addComment(@PathVariable(name = "id") Integer id,
-                                              @RequestBody Comment comment) {
-        return ResponseEntity.ok(new Comment());
+                                              @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+        return ResponseEntity.ok(commentService.addComment(id, createOrUpdateComment));
     }
 
     @Operation(
@@ -71,7 +75,10 @@ public class CommentController {
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable(name = "adId") Integer adId,
                                            @PathVariable(name = "commentId") Integer commentId) {
-        return ResponseEntity.ok(new Comment());
+        if (commentService.deleteComment(adId, commentId)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @Operation(
@@ -91,7 +98,11 @@ public class CommentController {
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<Comment> updateComment(@PathVariable(name = "adId") Integer adId,
                                                  @PathVariable(name = "commentId") Integer commentId,
-                                                 @RequestBody CreateOrUpdateComment comment){
-        return ResponseEntity.ok(new Comment());
+                                                 @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+        Comment comment = commentService.updateComment(adId, commentId, createOrUpdateComment);
+        if (comment != null) {
+            return ResponseEntity.ok(comment);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }
