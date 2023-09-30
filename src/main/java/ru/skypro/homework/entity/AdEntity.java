@@ -33,4 +33,9 @@ public class AdEntity {
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<CommentEntity> adComments;
+
+    public String getDescription() {
+        return description;
+    }
+
 }

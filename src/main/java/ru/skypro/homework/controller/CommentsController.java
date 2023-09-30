@@ -12,9 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.service.CommentsService;
 
 import javax.validation.Valid;
@@ -80,15 +80,15 @@ public class CommentsController {
             @ApiResponse(responseCode = "200",
                     description = "OK",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ResponseWrapper.class))),
+                            schema = @Schema(implementation = Ads.class))),
             @ApiResponse(responseCode = "401",
                     description = "Unauthorized"),
             @ApiResponse(responseCode = "404",
                     description = "Not found")
     })
     @GetMapping("{id}/comments")
-    public ResponseEntity<ResponseWrapper<Comments>> getComments(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(ResponseWrapper.of(commentService.listCommentsAdById(id)));
+    public ResponseEntity<Ads<Comments>> getComments(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(Ads.of(commentService.listCommentsAdById(id)));
     }
 
     @Operation(summary = "Обновление комментария", operationId = "updateComment")
