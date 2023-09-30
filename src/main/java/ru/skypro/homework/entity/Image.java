@@ -20,4 +20,8 @@ public class Image {
     private String fileName;
     private String mediaType;
 
+    public String getFileName() {
+        return null;
+    }
+
 }

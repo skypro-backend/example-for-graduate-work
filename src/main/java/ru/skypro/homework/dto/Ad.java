@@ -16,4 +16,10 @@ public class Ad {
     private int price;
     private String title;
 
+    public void setDescription(String description) {    }
+
+    public Long getId() {
+        return null;
+    }
+
 }
