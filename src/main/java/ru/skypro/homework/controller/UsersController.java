@@ -11,9 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
-import ru.skypro.homework.service.UsersService;
+import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
@@ -23,29 +24,31 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UsersController {
 
-    private final UsersService usersService;
+    private final UserService userService;
+    private Optional<Object> userOptional;
 
     @PostMapping("/set_password")
     public ResponseEntity<Void> setPassword(@Valid @RequestBody NewPassword newPassword) {
-        usersService.setPassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());
+        userService.setPassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> getUser() {
-        User user = usersService.getUser();
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<Object> getUser() {
+        Optional<User> user = userService.getUserByLogin();
+        return userOptional.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NO_CONTENT).build());
     }
 
     @PatchMapping("/me")
     public ResponseEntity<UpdateUser> patchUser(@Valid @RequestBody UpdateUser updateUser) {
-        UpdateUser updatedUser = usersService.updateUser(updateUser);
+        UpdateUser updatedUser = userService.updateUserByUpdateUser(updateUser);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> patchUserAvatar(@RequestParam("image") MultipartFile file) {
-        usersService.updateUserImage(file);
+        userService.changeImage(file);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

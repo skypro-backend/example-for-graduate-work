@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface AdRepository extends CrudRepository<AdEntity, Integer> {
-
     List<AdEntity> findAllByAuthor(UserEntity author);
 }
