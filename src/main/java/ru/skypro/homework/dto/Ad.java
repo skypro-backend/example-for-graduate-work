@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class Ad {
-    Integer authorId;
-    String linkToTheImage;
-    int adId;
-    int adPrice;
-    String adTitle;
+    Integer author;
+    String image;
+    int id;
+    int price;
+    String title;
 }

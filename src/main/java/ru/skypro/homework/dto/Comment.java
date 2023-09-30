@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class Comment {
-    Integer authorId;
-    String linkToImage;
+    int author;
+    String authorImage;
     String authorName;
-    Integer DateAndTimeCommentCreate;
-    int commentId;
-    String commentText;
+    Long createdAt;
+    int id;
+    String text;
 }
