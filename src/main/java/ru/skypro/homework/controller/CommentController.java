@@ -74,9 +74,11 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "Not found")
     })
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId, @PathVariable int commentId) {
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId,
+                                                    @PathVariable int commentId,
+                                                    @RequestBody String text) {
 
-        CommentDTO commentDTO = new CommentDTO();
+        CommentDTO commentDTO = commentService.updateComment(adId, commentId, text);
         return ResponseEntity.ok().body(commentDTO);
     }
 }

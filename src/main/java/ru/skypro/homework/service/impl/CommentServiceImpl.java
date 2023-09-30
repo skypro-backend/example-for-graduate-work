@@ -16,7 +16,6 @@ import ru.skypro.homework.service.repositories.CommentRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -28,48 +27,25 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentsDTO receivingAdComments(int adId) {
-        Optional<AdEntity> byId = adRepository.findById(adId);
+        AdEntity adEntity = checkForAd(adId);
 
-        if (byId.isPresent()) {
-            AdEntity adEntity = byId.get();
-            List<CommentEntity> commentEntityList = new ArrayList<>(adEntity.getCommentEntityList());
-            List<CommentDTO> commentDTOList = commentMapper.toCommentDTOList(commentEntityList);
+        List<CommentEntity> commentEntityList = new ArrayList<>(adEntity.getCommentEntityList());
 
-            return new CommentsDTO(commentDTOList.size(), commentDTOList);
-        } else {
-            throw new NotFoundException(String.format("Объявление с индексом \"%s\" не найдено.", adId));
-        }
+        List<CommentDTO> commentDTOList = commentMapper.toCommentDTOList(commentEntityList);
+
+        return new CommentsDTO(commentDTOList.size(), commentDTOList);
     }
 
     @Override
     public void deleteComment(int adId, int commentId) {
-        AdEntity adEntity = adRepository.findById(adId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Объявление с индексом \"%s\" не найдено.", adId)
-                ));
+        CommentEntity commentEntity = checkForAdAndComment(adId, commentId);
 
-        List<CommentEntity> commentEntityList = adEntity.getCommentEntityList();
-
-        Optional<CommentEntity> commentOptional = commentEntityList.stream()
-                .filter(comment -> comment.getId() == commentId)
-                .findFirst();
-
-        commentOptional.ifPresent(commentRepository::delete);
-
-        if (commentOptional.isEmpty()) {
-            throw new NotFoundException(String.format(
-                    "Комментарий с индексом \"%s\" не найден для объявления с индексом \"%s\".",
-                    commentId, adId
-            ));
-        }
+        commentRepository.delete(commentEntity);
     }
 
     @Override
     public CommentDTO addComment(int adId, String text) {
-        AdEntity adEntity = adRepository.findById(adId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Объявление с индексом \"%s\" не найдено.", adId)
-                ));
+        AdEntity adEntity = checkForAd(adId);
 
         String commentText = parseCommentText(text);
 
@@ -82,26 +58,38 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDTO updateComment(int adId, int commentId, String text) {
-        AdEntity adEntity = adRepository.findById(adId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Объявление с индексом \"%s\" не найдено.", adId)
-                ));
+        checkForAdAndComment(adId, commentId);
+
+        CommentEntity commentEntityToUpdate = checkForAdAndComment(adId, commentId);
+
+        commentEntityToUpdate.setText(parseCommentText(text));
+
+        commentRepository.saveAndFlush(commentEntityToUpdate);
+
+        return commentMapper.toCommentDto(commentEntityToUpdate);
+    }
+
+    private CommentEntity checkForAdAndComment(int adId, int commentId) {
+        AdEntity adEntity = checkForAd(adId);
 
         List<CommentEntity> commentEntityList = adEntity.getCommentEntityList();
 
-        CommentEntity commentEntityToUpdate = commentEntityList.stream()
+        return commentEntityList.stream()
                 .filter(comment -> comment.getId() == commentId)
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(String.format(
                         "Комментарий с индексом \"%s\" не найден для объявления с индексом \"%s\".",
                         commentId, adId))
                 );
-
-        commentEntityToUpdate.setText(parseCommentText(text));
-        commentRepository.saveAndFlush(commentEntityToUpdate);
-
-        return commentMapper.toCommentDto(commentEntityToUpdate);
     }
+
+    private AdEntity checkForAd(int adId) {
+        return adRepository.findById(adId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Объявление с индексом \"%s\" не найдено.", adId)
+                ));
+    }
+
 
     private String parseCommentText(String text) {
         try {
