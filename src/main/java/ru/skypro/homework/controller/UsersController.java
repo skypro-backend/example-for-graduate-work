@@ -11,10 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
-import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.service.UsersService;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
@@ -24,31 +23,29 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UsersController {
 
-    private final UserService userService;
-    private Optional<Object> userOptional;
+    private final UsersService usersService;
 
     @PostMapping("/set_password")
     public ResponseEntity<Void> setPassword(@Valid @RequestBody NewPassword newPassword) {
-        userService.setPassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());
+        usersService.setPassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Object> getUser() {
-        Optional<User> user = userService.getUserByLogin();
-        return userOptional.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NO_CONTENT).build());
+    public ResponseEntity<User> getUser() {
+        User user = usersService.getUser();
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PatchMapping("/me")
     public ResponseEntity<UpdateUser> patchUser(@Valid @RequestBody UpdateUser updateUser) {
-        UpdateUser updatedUser = userService.updateUserByUpdateUser(updateUser);
+        UpdateUser updatedUser = usersService.updateUser(updateUser);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> patchUserAvatar(@RequestParam("image") MultipartFile file) {
-        userService.changeImage(file);
+        usersService.updateUserImage(file);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
