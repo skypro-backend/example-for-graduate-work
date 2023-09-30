@@ -1,6 +1,13 @@
 package ru.skypro.homework.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import org.apache.tomcat.util.json.JSONParser;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exeptions.NotFoundException;
@@ -11,6 +18,7 @@ import ru.skypro.homework.service.entities.CommentEntity;
 import ru.skypro.homework.service.repositories.AdRepository;
 import ru.skypro.homework.service.repositories.CommentRepository;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,14 +77,22 @@ public class CommentServiceImpl implements CommentService {
                         String.format("Объявление с индексом \"%s\" не найдено.", adId)
                 ));
 
-        CommentEntity newCommentEntity = new CommentEntity();
-        newCommentEntity.setText(text);
-        newCommentEntity.setCreatedAt(LocalDateTime.now());
-        newCommentEntity.setUser(adEntity.getUser());
-        newCommentEntity.setAdEntity(adEntity);
+
+        String commentText = parseCommentText(text);
+
+        CommentEntity newCommentEntity = commentMapper.createCommentEntity(commentText, adEntity);
 
         commentRepository.saveAndFlush(newCommentEntity);
 
         return commentMapper.toCommentDto(newCommentEntity);
+    }
+
+    private String parseCommentText(String text) {
+        try {
+            JsonNode jsonNode = new ObjectMapper().readTree(text);
+            return jsonNode.get("text").asText();
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Ошибка при парсинге", e);
+        }
     }
 }

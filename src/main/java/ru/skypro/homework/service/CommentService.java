@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 

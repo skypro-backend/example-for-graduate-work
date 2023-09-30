@@ -1,7 +1,11 @@
 package ru.skypro.homework.mappers;
+
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.service.entities.AdEntity;
 import ru.skypro.homework.service.entities.CommentEntity;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +29,14 @@ public class CommentMapper {
                 .collect(Collectors.toList());
     }
 
-
+    public CommentEntity createCommentEntity(String commentText, AdEntity adEntity) {
+        CommentEntity newCommentEntity = new CommentEntity();
+        newCommentEntity.setText(commentText);
+        newCommentEntity.setCreatedAt(LocalDateTime.now());
+        newCommentEntity.setUser(adEntity.getUser());
+        newCommentEntity.setAdEntity(adEntity);
+        return newCommentEntity;
+    }
 
 }
 
