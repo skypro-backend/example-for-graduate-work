@@ -14,4 +14,5 @@ public class CommentMapper {
                 .setAuthorImage(comment.getUser().getImage())
                 .setAuthorFirstName(comment.getUser().getFirstName());
     }
+
 }

@@ -2,12 +2,10 @@ package ru.skypro.homework.service.ads;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.projection.CreateOrUpdateAd;
 import ru.skypro.homework.projection.ExtendedAd;
@@ -33,7 +31,9 @@ public class AdsServiceImpl implements AdsService{
 
     @Override
     public AdDTO createAd(CreateOrUpdateAd properties, MultipartFile image) {
-        return null;
+        return AdMapper.fromAd(adRepository.save(
+                new Ad(null, properties.getTitle(), null, properties.getPrice(), null))
+        );
     }
 
     @Override
@@ -47,8 +47,13 @@ public class AdsServiceImpl implements AdsService{
     }
 
     @Override
-    public ResponseEntity<?> updateAd(Integer id, CreateOrUpdateAd properties) {
-        return null;
+    public AdDTO updateAd(Integer id, CreateOrUpdateAd properties) {
+        Ad adResult = new Ad(id, properties.getTitle(), null, properties.getPrice(), null);
+        adResult.setPk(adRepository
+                .findById(id)
+                .orElseThrow()
+                .getPk());
+        return AdMapper.fromAd(adRepository.save(adResult));
     }
 
     @Override
@@ -59,7 +64,7 @@ public class AdsServiceImpl implements AdsService{
     }
 
     @Override
-    public ResponseEntity<?> updateImage(Integer id, MultipartFile image) {
-        return null;
+    public void updateImage(Integer id, MultipartFile image) {
+
     }
 }

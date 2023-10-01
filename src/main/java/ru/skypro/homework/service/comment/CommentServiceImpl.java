@@ -1,44 +1,39 @@
 package ru.skypro.homework.service.comment;
 
-import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Comment;
-import ru.skypro.homework.entity.User;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.exception.AdsNotFound;
-import ru.skypro.homework.exception.UserNotFound;
 import ru.skypro.homework.mapper.CommentMapper;
+import ru.skypro.homework.projection.Comments;
 import ru.skypro.homework.projection.CreateOrUpdateComment;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.exception.AdsNotFound;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@AllArgsConstructor
+
+@RequiredArgsConstructor
 @Service
 public class CommentServiceImpl implements CommentService{
     private final CommentRepository commentRepository;
     private final AdRepository adRepository;
-    private final UserRepository userRepository;
 
 
     @Override
-    public List<CommentDTO> getAllCommentsByAdId(Integer id) {
-        return commentRepository.getAllCommentsByAdId(id).stream()
-                .map(CommentMapper::fromComment)
-                .collect(Collectors.toList());
+    public List<Comments> getAllCommentsByAdId(Integer id) {
+        return commentRepository.getAllCommentsByAdID(id);
     }
 
     @Override
-    public void createComment(Integer id, CreateOrUpdateComment comment) {
-        User user = userRepository.findById(id).orElseThrow(UserNotFound::new);
+    public CommentDTO createComment(Integer id, CreateOrUpdateComment comment) {
         Ad ad = adRepository.findById(id).orElseThrow(AdsNotFound::new);
-        commentRepository.save(new Comment(ad.getPk(), Instant.now(), comment.getText(), user, ad));
+        return CommentMapper.fromComment(commentRepository.save(
+                new Comment(null, Instant.now(), comment.getText(), null, ad))
+        );
     }
 
     @Override
@@ -47,7 +42,11 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public ResponseEntity<?> updateComment(Integer adId, Integer commentId, CreateOrUpdateComment comment) {
-        return null;
+    public CommentDTO updateComment(Integer commentId,Integer adId, CreateOrUpdateComment comment) {
+        Comment resultComment = new Comment(null, Instant.now(), comment.getText(), null, null);
+        resultComment.setPk(commentRepository
+                .findByPkAndAd_Pk(commentId, adId)
+                .getPk());
+        return CommentMapper.fromComment(commentRepository.save(resultComment));
     }
 }

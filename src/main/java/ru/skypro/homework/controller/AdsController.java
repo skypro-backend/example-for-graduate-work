@@ -28,7 +28,7 @@ public class AdsController {
     @GetMapping()
     @Operation(summary = "Получение всех объявлений")
     @ApiResponse(responseCode = "200", description = "OK")
-    public ResponseEntity<?> getAllAds() {return (ResponseEntity<?>) adsService.getAllAds();}
+    public ResponseEntity<?> getAllAds() {return null;}
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Добавление объявления")

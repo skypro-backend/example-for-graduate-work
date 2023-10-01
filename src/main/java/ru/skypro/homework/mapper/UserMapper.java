@@ -4,7 +4,7 @@ import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.entity.User;
 
 public class UserMapper {
-    public static UserDTO toDTO(User user) {
+    public static UserDTO fromUser(User user) {
         return new UserDTO()
                 .setId(user.getId())
                 .setImage(user.getImage())
@@ -14,7 +14,7 @@ public class UserMapper {
                 .setFirstName(user.getFirstName())
                 .setLastName(user.getLastName());
     }
-    public static User fromDTO(UserDTO userDTO){
+    public static User toDTO(UserDTO userDTO){
         return new User()
                 .setId(userDTO.getId())
                 .setImage(userDTO.getImage())
@@ -25,3 +25,4 @@ public class UserMapper {
                 .setLastName(userDTO.getLastName());
     }
 }
+

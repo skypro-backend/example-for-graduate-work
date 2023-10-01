@@ -14,8 +14,8 @@ public interface AdsService {
     AdDTO createAd(CreateOrUpdateAd properties, MultipartFile image);
     ExtendedAd getAdFullInfo(Integer id);
     void deleteAd(Integer id);
-    ResponseEntity<?> updateAd(Integer id,CreateOrUpdateAd properties);
+    AdDTO updateAd(Integer id,CreateOrUpdateAd properties);
     List<AdDTO> getAllAdsByUser(String user);
-    ResponseEntity<?> updateImage(Integer id, MultipartFile image);
+    void updateImage(Integer id, MultipartFile image);
 
 }
