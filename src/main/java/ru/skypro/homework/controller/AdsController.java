@@ -17,7 +17,7 @@ public class AdsController {
 
     @GetMapping
     public ResponseEntity<AdsDto> getAllAds() {
-        return new ResponseEntity<AdsDto>(HttpStatus.OK);
+        return ResponseEntity.ok(new AdsDto());
     }
 
     @PostMapping(value = "/multipart/form-data")
@@ -25,28 +25,28 @@ public class AdsController {
             return new ResponseEntity<>(adDTO, HttpStatus.CREATED);
     }
 
-    @GetMapping({"/{id}"})
+    @GetMapping("/{id}")
     public ResponseEntity<ExtendedAdDto> getAdInformation(@PathVariable("id") Integer id) {
-            return new ResponseEntity<>(new ExtendedAdDto(), HttpStatus.OK);
+            return ResponseEntity.ok(new ExtendedAdDto());
     }
 
-    @DeleteMapping({"/{id}"})
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAd(@PathVariable("id") Integer id) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return ResponseEntity.noContent().build();
         }
 
-    @PatchMapping({"/{id}"})
+    @PatchMapping("/{id}")
     public ResponseEntity<AdDto> updateAdInformation(@PathVariable("id") Integer id, @RequestBody CreateOrUpdateAdDto createOrUpdateAdDto) {
-            return new ResponseEntity<>(new AdDto(), HttpStatus.OK);
+            return ResponseEntity.ok(new AdDto());
     }
 
     @GetMapping("/me")
     public ResponseEntity<AdsDto> getAuthorizedUserAds() {
-        return new ResponseEntity<>(new AdsDto(), HttpStatus.OK);
+        return ResponseEntity.ok(new AdsDto());
     }
 
     @PatchMapping("/{id}/image")
     public ResponseEntity<byte[]> updateAdImage(@PathVariable("id") Integer id, @RequestPart MultipartFile image) throws IOException {
-        return new ResponseEntity<>(image.getBytes(), HttpStatus.OK);
+        return ResponseEntity.ok(image.getBytes());
     }
 }

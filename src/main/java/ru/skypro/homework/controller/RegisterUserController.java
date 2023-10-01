@@ -16,16 +16,8 @@ import ru.skypro.homework.service.AuthService;
 public class RegisterUserController {
 
     private final AuthService authService;
-//    @PostMapping()
-//    public ResponseEntity<Void> registerUser(@RequestBody Register register) {
-//        try {
-//            return new  ResponseEntity<>(HttpStatus.CREATED);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
 
-    @PostMapping("/register")
+    @PostMapping()
     public ResponseEntity<?> register(@RequestBody Register register) {
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
