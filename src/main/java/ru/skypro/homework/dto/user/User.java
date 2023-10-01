@@ -6,9 +6,11 @@ import javax.validation.constraints.Pattern;
 
 @Data
 public class User {
-    private String phone;
-    private String lastName;
-    private String firstName;
-    private String email;
     private int id;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String phone;
+    private String role;
+    private String image;
 }

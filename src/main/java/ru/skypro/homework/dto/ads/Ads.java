@@ -9,7 +9,7 @@ import java.util.List;
 public class Ads {
 
     private int count;
-    private List<Ads> results;
+    private List<Ad> results;
 
 
 }
