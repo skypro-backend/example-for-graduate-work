@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,6 +64,7 @@ public class AdsController {
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
             }
     )
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @adsServiceImpl.getAdsById(#id).getEmail() == authentication.name")
     @PatchMapping("/{id}")
     public ResponseEntity<AdsDto> update(@PathVariable("id") Integer id,
                                          @RequestBody CreateOrUpdateAd createOrUpdateAd) {
@@ -79,6 +81,7 @@ public class AdsController {
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
             }
     )
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @adsServiceImpl.getAdsById(#id).getEmail() == authentication.name")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateAdsImage(@PathVariable("id") Integer id,
                                             @RequestPart("image") MultipartFile imageFile) throws IOException {
@@ -148,6 +151,7 @@ public class AdsController {
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             }
     )
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @adsServiceImpl.getAdsById(#id).getEmail() == authentication.name")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remove(@PathVariable("id") Integer id) {
         adsService.remove(id);

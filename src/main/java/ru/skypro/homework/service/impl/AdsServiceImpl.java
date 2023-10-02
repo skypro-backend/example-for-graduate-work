@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
@@ -16,6 +17,7 @@ import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.exception.IncorrectArgumentException;
 import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.repository.AdsRepository;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
 
 import java.io.IOException;
@@ -31,6 +33,7 @@ public class AdsServiceImpl implements AdsService {
     private final UserServiceImpl userService;
     private final AdsRepository adsRepository;
     private final ImageServiceImpl imageService;
+    private final UserRepository userRepository;
 
     @Override
     public AdsDto create(MultipartFile imageFiles, CreateOrUpdateAd createOrUpdateAd, Authentication authentication) throws IOException {
@@ -51,7 +54,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsDto update(Integer id, CreateOrUpdateAd createOrUpdateAd) {
         log.debug("Updating ads by id: {}", id);
-
+        User user = userRepository.getReferenceById(id);
         if (createOrUpdateAd.getTitle() == null
                 || createOrUpdateAd.getDescription() == null
                 || createOrUpdateAd.getPrice() == null) throw new IncorrectArgumentException();
@@ -60,8 +63,10 @@ public class AdsServiceImpl implements AdsService {
         ads.setTitle(createOrUpdateAd.getTitle());
         ads.setDescription(createOrUpdateAd.getDescription());
         ads.setPrice(createOrUpdateAd.getPrice());
-        adsRepository.save(ads);
-        log.info("Ads details updated for ads: {}", ads.getTitle());
+        if (user.equals(ads.getAuthor()) || user.getRole() == Role.ADMIN) {
+            adsRepository.save(ads);
+            log.info("Ads details updated for ads: {}", ads.getTitle());
+        }
         return AdsMapper.INSTANCE.toDto(ads);
     }
 
@@ -69,13 +74,15 @@ public class AdsServiceImpl implements AdsService {
     public void updateAdsImage(Integer id, MultipartFile imageFile) throws IOException {
         log.debug("Updating ads image by id: {}", id);
         Ads ads = findAdsById(id);
+        User user = userRepository.getReferenceById(id);
         if (ads.getImage() != null) {
-            imageService.remove(ads.getImage());
+            if (user.equals(ads.getAuthor()) || user.getRole() == Role.ADMIN) {
+                imageService.remove(ads.getImage());
+            }
+            ads.setImage(imageService.uploadImage(imageFile));
+            adsRepository.save(ads);
+            log.debug("Avatar updated for ads: {}", ads.getTitle());
         }
-        ads.setImage(imageService.uploadImage(imageFile));
-        adsRepository.save(ads);
-        log.debug("Avatar updated for ads: {}", ads.getTitle());
-
     }
 
     @Override
@@ -105,11 +112,16 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public void remove(Integer id) {
+        User user = userRepository.getReferenceById(id);
         Ads ads = findAdsById(id);
+        if (user.equals(ads.getAuthor()) || user.getRole() == Role.ADMIN) {
+            log.info("Ads removed successfully");
+        }
         adsRepository.delete(ads);
-        log.info("Ads removed successfully");
+
 
     }
+
     public Ads findAdsById(Integer id) {
         log.debug("Finding ads by id: {}", id);
         return adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
