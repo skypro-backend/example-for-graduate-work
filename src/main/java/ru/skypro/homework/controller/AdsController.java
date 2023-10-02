@@ -216,9 +216,8 @@ public class AdsController {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
             })
-    private ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
+    public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
         return ResponseEntity.ok(imageService.getImage(id));
 
     }
-
     }

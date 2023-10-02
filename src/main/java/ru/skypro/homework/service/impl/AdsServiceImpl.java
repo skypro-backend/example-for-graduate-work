@@ -97,7 +97,7 @@ public class AdsServiceImpl implements AdsService {
 
         if (user.equals(oldAd.getUser()) || user.getRole().equals(Role.ADMIN.name())) {
             oldAd.setTitle(createOrUpdateAdDto.getTitle());
-            oldAd.setPrice(priceValidation.checkPrice(createOrUpdateAdDto.getPrice()));
+            oldAd.setPrice(createOrUpdateAdDto.getPrice());
             oldAd.setDescription(createOrUpdateAdDto.getDescription());
             oldAd.setUser(oldAd.getUser());
             adRepository.save(oldAd);
