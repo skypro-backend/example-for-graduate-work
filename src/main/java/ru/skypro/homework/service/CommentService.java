@@ -8,12 +8,12 @@ import java.util.Optional;
 
 public interface CommentService {
 
-    Optional<Comments> createComment(String userLogin, Long id, CreateOrUpdateComment createComment);
+    Optional<Comments> addComment(int id, CreateOrUpdateComment createComment);
 
-    List<Comments> listCommentsAdById(Long id);
+    List<Comments> getComments(Integer id);
 
-    Optional<Comments> editComment(String userLogin, Long adId, Long commentId, CreateOrUpdateComment updateComment);
+    Optional<Comments> editComment( Integer adId, Integer commentId);
 
-    boolean deleteById(String userLogin, Long adId, Long commentId);
+    boolean deleteById( Integer adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment);
 
 }
