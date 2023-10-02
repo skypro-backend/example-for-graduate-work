@@ -101,7 +101,7 @@ public class AdsController {
                                          @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd,
                                           Authentication authentication) throws AdNotFoundException {
         Ad ad = adService.patchAdById(id, createOrUpdateAd);
-        return new ResponseEntity<>(new Ad(), HttpStatus.OK);
+        return new ResponseEntity<>(ad, HttpStatus.OK);
     }
 
     @GetMapping("/me")
@@ -114,7 +114,7 @@ public class AdsController {
     })
     public ResponseEntity<Ads> getMyAds(Authentication authentication) {
         Ads myAds = adService.getMyAds(authentication.getName());
-        return new ResponseEntity<>(new Ads(), HttpStatus.OK);
+        return new ResponseEntity<>(myAds, HttpStatus.OK);
     }
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
