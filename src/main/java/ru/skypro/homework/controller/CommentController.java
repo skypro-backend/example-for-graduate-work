@@ -63,7 +63,7 @@ public class CommentController {
 
 
 
-    @DeleteMapping("/ads/{adId}/comments/{commentId}")
+    @DeleteMapping("/{adId}/comments/{commentId}")
     @Operation(
             summary = "Добавить комментарий к объявлению",
             responses = {
@@ -85,7 +85,7 @@ public class CommentController {
     }
 
 
-    @PatchMapping("ads/{adId}/comments/{commentId}")
+    @PatchMapping("/{adId}/comments/{commentId}")
     @Operation(
             summary = "Добавить комментарий к объявлению",
             responses = {

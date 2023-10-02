@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto.user;
 
 import lombok.Data;
+import ru.skypro.homework.dto.Role;
 
 import javax.validation.constraints.Pattern;
 
@@ -11,6 +12,6 @@ public class User {
     private String firstName;
     private String lastName;
     private String phone;
-    private String role;
+    private Role role;
     private String image;
 }

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.Ads;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
@@ -41,7 +42,7 @@ public class AdsController {
     }
 
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "Добавление объявления",
             responses = {
@@ -54,7 +55,8 @@ public class AdsController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true)))
             }
     )
-    public ResponseEntity<Ad> addAd(@RequestPart Ad createdAd) {
+    public ResponseEntity<Ad> addAd(@RequestPart("properties") Ad createdAd,
+                                    @RequestParam("image")MultipartFile image) {
         return ResponseEntity.ok(new Ad());
     }
 
@@ -133,7 +135,7 @@ public class AdsController {
     }
 
 
-    @PostMapping("/{id}/image")
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "Обновление картинки объявления",
             responses = {
@@ -149,7 +151,7 @@ public class AdsController {
             }
     )
     public ResponseEntity<?> updateImage(@PathVariable int id,
-                                         @RequestParam String image) {
+                                         @RequestParam ("image") MultipartFile image) {
         return ResponseEntity.ok(new Ad().getImage());
     }
 }
