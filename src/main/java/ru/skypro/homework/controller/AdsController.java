@@ -20,9 +20,9 @@ public class AdsController {
         return ResponseEntity.ok(new AdsDto());
     }
 
-    @PostMapping(value = "/multipart/form-data")
-    public ResponseEntity<AdDto> addAd(@RequestBody AdDto adDTO, @RequestBody MultipartFile image) {
-            return new ResponseEntity<>(adDTO, HttpStatus.CREATED);
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<AdDto> addAd(@RequestPart("properties") CreateOrUpdateAdDto createOrUpdateAdDto, @RequestPart("image") MultipartFile image) {
+            return new ResponseEntity<>(new AdDto(), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -45,8 +45,8 @@ public class AdsController {
         return ResponseEntity.ok(new AdsDto());
     }
 
-    @PatchMapping("/{id}/image")
-    public ResponseEntity<byte[]> updateAdImage(@PathVariable("id") Integer id, @RequestPart MultipartFile image) throws IOException {
+    @PatchMapping(value = "/{id}/image", consumes = {"multipart/form-data"})
+    public ResponseEntity<byte[]> updateAdImage(@PathVariable("id") Integer id, @RequestPart("image") MultipartFile image) throws IOException {
         return ResponseEntity.ok(image.getBytes());
     }
 }

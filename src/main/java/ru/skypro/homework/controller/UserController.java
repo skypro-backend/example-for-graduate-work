@@ -31,8 +31,8 @@ public class UserController {
         return ResponseEntity.ok(updateUserDto);
     }
 
-    @PatchMapping("/me/image")
-    public ResponseEntity<UpdateUserDto> getUser(@RequestBody MultipartFile image) {
+    @PatchMapping(value = "/me/image", consumes = {"multipart/form-data"})
+    public ResponseEntity<UpdateUserDto> getUser(@RequestPart("image") MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 }

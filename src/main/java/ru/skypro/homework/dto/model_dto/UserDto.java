@@ -9,6 +9,7 @@ import ru.skypro.homework.dto.Role;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
+
       private Integer id; // идентификатор пользователя
       private String email;  //логин пользователя
       private String firstName;  //имя пользователя

@@ -12,6 +12,6 @@ import java.util.List;
 @Data
 public class AdsDto {
 
-      private Integer counts;
+      private Integer count;
       private List<AdDto> results;
 }

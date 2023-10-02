@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**
@@ -15,7 +16,7 @@ public class CommentDto {
       private Integer author; // идентификатор автора комментария
       private String authorImage;  //ссылка на аватар автора комментария
       private String authorFirstName;  //имя автора комментария
-      private LocalDateTime createdAt; // дата и время создания комментария
+      private Long createdAt; // дата и время создания комментария
       private Integer pk; // идентификатор комментария
       private String text;  //текст комментария
 }

@@ -9,6 +9,6 @@ services:
     ports:
       - "5433:5432"
   front:
-    image: ghcr.io/bizinmitya/front-react-avito:v1.18
+    image: ghcr.io/bizinmitya/front-react-avito:v1.19
     ports:
       - "3000:3000"
