@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.MyDatabaseUserDetails;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.transformer.UserTransformer;
 
 import javax.transaction.Transactional;
 
@@ -20,6 +21,7 @@ public class MyDatabaseUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserTransformer userTransformer;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -46,6 +48,6 @@ public class MyDatabaseUserDetailsService implements UserDetailsService {
     public UserEntity getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyDatabaseUserDetails myDatabaseUserDetails = (MyDatabaseUserDetails) loadUserByUsername(authentication.getName());
-        return myDatabaseUserDetails.toUserEntity();
+        return userTransformer.fromMyDatabaseUserDetailsToUserEntity(myDatabaseUserDetails);
     }
 }

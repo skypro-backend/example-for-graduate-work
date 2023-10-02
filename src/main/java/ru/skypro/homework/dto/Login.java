@@ -14,12 +14,12 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class Login {
 
-    @NotBlank
-    @Size(min = 4, max = 32)
+    @NotBlank(message = "Это поле не может быть пустым")
+    @Size(min = 4, max = 32, message = "Логин должен содержать от 4 до 32 символов")
     @Email
     private String username;
 
-    @NotBlank
-    @Size(min = 8, max = 16)
+    @NotBlank(message = "Это поле не может быть пустым")
+    @Size(min = 8, max = 16, message = "Пароль должен содержать от 8 до 16 символов")
     private String password;
 }

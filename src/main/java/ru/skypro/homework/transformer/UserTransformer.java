@@ -1,6 +1,7 @@
 package ru.skypro.homework.transformer;
 
 import org.springframework.stereotype.Component;
+import ru.skypro.homework.dto.MyDatabaseUserDetails;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
@@ -14,6 +15,7 @@ public class UserTransformer {
             return null;
         }
         User user = new User();
+        user.setId(userEntity.getId());
         user.setEmail(userEntity.getUsername());
         user.setFirstName(userEntity.getFirstName());
         user.setLastName(userEntity.getLastName());
@@ -71,5 +73,9 @@ public class UserTransformer {
         userEntity.setPhone(register.getPhone());
         userEntity.setRole(register.getRole());
         return userEntity;
+    }
+
+    public UserEntity fromMyDatabaseUserDetailsToUserEntity(MyDatabaseUserDetails myDatabaseUserDetails) {
+        return myDatabaseUserDetails.getUserEntity();
     }
 }

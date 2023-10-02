@@ -60,11 +60,4 @@ public class MyDatabaseUserDetails implements UserDetails {
         return true;
     }
 
-    public static MyDatabaseUserDetails fromUserEntity(UserEntity userEntity) {
-        return new MyDatabaseUserDetails(userEntity);
-    }
-
-    public UserEntity toUserEntity() {
-        return this.userEntity;
-    }
 }
