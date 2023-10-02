@@ -2,32 +2,51 @@ package ru.skypro.homework.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.Image;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = "spring")
 public interface AdMapper {
 
-    @Mapping(target = "author", source = "author.id")
-    @Mapping(target = "pk", source = "id")
-    Ad adEntityToAd(AdEntity adEntity);
+    AdMapper INSTANCE = Mappers.getMapper(AdMapper.class);
 
-    @Mapping(target = "author.id", source = "author")
-    @Mapping(target = "id", source = "pk")
-    AdEntity adToAdEntity(Ad ad);
+    @Mapping(target = "author", source = "author.id")
+    @Mapping(target = "image", source = "image", qualifiedByName = "imageMapping")
+    @Mapping(target = "pk", source = "id")
+    Ad adToDto(Ad ad);
 
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "authorFirstName", source = "author.firstName")
     @Mapping(target = "authorLastName", source = "author.lastName")
-    @Mapping(target = "email", source = "author.username")
+    @Mapping(target = "email", source = "author.email")
     @Mapping(target = "phone", source = "author.phone")
-    ExtendedAd adEntityToExtendedAd(AdEntity adEntity);
+    @Mapping(target = "image", source = "image", qualifiedByName = "imageMapping")
+    ExtendedAd extendedAdToDto(Ad ad);
 
-    CreateOrUpdateAd adEntityToCreateOrUpdateAd(AdEntity adEntity);
+    default Ad createOrUpdateAdToAd(CreateOrUpdateAd createOrUpdateAd, Ad ad) {
 
-    AdEntity createOrUpdateAdToAdEntity(CreateOrUpdateAd createOrUpdateAd);
+        ad.setTitle(createOrUpdateAd.getTitle());
+        ad.setPrice(createOrUpdateAd.getPrice());
+        ad.setDescription(createOrUpdateAd.getDescription());
+
+        return ad;
+
+    }
+
+    @Named("imageMapping")
+    default String imageMapping(Image image) {
+
+        if (image == null) {
+            return null;
+        }
+
+        return "/images/" + image.getFileName();
+
+    }
 
 }

@@ -1,26 +1,30 @@
 package ru.skypro.homework.mapper;
 
-import org.mapstruct.MappingConstants;
+import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.entity.Image;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.entity.CommentEntity;
-import ru.skypro.homework.utilities.Utils;
+import org.mapstruct.Named;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+
+@Mapper(componentModel = "spring")
 public interface CommentMapper {
 
+    CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
+
     @Mapping(target = "author", source = "user.id")
-    @Mapping(target = "authorImage", source = "user.image")
+    @Mapping(target = "authorImage", source = "user.image", qualifiedByName = "imageMapping")
     @Mapping(target = "authorFirstName", source = "user.firstName")
     @Mapping(target = "pk", source = "id")
-    Comment commentEntityToComment(CommentEntity commentEntity);
+    Comment comment(Comment comment);
 
-    default CommentEntity createOrUpdateCommentToCommentEntity (CreateOrUpdateComment createOrUpdateComment) {
-        CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setText(createOrUpdateComment.getText());
-        commentEntity.setCreatedAt(Utils.getCurrentTime());
-        return commentEntity;
+    @Named("imageMapping")
+    default String imageMapping(Image image) {
+        if (image == null) {
+            return null;
+        }
+        return "/images/" + image.getFileName();
     }
+
 }
