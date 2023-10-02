@@ -1,17 +1,18 @@
 package ru.skypro.homework.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "ads")
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class AdEntity {
 
     private int price;
@@ -26,9 +27,9 @@ public class AdEntity {
     @JoinColumn(name = "user_id")
     private UserEntity author;
 
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "image_id")
-    private Image image;
+//    @OneToOne(orphanRemoval = true)
+//    @JoinColumn(name = "image_id")
+    private String image;
 
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
