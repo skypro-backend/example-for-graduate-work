@@ -27,9 +27,9 @@ public class AdEntity {
     @JoinColumn(name = "user_id")
     private UserEntity author;
 
-//    @OneToOne(orphanRemoval = true)
-//    @JoinColumn(name = "image_id")
-    private String image;
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "image_id")
+    private Image image;
 
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
