@@ -1,10 +1,11 @@
 package ru.skypro.homework.security;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.entity.User;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class SecurityUserPrincipal implements UserDetails {
@@ -15,10 +16,9 @@ public class SecurityUserPrincipal implements UserDetails {
     }
 
     @Override
-    public ArrayList getAuthorities() {
-        return new ArrayList<>(List.of(user.getRole()));
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().getStringRole()));
     }
-
     @Override
     public String getPassword() {
         return user.getPassword();
