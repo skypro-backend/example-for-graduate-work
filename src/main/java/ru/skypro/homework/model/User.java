@@ -3,7 +3,6 @@ import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 
 
 /**
@@ -31,7 +30,7 @@ public class User {
       /**
        * Номер телефона пользователя в формате +7 (XXX) XXX-XX-XX.
        */
-      @Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
+      //@Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
       @Column(name = "phone")
       private String phone;
 
