@@ -7,10 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.projection.CreateOrUpdateAd;
 import ru.skypro.homework.projection.ExtendedAd;
 import ru.skypro.homework.repository.AdRepository;
-
+import ru.skypro.homework.service.user.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,10 +22,9 @@ import java.util.stream.Collectors;
 public class AdsServiceImpl implements AdsService{
 
     private final AdRepository adRepository;
-
     @Override
     public List<AdDTO> getAllAds() {
-        return adRepository.findAllAds().stream()
+        return adRepository.findAll().stream()
                 .map(AdMapper::fromAd)
                 .collect(Collectors.toList());
     }
