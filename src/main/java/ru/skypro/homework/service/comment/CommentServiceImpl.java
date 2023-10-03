@@ -25,7 +25,7 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public List<Comments> getAllCommentsByAdId(Integer id) {
-        return commentRepository.getAllCommentsByAdID(id);
+        return commentRepository.getAllCommentsByAdId(id);
     }
 
     @Override

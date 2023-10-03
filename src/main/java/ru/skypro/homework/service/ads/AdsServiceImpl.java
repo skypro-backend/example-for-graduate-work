@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.exception.AdsNotFound;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.projection.CreateOrUpdateAd;
@@ -38,7 +39,7 @@ public class AdsServiceImpl implements AdsService{
 
     @Override
     public ExtendedAd getAdFullInfo(Integer id) {
-        return adRepository.findAllAdFullInfo(id);
+        return adRepository.findAllAdFullInfo(id).orElseThrow(AdsNotFound::new);
     }
 
     @Override

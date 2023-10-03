@@ -12,7 +12,8 @@ public class UserMapper {
                 .setRole(user.getRole())
                 .setEmail(user.getEmail())
                 .setFirstName(user.getFirstName())
-                .setLastName(user.getLastName());
+                .setLastName(user.getLastName())
+                .setPassword(user.getPassword());
     }
     public static User fromDTO(UserDTO userDTO){
         return new User()
@@ -22,7 +23,8 @@ public class UserMapper {
                 .setRole(userDTO.getRole())
                 .setEmail(userDTO.getEmail())
                 .setFirstName(userDTO.getFirstName())
-                .setLastName(userDTO.getLastName());
+                .setLastName(userDTO.getLastName())
+                .setPassword(userDTO.getPassword());
     }
 }
 
