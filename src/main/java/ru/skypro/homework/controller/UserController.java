@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.projection.NewPassword;
 import ru.skypro.homework.projection.UpdateUser;
+import ru.skypro.homework.service.user.UserService;
 
 import javax.validation.Valid;
 
@@ -23,6 +24,9 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Tag(name = "Пользователи")
 public class UserController {
+
+    private final UserService userService;
+
     @PostMapping("/set_password")
     @Operation(summary = "Обновление пароля")
     @ApiResponses({

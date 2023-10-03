@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.projection.CreateOrUpdateAd;
+import ru.skypro.homework.service.ads.AdsService;
 
 import javax.validation.Valid;
 import java.time.Instant;
@@ -23,6 +24,7 @@ import java.time.Instant;
 @RequiredArgsConstructor
 @Tag(name = "Объявления")
 public class AdsController {
+    private final AdsService adsService;
     @GetMapping()
     @Operation(summary = "Получение всех объявлений")
     @ApiResponse(responseCode = "200", description = "OK")

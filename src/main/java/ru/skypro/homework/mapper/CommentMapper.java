@@ -5,7 +5,7 @@ import ru.skypro.homework.entity.Comment;
 
 
 public class CommentMapper {
-    public static CommentDTO toDTO(Comment comment) {
+    public static CommentDTO fromComment(Comment comment) {
         return new CommentDTO()
                 .setAuthor(comment.getUser().getId())
                 .setPk(comment.getPk())
@@ -14,4 +14,5 @@ public class CommentMapper {
                 .setAuthorImage(comment.getUser().getImage())
                 .setAuthorFirstName(comment.getUser().getFirstName());
     }
+
 }
