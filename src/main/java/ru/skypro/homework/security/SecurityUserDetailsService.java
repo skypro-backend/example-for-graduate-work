@@ -4,9 +4,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.Register;
-import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.mapper.UserMapper;
 
 @Service
 public class SecurityUserDetailsService implements UserDetailsService {
@@ -19,29 +18,9 @@ public class SecurityUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username){
-        User user = userRepository.findByEmail(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(username);
-        }
-        return new SecurityUserPrincipal(user);
+        return new SecurityUserPrincipal(userRepository.findByEmail(username)
+                .map(UserMapper::toDTO)
+                .orElseThrow(() -> new UsernameNotFoundException(username)));
     }
 
-    public boolean userExists(String userName) {
-        User user = userRepository.findByEmail(userName);
-        if (user == null) {
-            return false;
-        }
-        return true;
-    }
-
-    public void createUser(Register register) {
-        User newUser = new User()
-                .setPhone(register.getPhone())
-                .setRole(register.getRole())
-                .setEmail(register.getUsername())
-                .setFirstName(register.getFirstName())
-                .setLastName(register.getLastName())
-                .setPassword(register.getPassword());
-        userRepository.save(newUser);
-    }
 }
