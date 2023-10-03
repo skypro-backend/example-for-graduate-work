@@ -15,12 +15,12 @@ import javax.persistence.*;
 @Table(name = "comments")
 public class CommentEntity {
 
-    private long createdAt;
-    private String text;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    private long createdAt;
+    private String text;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

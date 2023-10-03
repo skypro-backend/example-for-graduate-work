@@ -24,7 +24,6 @@ public class Register {
     @Size(min = 8, max = 16, message = "Пароль должен содержать от 8 до 16 символов")
     private String password;
 
-
     @NotBlank(message = "Это поле не может быть пустым")
     @Size(min = 2, max = 16, message = "Имя пользователя должно содержать не менее 2 и не более 16 символов")
     private String firstName;

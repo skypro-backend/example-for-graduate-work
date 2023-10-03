@@ -2,51 +2,32 @@ package ru.skypro.homework.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.MappingConstants;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.AdEntity;
-import ru.skypro.homework.entity.Image;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface AdMapper {
 
-    AdMapper INSTANCE = Mappers.getMapper(AdMapper.class);
-
     @Mapping(target = "author", source = "author.id")
-    @Mapping(target = "image", source = "image", qualifiedByName = "imageMapping")
     @Mapping(target = "pk", source = "id")
-    Ad adToDto(Ad ad);
+    Ad adEntityToAd(AdEntity adEntity);
+
+    @Mapping(target = "author.id", source = "author")
+    @Mapping(target = "id", source = "pk")
+    AdEntity adToAdEntity(Ad ad);
 
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "authorFirstName", source = "author.firstName")
     @Mapping(target = "authorLastName", source = "author.lastName")
-    @Mapping(target = "email", source = "author.email")
+    @Mapping(target = "email", source = "author.username")
     @Mapping(target = "phone", source = "author.phone")
-    @Mapping(target = "image", source = "image", qualifiedByName = "imageMapping")
-    ExtendedAd extendedAdToDto(Ad ad);
+    ExtendedAd adEntityToExtendedAd(AdEntity adEntity);
 
-    default Ad createOrUpdateAdToAd(CreateOrUpdateAd createOrUpdateAd, Ad ad) {
+    CreateOrUpdateAd adEntityToCreateOrUpdateAd(AdEntity adEntity);
 
-        ad.setTitle(createOrUpdateAd.getTitle());
-        ad.setPrice(createOrUpdateAd.getPrice());
-        ad.setDescription(createOrUpdateAd.getDescription());
-
-        return ad;
-
-    }
-
-    @Named("imageMapping")
-    default String imageMapping(Image image) {
-
-        if (image == null) {
-            return null;
-        }
-
-        return "/images/" + image.getFileName();
-
-    }
+    AdEntity createOrUpdateAdToAdEntity(CreateOrUpdateAd createOrUpdateAd);
 
 }
