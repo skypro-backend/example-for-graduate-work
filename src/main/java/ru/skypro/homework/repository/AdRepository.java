@@ -8,6 +8,8 @@ import ru.skypro.homework.projection.ExtendedAd;
 import java.util.List;
 
 public interface AdRepository extends JpaRepository<Ad, Integer> {
+    @Query("SELECT e FROM Ad e")
+    List<Ad> findAllAds();
     @Query("")
     List<Ad> getAllAdsByUser(String user);
     @Query("")
