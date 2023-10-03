@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: fill-user-table
+      author: Svetlana
+      changes:
+        - insert:
+            tableName: app_user
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: email
+                  value: UserTest
+              - column:
+                  name: first_name
+                  value: testFirstName
+              - column:
+                  name: last_name
+                  value: testLastName
+              - column:
+                  name: phone
+                  value: +71231234545
+              - column:
+                  name: role
+                  value: USER
+              - column:
+                  name: password
+                  value: $2y$04$yL.2DzX01VhRkkiFG0QKIekqpx3qQTpPv/pOVhfCqIAcTSHyTgHj2
+        - insert:
+            tableName: app_user
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: email
+                  value: AdminTest
+              - column:
+                  name: first_name
+                  value: adminFirstName
+              - column:
+                  name: last_name
+                  value: adminLastName
+              - column:
+                  name: phone
+                  value: +71234567899
+              - column:
+                  name: role
+                  value: ADMIN
+              - column:
+                  name: password
+                  value: $2y$04$yL.2DzX01VhRkkiFG0QKIekqpx3qQTpPv/pOVhfCqIAcTSHyTgHj2
