@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Класс DTO для передачи информации об объявлении
+ * Класс DTO для передачи информации об общем количестве объявлений
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AdsDto {
 
-      private Integer count;
-      private List<AdDto> results;
+      private Integer count; // количество объявлений в списке
+      private List<AdDto> results; // список объявлений
 }
