@@ -47,7 +47,7 @@ public class AdServiceImpl implements AdService {
         adEntity.setTitle(properties.getTitle());
         adEntity.setDescription(properties.getDescription());
         adEntity.setPrice(properties.getPrice());
-        adEntity.setImage("");
+        adEntity.setImage(null);
         adEntity.setAuthor(author);
         adRepository.save(adEntity);
         return adMapper.adEntityToAd(adEntity);
