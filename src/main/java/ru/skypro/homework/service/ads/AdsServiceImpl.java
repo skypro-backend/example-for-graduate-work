@@ -53,19 +53,10 @@ public class AdsServiceImpl implements AdsService{
                 .setTitle(properties.getTitle())
                 .setDescription(properties.getDescription())
                 .setPrice(properties.getPrice());
-        adResult.setTitle(adRepository
-                        .findById(id)
-                        .orElseThrow()
-                        .getTitle())
-                .setDescription(adRepository
-                        .findById(id)
-                        .orElseThrow()
-                        .getDescription())
-                .setPrice(adRepository
-                        .findById(id)
-                        .orElseThrow()
-                        .getPrice());
-
+        Ad adById = adRepository.findById(id).orElseThrow(AdsNotFound::new);
+        adResult.setTitle(adById.getTitle())
+                .setDescription(adById.getDescription())
+                .setPrice(adById.getPrice());
         return AdMapper.fromAd(adRepository.save(adResult));
     }
 

@@ -42,10 +42,8 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public CommentDTO updateComment(Integer commentId,Integer adId, CreateOrUpdateComment comment) {
-        Comment resultComment = new Comment().setText(comment.getText());
-        resultComment.setText(commentRepository
-                .findByPkAndAd_Pk(commentId, adId)
-                .getText());
-        return CommentMapper.fromComment(commentRepository.save(resultComment));
+        Comment commentResult = commentRepository.findByPkAndAd_Pk(commentId, adId);
+        commentResult.setText(comment.getText());
+        return CommentMapper.fromComment(commentRepository.save(commentResult));
     }
 }
