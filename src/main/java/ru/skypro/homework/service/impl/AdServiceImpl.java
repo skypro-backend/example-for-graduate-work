@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,34 +11,31 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.AdNotFoundException;
+import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
-import ru.skypro.homework.transformer.AdTransformer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AdServiceImpl implements AdService {
 
     private final AdRepository adRepository;
     private final UserRepository usersRepository;
-    private final AdTransformer adTransformer;
-
-    public AdServiceImpl(AdRepository adRepository, UserRepository usersRepository, AdTransformer adTransformer) {
-        this.adRepository = adRepository;
-        this.usersRepository = usersRepository;
-        this.adTransformer = adTransformer;
-    }
+    private final AdMapper adMapper;
 
     @Override
     @Transactional
     public Ads getAllAds() {
         Ads allAds = new Ads();
-        List<AdEntity> list = (List<AdEntity>) adRepository.findAll();
+        List<AdEntity> list = new ArrayList<>();
+        adRepository.findAll().forEach(list::add);
         allAds.setCount(list.size());
-        allAds.setResults(list.stream().map(adTransformer::adEntityToAd).collect(Collectors.toList()));
+        allAds.setResults(list.stream().map(adMapper::adEntityToAd).collect(Collectors.toList()));
         return allAds;
     }
 
@@ -45,15 +43,20 @@ public class AdServiceImpl implements AdService {
     @Transactional
     public Ad postAd(CreateOrUpdateAd properties, MultipartFile file, String userName) {
         UserEntity author = usersRepository.findByUsername(userName);
-        AdEntity adEntity = adTransformer.createOrUpdateAdToAdEntity(properties, author);
-        AdEntity createdAdEntity = adRepository.save(adEntity);
-        return adTransformer.adEntityToAd(createdAdEntity);
+        AdEntity adEntity = new AdEntity();
+        adEntity.setTitle(properties.getTitle());
+        adEntity.setDescription(properties.getDescription());
+        adEntity.setPrice(properties.getPrice());
+        adEntity.setImage("");
+        adEntity.setAuthor(author);
+        adRepository.save(adEntity);
+        return adMapper.adEntityToAd(adEntity);
     }
 
     @Override
     @Transactional
     public ExtendedAd getAdById(int id) throws AdNotFoundException {
-        return adRepository.findById(id).map(adTransformer::adEntityToExtendedAd)
+        return adRepository.findById(id).map(adMapper::adEntityToExtendedAd)
                 .orElseThrow(() -> new AdNotFoundException("Not found ad with id = " + id));
     }
 
@@ -72,7 +75,7 @@ public class AdServiceImpl implements AdService {
         adEntity.setPrice(createOrUpdateAd.getPrice());
         adEntity.setDescription(createOrUpdateAd.getDescription());
         AdEntity updatedAdEntity = adRepository.save(adEntity);
-        return adTransformer.adEntityToAd(updatedAdEntity);
+        return adMapper.adEntityToAd(updatedAdEntity);
     }
 
     @Override
@@ -82,13 +85,14 @@ public class AdServiceImpl implements AdService {
         List<AdEntity> list = adRepository.findAllByAuthor(author);
         Ads myAds = new Ads();
         myAds.setCount(list.size());
-        myAds.setResults(list.stream().map(adTransformer::adEntityToAd).collect(Collectors.toList()));
+        myAds.setResults(list.stream().map(adMapper::adEntityToAd).collect(Collectors.toList()));
         return myAds;
     }
 
     @Override
     @Transactional
-    public void patchAdsImageById(int id, MultipartFile file) {
+    public Byte[] patchAdsImageById(int id, MultipartFile file) {
         //todo: уточнить про возвращаемый октет-стрим и доделать!!!
+        return null;
     }
 }

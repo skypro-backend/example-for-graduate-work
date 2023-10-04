@@ -16,9 +16,9 @@ public interface CommentsService {
     Optional<Comments> createComment(String userLogin, Long id, CreateOrUpdateComment createComment);
 
     /** Получение всех комментариев, по id, в List</>
-     @param id {@link Long}
+     @param id {@link Integer}
      @return объект {@link List<Comments>} */
-    List<Comments> listCommentsAdById(Long id);
+    Comments listCommentsAdById(int id);
 
     /** Редактирование комментария по его id
      @param userLogin     {@link String}

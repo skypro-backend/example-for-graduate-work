@@ -21,6 +21,6 @@ public interface AdService {
 
     Ads getMyAds(String userName);
 
-    void patchAdsImageById(int id, MultipartFile file);
+    Byte[] patchAdsImageById(int id, MultipartFile file);
 
 }

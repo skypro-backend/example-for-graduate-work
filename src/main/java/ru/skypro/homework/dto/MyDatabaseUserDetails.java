@@ -22,11 +22,7 @@ public class MyDatabaseUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority =
-                this.userEntity.getRole().equals(Role.ADMIN)
-                        ? new SimpleGrantedAuthority("ADMIN")
-                        : new SimpleGrantedAuthority("USER");
-        // todo: проверить
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userEntity.getRole().name());
         return Collections.singleton(authority);
     }
 
@@ -60,4 +56,7 @@ public class MyDatabaseUserDetails implements UserDetails {
         return true;
     }
 
+    public UserEntity toUserEntity() {
+        return this.userEntity;
+    }
 }

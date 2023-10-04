@@ -14,7 +14,6 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UpdateUser {
 
-
     @NotBlank(message = "Это поле не может быть пустым")
     @Size(min = 2, max = 16, message = "Имя пользователя должно содержать не менее 2 и не более 16 символов")
     private String firstName;

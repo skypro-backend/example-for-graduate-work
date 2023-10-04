@@ -4,6 +4,7 @@ import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.List;
 
 @Getter
@@ -18,9 +19,10 @@ import java.util.List;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Email
     private String username;
 
     @Column(name = "first_name")

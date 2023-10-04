@@ -17,7 +17,7 @@ public class AdExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<?> handleIOException(IOException ioException) {
-        return new ResponseEntity<>(ioException.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ioException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler
