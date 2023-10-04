@@ -7,12 +7,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.account.NewPassword;
 import ru.skypro.homework.dto.account.User;
+import ru.skypro.homework.service.AccountService;
+
+import java.io.IOException;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -21,6 +25,8 @@ import ru.skypro.homework.dto.account.User;
 @RequestMapping("/users")
 @Tag(name = "Пользователи")
 public class AccountController {
+
+    private final AccountService accountService;
 
     @PostMapping("/set_password")
     @Operation(
@@ -32,7 +38,10 @@ public class AccountController {
             }
     )
     public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
-   return ResponseEntity.ok(new NewPassword());
+        if (accountService.updatePassword(newPassword)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @GetMapping("/me")
@@ -49,7 +58,7 @@ public class AccountController {
             }
     )
     public ResponseEntity<User> getUser() {
-        return ResponseEntity.ok(new User());
+        return ResponseEntity.ok(accountService.getInfoAboutUser());
     }
 
     @PatchMapping("/me")
@@ -66,7 +75,7 @@ public class AccountController {
             }
     )
     public ResponseEntity<User> updateUser(@RequestBody User user) {
-        return ResponseEntity.ok(new User());
+        return ResponseEntity.ok(accountService.patchInfoAboutUser(user));
     }
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -77,7 +86,13 @@ public class AccountController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true)))
             }
     )
-    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) {
-        return ResponseEntity.ok(new Object());
+    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
+        if (image.getSize() > 10 * 1024 * 1024) {
+            return ResponseEntity.badRequest().body("File is too big");
+        } else if (accountService.updateUserAvatar(image)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 }
