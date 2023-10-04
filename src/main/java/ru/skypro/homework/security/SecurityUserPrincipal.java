@@ -3,30 +3,31 @@ package ru.skypro.homework.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.entity.User;
 
 import java.util.*;
 
 
 public class SecurityUserPrincipal implements UserDetails {
-    private User user;
+    private UserDTO userDTO;
 
-    public SecurityUserPrincipal(User user) {
-        this.user = user;
+    public SecurityUserPrincipal(UserDTO userDTO) {
+        this.userDTO = userDTO;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().getStringRole()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + userDTO.getRole().getStringRole()));
     }
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userDTO.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return userDTO.getEmail();
     }
 
     @Override
