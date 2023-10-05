@@ -28,7 +28,6 @@ import java.util.List;
 @Service
 public class AdServiceImpl implements AdService {
     private final CommentRepository commentRepository;
-    private final Ads ads;
     private final UserRepository userRepository;
     private final AdRepository adRepository;
     private final AdMapper adMapper;
@@ -37,13 +36,11 @@ public class AdServiceImpl implements AdService {
     private String adImageDirPath;
 
     public AdServiceImpl(CommentRepository commentRepository,
-                         Ads ads,
                          UserRepository userRepository,
                          AdRepository adRepository,
                          AdMapper adMapper,
                          UserDetails userDetails) {
         this.commentRepository = commentRepository;
-        this.ads = ads;
         this.userRepository = userRepository;
         this.adRepository = adRepository;
         this.adMapper = adMapper;
