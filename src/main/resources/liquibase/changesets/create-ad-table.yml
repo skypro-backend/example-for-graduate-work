@@ -23,6 +23,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: description
+                  type: varchar(2048)
+                  constraints:
+                  nullable: true
+              - column:
                   name: image
                   type: varchar
                   constraints:

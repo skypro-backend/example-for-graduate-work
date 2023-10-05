@@ -19,6 +19,8 @@ public class Ad {
     @Column(nullable = false)
     private String title;
 
+    private String description;
+
     private String image;
 
     @Column(nullable = false)

@@ -32,8 +32,7 @@ public class CommentServiceImpl implements CommentService{
     public CommentDTO createComment(Integer id, CreateOrUpdateComment comment) {
         Ad ad = adRepository.findById(id).orElseThrow(AdsNotFound::new);
         return CommentMapper.fromComment(commentRepository.save(
-                new Comment(null, Instant.now(), comment.getText(), null, ad))
-        );
+                new Comment().setText(comment.getText()).setAd(ad)));
     }
 
     @Override
@@ -43,10 +42,8 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public CommentDTO updateComment(Integer commentId,Integer adId, CreateOrUpdateComment comment) {
-        Comment resultComment = new Comment(null, Instant.now(), comment.getText(), null, null);
-        resultComment.setPk(commentRepository
-                .findByPkAndAd_Pk(commentId, adId)
-                .getPk());
-        return CommentMapper.fromComment(commentRepository.save(resultComment));
+        Comment commentResult = commentRepository.findByPkAndAd_Pk(commentId, adId);
+        commentResult.setText(comment.getText()).setCreatedAt(Instant.now());
+        return CommentMapper.fromComment(commentRepository.save(commentResult));
     }
 }

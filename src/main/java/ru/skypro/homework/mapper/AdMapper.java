@@ -12,7 +12,8 @@ public class AdMapper {
                 .setAuthor(ad.getUser().getId())
                 .setImage(ad.getImage())
                 .setPrice(ad.getPrice())
-                .setTitle(ad.getTitle());
+                .setTitle(ad.getTitle())
+                .setDescription(ad.getDescription());
     }
 
 }

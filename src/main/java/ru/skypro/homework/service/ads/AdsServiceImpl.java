@@ -8,11 +8,9 @@ import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.exception.AdsNotFound;
 import ru.skypro.homework.mapper.AdMapper;
-import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.projection.CreateOrUpdateAd;
 import ru.skypro.homework.projection.ExtendedAd;
 import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.service.user.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,9 +30,11 @@ public class AdsServiceImpl implements AdsService{
 
     @Override
     public AdDTO createAd(CreateOrUpdateAd properties, MultipartFile image) {
-        return AdMapper.fromAd(adRepository.save(
-                new Ad(null, properties.getTitle(), null, properties.getPrice(), null))
-        );
+        Ad ad = new Ad()
+                .setTitle(properties.getTitle())
+                .setPrice(properties.getPrice())
+                .setDescription(properties.getDescription());
+        return AdMapper.fromAd(adRepository.save(ad));
     }
 
     @Override
@@ -49,12 +49,11 @@ public class AdsServiceImpl implements AdsService{
 
     @Override
     public AdDTO updateAd(Integer id, CreateOrUpdateAd properties) {
-        Ad adResult = new Ad(id, properties.getTitle(), null, properties.getPrice(), null);
-        adResult.setPk(adRepository
-                .findById(id)
-                .orElseThrow()
-                .getPk());
-        return AdMapper.fromAd(adRepository.save(adResult));
+        Ad adById = adRepository.findById(id).orElseThrow(AdsNotFound::new);
+        adById.setTitle(properties.getTitle())
+                .setDescription(properties.getDescription())
+                .setPrice(properties.getPrice());
+        return AdMapper.fromAd(adRepository.save(adById));
     }
 
     @Override
