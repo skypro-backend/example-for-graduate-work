@@ -90,7 +90,7 @@ public class AdsController {
     })
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<Void> deleteAdById(@PathVariable int id, Authentication authentication) {
-        adService.deleteAdById(id);
+        adService.deleteAdById(id, authentication.getName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -108,7 +108,7 @@ public class AdsController {
     public ResponseEntity<Ad> patchAdById(@PathVariable int id,
                                          @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd,
                                           Authentication authentication) throws AdNotFoundException {
-        Ad ad = adService.patchAdById(id, createOrUpdateAd);
+        Ad ad = adService.patchAdById(id, createOrUpdateAd, authentication.getName());
         return new ResponseEntity<>(ad, HttpStatus.OK);
     }
 
@@ -139,7 +139,7 @@ public class AdsController {
     public ResponseEntity<Byte[]> patchAdsImageById(@PathVariable int id,
                                                   @RequestParam("image") MultipartFile file,
                                                   Authentication authentication) {
-        Byte[] image = adService.patchAdsImageById(id, file);
+        Byte[] image = adService.patchAdsImageById(id, file, authentication.getName());
         return new ResponseEntity<>(image, HttpStatus.OK);
         //todo: уточнить про возвращаемый октет-стрим и переделать!!! возвращает массив байт
     }
