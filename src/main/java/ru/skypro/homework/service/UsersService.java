@@ -7,15 +7,15 @@ import ru.skypro.homework.dto.User;
 
 public interface UsersService {
 
-    void setPassword(String currentPassword, String newPassword);
+    void setPassword(String currentPassword, String newPassword, String username);
 
-    User getUser();
+    User getUser(String username);
 
-    UpdateUser updateUser(UpdateUser updateUser);
+    UpdateUser updateUser(UpdateUser updateUser, String username);
 
-    void updateUserImage(MultipartFile file);
+    void updateUserImage(MultipartFile file, String username);
 
-    void createUser(UserDetails myDatabaseUserDetails);
+    void createUser(UserDetails userDetails);
 
     boolean userExists(String username);
 
