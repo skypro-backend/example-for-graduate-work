@@ -13,14 +13,14 @@ public interface AdService {
 
     Ads getAllAds();
 
-    ExtendedAd getAdById(int id) throws AdNotFoundException;
+    ExtendedAd getAdById(int id);
 
-    void deleteAdById(int id);
+    void deleteAdById(int id, String userName);
 
-    Ad patchAdById(int id, CreateOrUpdateAd createOrUpdateAd) throws AdNotFoundException;
+    Ad patchAdById(int id, CreateOrUpdateAd createOrUpdateAd, String userName);
 
     Ads getMyAds(String userName);
 
-    Byte[] patchAdsImageById(int id, MultipartFile file);
+    Byte[] patchAdsImageById(int id, MultipartFile file, String userName);
 
 }

@@ -4,13 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.AdNotFoundException;
+import ru.skypro.homework.exceptions.PermissionDeniedException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.UserRepository;
@@ -62,15 +60,25 @@ public class AdServiceImpl implements AdService {
 
     @Override
     @Transactional
-    public void deleteAdById(int id) {
+    public void deleteAdById(int id, String userName) {
+        UserEntity user = usersRepository.findByUsername(userName);
+        AdEntity adEntity = adRepository.findById(id)
+                .orElseThrow(() -> new AdNotFoundException("Not found ad with id = " + id));
+        if (!checkPermission(adEntity, user)) {
+            throw new PermissionDeniedException("You do not have permission to delete ad with id = " + id);
+        }
         adRepository.deleteById(id);
     }
 
     @Override
     @Transactional
-    public Ad patchAdById(int id, CreateOrUpdateAd createOrUpdateAd) throws AdNotFoundException {
+    public Ad patchAdById(int id, CreateOrUpdateAd createOrUpdateAd, String userName)  {
+        UserEntity user = usersRepository.findByUsername(userName);
         AdEntity adEntity = adRepository.findById(id)
                 .orElseThrow(() -> new AdNotFoundException("Not found ad with id = " + id));
+        if (!checkPermission(adEntity, user)) {
+            throw new PermissionDeniedException("You do not have permission to update ad with id = " + id);
+        }
         adEntity.setTitle(createOrUpdateAd.getTitle());
         adEntity.setPrice(createOrUpdateAd.getPrice());
         adEntity.setDescription(createOrUpdateAd.getDescription());
@@ -91,8 +99,19 @@ public class AdServiceImpl implements AdService {
 
     @Override
     @Transactional
-    public Byte[] patchAdsImageById(int id, MultipartFile file) {
+    public Byte[] patchAdsImageById(int id, MultipartFile file, String userName) {
+        UserEntity user = usersRepository.findByUsername(userName);
+        AdEntity adEntity = adRepository.findById(id)
+                .orElseThrow(() -> new AdNotFoundException("Not found ad with id = " + id));
+        if (!checkPermission(adEntity, user)) {
+            throw new PermissionDeniedException("You do not have permission to update image in ad with id = " + id);
+        }
+
         //todo: уточнить про возвращаемый октет-стрим и доделать!!!
         return null;
+    }
+
+    private boolean checkPermission(AdEntity ad, UserEntity user) {
+        return ad.getAuthor().equals(user) || user.getRole() == Role.ADMIN;
     }
 }

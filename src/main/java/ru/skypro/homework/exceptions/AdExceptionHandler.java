@@ -51,4 +51,8 @@ public class AdExceptionHandler {
         return new ResponseEntity<>("Файл не найден", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<?> handlePermissionDeniedException(PermissionDeniedException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+    }
 }
