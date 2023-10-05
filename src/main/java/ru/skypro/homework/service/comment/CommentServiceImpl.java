@@ -43,7 +43,7 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public CommentDTO updateComment(Integer commentId,Integer adId, CreateOrUpdateComment comment) {
         Comment commentResult = commentRepository.findByPkAndAd_Pk(commentId, adId);
-        commentResult.setText(comment.getText());
+        commentResult.setText(comment.getText()).setCreatedAt(Instant.now());
         return CommentMapper.fromComment(commentRepository.save(commentResult));
     }
 }

@@ -49,15 +49,11 @@ public class AdsServiceImpl implements AdsService{
 
     @Override
     public AdDTO updateAd(Integer id, CreateOrUpdateAd properties) {
-        Ad adResult = new Ad()
-                .setTitle(properties.getTitle())
+        Ad adById = adRepository.findById(id).orElseThrow(AdsNotFound::new);
+        adById.setTitle(properties.getTitle())
                 .setDescription(properties.getDescription())
                 .setPrice(properties.getPrice());
-        Ad adById = adRepository.findById(id).orElseThrow(AdsNotFound::new);
-        adResult.setTitle(adById.getTitle())
-                .setDescription(adById.getDescription())
-                .setPrice(adById.getPrice());
-        return AdMapper.fromAd(adRepository.save(adResult));
+        return AdMapper.fromAd(adRepository.save(adById));
     }
 
     @Override
