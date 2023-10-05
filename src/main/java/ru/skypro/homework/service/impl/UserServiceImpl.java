@@ -21,38 +21,5 @@ public class UserServiceImpl implements UserService{
 
       private final UserRepository userRepository;
 
-      @Override
-      public User findUserById (Integer userId) {
-            Optional <User> userFromDb = userRepository.findById (Math.toIntExact (userId));
-            return userFromDb.orElse (new User ());
-      }
-      @Override
-      public User getUsers (String email) {
-            return userRepository.findByEmail (email).orElseThrow ();
-      }
 
-      @Override
-      public List <User> allUsers () {
-            return userRepository.findAll();
-      }
-
-      @Override
-      public User addUser (User user) {
-            if (user.getRole () == null) {
-                  user.setRole (Role.USER);
-            }
-            if (userRepository.existsByEmailContains (user.getEmail ())) {
-                  PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder ();
-                  user.setPassword (passwordEncoder.encode (user.getPassword ()));
-            }
-            return userRepository.save (user);
-      }
-      @Override
-      public boolean deleteUser (Integer userId) {
-            if (userRepository.findById(userId).isPresent()) {
-                  userRepository.deleteById(userId);
-                  return true;
-            }
-            return false;
-      }
 }
