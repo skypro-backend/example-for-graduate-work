@@ -25,7 +25,7 @@ public class Ad {
 
     @Column(nullable = false)
     private Integer price;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author")
     private User user;
 }

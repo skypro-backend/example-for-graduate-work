@@ -1,13 +1,14 @@
 package ru.skypro.homework.projection;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import lombok.experimental.Accessors;
 import ru.skypro.homework.dto.AdDTO;
 
 import java.util.List;
-@RequiredArgsConstructor
-@Data
+@NoArgsConstructor
+@Getter @Setter
+@Accessors(chain = true)
 public class Ads {
-    private final Integer count;
-    private final List<AdDTO> results;
+    private Long count;
+    private List<AdDTO> results;
 }

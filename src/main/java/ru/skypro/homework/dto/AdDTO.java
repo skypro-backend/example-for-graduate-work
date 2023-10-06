@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 @Data
 @Accessors(chain = true)
 public class AdDTO {
-    private Integer author;
+    private UserDTO author;
     private String image;
     private Integer pk;
     private Integer price;
