@@ -54,7 +54,7 @@ public class AdsController {
         })
         @GetMapping("/{id}")
         public ResponseEntity<ExtendedAdDTO> getInfoByAd(@PathVariable int id){
-                return ResponseEntity.ok(new ExtendedAdDTO());
+                return ResponseEntity.ok(adService.getInfoByAd(id));
         }
 
         @Operation(summary = "Удаление объявления")
@@ -66,6 +66,7 @@ public class AdsController {
         })
         @DeleteMapping("/{id}")
         public ResponseEntity deleteUser(@PathVariable int id) {
+                adService.deleteUser(id);
                 return ResponseEntity.ok().build();
         }
 
@@ -79,7 +80,7 @@ public class AdsController {
         })
         @PatchMapping("/{id}")
         public ResponseEntity<AdDTO> updateInfoByAd(@PathVariable int id, @RequestBody CreateOrUpdateAdDTO ad){
-                return ResponseEntity.ok(new AdDTO());
+                return ResponseEntity.ok(adService.updateInfoByAd(id,ad));
         }
 
         @Operation(summary = "Получение информации об объявлении")

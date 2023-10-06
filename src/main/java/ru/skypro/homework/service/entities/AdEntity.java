@@ -32,7 +32,7 @@ public class AdEntity {
     int price;
 
     @Column(name = "title", nullable = false)
-    int title;
+    String title;
 
     @Column(name = "image", nullable = false)
     String image;

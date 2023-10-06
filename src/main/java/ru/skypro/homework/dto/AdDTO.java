@@ -12,6 +12,6 @@ public class AdDTO {
     int author;
     int pk;
     int price;
-    int title;
+    String title;
     String image;
 }
