@@ -64,15 +64,15 @@ public class AdsController {
 
     /**
      * Метод добавления нового объявления
-     * @param createOrUpdateAd
-     * @param imageFile              принимает изображение.
+     * @param properties         DTO. Включает title, price и description объявления.
+     * @param image              принимает изображение.
      * @return возвращает ResponsEntity
      */
     // postman не отрабатывает
     @PostMapping
-    public ResponseEntity<Ad> addAds(@RequestBody CreateOrUpdateAd createOrUpdateAd,
-                                     @RequestParam MultipartFile imageFile) {
-        return ResponseEntity.ok(new Ad());
+    public ResponseEntity<Ad> addAd(@ModelAttribute CreateOrUpdateAd properties,
+                                    @RequestParam MultipartFile image) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Ad());
     }
 
     /**
@@ -81,7 +81,7 @@ public class AdsController {
      * @return возвращает ResponsEntity
      */
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteAds(@PathVariable Integer id) {
+    public ResponseEntity<Void> removeAd(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -91,7 +91,7 @@ public class AdsController {
      * @return возвращает ResponsEntity
      */
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ExtendedAd> getInfoAdsById(@PathVariable Integer id) {
+    public ResponseEntity<ExtendedAd> getAds(@PathVariable Integer id) {
         return ResponseEntity.ok(new ExtendedAd());
     }
 }
