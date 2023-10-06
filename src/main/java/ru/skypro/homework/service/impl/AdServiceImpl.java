@@ -6,16 +6,20 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.exceptions.PermissionDeniedException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.ImagesRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +28,7 @@ public class AdServiceImpl implements AdService {
 
     private final AdRepository adRepository;
     private final UserRepository usersRepository;
+    private final ImagesRepository imagesRepository;
     private final AdMapper adMapper;
 
     @Override
@@ -45,8 +50,19 @@ public class AdServiceImpl implements AdService {
         adEntity.setTitle(properties.getTitle());
         adEntity.setDescription(properties.getDescription());
         adEntity.setPrice(properties.getPrice());
-        adEntity.setImage(null);
         adEntity.setAuthor(author);
+        Image image = new Image();
+        try {
+            byte[] bytes = file.getBytes();
+            image.setImage(bytes);
+            image.setFileName("");
+            image.setMediaType("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        imagesRepository.save(image);
+        adEntity.setImage(image);
+
         adRepository.save(adEntity);
         return adMapper.adEntityToAd(adEntity);
     }
@@ -99,7 +115,8 @@ public class AdServiceImpl implements AdService {
 
     @Override
     @Transactional
-    public Byte[] patchAdsImageById(int id, MultipartFile file, String userName) {
+    public byte[] patchAdsImageById(int id, MultipartFile file, String userName) {
+
         UserEntity user = usersRepository.findByUsername(userName);
         AdEntity adEntity = adRepository.findById(id)
                 .orElseThrow(() -> new AdNotFoundException("Not found ad with id = " + id));
@@ -107,8 +124,15 @@ public class AdServiceImpl implements AdService {
             throw new PermissionDeniedException("You do not have permission to update image in ad with id = " + id);
         }
 
-        //todo: уточнить про возвращаемый октет-стрим и доделать!!!
-        return null;
+        Image image = adEntity.getImage();
+        try {
+            byte[] bytes = file.getBytes();
+            image.setImage(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        imagesRepository.save(image);
+        return image.getImage();
     }
 
     private boolean checkPermission(AdEntity ad, UserEntity user) {

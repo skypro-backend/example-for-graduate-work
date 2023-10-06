@@ -136,11 +136,10 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Объявление не найдено")
     })
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public ResponseEntity<Byte[]> patchAdsImageById(@PathVariable int id,
+    public ResponseEntity<byte[]> patchAdsImageById(@PathVariable int id,
                                                   @RequestParam("image") MultipartFile file,
                                                   Authentication authentication) {
-        Byte[] image = adService.patchAdsImageById(id, file, authentication.getName());
+        byte[] image = adService.patchAdsImageById(id, file, authentication.getName());
         return new ResponseEntity<>(image, HttpStatus.OK);
-        //todo: уточнить про возвращаемый октет-стрим и переделать!!! возвращает массив байт
     }
 }
