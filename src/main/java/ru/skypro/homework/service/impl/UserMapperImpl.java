@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.account.Register;
 import ru.skypro.homework.dto.account.User;
@@ -8,11 +9,17 @@ import ru.skypro.homework.service.UserMapper;
 
 @Component
 public class UserMapperImpl implements UserMapper {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserMapperImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @Override
     public UserEntity toUserEntity(Register register) {
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(register.getUsername());
-        userEntity.setPassword(register.getPassword());
+        userEntity.setPassword(passwordEncoder.encode(register.getPassword()));
         userEntity.setFirstName(register.getFirstName());
         userEntity.setLastName(register.getLastName());
         userEntity.setPhoneUser(register.getPhone());

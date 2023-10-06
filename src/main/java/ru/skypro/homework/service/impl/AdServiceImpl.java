@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.account.Role;
@@ -48,6 +49,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
+    @Transactional
     public Ad createAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image) throws IOException {
         UserEntity user = userRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
@@ -61,21 +63,24 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Ads getAllAdvertising() {
         List<AdEntity> adEntityList = adRepository.findAll();
         return adMapper.toAds(adEntityList);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ExtendedAd getAdvertisingById(int id) {
         AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Ad not found"));
         return adMapper.toExtendedAd(adEntity);
     }
 
     @Override
+    @Transactional
     public boolean deleteAdvertisingById(int id) throws IOException {
         String userName = userDetails.getUsername();
-        UserEntity userEntity=userRepository.findByEmail(userName)
+        UserEntity userEntity = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
         AdEntity adEntity=adRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ad not found"));
@@ -89,11 +94,12 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
+    @Transactional
     public Ad updateAdvertising(int id, CreateOrUpdateAd createOrUpdateAd) {
         String userName = userDetails.getUsername();
-        UserEntity userEntity=userRepository.findByEmail(userName)
+        UserEntity userEntity = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
-        AdEntity adEntity=adRepository.findById(id)
+        AdEntity adEntity = adRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ad not found"));
         if (userEntity.getRole() == Role.ADMIN || adEntity.getUserEntity().equals(userEntity)){
             return adMapper.toAd(adRepository.save(adMapper.toAdEntity(createOrUpdateAd, adEntity)));
@@ -102,12 +108,14 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Ads getAllAuthenticatedUserAdvertising() {
         List<AdEntity> adEntityList = adRepository.findAllByUserEntityEmail(userDetails.getUsername());
         return adMapper.toAds(adEntityList);
     }
 
     @Override
+    @Transactional
     public boolean updateAdvertisingImage(int id, MultipartFile image) throws IOException {
         AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Ad not found"));
         if (adEntity.getImagePath() != null) {
@@ -117,7 +125,7 @@ public class AdServiceImpl implements AdService {
         adEntity.setImageMediaType(image.getContentType());
         adEntity.setImageFileSize(image.getSize());
         adRepository.save(adEntity);
-        return false;
+        return true;
     }
 
     private Path createPath(MultipartFile image, AdEntity adEntity) throws IOException {
