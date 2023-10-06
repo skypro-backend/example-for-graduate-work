@@ -20,55 +20,22 @@ import ru.skypro.homework.dto.ExtendedAd;
 public class AdsController {
 
     /**
-     * Метод обновляет информацию об объявлении.
+     * Метод получает все объявления.
      *
-     * @param id               порядковый номер объявления в БД.
-     * @param createOrUpdateAd DTO. Включает title, price и description объявления.
-     * @return DTO Ad. Включает author, image, pk, price и title объявления.
-     */
-    @PatchMapping(value = "/{id}")
-    public ResponseEntity<Ad> updateAds(@PathVariable Integer id,
-                                        @RequestBody CreateOrUpdateAd createOrUpdateAd) {
-        return ResponseEntity.ok(new Ad());
-    }
-
-    /**
-     * @return возвращает объявления авторизованного пользователя.
-     */
-    @GetMapping(value = "/me")
-    public ResponseEntity<Ads> getAdsMe() {
-        return ResponseEntity.ok(new Ads());
-    }
-
-    /**
-     * Метод обновляет картинку объявления.
-     *
-     * @param id        порядковый номер объявления в БД.
-     * @param imageFile принимает изображение.
-     * @return бинарный код изображения.
-     */
-    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> updateImage(@PathVariable Integer id,
-                                              @RequestParam MultipartFile imageFile) {
-        return ResponseEntity.ok("Uploaded");
-    }
-
-    /**
-     * Метод получения всех объявлений
-     * @return возвращает ResponsEntity
+     * @return возвращает ResponsEntity.
      */
     @GetMapping
     public ResponseEntity<Ads> getAllAds() {
-        return ResponseEntity.ok(new Ads());
+        return ResponseEntity.status(HttpStatus.OK).body(new Ads());
     }
 
     /**
-     * Метод добавления нового объявления
-     * @param properties         DTO. Включает title, price и description объявления.
-     * @param image              принимает изображение.
-     * @return возвращает ResponsEntity
+     * Метод добавляет новое объявление.
+     *
+     * @param properties DTO. Включает title, price и description объявления.
+     * @param image      принимает изображение.
+     * @return возвращает ResponsEntity.
      */
-    // postman не отрабатывает
     @PostMapping
     public ResponseEntity<Ad> addAd(@ModelAttribute CreateOrUpdateAd properties,
                                     @RequestParam MultipartFile image) {
@@ -76,22 +43,58 @@ public class AdsController {
     }
 
     /**
-     * метод удаления объявления по id
-     * @param id            идентификатор объявления
-     * @return возвращает ResponsEntity
-     */
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> removeAd(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    /**
-     * метод получения информации объявления по id
-     * @param id идентификатор объявления
-     * @return возвращает ResponsEntity
+     * Метод получает информацию об объявлении по id.
+     *
+     * @param id идентификатор объявления в БД.
+     * @return возвращает ResponsEntity.
      */
     @GetMapping(value = "/{id}")
     public ResponseEntity<ExtendedAd> getAds(@PathVariable Integer id) {
-        return ResponseEntity.ok(new ExtendedAd());
+        return ResponseEntity.status(HttpStatus.OK).body(new ExtendedAd());
+    }
+
+    /**
+     * Метод удаляет объявление по id.
+     *
+     * @param id идентификатор объявления в БД.
+     * @return возвращает ResponsEntity.
+     */
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> removeAd(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    /**
+     * Метод обновляет информацию об объявлении по id.
+     *
+     * @param id               идентификатор объявления в БД.
+     * @param createOrUpdateAd DTO. Включает title, price и description объявления.
+     * @return DTO Ad. Включает author, image, pk, price и title объявления.
+     */
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<Ad> updateAds(@PathVariable Integer id,
+                                        @RequestBody CreateOrUpdateAd createOrUpdateAd) {
+        return ResponseEntity.status(HttpStatus.OK).body(new Ad());
+    }
+
+    /**
+     * @return возвращает объявления авторизованного пользователя.
+     */
+    @GetMapping(value = "/me")
+    public ResponseEntity<Ads> getAdsMe() {
+        return ResponseEntity.status(HttpStatus.OK).body(new Ads());
+    }
+
+    /**
+     * Метод обновляет картинку объявления по id.
+     *
+     * @param id   идентификатор объявления в БД.
+     * @param file принимает изображение.
+     * @return бинарный код изображения.
+     */
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateImage(@PathVariable Integer id,
+                                              @RequestParam("image") MultipartFile file) {
+        return ResponseEntity.status(HttpStatus.OK).body("File uploaded");
     }
 }
