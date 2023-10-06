@@ -5,12 +5,12 @@ import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Comment;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.exception.custom_exception.AdNotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.projection.Comments;
 import ru.skypro.homework.projection.CreateOrUpdateComment;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.exception.AdsNotFound;
 
 import java.time.Instant;
 import java.util.List;
@@ -30,7 +30,7 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public CommentDTO createComment(Integer id, CreateOrUpdateComment comment) {
-        Ad ad = adRepository.findById(id).orElseThrow(AdsNotFound::new);
+        Ad ad = adRepository.findById(id).orElseThrow(AdNotFoundException::new);
         return CommentMapper.fromComment(commentRepository.save(
                 new Comment().setText(comment.getText()).setAd(ad)));
     }

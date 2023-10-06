@@ -1,21 +1,25 @@
 package ru.skypro.homework.service.ads;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.projection.AdView;
+import ru.skypro.homework.projection.Ads;
 import ru.skypro.homework.projection.CreateOrUpdateAd;
 import ru.skypro.homework.projection.ExtendedAd;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 public interface AdsService {
 
-    List<AdDTO> getAllAds();
+    Ads getAllAds();
     AdDTO createAd(CreateOrUpdateAd properties, MultipartFile image);
     ExtendedAd getAdFullInfo(Integer id);
     void deleteAd(Integer id);
-    AdDTO updateAd(Integer id,CreateOrUpdateAd properties);
-    List<AdDTO> getAllAdsByUser(String user);
-    void updateImage(Integer id, MultipartFile image);
+    AdView updateAd(Integer id, CreateOrUpdateAd properties);
+    Ads getAllAdsByUser();
+    String updateImage(Integer id, MultipartFile image);
 
 }
