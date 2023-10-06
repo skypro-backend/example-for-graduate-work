@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UsersService;
 
 import javax.validation.Valid;
@@ -50,18 +49,18 @@ public class UsersController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PatchMapping("/me")
-    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser userUpdate) {
-
-        Optional<UpdateUser> userUpdateOptional = usersService.updateUser(SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName(), userUpdate);
-
-        return userUpdateOptional.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NO_CONTENT).build());
-
-    }
+//    @PatchMapping("/me")
+//    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser userUpdate) {
+//
+//        Optional<UpdateUser> userUpdateOptional = usersService.updateUser(SecurityContextHolder
+//                .getContext()
+//                .getAuthentication()
+//                .getName(), userUpdate);
+//
+//        return userUpdateOptional.map(ResponseEntity::ok)
+//                .orElseGet(() -> ResponseEntity.status(HttpStatus.NO_CONTENT).build());
+//
+//    }
 
     @PatchMapping("/me")
     @Operation(summary = "Обновление информации об авторизованном пользователе",
