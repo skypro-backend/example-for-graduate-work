@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +22,7 @@ import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UsersService;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -40,21 +43,24 @@ public class UsersController {
             @ApiResponse(responseCode = "401", description = "Требуется авторизация"),
             @ApiResponse(responseCode = "403", description = "Доступ запрещен")
     })
-    public ResponseEntity<Void> setPassword(@Valid @RequestBody NewPassword newPassword) {
-        usersService.setPassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());
+    public ResponseEntity<Void> setPassword(@Valid @RequestBody NewPassword newPassword,
+                                            Authentication authentication) {
+        usersService.setPassword(newPassword.getCurrentPassword(), newPassword.getNewPassword(),
+                authentication.getName());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/me")
-    @Operation(summary = "Получение информации об авторизованном пользователе")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Информация получена", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
-            @ApiResponse(responseCode = "401", description = "Требуется авторизация")
-    })
-    public ResponseEntity<User> getUser() {
-        User user = usersService.getUser();
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    @PatchMapping("/me")
+    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser userUpdate) {
+
+        Optional<UpdateUser> userUpdateOptional = usersService.updateUser(SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName(), userUpdate);
+
+        return userUpdateOptional.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NO_CONTENT).build());
+
     }
 
     @PatchMapping("/me")
@@ -65,8 +71,9 @@ public class UsersController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = UpdateUser.class))}),
             @ApiResponse(responseCode = "401", description = "Требуется авторизация")
     })
-    public ResponseEntity<UpdateUser> patchUser(@Valid @RequestBody UpdateUser updateUser) {
-        UpdateUser updatedUser = usersService.updateUser(updateUser);
+    public ResponseEntity<UpdateUser> patchUser(@Valid @RequestBody UpdateUser updateUser,
+                                                Authentication authentication) {
+        UpdateUser updatedUser = usersService.updateUser(updateUser, authentication.getName());
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
@@ -78,8 +85,9 @@ public class UsersController {
             @ApiResponse(responseCode = "200", description = "Аватар обновлен"),
             @ApiResponse(responseCode = "401", description = "Требуется авторизация")
     })
-    public ResponseEntity<Void> patchUserAvatar(@RequestParam("image") MultipartFile file) {
-        usersService.updateUserImage(file);
+    public ResponseEntity<Void> patchUserAvatar(@RequestParam("image") MultipartFile file,
+                                                Authentication authentication) {
+        usersService.updateUserImage(file, authentication.getName());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

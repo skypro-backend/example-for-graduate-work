@@ -19,6 +19,8 @@ public class Image {
     private int id;
     private String fileName;
     private String mediaType;
+    @Lob
+    private byte[] image;
 
     public String getFileName() {
         return null;

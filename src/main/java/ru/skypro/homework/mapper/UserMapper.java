@@ -8,11 +8,13 @@ import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserEntity;
 
+import java.util.Optional;
+
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
 
     @Mapping(target = "email", source = "username")
-    User userEntityToUser(UserEntity userEntity);
+    Optional<UserEntity> userEntityToUser(UserEntity userEntity);
 
     @Mapping(target = "username", source = "email")
     UserEntity userToUserEntity(User user);

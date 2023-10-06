@@ -30,4 +30,9 @@ public class CommentEntity {
     @JoinColumn(name = "ad_id", nullable = false)
     private AdEntity ad;
 
+    public void setUserEntity(UserEntity userEntity) {
+    }
+
+    public void setAdEntity(AdEntity adEntity) {
+    }
 }

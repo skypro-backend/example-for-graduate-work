@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto;
 
 import lombok.*;
+import ru.skypro.homework.entity.UserEntity;
 
 import java.util.List;
 

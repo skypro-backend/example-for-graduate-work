@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentsService;
@@ -42,9 +43,9 @@ public class CommentsController {
             @ApiResponse(responseCode = "401", description = "Требуется авторизация"),
             @ApiResponse(responseCode = "404", description = "Объявление не найдено")
     })
-    public ResponseEntity<Comments> addComment(@PathVariable("id") Long id,
-                                               @Valid @RequestBody CreateOrUpdateComment createComment) {
-        Optional<Comments> optionalCommentDto = commentService.createComment(SecurityContextHolder
+    public ResponseEntity<Comment> addComment(@PathVariable("id") Long id,
+                                              @Valid @RequestBody CreateOrUpdateComment createComment) {
+        Optional<Comment> optionalCommentDto = commentService.createComment(SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getName(), id, createComment);
@@ -99,10 +100,10 @@ public class CommentsController {
             @ApiResponse(responseCode = "404", description = "Комментарий или объявление не найдены")
     })
     @PatchMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<Comments> updateComment(@PathVariable("adId") Long adId,
-                                                  @PathVariable("commentId") Long commentId,
-                                                  @Valid @RequestBody CreateOrUpdateComment updateComment) {
-        Optional<Comments> optionalCommentDto = commentService.editComment(SecurityContextHolder
+    public ResponseEntity<Comment> updateComment(@PathVariable("adId") Long adId,
+                                                 @PathVariable("commentId") Long commentId,
+                                                 @Valid @RequestBody CreateOrUpdateComment updateComment) {
+        Optional<Comment> optionalCommentDto = commentService.editComment(SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getName(), adId, commentId, updateComment);

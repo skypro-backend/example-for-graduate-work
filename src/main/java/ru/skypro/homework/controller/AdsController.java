@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -54,8 +55,9 @@ public class AdsController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Ad.class)) }),
             @ApiResponse(responseCode = "401", description = "Требуется авторизация")
     })
-    public ResponseEntity<Ad> postAd(@RequestParam ("properties") CreateOrUpdateAd properties,
-                                     @RequestParam("image") MultipartFile file, Authentication authentication) {
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    public ResponseEntity<Ad> postAd(@RequestPart("properties") CreateOrUpdateAd properties,
+                                     @RequestPart("image") MultipartFile file, Authentication authentication) {
         Ad ad = adService.postAd(properties, file, authentication.getName());
         return new ResponseEntity<>(ad, HttpStatus.CREATED);
     }
@@ -70,6 +72,7 @@ public class AdsController {
             @ApiResponse(responseCode = "401", description = "Требуется авторизация"),
             @ApiResponse(responseCode = "404", description = "Объявление не найдено")
     })
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ExtendedAd> getAdById(@PathVariable int id,
                                                 Authentication authentication) throws AdNotFoundException {
         ExtendedAd extendedAd = adService.getAdById(id);
@@ -85,8 +88,9 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Доступ запрещен"),
             @ApiResponse(responseCode = "404", description = "Объявление не найдено")
     })
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<Void> deleteAdById(@PathVariable int id, Authentication authentication) {
-        adService.deleteAdById(id);
+        adService.deleteAdById(id, authentication.getName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -100,10 +104,11 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Доступ запрещен"),
             @ApiResponse(responseCode = "404", description = "Объявление не найдено")
     })
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<Ad> patchAdById(@PathVariable int id,
                                          @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd,
                                           Authentication authentication) throws AdNotFoundException {
-        Ad ad = adService.patchAdById(id, createOrUpdateAd);
+        Ad ad = adService.patchAdById(id, createOrUpdateAd, authentication.getName());
         return new ResponseEntity<>(ad, HttpStatus.OK);
     }
 
@@ -114,6 +119,7 @@ public class AdsController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Ads.class)) }),
             @ApiResponse(responseCode = "401", description = "Требуется авторизация")
     })
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<Ads> getMyAds(Authentication authentication) {
         Ads myAds = adService.getMyAds(authentication.getName());
         return new ResponseEntity<>(myAds, HttpStatus.OK);
@@ -129,10 +135,11 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Доступ запрещен"),
             @ApiResponse(responseCode = "404", description = "Объявление не найдено")
     })
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<Byte[]> patchAdsImageById(@PathVariable int id,
                                                   @RequestParam("image") MultipartFile file,
                                                   Authentication authentication) {
-        Byte[] image = adService.patchAdsImageById(id, file);
+        Byte[] image = adService.patchAdsImageById(id, file, authentication.getName());
         return new ResponseEntity<>(image, HttpStatus.OK);
         //todo: уточнить про возвращаемый октет-стрим и переделать!!! возвращает массив байт
     }

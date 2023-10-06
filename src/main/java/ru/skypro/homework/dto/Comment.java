@@ -1,6 +1,8 @@
 package ru.skypro.homework.dto;
 
 import lombok.*;
+import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.UserEntity;
 
 @Getter
 @Setter
@@ -17,4 +19,9 @@ public class Comment {
     private int pk;
     private String text;
 
+    public void setUserEntity(UserEntity userEntity) {
+    }
+
+    public void setAdEntity(AdEntity adEntity) {
+    }
 }
