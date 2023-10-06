@@ -10,8 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@ToString
-
+//@ToString
 @Entity
 @Table(name = "ads")
 public class AdEntity {

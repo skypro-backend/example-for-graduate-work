@@ -28,6 +28,11 @@ public class ImageServiceImpl implements ImageService {
     private String pathImageDir;
 
     @Override
+    public byte[] getImageInByteById(int id) {
+        return imagesRepository.findById(id).orElseThrow().getImage();
+    }
+
+    @Override
     public byte[] getImageInByte(String fileName) {
         Path path = Path.of(pathImageDir + "/" + fileName);
         byte[] imageByte;
@@ -42,7 +47,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image changeUserImage(Long userId, Long imageId, MultipartFile multipartFile) throws IOException {
+    public Image changeUserImage(Long userId, Integer imageId, MultipartFile multipartFile) throws IOException {
         String fileName = "user-image-"
                 + userId
                 + "." + getExtension(Objects.requireNonNull(multipartFile.getOriginalFilename()));
@@ -52,7 +57,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image changeAdImage(Long adId, Long imageId, MultipartFile multipartFile) throws IOException {
+    public Image changeAdImage(Long adId, Integer imageId, MultipartFile multipartFile) throws IOException {
         String fileName = "ad-image-"
                 + adId
                 + "." + getExtension(Objects.requireNonNull(multipartFile.getOriginalFilename()));
@@ -62,7 +67,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
 
-    private Image convertToImage(Path path, Long idImage, MultipartFile multipartFile, String fileName) throws IOException {
+    private Image convertToImage(Path path, Integer idImage, MultipartFile multipartFile, String fileName) throws IOException {
         Files.createDirectories(path.getParent());
         Files.deleteIfExists(path);
         try (InputStream is = multipartFile.getInputStream();

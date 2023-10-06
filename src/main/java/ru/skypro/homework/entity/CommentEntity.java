@@ -7,10 +7,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 @EqualsAndHashCode
-@ToString
+//@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Entity
 @Table(name = "comments")
 public class CommentEntity {

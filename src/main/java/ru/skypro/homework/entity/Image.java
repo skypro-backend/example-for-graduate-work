@@ -3,6 +3,7 @@ package ru.skypro.homework.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -11,7 +12,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public class Image {
 
     @Id
@@ -20,10 +20,7 @@ public class Image {
     private String fileName;
     private String mediaType;
     @Lob
+    @Type(type="org.hibernate.type.ImageType")
     private byte[] image;
-
-    public String getFileName() {
-        return null;
-    }
 
 }
