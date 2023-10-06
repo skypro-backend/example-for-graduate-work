@@ -1,23 +1,48 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.account.Register;
+import ru.skypro.homework.dto.account.Role;
+import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.UserMapper;
+
+import javax.annotation.PostConstruct;
+
+import static ru.skypro.homework.dto.account.Role.USER;
 
 @Service
 public class AuthServiceImpl implements AuthService {
-
     private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
+    private final UserMapper userMapper;
+    private final UserRepository userRepository;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
+    public AuthServiceImpl(UserDetailsManager manager, PasswordEncoder encoder,
+                           UserMapper userMapper, UserRepository userRepository) {
         this.manager = manager;
-        this.encoder = passwordEncoder;
+        this.encoder = encoder;
+        this.userMapper = userMapper;
+        this.userRepository = userRepository;
+    }
+
+    @PostConstruct
+    public void init() {
+        UserEntity admin = new UserEntity();
+        admin.setId(1);
+        admin.setEmail("admin@gmail.com");
+        admin.setPassword(encoder.encode("password"));
+        admin.setFirstName("Admin");
+        admin.setLastName("Adminov");
+        admin.setPhoneUser("+77777777777");
+        admin.setRole(Role.ADMIN);
+        if (!manager.userExists(admin.getEmail())) {
+            userRepository.save(admin);
+        }
     }
 
     @Override
@@ -34,14 +59,9 @@ public class AuthServiceImpl implements AuthService {
         if (manager.userExists(register.getUsername())) {
             return false;
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
+        Role role = (register.getRole() == null) ? USER : register.getRole();
+        register.setRole(role);
+        userRepository.save(userMapper.toUserEntity(register));
         return true;
     }
-
 }
