@@ -2,13 +2,12 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.Comments;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -20,35 +19,34 @@ public class CommentsController {
 //    private CommentsService = commentsService;
 
     /**
+     * Получение комментариев объявления
      * @param id - идентификатор объявления
      * @return ResponseEntity
      * Метод отправляет запрос на сервис в поисках объявления, если такое объявление
      * существует, то возвращает список комментариев к нему
      */
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<Comment>> getCommentsByAdId(@PathVariable(value = "id") long id) {
-        List<Comment> comments = new ArrayList<>();
+    public ResponseEntity<Comments> getComments(@PathVariable(value = "id") Integer id) {
 //        comments = commentsService.getCommentsByAdId(id);
-        if (comments.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        return ResponseEntity.ok(comments);
+        return ResponseEntity.ok(new Comments());
     }
 
     /**
+     * Добавление комментария к объявлению
      * @param id - идентификатор объявления
      * @return ResponseEntity
      * Метод отправляет запрос на сервис добавить новый комментарий к объявлению
      */
 
     @PostMapping("/{id}/comments")
-    public ResponseEntity<Comment> addCommentsByAdId(@PathVariable(value = "id") long id,
-                                                           @RequestBody Comment comment) {
+    public ResponseEntity<Comment> addComment(@PathVariable(value = "id") Integer id,
+                                              @RequestBody CreateOrUpdateComment createOrUpdateComment) {
 //        return commentsService.addCommentsByAdId(id);
-        return ResponseEntity.ok(comment);
+        return ResponseEntity.ok(new Comment());
     }
 
     /**
+     * Удаление комментария
      * @param adId - идентификатор объявления
      * @param commentId - идентификатор комментария
      * @return ResponseEntity
@@ -56,13 +54,13 @@ public class CommentsController {
      */
 
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> delCommentsByAdId(@PathVariable(value = "adId") long adId,
-                                                     @PathVariable(value = "commentId") long commentId) {
-        //...
+    public ResponseEntity<Void> deleteComment(@PathVariable(value = "adId") Integer adId,
+                                                  @PathVariable(value = "commentId") Integer commentId) {
         return ResponseEntity.ok().build();
     }
 
     /**
+     * Обновление комментария
      * @param adId - идентификатор объявления
      * @param commentId - идентификатор комментария
      * @return ResponseEntity
@@ -70,11 +68,10 @@ public class CommentsController {
      */
 
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> editCommentsByAdId(@PathVariable(value = "adId") long adId,
-                                                @PathVariable(value = "commentId") long commentId) {
-
+    public ResponseEntity<Comment> updateComment(@PathVariable(value = "adId") Integer adId,
+                                                @PathVariable(value = "commentId") Integer commentId,
+                                                @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         //...
-
-        return ResponseEntity.ok("comment was updated");
+        return ResponseEntity.ok(new Comment());
     }
 }
