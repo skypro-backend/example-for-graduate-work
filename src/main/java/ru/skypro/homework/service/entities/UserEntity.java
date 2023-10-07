@@ -37,7 +37,7 @@ public class UserEntity {
     @Column(name = "image", nullable = false)
     String image;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     String username;
 
     @Column(name = "password", nullable = false)
