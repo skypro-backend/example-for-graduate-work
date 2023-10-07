@@ -35,6 +35,7 @@ public class UserMapperImpl implements UserMapper {
         user.setFirstName(userEntity.getFirstName());
         user.setLastName(userEntity.getLastName());
         user.setPhone(userEntity.getPhoneUser());
+        user.setRole(userEntity.getRole());
         user.setImage("/users/image/" + userEntity.getId());
         return user;
     }
