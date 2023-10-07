@@ -31,12 +31,6 @@ public class AdEntity {
     @Column(name = "image_path")
     private String imagePath;
 
-    @Column(name = "image_media_type")
-    private String imageMediaType;
-
-    @Column(name = "image_file_size")
-    private long imageFileSize;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ToString.Exclude

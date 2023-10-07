@@ -86,8 +86,6 @@ public class AccountServiceImpl implements AccountService {
                 + StringUtils.getFilenameExtension(image.getOriginalFilename()));
         uploadImage(image, filePath);
         userEntity.setImagePath(filePath.toAbsolutePath().toString());
-        userEntity.setImageMediaType(image.getContentType());
-        userEntity.setImageFileSize(image.getSize());
         userRepository.save(userEntity);
         return true;
     }

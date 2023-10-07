@@ -38,12 +38,6 @@ public class UserEntity {
     @Column(name = "image_path")
     private String imagePath;
 
-    @Column(name = "image_media_type")
-    private String imageMediaType;
-
-    @Column(name = "image_file_size")
-    private long imageFileSize;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;

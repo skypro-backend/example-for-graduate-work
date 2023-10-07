@@ -57,8 +57,6 @@ public class AdServiceImpl implements AdService {
         Path filePath = createPath(image, adEntity);
         adEntity.setUserEntity(user);
         adEntity.setImagePath(filePath.toAbsolutePath().toString());
-        adEntity.setImageMediaType(image.getContentType());
-        adEntity.setImageFileSize(image.getSize());
         return adMapper.toAd(adRepository.save(adEntity));
     }
 
@@ -122,8 +120,6 @@ public class AdServiceImpl implements AdService {
             Files.deleteIfExists(Path.of(adEntity.getImagePath()));
         }
         adEntity.setImagePath(createPath(image, adEntity).toAbsolutePath().toString());
-        adEntity.setImageMediaType(image.getContentType());
-        adEntity.setImageFileSize(image.getSize());
         adRepository.save(adEntity);
         return true;
     }
