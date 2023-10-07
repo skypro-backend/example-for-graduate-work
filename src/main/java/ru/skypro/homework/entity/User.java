@@ -30,6 +30,7 @@ public class User {
     private String phone;
     @NotNull
     private String password;
+    private Boolean enabled;
     @OneToOne(cascade = CascadeType.ALL)
     private Avatar avatar;
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)

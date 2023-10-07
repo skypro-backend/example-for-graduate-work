@@ -21,7 +21,11 @@ public class WebSecurityConfig extends GlobalMethodSecurityConfiguration {
             "/v3/api-docs",
             "/webjars/**",
             "/login",
-            "/register"
+            "/register",
+            "/ads",
+            "/ads/*",
+            "/ads/image/**",
+            "/ads/*/comments"
     };
 
 
@@ -35,7 +39,10 @@ public class WebSecurityConfig extends GlobalMethodSecurityConfiguration {
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
                                         .mvcMatchers("/ads/**", "/users/**")
-                                        .authenticated())
+                                        .authenticated()
+                                        .anyRequest()
+                                        .authenticated()
+                )
                 .cors()
                 .and()
                 .httpBasic(withDefaults());

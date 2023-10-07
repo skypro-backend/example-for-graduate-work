@@ -47,6 +47,7 @@ public class PersonalizedUserInformationServiceImpl implements UserDetailsServic
         user.setFirstName(register.getFirstName());
         user.setLastName(register.getLastName());
         user.setPhone(register.getPhone());
+        user.setEnabled(true);
         userRepository.save(user);
     }
 }

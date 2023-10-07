@@ -64,7 +64,8 @@ public class AdsController {
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
             }
     )
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @adsServiceImpl.getAdsById(#id).getEmail() == authentication.name")
+    @PreAuthorize("@adsServiceImpl.getAdsById(#id).getEmail()" +
+            "== authentication.name or hasRole('ROLE_ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<AdsDto> update(@PathVariable("id") Integer id,
                                          @RequestBody CreateOrUpdateAd createOrUpdateAd) {
@@ -81,7 +82,8 @@ public class AdsController {
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
             }
     )
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @adsServiceImpl.getAdsById(#id).getEmail() == authentication.name")
+    @PreAuthorize("@adsServiceImpl.getAdsById(#id).getEmail()" +
+            "== authentication.name or hasRole('ROLE_ADMIN')")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateAdsImage(@PathVariable("id") Integer id,
                                             @RequestPart("image") MultipartFile imageFile) throws IOException {
@@ -151,7 +153,8 @@ public class AdsController {
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             }
     )
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @adsServiceImpl.getAdsById(#id).getEmail() == authentication.name")
+    @PreAuthorize("@adsServiceImpl.getAdsById(#id).getEmail()" +
+            "== authentication.name or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remove(@PathVariable("id") Integer id) {
         adsService.remove(id);
