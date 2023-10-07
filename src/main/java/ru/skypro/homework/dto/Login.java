@@ -9,23 +9,16 @@ import lombok.NoArgsConstructor;
 
 @Data
 public class Login {
-
-    private String username;
     private String password;
+    private String userName;
+
+
 
     public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+        return userName;
     }
 
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }
