@@ -37,7 +37,6 @@ public class SecurityUserManager implements UserDetailsManager {
 
     @Override
     public void deleteUser(String username) {
-        userRepository.deleteByEmail(username);
     }
 
     @Override
