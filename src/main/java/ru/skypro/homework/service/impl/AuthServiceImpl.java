@@ -33,14 +33,13 @@ public class AuthServiceImpl implements AuthService {
     @PostConstruct
     public void init() {
         UserEntity admin = new UserEntity();
-        admin.setId(1);
-        admin.setEmail("admin@gmail.com");
-        admin.setPassword(encoder.encode("password"));
-        admin.setFirstName("Admin");
-        admin.setLastName("Adminov");
-        admin.setPhoneUser("+77777777777");
-        admin.setRole(Role.ADMIN);
         if (!manager.userExists(admin.getEmail())) {
+            admin.setEmail("admin@gmail.com");
+            admin.setPassword(encoder.encode("password"));
+            admin.setFirstName("Admin");
+            admin.setLastName("Adminov");
+            admin.setPhoneUser("+77777777777");
+            admin.setRole(Role.ADMIN);
             userRepository.save(admin);
         }
     }
