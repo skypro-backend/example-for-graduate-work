@@ -14,19 +14,22 @@ import ru.skypro.homework.model.User;
  */
 @Mapper (componentModel = "spring")
 public interface AdMapper {
+      @Mapping(target = "id", source = "pk")
       @Mapping(target = "author.id", source = "author")
       Ad toAd(AdDto adDto); // конвертация DTO в сущность
 
+      @Mapping(target = "pk", source = "id")
       @Mapping(target = "author", source = "author.id")
       AdDto AdDto(Ad ad); // конвертация сущности в DTO
 
-      @Mapping(target = "pk", ignore = true)
+      @Mapping(target = "id", ignore = true)
       @Mapping(target = "author", ignore = true)
       @Mapping(target = "image", ignore = true)
       Ad toAd(CreateOrUpdateAdDto dto); // конвертация получить или обновить объявление от автора
       @Mapping(target = "description", ignore = true)
       CreateOrUpdateAdDto toCreateOrUpdateAdDto(Ad ad); // конвертация обновленного объявления
 
+      @Mapping(target = "pk", source = "id")
       @Mapping(target = "authorFirstName", source = "author.firstName")
       @Mapping(target = "authorLastName", source = "author.lastName")
       @Mapping(target = "email", source = "author.email")

@@ -13,15 +13,17 @@ import java.time.ZoneOffset;
 
 @Mapper (componentModel = "spring")
 public interface CommentMapper {
+      @Mapping(target = "id", source = "pk")
       @Mapping(target = "author", ignore = true)
       @Mapping (target = "createdAt", ignore = true)
       @Mapping (target = "ad", ignore = true)
       Comment toCommenty (CommentDto commentDto); // конвертация DTO в сущность
-
+      @Mapping(source = "id", target = "pk")
       @Mapping(target = "author", source = "author.id")
       @Mapping(target = "createdAt", qualifiedByName = "instantToInteger")
       CommentDto toCommentDto (Comment comment); // конвертация сущности в DTO
-      @Mapping(target = "pk", ignore = true)
+
+      @Mapping(target = "id", ignore = true)
       @Mapping(target = "author", ignore = true)
       @Mapping(target = "authorImage", ignore = true)
       @Mapping(target = "authorFirstName", ignore = true)
