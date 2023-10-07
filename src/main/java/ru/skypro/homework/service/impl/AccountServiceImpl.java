@@ -91,8 +91,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     static void uploadImage(MultipartFile image, Path filePath) throws IOException {
-        Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
+        Files.createDirectories(filePath.getParent());
 
         try (InputStream is = image.getInputStream();
              OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
