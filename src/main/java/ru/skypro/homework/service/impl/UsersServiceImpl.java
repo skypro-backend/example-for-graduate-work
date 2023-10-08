@@ -9,12 +9,15 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.MyDatabaseUserDetails;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.repository.ImagesRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UsersService;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ public class UsersServiceImpl implements UsersService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final ImagesRepository imagesRepository;
 
     @Override
     @Transactional
@@ -56,11 +60,22 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     @Transactional
-    public void updateUserImage(MultipartFile file, String username) {
+    public byte[] updateUserImage(MultipartFile file, String username) {
         UserEntity userEntity = userRepository.findByUsername(username);
-        String filePath = "";
-        userEntity.setImage(filePath);
+        Image image = userEntity.getImage();
+        if (image == null) {
+            image = new Image();
+        }
+        try {
+            byte[] bytes = file.getBytes();
+            image.setImage(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        userEntity.setImage(image);
+        imagesRepository.save(image);
         userRepository.save(userEntity);
+        return image.getImage();
     }
 
     @Override

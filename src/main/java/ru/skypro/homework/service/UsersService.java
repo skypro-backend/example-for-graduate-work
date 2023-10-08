@@ -13,7 +13,7 @@ public interface UsersService {
 
     UpdateUser updateUser(UpdateUser updateUser, String username);
 
-    void updateUserImage(MultipartFile file, String username);
+    byte[] updateUserImage(MultipartFile file, String username);
 
     void createUser(UserDetails userDetails);
 

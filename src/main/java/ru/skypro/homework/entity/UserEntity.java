@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-//@ToString
 @Entity
 @Table(name = "users")
 public class UserEntity {
@@ -35,7 +34,9 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String image;
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "image_id")
+    private Image image;
 
     private String password;
 

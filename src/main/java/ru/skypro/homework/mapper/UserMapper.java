@@ -6,21 +6,23 @@ import org.mapstruct.MappingConstants;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.UserEntity;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface UserMapper {
+public abstract class UserMapper {
 
     @Mapping(target = "email", source = "username")
-    User userEntityToUser(UserEntity userEntity);
+    @Mapping(target = "image", expression = "java(getImageUrl(userEntity.getImage()))")
+    public abstract User userEntityToUser(UserEntity userEntity);
 
-    @Mapping(target = "username", source = "email")
-    UserEntity userToUserEntity(User user);
+    public abstract UpdateUser userEntityToUpdateUser(UserEntity userEntity);
 
-    UpdateUser userEntityToUpdateUser(UserEntity userEntity);
+    public abstract UserEntity updateUserToUserEntity(UpdateUser updateUser);
 
-    UserEntity updateUserToUserEntity(UpdateUser updateUser);
+    public abstract UserEntity registerToUserEntity(Register register);
 
-    UserEntity registerToUserEntity(Register register);
-
+    protected String getImageUrl(Image image) {
+        return "/images/" + image.getId();
+    }
 }
