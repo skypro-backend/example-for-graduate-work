@@ -1,10 +1,11 @@
 package ru.skypro.homework.controller;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 
@@ -19,10 +20,10 @@ public class AdController {
     private final AdService adService;
     /**
      * Получить список всех объявлений.
-     * @return Объект {@link ResponseEntity} с оберткой {@link ResponseWrapperAds}, содержащей список объявлений и статус ответа.
+     * @return Объект {@link ResponseEntity} с оберткой {@link AdsDTO}, содержащей список объявлений.
      */
     @GetMapping
-    public ResponseEntity<ResponseWrapperAds> getAllAds() {
+    public ResponseEntity<AdsDTO> getAllAds() {
         return ResponseEntity.ok(adService.getAllAds());
     }
 
@@ -31,28 +32,30 @@ public class AdController {
     /**
      * Добавить объявление.
      * @param authentication Объект {@link Authentication} с информацией о  пользователе, выполнившим аутентификацию.
-     * @param createAd      Объект {@link CreateAd} с данными созданного объявления.
-     * @param image          Объект {@link MultipartFile} с изображением объявления.
+     * @param CreateOrUpdateAdDTO  Объект {@link CreateOrUpdateAdDTO} с данными созданного объявления.
+     * @param image  Объект {@link MultipartFile} с изображением объявления.
      * @return Объект {@link ResponseEntity} с созданным объявлением.
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdDTO> addAd(Authentication authentication,
-                                       @RequestPart("properties") CreateAd createAd,
-                                       @RequestPart("image") MultipartFile image) {
+                                        @RequestPart("properties") CreateOrUpdateAdDTO createAd,
+                                        @RequestPart("image") MultipartFile image) {
         return ResponseEntity.ok(adService.addAd(createAd, authentication.getName(), image));
     }
 
 
     /**
      * Обновить объявление по его идентификатору.
-     * @param createAd  Объект {@link CreateAd} с обновленными данными для объявления.
-     * @param id        Идентификатор объявления, которое нужно обновить.
+     * @PatchMapping это составленная аннотация, которая действует как ярлык для @RequestMapping(method = RequestMethod.PATCH)
+     * для сопоставления HTTP-запросов на ИСПРАВЛЕНИЕ с конкретными методами обработки.
+     * @param CreateOrUpdateAdDTO  Объект {@link CreateOrUpdateAdDTO} с обновленными данными для объявления.
+     * @param id Идентификатор объявления, которое  обновляется.
      * @return Объект {@link ResponseEntity} с обновленным объявлением.
      */
-    @PatchMapping("/{id}") //@PatchMapping это составленная аннотация, которая действует как ярлык для @RequestMapping(method = RequestMethod.PATCH).
-    public ResponseEntity<AdDto> updateAds(@RequestBody CreateAd createAd,
+    @PatchMapping("/{id}")
+    public ResponseEntity<AdDTO> updateAds(@RequestBody CreateOrUpdateAd updateAd,
                                             @PathVariable Integer id) {
-        return ResponseEntity.ok(adService.updateAds(createAd, id));
+        return ResponseEntity.ok(adService.updateAds(updateAd, id));
     }
 
 
@@ -73,11 +76,10 @@ public class AdController {
     /**
      * Получить список объявлений пользователя, выполнившего аутентификацию.
      * @param authentication Объект {@link Authentication} с информацией об аутентифицированном пользователе.
-     * @return Объект {@link ResponseEntity} с оберткой {@link ResponseWrapperAds}, содержащей список объявлений пользователя.
+     * @return Объект {@link ResponseEntity} с оберткой {@link AdsDTO}, содержащей список объявлений пользователя.
      */
-
     @GetMapping("/me")
-    public ResponseEntity<ResponseWrapperAds> getAdMe(Authentication authentication) {
+    public ResponseEntity<AdsDTO> getAdMe(Authentication authentication) {
         return ResponseEntity.ok(adService.getAdMe(authentication.getName()));
     }
 
