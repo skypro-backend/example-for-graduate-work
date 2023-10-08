@@ -32,8 +32,8 @@ public class AuthServiceImpl implements AuthService {
 
     @PostConstruct
     public void init() {
-        UserEntity admin = new UserEntity();
-        if (!manager.userExists(admin.getEmail())) {
+        if (!manager.userExists("admin@gmail.com")) {
+            UserEntity admin = new UserEntity();
             admin.setEmail("admin@gmail.com");
             admin.setPassword(encoder.encode("password"));
             admin.setFirstName("Admin");
