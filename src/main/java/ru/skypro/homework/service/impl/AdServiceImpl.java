@@ -30,16 +30,19 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDTO addAd(AdDTO ad, MultipartFile image) {
+    public AdDTO addAd(CreateOrUpdateAdDTO ad, MultipartFile image) {
         AdEntity adEntity = new AdEntity();
-        adEntity.setPrice(ad.getPrice());
+        adEntity.setDescription(ad.getDescription());
         adEntity.setTitle(ad.getTitle());
-        adEntity.setAuthor(ad.getAuthor());
+        adEntity.setPrice(ad.getPrice());
+        //adEntity.setUser(); получение авторизированного пользователя
 /*
         image.getInputStream().
 */
+        adEntity.setImage("photo");
+        adEntity.setPhone("+7321736144");
         adRepository.save(adEntity);
-        return ad;
+        return adMapper.toAdDto(adEntity);
     }
 
     @Override

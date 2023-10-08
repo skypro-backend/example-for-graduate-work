@@ -24,7 +24,7 @@ public class AdMapper{
         adDTO.pk( ad.getPk() );
         adDTO.price( ad.getPrice() );
         adDTO.title( ad.getTitle() );
-        adDTO.image( ad.getImage() );
+        //adDTO.image( ad.getImage() );
 
         return adDTO.build();
     }

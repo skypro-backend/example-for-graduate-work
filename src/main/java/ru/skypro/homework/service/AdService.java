@@ -16,7 +16,7 @@ import java.util.List;
 public interface AdService {
     AdsDTO getAllAds();
 
-    AdDTO addAd(AdDTO ad, MultipartFile image);
+    AdDTO addAd(CreateOrUpdateAdDTO ad, MultipartFile image);
 
     ExtendedAdDTO getInfoByAd(int id);
 
