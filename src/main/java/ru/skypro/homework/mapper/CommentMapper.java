@@ -12,11 +12,13 @@ import ru.skypro.homework.entity.Comment;
 public interface CommentMapper {
     String USER_AVATAR = "/users/avatar/";
     CommentMapper INSTANSE = Mappers.getMapper(CommentMapper.class);
+
     @Mapping(target = "id", source = "pk")
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "ads", ignore = true)
     Comment toEntity(CommentDto dto);
+
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "author.id")
     @Mapping(target = "authorFirstName", source = "author.firstName")

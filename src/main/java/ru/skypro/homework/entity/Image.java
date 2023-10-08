@@ -20,6 +20,6 @@ public class Image {
     private String mediaType;
     private Long fileSize;
     @Lob
-    @Type(type="org.hibernate.type.BinaryType")
+    @Type(type = "org.hibernate.type.BinaryType")
     private byte[] data;
 }

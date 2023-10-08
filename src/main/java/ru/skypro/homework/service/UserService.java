@@ -6,6 +6,7 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserDto;
 
 import java.io.IOException;
+
 /**
  * CRUD-methods for managing Users on platform
  */
@@ -13,6 +14,7 @@ public interface UserService {
 
     /**
      * Method to get user my authentication data
+     *
      * @param authentication authentication data of the user
      * @return Return the found user
      */
@@ -20,7 +22,8 @@ public interface UserService {
 
     /**
      * Method to Update the old user info
-     * @param userDto DTO of the User
+     *
+     * @param userDto        DTO of the User
      * @param authentication authentication data of the user
      * @return Returns updated user
      */
@@ -29,7 +32,8 @@ public interface UserService {
 
     /**
      * Method to update users password
-     * @param newPassword DTO for the new password
+     *
+     * @param newPassword    DTO for the new password
      * @param authentication authentication data of the user
      */
 
@@ -37,7 +41,8 @@ public interface UserService {
 
     /**
      * Method to update users avatar
-     * @param avatar Avatar file
+     *
+     * @param avatar         Avatar file
      * @param authentication authentication data of the user
      * @throws IOException Signals that an I/O exception of some sort has occurred.
      */

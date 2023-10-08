@@ -32,7 +32,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto create(Integer id, CommentDto commentDto, Authentication authentication) {
         log.debug("Adding comment for ads with id: {}", id);
 
-        if(commentDto.getText() == null || commentDto.getText().isBlank()) throw new IncorrectArgumentException();
+        if (commentDto.getText() == null || commentDto.getText().isBlank()) throw new IncorrectArgumentException();
 
         Comment comment = CommentMapper.INSTANSE.toEntity(commentDto);
         User user = userService.getByUsername(authentication.getName());
@@ -47,7 +47,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto update(Integer adId, Integer commentId, CommentDto commentDto) {
         log.debug("Updating comment with id: {} for ads with id: {}", commentId, adId);
 
-        if(commentDto.getText() == null || commentDto.getText().isBlank()) throw new IncorrectArgumentException();
+        if (commentDto.getText() == null || commentDto.getText().isBlank()) throw new IncorrectArgumentException();
 
         Comment adsComment = getAdsComment(commentId, adId);
         adsComment.setText(commentDto.getText());
@@ -63,10 +63,12 @@ public class CommentServiceImpl implements CommentService {
                 .map(CommentMapper.INSTANSE::toDto)
                 .collect(Collectors.toList());
     }
+
     public Comment getAdsComment(Integer commentId, Integer adId) {
         log.debug("Getting comment with id: {} for ads with id: {}", commentId, adId);
         return commentRepository.findByIdAndAdsId(commentId, adId).orElseThrow(CommentNotFoundException::new);
     }
+
     @Override
     public Comment getById(Integer id) {
         log.debug("Getting comment with id: {}", id);

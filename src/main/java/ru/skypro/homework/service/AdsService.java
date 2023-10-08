@@ -16,9 +16,10 @@ public interface AdsService {
 
     /**
      * Method creates new add.
-     * @param imageFiles image that client posts in add
+     *
+     * @param imageFiles       image that client posts in add
      * @param createOrUpdateAd All the text of the add
-     * @param authentication Authentication data.
+     * @param authentication   Authentication data.
      * @return Returns new add for the platform
      * @throws IOException Signals that an I/O exception of some sort has occurred.
      */
@@ -26,7 +27,8 @@ public interface AdsService {
 
     /**
      * Method to update the adds text
-     * @param id ID of the add that need an update
+     *
+     * @param id               ID of the add that need an update
      * @param createOrUpdateAd All the text of the add
      * @return Returns Updated add
      */
@@ -34,7 +36,8 @@ public interface AdsService {
 
     /**
      * Method to update the adds image
-     * @param id ID of the add that need an update
+     *
+     * @param id        ID of the add that need an update
      * @param imageFile The new image to update the old one with
      * @throws IOException Signals that an I/O exception of some sort has occurred.
      */
@@ -43,6 +46,7 @@ public interface AdsService {
 
     /**
      * Method to get the list of adds
+     *
      * @param authentication Authentication data.
      * @return Returns the list of adds by authentication data
      */
@@ -50,6 +54,7 @@ public interface AdsService {
 
     /**
      * Method to get the add by its ID
+     *
      * @param id Id of the add to search
      * @return Returns the add by ID
      */
@@ -58,6 +63,7 @@ public interface AdsService {
 
     /**
      * Method to get list of all adds
+     *
      * @return Returns list of all ads on the platform
      */
 
@@ -65,6 +71,7 @@ public interface AdsService {
 
     /**
      * Method to delete the add
+     *
      * @param id ID of the add to be deleted
      */
 

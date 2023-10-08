@@ -6,6 +6,7 @@ import ru.skypro.homework.entity.Comment;
 
 import java.util.List;
 import java.util.Optional;
+
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
     Optional<Comment> findByIdAndAdsId(Integer commentId, Integer adsId);

@@ -36,8 +36,8 @@ public class CommentController {
     )
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDto> create(@PathVariable("id") Integer id,
-                                                       @RequestBody CommentDto commentDto,
-                                                       Authentication authentication) {
+                                             @RequestBody CommentDto commentDto,
+                                             Authentication authentication) {
         return ResponseEntity.ok(commentService.create(id, commentDto, authentication));
     }
 
@@ -66,6 +66,7 @@ public class CommentController {
     public ResponseHandler<CommentDto> get(@PathVariable("id") Integer id) {
         return ResponseHandler.of(commentService.get(id));
     }
+
     @Operation(
             summary = "Удалить комментарий", tags = "Комментарии",
             responses = {
@@ -79,7 +80,7 @@ public class CommentController {
             "== authentication.name or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> remove(@PathVariable("adId") Integer adId,
-                                              @PathVariable("commentId") Integer commentId) {
+                                    @PathVariable("commentId") Integer commentId) {
         commentService.remove(adId, commentId);
         return ResponseEntity.ok().build();
     }
