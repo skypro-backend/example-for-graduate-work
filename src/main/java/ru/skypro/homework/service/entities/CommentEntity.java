@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class CommentEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
     @Column(name = "text", nullable = false)
@@ -35,5 +35,4 @@ public class CommentEntity {
     @ManyToOne
     @JoinColumn(name = "ad_id", referencedColumnName = "pk")
     AdEntity adEntity;
-
 }

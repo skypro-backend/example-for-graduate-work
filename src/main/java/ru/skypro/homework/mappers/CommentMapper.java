@@ -29,9 +29,9 @@ public class CommentMapper {
                 .collect(Collectors.toList());
     }
 
-    public CommentEntity createCommentEntity(String commentText, AdEntity adEntity) {
+    public CommentEntity createCommentEntity(CreateOrUpdateCommentDTO commentText, AdEntity adEntity) {
         CommentEntity newCommentEntity = new CommentEntity();
-        newCommentEntity.setText(commentText);
+        newCommentEntity.setText(commentText.getText());
         newCommentEntity.setCreatedAt(LocalDateTime.now());
         newCommentEntity.setUser(adEntity.getUser());
         newCommentEntity.setAdEntity(adEntity);

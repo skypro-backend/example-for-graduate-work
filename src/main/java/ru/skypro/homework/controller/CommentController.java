@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
+import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.repositories.CommentRepository;
 
@@ -46,7 +47,7 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "Not found")
     })
     @PostMapping("/{adId}/comments")
-    public ResponseEntity<CommentDTO> addComment(@PathVariable int adId, @RequestBody String text) {
+    public ResponseEntity<CommentDTO> addComment(@PathVariable int adId, @RequestBody CreateOrUpdateCommentDTO text) {
 
         CommentDTO newCommentDto = commentService.addComment(adId, text);
 
@@ -76,7 +77,7 @@ public class CommentController {
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId,
                                                     @PathVariable int commentId,
-                                                    @RequestBody String text) {
+                                                    @RequestBody CreateOrUpdateCommentDTO text) {
 
         CommentDTO commentDTO = commentService.updateComment(adId, commentId, text);
         return ResponseEntity.ok().body(commentDTO);

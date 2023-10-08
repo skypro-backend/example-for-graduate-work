@@ -1,7 +1,5 @@
 package ru.skypro.homework.service.impl;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
@@ -13,9 +11,8 @@ import ru.skypro.homework.service.entities.CommentEntity;
 import ru.skypro.homework.service.repositories.AdRepository;
 import ru.skypro.homework.service.repositories.CommentRepository;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -29,11 +26,11 @@ public class CommentServiceImpl implements CommentService {
     public CommentsDTO receivingAdComments(int adId) {
         AdEntity adEntity = checkForAd(adId);
 
-        List<CommentEntity> commentEntityList = new ArrayList<>(adEntity.getCommentEntityList());
+        List<CommentEntity> commentEntityList = adEntity.getCommentEntityList();
 
         List<CommentDTO> commentDTOList = commentMapper.toCommentDTOList(commentEntityList);
 
-        return new CommentsDTO(commentDTOList.size(), commentDTOList);
+        return new CommentsDTO(commentEntityList.size(), commentDTOList);
     }
 
     @Override
@@ -44,12 +41,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDTO addComment(int adId, String text) {
+    public CommentDTO addComment(int adId, CreateOrUpdateCommentDTO text) {
         AdEntity adEntity = checkForAd(adId);
 
-        String commentText = parseCommentText(text);
-
-        CommentEntity newCommentEntity = commentMapper.createCommentEntity(commentText, adEntity);
+        CommentEntity newCommentEntity = commentMapper.createCommentEntity(text, adEntity);
 
         commentRepository.saveAndFlush(newCommentEntity);
 
@@ -57,12 +52,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDTO updateComment(int adId, int commentId, String text) {
-        checkForAdAndComment(adId, commentId);
+    public CommentDTO updateComment(int adId, int commentId, CreateOrUpdateCommentDTO text) {
 
         CommentEntity commentEntityToUpdate = checkForAdAndComment(adId, commentId);
 
-        commentEntityToUpdate.setText(parseCommentText(text));
+        commentEntityToUpdate.setText(text.getText());
 
         commentRepository.saveAndFlush(commentEntityToUpdate);
 
@@ -70,17 +64,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private CommentEntity checkForAdAndComment(int adId, int commentId) {
-        AdEntity adEntity = checkForAd(adId);
+        checkForAd(adId);
 
-        List<CommentEntity> commentEntityList = adEntity.getCommentEntityList();
+        Optional<CommentEntity> commentEntity = commentRepository.findCommentByCommentIdAndAdId(adId, commentId);
 
-        return commentEntityList.stream()
-                .filter(comment -> comment.getId() == commentId)
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException(String.format(
-                        "Комментарий с индексом \"%s\" не найден для объявления с индексом \"%s\".",
-                        commentId, adId))
-                );
+        return commentEntity.orElseThrow(() -> new NotFoundException(String.format(
+                "Комментарий с индексом \"%s\" не найден для объявления с индексом \"%s\".",
+                commentId, adId))
+        );
     }
 
     private AdEntity checkForAd(int adId) {
@@ -88,15 +79,5 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Объявление с индексом \"%s\" не найдено.", adId)
                 ));
-    }
-
-
-    private String parseCommentText(String text) {
-        try {
-            JsonNode jsonNode = new ObjectMapper().readTree(text);
-            return jsonNode.get("text").asText();
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Ошибка при парсинге", e);
-        }
     }
 }
