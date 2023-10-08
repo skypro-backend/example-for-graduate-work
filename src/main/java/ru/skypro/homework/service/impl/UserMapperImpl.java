@@ -42,7 +42,6 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public UserEntity updateUserEntity(UserEntity userEntity, User user) {
-        userEntity.setEmail(user.getEmail());
         userEntity.setFirstName(user.getFirstName());
         userEntity.setLastName(user.getLastName());
         userEntity.setPhoneUser(user.getPhone());

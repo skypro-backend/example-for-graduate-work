@@ -25,7 +25,7 @@ public class AdMapperImpl implements AdMapper {
     public Ad toAd(AdEntity adEntity) {
         Ad ad = new Ad();
         ad.setAuthor(adEntity.getUserEntity().getId());
-        ad.setImage("/ad/image/" + adEntity.getId());
+        ad.setImage("/ads/image/" + adEntity.getId());
         ad.setPk(adEntity.getId());
         ad.setPrice(adEntity.getPrice());
         ad.setTitle(adEntity.getTitle());
@@ -40,7 +40,7 @@ public class AdMapperImpl implements AdMapper {
         extendedAd.setAuthorLastName(adEntity.getUserEntity().getLastName());
         extendedAd.setDescription(adEntity.getDescription());
         extendedAd.setEmail(adEntity.getUserEntity().getEmail());
-        extendedAd.setImage("/ad/image" + adEntity.getId());
+        extendedAd.setImage("/ads/image" + adEntity.getId());
         extendedAd.setPhone(adEntity.getUserEntity().getPhoneUser());
         extendedAd.setPrice(adEntity.getPrice());
         extendedAd.setTitle(adEntity.getTitle());
