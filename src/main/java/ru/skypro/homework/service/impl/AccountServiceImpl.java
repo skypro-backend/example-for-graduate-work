@@ -45,10 +45,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public boolean updatePassword(NewPassword newPassword) {
-        if (newPassword != null &&
-                newPassword.getNewPassword() != null &&
+        if (newPassword.getNewPassword() != null &&
                 !newPassword.getNewPassword().isEmpty() &&
-                !newPassword.getNewPassword().isBlank()) {
+                !newPassword.getNewPassword().isBlank() &&
+                newPassword.getCurrentPassword() != null &&
+                !newPassword.getCurrentPassword().isEmpty() &&
+                !newPassword.getCurrentPassword().isBlank()) {
             userDetailsManager.changePassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());
             return true;
         }
