@@ -17,10 +17,10 @@ public class SecurityUserDetailsService implements UserDetailsService {
 
     @Override
     // который принимает строку с именем пользователя.
-    public UserDetails loadUserByUsername(String username) {
-        UserEntity user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String userEmail) {
+        UserEntity user = userRepository.findByEmail(userEmail);
         if (user == null) {
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException(userEmail);
         }
         return new SecurityUserPrincipal(user);
     }
