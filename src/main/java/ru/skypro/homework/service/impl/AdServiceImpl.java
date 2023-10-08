@@ -35,7 +35,7 @@ public class AdServiceImpl implements AdService {
         adEntity.setDescription(ad.getDescription());
         adEntity.setTitle(ad.getTitle());
         adEntity.setPrice(ad.getPrice());
-        //adEntity.setUser(); получение авторизированного пользователя
+        //adEntity.setUser(); получение авторизированного пользователся
 /*
         image.getInputStream().
 */
@@ -47,7 +47,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public ExtendedAdDTO getInfoByAd(int id) {
-        return adMapper.toExtendedAdDTO(adRepository.getReferenceById(id));
+        return adMapper.toExtendedAdDTO(adRepository.findById(id).get());
     }
 
     @Override
