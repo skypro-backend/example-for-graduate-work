@@ -36,7 +36,7 @@ public class AdMapper{
 
         CreateOrUpdateAdDTO.CreateOrUpdateAdDTOBuilder createOrUpdateAdDTO = CreateOrUpdateAdDTO.builder();
 
-        createOrUpdateAdDTO.title( String.valueOf( ad.getTitle() ) );
+        createOrUpdateAdDTO.title( ad.getTitle() );
         createOrUpdateAdDTO.price( ad.getPrice() );
         createOrUpdateAdDTO.description( ad.getDescription() );
 
@@ -55,7 +55,7 @@ public class AdMapper{
         extendedAdDTO.image( ad.getImage() );
         extendedAdDTO.phone( ad.getPhone() );
         extendedAdDTO.price( ad.getPrice() );
-        extendedAdDTO.title( String.valueOf( ad.getTitle() ) );
+        extendedAdDTO.title( ad.getTitle() );
 
         return extendedAdDTO.build();
     }
@@ -77,12 +77,10 @@ public class AdMapper{
         if ( ad == null ) {
             return null;
         }
-        List<AdDTO> adDTO = new ArrayList<AdDTO>(ad.size());
-        int count=0;
+        List<AdDTO> adDTO = new ArrayList<>(ad.size());
         for (AdEntity adEntity : ad) {
-            count++;
             adDTO.add(toAdDto(adEntity));
         }
-        return new AdsDTO(count,adDTO);
+        return new AdsDTO(ad.size(),adDTO);
     }
 }

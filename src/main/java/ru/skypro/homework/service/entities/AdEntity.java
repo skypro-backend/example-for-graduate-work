@@ -25,9 +25,6 @@ public class AdEntity {
     @JoinColumn(name = "id")
     UserEntity user; //user
 
-    @Column(name = "author", nullable = false)
-    int author;
-
     @Column(name = "price", nullable = false)
     int price;
 
