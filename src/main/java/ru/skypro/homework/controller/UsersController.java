@@ -82,9 +82,9 @@ public class UsersController {
             @ApiResponse(responseCode = "200", description = "Аватар обновлен"),
             @ApiResponse(responseCode = "401", description = "Требуется авторизация")
     })
-    public ResponseEntity<Void> patchUserAvatar(@RequestParam("image") MultipartFile file,
+    public ResponseEntity<byte[]> patchUserAvatar(@RequestParam("image") MultipartFile file,
                                                 Authentication authentication) {
-        usersService.updateUserImage(file, authentication.getName());
-        return new ResponseEntity<>(HttpStatus.OK);
+        byte[] image = usersService.updateUserImage(file, authentication.getName());
+        return new ResponseEntity<>(image, HttpStatus.OK);
     }
 }
