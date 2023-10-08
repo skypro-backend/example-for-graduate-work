@@ -53,21 +53,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdsDto update(Integer id, CreateOrUpdateAd createOrUpdateAd) {
-//        log.debug("Updating ads by id: {}", id);
-//        User user = userRepository.getReferenceById(id);
-//        if (createOrUpdateAd.getTitle() == null
-//                || createOrUpdateAd.getDescription() == null
-//                || createOrUpdateAd.getPrice() == null) throw new IncorrectArgumentException();
-//
-//        Ads ads = findAdsById(id);
-//        ads.setTitle(createOrUpdateAd.getTitle());
-//        ads.setDescription(createOrUpdateAd.getDescription());
-//        ads.setPrice(createOrUpdateAd.getPrice());
-//        if (user.equals(ads.getAuthor()) || user.getRole() == Role.ADMIN) {
-//            adsRepository.save(ads);
-//            log.info("Ads details updated for ads: {}", ads.getTitle());
-//        }
-//        return AdsMapper.INSTANCE.toDto(ads);
+
         log.debug("Updating ads by id: {}", id);
 
         if (createOrUpdateAd.getTitle() == null || createOrUpdateAd.getTitle().isBlank()
@@ -86,17 +72,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public void updateAdsImage(Integer id, MultipartFile imageFile) throws IOException {
-//        log.debug("Updating ads image by id: {}", id);
-//        Ads ads = findAdsById(id);
-//        User user = userRepository.getReferenceById(id);
-//        if (ads.getImage() != null) {
-//            if (user.equals(ads.getAuthor()) || user.getRole() == Role.ADMIN) {
-//                imageService.remove(ads.getImage());
-//            }
-//            ads.setImage(imageService.uploadImage(imageFile));
-//            adsRepository.save(ads);
-//            log.debug("Avatar updated for ads: {}", ads.getTitle());
-//        }
+
         log.debug("Updating ads image by id: {}", id);
         Ads ads = findAdsById(id);
         if (ads.getImage() != null) {
@@ -134,12 +110,6 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public void remove(Integer id) {
-//        User user = userRepository.getReferenceById(id);
-//        Ads ads = findAdsById(id);
-//        if (user.equals(ads.getAuthor()) || user.getRole() == Role.ADMIN) {
-//            log.info("Ads removed successfully");
-//        }
-//        adsRepository.delete(ads);
 
         log.debug("Removing ads by id: {}", id);
         Ads ads = findAdsById(id);

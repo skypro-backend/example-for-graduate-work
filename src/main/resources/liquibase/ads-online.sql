@@ -17,6 +17,7 @@
     first_name  varchar(200) not null,
     last_name   varchar(200) not null,
     phone       varchar(200) not null,
+    enabled     boolean,
     password    varchar(300) not null,
     avatar_id   integer references avatar(id),
     role        varchar(200)

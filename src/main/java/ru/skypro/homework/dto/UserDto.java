@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class UserDto {
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer id;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -14,4 +15,5 @@ public class UserDto {
     private String phone;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String image;
+    private Role role;
 }

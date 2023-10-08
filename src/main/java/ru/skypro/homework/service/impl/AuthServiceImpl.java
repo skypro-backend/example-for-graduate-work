@@ -31,20 +31,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(Register register) {
-//
-//        if (userRepository.existsByUserNameIgnoreCase(register.getUsername())) {
-//            return false;
-//        }
-//        ru.skypro.homework.entity.User user = new ru.skypro.homework.entity.User();
-//        user.setUserName(register.getUsername());
-//        user.setFirstName(register.getFirstName());
-//        user.setLastName(register.getLastName());
-//        user.setPassword(encoder.encode(register.getPassword()));
-//        user.setRole(register.getRole());
-//        user.setPhone(register.getPhone());
-//        userRepository.save(user);
-//        return true;
-//    }
+
         if(register.getUsername() == null || register.getUsername().isBlank()
                 || register.getFirstName() == null || register.getFirstName().isBlank()
                 || register.getLastName() == null || register.getLastName().isBlank()
