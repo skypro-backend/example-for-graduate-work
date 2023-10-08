@@ -65,7 +65,7 @@ public class AdsController {
             }
     )
     @PreAuthorize("@adsServiceImpl.getAdsById(#id).getEmail()" +
-            "== authentication.name or hasRole('ROLE_ADMIN')")
+            "== authentication.name or hasRole('ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<AdsDto> update(@PathVariable("id") Integer id,
                                          @RequestBody CreateOrUpdateAd createOrUpdateAd) {
@@ -83,7 +83,7 @@ public class AdsController {
             }
     )
     @PreAuthorize("@adsServiceImpl.getAdsById(#id).getEmail()" +
-            "== authentication.name or hasRole('ROLE_ADMIN')")
+            "== authentication.name or hasRole('ADMIN')")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateAdsImage(@PathVariable("id") Integer id,
                                             @RequestPart("image") MultipartFile imageFile) throws IOException {
@@ -154,7 +154,7 @@ public class AdsController {
             }
     )
     @PreAuthorize("@adsServiceImpl.getAdsById(#id).getEmail()" +
-            "== authentication.name or hasRole('ROLE_ADMIN')")
+            "== authentication.name or hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remove(@PathVariable("id") Integer id) {
         adsService.remove(id);

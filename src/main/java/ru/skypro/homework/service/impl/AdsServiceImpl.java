@@ -52,6 +52,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdsDto update(Integer id, CreateOrUpdateAd createOrUpdateAd) {
+
         log.debug("Updating ads by id: {}", id);
 
         if (createOrUpdateAd.getTitle() == null || createOrUpdateAd.getTitle().isBlank()

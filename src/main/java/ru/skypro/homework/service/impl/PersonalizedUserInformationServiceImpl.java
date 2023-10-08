@@ -43,7 +43,7 @@ public class PersonalizedUserInformationServiceImpl implements UserDetailsServic
         User user = new User();
         user.setUserName(register.getUsername());
         user.setPassword(passwordEncoder.encode(register.getPassword()));
-        user.setRole(Role.USER);
+        user.setRole(register.getRole());
         user.setFirstName(register.getFirstName());
         user.setLastName(register.getLastName());
         user.setPhone(register.getPhone());
