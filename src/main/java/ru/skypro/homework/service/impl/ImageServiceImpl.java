@@ -66,7 +66,6 @@ public class ImageServiceImpl implements ImageService {
         return imagesRepository.save(image);
     }
 
-
     private Image convertToImage(Path path, Integer idImage, MultipartFile multipartFile, String fileName) throws IOException {
         Files.createDirectories(path.getParent());
         Files.deleteIfExists(path);

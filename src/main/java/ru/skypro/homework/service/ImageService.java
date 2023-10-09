@@ -10,7 +10,7 @@ public interface ImageService {
     /** Получение изображения по идентификатору
      * @param id идентификатор файла
      * @return массив byte картинки */
-    public byte[] getImageInByteById(int id);
+    byte[] getImageInByteById(int id);
 
     /** Получение изображения по названию файла
      * @param fileName название файла {@link String}
@@ -30,7 +30,5 @@ public interface ImageService {
      * @param multipartFile объект {@link  MultipartFile}
      * @return объект {@link Image} */
     Image changeAdImage(Long idAd, Integer imageId, MultipartFile multipartFile) throws IOException;
-
-
 
 }
