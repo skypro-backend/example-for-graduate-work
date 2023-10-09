@@ -24,7 +24,10 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, SecurityUserDetailsService securityUserDetailsService, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository,
+                           UserMapper userMapper,
+                           SecurityUserDetailsService securityUserDetailsService,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.securityUserDetailsService = securityUserDetailsService;
