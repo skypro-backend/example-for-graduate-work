@@ -125,7 +125,7 @@ public class AdServiceImpl implements AdService {
     }
 
     private Path createPath(MultipartFile image, AdEntity adEntity) throws IOException {
-        Path filePath = Path.of(adImageDirPath, "Объявление_" + adEntity.getId() + "."
+        Path filePath = Path.of(adImageDirPath, "Advertisement_" + adEntity.getId() + "."
                 + StringUtils.getFilenameExtension(image.getOriginalFilename()));
         AccountServiceImpl.uploadImage(image, filePath);
         return filePath;
