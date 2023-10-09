@@ -19,6 +19,7 @@ import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAd;
 import ru.skypro.homework.service.AdService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
@@ -157,6 +158,7 @@ public class AdvertisementController {
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
             }
     )
+
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateImage(@PathVariable int id,
                                          @RequestParam MultipartFile image) throws IOException {
@@ -165,4 +167,19 @@ public class AdvertisementController {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
+
+    @GetMapping(value = "/image/{adId}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    public void downloadAdImageFromDB(@PathVariable int adId, HttpServletResponse response) throws IOException {
+        adService.downloadAdImageFromDB(adId, response);
+    }
+
+    @Operation(
+            summary = "Найти объявление по названию"
+    )
+    @GetMapping("/find")
+    public ResponseEntity<Ads> findAdsByTitle(@RequestParam String title) {
+        return ResponseEntity.ok(adService.findByTitle(title));
+    }
+
+
 }

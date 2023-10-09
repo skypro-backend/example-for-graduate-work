@@ -6,6 +6,7 @@ import ru.skypro.homework.dto.ads.Ads;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAd;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public interface AdService {
@@ -16,4 +17,6 @@ public interface AdService {
     Ad updateAdvertising(int id, CreateOrUpdateAd createOrUpdateAd);
     Ads getAllAuthenticatedUserAdvertising();
     boolean updateAdvertisingImage(int id, MultipartFile image) throws IOException;
+    void downloadAdImageFromDB(int adId, HttpServletResponse response) throws IOException;
+    Ads findByTitle(String title);
 }

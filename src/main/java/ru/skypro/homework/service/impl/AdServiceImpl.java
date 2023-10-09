@@ -21,6 +21,7 @@ import ru.skypro.homework.service.AdMapper;
 import ru.skypro.homework.service.AdService;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -132,4 +133,18 @@ public class AdServiceImpl implements AdService {
         AccountServiceImpl.uploadImage(image, filePath);
         return filePath;
     }
+
+    @Override
+    public void downloadAdImageFromDB(int adId, HttpServletResponse response) throws IOException {
+        AdEntity adEntity = adRepository.findById(adId).orElseThrow(() -> new IllegalArgumentException("Ad not found"));
+        AccountServiceImpl.downloadImage(response,
+                adEntity.getImagePath());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Ads findByTitle(String title) {
+        return adMapper.toAds(adRepository.findAllByTitleLike(title));
+    }
+
 }
