@@ -30,12 +30,6 @@ public class Comment {
       @JoinColumn(name = "author_id")
       private User author;
 
-      @JoinColumn(name = "authorImage")
-      private String authorImage;
-
-      @Column(name = "authorFirstName", length = 32)
-      private String authorFirstName;
-
       // для автоматической установки метки времени при первом сохранении
       @CreationTimestamp
       private Instant createdAt;

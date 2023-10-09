@@ -28,7 +28,9 @@ public class CommentsController {
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<CommentDto> updateComment(@PathVariable("adId") Integer adId, @PathVariable("commentId") Integer commentId) {
+    public ResponseEntity<CommentDto> updateComment(@PathVariable("adId") Integer adId,
+                                                    @PathVariable("commentId") Integer commentId,
+                                                    @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         return ResponseEntity.ok(new CommentDto());
     }
 }

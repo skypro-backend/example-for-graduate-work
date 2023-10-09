@@ -26,8 +26,6 @@ public interface AdMapper {
       @Mapping(target = "author", ignore = true)
       @Mapping(target = "image", ignore = true)
       Ad toAd(CreateOrUpdateAdDto dto); // конвертация получить или обновить объявление от автора
-      @Mapping(target = "description", ignore = true)
-      CreateOrUpdateAdDto toCreateOrUpdateAdDto(Ad ad); // конвертация обновленного объявления
 
       @Mapping(target = "pk", source = "id")
       @Mapping(target = "authorFirstName", source = "author.firstName")

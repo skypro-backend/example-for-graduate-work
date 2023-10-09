@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +21,7 @@ public class AdsController {
         return ResponseEntity.ok(new AdsDto());
     }
 
-    @PostMapping(consumes = {"multipart/form-data"})
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdDto> addAd(@RequestPart("properties") CreateOrUpdateAdDto createOrUpdateAdDto, @RequestPart("image") MultipartFile image) {
             return new ResponseEntity<>(new AdDto(), HttpStatus.CREATED);
     }
@@ -45,7 +46,7 @@ public class AdsController {
         return ResponseEntity.ok(new AdsDto());
     }
 
-    @PatchMapping(value = "/{id}/image", consumes = {"multipart/form-data"})
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<byte[]> updateAdImage(@PathVariable("id") Integer id, @RequestPart("image") MultipartFile image) throws IOException {
         return ResponseEntity.ok(image.getBytes());
     }
