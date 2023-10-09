@@ -16,6 +16,7 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AccountService;
 import ru.skypro.homework.service.UserMapper;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -90,6 +91,30 @@ public class AccountServiceImpl implements AccountService {
         userEntity.setImagePath(filePath.toAbsolutePath().toString());
         userRepository.save(userEntity);
         return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean downloadAvatarFromDB(int userId, HttpServletResponse response) throws IOException {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+        if (userEntity.getImagePath() != null) {
+            downloadImage(response,
+                    userEntity.getImagePath());
+            return true;
+        }
+        return false;
+    }
+
+    static void downloadImage(HttpServletResponse response,
+                              String imagePath) throws IOException {
+        Path path = Path.of(imagePath);
+
+        try (InputStream is = Files.newInputStream(path);
+             OutputStream os = response.getOutputStream()) {
+            response.setStatus(200);
+            is.transferTo(os);
+        }
     }
 
     static void uploadImage(MultipartFile image, Path filePath) throws IOException {

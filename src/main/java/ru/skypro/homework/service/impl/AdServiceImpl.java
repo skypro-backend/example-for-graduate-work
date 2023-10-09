@@ -33,6 +33,8 @@ public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
     private final AdMapper adMapper;
     private final UserDetails userDetails;
+    private static final String USER_NOT_FOUND = "User not found";
+    private static final String AD_NOT_FOUND = "Ad not found";
     @Value("${ad.image.dir.path}")
     private String adImageDirPath;
 
@@ -52,7 +54,7 @@ public class AdServiceImpl implements AdService {
     @Transactional
     public Ad createAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image) throws IOException {
         UserEntity user = userRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         AdEntity adEntity = adRepository.save(adMapper.toAdEntity(createOrUpdateAd, new AdEntity()));
         Path filePath = createPath(image, adEntity);
         adEntity.setUserEntity(user);
@@ -70,7 +72,7 @@ public class AdServiceImpl implements AdService {
     @Override
     @Transactional(readOnly = true)
     public ExtendedAd getAdvertisingById(int id) {
-        AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Ad not found"));
+        AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(AD_NOT_FOUND));
         return adMapper.toExtendedAd(adEntity);
     }
 
@@ -79,9 +81,9 @@ public class AdServiceImpl implements AdService {
     public boolean deleteAdvertisingById(int id) throws IOException {
         String userName = userDetails.getUsername();
         UserEntity userEntity = userRepository.findByEmail(userName)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         AdEntity adEntity=adRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Ad not found"));
+                .orElseThrow(() -> new EntityNotFoundException(AD_NOT_FOUND));
         if (userEntity.getRole() == Role.ADMIN || adEntity.getUserEntity().equals(userEntity)){
             commentRepository.deleteAllByAdEntity_Id(id);
             adRepository.deleteById(id);
@@ -96,9 +98,9 @@ public class AdServiceImpl implements AdService {
     public Ad updateAdvertising(int id, CreateOrUpdateAd createOrUpdateAd) {
         String userName = userDetails.getUsername();
         UserEntity userEntity = userRepository.findByEmail(userName)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         AdEntity adEntity = adRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Ad not found"));
+                .orElseThrow(() -> new EntityNotFoundException(AD_NOT_FOUND));
         if (userEntity.getRole() == Role.ADMIN || adEntity.getUserEntity().equals(userEntity)){
             return adMapper.toAd(adRepository.save(adMapper.toAdEntity(createOrUpdateAd, adEntity)));
         }
@@ -115,7 +117,7 @@ public class AdServiceImpl implements AdService {
     @Override
     @Transactional
     public boolean updateAdvertisingImage(int id, MultipartFile image) throws IOException {
-        AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Ad not found"));
+        AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(AD_NOT_FOUND));
         if (adEntity.getImagePath() != null) {
             Files.deleteIfExists(Path.of(adEntity.getImagePath()));
         }
