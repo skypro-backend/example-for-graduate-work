@@ -18,6 +18,7 @@ public interface CommentMapper {
       @Mapping (target = "createdAt", ignore = true)
       @Mapping (target = "ad", ignore = true)
       Comment toCommenty (CommentDto commentDto); // конвертация DTO в сущность
+
       @Mapping(source = "id", target = "pk")
       @Mapping(target = "author", source = "author.id")
       @Mapping(target = "createdAt", qualifiedByName = "instantToInteger")
@@ -25,8 +26,6 @@ public interface CommentMapper {
 
       @Mapping(target = "id", ignore = true)
       @Mapping(target = "author", ignore = true)
-      @Mapping(target = "authorImage", ignore = true)
-      @Mapping(target = "authorFirstName", ignore = true)
       @Mapping(target = "createdAt", ignore = true)
       @Mapping (target = "ad", ignore = true)
       Comment toCommenty (CreateOrUpdateCommentDto dto); // конвертация новых комментарий
