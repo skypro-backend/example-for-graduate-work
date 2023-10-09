@@ -5,6 +5,7 @@ import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.projection.AdView;
 
 public class AdMapper {
+
     public static AdDTO fromAd(Ad ad) {
         return new AdDTO()
                 .setPk(ad.getPk())
@@ -14,6 +15,7 @@ public class AdMapper {
                 .setTitle(ad.getTitle())
                 .setDescription(ad.getDescription());
     }
+
     public static Ad toAd(AdDTO adDTO) {
         return new Ad()
                 .setPk(adDTO.getPk())
@@ -23,7 +25,8 @@ public class AdMapper {
                 .setTitle(adDTO.getTitle())
                 .setDescription(adDTO.getDescription());
     }
-    public static AdView toView(Ad ad){
+
+    public static AdView toView(Ad ad) {
         return new AdView()
                 .setAuthor(ad.getUser().getId())
                 .setPk(ad.getPk())

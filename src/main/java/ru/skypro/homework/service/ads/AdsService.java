@@ -15,11 +15,11 @@ import java.util.List;
 public interface AdsService {
 
     Ads getAllAds();
-    AdDTO createAd(CreateOrUpdateAd properties, MultipartFile image);
+    AdDTO createAd(CreateOrUpdateAd properties, MultipartFile image, Authentication authentication);
     ExtendedAd getAdFullInfo(Integer id);
     void deleteAd(Integer id);
     AdView updateAd(Integer id, CreateOrUpdateAd properties);
-    Ads getAllAdsByUser();
+    Ads getAllAdsByUser(Authentication authentication);
     String updateImage(Integer id, MultipartFile image);
 
 }

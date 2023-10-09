@@ -1,17 +1,21 @@
 package ru.skypro.homework.projection;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
+@Accessors(chain = true)
 public class UpdateUser {
     @Size(min = 3, max = 10)
-    private final String firstName;
+    private String firstName;
     @Size(min = 3, max = 10)
-    private final String lastName;
+    private String lastName;
     @Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
-    private final String phone;
+    private String phone;
 }

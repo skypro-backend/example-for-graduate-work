@@ -35,7 +35,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: phone
-                  type: varchar(12)
+                  type: varchar(14)
                   constraints:
                     nullable: false
                     unique: true
