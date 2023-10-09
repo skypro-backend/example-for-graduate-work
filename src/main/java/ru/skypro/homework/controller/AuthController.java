@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,10 @@ import ru.skypro.homework.service.AuthService;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private AuthService authService;
+    private  AuthService authService;
+
+
+
     @Operation(
             summary = "Авторизация пользователе",
             tags =  "Авторизация"

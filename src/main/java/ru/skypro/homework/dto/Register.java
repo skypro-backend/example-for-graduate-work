@@ -4,14 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.annotation.Resource;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 
-@Data
+
 public class Register {
 
-    private String username;
+    private String userName;
+    private String login;
     private String password;
     private String firstName;
     private String lastName;
@@ -20,14 +23,14 @@ public class Register {
 
 
     public String getUsername() {
-        return username;
+        return null;
     }
 
     public String getPassword() {
-        return password;
+        return null;
     }
 
-    public Role getRole() {
-        return role;
+    public Resource getRole() {
+        return null;
     }
 }

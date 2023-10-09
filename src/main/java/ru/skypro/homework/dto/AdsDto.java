@@ -3,11 +3,12 @@ package ru.skypro.homework.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.skypro.homework.service.impl.AdsService;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdsDto {
+public class AdsDto implements AdsService {
     private Integer author; // id автора объявления
     private String image; // ссылка на картинку объявления
     private Integer pk; // id объявления

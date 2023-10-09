@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDto;
-import ru.skypro.homework.service.impl.CommentServiceImpl;
-
-import javax.xml.stream.events.Comment;
+import ru.skypro.homework.dto.CreateComment;
+import ru.skypro.homework.dto.ResponseWrapperComment;
+import ru.skypro.homework.service.impl.CommentService;
 
 /**
  * Контроллер для работы с комментариями
@@ -20,18 +20,19 @@ import javax.xml.stream.events.Comment;
 @RequestMapping("/ads")
 
 public class CommentController {
-private CommentServiceImpl commentService;
 
+    public CommentController(CommentService commentService) {
+    }
     @Operation(
             summary = "получение комментариев объявления",
             tags= "Комментарии"
     )
 
-@GetMapping("/{id}/comments")
+    @GetMapping("/{id}/comments")
 
-    public CommentDto getComment(@PathVariable(value = "id") int id){
 
-        return getComment(id);
+    public ResponseWrapperComment getComment(@PathVariable(value = "id") int id){
+        return new ResponseWrapperComment();
     }
 
     @Operation(
@@ -40,7 +41,9 @@ private CommentServiceImpl commentService;
             tags= "Комментарии"
     )
     @PostMapping("/{id}/comments")
-    public CommentDto addComment(@PathVariable(value = "id") int CommentId){
+
+    public CommentDto addComment(@PathVariable("id") int commentId,
+                                 @RequestBody CreateComment comments){
 
         return new CommentDto();
     }
@@ -51,7 +54,7 @@ private CommentServiceImpl commentService;
             tags= "Комментарии"
     )
     @DeleteMapping("/{id}/comments/{commentId}")
-    public CommentDto deleteCommend(@PathVariable(value ="id") int CommentId){
+    public CommentDto deleteCommend(@PathVariable(value ="id") int commentId){
         return new CommentDto();
     }
 
@@ -61,7 +64,8 @@ private CommentServiceImpl commentService;
             tags= "Комментарии"
     )
     @PatchMapping("/{id}/comments/{commentId}")
-    public  CommentDto updateComment(@PathVariable(value = "id") int CommentId){
+    public  CommentDto updateComment(@PathVariable(value = "id") int commentId){
+
         return new CommentDto();
     }
 

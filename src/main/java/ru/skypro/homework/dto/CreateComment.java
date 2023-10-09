@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO создания комментария.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PictureDto {
-    private String idPicture;
-    private byte[] data;
+public class CreateComment {
+
+    private String text; // текст комментария
 }

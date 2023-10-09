@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.management.relation.Role;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,7 +15,7 @@ public class UserDto {
     private String firstName; // имя пользователя
     private String lastName; // фамилия пользователя
     private String phone; // телефон пользователя
-    private String role;//права админа или пользователя
+    private Role role;//права админа или пользователя
     private String image; // ссылка на аватар пользователя
 
 

@@ -2,11 +2,12 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateAdsDto;
-import ru.skypro.homework.dto.PictureDto;
-import ru.skypro.homework.model.Ads;
+import ru.skypro.homework.service.PictureService;
 import ru.skypro.homework.service.impl.AdsService;
 
 /**
@@ -21,12 +22,9 @@ import ru.skypro.homework.service.impl.AdsService;
 
 public class AdsController {
 
-    private AdsService AdsService;
-    private AdsDto ads;
-    private AdsDto PictureDto;
-
-    public AdsController(AdsService adsService) {
+    public AdsController(AdsService adsService, PictureService pictureService) {
     }
+
 
     @Operation(
             summary = "получение всех объявлений",
@@ -41,12 +39,12 @@ public class AdsController {
             summary = "добавление объявлений",
             tags= "объявления"
     )
-    @PostMapping
-    public AdsService addAds(@RequestBody Ads ads){
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 
-        return AdsService;
+    public AdsService addAds(@RequestPart("properties") CreateAdsDto ads, @RequestPart("image") MultipartFile image) {
+       return new AdsDto();
+
     }
-
     @Operation(
             summary = "получение информации об объявлении",
             tags= "объявления"
@@ -54,24 +52,22 @@ public class AdsController {
     @GetMapping("/{id}")
     public AdsDto getAds(@PathVariable("id") int id){
       
-        return ads;
+        return new AdsDto();
     }
     @Operation(
             summary = "удаление объявлении",
             tags= "объявления"
-
     )
-
     @DeleteMapping("/{id}")
-    public AdsDto deleteByIdDto(@PathVariable("id") int id){
-        return ads;
+    public void deleteByIdDto(@PathVariable("id") int id){
+
     }
     @Operation(
             summary = "обновление информации об объявлении",
             tags= "объявления"
     )
     @PatchMapping("/{id}")
-    public CreateAdsDto updateCreateAdsDto(@RequestBody CreateAdsDto Ads) {
+    public CreateAdsDto updateCreateAdsDto(@RequestBody CreateAdsDto ads) {
         return new CreateAdsDto();
     }
     @Operation(
@@ -80,6 +76,7 @@ public class AdsController {
     )
 
     @GetMapping("/me")
+
     public AdsDto getLoginUserAds(@RequestBody AdsDto ads){
 
         return new AdsDto();
@@ -90,15 +87,13 @@ public class AdsController {
     )
 
     @PatchMapping("/{id}/image")
-    public AdsDto updateAdPicture(@PathVariable("id") int idPicture, PictureDto pictureDto){
-        return PictureDto;
+    public AdsDto updateAdPicture(@PathVariable("id") int id, @RequestParam("image") MultipartFile image){
+        return new AdsDto();
     }
 
 
 
-
-
-    }
+}
 
 
 

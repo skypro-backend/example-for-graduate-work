@@ -1,12 +1,12 @@
 package ru.skypro.homework.service.impl;
 
-import ru.skypro.homework.model.Ads;
+import ru.skypro.homework.model.Ad;
 
 public class AdsServiceImpl implements AdsService {
-    private int idCounter = 0;
 
 
-    public Ads getAds(int id) {
+
+    public Ad getAds(int id) {
 
         return null;
     }
