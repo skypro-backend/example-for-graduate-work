@@ -41,7 +41,9 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Forbidden")
     })
     @PostMapping("/set_password")
-    public ResponseEntity<?> updatePassword(@RequestBody NewPasswordDTO user) {
+    public ResponseEntity<?> updatePassword(@RequestBody NewPasswordDTO newPasswordDTO) {
+
+        userService.updatePassword(newPasswordDTO);
 
         return ResponseEntity.ok().build();
     }
@@ -53,7 +55,9 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUser() {
 
-        return ResponseEntity.ok().body(null);
+        UserDTO userDTO = userService.getUser();
+
+        return ResponseEntity.ok().body(userDTO);
     }
 
     @Operation(summary = "Обновление информации об авторизованном пользователе")
@@ -64,13 +68,9 @@ public class UserController {
     @PatchMapping("/me")
     public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody UpdateUserDTO user) {
 
-        Optional<UserEntity> byId = userRepository.findById(1);
-        UserEntity userTest = byId.orElse(null);
+        UpdateUserDTO updateUserDTO = userService.updateUser(user);
 
-        UpdateUserDTO userDTO1 = userService.updateUser(userTest);
-        log.info("User updated successfully");
-
-        return ResponseEntity.ok().body(userDTO1);
+        return ResponseEntity.ok().body(updateUserDTO);
 
     }
 

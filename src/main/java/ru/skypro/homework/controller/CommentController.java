@@ -63,7 +63,9 @@ public class CommentController {
     })
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable int adId, @PathVariable int commentId) {
+
         commentService.deleteComment(adId, commentId);
+
         return ResponseEntity.ok().build();
     }
 
@@ -80,6 +82,7 @@ public class CommentController {
                                                     @RequestBody CreateOrUpdateCommentDTO text) {
 
         CommentDTO commentDTO = commentService.updateComment(adId, commentId, text);
+
         return ResponseEntity.ok().body(commentDTO);
     }
 }

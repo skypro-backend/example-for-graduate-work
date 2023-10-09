@@ -23,7 +23,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean login(String userName, String password) {
-        System.out.println(userName);
         UserDetails userDetails = securityUserDetailsService.loadUserByUsername(userName);
         return passwordEncoder().matches(password, userDetails.getPassword());
     }

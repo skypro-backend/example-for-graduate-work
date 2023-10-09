@@ -16,11 +16,19 @@ public class SecurityUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    // который принимает строку с именем пользователя.
     public UserDetails loadUserByUsername(String userEmail) {
         UserEntity user = userRepository.findByEmail(userEmail);
         if (user == null) {
             throw new UsernameNotFoundException(userEmail);
+        }
+        return new SecurityUserPrincipal(user);
+    }
+
+
+    public UserDetails loadUserByUserName(String userName) {
+        UserEntity user = userRepository.findByUsername(userName);
+        if (user == null) {
+            throw new UsernameNotFoundException(userName);
         }
         return new SecurityUserPrincipal(user);
     }
