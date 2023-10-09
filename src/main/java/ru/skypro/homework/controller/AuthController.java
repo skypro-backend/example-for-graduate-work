@@ -1,5 +1,8 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +25,9 @@ public class AuthController {
     private final AuthService authService;
     @Tag(name = "Авторизация")
     @PostMapping("/login")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Ok", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Bad Unauthorized", content = @Content)})
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
@@ -31,6 +37,9 @@ public class AuthController {
     }
     @Tag(name = "Регистрация")
     @PostMapping("/register")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Created", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)})
     public ResponseEntity<?> register(@RequestBody Register register) {
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();

@@ -1,14 +1,17 @@
 package ru.skypro.homework.projection;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import ru.skypro.homework.dto.CommentDTO;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@Accessors(chain = true)
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class Comments {
-    private final Integer count;
-    private final List<CommentDTO> results;
+    private Integer count;
+    private List<CommentView> results;
 }

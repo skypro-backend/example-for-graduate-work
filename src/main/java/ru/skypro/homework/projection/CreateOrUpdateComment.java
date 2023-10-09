@@ -1,13 +1,15 @@
 package ru.skypro.homework.projection;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Size;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class CreateOrUpdateComment {
     @Size(min = 8, max = 64)
-    private final String text;
+    private String text;
 }

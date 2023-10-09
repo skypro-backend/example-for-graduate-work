@@ -1,18 +1,20 @@
 package ru.skypro.homework.projection;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
-@RequiredArgsConstructor
+import lombok.NoArgsConstructor;
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class ExtendedAd {
-    private final Integer pk;
-    private final String authorFirstName;
-    private final String authorLastName;
-    private final String description;
-    private final String email;
-    private final String image;
-    private final String phone;
-    private final Integer price;
-    private final String title;
+    private Integer pk;
+    private String authorFirstName;
+    private String authorLastName;
+    private String description;
+    private String email;
+    private String image;
+    private String phone;
+    private Integer price;
+    private String title;
 
 }

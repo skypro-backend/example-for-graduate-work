@@ -1,5 +1,7 @@
 package ru.skypro.homework.service.auth;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,23 +11,15 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.security.SecurityUserDetailsService;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final SecurityUserDetailsService securityUserDetailsService;
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
-
-    public AuthServiceImpl(SecurityUserDetailsService securityUserDetailsService,
-                           PasswordEncoder passwordEncoder,
-                           UserRepository userRepository) {
-        this.securityUserDetailsService = securityUserDetailsService;
-        this.encoder = passwordEncoder;
-        this.userRepository = userRepository;
-    }
-
     @Override
     public boolean login(String userName, String password) {
-        if (!userRepository.existsByEmail(userName)) {
+        if (!userRepository.existsByEmailIgnoreCase(userName)) {
             return false;
         }
         UserDetails userDetails = securityUserDetailsService.loadUserByUsername(userName);
@@ -34,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(Register register) {
-        if (userRepository.existsByEmail(register.getUsername())) {
+        if (userRepository.existsByEmailIgnoreCase(register.getUsername())) {
             return false;
         }
         createUser(register);
@@ -49,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
                 .setEmail(register.getUsername())
                 .setFirstName(register.getFirstName())
                 .setLastName(register.getLastName())
-                .setPassword(register.getPassword());
+                .setPassword(encoder.encode(register.getPassword()));
         userRepository.save(newUser);
     }
 }

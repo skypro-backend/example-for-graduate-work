@@ -1,22 +1,18 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.projection;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import ru.skypro.homework.entity.Ad;
-
-import java.time.Instant;
-
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Accessors(chain = true)
-public class CommentDTO {
+public class CommentView {
+    private Integer author;
+    private String authorImage;
+    private String authorFirstName;
+    private Long createdAt;
     private Integer pk;
-    private Instant createdAt;
     private String text;
-    private UserDTO userDTO;
-    private Ad ad;
-
 }

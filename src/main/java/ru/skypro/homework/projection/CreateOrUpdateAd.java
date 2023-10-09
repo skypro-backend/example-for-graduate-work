@@ -1,19 +1,21 @@
 package ru.skypro.homework.projection;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class CreateOrUpdateAd {
     @Size(min = 4, max = 32)
-    private final String title;
+    private String title;
     @Min(value = 0) @Max(value = 10_000_000)
-    private final Integer price;
+    private Integer price;
     @Size(min = 4, max = 32)
-    private final String description;
+    private String description;
 }
