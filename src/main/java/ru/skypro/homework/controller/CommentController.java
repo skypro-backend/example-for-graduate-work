@@ -30,6 +30,12 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    /**
+     * Этот метод обрабатывает GET-запросы на получение комментариев объявления
+     *
+     * @param id идентификатор объявления
+     * @return Возвращает список комметариев, оставленных к объявлению с указанным id
+     */
     @GetMapping("/{id}/comments")
     @Operation(summary = "Получение комментариев объявления")
     @ApiResponses({
@@ -42,6 +48,14 @@ public class CommentController {
         return ResponseEntity.ok(commentService.getAllCommentsByAdId(id));
     }
 
+    /**
+     * Этот метод обрабатывает POST-запросы на добавление комментария к объявлению
+     *
+     * @param id идентификатор объявления
+     * @param comment комментарий
+     * @param authentication данные авторизированного пользователя
+     * @return Возвращает добавленный комментарий
+     */
     @PostMapping("/{id}/comments")
     @Operation(summary = "Добавление комментария к объявлению")
     @ApiResponses({
@@ -56,6 +70,13 @@ public class CommentController {
         return ResponseEntity.ok(commentService.createComment(id, comment, authentication));
     }
 
+    /**
+     * Этот метод обрабатывает DELETE-запросы на удаление комментария к объявлению
+     *
+     * @param adId идентификатор объявления
+     * @param commentId идентификатор комментария
+     * @param authentication данные авторизированного пользователя
+     */
     @DeleteMapping("/{adId}/comments/{commentId}")
     @Operation(summary = "Удаление комментария")
     @ApiResponses({
@@ -70,8 +91,17 @@ public class CommentController {
         commentService.deleteComment(commentId, adId);
     }
 
+    /**
+     * Этот метод обрабатывает PATCH-запросы на обновление комментария к объявлению
+     *
+     * @param adId идентификатор объявления
+     * @param commentId идентификатор комментария
+     * @param comment комментарий
+     * @param authentication данные авторизированного пользователя
+     * @return Возвращает обновленный комментарий
+     */
     @PatchMapping("/{adId}/comments/{commentId}")
-    @Operation(summary = "Удаление комментария")
+    @Operation(summary = "Обновление комментария")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

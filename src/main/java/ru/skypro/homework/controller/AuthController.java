@@ -23,6 +23,13 @@ import ru.skypro.homework.service.auth.AuthService;
 public class AuthController {
 
     private final AuthService authService;
+
+    /**
+     * Этот метод обрабатывает POST-запросы на авторизацию пользователя
+     *
+     * @param login логин и пароль
+     * @return Возвращает статус результата обработки запроса
+     */
     @Tag(name = "Авторизация")
     @PostMapping("/login")
     @ApiResponses({
@@ -35,6 +42,13 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
+    /**
+     * Этот метод обрабатывает POST-запросы на регистрацию пользователя
+     *
+     * @param register информация о пользователе
+     * @return Возвращает статус результата обработки запроса
+     */
     @Tag(name = "Регистрация")
     @PostMapping("/register")
     @ApiResponses({
