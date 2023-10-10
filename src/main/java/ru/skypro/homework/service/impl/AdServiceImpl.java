@@ -136,7 +136,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public void downloadAdImageFromDB(int adId, HttpServletResponse response) throws IOException {
-        AdEntity adEntity = adRepository.findById(adId).orElseThrow(() -> new IllegalArgumentException("Ad not found"));
+        AdEntity adEntity = adRepository.findById(adId).orElseThrow(() -> new IllegalArgumentException(AD_NOT_FOUND));
         AccountServiceImpl.downloadImage(response,
                 adEntity.getImagePath());
     }
