@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:13.3
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5433:5432"
+  front:
+    image: ghcr.io/bizinmitya/front-react-avito:v1.19
+    ports:
+      - "3000:3000"
