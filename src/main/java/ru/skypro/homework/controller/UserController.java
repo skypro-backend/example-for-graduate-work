@@ -23,17 +23,17 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getUser(@RequestBody UserDto userDto) {
-        return ResponseEntity.ok(userDto);
+    public ResponseEntity<UserDto> getUser() {
+        return ResponseEntity.ok(new UserDto());
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUserDto> getUser(@RequestBody UpdateUserDto updateUserDto) {
+    public ResponseEntity<UpdateUserDto> UpdateUser(@RequestBody UpdateUserDto updateUserDto) {
         return ResponseEntity.ok(updateUserDto);
     }
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UpdateUserDto> getUser(@RequestPart("image") MultipartFile image) {
+    public ResponseEntity<UpdateUserDto> updateUserImage(@RequestPart("image") MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 }
