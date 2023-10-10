@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,6 +47,7 @@ public class UserServiceImpl implements UserService {
         return updateUserDTO;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public UserDTO getUser() {
         UserEntity user = getCurrentUser();
@@ -61,7 +63,7 @@ public class UserServiceImpl implements UserService {
         }
 
         UserEntity user = getCurrentUser();
-        UserDetails userDetails = securityUserDetailsService.loadUserByUserName(user.getUsername());
+        UserDetails userDetails = securityUserDetailsService.loadUserByUsername(user.getUsername());
 
         if (!passwordEncoder.matches(newPasswordDTO.getCurrentPassword(), userDetails.getPassword())) {
             throw new ForbiddenException("Пароли не совпадают");

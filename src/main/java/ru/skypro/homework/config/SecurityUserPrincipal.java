@@ -1,10 +1,14 @@
 package ru.skypro.homework.config;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.service.entities.UserEntity;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class SecurityUserPrincipal implements UserDetails {
     private UserEntity user;
@@ -16,9 +20,9 @@ public class SecurityUserPrincipal implements UserDetails {
     }
 
     @Override
-    // Возвращает авторитеты (роли) пользователя.
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().toString());
+        return Collections.singletonList(authority);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exeptions.NotFoundException;
@@ -33,8 +35,10 @@ public class CommentServiceImpl implements CommentService {
         return new CommentsDTO(commentEntityList.size(), commentDTOList);
     }
 
+
     @Override
-    public void deleteComment(int adId, int commentId) {
+    public void deleteComment(int adId, int commentId, Authentication authentication) {
+
         CommentEntity commentEntity = checkForAdAndComment(adId, commentId);
 
         commentRepository.delete(commentEntity);
@@ -53,7 +57,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDTO updateComment(int adId, int commentId, CreateOrUpdateCommentDTO text) {
-
         CommentEntity commentEntityToUpdate = checkForAdAndComment(adId, commentId);
 
         commentEntityToUpdate.setText(text.getText());

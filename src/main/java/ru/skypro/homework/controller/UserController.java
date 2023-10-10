@@ -9,6 +9,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
@@ -52,8 +55,23 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
+
     @GetMapping("/me")
-    public ResponseEntity<UserDTO> getUser() {
+    public ResponseEntity<UserDTO> getUser(Authentication authentication) {
+
+         authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getAuthorities().getClass());
+        System.out.println(authentication.getAuthorities());
+
+        // Проверить, имеет ли пользователь роль "ADMIN"
+        if (authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"))) {
+            System.out.println("ADMIN");
+        } else {
+            System.out.println("NE ADMIN");
+        }
+
+
 
         UserDTO userDTO = userService.getUser();
 

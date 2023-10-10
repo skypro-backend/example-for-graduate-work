@@ -9,12 +9,18 @@ import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.repositories.CommentRepository;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @CrossOrigin(value = "http://localhost:3000")
@@ -61,10 +67,11 @@ public class CommentController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable int adId, @PathVariable int commentId) {
 
-        commentService.deleteComment(adId, commentId);
+    @DeleteMapping("/{adId}/comments/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable int adId, @PathVariable int commentId, Authentication authentication) {
+
+        commentService.deleteComment(adId, commentId, authentication);
 
         return ResponseEntity.ok().build();
     }
