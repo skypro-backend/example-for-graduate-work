@@ -88,7 +88,7 @@ public class UserController {
     /**
      * Этот метод обрабатывает PATCH-запросы на обновление аватара авторизованного пользователя
      *
-     * @param image ссылка на новый аватар
+     * @param image картинка
      * @param authentication данные авторизированного пользователя
      * @throws IOException если введен неверный формат данных
      */

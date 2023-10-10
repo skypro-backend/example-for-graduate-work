@@ -29,6 +29,12 @@ public class CommentServiceImpl implements CommentService{
     private final UserService userService;
 
 
+    /**
+     * Возвращает список комментариев объявления
+     *
+     * @param id идентификатор объявления
+     * @return количество комметариев, оставленных к объявлению с указанным id, и их список
+     */
     @Override
     public Comments getAllCommentsByAdId(Integer id) {
         List<Comment> list = commentRepository.findAllByAd_Pk(id);
@@ -39,6 +45,15 @@ public class CommentServiceImpl implements CommentService{
                 .setCount(list.size());
     }
 
+    /**
+     * Сохраняет в БД новый комментарий к объявлению с указанным id и возвращает описание этого комментария
+     *
+     * @param id идентификатор объявления
+     * @param comment комментарий
+     * @param authentication данные авторизированного пользователя
+     * @return описание добавленного комментария
+     * @throws AdNotFoundException если объявление с указанным id не найдено
+     */
     @Override
     public CommentView createComment(Integer id, CreateOrUpdateComment comment,Authentication authentication) {
         return CommentMapper.toView(commentRepository.save(new Comment()
@@ -48,11 +63,26 @@ public class CommentServiceImpl implements CommentService{
                 .setUser(UserMapper.fromDTO(userService.getCurrentUser(authentication)))));
     }
 
+    /**
+     * Удаляет комментарий из БД
+     *
+     * @param commentId идентификатор комментария
+     * @param adId идентификатор объявления
+     */
     @Override
     public void deleteComment(Integer commentId,Integer adId) {
         commentRepository.deleteCommentByPkAndAd_Pk(commentId, adId);
     }
 
+    /**
+     * Обновляет в БД комментарий к объявлению и возвращает его описание
+     *
+     * @param commentId идентификатор комментария
+     * @param adId идентификатор объявления
+     * @param comment комментарий
+     * @return описание комментария после обновления
+     * @throws CommentNotFoundException если комментарий с указанным commentId не найден
+     */
     @Override
     public CommentView updateComment(Integer commentId,Integer adId, CreateOrUpdateComment comment) {
         Comment commentResult = commentRepository.findByPkAndAd_Pk(commentId, adId).orElseThrow(CommentNotFoundException::new);
@@ -61,6 +91,13 @@ public class CommentServiceImpl implements CommentService{
         return CommentMapper.toView(commentRepository.save(commentResult));
     }
 
+    /**
+     * Возвращает DTO комментария, найденного по id
+     *
+     * @param id идентификатор комментария
+     * @return DTO комментария
+     * @throws CommentNotFoundException если комментарий с указанным id не найден
+     */
     @Override
     public CommentDTO findById(Integer id) {
         return commentRepository.findById(id).map(CommentMapper::fromComment).orElseThrow(CommentNotFoundException::new);
