@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import javax.validation.Valid;
 @RestController
 @Validated
 @RequiredArgsConstructor
+@Tag(name = "Регистрация и авторизация", description = "Регистрация и авторизация пользователей")
 public class AuthController {
 
     private final AuthService authService;

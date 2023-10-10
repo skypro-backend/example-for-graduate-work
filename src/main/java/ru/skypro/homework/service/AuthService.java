@@ -4,7 +4,20 @@ import ru.skypro.homework.dto.Register;
 
 public interface AuthService {
 
-    boolean login(String userName, String password);
+    /**
+     * Авторизация пользователя по логину и паролю
+     *
+     * @param username {@link String}
+     * @param password {@link String}
+     * @return boolean
+     */
+    boolean login(String username, String password);
 
+    /**
+     * Регистрация пользователя по логину и паролю
+     *
+     * @param register {@link Register}
+     * @return boolean
+     */
     boolean register(Register register);
 }

@@ -106,7 +106,7 @@ public class AdsController {
     })
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<Ad> patchAdById(@PathVariable int id,
-                                         @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd,
+                                          @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd,
                                           Authentication authentication) throws AdNotFoundException {
         Ad ad = adService.patchAdById(id, createOrUpdateAd, authentication.getName());
         return new ResponseEntity<>(ad, HttpStatus.OK);
@@ -137,8 +137,8 @@ public class AdsController {
     })
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<byte[]> patchAdsImageById(@PathVariable int id,
-                                                  @RequestParam("image") MultipartFile file,
-                                                  Authentication authentication) {
+                                                    @RequestParam("image") MultipartFile file,
+                                                    Authentication authentication) {
         byte[] image = adService.patchAdsImageById(id, file, authentication.getName());
         return new ResponseEntity<>(image, HttpStatus.OK);
     }

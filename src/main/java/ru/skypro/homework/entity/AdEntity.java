@@ -34,8 +34,4 @@ public class AdEntity {
     @ToString.Exclude
     private List<CommentEntity> adComments;
 
-    public String getDescription() {
-        return description;
-    }
-
 }

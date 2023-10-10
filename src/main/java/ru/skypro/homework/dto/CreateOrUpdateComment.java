@@ -13,8 +13,8 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class CreateOrUpdateComment {
 
-    @NotBlank
-    @Size(min = 8, max = 64)
+    @NotBlank(message = "Это поле не может быть пустым")
+    @Size(min = 8, max = 64, message = "Текст объявления должен содержать не менее 8 и не более 64 символов")
     private String text;
 
 }

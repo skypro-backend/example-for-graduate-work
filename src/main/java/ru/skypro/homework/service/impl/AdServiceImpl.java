@@ -19,7 +19,6 @@ import ru.skypro.homework.service.AdService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
