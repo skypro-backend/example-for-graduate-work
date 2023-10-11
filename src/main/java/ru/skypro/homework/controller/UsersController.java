@@ -1,5 +1,7 @@
 package ru.skypro.homework.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Register;
 
@@ -8,19 +10,19 @@ import ru.skypro.homework.dto.Register;
 public class UsersController {
 
 
-    @PostMapping("/setPassword/")
+    @PostMapping("/setPassword")
     public void updatePassword() {
 
     }
 
-    @GetMapping("/me/")
-    public Register getInfoAboutUser() {
-        return new Register(); //изменить на DTO
+    @GetMapping("/me")
+    public ResponseEntity<?> getInfoAboutUser() {
+        return new ResponseEntity<>(HttpStatus.OK);//изменить на DTO
     }
 
-    @PatchMapping("/me/")
-    public Register updateInfoAboutUser() {
-        return new Register(); //изменить на DTO
+    @PatchMapping("/me")
+    public ResponseEntity<?> updateInfoAboutUser() {
+        return new ResponseEntity<>(HttpStatus.OK); //изменить на DTO
     }
 
     @PatchMapping("/me/image")
