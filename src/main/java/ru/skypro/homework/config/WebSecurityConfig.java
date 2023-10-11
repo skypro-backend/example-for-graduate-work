@@ -48,13 +48,18 @@ public class WebSecurityConfig {
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
                                         .mvcMatchers("/ads/**", "/users/**")
-                                        .hasRole("USER"))
+                                        .authenticated())
                 .cors()
                 .and()
                 .httpBasic(withDefaults());
         return http.build();
     }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
+}
 
 //    // Создаем бин SecurityFilterChain для настройки фильтра безопасности.
 //    @Bean
@@ -87,9 +92,4 @@ public class WebSecurityConfig {
 //        }
 //    }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
-}

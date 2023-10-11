@@ -56,14 +56,6 @@ public class UserController {
          authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication.getAuthorities());
 
-        // Проверить, имеет ли пользователь роль "ADMIN"
-        if (authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"))) {
-            System.out.println("ADMIN");
-        } else {
-            System.out.println("NE ADMIN");
-        }
-
 
 
         UserDTO userDTO = userService.getUser();

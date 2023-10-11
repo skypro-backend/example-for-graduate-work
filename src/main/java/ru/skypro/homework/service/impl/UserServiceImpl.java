@@ -47,7 +47,6 @@ public class UserServiceImpl implements UserService {
         return updateUserDTO;
     }
 
-//    @PreAuthorize("hasRole('USER')")
     @Override
     public UserDTO getUser() {
         UserEntity user = getCurrentUser();

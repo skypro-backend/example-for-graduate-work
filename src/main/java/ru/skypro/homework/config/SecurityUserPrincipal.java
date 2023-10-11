@@ -5,23 +5,19 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.service.entities.UserEntity;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 public class SecurityUserPrincipal implements UserDetails {
     private UserEntity user;
 
-    // Конструктор класса SecurityUserPrincipal,
-    // принимающий объект класса AuthUser.
     public SecurityUserPrincipal(UserEntity user) {
         this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+user.getRole().toString());
+        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().toString());
         return Collections.singletonList(authority);
     }
 
