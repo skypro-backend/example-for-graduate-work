@@ -53,7 +53,6 @@ public class AdMapper{
         extendedAdDTO.pk( ad.getPk() );
         extendedAdDTO.description( ad.getDescription() );
         extendedAdDTO.image( ad.getImage() );
-        extendedAdDTO.phone( ad.getPhone() );
         extendedAdDTO.price( ad.getPrice() );
         extendedAdDTO.title( ad.getTitle() );
 
