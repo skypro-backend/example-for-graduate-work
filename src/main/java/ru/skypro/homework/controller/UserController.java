@@ -9,21 +9,17 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
-import ru.skypro.homework.service.AuthService;
-import ru.skypro.homework.service.UserService;
-import ru.skypro.homework.service.impl.UserServiceImpl;
-import ru.skypro.homework.service.entities.UserEntity;
-import ru.skypro.homework.service.repositories.UserRepository;
+import ru.skypro.homework.service.*;
 
-import java.util.Optional;
+
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -34,8 +30,6 @@ import java.util.Optional;
 public class UserController {
 
     UserService userService;
-
-    UserRepository userRepository;
 
     @Operation(summary = "Обновление пароля")
     @ApiResponses(value = {
@@ -60,7 +54,6 @@ public class UserController {
     public ResponseEntity<UserDTO> getUser(Authentication authentication) {
 
          authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getAuthorities().getClass());
         System.out.println(authentication.getAuthorities());
 
         // Проверить, имеет ли пользователь роль "ADMIN"

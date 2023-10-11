@@ -16,11 +16,8 @@ import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.service.CommentService;
-import ru.skypro.homework.service.repositories.CommentRepository;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Log4j2
 @CrossOrigin(value = "http://localhost:3000")

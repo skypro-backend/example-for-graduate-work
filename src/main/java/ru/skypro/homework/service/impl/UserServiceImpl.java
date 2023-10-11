@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         return updateUserDTO;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('USER')")
     @Override
     public UserDTO getUser() {
         UserEntity user = getCurrentUser();
@@ -76,6 +76,7 @@ public class UserServiceImpl implements UserService {
 
     private UserEntity getCurrentUser() {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByUsername(userName);
+        System.out.println(userName);
+        return userRepository.findByEmail(userName);
     }
 }

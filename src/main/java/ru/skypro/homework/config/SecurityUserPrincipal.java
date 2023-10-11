@@ -21,7 +21,7 @@ public class SecurityUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().toString());
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+user.getRole().toString());
         return Collections.singletonList(authority);
     }
 
@@ -34,7 +34,7 @@ public class SecurityUserPrincipal implements UserDetails {
     @Override
     // Возвращает имя пользователя.
     public String getUsername() {
-        return user.getUsername();
+        return user.getEmail();
     }
 
     @Override

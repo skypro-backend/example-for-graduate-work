@@ -2,7 +2,7 @@ insert into images(image_name)
 values ('weq');
 
 insert into users (last_Name, first_Name, email, phone, image, username, password, user_image_id)
-values ('Ivan', 'Ivan', 'ivan@mail.ru', 'phone','image', 'ivan', '$2a$10$oQ5so8XshqEoyemOczQW2.yuateW7VDQcNJHlIPSw8FQiVP5sQhOq', 1);
+values ('Ivan', 'Ivan', 'ivan@mail.ru', 'phone','image', 'ivan', '$2a$10$vECcovpeQoJOzPMxUhZlgOnn5mH3WKOCJbD9FCJ0uv1aBTePbNyOe', 1);
 
 insert into ad(id, author, description, image, phone, price, title )
 values (1, 1,'qwe','image','phone', 1, 'title');

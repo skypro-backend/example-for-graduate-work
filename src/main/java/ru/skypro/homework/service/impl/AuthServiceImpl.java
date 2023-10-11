@@ -6,19 +6,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.config.SecurityUserDetailsService;
+import ru.skypro.homework.exeptions.BadRequestException;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.entities.UserEntity;
+import ru.skypro.homework.service.repositories.UserRepository;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
     private final SecurityUserDetailsService securityUserDetailsService;
+    private final UserRepository userRepository;
 
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    public AuthServiceImpl(SecurityUserDetailsService securityUserDetailsService) {
+    public AuthServiceImpl(SecurityUserDetailsService securityUserDetailsService, UserRepository userRepository) {
         this.securityUserDetailsService = securityUserDetailsService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -29,22 +34,22 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(Register register) {
-        return false;
-    }
+        if (userRepository.findByUsername(register.getUsername()) != null) {
+            throw new BadRequestException(String.format("Пользователь с ником \"%s\" cуществует",
+                    register.getUsername())
+            );
+        }
 
-//    @Override
-//    public boolean register(Register register) {
-//        if (manager.userExists(register.getUsername())) {
-//            return false;
-//        }
-//        manager.createUser(
-//                User.builder()
-//                        .passwordEncoder(this.encoder::encode)
-//                        .password(register.getPassword())
-//                        .username(register.getUsername())
-//                        .roles(register.getRole().name())
-//                        .build());
-//        return true;
-//    }
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(register.getUsername());
+        userEntity.setPassword(passwordEncoder().encode(register.getPassword()));
+        userEntity.setFirstName(register.getFirstName());
+        userEntity.setLastName(register.getLastName());
+        userEntity.setPhone(register.getPhone());
+        userEntity.setRole(register.getRole());
+
+        userRepository.saveAndFlush(userEntity);
+        return true;
+    }
 
 }
