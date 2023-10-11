@@ -32,6 +32,12 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * Этот метод обрабатывает POST-запросы на обновление пароля
+     *
+     * @param newPassword новый пароль
+     * @param authentication данные авторизированного пользователя
+     */
     @PostMapping("/set_password")
     @Operation(summary = "Обновление пароля")
     @ApiResponses({
@@ -43,6 +49,13 @@ public class UserController {
                             Authentication authentication) {
         userService.setPassword(newPassword,authentication);
     }
+
+    /**
+     * Этот метод обрабатывает GET-запросы на получение информации об авторизированном пользователе
+     *
+     * @param authentication данные авторизированного пользователя
+     * @return Возвращает информацию об авторизированном пользователе
+     */
     @GetMapping("/me")
     @Operation(summary = "Получение информации об авторизованном пользователе")
     @ApiResponses({
@@ -54,6 +67,13 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserView(authentication));
     }
 
+    /**
+     * Этот метод обрабатывает PATCH-запросы на обновление информации об авторизованном пользователе
+     *
+     * @param updateUser новая информация о пользователе
+     * @param authentication данные авторизированного пользователя
+     * @return Возвращает обновленную информацию о пользователе
+     */
     @PatchMapping("/me")
     @Operation(summary = "Обновление информации об авторизованном пользователе")
     @ApiResponses({
@@ -64,6 +84,14 @@ public class UserController {
     public ResponseEntity<UpdateUser> updateUser(@RequestBody @Valid UpdateUser updateUser,Authentication authentication) {
         return ResponseEntity.ok(userService.updateUser(updateUser,authentication));
     }
+
+    /**
+     * Этот метод обрабатывает PATCH-запросы на обновление аватара авторизованного пользователя
+     *
+     * @param image картинка
+     * @param authentication данные авторизированного пользователя
+     * @throws IOException если введен неверный формат данных
+     */
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Обновление аватара авторизованного пользователя")
     @ApiResponses({

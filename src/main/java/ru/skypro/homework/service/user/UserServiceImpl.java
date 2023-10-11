@@ -28,6 +28,13 @@ public class UserServiceImpl implements UserService {
     private final ImageService imageService;
 
 
+    /**
+     * Обновляет пароль в БД у авторизированного пользователя
+     *
+     * @param newPassword новый пароль
+     * @param authentication данные авторизированного пользователя
+     * @throws WrongPassException если введен неверный пароль
+     */
     @Override
     public void setPassword(NewPassword newPassword,Authentication authentication) {
         UserDTO user = getCurrentUser(authentication);
@@ -38,15 +45,37 @@ public class UserServiceImpl implements UserService {
         userRepository.save(UserMapper.fromDTO(user));
     }
 
+    /**
+     * Возвращает информацию об авторизированном пользователе
+     *
+     * @param authentication данные авторизации пользователя
+     * @return информация об авторизированном пользователе
+     * @throws UserNotFoundException если пользователь с указанным логином не найден
+     */
     @Override
     public UserDTO getCurrentUser(Authentication authentication) {
         return UserMapper.toDTO(userRepository.findByEmailIgnoreCase(authentication.getName()).orElseThrow(UserNotFoundException::new));
     }
+
+    /**
+     * Возвращает проекцию с полным описанием авторизированного пользователя
+     *
+     * @param authentication данные авторизации пользователя
+     * @return проекция с полным описанием авторизированного пользователя
+     * @throws UserNotFoundException если пользователь с указанным логином не найден
+     */
     @Override
     public UserView getUserView(Authentication authentication) {
         return userRepository.findViewByEmailIgnoreCase(authentication.getName()).orElseThrow(UserNotFoundException::new);
     }
 
+    /**
+     * Обновляет в БД телефон, имя и фамилию авторизованного пользователя
+     *
+     * @param updateUser новая информация о пользователе
+     * @param authentication данные авторизации пользователя
+     * @return обновленная информация
+     */
     @Override
     public UpdateUser updateUser(UpdateUser updateUser, Authentication authentication) {
         UserDTO current = getCurrentUser(authentication)
@@ -60,6 +89,14 @@ public class UserServiceImpl implements UserService {
                 .setFirstName(actual.getFirstName());
     }
 
+    /**
+     * Обновление в БД ссылки на аватар авторизованного пользователя
+     *
+     * @param image картинка
+     * @param authentication данные авторизации пользователя
+     * @throws IOException если введен неверный формат данных
+     * @throws UserNotFoundException если пользователь с указанным логином не найден
+     */
     @Override
     public void updateImage(MultipartFile image, Authentication authentication) throws IOException {
         String URL = imageService.createImage(image);
