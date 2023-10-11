@@ -13,17 +13,25 @@
 
 ### Безопасность
 
-Приложение использует Spring Security, распределены роли между пользователями: пользователь и администратор:
+Приложение использует Spring Security, распределены роли между пользователями: анонимный пользователь, пользователь, администратор:
 
-1) **Пользователь** - может удалять или редактировать только свои объявления;
-2) **Администратор** - может удалять или редактировать все объявления.
+1) **Анонимный пользователь (без прохождения аутентификаци)** - доступен просмотр всех объявлений;
+2) **Пользователь** - может удалять или редактировать только свои объявления;
+3) **Администратор** - может удалять или редактировать все объявления.
 
 ### Технологии:
-* Spring Boot
-* PostgreSQL
-* Spring Security 
-* Liquibase
-* Docker
+* Hibernate https://hibernate.org/
+* Spring Boot https://spring.io/projects/spring-boot
+* Spring Web Services https://spring.io/projects/spring-ws
+* PostgreSQL https://www.postgresql.org/
+* Spring Security https://spring.io/projects/spring-security
+* Liquibase https://www.liquibase.org/
+* Docker https://www.docker.com/
+* Java SE 11 https://www.oracle.com/cis/java/technologies/javase/jdk11-archive-downloads.html
+
+### Использование
+
+
 
 ### Команда проекта
 * Жуков Александр 
