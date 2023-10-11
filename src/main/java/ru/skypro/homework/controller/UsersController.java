@@ -5,8 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassDto;
-import ru.skypro.homework.dto.Register;
-import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserInfoDto;
 
 @RestController
@@ -16,7 +14,7 @@ public class UsersController {
 
 
     @PostMapping("/set_password")
-    public ResponseEntity<NewPassDto> updatePassword(
+    public ResponseEntity<Void> updatePassword(
             @RequestBody NewPassDto newPassDto) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -27,8 +25,8 @@ public class UsersController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUserDto> updateInfoAboutUser(
-            @RequestBody UpdateUserDto updateUserDto) {
+    public ResponseEntity<UserInfoDto> updateInfoAboutUser(
+            @RequestBody UserInfoDto userInfoDto) {
         return new ResponseEntity<>(HttpStatus.OK); //изменить на DTO
     }
 
