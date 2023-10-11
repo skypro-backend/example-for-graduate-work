@@ -11,10 +11,7 @@ import ru.skypro.homework.mappers.AdMapper;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.entities.AdEntity;
 import ru.skypro.homework.service.repositories.AdRepository;
-
-import javax.imageio.stream.ImageInputStreamImpl;
 import javax.xml.crypto.OctetStreamData;
-import java.io.OutputStream;
 import java.util.List;
 
 @AllArgsConstructor
@@ -39,8 +36,7 @@ public class AdServiceImpl implements AdService {
 /*
         image.getInputStream().
 */
-        adEntity.setImage("photo");
-        adEntity.setPhone("+7321736144");
+        adEntity.setImage(null);
         adRepository.save(adEntity);
         return adMapper.toAdDto(adEntity);
     }
