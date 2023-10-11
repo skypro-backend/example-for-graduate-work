@@ -1,13 +1,14 @@
 package ru.skypro.homework.dto.adsDTO;
 
-import java.util.List;
 import lombok.*;
+
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class AdsAllCommentsDTO {
-    int count;
-    List<AdsCommentDTO> results;
+public class AdsDTO {
+    Integer count;
+    List<AdDTO> results;
 }

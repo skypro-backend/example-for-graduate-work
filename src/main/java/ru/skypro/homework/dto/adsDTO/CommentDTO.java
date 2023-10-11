@@ -1,12 +1,15 @@
 package ru.skypro.homework.dto.adsDTO;
-
-import lombok.experimental.FieldDefaults;
 import lombok.*;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class AdsCreateCommentDTO {
+public class CommentDTO {
+    int author;
+    String authorImage;
+    String authorFirstName;
+    long createdAt;
+    int pk;
     String text;
 }

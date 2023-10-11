@@ -1,6 +1,6 @@
 package ru.skypro.homework.dto.adsDTO;
 
-public class AdsCreateDTO {
+public class CreateAdsDTO {
     String title;
     Integer price;
     String description;

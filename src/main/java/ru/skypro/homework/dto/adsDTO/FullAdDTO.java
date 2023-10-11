@@ -5,7 +5,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdInfoAllDTO {
+public class FullAdDTO {
     int pk;
     String authorFirstName;
     String authorLastName;
