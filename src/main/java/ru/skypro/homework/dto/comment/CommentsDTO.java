@@ -2,7 +2,7 @@ package ru.skypro.homework.dto.comment;
 
 import java.util.List;
 
-public class Comments {
+public class CommentsDTO {
     private int count;
-    private List<Comment> results;
+    private List<CommentDTO> results;
 }

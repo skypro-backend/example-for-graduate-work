@@ -2,21 +2,21 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.comment.Comment;
-import ru.skypro.homework.dto.comment.Comments;
-import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
+import ru.skypro.homework.dto.comment.CommentDTO;
+import ru.skypro.homework.dto.comment.CommentsDTO;
+import ru.skypro.homework.dto.comment.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.service.CommentService;
 
 
 @Service
 public class CommentServiceImpl implements CommentService {
     @Override
-    public Comments getComments(Authentication authentication, int id) {
+    public CommentsDTO getComments(Authentication authentication, int id) {
         return null;
     }
 
     @Override
-    public Comment addComment(Authentication authentication, int id, CreateOrUpdateComment comment) {
+    public CommentDTO addComment(Authentication authentication, int id, CreateOrUpdateCommentDTO comment) {
         return null;
     }
 
@@ -26,7 +26,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment updateComment(Authentication authentication, int adId, int commentId, CreateOrUpdateComment createOrUpdateComment) {
+    public CommentDTO updateComment(Authentication authentication, int adId, int commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         return null;
     }
 }

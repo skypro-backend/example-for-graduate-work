@@ -1,6 +1,6 @@
 package ru.skypro.homework.dto.comment;
 
-public class Comment {
+public class CommentDTO {
     private int author;
     private String authorImage;
     private String authorFirstName;

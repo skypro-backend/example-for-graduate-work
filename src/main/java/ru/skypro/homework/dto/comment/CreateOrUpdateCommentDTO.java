@@ -1,5 +1,5 @@
 package ru.skypro.homework.dto.comment;
 
-public class CreateOrUpdateComment {
+public class CreateOrUpdateCommentDTO {
     private String text;
 }
