@@ -10,7 +10,7 @@ import ru.skypro.homework.dto.Register;
 public class UsersController {
 
 
-    @PostMapping("/setPassword")
+    @PostMapping("/set_Password")
     public void updatePassword() {
 
     }
