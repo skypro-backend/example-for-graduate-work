@@ -20,41 +20,39 @@
 3) **Администратор** - может удалять или редактировать все объявления.
 
 ### Технологии:
-* Hibernate https://hibernate.org/
-* Spring Boot https://spring.io/projects/spring-boot
-* Spring Web Services https://spring.io/projects/spring-ws
-* PostgreSQL https://www.postgresql.org/
-* Spring Security https://spring.io/projects/spring-security
-* Liquibase https://www.liquibase.org/
-* Docker https://www.docker.com/
-* Java SE 11 https://www.oracle.com/cis/java/technologies/javase/jdk11-archive-downloads.html
+* [Hibernate](https://hibernate.org/)
+* [Spring Boot](https://spring.io/projects/spring-boot)
+* [Spring Web Services](https://spring.io/projects/spring-ws)
+* [PostgreSQL](https://www.postgresql.org/)
+* [Spring Security](https://spring.io/projects/spring-security)
+* [Liquibase](https://www.liquibase.org/)
+* [Docker](https://www.docker.com/)
+* [Java SE 11](https://www.oracle.com/cis/java/technologies/javase/jdk11-archive-downloads.html)
 
 ### Использование
 
 Установите Docker Desktop:
-1) Скачайте дистрибутив:
-https://www.docker.com/products/docker-desktop/
-2) Установите WSL 2 на Windows:
-https://learn.microsoft.com/en-us/windows/wsl/install-manual
-3) После этого вы можете перейти к установке Docker Desktop:
-https://docs.docker.com/desktop/install/windows-install/
+1) [Скачайте дистрибутив](https://www.docker.com/products/docker-desktop/)
+2) [Установите WSL 2 на Windows](https://learn.microsoft.com/en-us/windows/wsl/install-manual)
+3) [После этого вы можете перейти к установке Docker Desktop](https://docs.docker.com/desktop/install/windows-install/)
 
 Установите среду разработки (IntelliJ IDEA)
-1) Платная версия https://www.jetbrains.com/idea/
-2) Бесплатная версия (IntelliJ IDEA Community Edition) https://www.jetbrains.com/ru-ru/idea/download/?section=windows
+1) [Платная версия](https://www.jetbrains.com/idea/)
+2) [Бесплатная версия (IntelliJ IDEA Community Edition)](https://www.jetbrains.com/ru-ru/idea/download/?section=windows)
 
 Скопируйте наш проект в среду разработки:
-1) Выполните команду: File -> New -> Project from Version Control 
+1) Выполните команду: `File -> New -> Project from Version Control `
 2) В открывшемся окне в поле URL вставьте наш проект https://github.com/AleksandrZhukovJava/3S.git
 3) Нажмите Clone.
 
 Чтобы запустить фронтенд с помощью установленного Docker, нужно открыть командную строку (или терминал) и выполнить следующую команду:
-docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.18
+
+`docker compose up`
 
 После выполнения команды frontend запустится можно будет зайти на него через браузер по адресу: http://localhost:3000
 
 ### Команда проекта
-* Жуков Александр 
-* Косенко Александра
-* Журавская Светлана	
-* Кузьмичев Игорь
+* Жуков Александр Владимирович
+* Косенко Александра Михайловна
+* Журавская Светлана Павловна	
+* Кузьмичев Игорь Сергеевич
