@@ -18,11 +18,17 @@ import ru.skypro.homework.service.UserMapper;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
+/**
+ * Класс для осуществления операций с базой данных пользователей
+ */
 @Slf4j
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -43,6 +49,18 @@ public class AccountServiceImpl implements AccountService {
     @Value("${users.avatar.dir.path}")
     private String avatarsDir;
 
+    /**
+     * Обновление пароля текущего пользователя. На вход передаётся объект класса
+     * <b>NewPassword</b>,
+     * происходит проверка корректности нового и текущего паролей,
+     * сохраняется новый пароль для текущего пользователя.
+     * Используется метод класса {@link UserDetailsManager#changePassword(String, String)}
+     * Используются методы класса {@link NewPassword#getNewPassword()}
+     * Используются методы класса {@link NewPassword#getCurrentPassword()}
+     * @param newPassword объект, содержащий текущий и новый пароли пользователя
+     * @return возвращает {@code true}, если пароль успешно изменён, или {@code false}, если новый пароль некорректен
+     * @see UserDetails#getUsername()
+     */
     @Override
     @Transactional
     public boolean updatePassword(NewPassword newPassword) {
@@ -53,19 +71,42 @@ public class AccountServiceImpl implements AccountService {
                 !newPassword.getCurrentPassword().isEmpty() &&
                 !newPassword.getCurrentPassword().isBlank()) {
             userDetailsManager.changePassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());
+            log.info("Password for user: {} was changed successfully.", userDetails.getUsername());
             return true;
         }
+        log.warn("New password is incorrect for user: {}.", userDetails.getUsername());
         return false;
     }
 
+    /**
+     * Получение информации о пользователе из базы данных путём
+     * получения имени пользователя (логина) из объекта класса <b>UserDetails</b>.
+     * <br>Используется метод {@link UserDetails#getUsername()}
+     * <br>Для получения пользователя используется метод класса
+     * {@link UserRepository#findByEmail(String)}
+     * @return Пользователь
+     * @throws UsernameNotFoundException если пользователь с таким логином не найден в базе данных
+     */
     @Override
     @Transactional(readOnly = true)
     public User getInfoAboutUser() {
         String userName = userDetails.getUsername();
+        log.info("Information about user: {} was received.", userName);
         return userMapper.toUser(userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND)));
     }
 
+    /**
+     * Обновление данных пользователя. Логин пользователя получается из объекта
+     * класса <b>UserDetails</b> методом {@link UserDetails#getUsername()}
+     * <br> Получение пользователя из базы данных происходит в методе
+     * {@link UserRepository#findByEmail(String)}
+     * <br> Сохранение пользователя происходит в методе {@link UserRepository#save(Object)}
+     * @param user Данные пользователя из веб-интерфейса
+     * @return обновлённый пользователь
+     * @throws UsernameNotFoundException если пользователь с таким логином не найден в базе данных
+     * @see UserMapper#updateUserEntity(UserEntity, User)
+     */
     @Override
     @Transactional
     public User patchInfoAboutUser(User user) {
@@ -73,9 +114,25 @@ public class AccountServiceImpl implements AccountService {
         UserEntity userEntity = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         UserEntity updatedUser = userRepository.save(userMapper.updateUserEntity(userEntity, user));
+        log.info("Information about user: {} was updated successfully.", userName);
         return userMapper.toUser(updatedUser);
     }
 
+    /**
+     * Обновление аватара пользователя. Используется метод
+     * <br> <b>uploadImage(image, filePath)</b>. Логин пользователя получается из объекта
+     * класса <b>UserDetails</b> методом {@link UserDetails#getUsername()}
+     * <br> Получение пользователя из базы данных происходит в методе
+     * {@link UserRepository#findByEmail(String)}
+     * @param image файл картинки
+     * @return {@code true}, если аватар успешно обновлён
+     * @throws IOException ошибка ввода-вывода
+     * @throws UsernameNotFoundException если текущий пользователь не найден в базе данных
+     * @see Files#deleteIfExists(Path)
+     * @see UserEntity#getImagePath()
+     * @see Path#of(String, String...)
+     * @see StringUtils#getFilenameExtension(String)
+     */
     @Override
     @Transactional
     public boolean updateUserAvatar(MultipartFile image) throws IOException {
@@ -90,9 +147,22 @@ public class AccountServiceImpl implements AccountService {
         uploadImage(image, filePath);
         userEntity.setImagePath(filePath.toAbsolutePath().toString());
         userRepository.save(userEntity);
+        log.info("Avatar for user: {} was updated successfully.", userName);
         return true;
     }
 
+    /**
+     * Загрузка аватара из файловой системы по id пользователя. <br> Используется метод
+     * {@link UserRepository#findById(Object)} для получения пользователя из базы данных.
+     * Для формирования ответа сервера используется метод
+     * {@link #downloadImage(HttpServletResponse, String)}
+     * @param userId id пользователя
+     * @param response ответ сервера
+     * @return {@code true}, если аватар пользователя успешно загружен
+     * @throws IOException ошибка ввода-вывода
+     * @throws UsernameNotFoundException если пользователь с данным id не найден в базе данных
+     * @see #downloadAvatarFromDB(int, HttpServletResponse)
+     */
     @Override
     @Transactional
     public boolean downloadAvatarFromDB(int userId, HttpServletResponse response) throws IOException {
@@ -101,11 +171,21 @@ public class AccountServiceImpl implements AccountService {
         if (userEntity.getImagePath() != null) {
             downloadImage(response,
                     userEntity.getImagePath());
+            log.info("Download avatar for user: {} method was invoked", userEntity.getEmail());
             return true;
         }
         return false;
     }
 
+    /**
+     * Копирование файла картинки. Входной поток получаем
+     * из метода {@link Files#newInputStream(Path, OpenOption...)}. Выходной поток
+     * получаем из метода {@link HttpServletResponse#getOutputStream()}
+     * @param response ответ сервера
+     * @param imagePath путь и название файла с аватаркой
+     * @throws IOException ошибка ввода - вывода
+     * @see Path#of(URI)
+     */
     static void downloadImage(HttpServletResponse response,
                               String imagePath) throws IOException {
         Path path = Path.of(imagePath);
@@ -114,9 +194,20 @@ public class AccountServiceImpl implements AccountService {
              OutputStream os = response.getOutputStream()) {
             response.setStatus(200);
             is.transferTo(os);
+            log.info("Image was downloaded successfully.");
         }
     }
 
+    /**
+     * Загрузка на сервер файла картинки. Входной поток получаем методом
+     * {@link MultipartFile#getInputStream()}. Выходной поток получаем методом
+     * {@link Files#newOutputStream(Path, OpenOption...)}
+     * @param image файл картинки
+     * @param filePath путь к файлу на сервере
+     * @throws IOException ошибка ввода - вывода
+     * @see Files#deleteIfExists(Path)
+     * @see Files#createDirectories(Path, FileAttribute[])
+     */
     static void uploadImage(MultipartFile image, Path filePath) throws IOException {
         Files.deleteIfExists(filePath);
         Files.createDirectories(filePath.getParent());
@@ -127,6 +218,7 @@ public class AccountServiceImpl implements AccountService {
              BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
         ) {
             bis.transferTo(bos);
+            log.info("Image was uploaded successfully.");
         }
     }
 }
