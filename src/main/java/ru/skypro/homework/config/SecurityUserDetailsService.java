@@ -23,13 +23,4 @@ public class SecurityUserDetailsService implements UserDetailsService {
         }
         return new SecurityUserPrincipal(user);
     }
-
-
-    public UserDetails loadUserByUserName(String userName) {
-        UserEntity user = userRepository.findByUsername(userName);
-        if (user == null) {
-            throw new UsernameNotFoundException(userName);
-        }
-        return new SecurityUserPrincipal(user);
-    }
 }

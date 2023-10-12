@@ -22,25 +22,25 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name")
     String lastName;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name")
     String firstName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     String email;
 
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone")
     String phone;
 
-    @Column(name = "image", nullable = false)
+    @Column(name = "image")
     String image;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", unique = true)
     String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     String password;
 
     @NonNull
