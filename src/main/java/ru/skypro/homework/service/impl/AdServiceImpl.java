@@ -25,9 +25,13 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.List;
 
+/**
+ * Класс для осуществления операций с базой данных объявлений
+ */
 @Slf4j
 @Service
 public class AdServiceImpl implements AdService {
@@ -53,6 +57,21 @@ public class AdServiceImpl implements AdService {
         this.userDetails = userDetails;
     }
 
+    /**
+     * Создание объявления и сохранение его в базе данных.<br>
+     * - Поиск пользователя в базе данных по данным аутентификации {@link UserDetails#getUsername()}, {@link UserRepository#findByEmail(String)}.<br>
+     * - Создание объявления из входных данных {@link AdMapper#toAdEntity(CreateOrUpdateAd, AdEntity)}
+     * и сохранение его в базе данных {@link AdRepository#save(Object)}.<br>
+     * - Создание пути для загрузки изображения объявления {@link #createPath(MultipartFile, AdEntity)}.<br>
+     * - Загрузка с сайта и сохранение в файловой системе изображения объявления {@link AccountServiceImpl#uploadImage(MultipartFile, Path)}.<br>
+     * - Задание необходимых параметров созданному объявлению {@link AdEntity#setUserEntity(UserEntity)}, {@link AdEntity#setImagePath(String)}.<br>
+     * - Сохранение созданного объявления в базе данных {@link AdRepository#save(Object)}.<br>
+     * - Преобразование (маппинг) созданного объявления в объект возвращаемого класса {@link AdMapper#toAd(AdEntity)}.
+     * @param createOrUpdateAd объект, содержащий необходимую информацию для создания объявления
+     * @param image загружаемое изображение
+     * @return объект {@link Ad}, содержащий необходимую информацию о созданном объявлении
+     * @throws IOException выбрасывается при ошибках, возникающих во время загрузки изображения
+     */
     @Override
     @Transactional
     public Ad createAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image) throws IOException {
@@ -67,6 +86,12 @@ public class AdServiceImpl implements AdService {
         return savedAd;
     }
 
+    /**
+     * Получение всех объявлений.<br>
+     * - Поиск всех объявлений в базе данных {@link AdRepository#findAll()}.<br>
+     * - Преобразование (маппинг) списка найденных объявлений в объект возвращаемого класса {@link AdMapper#toAds(List)}.
+     * @return объект {@link Ads}, содержащий количество объявлений и список объявлений
+     */
     @Override
     @Transactional(readOnly = true)
     public Ads getAllAdvertising() {
@@ -76,6 +101,12 @@ public class AdServiceImpl implements AdService {
         return ads;
     }
 
+    /** Получение объявления по id.<br>
+     * - Поиск объявления по id {@link AdRepository#findById(Object)}.<br>
+     * - Преобразование (маппинг) найденного объявления в объект возвращаемого класса {@link AdMapper#toExtendedAd(AdEntity)}.
+     * @param id идентификатор объявления в БД
+     * @return объект {@link ExtendedAd}, содержащий необходимую информацию о запрашиваемом объявлении
+     */
     @Override
     @Transactional(readOnly = true)
     public ExtendedAd getAdvertisingById(int id) {
@@ -85,6 +116,18 @@ public class AdServiceImpl implements AdService {
         return ad;
     }
 
+    /**
+     * Удаление объявления.<br>
+     * - Поиск пользователя в базе данных по данным аутентификации {@link UserDetails#getUsername()}, {@link UserRepository#findByEmail(String)}.<br>
+     * - Поиск объявления в базе данных по идентификатору объявления {@link AdRepository#findById(Object)}.<br>
+     * - Удаление из базы данных всех комментариев найденного объявления {@link CommentRepository#deleteAllByAdEntity_Id(int)}.<br>
+     * - Удаление из базы данных объявления по id {@link AdRepository#deleteById(Object)}.<br>
+     * - Удаление из файловой системы изображения объявления {@link Files#deleteIfExists(Path)}.
+     * @param id идентификатор объявления в БД
+     * @return <B>true</B>, если у пользователя есть права на удаление объявления.<br>
+     * В противном случае <B>false</B>
+     * @throws IOException выбрасывается при ошибках, возникающих во время удаления изображения
+     */
     @Override
     @Transactional
     public boolean deleteAdvertisingById(int id) throws IOException {
@@ -103,6 +146,18 @@ public class AdServiceImpl implements AdService {
         return false;
     }
 
+    /**
+     * Обновление объявления.<br>
+     * - Поиск пользователя в базе данных по данным аутентификации {@link UserDetails#getUsername()}, {@link UserRepository#findByEmail(String)}.<br>
+     * - Поиск объявления в базе данных по идентификатору объявления {@link AdRepository#findById(Object)}.<br>
+     * - Преобразование (маппинг) найденного объявления и входных данных в обновленное объявление {@link AdMapper#toAdEntity(CreateOrUpdateAd, AdEntity)}.<br>
+     * - Сохранение обновленного объявления в базе данных {@link AdRepository#save(Object)}.<br>
+     * - Преобразование (маппинг) обновленного объявления в объект возвращаемого класса {@link AdMapper#toAd(AdEntity)}.
+     * @param id идентификатор объявления в БД
+     * @param createOrUpdateAd объект, содержащий необходимую информацию для обновления объявления
+     * @return объект {@link Ad}, содержащий необходимую информацию об обновленном объявлении.<br>
+     * В противном случае <B>null</B>
+     */
     @Override
     @Transactional
     public Ad updateAdvertising(int id, CreateOrUpdateAd createOrUpdateAd) {
@@ -119,6 +174,12 @@ public class AdServiceImpl implements AdService {
         return null;
     }
 
+    /**
+     * Получение всех объявлений аутентифицированного пользователя.<br>
+     * - Поиск в базе данных всех объявлений текущего пользователя {@link AdRepository#findAllByUserEntityEmail(String)}.<br>
+     * - Преобразование (маппинг) списка найденных объявлений в объект возвращаемого класса {@link AdMapper#toAds(List)}.
+     * @return объект {@link Ads}, содержащий количество объявлений и список объявлений текущего пользователя
+     */
     @Override
     @Transactional(readOnly = true)
     public Ads getAllAuthenticatedUserAdvertising() {
@@ -128,6 +189,19 @@ public class AdServiceImpl implements AdService {
         return userAds;
     }
 
+    /**
+     * Обновление изображения объявления.<br>
+     * - Поиск объявления в базе данных по идентификатору объявления {@link AdRepository#findById(Object)}.<br>
+     * - Удаление текущего изображения объявления {@link Files#deleteIfExists(Path)}, если в объявлении сохранен путь к изображению в файловой системе.<br>
+     * - Создание пути для загрузки обновленного изображения объявления {@link #createPath(MultipartFile, AdEntity)}.<br>
+     * - Загрузка с сайта и сохранение в файловой системе обновленного изображения объявления {@link AccountServiceImpl#uploadImage(MultipartFile, Path)}.<br>
+     * - Задание необходимых параметров найденному объявлению {@link AdEntity#setUserEntity(UserEntity)}, {@link AdEntity#setImagePath(String)}.<br>
+     * - Сохранение в базе данных объявления с обновленным изображением {@link AdRepository#save(Object)}.
+     * @param id идентификатор объявления в БД
+     * @param image загружаемое изображение
+     * @return <B>true</B>
+     * @throws IOException выбрасывается при ошибках, возникающих во время загрузки изображения
+     */
     @Override
     @Transactional
     public boolean updateAdvertisingImage(int id, MultipartFile image) throws IOException {
@@ -141,6 +215,15 @@ public class AdServiceImpl implements AdService {
         return true;
     }
 
+    /**
+     * Вспомогательный метод. Создание пути для загрузки изображения объявления.<br>
+     * - Создание пути из папки хранения изображений объявлений, идентификатора объявления и расширения изображения.
+     * - Копирование данных изображения. Входной поток получаем из метода {@link Files#newInputStream(Path, OpenOption...)}. Выходной поток получаем из метода {@link HttpServletResponse#getOutputStream()}
+     * @param image загружаемое изображение
+     * @param adEntity объявление, для которого загружается изображение
+     * @return объект класса {@link Path}
+     * @throws IOException выбрасывается при ошибках, возникающих во время выгрузки изображения
+     */
     private Path createPath(MultipartFile image, AdEntity adEntity) throws IOException {
         Path filePath = Path.of(adImageDirPath, "Advertisement_" + adEntity.getId() + "."
                 + StringUtils.getFilenameExtension(image.getOriginalFilename()));
@@ -149,6 +232,14 @@ public class AdServiceImpl implements AdService {
         return filePath;
     }
 
+    /**
+     * Выгрузка изображения объявления из файловой системы.<br>
+     * - Поиск объявления в базе данных по идентификатору объявления {@link AdRepository#findById(Object)}.<br>
+     * - Копирование данных изображения. Входной поток получаем из метода {@link Files#newInputStream(Path, OpenOption...)}. Выходной поток получаем из метода {@link HttpServletResponse#getOutputStream()}
+     * @param adId идентификатор объявления в БД
+     * @param response ответ сервера
+     * @throws IOException выбрасывается при ошибках, возникающих во время выгрузки изображения
+     */
     @Override
     public void downloadAdImageFromDB(int adId, HttpServletResponse response) throws IOException {
         AdEntity adEntity = adRepository.findById(adId).orElseThrow(() -> new IllegalArgumentException(AD_NOT_FOUND));
@@ -156,6 +247,13 @@ public class AdServiceImpl implements AdService {
         log.info("Download advertisement image from database method was invoked.");
     }
 
+    /**
+     * Поиск объявления по заголовку.<br>
+     * - Поиск объявления в базе данных по заголовку объявления {@link AdRepository#findAllByTitleLike(String)}.<br>
+     * - Преобразование (маппинг) списка найденных объявлений в объект возвращаемого класса {@link AdMapper#toAds(List)}.
+     * @param title заголовок объявления
+     * @return объект {@link Ads}, содержащий количество объявлений и список объявлений
+     */
     @Override
     @Transactional(readOnly = true)
     public Ads findByTitle(String title) {
