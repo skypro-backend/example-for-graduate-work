@@ -1,7 +1,7 @@
 package ru.skypro.homework.controller;
 
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 
@@ -28,17 +28,14 @@ public class UserController {
     public ResponseEntity<UpdateUserDto> updateUserInfo(@RequestBody UpdateUserDto updateUserDto) {
         return ResponseEntity.ok(new UpdateUserDto());
     }
+
     @PatchMapping("/set_password")
     public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
-        // Здесь можно реализовать логику обновления пароля.
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/me/image")
     public ResponseEntity<Void> updateUserImage(@RequestPart MultipartFile image) {
-        // Здесь можно реализовать логику обновления аватара пользователя.
         return ResponseEntity.ok().build();
     }
-
-
 }
