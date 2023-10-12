@@ -5,6 +5,7 @@ import org.springframework.web.multipart.*;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.adsDTO.AdsDTO;
 import ru.skypro.homework.dto.usersDTO.*;
 public class UserController {
 
@@ -17,9 +18,8 @@ public class UserController {
 
     @Operation(summary = "Получение информации об авторизованном пользователе")
     @GetMapping("/me")
-    public ResponseEntity<?> getUser(@RequestBody UserDTO user) {
-        UserDTO userDto = new UserDTO();
-        return ResponseEntity.ok().body(userDto);
+    public ResponseEntity<UserDTO> getUser() {
+        return ResponseEntity.ok(new UserDTO());
     }
 
     @Operation(summary = "Обновление информации об авторизованном пользователе")

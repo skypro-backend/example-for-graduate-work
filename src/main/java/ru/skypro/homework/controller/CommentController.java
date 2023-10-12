@@ -16,33 +16,30 @@ public class CommentController {
     @Operation(summary = "Получение комментариев объявления")
     @GetMapping("/{id}/comments")
     public ResponseEntity<AdsDTO> receivingAdComments(@PathVariable int id) {
-
         AdsDTO adsDTO = new AdsDTO();
-
         return ResponseEntity.ok().body(adsDTO);
     }
 
     @Operation(summary = "Добавление комментария к объявлению")
     @PostMapping("/{id}/comments")
-    public ResponseEntity<CommentDTO> addComment(@PathVariable int id, @RequestBody String text) {
-
-        CommentDTO commentDTO = new CommentDTO();
-
-        return ResponseEntity.ok().body(commentDTO);
+    public ResponseEntity<CommentDTO> addComment(@PathVariable int id,
+                                                 @RequestBody CreateCommentDTO text) {
+        CommentDTO newCommentDTO = new CommentDTO();
+        return ResponseEntity.ok().body(newCommentDTO);
     }
 
     @Operation(summary = "Удаление комментария")
     @DeleteMapping("/{adId}/comments/{commentId}")
-
-    public ResponseEntity<?> deleteComment(@PathVariable int adId, @PathVariable int commentId) {
-
+    public ResponseEntity<?> deleteComment(@PathVariable int adId,
+                                           @PathVariable int commentId) {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Удаление комментария")
-    @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId, @PathVariable int commentId){
-
+    @Operation(summary = "Обновление комментария")
+    @PatchMapping("/{adId}/comments/{commentId}")
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId,
+                                                    @PathVariable int commentId,
+                                                    @RequestBody CreateCommentDTO text){
         CommentDTO commentDTO = new CommentDTO();
         return ResponseEntity.ok().body(commentDTO);
     }
