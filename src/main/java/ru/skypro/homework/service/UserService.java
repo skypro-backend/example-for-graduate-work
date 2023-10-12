@@ -7,7 +7,7 @@ import ru.skypro.homework.dto.UserDTO;
 
 public interface UserService {
     UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO);
-    @PreAuthorize("hasRole('USER')")
+
     UserDTO getUser();
 
     void updatePassword(NewPasswordDTO newPasswordDTO);

@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -18,7 +19,6 @@ import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.*;
-
 
 
 @Slf4j
@@ -51,12 +51,7 @@ public class UserController {
     })
 
     @GetMapping("/me")
-    public ResponseEntity<UserDTO> getUser(Authentication authentication) {
-
-         authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getAuthorities());
-
-
+    public ResponseEntity<UserDTO> getUser() {
 
         UserDTO userDTO = userService.getUser();
 
