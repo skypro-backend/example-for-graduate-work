@@ -14,7 +14,7 @@ public class UpdateUser {
     private String firstName;
     @Size(min = 3, max = 10)
     private String lastName;
-//    @Pattern (  \+7\s?\(?\d{3}\)?\s?\d{3}-?\d{2}-?\d{2} )
+    @Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}", message = "Неверный формат введенного номера телефона")
     private String phone;
 
 }
