@@ -8,7 +8,7 @@ import ru.skypro.homework.service.impl.AdsService;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdsDto implements AdsService {
+public class AdsDto  {
     private Integer author; // id автора объявления
     private String image; // ссылка на картинку объявления
     private Integer pk; // id объявления

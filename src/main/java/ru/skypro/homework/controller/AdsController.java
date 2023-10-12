@@ -41,7 +41,7 @@ public class AdsController {
     )
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 
-    public AdsService addAds(@RequestPart("properties") CreateAdsDto ads, @RequestPart("image") MultipartFile image) {
+    public AdsDto addAds(@RequestPart("properties") CreateAdsDto ads, @RequestPart("image") MultipartFile image) {
        return new AdsDto();
 
     }

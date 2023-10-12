@@ -14,7 +14,6 @@ import javax.annotation.Resource;
 public class Register {
 
     private String userName;
-    private String login;
     private String password;
     private String firstName;
     private String lastName;
@@ -23,14 +22,14 @@ public class Register {
 
 
     public String getUsername() {
-        return null;
+        return userName;
     }
 
     public String getPassword() {
-        return null;
+        return password;
     }
 
-    public Resource getRole() {
-        return null;
+    public Role getRole() {
+        return role;
     }
 }
