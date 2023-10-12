@@ -7,7 +7,7 @@ import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
 import ru.skypro.homework.model.CommentEntity;
 import ru.skypro.homework.service.CommentMapper;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +16,7 @@ public class CommentMapperImpl implements CommentMapper {
     @Override
     public CommentEntity toCommentEntity(CreateOrUpdateComment createOrUpdateComment, CommentEntity commentEntity) {
         commentEntity.setText(createOrUpdateComment.getText());
-        commentEntity.setCreatedAt(LocalDateTime.now());
+        commentEntity.setCreatedAt(Instant.now().toEpochMilli());
         return commentEntity;
     }
 
