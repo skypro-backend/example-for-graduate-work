@@ -1,8 +1,15 @@
 package ru.skypro.homework.dto.comment;
 
-import java.util.List;
+import lombok.Data;
 
+import java.util.List;
+@Data
 public class CommentsDTO {
     private int count;
     private List<CommentDTO> results;
+
+    public CommentsDTO(int count){
+        this.count=count;
+    }
 }
+
