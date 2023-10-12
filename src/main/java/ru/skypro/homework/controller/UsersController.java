@@ -29,14 +29,13 @@ public class UsersController {
 
     //    Получение информации об авторизованном пользователе
     @GetMapping("/me")
-    public ResponseEntity<?> getProfile(Authentication authentication,
-                                        @RequestBody User user) {
-        return userService.getProfile(authentication, user);
+    public User getProfile(Authentication authentication) {
+        return userService.getProfile(authentication);
     }
 
     //    Обновление информации об авторизованном пользователе
     @PatchMapping("/me")
-    public ResponseEntity<?> updateUser(Authentication authentication,
+    public UpdateUser updateUser(Authentication authentication,
                                         @RequestBody UpdateUser updateUser) {
         return userService.updateUser(authentication, updateUser);
     }
