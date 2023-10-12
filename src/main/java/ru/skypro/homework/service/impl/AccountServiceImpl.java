@@ -53,8 +53,10 @@ public class AccountServiceImpl implements AccountService {
                 !newPassword.getCurrentPassword().isEmpty() &&
                 !newPassword.getCurrentPassword().isBlank()) {
             userDetailsManager.changePassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());
+            log.info("Password for user: {} was changed successfully.", userDetails.getUsername());
             return true;
         }
+        log.warn("New password is incorrect for user: {}.", userDetails.getUsername());
         return false;
     }
 
@@ -62,6 +64,7 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(readOnly = true)
     public User getInfoAboutUser() {
         String userName = userDetails.getUsername();
+        log.info("Information about user: {} was received.", userName);
         return userMapper.toUser(userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND)));
     }
@@ -73,6 +76,7 @@ public class AccountServiceImpl implements AccountService {
         UserEntity userEntity = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         UserEntity updatedUser = userRepository.save(userMapper.updateUserEntity(userEntity, user));
+        log.info("Information about user: {} was updated successfully.", userName);
         return userMapper.toUser(updatedUser);
     }
 
@@ -90,6 +94,7 @@ public class AccountServiceImpl implements AccountService {
         uploadImage(image, filePath);
         userEntity.setImagePath(filePath.toAbsolutePath().toString());
         userRepository.save(userEntity);
+        log.info("Avatar for user: {} was updated successfully.", userName);
         return true;
     }
 
@@ -101,6 +106,7 @@ public class AccountServiceImpl implements AccountService {
         if (userEntity.getImagePath() != null) {
             downloadImage(response,
                     userEntity.getImagePath());
+            log.info("Download avatar for user: {} method was invoked", userEntity.getEmail());
             return true;
         }
         return false;
@@ -114,6 +120,7 @@ public class AccountServiceImpl implements AccountService {
              OutputStream os = response.getOutputStream()) {
             response.setStatus(200);
             is.transferTo(os);
+            log.info("Image was downloaded successfully.");
         }
     }
 
@@ -127,6 +134,7 @@ public class AccountServiceImpl implements AccountService {
              BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
         ) {
             bis.transferTo(bos);
+            log.info("Image was uploaded successfully.");
         }
     }
 }

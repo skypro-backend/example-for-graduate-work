@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,6 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+@Slf4j
 @Service
 public class AdServiceImpl implements AdService {
     private final CommentRepository commentRepository;
@@ -60,21 +62,27 @@ public class AdServiceImpl implements AdService {
         Path filePath = createPath(image, adEntity);
         adEntity.setUserEntity(user);
         adEntity.setImagePath(filePath.toAbsolutePath().toString());
-        return adMapper.toAd(adRepository.save(adEntity));
+        Ad savedAd = adMapper.toAd(adRepository.save(adEntity));
+        log.info("Advertisement was created successfully.");
+        return savedAd;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Ads getAllAdvertising() {
         List<AdEntity> adEntityList = adRepository.findAll();
-        return adMapper.toAds(adEntityList);
+        Ads ads = adMapper.toAds(adEntityList);
+        log.info("Advertisements were received successfully.");
+        return ads;
     }
 
     @Override
     @Transactional(readOnly = true)
     public ExtendedAd getAdvertisingById(int id) {
         AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(AD_NOT_FOUND));
-        return adMapper.toExtendedAd(adEntity);
+        ExtendedAd ad = adMapper.toExtendedAd(adEntity);
+        log.info("Advertisement with id: {} was received successfully.", id);
+        return ad;
     }
 
     @Override
@@ -83,12 +91,13 @@ public class AdServiceImpl implements AdService {
         String userName = userDetails.getUsername();
         UserEntity userEntity = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
-        AdEntity adEntity=adRepository.findById(id)
+        AdEntity adEntity = adRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(AD_NOT_FOUND));
         if (userEntity.getRole() == Role.ADMIN || adEntity.getUserEntity().equals(userEntity)){
             commentRepository.deleteAllByAdEntity_Id(id);
             adRepository.deleteById(id);
             Files.deleteIfExists(Path.of(adEntity.getImagePath()));
+            log.info("Advertisement with id: {} was deleted successfully.", id);
             return true;
         }
         return false;
@@ -103,7 +112,9 @@ public class AdServiceImpl implements AdService {
         AdEntity adEntity = adRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(AD_NOT_FOUND));
         if (userEntity.getRole() == Role.ADMIN || adEntity.getUserEntity().equals(userEntity)){
-            return adMapper.toAd(adRepository.save(adMapper.toAdEntity(createOrUpdateAd, adEntity)));
+            Ad updatedAd = adMapper.toAd(adRepository.save(adMapper.toAdEntity(createOrUpdateAd, adEntity)));
+            log.info("Advertisement with id: {} was updated successfully.", id);
+            return updatedAd;
         }
         return null;
     }
@@ -112,7 +123,9 @@ public class AdServiceImpl implements AdService {
     @Transactional(readOnly = true)
     public Ads getAllAuthenticatedUserAdvertising() {
         List<AdEntity> adEntityList = adRepository.findAllByUserEntityEmail(userDetails.getUsername());
-        return adMapper.toAds(adEntityList);
+        Ads userAds = adMapper.toAds(adEntityList);
+        log.info("Advertisements for user: {} were successfully received.", userDetails.getUsername());
+        return userAds;
     }
 
     @Override
@@ -124,6 +137,7 @@ public class AdServiceImpl implements AdService {
         }
         adEntity.setImagePath(createPath(image, adEntity).toAbsolutePath().toString());
         adRepository.save(adEntity);
+        log.info("Advertisement image was updated successfully.");
         return true;
     }
 
@@ -131,20 +145,23 @@ public class AdServiceImpl implements AdService {
         Path filePath = Path.of(adImageDirPath, "Advertisement_" + adEntity.getId() + "."
                 + StringUtils.getFilenameExtension(image.getOriginalFilename()));
         AccountServiceImpl.uploadImage(image, filePath);
+        log.info("Upload image from database method was invoked.");
         return filePath;
     }
 
     @Override
     public void downloadAdImageFromDB(int adId, HttpServletResponse response) throws IOException {
         AdEntity adEntity = adRepository.findById(adId).orElseThrow(() -> new IllegalArgumentException(AD_NOT_FOUND));
-        AccountServiceImpl.downloadImage(response,
-                adEntity.getImagePath());
+        AccountServiceImpl.downloadImage(response, adEntity.getImagePath());
+        log.info("Download advertisement image from database method was invoked.");
     }
 
     @Override
     @Transactional(readOnly = true)
     public Ads findByTitle(String title) {
-        return adMapper.toAds(adRepository.findAllByTitleLike(title));
+        Ads foundAds = adMapper.toAds(adRepository.findAllByTitleLike(title));
+        log.info("Advertisement/s with title: {} was/were successfully found.", title);
+        return foundAds;
     }
 
 }
