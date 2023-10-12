@@ -14,3 +14,4 @@ public class ExtendedAdDto {
     private int price;
     private String title;
 }
+
