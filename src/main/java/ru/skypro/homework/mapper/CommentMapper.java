@@ -12,7 +12,7 @@ public class CommentMapper {
                 .setPk(comment.getPk())
                 .setText(comment.getText())
                 .setCreatedAt(comment.getCreatedAt())
-                .setAd(comment.getAd());
+                .setAdDTO(AdMapper.fromAd(comment.getAd()));
     }
     public static CommentView toView(Comment comment){
         return new CommentView()

@@ -84,7 +84,7 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")})
-@PreAuthorize("hasRole('ADMIN') or hasAuthority(@commentServiceImpl.findById(#commentId).getUserDTO().getEmail().equalsIgnoreCase(authentication.name))")
+@PreAuthorize("hasRole('ADMIN') or @commentServiceImpl.findById(#commentId).getUserDTO().getEmail().equalsIgnoreCase(authentication.name)")
     public void deleteComment(@PathVariable("adId") Integer adId,
                               @PathVariable("commentId") Integer commentId,
                               Authentication authentication) {
@@ -109,7 +109,7 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)})
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority(@commentServiceImpl.findById(#commentId).getUserDTO().getEmail().equalsIgnoreCase(authentication.name))")
+    @PreAuthorize("hasRole('ADMIN') or @commentServiceImpl.findById(#commentId).getUserDTO().getEmail().equalsIgnoreCase(authentication.name)")
     public ResponseEntity<CommentView> updateComment(@PathVariable("adId") Integer adId,
                                                      @PathVariable("commentId") Integer commentId,
                                                      @RequestBody @Valid CreateOrUpdateComment comment,

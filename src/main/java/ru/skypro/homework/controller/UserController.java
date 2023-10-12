@@ -44,7 +44,6 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden")})
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority(@userServiceImpl.getUserView(#authentication).email.equalsIgnoreCase(authentication.name))")
     public void setPassword(@RequestBody @Valid NewPassword newPassword,
                             Authentication authentication) {
         userService.setPassword(newPassword,authentication);

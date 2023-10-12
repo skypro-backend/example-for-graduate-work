@@ -11,13 +11,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.UUID;
 
 @Service
 public class ImageServiceImpl implements ImageService {
-    @Value("${path.to.images}/")
+    @Value("${path.to.images}")
     private String pathToImages;
 
     /**
@@ -25,21 +26,14 @@ public class ImageServiceImpl implements ImageService {
      *
      * @param file картинка
      * @return ссылку на картинку
-     * @throws MalformedURLException если URL-адрес неправильно сформирован
      * @throws RuntimeException если введен неверный формат данных
      */
     @SneakyThrows
     @Override
-    public String createImage(MultipartFile file) throws MalformedURLException {
+    public String createImage(MultipartFile file) {
         checkDirectory();
         String imageName = UUID.randomUUID() + "_" + Instant.now().getEpochSecond() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
-        File tempFile = new File(Path.of(pathToImages).toAbsolutePath().toFile(), imageName);
-        try (FileOutputStream fileOutputStream = new FileOutputStream(tempFile)) {
-            fileOutputStream.write(file.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        Files.write(Path.of(pathToImages + imageName),file.getBytes());
         return "/images/" + imageName;
     }
 
@@ -49,6 +43,8 @@ public class ImageServiceImpl implements ImageService {
      */
     private void checkDirectory() {
         File imagesDir = new File(pathToImages);
-        if (!imagesDir.exists()) imagesDir.mkdirs();
+        if (!imagesDir.exists()) {
+            imagesDir.mkdirs();
+        }
     }
 }

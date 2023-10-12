@@ -99,7 +99,7 @@ public class AdsController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")})
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority(@adsServiceImpl.getAdFullInfo(#id).getEmail().equalsIgnoreCase(authentication.name))")
+    @PreAuthorize("hasRole('ADMIN') or @adsServiceImpl.getAdFullInfo(#id).getEmail().equalsIgnoreCase(authentication.name)")
     public void deleteAd(@PathVariable("id") Integer id,Authentication authentication) {
         adsService.deleteAd(id);
     }
@@ -121,7 +121,7 @@ public class AdsController {
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content)})
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority(@adsServiceImpl.getAdFullInfo(#id).getEmail().equalsIgnoreCase(authentication.name))")
+    @PreAuthorize("hasRole('ADMIN') or @adsServiceImpl.getAdFullInfo(#id).getEmail().equalsIgnoreCase(authentication.name)")
     public AdView updateAd(@PathVariable("id") Integer id,
                            @RequestBody @Valid CreateOrUpdateAd properties,
                            Authentication authentication) {
@@ -145,7 +145,7 @@ public class AdsController {
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content)})
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority(@adsServiceImpl.getAdFullInfo(#id).getEmail().equalsIgnoreCase(authentication.name))")
+    @PreAuthorize("hasRole('ADMIN') or @adsServiceImpl.getAdFullInfo(#id).getEmail().equalsIgnoreCase(authentication.name)")
     public String updateImage(@PathVariable("id") Integer id,
                               @RequestPart("image") MultipartFile image,
                               Authentication authentication) {
