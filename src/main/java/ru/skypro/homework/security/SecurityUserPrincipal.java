@@ -19,7 +19,7 @@ public class SecurityUserPrincipal implements UserDetails {
     private UserDTO userDTO;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(userDTO.getRole().getStringRole()));
+        return List.of(new SimpleGrantedAuthority(userDTO.getRole().getAuthority()));
     }
     @Override
     public String getPassword() {

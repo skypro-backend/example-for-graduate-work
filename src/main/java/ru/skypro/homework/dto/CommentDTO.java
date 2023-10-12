@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import ru.skypro.homework.entity.Ad;
 
 import java.time.Instant;
 
@@ -17,6 +16,6 @@ public class CommentDTO {
     private Instant createdAt;
     private String text;
     private UserDTO userDTO;
-    private Ad ad;
+    private AdDTO adDTO;
 
 }
