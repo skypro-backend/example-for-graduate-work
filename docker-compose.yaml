@@ -1,0 +1,35 @@
+version: '2.22.0'
+services:
+  app:
+    container_name: app
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/db_example
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver
+    restart: on-failure
+
+  db:
+    container_name: db
+    image: 'postgres:14.7-alpine'
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=db_example
+    restart: on-failure
+
+  front:
+    build:
+      context: https://github.com/BizinMitya/front-react-avito.git
+    ports:
+      - "3000:3000"
+    restart: on-failure
