@@ -10,9 +10,9 @@ import ru.skypro.homework.dto.User;
 public interface UserService {
     ResponseEntity<?> setPassword(Authentication authentication, NewPassword newPassword);
 
-    ResponseEntity<?> getProfile(Authentication authentication, User user);
+    User getProfile(Authentication authentication);
 
-    ResponseEntity<?> updateUser(Authentication authentication, UpdateUser updateUser);
+    UpdateUser updateUser(Authentication authentication, UpdateUser updateUser);
 
     ResponseEntity<?> updateImage(Authentication authentication, MultipartFile photo);
 }
