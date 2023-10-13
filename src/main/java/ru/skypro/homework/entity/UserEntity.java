@@ -1,5 +1,6 @@
 package ru.skypro.homework.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import ru.skypro.homework.dto.Role;
 
@@ -28,9 +29,10 @@ public class UserEntity {
     private long fileSize;
     private String mediaType;
     @Lob
+    @Column(columnDefinition = "oid")
     private byte[] data;
-    @OneToMany(mappedBy = "user_entity")
+    @OneToMany(mappedBy = "userEntity")
     private Collection<AdEntity> adEntities;
-    @OneToMany(mappedBy = "user_entity")
+    @OneToMany(mappedBy = "userEntity")
     private Collection<CommentEntity> commentEntities;
 }

@@ -23,6 +23,7 @@ public class AdEntity {
     private long fileSize;
     private String mediaType;
     @Lob
+    @Column(columnDefinition = "oid")
     private byte[] data;
     @ManyToOne
     @JoinColumn(name = "user_entity_id")

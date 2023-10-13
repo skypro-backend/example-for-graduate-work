@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.entity.AdEntity;
-import ru.skypro.homework.mappers.AdsMapper;
-import ru.skypro.homework.repository.AdEntityRepository;
+import ru.skypro.homework.mapper.AdsMapper;
+import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.List;
@@ -15,11 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdsServiceImpl implements AdsService {
 
-    private final AdEntityRepository adEntityRepository;
+    private final AdRepository adRepository;
 
     @Override
     public Ads getAllAds() {
-        List<AdEntity> adEntityList = adEntityRepository.findAll();
+        List<AdEntity> adEntityList = adRepository.findAll();
         List<Ad> adList = AdsMapper.INSTANCE.adEntityListToAdList(adEntityList);
         Integer sizeList = adList.size();
 
