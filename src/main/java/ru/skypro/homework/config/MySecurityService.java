@@ -39,6 +39,24 @@ public class MySecurityService {
 
         return authentication.getName().equals(name);
     }
+    /**
+     * Проверяем, что пользователь производящий манипуляции над объявлением являеятся его создателем или АДМИНОМ
+     */
+    public boolean canRefAdd(int id) {
+        Optional<AdEntity> adEntity = Optional.ofNullable(adRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format(
+                "Объявление с индексом \"%s\" не найдено ",
+                id))
+        ));
+        String name = adEntity.get().getUser().getEmail();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            System.out.println(authentication.getAuthorities());
+            return true;
+        }
+
+        return authentication.getName().equals(name);
+    }
 
     private CommentEntity checkForAdAndComment(int adId, int commentId) {
         checkForAd(adId);

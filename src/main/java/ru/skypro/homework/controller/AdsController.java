@@ -9,11 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdService;
 
+import javax.transaction.Transactional;
 import javax.xml.crypto.OctetStreamData;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -64,8 +67,9 @@ public class AdsController {
                 @ApiResponse(responseCode = "404", description = "Not found")
         })
         @DeleteMapping("/{id}")
-        public ResponseEntity deleteUser(@PathVariable int id) {
-                adService.deleteUser(id);
+        @Transactional
+        public ResponseEntity deleteAd(@PathVariable int id) {
+                adService.deleteAd(id);
                 return ResponseEntity.ok().build();
         }
 
@@ -89,8 +93,9 @@ public class AdsController {
                 @ApiResponse(responseCode = "401", description = "Unauthorized")
         })
         @GetMapping("/me")
-        public ResponseEntity<AdsDTO> getAdsByAuthUser(){
-                return ResponseEntity.ok(new AdsDTO());
+        public ResponseEntity<AdsDTO> getAdsByAuthUser(Authentication authentication){
+                System.out.println(authentication);
+                return ResponseEntity.ok(adService.getAdsByAuthUser(authentication.getName()));
         }
 
         @Operation(summary = "Обновление картинки объявления")
