@@ -17,7 +17,7 @@ public class СommentsController {
     @GetMapping("/{id}/comments")
     public Comments getFullCommets(@PathVariable int id) {
         System.out.println("тут будет получение комментариев объявления ");
-        return commentsService.getFullComments(id);
+        return commentsService.getFullComments( id);
     }
     @PostMapping("/{id}/comments")
     public Comments addComments(@PathVariable int id) {
