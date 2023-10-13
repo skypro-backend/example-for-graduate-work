@@ -21,7 +21,7 @@ public class СommentsController {
     }
     @PostMapping("/{id}/comments")
     public Comments addComments(@PathVariable int id) {
-        System.out.println("Добавление комментария к объявлению");
+        System.out.println("Добавление комментария к  объявлению");
         return commentsService.addComments(id);
     }
     @DeleteMapping("/{adId}/comments/{commentId}")
