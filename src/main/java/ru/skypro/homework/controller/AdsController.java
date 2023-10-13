@@ -3,10 +3,10 @@ package ru.skypro.homework.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.adsDto.AdsDto;
-import ru.skypro.homework.dto.adsDto.CreateAdsDto;
-import ru.skypro.homework.dto.adsDto.FullAdsDto;
-import ru.skypro.homework.dto.adsDto.ResponseWrapperAdsDto;
+import ru.skypro.homework.dto.ads.AdsDto;
+import ru.skypro.homework.dto.ads.CreateAdsDto;
+import ru.skypro.homework.dto.ads.FullAdsDto;
+import ru.skypro.homework.dto.ads.ResponseWrapperAdsDto;
 
 import java.util.ArrayList;
 
@@ -16,20 +16,20 @@ public class AdsController {
 
 
     @GetMapping()
-    public ResponseEntity<AdsDto> getAllAds(){
+    public AdsDto getAllAds(){
         AdsDto adsDto = new AdsDto();
-        return ResponseEntity.ok(adsDto);
+        return adsDto;
     }
 
     @PostMapping()
-    public ResponseEntity<AdsDto> addAds(@RequestPart CreateAdsDto ads){
+    public AdsDto addAds(@RequestPart CreateAdsDto ads){
         return null;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FullAdsDto> getAds(@PathVariable Integer id){
+    public FullAdsDto getAds(@PathVariable Integer id){
         FullAdsDto fullAdsDto = new FullAdsDto();
-        return ResponseEntity.ok(fullAdsDto);
+        return fullAdsDto;
     }
 
     @DeleteMapping("/{id}")
@@ -38,7 +38,7 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id){
+    public AdsDto updateAds(@PathVariable Integer id){
         return null;
     }
 
@@ -49,7 +49,7 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}/image")
-    public ResponseEntity<byte[]> updateImage(@PathVariable Integer id,
+    public byte[] updateImage(@PathVariable Integer id,
                                               @RequestPart MultipartFile image){
         return null;
     }
