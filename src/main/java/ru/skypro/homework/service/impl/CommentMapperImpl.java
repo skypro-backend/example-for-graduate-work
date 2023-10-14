@@ -24,10 +24,11 @@ public class CommentMapperImpl implements CommentMapper {
     public Comment toComment(CommentEntity commentEntity) {
         Comment comment = new Comment();
         comment.setAuthor(commentEntity.getUserEntity().getId());
-        comment.setImage("/users/image/" + commentEntity.getUserEntity().getId());
+        comment.setAuthorImage("/users/image/" + commentEntity.getUserEntity().getId());
+        comment.setAuthorFirstName(commentEntity.getUserEntity().getFirstName());
+        comment.setCreatedAt(commentEntity.getCreatedAt());
         comment.setPk(commentEntity.getId());
-        comment.setPrice(commentEntity.getAdEntity().getPrice());
-        comment.setTitle(commentEntity.getAdEntity().getTitle());
+        comment.setText(commentEntity.getText());
         return comment;
     }
 

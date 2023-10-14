@@ -5,8 +5,9 @@ import lombok.Data;
 @Data
 public class Comment {
     private int author;
-    private String image;
+    private String authorImage;
+    private String authorFirstName;
+    private Long createdAt;
     private int pk;
-    private int price;
-    private String title;
+    private String text;
 }
