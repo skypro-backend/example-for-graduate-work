@@ -31,8 +31,8 @@ public class UserEntity {
     @Lob
     @Column(columnDefinition = "oid")
     private byte[] data;
-    @OneToMany(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<AdEntity> adEntities;
-    @OneToMany(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<CommentEntity> commentEntities;
 }
