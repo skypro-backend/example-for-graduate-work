@@ -51,7 +51,7 @@ public class AdController {
 
 
     //Получение объявлений авторизованного пользователя
-    @GetMapping("/me}")
+    @GetMapping("/me")
     public AdsDTO getUserAds() {
         return adService.getUserAdds();
     }
