@@ -96,7 +96,7 @@ public class AuthServiceImpl implements AuthService {
         Role role = (register.getRole() == null) ? USER : register.getRole();
         register.setRole(role);
         userRepository.save(userMapper.toUserEntity(register));
-        log.info("User with username was successfully registered. " + LocalDate.now());
+        log.info("User was successfully registered. " + LocalDate.now());
         return true;
     }
 }
