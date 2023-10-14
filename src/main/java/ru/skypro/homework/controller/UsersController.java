@@ -10,6 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.service.UsersService;
+
+import java.io.IOException;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -17,6 +20,8 @@ import ru.skypro.homework.dto.User;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UsersController {
+
+    private final UsersService usersService;
 
     /**
      * Метод для обновления пароля.
@@ -26,9 +31,12 @@ public class UsersController {
      */
     @PostMapping("/set_password")
     public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword) {
+        if (usersService.setPassword(newPassword)) {
+            //если новый пароль не совпадает с текущим паролем и записал в БД, то вернуть статус 200
+            return ResponseEntity.ok().build();
+        }
         //если новый пароль совпадает с текущим паролем, то вернуть статус ошибки 403(типо бесполезно поворять с тем же запросом)
-        //если новый пароль не совпадает с текущим паролем и записал в БД, то вернуть статус 200
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     /**
@@ -38,9 +46,7 @@ public class UsersController {
      */
     @GetMapping("/me")
     public ResponseEntity<User> getUser() {
-        //если нет ни одного пользователя, вернуть статус ошибки 401(типо в следующий раз в БД может быть пользователь)
-        //если в БД таблица не пуста, вернуть статус 200
-        return ResponseEntity.status(HttpStatus.OK).body(new User());
+        return ResponseEntity.ok(usersService.getUser());
     }
 
     /**
@@ -51,10 +57,10 @@ public class UsersController {
      */
     @PatchMapping("/me")
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
-        //если такого пользователя не существует, то вернуть 401(типо в следующий раз в БД может быть пользователь)
-        //если такой пользователь существует, сохранить изменения, и вернуть статус 200
-        return ResponseEntity.status(HttpStatus.OK).body(new UpdateUser());
-
+        if (usersService.updateUser(updateUser)) {
+            return ResponseEntity.ok(updateUser);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     /**
@@ -64,9 +70,10 @@ public class UsersController {
      * @return статус 200, если аватарка успешно обновлена.
      */
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile file) {
-        //если такой аватарки пользователя не существует, то вернуть 401(типо в следующий раз в БД может быть аватарка пользователя)
-        //если такая аватарка пользователя существует, вернуть статус 200
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile file) throws IOException {
+        if (usersService.updateUserImage(file)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
