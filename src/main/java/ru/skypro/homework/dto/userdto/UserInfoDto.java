@@ -1,12 +1,16 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.dto.userdto;
 
+import lombok.Data;
+import ru.skypro.homework.dto.authdto.Role;
+
+@Data
 public class UserInfoDto {
 
     private int id;
 
     private String email;
 
-    private String firtsName;
+    private String firstName;
 
     private String lastName;
 

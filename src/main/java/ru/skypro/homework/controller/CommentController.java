@@ -17,12 +17,10 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<CommentsDTO> getComments(Authentication authentication,
+    public CommentsDTO getComments(Authentication authentication,
                                                    @PathVariable int id) {
         CommentsDTO comments = commentService.getComments(authentication, id);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(comments);
+        return comments;
     }
 
     @PostMapping("/{id}/comments")

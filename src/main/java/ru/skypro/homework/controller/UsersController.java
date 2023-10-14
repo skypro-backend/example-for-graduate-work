@@ -1,11 +1,9 @@
 package ru.skypro.homework.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.NewPassDto;
-import ru.skypro.homework.dto.UserInfoDto;
+import ru.skypro.homework.dto.userdto.NewPassDto;
+import ru.skypro.homework.dto.userdto.UserInfoDto;
 
 @RestController
 @RequestMapping("/users")
@@ -14,24 +12,29 @@ public class UsersController {
 
 
     @PostMapping("/set_password")
-    public ResponseEntity<Void> updatePassword(
+    public void updatePassword(
             @RequestBody NewPassDto newPassDto) {
-        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserInfoDto> getInfoAboutUser() {
-        return new ResponseEntity<>(HttpStatus.OK);//изменить на DTO
+    public UserInfoDto getInfoAboutUser() {
+        UserInfoDto userInfoDto = new UserInfoDto();
+        userInfoDto.setId(1);
+        userInfoDto.setFirstName("222");
+        userInfoDto.setLastName("Коп");
+        userInfoDto.setPhone("12345");
+        return userInfoDto;
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UserInfoDto> updateInfoAboutUser(
+    public UserInfoDto updateInfoAboutUser(
             @RequestBody UserInfoDto userInfoDto) {
-        return new ResponseEntity<>(HttpStatus.OK); //изменить на DTO
+        return userInfoDto; //изменить на DTO
     }
 
     @PatchMapping("/me/image")
-    ResponseEntity<byte[]> updateUserImage(
+  public byte[] updateUserImage(
             @RequestPart MultipartFile image) {
         return null;
     }
