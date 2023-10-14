@@ -14,7 +14,6 @@ public interface AdsMapper {
 
     AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
-    @Mapping(source = "filePath", target = "image")
     Ad adEntityToAd(AdEntity adEntity);
 
     @InheritInverseConfiguration

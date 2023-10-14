@@ -42,7 +42,7 @@ public class AdsController {
     @PostMapping
     public ResponseEntity<Ad> addAd(@ModelAttribute CreateOrUpdateAd properties,
                                     @RequestParam MultipartFile image) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(new Ad());
+        return ResponseEntity.status(HttpStatus.CREATED).body(adsService.addAd(properties, image));
     }
 
     /**
@@ -53,7 +53,7 @@ public class AdsController {
      */
     @GetMapping(value = "/{id}")
     public ResponseEntity<ExtendedAd> getAds(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ExtendedAd());
+        return ResponseEntity.status(HttpStatus.OK).body(adsService.getAds(id));
     }
 
     /**
@@ -77,7 +77,7 @@ public class AdsController {
     @PatchMapping(value = "/{id}")
     public ResponseEntity<Ad> updateAds(@PathVariable Integer id,
                                         @RequestBody CreateOrUpdateAd createOrUpdateAd) {
-        return ResponseEntity.status(HttpStatus.OK).body(new Ad());
+        return ResponseEntity.status(HttpStatus.OK).body(adsService.updateAds(id, createOrUpdateAd));
     }
 
     /**
@@ -85,7 +85,7 @@ public class AdsController {
      */
     @GetMapping(value = "/me")
     public ResponseEntity<Ads> getAdsMe() {
-        return ResponseEntity.status(HttpStatus.OK).body(new Ads());
+        return ResponseEntity.status(HttpStatus.OK).body(adsService.getAdsMe());
     }
 
     /**
@@ -98,6 +98,6 @@ public class AdsController {
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateImage(@PathVariable Integer id,
                                               @RequestParam("image") MultipartFile file) {
-        return ResponseEntity.status(HttpStatus.OK).body("File uploaded");
+        return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(id, file));
     }
 }
