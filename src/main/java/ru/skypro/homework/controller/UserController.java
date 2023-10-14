@@ -11,9 +11,10 @@ public class UserController {
 
     @Autowired
     private UserController userService;
-
     // Получение всех пользователей
     @GetMapping
+
+
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
@@ -26,6 +27,8 @@ public class UserController {
 
     // Создание нового пользователя
     @PostMapping
+
+
     public User createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
