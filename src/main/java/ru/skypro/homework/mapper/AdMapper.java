@@ -20,7 +20,7 @@ public interface AdMapper {
 
       @Mapping(target = "pk", source = "id")
       @Mapping(target = "author", source = "author.id")
-      AdDto AdDto(Ad ad); // конвертация сущности в DTO
+      AdDto toAdDto(Ad ad); // конвертация сущности в DTO
 
       @Mapping(target = "id", ignore = true)
       @Mapping(target = "author", ignore = true)
