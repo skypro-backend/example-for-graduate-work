@@ -11,6 +11,7 @@ import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exeptions.ForbiddenException;
+import ru.skypro.homework.exeptions.UnauthorizedException;
 import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.entities.UserEntity;
@@ -65,7 +66,7 @@ public class UserServiceImpl implements UserService {
         UserDetails userDetails = securityUserDetailsService.loadUserByUsername(user.getUsername());
 
         if (!passwordEncoder.matches(newPasswordDTO.getCurrentPassword(), userDetails.getPassword())) {
-            throw new ForbiddenException("Пароли не совпадают");
+            throw new UnauthorizedException("Пароли не совпадают");
         }
 
         String encodedNewPassword = passwordEncoder.encode(newPassword);
