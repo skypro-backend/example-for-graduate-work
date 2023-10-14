@@ -17,6 +17,10 @@ public class AdsServiceImpl implements AdsService {
 
     private final AdRepository adRepository;
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Ads getAllAds() {
         List<AdEntity> adEntityList = adRepository.findAll();
