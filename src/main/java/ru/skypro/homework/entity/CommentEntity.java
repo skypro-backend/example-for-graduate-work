@@ -12,6 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 public class CommentEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pk;
@@ -20,7 +21,6 @@ public class CommentEntity {
     @ManyToOne
     @JoinColumn(name = "user_entity_id")
     private UserEntity userEntity;
-
     @ManyToOne
     @JoinColumn(name = "ad_entity_id")
     private AdEntity adEntity;

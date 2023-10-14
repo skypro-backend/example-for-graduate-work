@@ -12,6 +12,7 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.service.AdsService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -29,7 +30,7 @@ public class AdsController {
      */
     @GetMapping
     public ResponseEntity<Ads> getAllAds() {
-        return ResponseEntity.status(HttpStatus.OK).body(new Ads());
+        return ResponseEntity.status(HttpStatus.OK).body(adsService.getAllAds());
     }
 
     /**

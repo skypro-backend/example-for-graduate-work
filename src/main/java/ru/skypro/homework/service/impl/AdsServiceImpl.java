@@ -25,7 +25,7 @@ public class AdsServiceImpl implements AdsService {
 
         Ads ads = new Ads();
         ads.setCount(sizeList);
-        ads.setResults((Ad) adList);//что-то исправил
+        ads.setResults((Ad) adList);
         return ads;
     }
 }

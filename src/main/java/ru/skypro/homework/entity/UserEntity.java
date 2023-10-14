@@ -14,10 +14,10 @@ import java.util.Collection;
 @AllArgsConstructor
 @Entity
 public class UserEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String username;
     private String password;
     private String firstName;
