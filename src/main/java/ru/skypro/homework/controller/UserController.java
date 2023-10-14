@@ -1,7 +1,9 @@
 package ru.skypro.homework.controller;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.*;
 
 import java.util.List;
 
@@ -11,37 +13,31 @@ public class UserController {
 
     @Autowired
     private UserController userService;
-    // Получение всех пользователей
-    @GetMapping
 
-
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
 
     // Получение пользователя по ID
-    @GetMapping("/{userId}")
-    public User getUserById(@PathVariable Long userId) {
-        return userService.getUserById(userId);
+    @GetMapping("/me")
+    public User getUserById(@PathVariable int userId) {
+        return new User(1, "fe", "fre", "vtgr", "f54", Role.USER.toString(), "/gfd/gtfr");
     }
 
     // Создание нового пользователя
-    @PostMapping
-
-
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    @PostMapping("/set_password")
+    public void setPasswordUser() {
+        System.out.println("Обновление пароля");
+        new NewPassword("gtrji", "fregtr");
     }
 
-    // Обновление существующего пользователя
-    @PutMapping("/{userId}")
-    public User updateUser(@PathVariable Long userId, @RequestBody User user) {
-        return userService.updateUser(userId, user);
+    @PatchMapping("/me")
+    public UpdateUser updateInfoUsers(@RequestBody User user) {
+        System.out.println("Обновление информации об авторизованном пользователе");
+        return new UpdateUser("btr", "reg", "rr");
     }
 
-    // Удаление пользователя по ID
-    @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userId);
+    @PatchMapping("/me/image")
+    public void updateAvatarUsers( @PathVariable String pathImage) {
+        System.out.println("Обновление avatar об авторизованном пользователе");
+        System.out.println(pathImage);
+
     }
 }
