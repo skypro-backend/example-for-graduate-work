@@ -6,6 +6,7 @@ import ru.skypro.homework.entity.ImageEntity;
 import java.io.IOException;
 
 public interface ImageService {
+
     void uploadUserImage(MultipartFile file) throws IOException;
 
     ImageEntity findUserImage(Integer userId);

@@ -23,4 +23,5 @@ public class AdEntity {
     @ManyToOne
     @JoinColumn(name = "user_entity_id")
     private UserEntity userEntity;
+
 }

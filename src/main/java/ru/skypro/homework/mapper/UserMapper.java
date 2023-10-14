@@ -28,4 +28,5 @@ public interface UserMapper {
      */
     @InheritInverseConfiguration
     UserEntity userToUserEntity(User user);
+
 }

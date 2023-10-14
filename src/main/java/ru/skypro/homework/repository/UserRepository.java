@@ -17,4 +17,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
      * @return объект пользователя
      */
     UserEntity findByUsername(String email);
+
 }

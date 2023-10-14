@@ -16,4 +16,5 @@ public interface UsersService {
     boolean updateUser(UpdateUser updateUser);
 
     boolean updateUserImage(MultipartFile file) throws IOException;
+
 }

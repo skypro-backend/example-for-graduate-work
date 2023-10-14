@@ -18,10 +18,12 @@ public class CommentEntity {
     private Integer pk;
     private String text;
     private Long createdAt;
+
     @ManyToOne
     @JoinColumn(name = "user_entity_id")
     private UserEntity userEntity;
     @ManyToOne
     @JoinColumn(name = "ad_entity_id")
     private AdEntity adEntity;
+
 }

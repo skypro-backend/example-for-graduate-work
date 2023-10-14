@@ -89,4 +89,5 @@ public class UsersServiceImpl implements UsersService {
         imageService.uploadUserImage(file);
         return true;
     }
+
 }

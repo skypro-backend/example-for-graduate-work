@@ -22,4 +22,5 @@ public interface AdsMapper {
 
 
     List<Ad> adEntityListToAdList(List<AdEntity> adEntityList);
+
 }

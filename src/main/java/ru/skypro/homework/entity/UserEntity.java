@@ -29,4 +29,5 @@ public class UserEntity {
     private Collection<AdEntity> adEntities;
     @OneToMany(mappedBy = "userEntity")
     private Collection<CommentEntity> commentEntities;
+
 }

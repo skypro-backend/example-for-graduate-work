@@ -10,6 +10,7 @@ import ru.skypro.homework.repository.UserRepository;
 @Component
 @RequiredArgsConstructor
 public class UserAuthentication {
+
     private final UserRepository userRepository;
 
     /**
@@ -20,4 +21,5 @@ public class UserAuthentication {
         Authentication authenticationUser = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findByUsername(authenticationUser.getName());
     }
+
 }
