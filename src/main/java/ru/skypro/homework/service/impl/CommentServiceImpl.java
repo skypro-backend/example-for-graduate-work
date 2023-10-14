@@ -57,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
     public Comments getComments(Integer id) {
         List<CommentEntity> commentEntityList = commentRepository
                 .findCommentEntitiesByAdEntity_Id(id);
-        log.info("List of comments received. " + LocalDate.now());
+        log.info("List of comments was received successfully. " + LocalDate.now());
         return commentMapper.toComments(commentEntityList);
     }
 
@@ -84,7 +84,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         commentEntity.setUserEntity(userEntity);
         commentEntity.setAdEntity(adEntity);
-        log.info("A comment has been created in the database. " + LocalDate.now());
+        log.info("A comment was created in database. " + LocalDate.now());
         return commentMapper.toComment(commentRepository.save(commentEntity));
     }
 
@@ -109,11 +109,11 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
         if (userEntity.getRole() == Role.ADMIN || commentEntity.getUserEntity().equals(userEntity)) {
             commentRepository.delete(commentEntity);
-            log.info("Removed comment from database. " + LocalDate.now());
+            log.info("Comment was removed from database. " + LocalDate.now());
             return true;
         }
-        log.info("It was not possible to remove the comment from the melon database. " +
-                "There may be no comment with this identification number." + LocalDate.now());
+        log.info("It is not possible to delete comment from database. " +
+                "Maybe there is no comment with this identification number in database." + LocalDate.now());
         return false;
     }
 
@@ -144,7 +144,7 @@ public class CommentServiceImpl implements CommentService {
             return commentMapper.toComment(commentRepository.save(
                     commentMapper.toCommentEntity(createOrUpdateComment, commentEntity)));
         }
-        log.info("It was not possible to update comment in the database. " + LocalDate.now());
+        log.info("It is not possible to update a comment in database. " + LocalDate.now());
         return null;
     }
 }
