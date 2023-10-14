@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.skypro.homework.entity.UserEntity;
 
-import java.util.Optional;
 
 /**
  * Интерфейс для обращения к БД пользователя
@@ -13,10 +12,9 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     /**
-     * Метод, который ищет пользователя по имени
-     * @param email - имя пользователя
+     * Метод, который ищет пользователя по email
+     * @param email - логин пользователя
      * @return объект пользователя
      */
-    //Optional<UserEntity> findByUsername(String email);
     UserEntity findByUsername(String email);
 }

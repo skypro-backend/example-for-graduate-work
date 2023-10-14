@@ -6,22 +6,28 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = "pk")
+@EqualsAndHashCode(exclude = "id")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class CommentEntity {
+public class ImageEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer pk;
-    private String text;
-    private Long createdAt;
-    @ManyToOne
-    @JoinColumn(name = "user_entity_id")
+    private Integer id;
+
+    private String filePath;
+    private long fileSize;
+    private String mediaType;
+
+    @Lob
+    @Column(columnDefinition = "oid")
+    private byte[] data;
+
+    @OneToOne
     private UserEntity userEntity;
 
-    @ManyToOne
-    @JoinColumn(name = "ad_entity_id")
+    @OneToOne
     private AdEntity adEntity;
 }

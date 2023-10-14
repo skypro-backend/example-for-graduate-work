@@ -26,7 +26,7 @@ public class UsersController {
     /**
      * Метод для обновления пароля
      * @param newPassword принимает новый пароль от пользователя
-     * @return статус 200, если новый пароль не совпадает с текущим паролем и сохранился в БД
+     * @return статус 200, если новый пароль не совпадает с текущим паролем, и сохранился в БД
      */
     @PostMapping("/set_password")
     public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword) {
@@ -55,10 +55,8 @@ public class UsersController {
     @PatchMapping("/me")
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
         if (usersService.updateUser(updateUser)) {
-            //если такой пользователь существует, сохранить изменения, и вернуть статус 200
             return ResponseEntity.ok(updateUser);
         }
-        //если такого пользователя не существует, то вернуть 401(типо в следующий раз в БД может быть пользователь)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
@@ -70,10 +68,8 @@ public class UsersController {
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile file) throws IOException {
         if (usersService.updateUserImage(file)) {
-            //если такая аватарка пользователя существует, вернуть статус 200
             return ResponseEntity.ok().build();
         }
-        //если такой аватарки пользователя не существует, то вернуть 401(типо в следующий раз в БД может быть аватарка пользователя)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

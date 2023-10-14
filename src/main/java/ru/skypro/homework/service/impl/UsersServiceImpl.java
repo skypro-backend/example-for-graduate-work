@@ -1,9 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
@@ -11,11 +8,13 @@ import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UsersService;
+import ru.skypro.homework.util.UserAuthentication;
 
 import java.io.IOException;
-import java.util.Optional;
 
 /**
  * Сервис для обработки запроса от UsersController, обращений в БД
@@ -24,7 +23,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
+
     private final UserRepository userRepository;
+
+    private final ImageService imageService;
+
+    private final UserAuthentication userAuthentication;
+
+    private final ImageRepository imageRepository;
 
     /**
      * Метод, который сравнивает значения текущего пароля с новым
@@ -33,20 +39,24 @@ public class UsersServiceImpl implements UsersService {
      */
     @Override
     public boolean setPassword(NewPassword newPassword) {
-        UserEntity currentUserEntity = getCurrentUserName();
+        UserEntity currentUserEntity = userAuthentication.getCurrentUserName();
                 //.orElseThrow(() -> new UsernameNotFoundException("User not found"));
         // если текущий пароль не совпадает с новым паролем, то изменить, затем сохранить новый пароль в БД и вернуть true
         return false;
     }
 
     /**
-     * Метод, который ищет в БД пользователя по имени
+     * Метод, который ищет в БД пользователя по логину
      * @return данные пользователя
      */
     @Override
     public User getUser() {
-        UserEntity currentUserEntity = getCurrentUserName();
-        return UserMapper.INSTANCE.userEntityToUser(currentUserEntity);
+        UserEntity currentUserEntity = userAuthentication.getCurrentUserName();
+        User user = UserMapper.INSTANCE.userEntityToUser(currentUserEntity);
+
+        String userFilePath = imageRepository.findFilePathByUserEntityId(currentUserEntity.getId());
+        user.setImage(userFilePath);
+        return user;
     }
 
     /**
@@ -56,15 +66,13 @@ public class UsersServiceImpl implements UsersService {
      */
     @Override
     public boolean updateUser(UpdateUser updateUser) {
-        //Optional<UserEntity> currentUserEntity = userRepository.findByUsername(getCurrentUserName());
-        UserEntity currentUserEntity1 = getCurrentUserName();
-        //UserEntity currentUserEntity2 = getUser().getEmail();
-//        currentUserEntity.ifPresent((userEntity) -> UserMapper.INSTANCE.userToUserEntity(user));
-        if (!currentUserEntity1.getUsername().isEmpty()) {
-            currentUserEntity1.setFirstName(updateUser.getFirstName());
-            currentUserEntity1.setLastName(updateUser.getLastName());
-            currentUserEntity1.setPhone(updateUser.getPhone());
-            userRepository.save(currentUserEntity1);
+        UserEntity currentUserEntity = userAuthentication.getCurrentUserName();
+
+        if (!currentUserEntity.getUsername().isEmpty()) {
+            currentUserEntity.setFirstName(updateUser.getFirstName());
+            currentUserEntity.setLastName(updateUser.getLastName());
+            currentUserEntity.setPhone(updateUser.getPhone());
+            userRepository.save(currentUserEntity);
             return true;
         }
         return false;
@@ -73,24 +81,12 @@ public class UsersServiceImpl implements UsersService {
     /**
      * Метод, который меняет аватарку пользователя, и сохраняет в БД
      * @param file - значение нового файла
+     * @return true, если аватарка поменялась, и сохранилась в БД
      * @throws IOException
      */
     @Override
     public boolean updateUserImage(MultipartFile file) throws IOException {
-        UserEntity userEntity = getCurrentUserName();
-                //.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        userEntity.setData(file.getBytes());
-        userRepository.save(userEntity);
+        imageService.uploadUserImage(file);
         return true;
-    }
-
-    /**
-     * Приватный метод, который вытаскивает имя авторизованного пользователя
-     * @return имя авторизованного пользователя
-     */
-    private UserEntity getCurrentUserName() {
-        Authentication authenticationUser = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByUsername(authenticationUser.getName());
     }
 }
