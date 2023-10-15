@@ -7,13 +7,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UsersService;
-
-import java.io.IOException;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -31,7 +28,7 @@ public class UsersController {
      * @return статус 200, если новый пароль не совпадает с текущим паролем и сохранился в БД.
      */
     @PostMapping("/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword) {
+    public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword) { // TODO: 14.10.2023 требуется дороботка
         if (usersService.setPassword(newPassword)) {
             //если новый пароль не совпадает с текущим паролем и записал в БД, то вернуть статус 200
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -47,7 +44,11 @@ public class UsersController {
      */
     @GetMapping("/me")
     public ResponseEntity<User> getUser() {
-        return ResponseEntity.status(HttpStatus.OK).body(usersService.getUser());
+        User user = usersService.getUser();
+        if (user.getEmail() == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     /**
@@ -71,7 +72,7 @@ public class UsersController {
      * @return статус 200, если аватарка успешно обновлена.
      */
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile file) throws IOException {
+    public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile file) {
         if (usersService.updateUserImage(file)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         }

@@ -1,28 +1,23 @@
 package ru.skypro.homework.service;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.ExtendedAd;
 
 public interface AdsService {
 
-    Ads getAllAds();
+    ResponseEntity<?> getAllAds();
 
-    Ad addAd(CreateOrUpdateAd properties, MultipartFile image);
+    ResponseEntity<?> addAd(CreateOrUpdateAd properties, MultipartFile image);
 
-    ExtendedAd getAds(Integer id);
+    ResponseEntity<?> getAds(Integer adPk);
 
-    boolean removeAd(Integer id);
+    ResponseEntity<?> removeAd(Integer adPk);
 
-    Ad updateAds(Integer id, CreateOrUpdateAd createOrUpdateAd);
+    ResponseEntity<?> updateAds(Integer adPk, CreateOrUpdateAd createOrUpdateAd);
 
-    Ads getAdsMe();
+    ResponseEntity<?> getAdsMe();
 
-    String updateImage(Integer id, MultipartFile file);
+    ResponseEntity<?> updateImage(Integer adPk, MultipartFile file);
 
 }

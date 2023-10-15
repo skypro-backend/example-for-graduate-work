@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
@@ -21,6 +22,7 @@ import java.io.IOException;
  * и возврата ответа в UsersController
  */
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
 
@@ -38,7 +40,7 @@ public class UsersServiceImpl implements UsersService {
      * @return true, если текущий пароль не совпадает с новым паролем; false, если пароли одинаковые
      */
     @Override
-    public boolean setPassword(NewPassword newPassword) {
+    public boolean setPassword(NewPassword newPassword) { // TODO: 14.10.2023 требуется дороботка
         UserEntity currentUserEntity = userAuthentication.getCurrentUserName();
                 //.orElseThrow(() -> new UsernameNotFoundException("User not found"));
         // если текущий пароль не совпадает с новым паролем, то изменить, затем сохранить новый пароль в БД и вернуть true
@@ -54,6 +56,7 @@ public class UsersServiceImpl implements UsersService {
         UserEntity currentUserEntity = userAuthentication.getCurrentUserName();
         User user = UserMapper.INSTANCE.userEntityToUser(currentUserEntity);
 
+        // TODO: 14.10.2023 доработать UserMapper
         String userFilePath = imageRepository.findFilePathByUserEntityId(currentUserEntity.getId());
         user.setImage(userFilePath);
         return user;
@@ -82,12 +85,16 @@ public class UsersServiceImpl implements UsersService {
      * Метод, который меняет аватарку пользователя, и сохраняет в БД
      * @param file - значение нового файла
      * @return true, если аватарка поменялась, и сохранилась в БД
-     * @throws IOException
      */
     @Override
-    public boolean updateUserImage(MultipartFile file) throws IOException {
-        imageService.uploadUserImage(file);
-        return true;
+    public boolean updateUserImage(MultipartFile file) {
+        try {
+            imageService.uploadUserImage(file);
+            return true;
+        } catch (IOException e) {
+            log.error("Image nou uploaded");
+            return false;
+        }
     }
 
 }

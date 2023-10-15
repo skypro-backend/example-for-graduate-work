@@ -9,6 +9,10 @@ public interface ImageService {
 
     void uploadUserImage(MultipartFile file) throws IOException;
 
+    byte[] uploadAdImage(Integer adPk, MultipartFile file) throws IOException;
+
     ImageEntity findUserImage(Integer userId);
+
+    ImageEntity findAdImage(Integer adPk);
 
 }
