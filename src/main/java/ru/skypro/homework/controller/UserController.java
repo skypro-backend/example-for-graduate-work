@@ -5,17 +5,18 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
 
 import java.util.List;
-@CrossOrigin(value = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
+    @Autowired
+    private UserController userService;
 
-    // Получение пользователя
+    // Получение пользователя по ID
     @GetMapping("/me")
-    public User getUser() {
-        return new User(1, "rrr", "Iri", "Romanov", "*89845", Role.USER.toString(), "gfmtreo/trbvt");
-//        return new User(0, "fe", "Obito", "Rim", "f55", Role.USER.toString(), "/gfd/gtfr");
+    public User getUserById(@PathVariable int userId) {
+        return new User(1, "fe", "fre", "vtgr", "f54", Role.USER.toString(), "/gfd/gtfr");
     }
 
     // Создание нового пользователя
