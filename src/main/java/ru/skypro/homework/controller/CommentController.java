@@ -132,7 +132,7 @@ public class CommentController {
     )
     public ResponseEntity<CommentDto> updateComment(@PathVariable Integer adId,
                                                     @PathVariable Integer commentId,
-                                                    @RequestBody CommentDto comment) {
+                                                    @RequestBody CreateOrUpdateComment comment) {
         try {
             CommentDto commentDto = commentService.updateComment(adId, commentId, comment).getBody();
             return ResponseEntity.ok(commentDto);
@@ -141,6 +141,7 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
 
 
 

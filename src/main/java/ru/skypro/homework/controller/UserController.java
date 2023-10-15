@@ -6,7 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
-import ru.skypro.homework.model.Picture;
 
 /**
  * Контроллер для работы с пользователями

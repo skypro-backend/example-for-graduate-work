@@ -20,7 +20,6 @@ public class Register {
     private String phone;
     private Role role;
 
-
     public String getUsername() {
         return userName;
     }
@@ -32,4 +31,5 @@ public class Register {
     public Role getRole() {
         return role;
     }
+
 }
