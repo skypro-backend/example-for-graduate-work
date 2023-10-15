@@ -5,8 +5,6 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 
-import java.io.IOException;
-
 public interface UsersService {
 
     boolean setPassword(NewPassword newPassword);
@@ -15,6 +13,6 @@ public interface UsersService {
 
     boolean updateUser(UpdateUser updateUser);
 
-    boolean updateUserImage(MultipartFile file) throws IOException;
+    boolean updateUserImage(MultipartFile file);
 
 }
