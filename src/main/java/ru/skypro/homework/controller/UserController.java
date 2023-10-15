@@ -11,16 +11,6 @@ import ru.skypro.homework.dto.*;
 @RequestMapping("/users")
 public class UserController {
 
-    @PostMapping("/register")
-    public ResponseEntity<RegisterDto> registerUser(@RequestBody RegisterDto registerDto) {
-        return ResponseEntity.ok(new RegisterDto());
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<LoginDto> loginUser(@RequestBody LoginDto loginDto) {
-        return ResponseEntity.ok(new LoginDto());
-    }
-
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUserInfo() {
         return ResponseEntity.ok(new UserDto());
