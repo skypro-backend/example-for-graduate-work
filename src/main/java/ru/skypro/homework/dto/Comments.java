@@ -2,8 +2,10 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class Comments {
-    Comment comment;
-    int count;
+    private List<Comment> Listcomment;
+    private   int count;
 }

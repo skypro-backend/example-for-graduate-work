@@ -4,11 +4,11 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class User {
-    int id;
-    String email;
-    String firsName;
-    String lastName;
-    String phone;
-    String role;
-    String image;
+    private    int id;
+    private  String email;
+    private   String firsName;
+    private   String lastName;
+    private   String phone;
+    private   String role;
+    private  String image;
 }

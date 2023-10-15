@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class CreateOrUpdateComment {
 //    Необходимо ограничить min 8 and max 64
-    String text;
+private    String text;
 }
