@@ -20,7 +20,7 @@ public class AdEntity {
     private String title;
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_entity_id")
     private UserEntity userEntity;
 

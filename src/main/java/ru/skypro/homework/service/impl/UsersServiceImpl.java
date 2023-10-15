@@ -28,11 +28,14 @@ public class UsersServiceImpl implements UsersService {
 
     private final UserRepository userRepository;
 
+    private final ImageRepository imageRepository;
+
     private final ImageService imageService;
+
+    private final UserMapper userMapper;
 
     private final UserAuthentication userAuthentication;
 
-    private final ImageRepository imageRepository;
 
     /**
      * Метод, который сравнивает значения текущего пароля с новым
@@ -54,7 +57,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public User getUser() {
         UserEntity currentUserEntity = userAuthentication.getCurrentUserName();
-        User user = UserMapper.INSTANCE.userEntityToUser(currentUserEntity);
+        User user = userMapper.userEntityToUser(currentUserEntity);
 
         // TODO: 14.10.2023 доработать UserMapper
         String userFilePath = imageRepository.findFilePathByUserEntityId(currentUserEntity.getId());

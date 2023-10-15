@@ -34,9 +34,11 @@ public class AdsServiceImpl implements AdsService {
 
     private final UserRepository userRepository;
 
+    private final ImageRepository imageRepository;
+
     private final ImageService imageService;
 
-    private final ImageRepository imageRepository;
+    private final AdsMapper adsMapper;
 
     private final UserAuthentication userAuthentication;
 
@@ -49,8 +51,8 @@ public class AdsServiceImpl implements AdsService {
     public ResponseEntity<?> getAllAds() {
         List<AdEntity> adEntityList = adRepository.findAll();
 
-        // TODO: 14.10.2023 доработать AdsMapper
-        List<Ad> adList = AdsMapper.INSTANCE.adEntityListToAdList(adEntityList);
+        // TODO: 14.10.2023 доработать AdsMapper чтобы передавался image
+        List<Ad> adList = adsMapper.adEntityListToAdList(adEntityList);
         Integer sizeList = adList.size();
 
         Ads ads = new Ads();
@@ -68,7 +70,7 @@ public class AdsServiceImpl implements AdsService {
      */
     @Override
     public ResponseEntity<?> addAd(CreateOrUpdateAd properties, MultipartFile image) {
-        AdEntity newAdEntity = AdsMapper.INSTANCE.createOrUpdateAdToAdEntity(properties);
+        AdEntity newAdEntity = adsMapper.createOrUpdateAdToAdEntity(properties);
         UserEntity currentUserEntity = userAuthentication.getCurrentUserName();
 
         if (currentUserEntity.getId() == null) {
@@ -83,10 +85,9 @@ public class AdsServiceImpl implements AdsService {
                 log.error("Image not uploaded");
             }
 
-            // TODO: 14.10.2023 доработать AdsMapper
+            // TODO: 14.10.2023 доработать AdsMapper чтобы передавался image
             String filePath = imageRepository.findFilePathByAdEntityPk(savedAdEntity.getPk());
-            Ad ad = AdsMapper.INSTANCE.adEntityToAd(savedAdEntity);
-            ad.setAuthor(savedAdEntity.getUserEntity().getId());
+            Ad ad = adsMapper.adEntityToAd(savedAdEntity);
             ad.setImage(filePath);
             return new ResponseEntity<>(ad, HttpStatus.CREATED);
         }
@@ -109,13 +110,9 @@ public class AdsServiceImpl implements AdsService {
             AdEntity foundedAdEntity = checkForExistAd.get();
             if (foundedAdEntity.getUserEntity().getId() != null) {
 
-                // TODO: 14.10.2023 доработать AdsMapper
+                // TODO: 14.10.2023 доработать AdsMapper чтобы передавался image
                 String filePath = imageRepository.findFilePathByAdEntityPk(adPk);
-                ExtendedAd extendedAd = AdsMapper.INSTANCE.adEntityToExtendedAd(foundedAdEntity);
-                extendedAd.setAuthorFirstName(foundedAdEntity.getUserEntity().getFirstName());
-                extendedAd.setAuthorLastName(foundedAdEntity.getUserEntity().getLastName());
-                extendedAd.setEmail(foundedAdEntity.getUserEntity().getUsername());
-                extendedAd.setPhone(foundedAdEntity.getUserEntity().getPhone());
+                ExtendedAd extendedAd = adsMapper.adEntityToExtendedAd(foundedAdEntity);
                 extendedAd.setImage(filePath);
                 return new ResponseEntity<>(extendedAd, HttpStatus.OK);
             } else {
@@ -168,15 +165,14 @@ public class AdsServiceImpl implements AdsService {
             AdEntity foundedAdEntity = checkForExistAd.get();
             if (foundedAdEntity.getUserEntity().getId() != null) {
 
-                AdEntity updatedEntity = AdsMapper.INSTANCE.createOrUpdateAdToAdEntity(createOrUpdateAd);
+                AdEntity updatedEntity = adsMapper.createOrUpdateAdToAdEntity(createOrUpdateAd);
                 updatedEntity.setPk(foundedAdEntity.getPk());
                 updatedEntity.setUserEntity(foundedAdEntity.getUserEntity());
                 adRepository.save(foundedAdEntity);
 
-                // TODO: 14.10.2023 доработать AdsMapper
+                // TODO: 14.10.2023 доработать AdsMapper чтобы передавался image
                 String filePath = imageRepository.findFilePathByAdEntityPk(adPk);
-                Ad ad = AdsMapper.INSTANCE.adEntityToAd(updatedEntity);
-                ad.setAuthor(updatedEntity.getUserEntity().getId());
+                Ad ad = adsMapper.adEntityToAd(updatedEntity);
                 ad.setImage(filePath);
                 return new ResponseEntity<>(ad, HttpStatus.OK);
             } else {
@@ -200,8 +196,8 @@ public class AdsServiceImpl implements AdsService {
                                                             .map(UserEntity::getAdEntities)
                                                             .orElse(null);
 
-            // TODO: 14.10.2023 доработать AdsMapper
-            List<Ad> adList = AdsMapper.INSTANCE.adEntityListToAdList((List<AdEntity>) adEntityList);
+            // TODO: 14.10.2023 доработать AdsMapper чтобы передавался image
+            List<Ad> adList = adsMapper.adEntityListToAdList((List<AdEntity>) adEntityList);
             Integer sizeList = adList.size();
 
             Ads ads = new Ads();

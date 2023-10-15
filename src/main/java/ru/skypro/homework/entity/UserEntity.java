@@ -26,9 +26,9 @@ public class UserEntity {
     private String phone;
     private Role role;
 
-    @OneToMany(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<AdEntity> adEntities;
-    @OneToMany(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<CommentEntity> commentEntities;
 
 }

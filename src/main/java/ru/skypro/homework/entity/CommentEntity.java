@@ -19,10 +19,10 @@ public class CommentEntity {
     private String text;
     private Long createdAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_entity_id")
     private UserEntity userEntity;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ad_entity_id")
     private AdEntity adEntity;
 
