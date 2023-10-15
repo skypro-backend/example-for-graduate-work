@@ -35,10 +35,9 @@ public class AdsController {
      * @param image      принимает изображение.
      * @return возвращает ResponsEntity.
      */
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, // TODO: 14.10.2023 не передает Dto
-            MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> addAd(@ModelAttribute CreateOrUpdateAd properties,
-                                    @RequestParam MultipartFile image) {
+    @PostMapping
+    public ResponseEntity<?> addAd(@RequestPart("properties") CreateOrUpdateAd properties,
+                                   @RequestPart("image") MultipartFile image) {
         return adsService.addAd(properties, image);
     }
 

@@ -40,6 +40,11 @@ public class AdsServiceImpl implements AdsService {
 
     private final UserAuthentication userAuthentication;
 
+    /**
+     * Метод получает все объявления из БД и конвертирует их в Ads Dto.
+     *
+     * @return возвращает ResponsEntity status с Ads Dto.
+     */
     @Override
     public ResponseEntity<?> getAllAds() {
         List<AdEntity> adEntityList = adRepository.findAll();
@@ -54,6 +59,13 @@ public class AdsServiceImpl implements AdsService {
         return new ResponseEntity<>(ads, HttpStatus.OK);
     }
 
+    /**
+     * Метод добавляет новое объявление в БД.
+     *
+     * @param properties CreateOrUpdateAd DTO. Включает title, price и description объявления.
+     * @param image      принимает изображение объявления.
+     * @return возвращает ResponsEntity status с Ad Dto.
+     */
     @Override
     public ResponseEntity<?> addAd(CreateOrUpdateAd properties, MultipartFile image) {
         AdEntity newAdEntity = AdsMapper.INSTANCE.createOrUpdateAdToAdEntity(properties);
@@ -80,24 +92,30 @@ public class AdsServiceImpl implements AdsService {
         }
     }
 
+    /**
+     * Метод получает из БД информацию об объявлении по id объявления.
+     *
+     * @param adPk идентификатор объявления в БД.
+     * @return возвращает ResponsEntity status с ExtendedAd Dto.
+     */
     @Override
     public ResponseEntity<?> getAds(Integer adPk) {
-        Optional<AdEntity> foundedAd = adRepository.findById(adPk);
+        Optional<AdEntity> checkForExistAd = adRepository.findById(adPk);
 
-        if (foundedAd.isEmpty()) {
+        if (checkForExistAd.isEmpty()) {
             log.error("Ad not founded");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            AdEntity adEntity = foundedAd.get();
-            if (adEntity.getUserEntity().getId() != null) {
+            AdEntity foundedAdEntity = checkForExistAd.get();
+            if (foundedAdEntity.getUserEntity().getId() != null) {
 
                 // TODO: 14.10.2023 доработать AdsMapper
                 String filePath = imageRepository.findFilePathByAdEntityPk(adPk);
-                ExtendedAd extendedAd = AdsMapper.INSTANCE.adEntityToExtendedAd(adEntity);
-                extendedAd.setAuthorFirstName(adEntity.getUserEntity().getFirstName());
-                extendedAd.setAuthorLastName(adEntity.getUserEntity().getLastName());
-                extendedAd.setEmail(adEntity.getUserEntity().getUsername());
-                extendedAd.setPhone(adEntity.getUserEntity().getPhone());
+                ExtendedAd extendedAd = AdsMapper.INSTANCE.adEntityToExtendedAd(foundedAdEntity);
+                extendedAd.setAuthorFirstName(foundedAdEntity.getUserEntity().getFirstName());
+                extendedAd.setAuthorLastName(foundedAdEntity.getUserEntity().getLastName());
+                extendedAd.setEmail(foundedAdEntity.getUserEntity().getUsername());
+                extendedAd.setPhone(foundedAdEntity.getUserEntity().getPhone());
                 extendedAd.setImage(filePath);
                 return new ResponseEntity<>(extendedAd, HttpStatus.OK);
             } else {
@@ -106,16 +124,22 @@ public class AdsServiceImpl implements AdsService {
         }
     }
 
+    /**
+     * Метод удаляет объявление из БД по id объявления.
+     *
+     * @param adPk идентификатор объявления в БД.
+     * @return возвращает ResponsEntity status.
+     */
     @Override
     public ResponseEntity<?> removeAd(Integer adPk) {
-        Optional<AdEntity> foundedAd = adRepository.findById(adPk);
+        Optional<AdEntity> checkForExistAd = adRepository.findById(adPk);
 
-        if (foundedAd.isEmpty()) {
+        if (checkForExistAd.isEmpty()) {
             log.error("Ad not founded");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            AdEntity adEntity = foundedAd.get();
-            if (adEntity.getUserEntity().getId() != null) {
+            AdEntity foundedAdEntity = checkForExistAd.get();
+            if (foundedAdEntity.getUserEntity().getId() != null) {
                 adRepository.deleteById(adPk);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             } else {
@@ -126,24 +150,33 @@ public class AdsServiceImpl implements AdsService {
         // TODO: 15.10.2023 добавить HttpStatus.FORBIDDEN
     }
 
+    /**
+     * Метод обновляет информацию об объявлении в БД по id объявления.
+     *
+     * @param adPk             идентификатор объявления в БД.
+     * @param createOrUpdateAd DTO. Включает title, price и description объявления.
+     * @return возвращает ResponsEntity status с Ad Dto.
+     */
     @Override
     public ResponseEntity<?> updateAds(Integer adPk, CreateOrUpdateAd createOrUpdateAd) {
-        Optional<AdEntity> foundedAd = adRepository.findById(adPk);
+        Optional<AdEntity> checkForExistAd = adRepository.findById(adPk);
 
-        if (foundedAd.isEmpty()) {
+        if (checkForExistAd.isEmpty()) {
             log.error("Ad not founded");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            AdEntity adEntity = foundedAd.get();
-            if (adEntity.getUserEntity().getId() != null) {
-                AdEntity updatedAd = AdsMapper.INSTANCE.createOrUpdateAdToAdEntity(createOrUpdateAd);
-                updatedAd.setPk(adPk);
-                adRepository.save(updatedAd);
+            AdEntity foundedAdEntity = checkForExistAd.get();
+            if (foundedAdEntity.getUserEntity().getId() != null) {
+
+                AdEntity updatedEntity = AdsMapper.INSTANCE.createOrUpdateAdToAdEntity(createOrUpdateAd);
+                updatedEntity.setPk(foundedAdEntity.getPk());
+                updatedEntity.setUserEntity(foundedAdEntity.getUserEntity());
+                adRepository.save(foundedAdEntity);
 
                 // TODO: 14.10.2023 доработать AdsMapper
                 String filePath = imageRepository.findFilePathByAdEntityPk(adPk);
-                Ad ad = AdsMapper.INSTANCE.adEntityToAd(updatedAd);
-                ad.setAuthor(updatedAd.getUserEntity().getId());
+                Ad ad = AdsMapper.INSTANCE.adEntityToAd(updatedEntity);
+                ad.setAuthor(updatedEntity.getUserEntity().getId());
                 ad.setImage(filePath);
                 return new ResponseEntity<>(ad, HttpStatus.OK);
             } else {
@@ -153,14 +186,19 @@ public class AdsServiceImpl implements AdsService {
         // TODO: 15.10.2023 добавить HttpStatus.FORBIDDEN
     }
 
+    /**
+     * Метод возвращает все объявления авторизованного пользователя.
+     *
+     * @return возвращает ResponsEntity status с Ads Dto.
+     */
     @Override
     public ResponseEntity<?> getAdsMe() {
         UserEntity currentUserEntity = userAuthentication.getCurrentUserName();
 
         if (currentUserEntity != null) {
             Collection<AdEntity> adEntityList = userRepository.findById(currentUserEntity.getId())
-                    .map(UserEntity::getAdEntities)
-                    .orElse(null);
+                                                            .map(UserEntity::getAdEntities)
+                                                            .orElse(null);
 
             // TODO: 14.10.2023 доработать AdsMapper
             List<Ad> adList = AdsMapper.INSTANCE.adEntityListToAdList((List<AdEntity>) adEntityList);
@@ -176,17 +214,24 @@ public class AdsServiceImpl implements AdsService {
         }
     }
 
+    /**
+     * Метод обновляет в БД картинку объявления по id объявления.
+     *
+     * @param adPk   идентификатор объявления в БД.
+     * @param file   изображение.
+     * @return возвращает ResponsEntity status с byte[] (бинарным кодом изображения).
+     */
     @Override
     public ResponseEntity<?> updateImage(Integer adPk, MultipartFile file) {
-        Optional<AdEntity> foundedAd = adRepository.findById(adPk);
+        Optional<AdEntity> checkForExistAd = adRepository.findById(adPk);
 
-        if (foundedAd.isEmpty()) {
+        if (checkForExistAd.isEmpty()) {
             log.error("Ad not founded");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            AdEntity adEntity = foundedAd.get();
+            AdEntity foundedAdEntity = checkForExistAd.get();
 
-            if (adEntity.getUserEntity().getId() != null) {
+            if (foundedAdEntity.getUserEntity().getId() != null) {
                 byte[] image = new byte[0];
                 try {
                     image = imageService.uploadAdImage(adPk, file);

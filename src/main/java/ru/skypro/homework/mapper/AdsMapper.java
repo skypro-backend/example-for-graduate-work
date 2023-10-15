@@ -8,8 +8,10 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.AdEntity;
 
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * Класс конвертирует модель AdEntity в Ad Dto и обратно.
+ */
 @Mapper
 public interface AdsMapper {
 
