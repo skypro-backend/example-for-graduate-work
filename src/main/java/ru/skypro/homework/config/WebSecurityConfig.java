@@ -37,6 +37,7 @@ public class WebSecurityConfig {
         return new InMemoryUserDetailsManager(user);
     }
 
+    // Метод создает фильтр цепочки безопасности для настройки правил авторизации и аутентификации HTTP-запросов
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()
@@ -54,6 +55,7 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    // Метод создает и настраивает бин для шифрования паролей с использованием BCryptPasswordEncode
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

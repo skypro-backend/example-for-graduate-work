@@ -2,6 +2,10 @@ package ru.skypro.homework.model;
 import lombok.*;
 import ru.skypro.homework.dto.Role;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Класс пользователя системы онлайн-продаж.
@@ -20,15 +24,20 @@ public class User {
       private Integer id;
 
       @Column(name = "email", nullable = false, length = 32)
+      @Email
       private String email;
 
       @Column(name = "password")
+      @NotNull
+      @Size (min = 8)
       private String password;
 
       @Column(name = "firstName", length = 32)
+      @NotBlank
       private String firstName;
 
       @Column(name = "lastName", length = 32)
+      @NotBlank
       private String lastName;
 
       @Column(name = "phone")
@@ -38,6 +47,7 @@ public class User {
       @Enumerated(EnumType.STRING) // значение роли будет храниться как строка
       private Role role;
 
-      @Column(name = "image")
-      private String image;
+      @OneToOne
+      @JoinColumn(name = "image")
+      private Image image;
 }

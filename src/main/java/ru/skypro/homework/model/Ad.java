@@ -23,8 +23,9 @@ public class Ad {
       @JoinColumn(name = "author_id", nullable = false)
       private User author;
 
-      @Column(name = "image")
-      private String image;
+      @OneToOne()
+      @JoinColumn(name = "image_id")
+      private Image image;
 
       @Column(name = "price")
       private Integer price;
