@@ -1,19 +1,17 @@
 package ru.skypro.homework.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
 
 import java.util.List;
-
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     @Autowired
     private UserController userService;
-
 
     // Получение пользователя по ID
     @GetMapping("/me")
@@ -38,6 +36,5 @@ public class UserController {
     public void updateAvatarUsers( @PathVariable String pathImage) {
         System.out.println("Обновление avatar об авторизованном пользователе");
         System.out.println(pathImage);
-
     }
 }

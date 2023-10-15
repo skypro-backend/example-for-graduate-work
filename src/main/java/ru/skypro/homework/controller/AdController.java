@@ -5,7 +5,7 @@ import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.projections.ExtendedAd;
 import ru.skypro.homework.service.impl.AdServiceImpl;
-
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
 public class AdController {
