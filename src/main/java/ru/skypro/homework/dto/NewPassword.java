@@ -4,6 +4,6 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class NewPassword {
-    String currentPassword;
-    String newPassword;
+    private String currentPassword;
+    private String newPassword;
 }
