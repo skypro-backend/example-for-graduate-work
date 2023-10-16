@@ -34,9 +34,6 @@ public class UserEntity {
     @Column(name = "phone")
     String phone;
 
-    @Column(name = "image")
-    String image;
-
     @Column(name = "username", unique = true)
     String username;
 
@@ -53,29 +50,8 @@ public class UserEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<AdEntity> ads = new ArrayList<>();
 
-    @OneToOne(targetEntity = ImageIEntity.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToOne(targetEntity = ImageEntity.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_image_id")
-    private ImageIEntity imageIEntity;
+    private ImageEntity imageEntity;
 
-
-    public static UserEntity makeDefaults(
-            String lastName,
-            String firstName,
-            String email,
-            String phone,
-            String image,
-            String username,
-            String password,
-            Role role) {
-        return builder()
-                .lastName(lastName)
-                .firstName(firstName)
-                .email(email)
-                .phone(phone)
-                .image(image)
-                .username(username)
-                .password(password)
-                .role(role)
-                .build();
-    }
 }

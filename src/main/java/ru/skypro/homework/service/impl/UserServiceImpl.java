@@ -1,11 +1,11 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.config.SecurityUserDetailsService;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
@@ -14,6 +14,7 @@ import ru.skypro.homework.exeptions.ForbiddenException;
 import ru.skypro.homework.exeptions.UnauthorizedException;
 import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.service.entities.ImageEntity;
 import ru.skypro.homework.service.entities.UserEntity;
 import ru.skypro.homework.service.repositories.UserRepository;
 
@@ -24,16 +25,18 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final SecurityUserDetailsService securityUserDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final ImageServiceImpl imageService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            UserMapper userMapper,
                            SecurityUserDetailsService securityUserDetailsService,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder, ImageServiceImpl imageService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.securityUserDetailsService = securityUserDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.imageService = imageService;
     }
 
     @Override
@@ -74,9 +77,17 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public void updateAvatar(MultipartFile image) {
+        UserEntity user = getCurrentUser();
+        ImageEntity imageEntity = imageService.downloadImage(image);
+        user.setImageEntity(imageEntity);
+        userRepository.saveAndFlush(user);
+    }
+
     private UserEntity getCurrentUser() {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println(userName);
         return userRepository.findByEmail(userName);
     }
 }
+
