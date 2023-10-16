@@ -1,5 +1,7 @@
 package ru.skypro.homework.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,16 +10,6 @@ import ru.skypro.homework.dto.*;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
-    @PostMapping("/register")
-    public ResponseEntity<RegisterDto> registerUser(@RequestBody RegisterDto registerDto) {
-        return ResponseEntity.ok(new RegisterDto());
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<LoginDto> loginUser(@RequestBody LoginDto loginDto) {
-        return ResponseEntity.ok(new LoginDto());
-    }
 
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUserInfo() {

@@ -22,3 +22,4 @@ public class BasicAuthCorsFilter extends OncePerRequestFilter {
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }
+
