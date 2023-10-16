@@ -23,9 +23,4 @@ public class ImageEntity {
     @Column(columnDefinition = "oid")
     private byte[] data;
 
-    @OneToOne
-    private UserEntity userEntity;
-    @OneToOne
-    private AdEntity adEntity;
-
 }

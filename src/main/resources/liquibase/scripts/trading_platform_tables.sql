@@ -8,7 +8,8 @@ CREATE TABLE user_entity (
     first_name          text,
     last_name           text,
     phone               text,
-    role                int4
+    role                int4,
+    image_entity_id     int4
 );
 
 -- changeset grigorii:create-ad_entity-table
@@ -17,7 +18,8 @@ CREATE TABLE ad_entity (
     price               integer,
     title               text,
     description         text,
-    user_entity_id      int4
+    user_entity_id      int4,
+    image_entity_id     int4
 );
 
 -- changeset grigorii:create-comment_entity-table
@@ -35,7 +37,5 @@ CREATE TABLE image_entity (
     file_path           text,
     file_size           bigint,
     media_type          text,
-    data                oid,
-    user_entity_id      int4,
-    ad_entity_pk        int4
+    data                oid
 );

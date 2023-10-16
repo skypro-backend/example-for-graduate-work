@@ -79,7 +79,7 @@ public class AdsController {
     /**
      * @return возвращает объявления авторизованного пользователя.
      */
-    @GetMapping(value = "/me")
+    @GetMapping(value = "/me") // TODO: 15.10.2023 выкидывает PSQLException
     public ResponseEntity<?> getAdsMe() {
         return adsService.getAdsMe();
     }

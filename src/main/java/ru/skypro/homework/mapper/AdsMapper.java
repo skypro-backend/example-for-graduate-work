@@ -16,16 +16,19 @@ import java.util.List;
 public interface AdsMapper {
 
     @Mapping(source = "userEntity.id", target = "author")
-    Ad adEntityToAd(AdEntity adEntity); // TODO: 14.10.2023 не передает image
+    @Mapping(source = "imageEntity.filePath", target = "image")
+    Ad adEntityToAd(AdEntity adEntity);
 
     @Mapping(source = "userEntity.id", target = "author")
-    List<Ad> adEntityListToAdList(List<AdEntity> adEntityList); // TODO: 14.10.2023 не передает image
+    @Mapping(source = "imageEntity.filePath", target = "image")
+    List<Ad> adEntityListToAdList(List<AdEntity> adEntityList);
 
     @Mapping(source = "userEntity.firstName", target = "authorFirstName")
     @Mapping(source = "userEntity.lastName", target = "authorLastName")
     @Mapping(source = "userEntity.username", target = "email")
     @Mapping(source = "userEntity.phone", target = "phone")
-    ExtendedAd adEntityToExtendedAd(AdEntity adEntity); // TODO: 14.10.2023 не передает image
+    @Mapping(source = "imageEntity.filePath", target = "image")
+    ExtendedAd adEntityToExtendedAd(AdEntity adEntity);
 
     AdEntity createOrUpdateAdToAdEntity(CreateOrUpdateAd createOrUpdateAd);
 

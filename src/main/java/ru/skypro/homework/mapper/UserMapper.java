@@ -13,6 +13,7 @@ import ru.skypro.homework.entity.UserEntity;
 public interface UserMapper {
 
     @Mapping(source = "username", target = "email")
+    @Mapping(source = "imageEntity.filePath", target = "image")
     User userEntityToUser(UserEntity userEntity);
 
 }
