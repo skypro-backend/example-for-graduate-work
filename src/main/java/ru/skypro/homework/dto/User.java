@@ -6,6 +6,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class User {
+
     private int id;
     private String email;
     private String firsName;
@@ -13,4 +14,5 @@ public class User {
     private String phone;
     private String role;
     private String image;
+
 }

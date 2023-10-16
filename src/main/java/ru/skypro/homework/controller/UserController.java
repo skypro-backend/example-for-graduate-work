@@ -10,12 +10,9 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserController userService;
 
-    // Получение пользователя по ID
     @GetMapping("/me")
-    public User getUserById(@PathVariable int userId) {
+    public User getUser(@PathVariable int userId) {
         return new User(1, "fe", "fre", "vtgr", "f54", Role.USER.toString(), "/gfd/gtfr");
     }
 

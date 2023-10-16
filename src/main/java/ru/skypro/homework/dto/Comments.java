@@ -6,9 +6,11 @@ import lombok.Data;
 
 import java.util.List;
 
+
 @AllArgsConstructor
 @Data
 public class Comments {
     private List<Comment> commentList;
     private  int count;
+
 }
