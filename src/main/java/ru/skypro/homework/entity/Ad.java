@@ -30,6 +30,7 @@ import java.util.List;
      @Column(name="id")
 
      private Integer id;
+
      /**
       * Цена объявления
       */
@@ -60,12 +61,6 @@ import java.util.List;
     @ManyToOne
     private User user;
 
-
-   // @OneToMany(mappedBy = "ad", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "ad"
-      //      , cascade = CascadeType.ALL, orphanRemoval = true)
-
-   // private Collection<Comment> comment;
 
 
 }

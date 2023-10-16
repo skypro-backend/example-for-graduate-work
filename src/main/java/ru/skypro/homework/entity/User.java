@@ -27,6 +27,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Integer id;
+
+    /**
+     * Логин пользователя
+     */
+    @Column(name = "user_name")
+    private String userName;
     /**
      * mail пользователя
      */
@@ -63,8 +69,8 @@ public class User {
     /**
      * Объявления пользователя
      */
-    //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    //private List<Ad> ads;
+
+
 
      @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 

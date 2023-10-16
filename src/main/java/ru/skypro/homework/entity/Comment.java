@@ -54,7 +54,6 @@ public class Comment {
     @Column(name = "text")
     private String test;
 
-   // @ManyToOne
-   // private Ad ads;
+
 
   }

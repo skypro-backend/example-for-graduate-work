@@ -9,17 +9,6 @@ import java.util.List;
 
 @Repository
 public interface AdsRepository extends JpaRepository<Ad, Integer> {
-    /**
-     * поиск объявления по названию
-     */
-
-    List<Ad> findByDescriptionContainingIgnoreCase(String description);
-
-    /**
-     * поиск объвления по автору
-     */
-
-    List<Ad> findByAuthor(User author);
 
 
 }
