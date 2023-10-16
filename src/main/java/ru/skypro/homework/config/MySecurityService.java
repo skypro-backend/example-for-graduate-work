@@ -28,12 +28,13 @@ public class MySecurityService {
      */
     public boolean canDeleteComment(int commentId, int adId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CommentEntity commentEntity = checkForAdAndComment(adId, commentId);
-        String name = commentEntity.getUser().getEmail();
 
         if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             return true;
         }
+
+        CommentEntity commentEntity = checkForAdAndComment(adId, commentId);
+        String name = commentEntity.getUser().getEmail();
 
         return authentication.getName().equals(name);
     }
