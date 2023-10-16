@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/changesets/create_user.yml
+  - include:
+      file: liquibase/changesets/create_ad.yml
+  - include:
+      file: liquibase/changesets/create_image.yml
+  - include:
+      file: liquibase/changesets/create_comment.yml

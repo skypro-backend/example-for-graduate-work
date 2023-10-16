@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Seydaliev
+      changes:
+        - createTable:
+            tableName: image
+            columns:
+              - column:
+                  name: image_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: ad_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: ad_id
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: user_id
