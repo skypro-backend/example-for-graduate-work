@@ -4,10 +4,14 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import ru.skypro.homework.dto.model_dto.AdDto;
+import ru.skypro.homework.dto.model_dto.AdsDto;
 import ru.skypro.homework.dto.model_dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.model_dto.ExtendedAdDto;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Маппинг сущности объявления
@@ -35,4 +39,8 @@ public interface AdMapper {
       @Mapping(target = "description", ignore = true)
       ExtendedAdDto toExtendedAdDto(Ad ad); // конвертация объявления к расширенному объявлению
 
+      default AdsDto toAdsDto(List<Ad> ads) {
+            List<AdDto> adsDtoList = ads.stream().map(this::toAdDto).collect(Collectors.toList());
+            return new AdsDto(adsDtoList.size(), adsDtoList);
+      }
 }

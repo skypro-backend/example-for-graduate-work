@@ -9,7 +9,7 @@ import javax.persistence.*;
  * Класс, описывающий объявление
  */
 @Entity // сущность
-@Table (name = "ad")
+@Table (name = "ad_table")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,4 +32,18 @@ public class Ad {
       @Column(name = "title")
       private String title;
 
+      @Column(name = "description")
+      private String description;
+
+      @Override
+      public String toString() {
+            return "Ad{" +
+                    "id=" + id +
+                    ", author=" + author +
+                    ", image='" + image + '\'' +
+                    ", price=" + price +
+                    ", title='" + title + '\'' +
+                    ", description='" + description + '\'' +
+                    '}';
+      }
 }

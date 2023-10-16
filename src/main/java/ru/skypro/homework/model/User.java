@@ -7,7 +7,7 @@ import javax.persistence.*;
  * Класс пользователя системы онлайн-продаж.
  */
 @Entity // сущность
-@Table(name = "users")
+@Table(name = "user_table")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,10 +25,10 @@ public class User {
       @Column(name = "password")
       private String password;
 
-      @Column(name = "firstName", length = 32)
+      @Column(name = "firstname", length = 32)
       private String firstName;
 
-      @Column(name = "lastName", length = 32)
+      @Column(name = "lastname", length = 32)
       private String lastName;
 
       @Column(name = "phone")
