@@ -24,7 +24,7 @@ public class AdMapper{
         adDTO.pk( ad.getPk() );
         adDTO.price( ad.getPrice() );
         adDTO.title( ad.getTitle() );
-        //adDTO.image( ad.getImage() );
+        adDTO.image( ad.getImage() );
 
         return adDTO.build();
     }
@@ -36,7 +36,7 @@ public class AdMapper{
 
         CreateOrUpdateAdDTO.CreateOrUpdateAdDTOBuilder createOrUpdateAdDTO = CreateOrUpdateAdDTO.builder();
 
-        createOrUpdateAdDTO.title( ad.getTitle() );
+        createOrUpdateAdDTO.title( String.valueOf( ad.getTitle() ) );
         createOrUpdateAdDTO.price( ad.getPrice() );
         createOrUpdateAdDTO.description( ad.getDescription() );
 
@@ -53,8 +53,9 @@ public class AdMapper{
         extendedAdDTO.pk( ad.getPk() );
         extendedAdDTO.description( ad.getDescription() );
         extendedAdDTO.image( ad.getImage() );
+        extendedAdDTO.phone( ad.getPhone() );
         extendedAdDTO.price( ad.getPrice() );
-        extendedAdDTO.title( ad.getTitle() );
+        extendedAdDTO.title( String.valueOf( ad.getTitle() ) );
 
         return extendedAdDTO.build();
     }
@@ -76,10 +77,12 @@ public class AdMapper{
         if ( ad == null ) {
             return null;
         }
-        List<AdDTO> adDTO = new ArrayList<>(ad.size());
+        List<AdDTO> adDTO = new ArrayList<AdDTO>(ad.size());
+        int count=0;
         for (AdEntity adEntity : ad) {
+            count++;
             adDTO.add(toAdDto(adEntity));
         }
-        return new AdsDTO(ad.size(),adDTO);
+        return new AdsDTO(count,adDTO);
     }
 }

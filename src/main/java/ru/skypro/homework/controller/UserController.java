@@ -9,10 +9,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
@@ -39,7 +35,6 @@ public class UserController {
     })
     @PostMapping("/set_password")
     public ResponseEntity<?> updatePassword(@RequestBody NewPasswordDTO newPasswordDTO) {
-
         userService.updatePassword(newPasswordDTO);
 
         return ResponseEntity.ok().build();
@@ -52,7 +47,6 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUser() {
-
         UserDTO userDTO = userService.getUser();
 
         return ResponseEntity.ok().body(userDTO);
@@ -65,11 +59,9 @@ public class UserController {
     })
     @PatchMapping("/me")
     public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody UpdateUserDTO user) {
-
         UpdateUserDTO updateUserDTO = userService.updateUser(user);
 
         return ResponseEntity.ok().body(updateUserDTO);
-
     }
 
     @Operation(summary = "Обновление аватара авторизованного пользователя")
@@ -79,6 +71,7 @@ public class UserController {
     })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUserAvatar(@RequestPart MultipartFile image) {
+        userService.updateAvatar(image);
 
         return ResponseEntity.ok().build();
     }

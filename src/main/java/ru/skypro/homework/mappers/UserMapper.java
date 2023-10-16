@@ -1,5 +1,7 @@
 package ru.skypro.homework.mappers;
+
 import org.springframework.stereotype.Component;
+import ru.skypro.homework.controller.ImageController;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.entities.UserEntity;
@@ -7,6 +9,7 @@ import ru.skypro.homework.service.entities.UserEntity;
 
 @Component
 public class UserMapper {
+    ImageController imageController;
 
     public UpdateUserDTO toUpdateUserDto(UserEntity userEntity) {
         UpdateUserDTO updateUserDTO = new UpdateUserDTO();
@@ -23,7 +26,7 @@ public class UserMapper {
         userDTO.setFirstName(userEntity.getFirstName());
         userDTO.setEmail(userEntity.getEmail());
         userDTO.setPhone(userEntity.getPhone());
-        userDTO.setImage(userEntity.getImage());
+        userDTO.setImage("/images/" + userEntity.getImageEntity().getImageName());
         return userDTO;
     }
 
