@@ -17,6 +17,4 @@ public class ImageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String imageName;
-
-
 }
