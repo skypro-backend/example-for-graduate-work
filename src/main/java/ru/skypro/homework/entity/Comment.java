@@ -24,10 +24,14 @@ public class Comment {
     @JoinColumn (name = "author_id")
     private Users users;
 
+    @ManyToOne  (fetch = FetchType.EAGER)
+    @JoinColumn (name = "ad_id")
+    private Ad ad;
+
     @Column(name = "createdAt", nullable = false)
     LocalDateTime createdAt;
 
-    @Column(name = "createdAt", nullable = false)
+    @Column(name = "text", nullable = false)
     private String text;
 
     @Override
@@ -42,4 +46,6 @@ public class Comment {
     public int hashCode() {
         return Objects.hash(pk, createdAt, text);
     }
+
+
 }
