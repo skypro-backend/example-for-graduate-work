@@ -28,8 +28,7 @@ services:
     restart: on-failure
 
   front:
-    build:
-      context: https://github.com/BizinMitya/front-react-avito.git
+    image: ghcr.io/bizinmitya/front-react-avito:v1.18
     ports:
       - "3000:3000"
     restart: on-failure

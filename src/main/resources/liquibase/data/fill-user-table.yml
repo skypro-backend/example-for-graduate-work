@@ -7,9 +7,6 @@ databaseChangeLog:
             tableName: app_user
             columns:
               - column:
-                  name: id
-                  value: 1
-              - column:
                   name: email
                   value: UserTest@mail.ru
               - column:
@@ -30,9 +27,6 @@ databaseChangeLog:
         - insert:
             tableName: app_user
             columns:
-              - column:
-                  name: id
-                  value: 2
               - column:
                   name: email
                   value: AdminTest@mail.ru

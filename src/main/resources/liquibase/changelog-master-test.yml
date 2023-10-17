@@ -5,3 +5,7 @@ databaseChangeLog:
       file: liquibase/changesets/create-ad-table.yml
   - include:
       file: liquibase/changesets/create-comment-table.yml
+  - include:
+      file: liquibase/data/fill-user-table.yml
+  - include:
+      file: liquibase/data/fill-ad-table.yml
