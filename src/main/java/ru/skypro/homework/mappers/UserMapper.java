@@ -9,7 +9,6 @@ import ru.skypro.homework.service.entities.UserEntity;
 
 @Component
 public class UserMapper {
-    ImageController imageController;
 
     public UpdateUserDTO toUpdateUserDto(UserEntity userEntity) {
         UpdateUserDTO updateUserDTO = new UpdateUserDTO();

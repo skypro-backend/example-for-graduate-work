@@ -42,13 +42,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO) {
         UserEntity user = getCurrentUser();
-        user.setFirstName(updateUserDTO.getFirstName());
-        user.setLastName(updateUserDTO.getLastName());
-        user.setPhone(updateUserDTO.getPhone());
-
+        UpdateUserDTO updateUser = userMapper.toUpdateUserDto(user);
         userRepository.saveAndFlush(user);
 
-        return updateUserDTO;
+        return updateUser;
     }
 
     @Override
@@ -85,6 +82,9 @@ public class UserServiceImpl implements UserService {
         userRepository.saveAndFlush(user);
     }
 
+    /**
+     * Получение инорфмации о текущем авторизованном пользователе
+     */
     private UserEntity getCurrentUser() {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByEmail(userName);
