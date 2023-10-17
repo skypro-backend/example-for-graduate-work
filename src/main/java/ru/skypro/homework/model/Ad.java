@@ -33,4 +33,7 @@ public class Ad {
       @Column(name = "title")
       private String title;
 
+      @Column(nullable = false)
+      private String description;
+
 }

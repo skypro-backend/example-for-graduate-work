@@ -7,20 +7,31 @@ import ru.skypro.homework.dto.model_dto.AdDto;
 import ru.skypro.homework.dto.model_dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.model_dto.ExtendedAdDto;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
+
+import java.util.List;
 
 /**
  * Маппинг сущности объявления
  */
 @Mapper (componentModel = "spring")
 public interface AdMapper {
-      @Mapping(target = "id", source = "pk")
-      @Mapping(target = "author.id", source = "author")
-      Ad toAd(AdDto adDto); // конвертация DTO в сущность
+      @Mapping(target = "id", ignore = true)
+      @Mapping(target = "author", source = "author")
+      @Mapping(target = "image", ignore = true)
+      Ad toAd(Ad adDto); // конвертация DTO в сущность
 
+      @Mapping(target = "image", source = "image", qualifiedByName = "imageToPathString")
       @Mapping(target = "pk", source = "id")
       @Mapping(target = "author", source = "author.id")
-      AdDto AdDto(Ad ad); // конвертация сущности в DTO
+      AdDto toAdDto(Ad ad); // конвертация сущности в DTO
+
+      @Named("imageToPathString")
+      default String imageToPathString(Image image) {
+            return "/ads/image/" + image.getId();
+      }
+      List <AdDto> toAdsDto(List<Ad> ads);
 
       @Mapping(target = "id", ignore = true)
       @Mapping(target = "author", ignore = true)
@@ -33,6 +44,12 @@ public interface AdMapper {
       @Mapping(target = "email", source = "author.email")
       @Mapping(target = "phone", source = "author.phone")
       @Mapping(target = "description", ignore = true)
+      @Mapping(target = "image", source = "image", qualifiedByName = "imageToPathString")
       ExtendedAdDto toExtendedAdDto(Ad ad); // конвертация объявления к расширенному объявлению
+
+      @Named("authorToInt")
+      default Integer authorToInt(User user) {
+            return user.getId();
+      }
 
 }

@@ -17,13 +17,12 @@ import ru.skypro.homework.service.UserService;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
-
 /**
  * Имплеменация сервиса для работы с пользователем
  */
-@RequiredArgsConstructor
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
       private final UserRepository userRepository;
@@ -41,16 +40,12 @@ public class UserServiceImpl implements UserService {
                   userDetailsServicer.loadUserByUsername (user.getEmail ());
             }
       }
-
-      // получение информации об авторизованном пользователе
-     @Override
+      @Override
       public Optional <User> findAuthUser () {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String currentPrincipalName = authentication.getName();
             return userRepository.findByEmail(currentPrincipalName);
       }
-
-      // обновление информации об авторизованном пользователе
       @Override
       public UserDto updateUserDto (UserDto newUserDto) {
             Optional<User> currentUser = findAuthUser();
