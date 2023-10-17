@@ -44,7 +44,7 @@ public class UserControllerIntegrationTests {
         JSONObject newPassword = new JSONObject();
         newPassword.put("currentPassword", "password");
         newPassword.put("newPassword", "password1");
-        mockMvc.perform(post("/users/set-password")
+        mockMvc.perform(post("/users/set_password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newPassword.toString()))
                 .andExpect(status().isOk());
@@ -56,7 +56,7 @@ public class UserControllerIntegrationTests {
         JSONObject newPassword = new JSONObject();
         newPassword.put("currentPassword", "password1");
         newPassword.put("newPassword", "password2");
-        mockMvc.perform(post("/users/set-password")
+        mockMvc.perform(post("/users/set_password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newPassword.toString()))
                 .andExpect(status().isForbidden());
