@@ -1,8 +1,8 @@
 package ru.skypro.homework.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Comments;
-import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.dto.CommentsDTO;
+import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.service.CommentsService;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -15,12 +15,12 @@ public class СommentsController {
     }
 
     @GetMapping("/{id}/comments")
-    public Comments getFullCommets(@PathVariable int id) {
+    public CommentsDTO getFullCommets(@PathVariable int id) {
         System.out.println("тут будет получение комментариев объявления ");
         return commentsService.getFullComments( id);
     }
     @PostMapping("/{id}/comments")
-    public Comments addComments(@PathVariable int id) {
+    public CommentsDTO addComments(@PathVariable int id) {
         System.out.println("Добавление комментария к  объявлению");
         return commentsService.addComments(id);
     }
@@ -30,7 +30,7 @@ public class СommentsController {
 
     }
     @PatchMapping("/ads/{adId}/comments/{commentId}")
-    public CreateOrUpdateComment updateComments(@PathVariable int id, @PathVariable int commentId) {
+    public CreateOrUpdateCommentDTO updateComments(@PathVariable int id, @PathVariable int commentId) {
         System.out.println("Обновление комментария");
         return commentsService.updateComments(id, commentId);
     }
