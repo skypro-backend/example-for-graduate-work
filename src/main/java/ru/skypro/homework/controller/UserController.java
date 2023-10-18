@@ -2,10 +2,11 @@ package ru.skypro.homework.controller;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.dto.user.NewPassword;
+import ru.skypro.homework.dto.user.UpdateImage;
+import ru.skypro.homework.dto.user.UpdateUser;
+import ru.skypro.homework.dto.user.User;
 import ru.skypro.homework.service.UserService;
 
 
