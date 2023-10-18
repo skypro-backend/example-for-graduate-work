@@ -12,7 +12,7 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    public List<CommentDTO> getAllComments() {
+    public List<CommentDTO> getComments(Integer adId) {
         return null;
     }
 
