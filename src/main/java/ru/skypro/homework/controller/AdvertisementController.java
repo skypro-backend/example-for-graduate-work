@@ -158,7 +158,6 @@ public class AdvertisementController {
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
             }
     )
-
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateImage(@PathVariable int id,
                                          @RequestParam MultipartFile image) throws IOException {
