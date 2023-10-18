@@ -13,7 +13,9 @@ public class AdsEntity {
     Integer price;
     String title;
     String description;
-    String image;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image")
+    ImageEntity image;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     UserEntity user;

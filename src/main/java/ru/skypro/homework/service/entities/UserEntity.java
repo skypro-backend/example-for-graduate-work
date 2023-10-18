@@ -19,7 +19,9 @@ public class UserEntity {
     String firstName;
     String lastName;
     String phone;
-    String image;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image")
+    ImageEntity image;
     @Enumerated(EnumType.STRING)
     Role role;
 }
