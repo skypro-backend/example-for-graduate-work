@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
             "ivan",
             "ivanov",
             "+7 777-77-77",
-            Role.USER);
+            Role.USER,null);
 
     public UserServiceImpl(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;

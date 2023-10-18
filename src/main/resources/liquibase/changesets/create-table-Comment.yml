@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: Svetlana
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+            - column:
+              name: pk
+              type: integer
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+            - column:
+              name: author_id
+              type: integer
+              constraints:
+                nullable: false
+            - column:
+              name: ad_id
+              type: integer
+              constraints:
+                nullable: false
+            - column:
+              name: createdAt
+              type: datetime
+              constraints:
+                nullable: false
+            - column:
+                name: text
+                type: varchar(64)
+                constraints:
+                  nullable: false
