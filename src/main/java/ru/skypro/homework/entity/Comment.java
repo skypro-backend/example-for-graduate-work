@@ -1,5 +1,6 @@
 package ru.skypro.homework.entity;
 
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,7 @@ public class Comment {
     LocalDateTime createdAt;
 
     @Column(name = "text", nullable = false)
+    @Size(min=8, max=64)
     private String text;
 
     @Override

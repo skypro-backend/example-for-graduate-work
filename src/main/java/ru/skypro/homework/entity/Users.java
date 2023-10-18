@@ -15,6 +15,7 @@ import javax.persistence.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 @Entity
@@ -45,7 +46,7 @@ public class Users {
 
     private Role role;
 
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lot")
-//    private List<Comment> commentList;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "users")
+    private List<Comment> commentList;
 
 }

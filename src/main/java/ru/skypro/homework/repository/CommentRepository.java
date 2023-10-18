@@ -25,8 +25,8 @@ public interface CommentRepository extends CrudRepository<Comment, Integer> {
             nativeQuery = true)
     Comment findCommentByCommentId(Integer pk);
 
-    @Query("SELECT new ru.skypro.homework.dto.comment" +
-            ".Comments((SELECT COUNT(c.pk) FROM Comment c), " +
-            "(SELECT * FROM Comment c WHERE c.ad.adId = :adId))")
-    Comments findCommentsByAdId(Integer adId);
+//    @Query("SELECT new ru.skypro.homework.dto.comment" +
+//            ".Comments((SELECT COUNT(c.pk) FROM Comment c), " +
+//            "(SELECT * FROM Comment c WHERE c.ad.adId = :adId))")
+//    Comments findCommentsByAdId(Integer adId);
 }
