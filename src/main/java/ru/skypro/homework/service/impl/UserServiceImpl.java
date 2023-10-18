@@ -1,16 +1,19 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.user.NewPassword;
+import ru.skypro.homework.dto.user.UpdateUser;
+import ru.skypro.homework.dto.user.User;
 import ru.skypro.homework.entity.Users;
 import ru.skypro.homework.exceptions.WrongCurrentPasswordException;
+import ru.skypro.homework.repository.UsersRepository;
 import ru.skypro.homework.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private final UsersRepository usersRepository;
 
     private final Users users = new Users(1,
             "user@gmail.com",
@@ -19,8 +22,12 @@ public class UserServiceImpl implements UserService {
             "password",
             "ivan",
             "ivanov",
-            "+7(777)-777-77-77",
+            "+7 777-77-77",
             Role.USER);
+
+    public UserServiceImpl(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
+    }
 
 
     @Override
