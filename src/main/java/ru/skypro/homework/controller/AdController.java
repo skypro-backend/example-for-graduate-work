@@ -5,6 +5,9 @@ import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.projections.ExtendedAd;
 import ru.skypro.homework.service.impl.AdServiceImpl;
+
+import java.util.List;
+
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
@@ -20,7 +23,7 @@ public class AdController {
     //    Получение всех объявлений
     @GetMapping()
     public AdsDTO getAllAds() {
-        return adService.getAllAds();
+        return new AdsDTO(1, List.of(new AdDTO(1,"mjrtei/regtr",321,123,"frenhj")));
     }
 
     //Добавление объявления

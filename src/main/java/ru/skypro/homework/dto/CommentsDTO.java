@@ -4,11 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
-
 @AllArgsConstructor
 @Data
-public class AdsDTO {
+public class CommentsDTO {
+    private List<CommentDTO> results;
     private int count;
-    private List<AdDTO> results;
-
 }
