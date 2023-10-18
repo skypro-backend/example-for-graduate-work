@@ -40,7 +40,7 @@ public class AdMapperImpl implements AdMapper {
         extendedAd.setAuthorLastName(adEntity.getUserEntity().getLastName());
         extendedAd.setDescription(adEntity.getDescription());
         extendedAd.setEmail(adEntity.getUserEntity().getEmail());
-        extendedAd.setImage("/ads/image" + adEntity.getId());
+        extendedAd.setImage("/ads/image/" + adEntity.getId());
         extendedAd.setPhone(adEntity.getUserEntity().getPhoneUser());
         extendedAd.setPrice(adEntity.getPrice());
         extendedAd.setTitle(adEntity.getTitle());
