@@ -8,6 +8,8 @@ import javax.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
