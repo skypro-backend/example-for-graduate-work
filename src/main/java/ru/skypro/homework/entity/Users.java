@@ -3,16 +3,23 @@ package ru.skypro.homework.entity;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.dto.comment.CommentDTO;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.List;
 
 import javax.persistence.*;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @Entity
 @Table(name = "users")
+
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +44,8 @@ public class Users {
     private String phone;
 
     private Role role;
+
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lot")
+//    private List<Comment> commentList;
+
 }
