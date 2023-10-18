@@ -14,17 +14,13 @@ import ru.skypro.homework.dto.account.User;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AccountService;
+import ru.skypro.homework.service.FileService;
 import ru.skypro.homework.service.UserMapper;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URI;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
-import java.nio.file.attribute.FileAttribute;
-
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 /**
  * Класс для осуществления операций с базой данных пользователей
@@ -36,12 +32,14 @@ public class AccountServiceImpl implements AccountService {
     private final UserMapper userMapper;
     private final UserDetails userDetails;
     private final UserDetailsManager userDetailsManager;
+    private final FileService fileService;
 
-    public AccountServiceImpl(UserRepository userRepository, UserMapper userMapper, UserDetails userDetails, UserDetailsManager userDetailsManager) {
+    public AccountServiceImpl(UserRepository userRepository, UserMapper userMapper, UserDetails userDetails, UserDetailsManager userDetailsManager, FileService fileService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.userDetails = userDetails;
         this.userDetailsManager = userDetailsManager;
+        this.fileService = fileService;
     }
 
     private static final String USER_NOT_FOUND = "User not found";
@@ -144,7 +142,7 @@ public class AccountServiceImpl implements AccountService {
         }
         Path filePath = Path.of(avatarsDir, userEntity.getId() + "."
                 + StringUtils.getFilenameExtension(image.getOriginalFilename()));
-        uploadImage(image, filePath);
+        fileService.uploadImage(image, filePath);
         userEntity.setImagePath(filePath.toAbsolutePath().toString());
         userRepository.save(userEntity);
         log.info("Avatar for user: {} was updated successfully.", userName);
@@ -155,7 +153,7 @@ public class AccountServiceImpl implements AccountService {
      * Загрузка аватара из файловой системы по id пользователя. <br> Используется метод
      * {@link UserRepository#findById(Object)} для получения пользователя из базы данных.
      * Для формирования ответа сервера используется метод
-     * {@link #downloadImage(HttpServletResponse, String)}
+     * {@link FileService#downloadImage(HttpServletResponse, String)}
      * @param userId id пользователя
      * @param response ответ сервера
      * @return {@code true}, если аватар пользователя успешно загружен
@@ -169,56 +167,11 @@ public class AccountServiceImpl implements AccountService {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         if (userEntity.getImagePath() != null) {
-            downloadImage(response,
-                    userEntity.getImagePath());
+            fileService.downloadImage(response, userEntity.getImagePath());
             log.info("Download avatar for user: {} method was invoked", userEntity.getEmail());
             return true;
         }
         return false;
     }
 
-    /**
-     * Копирование файла картинки. Входной поток получаем
-     * из метода {@link Files#newInputStream(Path, OpenOption...)}. Выходной поток
-     * получаем из метода {@link HttpServletResponse#getOutputStream()}
-     * @param response ответ сервера
-     * @param imagePath путь и название файла с аватаркой
-     * @throws IOException ошибка ввода - вывода
-     * @see Path#of(URI)
-     */
-    static void downloadImage(HttpServletResponse response,
-                              String imagePath) throws IOException {
-        Path path = Path.of(imagePath);
-
-        try (InputStream is = Files.newInputStream(path);
-             OutputStream os = response.getOutputStream()) {
-            response.setStatus(200);
-            is.transferTo(os);
-            log.info("Image was downloaded successfully.");
-        }
-    }
-
-    /**
-     * Загрузка на сервер файла картинки. Входной поток получаем методом
-     * {@link MultipartFile#getInputStream()}. Выходной поток получаем методом
-     * {@link Files#newOutputStream(Path, OpenOption...)}
-     * @param image файл картинки
-     * @param filePath путь к файлу на сервере
-     * @throws IOException ошибка ввода - вывода
-     * @see Files#deleteIfExists(Path)
-     * @see Files#createDirectories(Path, FileAttribute[])
-     */
-    static void uploadImage(MultipartFile image, Path filePath) throws IOException {
-        Files.deleteIfExists(filePath);
-        Files.createDirectories(filePath.getParent());
-
-        try (InputStream is = image.getInputStream();
-             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
-        ) {
-            bis.transferTo(bos);
-            log.info("Image was uploaded successfully.");
-        }
-    }
 }

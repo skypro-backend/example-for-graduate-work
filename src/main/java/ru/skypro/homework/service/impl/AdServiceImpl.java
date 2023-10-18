@@ -20,6 +20,7 @@ import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdMapper;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.FileService;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,7 @@ public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
     private final AdMapper adMapper;
     private final UserDetails userDetails;
+    private final FileService fileService;
     private static final String USER_NOT_FOUND = "User not found";
     private static final String AD_NOT_FOUND = "Ad not found";
     @Value("${ad.image.dir.path}")
@@ -49,12 +51,13 @@ public class AdServiceImpl implements AdService {
                          UserRepository userRepository,
                          AdRepository adRepository,
                          AdMapper adMapper,
-                         UserDetails userDetails) {
+                         UserDetails userDetails, FileService fileService) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.adRepository = adRepository;
         this.adMapper = adMapper;
         this.userDetails = userDetails;
+        this.fileService = fileService;
     }
 
     /**
@@ -63,7 +66,7 @@ public class AdServiceImpl implements AdService {
      * - Создание объявления из входных данных {@link AdMapper#toAdEntity(CreateOrUpdateAd, AdEntity)}
      * и сохранение его в базе данных {@link AdRepository#save(Object)}.<br>
      * - Создание пути для загрузки изображения объявления {@link #createPath(MultipartFile, AdEntity)}.<br>
-     * - Загрузка с сайта и сохранение в файловой системе изображения объявления {@link AccountServiceImpl#uploadImage(MultipartFile, Path)}.<br>
+     * - Загрузка с сайта и сохранение в файловой системе изображения объявления {@link FileService#uploadImage(MultipartFile, Path)}.<br>
      * - Задание необходимых параметров созданному объявлению {@link AdEntity#setUserEntity(UserEntity)}, {@link AdEntity#setImagePath(String)}.<br>
      * - Сохранение созданного объявления в базе данных {@link AdRepository#save(Object)}.<br>
      * - Преобразование (маппинг) созданного объявления в объект возвращаемого класса {@link AdMapper#toAd(AdEntity)}.
@@ -194,7 +197,7 @@ public class AdServiceImpl implements AdService {
      * - Поиск объявления в базе данных по идентификатору объявления {@link AdRepository#findById(Object)}.<br>
      * - Удаление текущего изображения объявления {@link Files#deleteIfExists(Path)}, если в объявлении сохранен путь к изображению в файловой системе.<br>
      * - Создание пути для загрузки обновленного изображения объявления {@link #createPath(MultipartFile, AdEntity)}.<br>
-     * - Загрузка с сайта и сохранение в файловой системе обновленного изображения объявления {@link AccountServiceImpl#uploadImage(MultipartFile, Path)}.<br>
+     * - Загрузка с сайта и сохранение в файловой системе обновленного изображения объявления {@link FileService#uploadImage(MultipartFile, Path)}.<br>
      * - Задание необходимых параметров найденному объявлению {@link AdEntity#setUserEntity(UserEntity)}, {@link AdEntity#setImagePath(String)}.<br>
      * - Сохранение в базе данных объявления с обновленным изображением {@link AdRepository#save(Object)}.
      * @param id идентификатор объявления в БД
@@ -227,7 +230,7 @@ public class AdServiceImpl implements AdService {
     private Path createPath(MultipartFile image, AdEntity adEntity) throws IOException {
         Path filePath = Path.of(adImageDirPath, "Advertisement_" + adEntity.getId() + "."
                 + StringUtils.getFilenameExtension(image.getOriginalFilename()));
-        AccountServiceImpl.uploadImage(image, filePath);
+        fileService.uploadImage(image, filePath);
         log.info("Upload image from database method was invoked.");
         return filePath;
     }
@@ -243,7 +246,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public void downloadAdImageFromDB(int adId, HttpServletResponse response) throws IOException {
         AdEntity adEntity = adRepository.findById(adId).orElseThrow(() -> new IllegalArgumentException(AD_NOT_FOUND));
-        AccountServiceImpl.downloadImage(response, adEntity.getImagePath());
+        fileService.downloadImage(response, adEntity.getImagePath());
         log.info("Download advertisement image from database method was invoked.");
     }
 
