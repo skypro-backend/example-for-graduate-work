@@ -18,6 +18,7 @@ import ru.skypro.homework.service.AdService;
 
 import javax.transaction.Transactional;
 import javax.xml.crypto.OctetStreamData;
+import java.io.IOException;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -107,7 +108,7 @@ public class AdsController {
                 @ApiResponse(responseCode = "404", description = "Not found"),
         })
         @PatchMapping(value = "/{id}/image" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-        public ResponseEntity<OctetStreamData> updateImage(@PathVariable int id, @RequestPart MultipartFile image) {
-                return ResponseEntity.ok().build();
+        public ResponseEntity<OctetStreamData> updateImage(@PathVariable int id, @RequestPart MultipartFile image) throws IOException {
+                return ResponseEntity.ok(adService.updateImage(id,image));
         }
 }
