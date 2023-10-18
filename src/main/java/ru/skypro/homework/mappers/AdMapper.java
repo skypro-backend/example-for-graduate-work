@@ -7,7 +7,6 @@ import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.service.entities.AdEntity;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -24,7 +23,8 @@ public class AdMapper{
         adDTO.pk( ad.getPk() );
         adDTO.price( ad.getPrice() );
         adDTO.title( ad.getTitle() );
-        adDTO.image( ad.getImage() );
+        adDTO.image( "/images/" + ad.getImage().getImageName() );
+        adDTO.author( ad.getUser().getId() );
 
         return adDTO.build();
     }
@@ -52,11 +52,13 @@ public class AdMapper{
 
         extendedAdDTO.pk( ad.getPk() );
         extendedAdDTO.description( ad.getDescription() );
-        extendedAdDTO.image( ad.getImage() );
-        extendedAdDTO.phone( ad.getPhone() );
+        extendedAdDTO.image( "/images/" + ad.getImage().getImageName());
         extendedAdDTO.price( ad.getPrice() );
         extendedAdDTO.title( String.valueOf( ad.getTitle() ) );
-
+        extendedAdDTO.authorFirstName(ad.getUser().getFirstName());
+        extendedAdDTO.authorLastName(ad.getUser().getLastName());
+        extendedAdDTO.phone(ad.getUser().getPhone());
+        extendedAdDTO.email(ad.getUser().getEmail());
         return extendedAdDTO.build();
     }
 

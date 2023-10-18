@@ -31,8 +31,9 @@ public class AdEntity {
     @Column(name = "title", nullable = false)
     String title;
 
-    @Column(name = "image", nullable = false)
-    String image;
+    @OneToOne(targetEntity = ImageEntity.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "image")
+    ImageEntity image;
 
     @Column(name = "description", nullable = false)
     String description;

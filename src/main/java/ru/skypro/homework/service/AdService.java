@@ -7,6 +7,7 @@ import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ExtendedAdDTO;
 import javax.xml.crypto.OctetStreamData;
+import java.io.IOException;
 
 public interface AdService {
     AdsDTO getAllAds();
@@ -20,6 +21,6 @@ public interface AdService {
     AdDTO updateInfoByAd(int id, CreateOrUpdateAdDTO ad);
     AdsDTO getAdsByAuthUser(String email);
     @PreAuthorize("@mySecurityService.canRefAdd(#id)")
-    OctetStreamData updateImage(int id, MultipartFile image);
+    OctetStreamData updateImage(int id, MultipartFile image) throws IOException;
 
 }
