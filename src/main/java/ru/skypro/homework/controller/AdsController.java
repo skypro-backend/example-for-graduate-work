@@ -15,7 +15,7 @@ public class AdsController {
         return ResponseEntity.ok(AdsAllDTOService.getAllAds());
     }
 
-    @PatchMapping (value= "/{id}/image/json"),consumes= MediaType.MULTIPART_FROM_DATA_VALUE)
+    @PatchMapping (value= "/{id}/image/json"),consumes= MediaType.MULTIPART_FROM_DATA_VALUE);
     public ResponseEntity<String> updateUserImage(@PatchMapping Long id,@RequestParam MultipartFile image) {
 
         return ResponseEntity.ok(userService.updateUserImage(id,image);
