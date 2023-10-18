@@ -26,9 +26,10 @@ public class UserModel {
     private String lastName;
     @Column(name = "phone")
     private String phone;
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 
-    private  Ad ad;
+   // @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+
+   // private  Ad ad;
 
 
 
