@@ -5,7 +5,7 @@ import lombok.Data;
 @AllArgsConstructor
 
 @Data
-public class NewPasswordDTO {
+public class NewPassword {
     private   String currentPassword;
     private   String newPassword;
 }

@@ -1,9 +1,11 @@
 package ru.skypro.homework.controller;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
 
+import java.util.List;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/users")
@@ -11,21 +13,21 @@ public class UserController {
 
     // Получение пользователя
     @GetMapping("/me")
-    public UserDTO getUser() {
-        return new UserDTO(1, "fe", "fre", "vtgr", "f54", Role.USER.toString(), "/gfd/gtfr");
+    public User getUser(@PathVariable int userId) {
+        return new User(1, "fe", "fre", "vtgr", "f54", Role.USER.toString(), "/gfd/gtfr");
     }
 
     // Создание нового пользователя
     @PostMapping("/set_password")
     public void setPasswordUser() {
         System.out.println("Обновление пароля");
-        new NewPasswordDTO("gtrji", "fregtr");
+        new NewPassword("gtrji", "fregtr");
     }
 
     @PatchMapping("/me")
-    public UpdateUserDTO updateInfoUsers(@RequestBody UserDTO userDTO) {
+    public UpdateUser updateInfoUsers(@RequestBody User user) {
         System.out.println("Обновление информации об авторизованном пользователе");
-        return new UpdateUserDTO("btr", "reg", "rr");
+        return new UpdateUser("btr", "reg", "rr");
     }
 
     @PatchMapping("/me/image")
