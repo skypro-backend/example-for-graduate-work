@@ -1,10 +1,14 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
-public class Register {
-
+@AllArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
+public class Registred {
     private String username;
     private String password;
     private String firstName;
