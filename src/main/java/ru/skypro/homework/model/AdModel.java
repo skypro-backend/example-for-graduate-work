@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Data
@@ -31,11 +32,16 @@ public class AdModel {
     @JoinColumn(name = "author_id")
     private int author;
 
-/*
-        Тоже нужно по наверное
-    @Column(name = "comments")
-    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY)
-    private Collection<CommentModel> commentsList;
-*/
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserModel userModel;
+
+    @OneToMany(mappedBy="ad", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CommentModel> commentModels;
+
+//    @Column(name = "comments")
+//    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY)
+//    private Collection<CommentModel> commentsList;
+
 
 }
