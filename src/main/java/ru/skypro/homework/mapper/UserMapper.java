@@ -6,7 +6,7 @@ import ru.skypro.homework.model.UserModel;
 public class UserMapper {
 
 
-    public UserDTO mapToUserModel(UserModel userModel) {
+    public static UserDTO mapToUserModel(UserModel userModel) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(userModel.getId());
         userDTO.setEmail(userModel.getEmail());
@@ -18,7 +18,7 @@ public class UserMapper {
         return userDTO;
     }
 
-    public UserModel mapToUserDto(UserDTO userDTO) {
+    public static UserModel mapToUserDto(UserDTO userDTO) {
         UserModel userModel = new UserModel();
         userModel.setId(userDTO.getId());
         userModel.setEmail(userDTO.getEmail());
