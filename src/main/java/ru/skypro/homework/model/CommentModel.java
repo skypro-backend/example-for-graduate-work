@@ -12,11 +12,18 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "commet")
+@Table(name = "comment")
 public class CommentModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     private int pk;
+
+    @Column(name = "author_image")
+    private String authorImage;
+
+    @Column(name = "author_first_name")
+    private String  authorFirstName;
 
     @Column(name = "create_data")
     private LocalDateTime createAt = LocalDateTime.now();
