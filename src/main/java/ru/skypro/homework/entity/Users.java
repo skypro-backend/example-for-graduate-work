@@ -1,6 +1,8 @@
 package ru.skypro.homework.entity;
 
 import lombok.Data;
+
+import lombok.NoArgsConstructor;
 import ru.skypro.homework.dto.authdto.Role;
 
 import javax.persistence.*;
@@ -9,6 +11,7 @@ import java.util.*;
 @Data
 @Entity
 @Table(name = "userAuth")
+@NoArgsConstructor
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
