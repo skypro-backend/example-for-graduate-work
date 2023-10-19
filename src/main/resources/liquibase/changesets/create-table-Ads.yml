@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: Anna
+      changes:
+        - createTable:
+            tableName: ads
+            columns:
+              - column:
+                  name: ad_id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image
+                  type: varchar

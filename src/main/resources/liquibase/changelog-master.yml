@@ -5,3 +5,5 @@ databaseChangeLog:
       file: liquibase/changesets/create-table-Ads.yml
   - include:
       file: liquibase/changesets/create-table-Users.yml
+  - include:
+      file: liquibase/changesets/create-foreign-key-AdsTable.yml

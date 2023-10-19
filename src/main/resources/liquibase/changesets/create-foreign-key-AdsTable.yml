@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: Anna
+      changes:
+        - addColumn:
+            tableName: ads
+            columns:
+              - column:
+                  name: user_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - addForeignKeyConstraint:
+                  baseTableName: ads
+                  baseColumnNames: user_id
+                  referencedTableName: users
+                  referencedColumnNames: id
