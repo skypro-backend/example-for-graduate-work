@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+//import jakarta.validation.constraints.Max;
+//import jakarta.validation.constraints.Min;
 
 import java.util.List;
 
@@ -20,19 +20,20 @@ public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ad_id",nullable = false)
-    private int pk; //id объявления
+    private Integer pk; //id объявления
+//    Марина:поменяла тип int->Integer
 
-    @Max(32)
-    @Min(4)
+//    @Max(32)
+//    @Min(4)
     @Column(name = "title", nullable = false)
     private String title; //заголовок объявления
 
-    @Max(64)
-    @Min(8)
+//    @Max(64)
+//    @Min(8)
     @Column(name="description")
     private String description; // описание объявления
 
-    @Max(10000000)
+//    @Max(10000000)
     @Column(name = "price", nullable = false)
     private int price; //цена объявления
 
