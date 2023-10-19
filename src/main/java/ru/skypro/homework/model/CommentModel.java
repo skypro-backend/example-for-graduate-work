@@ -34,4 +34,7 @@ public class CommentModel {
     @Column(name ="author")
     @JoinColumn(name = "user_id")
     private int author;
+
+    @JoinColumn(name = "ad_id", nullable = false)
+    private AdModel adModel;
 }
