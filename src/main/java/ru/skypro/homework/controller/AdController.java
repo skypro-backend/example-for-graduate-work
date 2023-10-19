@@ -1,8 +1,10 @@
 package ru.skypro.homework.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.projections.ExtendedAd;
 import ru.skypro.homework.service.impl.AdServiceImpl;
 
@@ -11,51 +13,55 @@ import java.util.List;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
+@RequiredArgsConstructor
 public class AdController {
 
-   private final AdServiceImpl adService;
+    private final AdServiceImpl adService;
 
-    public AdController(AdServiceImpl adService) {
-        this.adService = adService;
-    }
+//    public AdController(AdServiceImpl adService) {
+//        this.adService = adService;
+//    }
 
 
     //    Получение всех объявлений
     @GetMapping()
     public AdsDTO getAllAds() {
-        return new AdsDTO(1, List.of(new AdDTO(1,"mjrtei/regtr",321,123,"frenhj")));
+        return adService.getAllAds();
     }
 
     //Добавление объявления
     @PostMapping()
-    public AdDTO addAd() {
-        return adService.addAd();
+    public AdDTO addAd(@RequestBody CreateOrUpdateAd createAd,
+                       @RequestParam String imagePath) {
+        return adService.addAd(createAd, imagePath);
     }
 
 
     // Получение информации об объявлении
     @GetMapping("/{id}")
-    public ExtendedAd getAdInfo(@PathVariable int id) {
+    public ExtendedAd getAds(@PathVariable int id) {
         return adService.getAdFullInfo(id);
-    }
-
-
-    // Обновление объявления
-    @PatchMapping("/{id}")
-    public AdsDTO updateAd(@PathVariable int id) {
-        return null;
     }
 
 
     // Удалить объявление
     @DeleteMapping("/{id}")
-    public void deleteAd(@PathVariable int id) {
+    public void removeAd(@PathVariable int id) {
+        adService.deleteAd(id);
+
+    }
+
+    // Обновление объявления
+    @PatchMapping("/{id}")
+    public AdsDTO updateAds(@PathVariable int id,
+                            @RequestBody CreateOrUpdateAd updateAd) {
+        return adService.updateAd(updateAd, id);
     }
 
 
     //Получение объявлений авторизованного пользователя
     @GetMapping("/me")
-    public AdsDTO getUserAds() {
+    public AdsDTO getAdsMe() {
         return adService.getUserAdds();
     }
 

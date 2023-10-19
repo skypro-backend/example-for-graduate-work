@@ -11,7 +11,7 @@ public class UserController {
 
     // Получение пользователя
     @GetMapping("/me")
-    public UserDTO getUser(@PathVariable int userId) {
+    public UserDTO getUser() {
         return new UserDTO(1, "fe", "fre", "vtgr", "f54", Role.USER.toString(), "/gfd/gtfr");
     }
 
