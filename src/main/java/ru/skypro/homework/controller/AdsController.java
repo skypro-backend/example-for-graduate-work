@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.skypro.homework.dto.DeleteAdDto;
 
 @RestController
 @RequestMapping("/ads")
@@ -19,7 +18,7 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not Found")
-    public ResponseEntity<Void> removeAd(@RequestBody DeleteAdDto deleteAdDTO) {
+    public ResponseEntity<Void> removeAd(@PathVariable("adId") Long adId) {
         // Реализация удаления объявления
         return ResponseEntity.noContent().build();
     }
