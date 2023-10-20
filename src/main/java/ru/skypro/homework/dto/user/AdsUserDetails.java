@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Users;
 
-
+import javax.persistence.Enumerated;
 import java.util.Collection;
 import java.util.Collections;
 
