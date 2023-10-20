@@ -2,10 +2,10 @@ package ru.skypro.homework.controller;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.user.*;
 import ru.skypro.homework.service.UserService;
 
 
@@ -18,23 +18,27 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/set_password")
-    public void updatePassword(@RequestBody NewPassword newPassword) {
-        userService.updatePassword(newPassword);
+    public void updatePassword(@RequestBody NewPassword newPassword, Authentication authentication) {
+        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
+        userService.updatePassword(newPassword, adsUserDetails.getId());
     }
 
     @GetMapping("/me")
-    public User getInformation() {
-        return userService.getInformation();
+    public User getInformation(Authentication authentication) {
+        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
+        return userService.getInformation(adsUserDetails.getId());
     }
 
     @PatchMapping("/me")
-    public UpdateUser updateInformationAboutUser(@RequestBody UpdateUser updateUser) {
-        return userService.updateInformationAboutUser(updateUser);
+    public UpdateUser updateInformationAboutUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
+        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
+        return userService.updateInformationAboutUser(updateUser, adsUserDetails.getId());
     }
 
     @PatchMapping("/me/image")
-    public void updateImage(UpdateImage image) {
-        userService.UpdateImage(image.getNewImage());
+    public void updateImage(@RequestParam("image") MultipartFile image, Authentication authentication) {
+        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
+        userService.UpdateImage(image, adsUserDetails.getId());
     }
 
 

@@ -1,6 +1,7 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.dto.user;
 
 import lombok.*;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Users;
 
 @Data
