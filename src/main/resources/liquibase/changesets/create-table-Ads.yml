@@ -8,7 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: ad_id
-                  type: int
+                  type: integer
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -31,3 +31,10 @@ databaseChangeLog:
               - column:
                   name: image
                   type: varchar
+              - column:
+                  name: user_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: users_id
+                    references: users(id)
+                    nullable: false

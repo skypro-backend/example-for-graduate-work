@@ -36,22 +36,22 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: fisrtName
+                  name: first_name
                   type: varchar(16)
                   constraints:
                     nullable: false
               - column:
-                  name: lastName
+                  name: last_name
                   type: varchar(16)
                   constraints:
                     nullable: false
               - column:
                   name: phone
-                  type: varchar(15)
+                  type: varchar(20)
                   constraints:
                     nullable: false
               - column:
                   name: role
-                  type: varchar(5)
+                  type: integer
                   constraints:
                     nullable: false
