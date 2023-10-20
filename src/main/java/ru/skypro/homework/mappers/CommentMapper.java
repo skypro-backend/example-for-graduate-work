@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.entities.AdEntity;
 import ru.skypro.homework.service.entities.CommentEntity;
+import ru.skypro.homework.service.entities.UserEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,11 +30,13 @@ public class CommentMapper {
                 .collect(Collectors.toList());
     }
 
-    public CommentEntity createCommentEntity(CreateOrUpdateCommentDTO commentText, AdEntity adEntity) {
+    public CommentEntity createCommentEntity(CreateOrUpdateCommentDTO commentText,
+                                             AdEntity adEntity,
+                                             UserEntity userEntity) {
         CommentEntity newCommentEntity = new CommentEntity();
         newCommentEntity.setText(commentText.getText());
         newCommentEntity.setCreatedAt(LocalDateTime.now());
-        newCommentEntity.setUser(adEntity.getUser());
+        newCommentEntity.setUser(userEntity);
         newCommentEntity.setAdEntity(adEntity);
         return newCommentEntity;
     }

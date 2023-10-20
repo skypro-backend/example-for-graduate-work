@@ -41,9 +41,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO) {
-        UserEntity user = getCurrentUser();
-        UpdateUserDTO updateUser = userMapper.toUpdateUserDto(user);
-        userRepository.saveAndFlush(user);
+        UserEntity userEntity = getCurrentUser();
+        UserEntity updateUserEntity = userMapper.userEntityUpdate(updateUserDTO, userEntity);
+        UpdateUserDTO updateUser = userMapper.toUpdateUserDto(userEntity);
+        userRepository.saveAndFlush(updateUserEntity);
 
         return updateUser;
     }
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
         }
 
         UserEntity user = getCurrentUser();
-        UserDetails userDetails = securityUserDetailsService.loadUserByUsername(user.getUsername());
+        UserDetails userDetails = securityUserDetailsService.loadUserByUsername(user.getEmail());
 
         if (!passwordEncoder.matches(newPasswordDTO.getCurrentPassword(), userDetails.getPassword())) {
             throw new UnauthorizedException("Пароли не совпадают");
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
         String encodedNewPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedNewPassword);
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
     }
 
     @Override

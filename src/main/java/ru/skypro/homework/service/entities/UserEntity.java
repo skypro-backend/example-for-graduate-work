@@ -34,9 +34,6 @@ public class UserEntity {
     @Column(name = "phone")
     String phone;
 
-    @Column(name = "username", unique = true)
-    String username;
-
     @Column(name = "password")
     String password;
 
