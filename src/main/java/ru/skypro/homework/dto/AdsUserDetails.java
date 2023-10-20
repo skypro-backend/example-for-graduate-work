@@ -1,13 +1,11 @@
-package ru.skypro.homework.dto.user;
+package ru.skypro.homework.dto;
 
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Users;
 
-import javax.persistence.Enumerated;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -20,23 +18,12 @@ public class AdsUserDetails implements UserDetails {
     private final String username;
     private final String password;
     private final boolean isAdmin;
-    private final String email;
-    private final String image;
-    private final String firstName;
-    private final String lastName;
-    private final String phone;
 
-
-    public AdsUserDetails(Integer id, String username, String password, boolean isAdmin, String email, String image, String firstName, String lastName, String phone) {
+    public AdsUserDetails(Integer id, String username, String password, boolean isAdmin) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
-        this.email = email;
-        this.image = image;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
     }
 
     @Override
@@ -80,29 +67,7 @@ public class AdsUserDetails implements UserDetails {
 
     public static AdsUserDetails from(Users user) {
         boolean isAdminForUser = user.getRole() == ADMIN;
-        return new AdsUserDetails(user.getId(),
-                user.getUsername(),
-                user.getPassword(),
-                isAdminForUser,
-                user.getEmail(),
-                user.getImage(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getPhone());
+        return new AdsUserDetails(user.getId(), user.getUsername(), user.getPassword(), isAdminForUser);
     }
-
-    public Users toAdsUserDetails() {
-        Role role = this.isAdmin ? ADMIN: USER;
-        return new Users(this.id,
-                this.email,
-                this.image,
-                this.username,
-                this.password,
-                this.firstName,
-                this.lastName,
-                this.phone,
-                role);
-    }
-
 
 }
