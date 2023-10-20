@@ -1,7 +1,6 @@
 package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +10,8 @@ import ru.skypro.homework.service.CommentService;
 
 import java.util.List;
 
-@Slf4j
-@CrossOrigin(value = "http://localhost:3000")
+//@Slf4j
+//@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("ads")
@@ -24,9 +23,9 @@ public class CommentController {
 
     //Получение комментариев объявления
     @GetMapping("/{id}/comments")
-    public List<CommentDTO> getComments(@PathVariable("id") Integer adId) {
+    public List<CommentDTO> getAllComments() {
         logger.info("get all comments");
-        return commentService.getComments(adId);
+        return commentService.getAllComments();
     }
 
     //Добавление комментария к объявлению

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CommentService {
 
-    List<CommentDTO> getComments(Integer adId);
+    List<CommentDTO> getAllComments();
 
     void addComment(Integer id, CreateOrUpdateComment createOrUpdateComment);
 
