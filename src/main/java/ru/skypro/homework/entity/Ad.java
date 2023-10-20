@@ -21,7 +21,7 @@ public class Ad {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ad_id",nullable = false)
     private Integer pk; //id объявления
-
+//    Марина:поменяла тип int->Integer
 
 //    @Max(32)
 //    @Min(4)
