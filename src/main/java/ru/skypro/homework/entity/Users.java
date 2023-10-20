@@ -47,7 +47,7 @@ public class Users {
     @Enumerated
     private Role role;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "users")
-    private List<Comment> commentList;
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "users")
+//    private List<Comment> commentList;
 
 }

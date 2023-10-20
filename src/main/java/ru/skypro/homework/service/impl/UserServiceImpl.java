@@ -1,5 +1,8 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Role;
@@ -54,4 +57,5 @@ public class UserServiceImpl implements UserService {
 //        дописать логику работы с файлами
 
     }
+
 }
