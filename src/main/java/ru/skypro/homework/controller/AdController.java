@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.projections.ExtendedAd;
 import ru.skypro.homework.service.impl.AdServiceImpl;
 
@@ -28,41 +29,41 @@ public class AdController {
 
     //Добавление объявления
     @PostMapping()
-    public AdDTO addAd() {
-        return adService.addAd();
+    public AdDTO addAd(@RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+        return adService.addAd(createOrUpdateAdDTO);
     }
 
 
     // Получение информации об объявлении
     @GetMapping("/{id}")
-    public ExtendedAd getAdInfo(@PathVariable int id) {
-        return adService.getAdFullInfo(id);
+    public ExtendedAd getAds(@PathVariable int id) {
+        return adService.getAds(id);
     }
 
 
     // Обновление объявления
     @PatchMapping("/{id}")
-    public AdsDTO updateAd(@PathVariable int id) {
+    public AdsDTO updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
         return null;
     }
 
 
     // Удалить объявление
     @DeleteMapping("/{id}")
-    public void deleteAd(@PathVariable int id) {
+    public void removeAd(@PathVariable int id) {
     }
 
 
     //Получение объявлений авторизованного пользователя
     @GetMapping("/me")
-    public AdsDTO getUserAds() {
-        return adService.getUserAdds();
+    public AdsDTO getAdsMe() {
+        return adService.getAdsMe();
     }
 
     // Обновление картинки объявления
     @PatchMapping("/{id}/image")
-    public String updateImage(@PathVariable int id) {
-        return adService.updateImage();
+    public String updateImage(@PathVariable int id, @RequestBody String pathImage) {
+        return adService.updateImage(id, pathImage);
     }
 
 
