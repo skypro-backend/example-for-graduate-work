@@ -3,7 +3,6 @@ package ru.skypro.homework.service.impl;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.projections.ExtendedAd;
 import ru.skypro.homework.service.AdService;
 
@@ -18,37 +17,31 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+    public AdDTO addAd() {
         return getListAdDTO().get(0);
     }
 
     @Override
-    public ExtendedAd getAds(int id) {
-        return null;
-    }
-
-
-    public AdsDTO updateAd(int id, CreateOrUpdateAdDTO createOrUpdateAdDTO) {
-        return null;
+    public ExtendedAd getAdFullInfo(int id) {
+        return getExtendedAdd();
     }
 
     @Override
-    public void deleteAd(int id) {
-
-    }
-
-    @Override
-    public AdsDTO getAdsMe() {
+    public AdsDTO updateAd() {
         return null;
     }
 
     @Override
-    public String updateImage(int id, String pathImage) {
+    public void deleteAd() {
+    }
+
+    @Override
+    public AdsDTO getUserAdds() {
+        return getAdsDto();
+    }
+
+    @Override
+    public String updateImage() {
         return "new path";
     }
-
 }
-
-
-
-
