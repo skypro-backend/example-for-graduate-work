@@ -1,6 +1,6 @@
 package ru.skypro.homework.entity;
 
-//import jakarta.validation.constraints.*;
+
 import lombok.*;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.comment.CommentDTO;
@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import java.util.List;
 
 import javax.persistence.*;
+
 
 @Data
 @AllArgsConstructor

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -34,7 +35,7 @@ public class Comment {
     LocalDateTime createdAt;
 
     @Column(name = "text", nullable = false)
-//    @Size(min=8, max=64)
+    @Size(min=8, max=64)
     private String text;
 
     @Override
