@@ -9,7 +9,7 @@ public class AdMapper {
         adDTO.setPk(adModel.getPk());
         adDTO.setTitle(adModel.getTitle());
         adDTO.setPrice(adModel.getPrice());
-//        adDTO.setAuthor(adModel.getAuthor());
+        adDTO.setAuthor(adModel.getUserModel().getId());
         adDTO.setImage(adModel.getImage());
         return adDTO;
     }
