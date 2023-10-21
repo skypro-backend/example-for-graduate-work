@@ -1,8 +1,8 @@
 package ru.skypro.homework.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.CommentsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.projections.Comments;
+import ru.skypro.homework.projections.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentsService;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -15,12 +15,12 @@ public class СommentsController {
     }
 
     @GetMapping("/{id}/comments")
-    public CommentsDTO getComments(@PathVariable int id) {
+    public Comments getComments(@PathVariable int id) {
         System.out.println("тут будет получение комментариев объявления ");
         return commentsService.getComments(id);
     }
     @PostMapping("/{id}/comments")
-    public CommentsDTO addComment(@PathVariable int id, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+    public Comments addComment(@PathVariable int id, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         System.out.println("Добавление комментария к  объявлению");
         return commentsService.addComment(id);
     }
@@ -30,8 +30,8 @@ public class СommentsController {
 
     }
     @PatchMapping("/ads/{adId}/comments/{commentId}")
-    public CreateOrUpdateCommentDTO updateComment(@PathVariable int adId, @PathVariable int commentId, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+    public CreateOrUpdateComment updateComment(@PathVariable int adId, @PathVariable int commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         System.out.println("Обновление комментария");
-        return commentsService.updateComment(adId, commentId, createOrUpdateCommentDTO);
+        return commentsService.updateComment(adId, commentId, createOrUpdateComment);
     }
 }

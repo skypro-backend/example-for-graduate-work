@@ -3,6 +3,9 @@ package ru.skypro.homework.controller;
 
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.model.Role;
+import ru.skypro.homework.projections.NewPassword;
+import ru.skypro.homework.projections.UpdateUser;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -17,15 +20,15 @@ public class UserController {
 
     // Создание нового пользователя
     @PostMapping("/set_password")
-    public void setPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
+    public void setPassword(@RequestBody NewPassword newPassword) {
         System.out.println("Обновление пароля");
-        new NewPasswordDTO("gtrji", "fregtr");
+        new NewPassword("gtrji", "fregtr");
     }
 
     @PatchMapping("/me")
-    public UpdateUserDTO updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
+    public UpdateUser updateUser(@RequestBody UpdateUser updateUser) {
         System.out.println("Обновление информации об авторизованном пользователе");
-        return new UpdateUserDTO("btr", "reg", "rr");
+        return new UpdateUser("btr", "reg", "rr");
     }
 
     @PatchMapping("/me/image")

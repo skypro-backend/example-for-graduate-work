@@ -2,8 +2,9 @@ package ru.skypro.homework.controller;
 
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
+import ru.skypro.homework.projections.Ads;
+import ru.skypro.homework.projections.CreateOrUpdateAd;
+
 import ru.skypro.homework.projections.ExtendedAd;
 import ru.skypro.homework.service.impl.AdServiceImpl;
 
@@ -23,13 +24,13 @@ public class AdController {
 
     //    Получение всех объявлений
     @GetMapping()
-    public AdsDTO getAllAds() {
-        return new AdsDTO(1, List.of(new AdDTO(1,"mjrtei/regtr",321,123,"frenhj")));
+    public Ads getAllAds() {
+        return new Ads(1, List.of(new AdDTO(1,"mjrtei/regtr",321,123,"frenhj")));
     }
 
     //Добавление объявления
     @PostMapping()
-    public AdDTO addAd(@RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO, @RequestParam String imagePath) {
+    public AdDTO addAd(@RequestBody CreateOrUpdateAd createOrUpdateAdDTO, @RequestParam String imagePath) {
         return adService.addAd(createOrUpdateAdDTO, imagePath);
     }
 
@@ -43,7 +44,7 @@ public class AdController {
 
     // Обновление объявления
     @PatchMapping("/{id}")
-    public AdsDTO updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+    public Ads updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAd createOrUpdateAdDTO) {
         return adService.updateAd( id, createOrUpdateAdDTO);
     }
 
@@ -56,7 +57,7 @@ public class AdController {
 
     //Получение объявлений авторизованного пользователя
     @GetMapping("/me")
-    public AdsDTO getAdsMe() {
+    public Ads getAdsMe() {
         return adService.getAdsMe();
     }
 

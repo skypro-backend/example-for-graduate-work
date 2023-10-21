@@ -2,8 +2,8 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import ru.skypro.homework.dto.CommentsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.projections.Comments;
+import ru.skypro.homework.projections.CreateOrUpdateComment;
 
 import ru.skypro.homework.service.CommentsService;
 
@@ -16,12 +16,12 @@ public class CommentsServiceImpl implements CommentsService {
 
 
     @Override
-    public CommentsDTO getComments(int id) {
+    public Comments getComments(int id) {
         return null;
     }
 
     @Override
-    public CommentsDTO addComment(int id) {
+    public Comments addComment(int id) {
         return null;
     }
 
@@ -31,7 +31,7 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
-    public CreateOrUpdateCommentDTO updateComment(int id, int commentsId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+    public CreateOrUpdateComment updateComment(int id, int commentsId, CreateOrUpdateComment createOrUpdateComment) {
         return null;
     }
 }

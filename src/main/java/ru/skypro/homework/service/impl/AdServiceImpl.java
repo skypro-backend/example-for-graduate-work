@@ -2,24 +2,22 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
+import ru.skypro.homework.projections.Ads;
+import ru.skypro.homework.projections.CreateOrUpdateAd;
+
 import ru.skypro.homework.projections.ExtendedAd;
 import ru.skypro.homework.service.AdService;
-
-import static ru.skypro.homework.service.ReturnableStubs.*;
 
 @Service
 public class AdServiceImpl implements AdService {
 
 
     @Override
-    public AdsDTO getAllAds() {
+    public Ads getAllAds() {
         return null;
     }
 
-    @Override
-    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, String pathImage) {
+    public AdDTO addAd(CreateOrUpdateAd createOrUpdateAdDTO, String pathImage) {
         return null;
     }
 
@@ -29,8 +27,7 @@ public class AdServiceImpl implements AdService {
         return null;
     }
 
-    @Override
-    public AdsDTO updateAd(int id, CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+    public Ads updateAd(int id, CreateOrUpdateAd createOrUpdateAdDTO) {
         return null;
     }
 
@@ -40,7 +37,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdsDTO getAdsMe() {
+    public Ads getAdsMe() {
         return null;
     }
 

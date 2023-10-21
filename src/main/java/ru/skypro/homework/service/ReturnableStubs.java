@@ -2,7 +2,7 @@ package ru.skypro.homework.service;
 
 
 import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.projections.Ads;
 import ru.skypro.homework.projections.ExtendedAd;
 
 import java.util.List;
@@ -18,8 +18,8 @@ public class ReturnableStubs {
     }
 
 
-    public static AdsDTO getAdsDto() {
-        return new AdsDTO(getListAdDTO().size(), getListAdDTO());
+    public static Ads getAdsDto() {
+        return new Ads(getListAdDTO().size(), getListAdDTO());
     }
 
     public static ExtendedAd getExtendedAdd() {

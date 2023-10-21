@@ -1,7 +1,6 @@
 package ru.skypro.homework.mapper;
 
 import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.model.CommentModel;
 
 public class CommentMaper {
