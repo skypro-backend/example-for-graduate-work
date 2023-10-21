@@ -19,9 +19,10 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, String pathImage) {
         return null;
     }
+
 
     @Override
     public ExtendedAd getAds(int id) {

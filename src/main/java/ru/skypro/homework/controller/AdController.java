@@ -29,8 +29,8 @@ public class AdController {
 
     //Добавление объявления
     @PostMapping()
-    public AdDTO addAd(@RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
-        return adService.addAd(createOrUpdateAdDTO);
+    public AdDTO addAd(@RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO, @RequestParam String imagePath) {
+        return adService.addAd(createOrUpdateAdDTO, imagePath);
     }
 
 
@@ -44,7 +44,7 @@ public class AdController {
     // Обновление объявления
     @PatchMapping("/{id}")
     public AdsDTO updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
-        return null;
+        return adService.updateAd( id, createOrUpdateAdDTO);
     }
 
 

@@ -9,7 +9,7 @@ public interface AdService {
 
     AdsDTO getAllAds();
 
-    AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO);
+    AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, String pathImage);
 
     ExtendedAd getAds(int id);
 
