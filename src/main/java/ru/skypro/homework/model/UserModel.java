@@ -45,9 +45,12 @@ public class UserModel {
     @Column(name = "role",nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy="users", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="userModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AdModel> adModels;
 
-
+    @OneToMany(mappedBy = "userModel",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    private List<CommentModel> commentModels;
 
 }

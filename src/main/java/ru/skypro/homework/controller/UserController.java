@@ -11,27 +11,27 @@ public class UserController {
 
     // Получение пользователя
     @GetMapping("/me")
-    public UserDTO getUser(@PathVariable int userId) {
+    public UserDTO getUser() {
         return new UserDTO(1, "fe", "fre", "vtgr", "f54", Role.USER.toString(), "/gfd/gtfr");
     }
 
     // Создание нового пользователя
     @PostMapping("/set_password")
-    public void setPasswordUser() {
+    public void setPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
         System.out.println("Обновление пароля");
         new NewPasswordDTO("gtrji", "fregtr");
     }
 
     @PatchMapping("/me")
-    public UpdateUserDTO updateInfoUsers(@RequestBody UserDTO user) {
+    public UpdateUserDTO updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
         System.out.println("Обновление информации об авторизованном пользователе");
         return new UpdateUserDTO("btr", "reg", "rr");
     }
 
     @PatchMapping("/me/image")
-    public void updateAvatarUsers( @PathVariable String pathImage) {
+    public String updateUserImage( @PathVariable String pathImage) {
         System.out.println("Обновление avatar об авторизованном пользователе");
-        System.out.println(pathImage);
+        return  "pathImage";
 
     }
 }

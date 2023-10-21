@@ -9,14 +9,14 @@ public class AdMapper {
         adDTO.setPk(adModel.getPk());
         adDTO.setTitle(adModel.getTitle());
         adDTO.setPrice(adModel.getPrice());
-        adDTO.setAuthor(adModel.getAuthor());
+//        adDTO.setAuthor(adModel.getAuthor());
         adDTO.setImage(adModel.getImage());
         return adDTO;
     }
 
     public static AdModel toAdModel(AdDTO adDTO) {
         AdModel adModel = new AdModel();
-        adModel.setAuthor(adDTO.getAuthor());
+//        adModel.setAuthor(adDTO.getAuthor());
         adModel.setTitle(adDTO.getTitle());
         adModel.setPk(adDTO.getPk());
         adModel.setImage(adDTO.getImage());

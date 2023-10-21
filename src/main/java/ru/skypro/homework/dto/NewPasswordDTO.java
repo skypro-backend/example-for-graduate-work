@@ -5,6 +5,6 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class NewPasswordDTO {
-    private   String currentPassword;
+    private   String currentPassword; // min 8; max 16
     private   String newPassword;
 }

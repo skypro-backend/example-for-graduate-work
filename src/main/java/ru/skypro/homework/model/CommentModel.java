@@ -19,22 +19,19 @@ public class CommentModel {
     @Column(name = "comment_id")
     private int pk;
 
-    @Column(name = "author_image")
-    private String authorImage;
-
-    @Column(name = "author_first_name")
-    private String  authorFirstName;
-
     @Column(name = "create_data")
     private LocalDateTime createAt = LocalDateTime.now();
 
     @Column(name = "text")
     private String text;
 
-    @Column(name ="author")
-    @JoinColumn(name = "user_id")
-    private int author;
 
-    @JoinColumn(name = "ad_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserModel userModel;
+
+    // появляется поле ad_id в таблице comments
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ad_id")
     private AdModel adModel;
 }

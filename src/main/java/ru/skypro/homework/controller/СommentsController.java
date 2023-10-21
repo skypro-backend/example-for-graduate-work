@@ -15,23 +15,23 @@ public class СommentsController {
     }
 
     @GetMapping("/{id}/comments")
-    public CommentsDTO getFullCommets(@PathVariable int id) {
+    public CommentsDTO getComments(@PathVariable int id) {
         System.out.println("тут будет получение комментариев объявления ");
-        return commentsService.getFullComments( id);
+        return commentsService.getComments(id);
     }
     @PostMapping("/{id}/comments")
-    public CommentsDTO addComments(@PathVariable int id) {
+    public CommentsDTO addComment(@PathVariable int id, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         System.out.println("Добавление комментария к  объявлению");
-        return commentsService.addComments(id);
+        return commentsService.addComment(id);
     }
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public void removeComments(@PathVariable int id, @PathVariable int commentId) {
+    public void deleteComment(@PathVariable int adId, @PathVariable int commentId) {
         System.out.println("Удаление комментария ");
 
     }
     @PatchMapping("/ads/{adId}/comments/{commentId}")
-    public CreateOrUpdateCommentDTO updateComments(@PathVariable int id, @PathVariable int commentId) {
+    public CreateOrUpdateCommentDTO updateComment(@PathVariable int adId, @PathVariable int commentId, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         System.out.println("Обновление комментария");
-        return commentsService.updateComments(id, commentId);
+        return commentsService.updateComment(adId, commentId, createOrUpdateCommentDTO);
     }
 }

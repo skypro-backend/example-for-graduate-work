@@ -14,31 +14,24 @@ import javax.transaction.Transactional;
 @Service
 public class CommentsServiceImpl implements CommentsService {
 
+
     @Override
-
-    public CommentsDTO getFullComments(int id) {
-
+    public CommentsDTO getComments(int id) {
         return null;
     }
 
     @Override
-
-    public CommentsDTO addComments(int id) {
-
+    public CommentsDTO addComment(int id) {
         return null;
     }
 
     @Override
-    public void removeComments(int id, int commentsId) {
+    public void deleteComment(int id, int commentsId) {
 
     }
 
     @Override
-
-    public CreateOrUpdateCommentDTO updateComments(int id, int commentsId) {
-
+    public CreateOrUpdateCommentDTO updateComment(int id, int commentsId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         return null;
     }
-
-
 }

@@ -4,10 +4,10 @@ import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 
 public interface CommentsService {
-    CommentsDTO getFullComments(int id);
-    CommentsDTO addComments(int id);
-    void removeComments(int id, int commentsId);
-    CreateOrUpdateCommentDTO updateComments(int id, int commentsId);
+    CommentsDTO getComments(int id);
+    CommentsDTO addComment(int id);
+    void deleteComment(int id, int commentsId);
+    CreateOrUpdateCommentDTO updateComment(int id, int commentsId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO);
 
 
 }
