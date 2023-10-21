@@ -3,7 +3,7 @@ package ru.skypro.homework.entity;
 
 import lombok.*;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.dto.comment.CommentDTO;
+
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -44,7 +44,7 @@ public class Users {
     @Enumerated
     private Role role;
 
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "users")
-//    private List<Comment> commentList;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "users")
+    private List<Comment> commentList;
 
 }

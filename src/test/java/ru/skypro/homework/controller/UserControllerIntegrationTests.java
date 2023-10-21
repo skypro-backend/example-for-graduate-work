@@ -58,7 +58,8 @@ public class UserControllerIntegrationTests {
                 "ivan",
                 "ivanov",
                 "+7 777-77-77",
-                Role.USER);
+                Role.USER,
+                new ArrayList<>());
         usersRepository.save(user);
     }
 

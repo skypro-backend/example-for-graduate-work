@@ -8,6 +8,7 @@ import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Users;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -101,7 +102,8 @@ public class AdsUserDetails implements UserDetails {
                 this.firstName,
                 this.lastName,
                 this.phone,
-                role);
+                role,
+                new ArrayList<>());
     }
 
 

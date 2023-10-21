@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.skypro.homework.entity.Users;
 
-import javax.validation.constraints.Max;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
