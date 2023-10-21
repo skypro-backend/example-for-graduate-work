@@ -3,16 +3,15 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
 public class CommentsController {
     @DeleteMapping("/{adId}/comments/{commentId}")
-    @Operation(summary = "Удаление комментария в объявлении")
+    @Operation(summary = "Удаление комментария в объявлении",
+            description = "Удаление комментария по идентификационному номеру объявления и комментари авторизованным пользователем")
     @ApiResponse(responseCode = "204", description = "No Content")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
