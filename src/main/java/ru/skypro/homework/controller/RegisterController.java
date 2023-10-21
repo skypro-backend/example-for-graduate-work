@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,11 @@ public class RegisterController {
 
     @PostMapping
     public ResponseEntity<String> registerUser(@RequestBody Register register) {
-        return registerServiceImpl.registerUser(register);
+        if (Register.validateRegister(register)){
+            ResponseEntity.status(HttpStatus.CREATED).body("Пользователь создан");
+            return registerServiceImpl.registerUser(register);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }

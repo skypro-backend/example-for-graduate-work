@@ -19,9 +19,6 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public ResponseEntity<String> registerUser(Register register) {
-        if (!validateRegister(register)) {
-            return ResponseEntity.badRequest().body("Неверные данные пользователя");
-        }
         User newUser = new User();
         newUser.setUsername(register.getUsername());
         newUser.setPassword(register.getPassword());
