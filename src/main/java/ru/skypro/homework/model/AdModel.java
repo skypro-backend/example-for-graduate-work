@@ -28,20 +28,11 @@ public class AdModel {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "user_id")
-    @JoinColumn(name = "author_id")
-    private int author;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne( fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private UserModel userModel;
 
-    @OneToMany(mappedBy="ad", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="adModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentModel> commentModels;
-
-//    @Column(name = "comments")
-//    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY)
-//    private Collection<CommentModel> commentsList;
-
 
 }

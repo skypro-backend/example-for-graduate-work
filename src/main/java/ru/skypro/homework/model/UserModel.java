@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 import java.util.List;
@@ -45,9 +44,12 @@ public class UserModel {
     @Column(name = "role",nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy="users", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="userModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AdModel> adModels;
 
-
+    @OneToMany(mappedBy = "userModel",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    private List<CommentModel> commentModels;
 
 }

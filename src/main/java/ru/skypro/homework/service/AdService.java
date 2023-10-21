@@ -1,25 +1,26 @@
 package ru.skypro.homework.service;
 
 import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.projections.Ads;
+
+import ru.skypro.homework.projections.CreateOrUpdateAd;
 import ru.skypro.homework.projections.ExtendedAd;
 
 public interface AdService {
 
-    AdsDTO getAllAds();
+    Ads getAllAds();
 
-    AdDTO addAd(CreateOrUpdateAd createAd, String imagePath);
+    AdDTO addAd(CreateOrUpdateAd createOrUpdateAdDTO, String pathImage);
 
-    ExtendedAd getAdFullInfo(int id);
+    ExtendedAd getAds(int id);
 
-    AdsDTO updateAd(CreateOrUpdateAd updateAd, int id);
+    Ads updateAd(int id, CreateOrUpdateAd createOrUpdateAdDTO);
 
-    void deleteAd(int id);
+    void removeAd( int id);
 
-    AdsDTO getUserAdds();
+    Ads getAdsMe();
 
-    String updateImage();
+    String updateImage(int id, String pathImage);
 
 
 }
