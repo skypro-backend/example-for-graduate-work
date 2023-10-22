@@ -5,7 +5,8 @@ import javax.persistence.*;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity(name="ads")
+@Entity
+@Table(name = "ads")
 public class AdsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
