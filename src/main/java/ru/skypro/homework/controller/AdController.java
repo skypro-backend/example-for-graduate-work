@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.projections.Ads;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequestMapping("/ads")
 public class AdController {
 
-   private final AdServiceImpl adService;
+    private final AdServiceImpl adService;
 
     public AdController(AdServiceImpl adService) {
         this.adService = adService;
@@ -25,7 +26,7 @@ public class AdController {
     //    Получение всех объявлений
     @GetMapping()
     public Ads getAllAds() {
-        return new Ads(1, List.of(new AdDTO(1,"mjrtei/regtr",321,123,"frenhj")));
+        return new Ads(1, List.of(new AdDTO(1, "mjrtei/regtr", 321, 123, "frenhj")));
     }
 
     //Добавление объявления
@@ -45,7 +46,7 @@ public class AdController {
     // Обновление объявления
     @PatchMapping("/{id}")
     public Ads updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAd createOrUpdateAdDTO) {
-        return adService.updateAd( id, createOrUpdateAdDTO);
+        return adService.updateAd(id, createOrUpdateAdDTO);
     }
 
 

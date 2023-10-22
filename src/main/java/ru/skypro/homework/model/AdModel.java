@@ -28,6 +28,10 @@ public class AdModel {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "description")
+    private String description;
+
+
     @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserModel userModel;
