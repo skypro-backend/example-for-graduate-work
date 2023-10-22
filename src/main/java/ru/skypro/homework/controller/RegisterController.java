@@ -14,16 +14,8 @@ import ru.skypro.homework.service.impl.RegisterServiceImpl;
 @RequestMapping(name = "/register")
 @AllArgsConstructor
 public class RegisterController {
-
-    private final RegisterServiceImpl registerServiceImpl;
-
     @PostMapping
-    public ResponseEntity<String> registerUser(@RequestBody Register register) {
-        if (Register.validateRegister(register)){
-            ResponseEntity.status(HttpStatus.CREATED).body("Пользователь создан");
-            return registerServiceImpl.registerUser(register);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public Register registerUser(@RequestBody Register register) {
+        return new Register();
     }
 }

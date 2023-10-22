@@ -33,10 +33,14 @@ public class Register {
 
     public static boolean validateRegister(Register register) {
 
-        Pattern pattern = Pattern.compile("\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}");
+        Pattern pattern = Pattern.compile("(\\+7|8)\\s\\(\\d{3}\\)\\s\\d{3}-\\d{2}-\\d{2}");
         Boolean matcher = pattern.matcher(register.getPhone()).matches();
 
-        if ((register.getUsername().length() < 4 || register.getUsername().length() > 32) || (register.getPassword().length() < 8 || register.getPassword().length() > 16) || (register.getFirstName().length() < 2 || register.getFirstName().length() > 16) || (register.getLastName().length() < 2 || register.getLastName().length() > 16) || (matcher)) {
+        if ((register.getUsername().length() < 4 || register.getUsername().length() > 32)
+                || (register.getPassword().length() < 8 || register.getPassword().length() > 16)
+                || (register.getFirstName().length() < 2 || register.getFirstName().length() > 16)
+                || (register.getLastName().length() < 2 || register.getLastName().length() > 16)
+                || (matcher && (register.getRole() != Role.ADMIN))) {
             return false;
         } else {
             return true;
