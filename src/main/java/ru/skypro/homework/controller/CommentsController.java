@@ -22,7 +22,7 @@ public class CommentsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not Found")
-    public ResponseEntity<Void> removeComment(@PathVariable("adId") Long adId, @PathVariable("commentId") Long commentId) {
+    public ResponseEntity<Void> removeComment(@PathVariable("adId") Integer adId, @PathVariable("commentId") Integer commentId) {
         // Реализация удаления комментария в объявлений
         return ResponseEntity.noContent().build();
     }
