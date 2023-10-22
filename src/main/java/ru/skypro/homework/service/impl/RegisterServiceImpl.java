@@ -2,10 +2,8 @@ package ru.skypro.homework.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.dto.Register;
