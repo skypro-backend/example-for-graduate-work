@@ -29,7 +29,7 @@ public class CommentController {
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema =
                     @Schema(implementation = Comments.class))
             }),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",content = @Content()),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
 
     })
@@ -43,8 +43,8 @@ public class CommentController {
             @ApiResponse(responseCode = "200", description = "OK", content = {
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema =
                     @Schema(implementation = Comment.class))}),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",content = @Content()),
-            @ApiResponse(responseCode = "404", description = "Not found",content = @Content())
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
 
     })
     public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id, @RequestBody CreateOrUpdateComment Text) {
@@ -54,14 +54,14 @@ public class CommentController {
     @DeleteMapping("/{adId}/comments/{commentId}")
     @Operation(summary = "Удаление комментария")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK",content = @Content()),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",content = @Content()),
-            @ApiResponse(responseCode = "403", description = "Forbidden",content = @Content()),
-            @ApiResponse(responseCode = "404", description = "Not found",content = @Content())
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content()),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
 
     })
     public ResponseEntity<?> deleteComment(@PathVariable("adId") Integer adId,
-                                           @PathVariable("commentId") Integer commentId){
+                                           @PathVariable("commentId") Integer commentId) {
         return ResponseEntity.ok().build();
     }
 
