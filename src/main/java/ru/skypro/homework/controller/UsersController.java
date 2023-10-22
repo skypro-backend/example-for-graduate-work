@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.PasswordDto;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.AvatarService;
 
 @Slf4j
@@ -26,6 +28,48 @@ public class UsersController {
     private static Logger logger = LoggerFactory.getLogger(UsersController.class);
 
     private final AvatarService avatarService;
+
+    /**
+     * endpoint 1 - updating password fro existent user
+     * @param passwordDto
+     */
+    @Operation(summary = "Обновление пароля")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden")
+    })
+    @PostMapping(value = "/users/set_password")
+    public void updatePassword(@RequestBody PasswordDto passwordDto) {
+    }
+
+    /**
+     * endpoint 2 - getting user info
+     *
+     */
+    @Operation(summary = "Получение информации об авторизованном пользователе")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @GetMapping("/user/me")
+    public ResponseEntity<UserDto> getUserInfo() {
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * endpoint 3 - updating user info
+     *
+     */
+    @Operation(summary = "Получение информации об авторизованном пользователе")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @PatchMapping("/user/me")
+    public ResponseEntity<UserDto> updateUserInfo(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok().build();
+    }
 
     @Operation(summary = "Обновление аватара авторизованного пользователя")
     @ApiResponses(value = {
