@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
+import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,7 @@ public class CommentsController {
     @DeleteMapping("/{adId}/comments/{commentId}")
     @Operation(summary = "Удаление комментария в объявлении",
             description = "Удаление комментария по id объявления и id комментария авторизованным пользователем")
-    @ApiResponse(responseCode = "204", description = "No Content")
+    @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not Found")
@@ -34,8 +35,8 @@ public class CommentsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<CommentsDto> getCommentsByAd(@PathVariable("id") Integer adId) {
-        CommentsDto list = new CommentsDto(0, new ArrayList<>());
-        return ResponseEntity.ok(list);
+        CommentsDto allCommentsDtoList = new CommentsDto(0, new ArrayList<>());
+        return ResponseEntity.ok(allCommentsDtoList);
     }
 
     @PostMapping("/{id}/comments")
@@ -45,20 +46,24 @@ public class CommentsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<CommentDto> addCommentToAd(@PathVariable("id") Integer adId,
-                                                     @RequestBody CommentDto newCommentDto) {
+                                                     @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+        CommentDto newCommentDto = new CommentDto(1, "imagePath",
+                "authorFirstName", 100500, 1, createOrUpdateCommentDto.text());
         return ResponseEntity.ok(newCommentDto);
     }
 
-    @PostMapping("/{id}/comments/{comment_id}")
+    @PostMapping("/{adId}/comments/{commentId}")
     @Operation(summary = "Обновление комментария",
             description = "Обновление комментария к объявлению по id объявления и id комментария")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public ResponseEntity<CommentDto> updateCommentToAd(@PathVariable("id") Integer adId,
-                                                        @PathVariable("comment_id") Integer commentId,
-                                                        @RequestBody CommentDto updatedCommentDto) {
+    public ResponseEntity<CommentDto> updateCommentToAd(@PathVariable("adId") Integer adId,
+                                                        @PathVariable("commentId") Integer commentId,
+                                                        @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+        CommentDto updatedCommentDto = new CommentDto(1, "imagePath",
+                "authorFirstName", 100500, 1, createOrUpdateCommentDto.text());
         return ResponseEntity.ok(updatedCommentDto);
     }
 

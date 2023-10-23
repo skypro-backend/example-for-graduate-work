@@ -6,10 +6,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.NewPasswordDto;
+import ru.skypro.homework.dto.UpdateUserDto;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.enums.Role;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/users")
@@ -49,7 +51,7 @@ public class UserController {
     @Operation(summary = "Обновление аватара авторизованного пользователя")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<String> updateUserImage(@RequestParam("image") MultipartFile image) {
+    public ResponseEntity<String> updateUserImage(@RequestParam("image") MultipartFile image) throws IOException {
         // Реализация обновления аватара авторизованного пользователя
         return ResponseEntity.ok("User image updated successfully");
     }
