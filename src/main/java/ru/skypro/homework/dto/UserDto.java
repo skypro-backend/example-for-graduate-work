@@ -6,7 +6,7 @@ public record UserDto(
         /**
          id пользователя
          */
-        Long id,
+        Integer id,
         /**
          логин пользователя
          */
