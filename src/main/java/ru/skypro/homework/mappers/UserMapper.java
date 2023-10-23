@@ -1,10 +1,7 @@
 package ru.skypro.homework.mappers;
-
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import ru.skypro.homework.controller.ImageController;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
@@ -36,8 +33,11 @@ public class UserMapper {
         userDTO.setLastName(userEntity.getLastName());
         userDTO.setFirstName(userEntity.getFirstName());
         userDTO.setEmail(userEntity.getEmail());
+        if (userEntity.getImageEntity() == null){
+            userDTO.setImage(null);
+        }else
+            userDTO.setImage("/images/" + userEntity.getImageEntity().getImageName());
         userDTO.setPhone(userEntity.getPhone());
-        userDTO.setImage("/images/" + userEntity.getImageEntity().getImageName());
         return userDTO;
     }
 
