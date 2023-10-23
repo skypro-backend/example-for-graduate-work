@@ -3,22 +3,24 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
-import ru.skypro.homework.dto.CommentDto;
-import ru.skypro.homework.dto.CommentsDto;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
+@Tag(name = "Объявления")
 public class AdsController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление объявления",
@@ -33,7 +35,8 @@ public class AdsController {
     }
 
     @GetMapping
-    @Operation(summary = "Получить все объявления", description = "getAllAds", tags = {"Объявления"})
+    @Operation(summary = "Получение всех объявлений",
+            description = "Получение количества и списка всех объявлений")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "204", description = "No Content")
     @ApiResponse(responseCode = "404", description = "Not Found")
@@ -43,7 +46,8 @@ public class AdsController {
     }
 
     @SneakyThrows
-    @Operation(summary = "Добавить объявление", description = "addAds", tags = {"Объявления"})
+    @Operation(summary = "Добавление объявления",
+            description = "Добавление изображения и всех полей объявления")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
@@ -54,7 +58,8 @@ public class AdsController {
         return ResponseEntity.ok(createAdsDto);
     }
 
-    @Operation(summary = "Получить информацию об объявлении", description = "getFullAd", tags = {"Объявления"})
+    @Operation(summary = "Получение информации об объявлении",
+            description = "Получение информации об объявлении по его id")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
@@ -63,6 +68,41 @@ public class AdsController {
                                               @RequestBody AdsDto adsDto) {
         return ResponseEntity.ok(adsDto);
     }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Обновление информации об объявлении",
+            description = "Обновление информации об объявлении по id объявления")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "404", description = "Not found")
+    public ResponseEntity<AdDto> updateAd(@PathVariable("id") Integer id,
+                                          @RequestBody AdDto updatedAdDto) {
+        return ResponseEntity.ok(updatedAdDto);
+    }
+
+    @GetMapping("/me")
+    @Operation(summary = "Получение объявлений авторизованного пользователя")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    public ResponseEntity<AdsDto> getAuthorizedUserAds() {
+        AdsDto list = new AdsDto(0, new ArrayList<>());
+        return ResponseEntity.ok(list);
+    }
+
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Обновление картинки объявления",
+            description = "Обновление картинки объявления по id объявления")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "404", description = "Not found")
+    public ResponseEntity<String> updateAdImage(@PathVariable("id") Integer id,
+                                                @RequestParam MultipartFile image) throws IOException {
+        String result = "Успешно";
+        return ResponseEntity.ok(result);
+    }
+
 }
 
 
