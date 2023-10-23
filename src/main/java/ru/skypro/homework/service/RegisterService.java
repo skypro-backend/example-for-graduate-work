@@ -1,9 +1,8 @@
 package ru.skypro.homework.service;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.dto.RegisterDto;
 
 public interface RegisterService {
-    ResponseEntity<String> registerUser(Register register);
+    ResponseEntity<String> registerUser(RegisterDto register);
 }
