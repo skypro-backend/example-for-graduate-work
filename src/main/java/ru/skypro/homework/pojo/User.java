@@ -9,12 +9,13 @@ import javax.persistence.*;
 @Table(name = "users")
 @Data
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userID;
 
-    @Column(name = "user_name")
+    @Column(name = "username")
     private String userName;
 
     @Column(name = "first_Name")
@@ -31,7 +32,9 @@ public class User {
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
+
     private Role role;
+
 
     @OneToOne
     @JoinColumn (name = "image_id", insertable=false, updatable=false)

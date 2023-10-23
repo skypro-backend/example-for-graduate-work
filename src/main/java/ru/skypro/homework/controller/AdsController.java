@@ -3,12 +3,15 @@ package ru.skypro.homework.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdInfoDTO;
+import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.dto.UserDetailsDTO;
 import ru.skypro.homework.pojo.Image;
 import ru.skypro.homework.pojo.User;
 import ru.skypro.homework.service.AdsService;
@@ -39,10 +42,15 @@ public class AdsController {
 
     @PostMapping(value ="/ads/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdDTO> createAd(
-            @PathVariable("userId") Long userId,
+            Authentication authentication,
             @RequestPart("adDTO") AdDTO adDTO,
             @RequestPart("imageFile") MultipartFile imageFile
     ) {
+        UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getDetails();
+        UserDTO userDTO = new UserDTO();
+
+        userDTO.setUserID(userDetailsDTO.getUserId());
+        Long userId = userDetailsDTO.getUserId();
         // Вызываем сервис для создания объявления
         AdDTO createdAd = adsService.createAd(userId, adDTO, imageFile);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAd);

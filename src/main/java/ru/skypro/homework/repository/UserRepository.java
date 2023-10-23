@@ -6,5 +6,5 @@ import ru.skypro.homework.pojo.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
+    User findUserByUserName(String userName);
 }

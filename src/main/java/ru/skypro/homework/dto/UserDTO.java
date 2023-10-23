@@ -7,7 +7,7 @@ import ru.skypro.homework.pojo.Image;
 public class UserDTO {
 
     private Long userID;
-    private String username;
+    private String userName;
     private String firstName;
     private String lastName;
     private String email;

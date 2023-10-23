@@ -1,48 +1,89 @@
 package ru.skypro.homework.controller;
 
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.pojo.User;
+import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.ImageService;
+
+import java.io.IOException;
 
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin ("http://localhost:3000/")
 public class UserController {
 
-    @PostMapping("/set_password")
-    public ResponseEntity<PasswordUpdateResponseDTO> updatePassword(@RequestBody PasswordUpdateRequestDTO passwordUpdateRequestDTO) {
+    private final AuthService authService;
 
-        PasswordUpdateResponseDTO responseDTO = new PasswordUpdateResponseDTO("test1", "test2");
-        return ResponseEntity.ok(responseDTO);
+    private final ImageService imageService;
+
+    public UserController(AuthService authService, ImageService imageService) {
+        this.authService = authService;
+        this.imageService = imageService;
     }
 
+
     @GetMapping("/me")
-    public ResponseEntity<UserDTO> getCurrentUser() {
+    public UserDTO me(Authentication authentication) {
+        UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getDetails();
 
         UserDTO userDTO = new UserDTO();
 
-        userDTO.setUserID(1L);
-        userDTO.setEmail("string");
-        userDTO.setFirstName("string");
-        userDTO.setLastName("string");
-        userDTO.setPhone("string");
-        userDTO.setRole(Role.USER);
+        userDTO.setUserName(userDetailsDTO.getUserName());
+        userDTO.setPassword(userDetailsDTO.getPassword());
+
+        return userDTO;
+    }
+
+
+    @PostMapping("/set_password")
+    public NewPassword setPassword(@RequestBody NewPassword newPassword, Authentication authentication) {
+        NewPassword resultPassword = new NewPassword();
+        authService.changePassword(
+                        authentication.getName(),
+                        newPassword.getCurrentPassword(),
+                        newPassword.getNewPassword()
+                )
+                .ifPresent(resultPassword::setCurrentPassword);
+        return resultPassword;
+    }
+
+    @PatchMapping("/me")
+    public ResponseEntity<UserDTO> updateUserInfo(@RequestBody UpdateUserDTO updateUserDTO, Authentication authentication) {
+        UserDetailsDTO userDetails = (UserDetailsDTO) authentication.getDetails();
+        Long userId = userDetails.getUserId();
+
+        User updatedUser = authService.updateUserInfo(userId, updateUserDTO);
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setFirstName(updatedUser.getFirstName());
+        userDTO.setLastName(updatedUser.getLastName());
+        userDTO.setPhone(updatedUser.getPhone());
 
         return ResponseEntity.ok(userDTO);
     }
 
-    @PatchMapping("/me")
-        public ResponseEntity<UpdateUserRequestDTO> updateUserInfo(@RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+    @PostMapping("/me/image")
+    public ResponseEntity<?> updateAvatar(Authentication authentication, @RequestParam("file") MultipartFile file) {
+        UserDetailsDTO currentUser = (UserDetailsDTO) authentication.getDetails();
 
-            UpdateUserRequestDTO updatedUser = new UpdateUserRequestDTO();
-            updatedUser.setFirstName("test");
-            updatedUser.setLastName("test");
-            updatedUser.setPhone("test");
-
-            return ResponseEntity.ok(updatedUser);
+        if (currentUser != null) {
+            try {
+                imageService.uploadImage(file);
+                return ResponseEntity.ok().build();
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update avatar");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authorized");
+        }
     }
-
 
 }
