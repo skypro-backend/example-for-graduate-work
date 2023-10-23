@@ -1,6 +1,6 @@
 package ru.skypro.homework.dto;
 
-public class Comments {
+public class CommentsDto {
     private Integer count;
-    private Comment results;
+    private CommentDto results;
 }

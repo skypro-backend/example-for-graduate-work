@@ -24,39 +24,33 @@ public class AdsController {
 
     @GetMapping
     public AdsDto getAllAds() {
-        System.out.println("Get All Ads");
         return new AdsDto();
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public AdDto addAd(@RequestBody CreateAdDto ad,
                        @RequestPart(name = "image") MultipartFile multipartFile) {
-        System.out.println("Add Ad");
         return new AdDto();
     }
 
     @GetMapping(path = "{id}")
     public ExtendedAdDto getAdById(@PathVariable(value = "id") Integer id) {
-        System.out.println("Get Ad by Id");
         return new ExtendedAdDto();
     }
 
     @DeleteMapping(path = "{id}")
     public ResponseEntity<AdDto> deleteAdById(@PathVariable(value = "id") Integer id) {
-        System.out.println("Delete Ad by Id");
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping(path = "{id}")
     public AdDto updateAdById(@PathVariable(value = "id") Integer id,
                               @RequestBody CreateAdDto ad) {
-        System.out.println("Update Ad by Id");
         return new AdDto();
     }
 
     @GetMapping(path = "/me")
     public List<AdDto> getAuthorizedUserAds() {
-        System.out.println("Get All Ads of Authorized User");
         return List.of(new AdDto[]{});
     }
 
@@ -67,7 +61,6 @@ public class AdsController {
     )
     public @ResponseBody Resource updateImageByAdId(@PathVariable(value = "id") Integer id,
                                                     @RequestPart(name = "image") MultipartFile file) throws IOException {
-        System.out.println("Update Image of Ad by AdId");
         return new ByteArrayResource(Files.readAllBytes(Paths.get("mto.jpg")));
     }
 
