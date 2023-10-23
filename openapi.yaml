@@ -572,13 +572,13 @@ components:
         firstName:
           type: string
           description: 'имя пользователя'
-          minLength: 3
-          maxLength: 10
+          minLength: 2
+          maxLength: 16
         lastName:
           type: string
           description: 'фамилия пользователя'
-          minLength: 3
-          maxLength: 10
+          minLength: 2
+          maxLength: 16
         phone:
           type: string
           description: 'телефон пользователя'
