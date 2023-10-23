@@ -6,20 +6,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.dto.Register;
-import ru.skypro.homework.service.RegisterService;
+import ru.skypro.homework.dto.RegisterDto;
+import ru.skypro.homework.service.RegisterDtoService;
 
-import static ru.skypro.homework.dto.Register.validateRegister;
+import static ru.skypro.homework.dto.RegisterDto.validateRegister;
 
 @Service
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterServiceImpl implements RegisterService {
+public class RegisterDtoServiceImpl implements RegisterDtoService {
 
     private UserRepository userRepository;
 
     @Override
-    public ResponseEntity<String> registerUser(Register register) {
+    public ResponseEntity<String> registerUser(RegisterDto register) {
         if (validateRegister(register)){
             User newUser = new User();
             newUser.setUsername(register.getUsername());

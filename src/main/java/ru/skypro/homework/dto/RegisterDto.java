@@ -1,17 +1,13 @@
 package ru.skypro.homework.dto;
 
 import lombok.*;
-import org.springframework.http.ResponseEntity;
 import ru.skypro.homework.repository.UserRepository;
 
 import java.util.regex.Pattern;
 
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-public class Register {
+public class RegisterDto {
 
     private String username;
     private String password;
@@ -22,7 +18,7 @@ public class Register {
 
     private static UserRepository userRepository;
 
-    public Register(String username, String password, String firstName, String lastName, String phone, Role role) {
+    public RegisterDto(String username, String password, String firstName, String lastName, String phone, Role role) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -31,7 +27,7 @@ public class Register {
         this.role = role;
     }
 
-    public static boolean validateRegister(Register register) {
+    public static boolean validateRegister(RegisterDto register) {
 
         Pattern pattern = Pattern.compile("(\\+7|8)\\s\\(\\d{3}\\)\\s\\d{3}-\\d{2}-\\d{2}");
         Boolean matcher = pattern.matcher(register.getPhone()).matches();
