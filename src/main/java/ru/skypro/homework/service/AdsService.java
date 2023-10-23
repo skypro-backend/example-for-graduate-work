@@ -5,6 +5,7 @@ import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdInfoDTO;
 import ru.skypro.homework.pojo.Image;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface AdsService {
@@ -21,5 +22,5 @@ public interface AdsService {
     List<AdDTO> getAdsForUser(Long userId);
 
 
-    void updateAdImage(Long pk, Image newImage);
+    void updateAdImage(Long pk, Image newImage) throws IOException;
 }

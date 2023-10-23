@@ -34,10 +34,10 @@ public class User {
     private Role role;
 
     @OneToOne
-    @JoinColumn (name = "avatar_id", insertable=false, updatable=false)
-    private Avatar avatar;
+    @JoinColumn (name = "image_id", insertable=false, updatable=false)
+    private Image image;
 
-    @Column (name = "avatar_id")
+    @Column (name = "image_id")
     private Long avatarId;
 
     @Column (name = "password")

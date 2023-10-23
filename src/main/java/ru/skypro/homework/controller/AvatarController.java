@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.service.AvatarService;
+import ru.skypro.homework.service.ImageService;
 
 import java.io.IOException;
 
@@ -16,16 +16,16 @@ import java.io.IOException;
 @RequestMapping("/users/me/")
 public class AvatarController {
 
-    private final AvatarService avatarService;
+    private final ImageService imageService;
 
-    public AvatarController(AvatarService avatarService) {
-        this.avatarService = avatarService;
+    public AvatarController(ImageService imageService) {
+        this.imageService = imageService;
     }
 
     @PostMapping(value ="/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadAvatar(@RequestParam("file") MultipartFile file) {
         try {
-            avatarService.uploadAvatar(file);
+            imageService.uploadImage(file);
             return ResponseEntity.ok("Avatar uploaded successfully");
         } catch (IOException e) {
             e.printStackTrace();

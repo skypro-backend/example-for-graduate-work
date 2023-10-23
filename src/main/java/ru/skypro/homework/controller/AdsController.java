@@ -37,20 +37,17 @@ public class AdsController {
         this.imageService = imageService;
     }
 
-    @PostMapping(value ="/ads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> createAd(
-            @PathVariable("id") Long userId,
-            @RequestBody AdDTO adDTO,
-            @RequestParam("file") MultipartFile file
+    @PostMapping(value ="/ads/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AdDTO> createAd(
+            @PathVariable("userId") Long userId,
+            @RequestPart("adDTO") AdDTO adDTO,
+            @RequestPart("imageFile") MultipartFile imageFile
     ) {
-        AdDTO createdAd = adsService.createAd(userId, adDTO, file);
-
-        if (createdAd != null) {
-            return ResponseEntity.ok("Объявление успешно создано с идентификатором " + createdAd.getPk());
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Не удалось создать объявление");
-        }
+        // Вызываем сервис для создания объявления
+        AdDTO createdAd = adsService.createAd(userId, adDTO, imageFile);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAd);
     }
+
 
     @GetMapping("/ads")
     public ResponseEntity<Map<String, Object>> getAllAds() {

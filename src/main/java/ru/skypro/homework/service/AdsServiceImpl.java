@@ -43,7 +43,10 @@ public class AdsServiceImpl implements AdsService {
 
         try {
             // Вызываем метод uploadImage и передаем в него imageFile
-            imageService.uploadImage(imageFile);
+            Image uploadedImage = imageService.uploadImage(imageFile);
+
+            // Связываем изображение с объявлением
+            ad.setImage(uploadedImage);
         } catch (IOException e) {
             e.printStackTrace();
             // Обработка ошибки загрузки изображения
@@ -183,7 +186,9 @@ public class AdsServiceImpl implements AdsService {
     public void updateAdImage(Long pk, Image newImage) {
         Ad ad = adRepository.findById(pk).orElse(null);
         if (ad != null) {
-            ad.setImage(newImage);
+            // Сохранение изображения в базе данных
+            Image savedImage = imageService.saveImage(newImage);
+            ad.setImage(savedImage);
             adRepository.save(ad);
         }
     }

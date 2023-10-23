@@ -1,7 +1,7 @@
 package ru.skypro.homework.dto;
 
 import lombok.Data;
-import ru.skypro.homework.pojo.Avatar;
+import ru.skypro.homework.pojo.Image;
 
 @Data
 public class UserDTO {
@@ -13,7 +13,7 @@ public class UserDTO {
     private String email;
     private String phone;
     private Role role;
-    private Avatar avatar;
+    private Image image;
     private String password;
 
     public UserDTO() {
