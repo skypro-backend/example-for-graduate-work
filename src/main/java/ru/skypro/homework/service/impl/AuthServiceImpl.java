@@ -1,46 +1,54 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.dto.RegisterDto;
+import ru.skypro.homework.model.User;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.CustomUserDetailsService;
+
 
 @Service
+@RequiredArgsConstructor
+
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
-    private final PasswordEncoder encoder;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
-        this.encoder = passwordEncoder;
-    }
+    private final UserRepository userRepository;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Override
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
+
+        if (userRepository.findByUsername(userName).isEmpty()) {
             return false;
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userName);
+        return passwordEncoder
+                .matches(password, userDetails.getPassword());
     }
 
+
     @Override
-    public boolean register(Register register) {
-        if (manager.userExists(register.getUsername())) {
+    public boolean register(RegisterDto registerDto) {
+        if (userRepository.findByUsername(registerDto.getUsername()).isPresent()) {
             return false;
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
+        User user = new User();
+
+        user.setUsername(registerDto.getUsername());
+        user.setPassword(passwordEncoder
+                .encode(registerDto.getPassword()));
+        user.setFirstName(registerDto.getFirstName());
+        user.setLastName(registerDto.getLastName());
+        user.setPhone(registerDto.getPhone());
+        user.setRole(registerDto.getRole());
+        userRepository.save(user);
         return true;
     }
 
