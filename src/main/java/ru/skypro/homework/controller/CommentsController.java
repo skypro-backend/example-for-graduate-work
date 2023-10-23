@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class CommentsController {
     @DeleteMapping("/{adId}/comments/{commentId}")
     @Operation(summary = "Удаление комментария в объявлении",
-            description = "Удаление комментария по идентификационному номеру объявления и комментари авторизованным пользователем")
+            description = "Удаление комментария по id объявления и id комментария авторизованным пользователем")
     @ApiResponse(responseCode = "204", description = "No Content")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
@@ -28,7 +28,8 @@ public class CommentsController {
     }
 
     @GetMapping("/{id}/comments")
-    @Operation(summary = "Получение комментариев объявления")
+    @Operation(summary = "Получение комментариев объявления",
+            description = "Получение всех комментариев объявления по id объявления")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
@@ -36,8 +37,10 @@ public class CommentsController {
         CommentsDto list = new CommentsDto(0, new ArrayList<>());
         return ResponseEntity.ok(list);
     }
+
     @PostMapping("/{id}/comments")
-    @Operation(summary = "Добавление комментария к объявлению")
+    @Operation(summary = "Добавление комментария к объявлению",
+            description = "Добавление комментария к объявлению по его id")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
@@ -47,7 +50,8 @@ public class CommentsController {
     }
 
     @PostMapping("/{id}/comments/{comment_id}")
-    @Operation(summary = "Обновление комментария")
+    @Operation(summary = "Обновление комментария",
+            description = "Обновление комментария к объявлению по id объявления и id комментария")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
