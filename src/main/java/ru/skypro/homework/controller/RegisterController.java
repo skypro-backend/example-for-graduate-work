@@ -17,6 +17,7 @@ public class RegisterController {
     public RegisterController(RegisterService registerService) {
         this.registerService = registerService;
     }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDto register) {
         if (registerService.registerUser(register)) {
