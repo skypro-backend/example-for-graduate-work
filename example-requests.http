@@ -1,8 +1,89 @@
+### Get all ads
+GET http://localhost:8080/ads
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
+
+### Create a new ad
+POST http://localhost:8080/ads
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Basic user@gmail.com password
+
+--WebAppBoundary
+Content-Disposition: form-data; name="properties"
+Content-Type: application/json
+
+{
+  "price": 3000,
+  "title": "New title",
+  "description": "New content"
+}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="mto.jpg"
+Content-Type: image/jpeg
+
+< mto.jpg
+
+### Get ad by id
+GET http://localhost:8080/ads/1
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
+
+### Delete ad by id
+DELETE http://localhost:8080/ads/1
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
+
+### Update ad by id
+PATCH http://localhost:8080/ads/1
+Content-Type: application/json
+
+{
+  "price": 3000,
+  "title": "New title",
+  "description": "New content"
+}
+
+### Get all ads by autorized user
+GET http://localhost:8080/ads/me
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
+
+### Update an image for ad
+PATCH http://localhost:8080/ads/1/image
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Basic user@gmail.com password
+
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="mto.jpg"
+Content-Type: image/jpeg
+
+< mto.jpg
+
+### Get comments for ad
 GET http://localhost:8080/ads/1/comments
 Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
-###
+### Add comment to ad
+POST http://localhost:8080/ads/1/comments
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
+
+{
+  "text": "Comment text"
+}
+
+### Update comment for ad
+PATCH http://localhost:8080/ads/1/comments/1
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
+
+{
+  "text": "Comment text"
+}
+
+### Login
 POST http://localhost:8080/login
 Content-Type: application/json
 
@@ -11,7 +92,7 @@ Content-Type: application/json
   "password": "password"
 }
 
-###
+### Register
 POST http://localhost:8080/register
 Content-Type: application/json
 
@@ -23,11 +104,6 @@ Content-Type: application/json
   "phone": " asdad",
   "role": "USER"
 }
-
-###
-GET http://localhost:8080/ads/me
-Content-Type: application/json
-Authorization: Basic user@gmail.com password
 
 ###
 GET http://localhost:8080/users/me
@@ -46,11 +122,6 @@ Authorization: Basic user@gmail.com password
 }
 
 ###
-GET http://localhost:8080/ads
-Content-Type: application/json
-Authorization: Basic user@gmail.com password
-
-###
 POST http://localhost:8080/users/set_password
 Content-Type: application/json
 Authorization: Basic user@gmail.com password
@@ -59,15 +130,3 @@ Authorization: Basic user@gmail.com password
   "newPassword": "password",
   "currentPassword": "password1"
 }
-
-###
-POST http://localhost:8080/ads
-Content-Type: application/json
-Authorization: Basic user@gmail.com password
-
-{
-  "price": 123,
-  "description": "123",
-  "title": "123"
-}
-

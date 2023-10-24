@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class ExtendedAdDto {
 
-    private int id;
+    private Integer pk;
     private String authorFirstName;
     private String authorLastName;
     private String title;
@@ -13,6 +13,6 @@ public class ExtendedAdDto {
     private String email;
     private String image;
     private String phone;
-    private int price;
+    private Integer price;
 
 }

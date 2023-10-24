@@ -1,6 +1,5 @@
 package ru.skypro.homework.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,6 @@ import java.io.IOException;
 @RestController
 @RequestMapping("users")
 @CrossOrigin(value = "http://localhost:3000")
-@Tag(name = "Контроллер для управления пользователями")
 public class UserController {
 
     public UserController() {
@@ -36,10 +34,10 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping(value = "me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE) // PATCH http://localhost:8080/users/me/image
-    public ResponseEntity<String> updateAvatar(@RequestParam MultipartFile avatar) throws IOException {
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    // PATCH http://localhost:8080/users/me/image
+    public ResponseEntity<String> updateAvatar(@RequestParam MultipartFile image) throws IOException {
         return ResponseEntity.ok().build();
     }
-
 
 }
