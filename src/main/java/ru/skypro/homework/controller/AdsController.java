@@ -46,8 +46,8 @@ public class AdsController {
             description = "Добавление изображения и всех полей объявления")
     @ApiResponse(responseCode = "201", description = "Created")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<AdDto> addAd(@RequestBody CreateOrUpdateAdDto createOrUpdateAdDto,
-                                       @RequestParam MultipartFile image) throws IOException {
+    public ResponseEntity<AdDto> addAd(@RequestPart("properties") CreateOrUpdateAdDto createOrUpdateAdDto,
+                                       @RequestPart MultipartFile image) throws IOException {
         AdDto addedAdDto = new AdDto(1, "imagePath", 1, createOrUpdateAdDto.price(), createOrUpdateAdDto.title());
         return ResponseEntity.ok(addedAdDto);
     }
