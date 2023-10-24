@@ -3,10 +3,9 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
 
 @Data
-public class CreateOrUpdateAddDto {
+public class CreateOrUpdateAdDto {
     @Size(min = 4, max = 32)
     private String title;
     @Size(max = 10000000)
