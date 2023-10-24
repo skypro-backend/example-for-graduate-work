@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,19 +17,9 @@ public class AdsController {
         return ResponseEntity.ok(null);
     }
 
-    @PostMapping
-    public ResponseEntity<Void> createAdd(@RequestBody AdsDto dto) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> addAdd(@RequestBody AdsDto dto, @RequestPart("file") MultipartFile multipartFile) {
         return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @GetMapping("/{id}/comments")
-    public ResponseEntity<CommentsDto> getComments(@PathVariable Long id) {
-        return ResponseEntity.ok(null);
-    }
-
-    @PostMapping("/{id}/comments")
-    public ResponseEntity<CommentDto> addComment(@PathVariable Long id, @RequestBody CreateOrUpdateCommentDto dto) {
-        return ResponseEntity.ok(null);
     }
 
     @GetMapping("/{id}")
@@ -46,25 +37,12 @@ public class AdsController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long adId, @PathVariable Long commentId) {
-        return ResponseEntity.ok().build();
-    }
-
-    @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<CommentDto> updateComment(@PathVariable Long adId,
-                                                    @PathVariable Long commentId,
-                                                    @RequestBody CreateOrUpdateCommentDto dto) {
-        return ResponseEntity.ok(null);
-    }
-
     @GetMapping("/me")
     public ResponseEntity<AdsDto> getAdsMe() {
         return ResponseEntity.ok(null);
     }
-
-    @GetMapping("/{id}/image")
-    public ResponseEntity<byte[]> updateImage(@PathVariable Long id, @RequestParam("file") MultipartFile multipartFile) {
-        return ResponseEntity.ok(null);
+    @PatchMapping(path = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateImage(@PathVariable Long id, @RequestPart("file") MultipartFile multipartFile) {
+        return ResponseEntity.ok().build();
     }
 }

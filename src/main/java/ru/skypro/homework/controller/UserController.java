@@ -28,8 +28,8 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping(path = "/me/image/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateUserImage(@RequestParam("file") MultipartFile multipartFile) {
+    @PatchMapping(path = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateUserImage(@RequestPart("image") MultipartFile multipartFile) {
         return ResponseEntity.ok().build();
     }
 }
