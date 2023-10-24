@@ -15,6 +15,7 @@ import ru.skypro.homework.service.UserService;
 @CrossOrigin("http://localhost:3000")
 public class UserController {
     private final UserService userService;
+
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUserInfo() {
 

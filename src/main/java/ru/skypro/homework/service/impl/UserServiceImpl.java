@@ -20,14 +20,6 @@ import ru.skypro.homework.service.UserService;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 
-/**
- * Сервис для поддержки пользователей
- * {@link ImageService}
- * {@link PasswordEncoder}
- * {@link UserDetailsManager}
- * {@link UserRepository}
- * {@link UserMapper}
- */
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -39,11 +31,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
 
     /**
-     * Получить информацию о пользователе из репозитория
-     * {@link UserRepository}
-     *
-     * @param username String
-     * @return {@link User}
+     * Получение информации о пользователе из репозитория
      */
     private User find(String username) {
         return repository.findByUsername(username)
@@ -51,10 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Получить информацию о пользователе из автооризации
-     * {@link SecurityContextHolder}
-     *
-     * @return {@link User}
+     * Получиение информации о пользователе из автооризации
      */
     @Override
     public User find() {
@@ -85,7 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     *Редактирование пароля
+     * Редактирование пароля
      */
     @Override
     public void updatePassword(NewPasswordDto newPasswordDto) {

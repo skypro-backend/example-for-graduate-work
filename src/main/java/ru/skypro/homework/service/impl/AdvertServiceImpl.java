@@ -16,8 +16,8 @@ import ru.skypro.homework.service.AdvertService;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
-import java.io.IOException;
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 
 @Service
 @Transactional

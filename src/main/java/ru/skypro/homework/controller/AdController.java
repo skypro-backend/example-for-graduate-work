@@ -15,10 +15,11 @@ import ru.skypro.homework.service.ImageService;
 @RequestMapping("/ads")
 @CrossOrigin("http://localhost:3000")
 public class AdController {
-private final AdvertService advertService;
-private final CommentService commentService;
+    private final AdvertService advertService;
+    private final CommentService commentService;
 
-private final ImageService imageService;
+    private final ImageService imageService;
+
     @GetMapping("/me")
     public ResponseEntity<AdsDto> getAdsMe() {
         var body = advertService.getAdvert();

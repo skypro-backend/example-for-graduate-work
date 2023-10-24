@@ -7,7 +7,7 @@ import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.model.User;
 
-public interface  UserService {
+public interface UserService {
     User find();
 
     void createUser(RegisterDto registerDto);

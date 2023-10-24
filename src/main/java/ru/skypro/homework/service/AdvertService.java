@@ -8,7 +8,7 @@ import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.model.Advert;
 
 
-public interface  AdvertService {
+public interface AdvertService {
     Advert find(int id);
 
     AdDto createAdvert(CreateOrUpdateAdDto dto, MultipartFile image);

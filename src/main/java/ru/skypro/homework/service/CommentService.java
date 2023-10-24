@@ -5,7 +5,7 @@ import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 import ru.skypro.homework.model.Comment;
 
-public interface  CommentService {
+public interface CommentService {
     Comment find(int commentId);
 
     CommentDto createComment(int advertId, CreateOrUpdateCommentDto dto);

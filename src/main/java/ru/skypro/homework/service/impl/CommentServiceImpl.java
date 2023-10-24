@@ -15,8 +15,8 @@ import ru.skypro.homework.service.AdvertService;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.UserService;
 
-import java.time.LocalDateTime;
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 
 
 @Service
