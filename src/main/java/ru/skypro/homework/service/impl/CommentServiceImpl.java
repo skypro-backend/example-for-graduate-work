@@ -33,9 +33,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentsDTO receivingAdComments(int adId) {
-        AdEntity adEntity = checkForAd(adId);
-        List<CommentEntity> commentEntityList = adEntity.getCommentEntityList();
-        List<CommentDTO> commentDTOList = commentMapper.toCommentDTOList(commentEntityList);
+        AdEntity adEntity = checkForAd(adId); //получили объявление
+        List<CommentEntity> commentEntityList = adEntity.getCommentEntityList(); // получили список всех коментов в объяве
+        List<CommentDTO> commentDTOList = commentMapper.toCommentDTOList(commentEntityList); // сделали маппинг
         return new CommentsDTO(commentEntityList.size(), commentDTOList);
     }
 

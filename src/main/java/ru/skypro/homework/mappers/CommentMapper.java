@@ -7,6 +7,7 @@ import ru.skypro.homework.service.entities.CommentEntity;
 import ru.skypro.homework.service.entities.UserEntity;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ public class CommentMapper {
             commentDTO.setAuthorImage("/images/" + commentEntity.getUser().getImageEntity().getImageName());
         commentDTO.setAuthor(commentEntity.getId());
         commentDTO.setAuthorFirstName(commentEntity.getUser().getFirstName());
-        commentDTO.setCreatedAt(commentEntity.getCreatedAt().toEpochSecond(java.time.ZoneOffset.UTC));
+        commentDTO.setCreatedAt(commentEntity.getCreatedAt().toInstant(ZoneOffset.UTC).toEpochMilli());
         commentDTO.setPk(commentEntity.getId());
         commentDTO.setText(commentEntity.getText());
         return commentDTO;
