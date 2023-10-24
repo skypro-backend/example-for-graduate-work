@@ -78,7 +78,7 @@ public class UsersController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadAvatar(@RequestParam MultipartFile image) {
+    public ResponseEntity<String> updateUserImage(@RequestParam MultipartFile image) {
         logger.info("Avatar Controller {}", image.getContentType());
         String username = "authenticatedUsername"; // Get from Authentication
         String imageString = avatarService.uploadAvatar(username, image);
