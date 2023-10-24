@@ -1,31 +1,22 @@
 package ru.skypro.homework.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.NewPasswordDto;
+import ru.skypro.homework.dto.RegisterDto;
+import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.User;
-import ru.skypro.homework.repository.UserRepository;
 
-@Service
-public class UserService {
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
+public interface UserService {
+    User find();
 
-    @Autowired
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
-    }
+    void createUser(RegisterDto registerDto);
 
-    public UserDto getUserById(int userId) {
-        User user = userRepository.findById(userId).orElse(null);
-        return userMapper.userToUserDto(user);
-    }
+    UserDto getUser();
 
-    public UserDto createUser(UserDto userDto) {
-        User user = userMapper.userDtoToUser(userDto);
-        userRepository.save(user);
-        return userMapper.userToUserDto(user);
-    }
+    void updatePassword(NewPasswordDto newPasswordDto);
+
+    void updateUser(UpdateUserDto updateUserDto);
+
+    void update(MultipartFile image);
 }
