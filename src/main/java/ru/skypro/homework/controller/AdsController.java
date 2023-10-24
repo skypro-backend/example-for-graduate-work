@@ -38,7 +38,7 @@ public class AdsController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addNewAd(@RequestPart(value = "properties") CreateOrUpdateAd createOrUpdateAd, @RequestPart(value = "image") MultipartFile image) {
+    public ResponseEntity<?> addAd(@RequestPart(value = "properties") CreateOrUpdateAd createOrUpdateAd, @RequestPart(value = "image") MultipartFile image) {
         logger.info("Ads Controller image {}, createOrUpdateAd {}", image.getContentType(), createOrUpdateAd.getTitle());
         Ad addedAd = adsService.addNewAd(createOrUpdateAd);
         if (addedAd == null) {
@@ -95,6 +95,30 @@ public class AdsController {
     @PatchMapping("/{id}")
     public ResponseEntity<Ad> patchAd(@PathVariable("id") Integer id,
                                                @RequestBody AdUpdateDto adUpdateDto) {
+        return ResponseEntity.ok(new Ad());
+    }
+
+    @Operation(summary = "Получение объявлений авторизованного пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema =
+                    @Schema(implementation = Ads.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @GetMapping("/me")
+    public ResponseEntity<Ads> getAdsMe() {
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Обновление картинки объявления")
+    @ApiResponse(responseCode = "200", description = "Ok", content = {
+            @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE)})
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "404", description = "Not found")
+    @PatchMapping("/{id}/image")
+    public ResponseEntity<Ad> updateImage(@PathVariable("id") Integer id, @RequestParam MultipartFile image) {
         return ResponseEntity.ok(new Ad());
     }
 }

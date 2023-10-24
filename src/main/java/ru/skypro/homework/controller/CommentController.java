@@ -11,9 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Comment;
-import ru.skypro.homework.dto.Comments;
-import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.dto.*;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -63,6 +61,21 @@ public class CommentController {
     public ResponseEntity<?> deleteComment(@PathVariable("adId") Integer adId,
                                            @PathVariable("commentId") Integer commentId) {
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Обновление комментария")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema =
+                    @Schema(implementation = Comment.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found")
+    })
+    @PatchMapping("/{id}/comments/{commentId}")
+    public ResponseEntity<Ad> updateComment(@PathVariable("id") Integer id,
+                                      @PathVariable("commentId") Integer commentId) {
+        return ResponseEntity.ok(new Ad());
     }
 
 }

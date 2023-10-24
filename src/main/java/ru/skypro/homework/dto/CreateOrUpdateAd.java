@@ -6,10 +6,10 @@ import lombok.Data;
 @Data
 public class CreateOrUpdateAd {
     @Schema(description = "заголовок объявления")
-    String title;
+    private String title;
     @Schema(description = "цена объявления")
-    Integer price;
+    private Integer price;
     @Schema(description = "описание объявления")
-    String description;
+    private String description;
 
 }
