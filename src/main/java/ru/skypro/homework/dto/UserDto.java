@@ -3,13 +3,13 @@ package ru.skypro.homework.dto;
 import java.util.Objects;
 
 public class UserDto {
-    long id;
-    String email;
-    String firstName;
-    String lastName;
-    String phone;
-    Role role;
-    String image;
+    private long id;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String phone;
+    private Role role;
+    private String image;
 
     public UserDto() {
     }

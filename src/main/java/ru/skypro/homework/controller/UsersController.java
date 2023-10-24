@@ -39,7 +39,7 @@ public class UsersController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden")
     })
-    @PostMapping(value = "/users/set_password")
+    @PostMapping(value = "/set_password")
     public void updatePassword(@RequestBody PasswordDto passwordDto) {
     }
 
@@ -52,7 +52,7 @@ public class UsersController {
             @ApiResponse(responseCode = "200", description = "Ok"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    @GetMapping("/user/me")
+    @GetMapping("/me")
     public ResponseEntity<UserDto> getUserInfo() {
         return ResponseEntity.ok().build();
     }
@@ -66,7 +66,7 @@ public class UsersController {
             @ApiResponse(responseCode = "200", description = "Ok"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    @PatchMapping("/user/me")
+    @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUserInfo(@RequestBody UserDto userDto) {
         return ResponseEntity.ok().build();
     }
