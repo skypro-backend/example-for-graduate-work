@@ -7,12 +7,9 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.account.Register;
 import ru.skypro.homework.dto.account.Role;
-import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserMapper;
-
-import javax.annotation.PostConstruct;
 
 import java.time.LocalDate;
 
@@ -32,27 +29,6 @@ public class AuthServiceImpl implements AuthService {
         this.encoder = encoder;
         this.userMapper = userMapper;
         this.userRepository = userRepository;
-    }
-
-    /*
-     * Инициализирует приложение после его создания.
-     * Проверяет наличие пользователя "admin@gmail.com" в системе.
-     * Если такого пользователя не существует, создает нового пользователя с ролью ADMIN.
-     * Записывает информацию о пользователе в репозиторий{@link UserRepository#save(Object)}.
-     */
-    @PostConstruct
-    public void init() {
-        if (!manager.userExists("admin@gmail.com")) {
-            UserEntity admin = new UserEntity();
-            admin.setEmail("admin@gmail.com");
-            admin.setPassword(encoder.encode("password"));
-            admin.setFirstName("Admin");
-            admin.setLastName("Adminov");
-            admin.setPhoneUser("+77777777777");
-            admin.setRole(Role.ADMIN);
-            userRepository.save(admin);
-        }
-        log.info("Authorization was successful. " + LocalDate.now());
     }
 
     /*

@@ -12,3 +12,6 @@ CREATE TABLE users (
     role VARCHAR(16) NOT NULL,
     CONSTRAINT phone_user_constraint CHECK (phone_user LIKE ('+7%'))
 );
+
+INSERT INTO users (email_user, password_user, first_name, last_name, phone_user, role)
+VALUES ('admin@gmail.com', '$2a$12$lV7lTQdu3Elm7m3bdAAxWOs3GjvMSIYUYE7gGMqO/KF2NLakrCWdu', 'Admin', 'Adminov', '+77777777777', 'ADMIN');
