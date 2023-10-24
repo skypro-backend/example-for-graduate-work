@@ -1,70 +1,87 @@
 package ru.skypro.homework.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.service.AdvertService;
+import ru.skypro.homework.service.CommentService;
+import ru.skypro.homework.service.ImageService;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/ads")
+@CrossOrigin("http://localhost:3000")
 public class AdController {
+private final AdvertService advertService;
+private final CommentService commentService;
 
+private final ImageService imageService;
     @GetMapping("/me")
     public ResponseEntity<AdsDto> getAdsMe() {
-        return ResponseEntity.ok(new AdsDto());
+        var body = advertService.getAdvert();
+        return ResponseEntity.ok(body);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAdDto> getAdById(@PathVariable int id) {
-        return ResponseEntity.ok(new ExtendedAdDto());
+        var body = advertService.getAdvertById(id);
+        return ResponseEntity.ok(body);
     }
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<CommentsDto> getCommentsForAd(@PathVariable int id) {
-        return ResponseEntity.ok(new CommentsDto());
+        var body = commentService.getAllCommentsAdvert(id);
+        return ResponseEntity.ok(body);
     }
 
     @PostMapping
     public ResponseEntity<AdDto> addAd(@RequestPart("properties") CreateOrUpdateAdDto createOrUpdateAdDto,
                                        @RequestPart("image") MultipartFile image) {
-        return ResponseEntity.ok(new AdDto());
+        var body = advertService.createAdvert(createOrUpdateAdDto, image);
+        return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<AdDto> updateAd(@PathVariable int id,
                                           @RequestBody CreateOrUpdateAdDto createOrUpdateAdDto) {
-        return ResponseEntity.ok(new AdDto());
+        var body = advertService.updateAdvert(id, createOrUpdateAdDto);
+        return ResponseEntity.ok(body);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAd(@PathVariable int id) {
-        return ResponseEntity.ok().build();
+
+        advertService.deleteAdvert(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("/{id}/image")
-    public ResponseEntity<byte[]> updateAdImage(@PathVariable int id,
+    public ResponseEntity<String> updateAdImage(@PathVariable int id,
                                                 @RequestPart MultipartFile image) {
-        return ResponseEntity.ok().body(new byte[0]);
+        var body = advertService.update(id, image);
+        return ResponseEntity.ok(body);
     }
 
     @GetMapping
     public ResponseEntity<AdsDto> getAllAds() {
-        return ResponseEntity.ok(new AdsDto());
+
+        var body = advertService.getAllAdverts();
+        return ResponseEntity.ok(body);
     }
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDto> addCommentToAd(@PathVariable int id,
                                                      @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
-        return ResponseEntity.ok(new CommentDto());
-    }
-
-    @GetMapping("/{id}/comments/{commentId}")
-    public ResponseEntity<CommentDto> getCommentById(@PathVariable int id, @PathVariable int commentId) {
-        return ResponseEntity.ok(new CommentDto());
+        var body = commentService.createComment(id, createOrUpdateCommentDto);
+        return ResponseEntity.ok(body);
     }
 
     @DeleteMapping("/{id}/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable int id, @PathVariable int commentId) {
+    public ResponseEntity<?> deleteComment(@PathVariable int id, @PathVariable int commentId) {
+        commentService.deleteComment(id, commentId);
         return ResponseEntity.ok().build();
     }
 
@@ -72,7 +89,8 @@ public class AdController {
     public ResponseEntity<CommentDto> updateComment(@PathVariable int id,
                                                     @PathVariable int commentId,
                                                     @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
-        return ResponseEntity.ok(new CommentDto());
+        var body = commentService.updateComment(id, commentId, createOrUpdateCommentDto);
+        return ResponseEntity.ok(body);
     }
 }
 
