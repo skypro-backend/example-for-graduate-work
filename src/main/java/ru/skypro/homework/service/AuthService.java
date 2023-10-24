@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.security.core.Authentication;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.pojo.User;
@@ -13,7 +14,7 @@ public interface AuthService {
 
     Optional<String> changePassword(String username, String currentPassword, String newPassword);
 
-    User updateUserInfo(Long userId, UpdateUserDTO updateUserDTO);
+    User updateUserInfo(Authentication authentication, UpdateUserDTO updateUserDTO);
 
 
 }

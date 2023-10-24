@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface AdsService {
-    AdDTO createAd(Long userId, AdDTO adDTO, MultipartFile imageFile);
+    AdDTO createAd(AdDTO adDTO, MultipartFile imageFile);
 
     List<AdDTO> getAllAds();
 

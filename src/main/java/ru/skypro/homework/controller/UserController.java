@@ -4,6 +4,7 @@ package ru.skypro.homework.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -11,7 +12,9 @@ import ru.skypro.homework.dto.*;
 import ru.skypro.homework.pojo.User;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.ImageService;
+import ru.skypro.homework.service.UserService;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 
 
@@ -24,20 +27,24 @@ public class UserController {
 
     private final ImageService imageService;
 
-    public UserController(AuthService authService, ImageService imageService) {
+    private final UserService userService;
+
+    public UserController(AuthService authService, ImageService imageService, UserService userService) {
         this.authService = authService;
         this.imageService = imageService;
+        this.userService = userService;
     }
 
 
     @GetMapping("/me")
     public UserDTO me(Authentication authentication) {
-        UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getDetails();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
 
         UserDTO userDTO = new UserDTO();
 
-        userDTO.setUserName(userDetailsDTO.getUserName());
-        userDTO.setPassword(userDetailsDTO.getPassword());
+        userDTO.setUserName(userDetails.getUsername());
+        userDTO.setPassword(userDetails.getPassword());
 
         return userDTO;
     }
@@ -57,24 +64,27 @@ public class UserController {
 
     @PatchMapping("/me")
     public ResponseEntity<UserDTO> updateUserInfo(@RequestBody UpdateUserDTO updateUserDTO, Authentication authentication) {
-        UserDetailsDTO userDetails = (UserDetailsDTO) authentication.getDetails();
-        Long userId = userDetails.getUserId();
+        try {
+            // Вызовите метод из вашего сервиса для обновления информации пользователя
+            User updatedUser = authService.updateUserInfo(authentication, updateUserDTO);
 
-        User updatedUser = authService.updateUserInfo(userId, updateUserDTO);
+            // Преобразуйте обновленного пользователя в DTO и верните его в ответе
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUserName(updatedUser.getUserName());
+            // Добавьте другие поля, которые вы хотите включить в DTO
 
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFirstName(updatedUser.getFirstName());
-        userDTO.setLastName(updatedUser.getLastName());
-        userDTO.setPhone(updatedUser.getPhone());
-
-        return ResponseEntity.ok(userDTO);
+            return ResponseEntity.ok(userDTO);
+        } catch (EntityNotFoundException ex) {
+            // Если пользователя не существует, верните 404 Not Found
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("/me/image")
     public ResponseEntity<?> updateAvatar(Authentication authentication, @RequestParam("file") MultipartFile file) {
-        UserDetailsDTO currentUser = (UserDetailsDTO) authentication.getDetails();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        if (currentUser != null) {
+        if (userDetails != null) {
             try {
                 imageService.uploadImage(file);
                 return ResponseEntity.ok().build();

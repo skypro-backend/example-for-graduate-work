@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdInfoDTO;
 import ru.skypro.homework.dto.UserDTO;
-import ru.skypro.homework.dto.UserDetailsDTO;
 import ru.skypro.homework.pojo.Image;
 import ru.skypro.homework.pojo.User;
 import ru.skypro.homework.service.AdsService;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.skypro.homework.service.ImageService;
+import ru.skypro.homework.service.UserService;
 
 
 @RestController
@@ -35,24 +35,25 @@ public class AdsController {
     private final AdsService adsService;
     private final ImageService imageService;
 
-    public AdsController(AdsService adsService, ImageService imageService) {
+    private final UserService userService;
+
+    public AdsController(AdsService adsService, ImageService imageService, UserService userService) {
         this.adsService = adsService;
         this.imageService = imageService;
+        this.userService = userService;
     }
 
-    @PostMapping(value ="/ads/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value ="/ads", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdDTO> createAd(
             Authentication authentication,
             @RequestPart("adDTO") AdDTO adDTO,
             @RequestPart("imageFile") MultipartFile imageFile
     ) {
-        UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getDetails();
-        UserDTO userDTO = new UserDTO();
+        UserDetails userDetails = userService.loadUserByUsername(authentication.getName());
 
-        userDTO.setUserID(userDetailsDTO.getUserId());
-        Long userId = userDetailsDTO.getUserId();
+
         // Вызываем сервис для создания объявления
-        AdDTO createdAd = adsService.createAd(userId, adDTO, imageFile);
+        AdDTO createdAd = adsService.createAd(adDTO, imageFile);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAd);
     }
 

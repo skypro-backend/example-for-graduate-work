@@ -31,9 +31,9 @@ public class AdsServiceImpl implements AdsService {
 
 
     @Override
-    public AdDTO createAd(Long userId, AdDTO adDTO, MultipartFile imageFile) {
+    public AdDTO createAd(AdDTO adDTO, MultipartFile imageFile) {
         User user = new User();
-        user.setUserID(userId);
+        user.setUserID(user.getUserID());
 
         Ad ad = new Ad();
         ad.setUser(user);

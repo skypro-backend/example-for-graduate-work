@@ -3,22 +3,22 @@ package ru.skypro.homework.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.dto.Role;
-
-import javax.sql.DataSource;
+import ru.skypro.homework.service.UserService;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+@EnableWebSecurity
 @Configuration
+
 public class WebSecurityConfig {
+
+
+
+private final UserService userService;
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -29,14 +29,10 @@ public class WebSecurityConfig {
             "/register"
     };
 
-    @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        JdbcDaoImpl jdbcDao = new JdbcDaoImpl();
-        jdbcDao.setDataSource(dataSource);
-        jdbcDao.setUsersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?");
-        jdbcDao.setAuthoritiesByUsernameQuery("SELECT username, role FROM users WHERE username = ?");
-        return jdbcDao;
+    public WebSecurityConfig(UserService userService) {
+        this.userService = userService;
     }
+
 
 //    @Bean
 //    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
@@ -77,7 +73,9 @@ public class WebSecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+
+//        return new BCryptPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();
     }
 
 }

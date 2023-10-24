@@ -4,16 +4,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.pojo.User;
 import ru.skypro.homework.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
-import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -24,18 +21,18 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
 
-    private final UserDetailsService userDetailsService;
+    private final UserService userService;
 
-    public AuthServiceImpl(PasswordEncoder encoder, UserRepository userRepository, UserDetailsService userDetailsService) {
+    public AuthServiceImpl(PasswordEncoder encoder, UserRepository userRepository, UserService userService) {
         this.encoder = encoder;
         this.userRepository = userRepository;
-        this.userDetailsService = userDetailsService;
+        this.userService = userService;
     }
 
 
     @Override
     public boolean login(String userName, String password) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+        UserDetails userDetails = userService.loadUserByUsername(userName);
 
         if (userDetails == null) {
             return false;
@@ -47,14 +44,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(Register register) {
-        UserDetails existingUser = userDetailsService.loadUserByUsername(register.getUserName());
-
-        if (existingUser != null) {
-            return false; // Пользователь с таким именем уже существует
-        }
+//        UserDetails existingUser = userService.loadUserByUsername(register.getUserName());
+//
+//        if (existingUser != null) {
+//            return false; // Пользователь с таким именем уже существует
+//        }
 
         User user = new User();
         user.setUserName(register.getUserName());
+//        String encodedPassword = encoder.encode(register.getPassword());
+//        user.setPassword(encodedPassword);
         user.setPassword(register.getPassword());
         user.setRole(register.getRole());
         user.setFirstName(register.getFirstName());
@@ -89,10 +88,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User updateUserInfo(Long userId, UpdateUserDTO updateUserDTO) {
-        // Найдем пользователя по userId
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    public User updateUserInfo(Authentication authentication, UpdateUserDTO updateUserDTO) {
+        // Извлеките имя пользователя из аутентификации
+        String username = authentication.getName();
+
+        // Найдем пользователя по имени
+        User user = userRepository.findUserByUserName(username);
+        if (user == null) {
+            throw new EntityNotFoundException("User not found");
+        }
 
         // Обновим информацию пользователя
         user.setFirstName(updateUserDTO.getFirstName());
