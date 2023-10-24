@@ -48,11 +48,11 @@ public class CommentsController {
     public ResponseEntity<CommentDto> addCommentToAd(@PathVariable("id") Integer adId,
                                                      @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         CommentDto newCommentDto = new CommentDto(1, "imagePath",
-                "authorFirstName", 100500, 1, createOrUpdateCommentDto.text());
+                "authorFirstName", (long) 100500, 1, createOrUpdateCommentDto.text());
         return ResponseEntity.ok(newCommentDto);
     }
 
-    @PostMapping("/{adId}/comments/{commentId}")
+    @PatchMapping("/{adId}/comments/{commentId}")
     @Operation(summary = "Обновление комментария",
             description = "Обновление комментария к объявлению по id объявления и id комментария")
     @ApiResponse(responseCode = "200", description = "OK")
@@ -63,7 +63,7 @@ public class CommentsController {
                                                         @PathVariable("commentId") Integer commentId,
                                                         @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         CommentDto updatedCommentDto = new CommentDto(1, "imagePath",
-                "authorFirstName", 100500, 1, createOrUpdateCommentDto.text());
+                "authorFirstName", (long) 100500, 1, createOrUpdateCommentDto.text());
         return ResponseEntity.ok(updatedCommentDto);
     }
 
