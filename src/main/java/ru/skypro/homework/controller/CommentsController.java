@@ -48,7 +48,7 @@ public class CommentsController {
     public ResponseEntity<CommentDto> addCommentToAd(@PathVariable("id") Integer adId,
                                                      @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         CommentDto newCommentDto = new CommentDto(1, "imagePath",
-                "authorFirstName", (long)100500, 1, createOrUpdateCommentDto.text());
+                "authorFirstName", (long) 100500, 1, createOrUpdateCommentDto.text());
         return ResponseEntity.ok(newCommentDto);
     }
 
@@ -63,7 +63,7 @@ public class CommentsController {
                                                         @PathVariable("commentId") Integer commentId,
                                                         @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         CommentDto updatedCommentDto = new CommentDto(1, "imagePath",
-                "authorFirstName", (long)100500, 1, createOrUpdateCommentDto.text());
+                "authorFirstName", (long) 100500, 1, createOrUpdateCommentDto.text());
         return ResponseEntity.ok(updatedCommentDto);
     }
 
