@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 
 @Data
 public class CommentDto {
-    private Long author;
+    private Integer author;
     private String authorImage;
     private String authorFirstName;
-    private LocalDateTime createdAt;
-    private Long pk;
+    private Integer createdAt;
+    private Integer pk;
     private String text;
 }

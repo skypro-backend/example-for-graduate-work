@@ -6,9 +6,9 @@ import java.math.BigDecimal;
 
 @Data
 public class AdDto {
-    private Long author;
+    private Integer author;
     private String image;
-    private Long pk;
-    private BigDecimal price;
+    private Integer pk;
+    private Integer price;
     private String title;
 }
