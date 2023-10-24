@@ -8,6 +8,6 @@ import java.util.Collection;
 @Data
 public class Ads {
     @Schema(description = "общее количество объявлений")
-    Integer count;
-    Collection<Ad> results;
+    private Integer count;
+    private Collection<Ad> results;
 }

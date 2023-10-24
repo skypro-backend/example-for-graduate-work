@@ -14,9 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -67,4 +65,36 @@ public class AdsController {
         return ResponseEntity.ok(receivedAds);
     }
 
+    @Operation(summary = "Получение информации об объявлении")
+    @ApiResponse(responseCode = "200", description = "OK", content = {
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema =
+            @Schema(implementation = AdInfoDto.class))})
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "404", description = "Not found")
+    @GetMapping("/{id}")
+    public ResponseEntity<AdInfoDto> getAdInfo(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(new AdInfoDto());
+    }
+
+    @Operation(summary = "Удаление объявления")
+    @ApiResponse(responseCode = "204", description = "No content")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "404", description = "Not found")
+    @DeleteMapping("/{id}")
+    public void deleteAd(@PathVariable("id") Integer id) {
+    }
+
+    @Operation(summary = "Обновление информации об объявлении")
+    @ApiResponse(responseCode = "200", description = "OK", content = {
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema =
+            @Schema(implementation = Ad.class))})
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "404", description = "Not found")
+    @PatchMapping("/{id}")
+    public ResponseEntity<Ad> patchAd(@PathVariable("id") Integer id,
+                                               @RequestBody AdUpdateDto adUpdateDto) {
+        return ResponseEntity.ok(new Ad());
+    }
 }
