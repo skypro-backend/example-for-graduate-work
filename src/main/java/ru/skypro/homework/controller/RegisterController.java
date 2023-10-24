@@ -13,7 +13,6 @@ import ru.skypro.homework.service.RegisterService;
 @AllArgsConstructor
 public class RegisterController {
     private final RegisterService registerService;
-
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDto register) {
         if (registerService.registerUser(register)) {
