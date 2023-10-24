@@ -10,7 +10,6 @@ create table users
     phone      varchar,
     image      varchar,
     role       varchar,
-    enabled    boolean
 );
 
 create table adverts
