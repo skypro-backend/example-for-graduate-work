@@ -99,9 +99,13 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void updateImage(MultipartFile image, Authentication authentication) throws IOException {
-        String URL = imageService.createImage(image);
+        String newImage = imageService.createImage(image);
         UserDTO userDTO = UserMapper.toDTO(userRepository.findByEmailIgnoreCase(getCurrentUser(authentication).getEmail()).orElseThrow(UserNotFoundException::new));
-        userDTO.setImage(URL);
+        String oldImage = userDTO.getImage();
+        userDTO.setImage(newImage);
         userRepository.save(UserMapper.fromDTO(userDTO));
+        if (oldImage != null) {
+            imageService.deleteImage(oldImage);
+        }
     }
 }

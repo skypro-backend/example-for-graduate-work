@@ -22,19 +22,33 @@ public class ImageServiceImpl implements ImageService {
     private String pathToImages;
 
     /**
-     * Возвращает ссылку на картинку
+     * Создает картинку и возращает её url
      *
      * @param file картинка
-     * @return ссылку на картинку
-     * @throws RuntimeException если введен неверный формат данных
+     * @return url картинки
      */
-    @SneakyThrows
     @Override
     public String createImage(MultipartFile file) {
         checkDirectory();
         String imageName = UUID.randomUUID() + "_" + Instant.now().getEpochSecond() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
-        Files.write(Path.of(pathToImages + imageName),file.getBytes());
-        return "/images/" + imageName;
+        try {
+            Files.write(Path.of(pathToImages + imageName),file.getBytes());
+        } catch (IOException ignored) {}
+        return "/" + imageName;
+    }
+    /**
+     * Возвращает картинку в виду массива байт
+     *
+     * @param imageName url картинки
+     * @return картинку в виду массива байт
+     */
+    @Override
+    public byte[] getImage(String imageName) {
+        byte[] image = null;
+        try {
+            image = Files.readAllBytes(Path.of(pathToImages + imageName));
+        } catch (IOException ignored) {}
+        return image;
     }
 
     /**
@@ -46,5 +60,14 @@ public class ImageServiceImpl implements ImageService {
         if (!imagesDir.exists()) {
             imagesDir.mkdirs();
         }
+    }
+    /**
+     * Проверяет существует ли каталог, в котором хранятся картики, и если да, удаляет его
+     *
+     * @param url картинки
+     */
+    @Override
+    public void deleteImage(String url) throws IOException {
+        Files.deleteIfExists(Path.of(pathToImages + url.replaceFirst("/","")));
     }
 }

@@ -144,7 +144,11 @@ public class AdsServiceImpl implements AdsService{
     @SneakyThrows
     public String updateImage(Integer id, MultipartFile image) {
         AdDTO adToUpdate = AdMapper.fromAd(adRepository.findById(id).orElseThrow(AdNotFoundException::new));
-        adToUpdate.setImage(image.getResource().getURL().toString());
+        String oldImage = adToUpdate.getImage();
+        adToUpdate.setImage(imageService.createImage(image));
+        if (oldImage != null) {
+            imageService.deleteImage(oldImage);
+        }
         return adRepository.save(AdMapper.toAd(adToUpdate)).getImage();
     }
 }

@@ -23,6 +23,6 @@ public class AppExceptionHandler{
     @ExceptionHandler()
     public ResponseEntity<? extends Exception> handleAnotherException(Exception exception){
         exception.printStackTrace();
-        return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
