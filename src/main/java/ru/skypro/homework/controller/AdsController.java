@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -7,7 +8,10 @@ import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
-
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/ads")
+@CrossOrigin("http://localhost:3000")
 public class AdsController {
 
     @GetMapping
@@ -82,13 +86,12 @@ public class AdsController {
 
     @PatchMapping("{id}/image")
     public AdDto updateImage(@PathVariable int id,
-                             @RequestBody MultipartFile image) {
+                             @RequestPart MultipartFile image) {
         return new AdDto();
     }
 
 //    @PatchMapping("{id}/image")
-//    public ResponseEntity<String> updateImage(@PathVariable int id,
-//                                              @RequestBody MultipartFile image) {
+//    public ResponseEntity<String> updateImage(@RequestPart(name = "image") MultipartFile image) {
 //        var body = service.update(id, image);
 //        return ResponseEntity.ok(body);
 //    }
