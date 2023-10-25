@@ -31,13 +31,13 @@ public class AdServiceImpl implements AdService {
     }
 
     public AdDTO addAd(CreateOrUpdateAd createOrUpdateAd, String pathImage) {
-        AdModel ad = new AdModel();
-        ad.setImage(pathImage);
-        ad.setPrice(createOrUpdateAd.getPrice());
-        ad.setTitle(createOrUpdateAd.getTitle());
-        ad.setDescription(createOrUpdateAd.getDescription());
-        repo.save(ad);
-        return AdMapper.fromAdDto(ad);
+        AdModel adModel = new AdModel();
+        adModel.setImage(pathImage);
+        adModel.setPrice(createOrUpdateAd.getPrice());
+        adModel.setTitle(createOrUpdateAd.getTitle());
+        adModel.setDescription(createOrUpdateAd.getDescription());
+        repo.save(adModel);
+        return AdMapper.fromAdDto(adModel);
     }
 
 

@@ -3,8 +3,8 @@ package ru.skypro.homework.mapper;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.model.CommentModel;
 
-public class CommentMaper {
-    public static CommentDTO fromCommetDTO(CommentModel commentModel) {
+public class CommentMapper {
+    public static CommentDTO fromCommentDTO(CommentModel commentModel) {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setPk(commentModel.getPk());
 //        commentDTO.setAuthor(commentModel.getAuthor());

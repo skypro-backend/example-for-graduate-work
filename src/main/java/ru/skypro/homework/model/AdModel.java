@@ -4,8 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -30,7 +28,6 @@ public class AdModel {
 
     @Column(name = "description")
     private String description;
-
 
     @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

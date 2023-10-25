@@ -1,6 +1,8 @@
 package ru.skypro.homework.controller;
 
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Role;
@@ -14,8 +16,10 @@ public class UserController {
 
     // Получение пользователя
     @GetMapping("/me")
-    public UserDTO getUser() {
-        return new UserDTO(1, "fe", "fre", "vtgr", "f54", Role.USER.toString(), "/gfd/gtfr");
+    public ResponseEntity<UserDTO> getUser(Authentication authentication) {
+
+//        return new UserDTO(0, "fe", "fre", "vtgr", "f54", Role.USER.name(), null);
+        return ResponseEntity.ok(new UserDTO(0, "fe@mail.ru", "nameForTest", "LastnameForTest", "+79999999999", Role.USER.name(), null));
     }
 
     // Создание нового пользователя
@@ -32,9 +36,9 @@ public class UserController {
     }
 
     @PatchMapping("/me/image")
-    public String updateUserImage( @PathVariable String pathImage) {
+    public String updateUserImage(@PathVariable String pathImage) {
         System.out.println("Обновление avatar об авторизованном пользователе");
-        return  "pathImage";
+        return "pathImage";
 
     }
 }

@@ -11,6 +11,8 @@ import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import java.util.List;
 
+import static ru.skypro.homework.service.ReturnableStubs.getAdsDto;
+
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
@@ -26,7 +28,8 @@ public class AdController {
     //    Получение всех объявлений
     @GetMapping()
     public Ads getAllAds() {
-        return new Ads(1, List.of(new AdDTO(1, "mjrtei/regtr", 321, 123, "frenhj")));
+//        return new Ads(1, List.of(new AdDTO(1, "mjrtei/regtr", 321, 123, "ttttttttttttttt")));
+        return getAdsDto();
     }
 
     //Добавление объявления
@@ -59,7 +62,8 @@ public class AdController {
     //Получение объявлений авторизованного пользователя
     @GetMapping("/me")
     public Ads getAdsMe() {
-        return adService.getAdsMe();
+//        return adService.getAdsMe();
+        return getAdsDto();
     }
 
     // Обновление картинки объявления
