@@ -12,13 +12,17 @@ import ru.skypro.homework.dto.adsDTO.*;
 
 
 import javax.xml.crypto.OctetStreamData;
-
+/**
+ * Контроллер для работы c объявлениями
+ */
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RestController
 @RequestMapping("/ads")
 public class AdsController {
-
+    /**
+     * Метод получения всех объявлений
+     */
     @Operation(summary = "Получение всех объявлений")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK")
@@ -27,7 +31,9 @@ public class AdsController {
     public ResponseEntity<AdsDTO> getAds(){
         return ResponseEntity.ok(new AdsDTO());
     }
-
+    /**
+     * Метод добавления всех объявлений
+     */
     @Operation(summary = "Добавление объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Created",
@@ -39,7 +45,9 @@ public class AdsController {
     public ResponseEntity<AdDTO> addAd(@RequestParam("properties") AdDTO ad, @RequestPart MultipartFile image) {
         return ResponseEntity.ok(ad);
     }
-
+    /**
+     * Метод получения информации о объявлении
+     */
     @Operation(summary = "Получение информации об объявлении")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -50,7 +58,9 @@ public class AdsController {
     public ResponseEntity<FullAdDTO> getInfoByAd(@PathVariable int id){
         return ResponseEntity.ok(new FullAdDTO());
     }
-
+    /**
+     * Метод удаления объявления
+     */
     @Operation(summary = "Удаление объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "No Content"),
@@ -62,7 +72,9 @@ public class AdsController {
     public ResponseEntity deleteUser(@PathVariable int id) {
         return ResponseEntity.ok().build();
     }
-
+    /**
+     * Метод обновления информации об объявлении
+     */
     @Operation(summary = "Обновление информации об объявлении")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",content = @Content(
@@ -75,8 +87,10 @@ public class AdsController {
     public ResponseEntity<AdDTO> updateInfoByAd(@PathVariable int id, @RequestBody CreateAdsDTO ad){
         return ResponseEntity.ok(new AdDTO());
     }
-
-    @Operation(summary = "Получение объявлений паторизованного пользователя")
+    /**
+     * Метод получения объявлений авторизованного пользователя
+     */
+    @Operation(summary = "Получение объявлений авторизованного пользователя")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE)),
@@ -86,7 +100,9 @@ public class AdsController {
     public ResponseEntity<AdsDTO> getAdsByAuthUser(){
         return ResponseEntity.ok(new AdsDTO());
     }
-
+    /**
+     * Метод обновления картинки объявления
+     */
     @Operation(summary = "Обновление картинки объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",content = @Content(

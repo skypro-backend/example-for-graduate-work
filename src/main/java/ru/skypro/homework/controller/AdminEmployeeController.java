@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.service.EmployeeService;
 
+/**
+ * Контроллер для работы
+ */
 @RestController
 @RequestMapping("/admin/employees")
 public class AdminEmployeeController {
