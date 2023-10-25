@@ -1,47 +1,46 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.RegisterDto;
+import ru.skypro.homework.entity.User;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
+    private final UserRepository userRepository;
+    private final UserDetailsService userDetailsService;
     private final PasswordEncoder encoder;
+    private final UserMapper userMapper;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
-        this.encoder = passwordEncoder;
+    @Override
+    public boolean login(final String username, final String password) {
+        try {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            return encoder.matches(password, userDetails.getPassword());
+        } catch (UsernameNotFoundException e) {
+            return false;
+        }
     }
 
     @Override
-    public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
+    public boolean register(final RegisterDto registerDto) {
+        if (userRepository.existsByLogin(registerDto.username())) {
             return false;
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
-    }
 
-    @Override
-    public boolean register(RegisterDto registerDto) {
-        if (manager.userExists(registerDto.username())) {
-            return false;
-        }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(registerDto.password())
-                        .username(registerDto.username())
-                        .roles(registerDto.role().name())
-                        .build());
+        User user = userMapper.toEntity(registerDto);
+        userRepository.save(user);
         return true;
     }
-
 }

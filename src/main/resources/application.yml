@@ -9,3 +9,9 @@ spring:
     username: ${DATASOURCE_USERNAME:postgres}
     password: ${DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    change-log: "db.changelog/db.changelog.yml"
+
+upload:
+  dir: "src/main/resources/images"

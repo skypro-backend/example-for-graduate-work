@@ -40,7 +40,6 @@ public class CommentsController {
         CommentsDto allCommentsDtoList = new CommentsDto(0, new ArrayList<>());
         return ResponseEntity.ok(allCommentsDtoList);
     }
-
     @PostMapping("/{id}/comments")
     @Operation(summary = "Добавление комментария к объявлению",
             description = "Добавление комментария к объявлению по его id")
