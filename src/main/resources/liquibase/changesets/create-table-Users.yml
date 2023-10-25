@@ -22,8 +22,6 @@ databaseChangeLog:
               - column:
                   name: image
                   type: varchar(255)
-                  constraints:
-                    nullable: false
               - column:
                   name: username
                   type: varchar(32)
@@ -32,7 +30,7 @@ databaseChangeLog:
                     unique: true
               - column:
                   name: password
-                  type: varchar(16)
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:

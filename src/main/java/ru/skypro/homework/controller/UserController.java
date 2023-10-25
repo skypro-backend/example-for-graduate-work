@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.*;
+import ru.skypro.homework.security.AdsUserDetails;
 import ru.skypro.homework.service.UserService;
 
 
@@ -19,26 +20,22 @@ public class UserController {
 
     @PostMapping("/set_password")
     public void updatePassword(@RequestBody NewPassword newPassword, Authentication authentication) {
-        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
-        userService.updatePassword(newPassword, adsUserDetails.getId());
+        userService.updatePassword(newPassword, authentication.getName());
     }
 
     @GetMapping("/me")
     public User getInformation(Authentication authentication) {
-        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
-        return userService.getInformation(adsUserDetails.getId());
+        return userService.getInformation(authentication.getName());
     }
 
     @PatchMapping("/me")
     public UpdateUser updateInformationAboutUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
-        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
-        return userService.updateInformationAboutUser(updateUser, adsUserDetails.getId());
+        return userService.updateInformationAboutUser(updateUser, authentication.getName());
     }
 
     @PatchMapping("/me/image")
     public void updateImage(@RequestParam("image") MultipartFile image, Authentication authentication) {
-        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
-        userService.UpdateImage(image, adsUserDetails.getId());
+        userService.UpdateImage(image, authentication.getName());
     }
 
 

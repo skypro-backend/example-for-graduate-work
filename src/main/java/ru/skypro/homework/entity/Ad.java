@@ -36,7 +36,7 @@ public class Ad {
     @JoinColumn(name = "user_id")
     private Users user; //id автора объявления
 
-    @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> comments; //комментарии к объявлению
 
 
