@@ -11,13 +11,13 @@ public class CommentInfoDTO {
         private String userName;
 
 
-        private Long avatarId;
+        private String authorImage;
 
 
         private String firstName;
 
 
-        private Instant timeStamp;
+        private Instant createdAt;
 
 
         private Long pk;

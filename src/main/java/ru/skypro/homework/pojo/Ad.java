@@ -26,6 +26,9 @@ public class Ad {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "user_id", insertable=false, updatable=false)
+    private Long UserID;
+
     public void setUser(User user) {
         this.user = user;
     }

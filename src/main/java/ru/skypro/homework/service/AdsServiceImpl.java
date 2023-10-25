@@ -4,10 +4,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdInfoDTO;
+import ru.skypro.homework.dto.AdUpdateDTO;
+import ru.skypro.homework.dto.AllAdDTO;
 import ru.skypro.homework.pojo.Ad;
 import ru.skypro.homework.pojo.Image;
 import ru.skypro.homework.pojo.User;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.UserRepository;
 
 
 import java.io.IOException;
@@ -23,10 +26,13 @@ public class AdsServiceImpl implements AdsService {
 
     private final ImageService imageService;
 
-    public AdsServiceImpl(AdRepository adRepository, ImageService imageService) {
+    private final UserRepository userRepository;
+
+    public AdsServiceImpl(AdRepository adRepository, ImageService imageService, UserRepository userRepository) {
         this.adRepository = adRepository;
 
         this.imageService = imageService;
+        this.userRepository = userRepository;
     }
 
 
@@ -43,7 +49,7 @@ public class AdsServiceImpl implements AdsService {
 
         try {
             // Вызываем метод uploadImage и передаем в него imageFile
-            Image uploadedImage = imageService.uploadImage(imageFile);
+            Image uploadedImage = imageService.uploadImage(imageFile, ad.getPk());
 
             // Связываем изображение с объявлением
             ad.setImage(uploadedImage);
@@ -57,7 +63,7 @@ public class AdsServiceImpl implements AdsService {
         Ad createdAd = adRepository.save(ad);
 
         AdDTO createdAdDTO = new AdDTO();
-        createdAdDTO.setUserId(createdAd.getUser().getUserID());
+        createdAdDTO.setAuthor(createdAd.getUser().getUserID());
         createdAdDTO.setDescription(createdAd.getDescription());
         createdAdDTO.setPrice(createdAd.getPrice());
         createdAdDTO.setTitle(createdAd.getTitle());
@@ -66,17 +72,17 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public List<AdDTO> getAllAds() {
+    public List<AllAdDTO> getAllAds() {
         List<Ad> ads = adRepository.findAll(); // Извлекаем все объявления из базы данных
-        List<AdDTO> adsRequestDTOs = new ArrayList<>();
+        List<AllAdDTO> adsRequestDTOs = new ArrayList<>();
 
         for (Ad ad : ads) {
-            AdDTO adsRequestDTO = new AdDTO();
-            adsRequestDTO.setUserId(ad.getUser().getUserID());
-            adsRequestDTO.setDescription(ad.getDescription());
+            AllAdDTO adsRequestDTO = new AllAdDTO();
+            adsRequestDTO.setAuthor(ad.getUser().getUserID());
             adsRequestDTO.setPk(ad.getPk());
             adsRequestDTO.setPrice(ad.getPrice());
             adsRequestDTO.setTitle(ad.getTitle());
+            adsRequestDTO.setImage(ad.getImage().getImagePath());
 
 
             adsRequestDTOs.add(adsRequestDTO);
@@ -100,7 +106,7 @@ public class AdsServiceImpl implements AdsService {
             adInfoDTO.setAuthorLastName(ad.getUser().getLastName());
             adInfoDTO.setDescription(ad.getDescription());
             adInfoDTO.setEmail(ad.getUser().getEmail());
-            adInfoDTO.setImage(ad.getImage());
+            adInfoDTO.setImage(ad.getImage().getImagePath());
             adInfoDTO.setPhone(ad.getUser().getPhone());
             adInfoDTO.setPrice(ad.getPrice());
             adInfoDTO.setTitle(ad.getTitle());
@@ -129,28 +135,26 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdDTO updateAd(Long pk, AdDTO adDTO) {
+    public AdUpdateDTO updateAd(Long pk, AdUpdateDTO adUpdateDTO) {
         Optional<Ad> optionalAd = adRepository.findById(pk);
         if (optionalAd.isPresent()) {
             Ad ad = optionalAd.get();
 
-            if (adDTO.getTitle() != null) {
-                ad.setTitle(adDTO.getTitle());
+            if (adUpdateDTO.getTitle() != null) {
+                ad.setTitle(adUpdateDTO.getTitle());
             }
-            if (adDTO.getPrice() != null) {
-                ad.setPrice(adDTO.getPrice());
+            if (adUpdateDTO.getPrice() != null) {
+                ad.setPrice(adUpdateDTO.getPrice());
             }
-            if (adDTO.getDescription() != null) {
-                ad.setDescription(adDTO.getDescription());
+            if (adUpdateDTO.getDescription() != null) {
+                ad.setDescription(adUpdateDTO.getDescription());
             }
 
             // Сохраняем обновленное объявление в базу
             adRepository.save(ad);
 
             // Создаем объект AdsDTO для ответа с нужными полями
-            AdDTO responseAd = new AdDTO();
-            responseAd.setUserId(ad.getUser().getUserID());
-            responseAd.setPk(ad.getPk());
+            AdUpdateDTO responseAd = new AdUpdateDTO();
             responseAd.setPrice(ad.getPrice());
             responseAd.setTitle(ad.getTitle());
             responseAd.setDescription(ad.getDescription());
@@ -163,23 +167,25 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public List<AdDTO> getAdsForUser(Long userId) {
-        // Используем adRepository для получения объявлений конкретного пользователя
-        List<Ad> ads = adRepository.findAdsByUserId(userId);
+    public List<AllAdDTO> getAdsForUser(String userName) {
+        User user = userRepository.findUserByUserName(userName);
+        Long userId = user.getUserID();
+        List<Ad> userAds = adRepository.findAdsByUserUserID(userId);
 
-        // Преобразуем список объявлений в список DTO (AdsDTO)
-        List<AdDTO> adDTOS = new ArrayList<>();
-        for (Ad ad : ads) {
-            AdDTO adDTO = new AdDTO();
+        List<AllAdDTO> allAdDTOs = new ArrayList<>();
+
+        for (Ad ad : userAds) {
+            AllAdDTO adDTO = new AllAdDTO();
+            adDTO.setAuthor(ad.getUser().getUserID()); // Устанавливаем айдишник объявления
+            adDTO.setImage(ad.getImage().getImagePath()); // Устанавливаем путь к изображению
             adDTO.setPk(ad.getPk());
-            adDTO.setTitle(ad.getTitle());
             adDTO.setPrice(ad.getPrice());
-            adDTO.setDescription(ad.getDescription());
+            adDTO.setTitle(ad.getTitle());
 
-            adDTOS.add(adDTO);
+            allAdDTOs.add(adDTO);
         }
 
-        return adDTOS;
+        return allAdDTOs;
     }
 
     @Override

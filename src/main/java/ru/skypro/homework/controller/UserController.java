@@ -2,6 +2,7 @@ package ru.skypro.homework.controller;
 
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,7 +52,7 @@ public class UserController {
         meDTO.setLastName(userDetailsDTO.getLastName());
         meDTO.setPhone(userDetailsDTO.getPhone());
         meDTO.setRole(userDetailsDTO.getRole());
-        meDTO.setImage(Arrays.toString(userDetailsDTO.getImage().getData()));
+        meDTO.setImage(userDetailsDTO.getImage().getImagePath());
 
         return meDTO;
     }
@@ -76,30 +77,25 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UserDTO> updateUserInfo(@RequestBody UpdateUserDTO updateUserDTO, Authentication authentication) {
-        try {
-            // Вызовите метод из вашего сервиса для обновления информации пользователя
-            User updatedUser = authService.updateUserInfo(authentication, updateUserDTO);
+    public ResponseEntity<UpdateUserDTO> updateUserInfo(@RequestBody UpdateUserDTO updateUserDTO, Authentication authentication) {    try {
+        // Вызовем метод из вашего сервиса для обновления информации пользователя
+        authService.updateUserInfo(authentication, updateUserDTO);
 
-            // Преобразуйте обновленного пользователя в DTO и верните его в ответе
-            UserDTO userDTO = new UserDTO();
-            userDTO.setUserName(updatedUser.getUserName());
-            // Добавьте другие поля, которые вы хотите включить в DTO
-
-            return ResponseEntity.ok(userDTO);
-        } catch (EntityNotFoundException ex) {
-            // Если пользователя не существует, верните 404 Not Found
-            return ResponseEntity.notFound().build();
-        }
+        // вернем полученный в запросе объект, так как он уже содержит обновленные данные
+        return ResponseEntity.ok(updateUserDTO);
+    } catch (EntityNotFoundException ex) {
+        // Если пользователя не существует, кинем 404 Not Found
+        return ResponseEntity.notFound().build();
+    }
     }
 
-    @PostMapping("/me/image")
+    @PostMapping(value ="/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateAvatar(Authentication authentication, @RequestParam("file") MultipartFile file) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getPrincipal();
 
-        if (userDetails != null) {
+        if (userDetailsDTO != null) {
             try {
-                imageService.uploadImage(file);
+                imageService.uploadAvatar(file, authentication);
                 return ResponseEntity.ok().build();
             } catch (IOException e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update avatar");

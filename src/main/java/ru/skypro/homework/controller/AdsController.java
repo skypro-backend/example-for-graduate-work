@@ -8,9 +8,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.AdInfoDTO;
-import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.dto.*;
+import ru.skypro.homework.pojo.Ad;
 import ru.skypro.homework.pojo.Image;
 import ru.skypro.homework.pojo.User;
 import ru.skypro.homework.service.AdsService;
@@ -19,6 +18,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +29,7 @@ import ru.skypro.homework.service.UserService;
 
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/ads")
 public class AdsController {
 
     private final AdsService adsService;
@@ -43,7 +43,7 @@ public class AdsController {
         this.userService = userService;
     }
 
-    @PostMapping(value ="/ads", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value ="", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdDTO> createAd(
             Authentication authentication,
             @RequestPart("adDTO") AdDTO adDTO,
@@ -58,9 +58,9 @@ public class AdsController {
     }
 
 
-    @GetMapping("/ads")
+    @GetMapping("")
     public ResponseEntity<Map<String, Object>> getAllAds() {
-        List<AdDTO> ads = adsService.getAllAds();
+        List<AllAdDTO> ads = adsService.getAllAds();
 
         Map<String, Object> response = new HashMap<>();
         response.put("count", ads.size());
@@ -69,7 +69,7 @@ public class AdsController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/ads/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<AdInfoDTO> getAdInfo(@PathVariable ("id")Long pk) {
         AdInfoDTO adInfoDTO = adsService.getAdsInfo(pk);
 
@@ -92,8 +92,8 @@ public class AdsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AdDTO> updateAd(@PathVariable("id") Long pk, @RequestBody AdDTO updatedAd) {
-        AdDTO updated = adsService.updateAd(pk, updatedAd);
+    public ResponseEntity<AdUpdateDTO> updateAd(@PathVariable("id") Long pk, @RequestBody AdUpdateDTO updatedAd) {
+        AdUpdateDTO updated = adsService.updateAd(pk, updatedAd);
 
         if (updated != null) {
             return ResponseEntity.ok(updated);
@@ -103,20 +103,15 @@ public class AdsController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Map<String, Object>> getUserAds(@AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails instanceof User) {
-            Long userId = ((User) userDetails).getUserID();
-            List<AdDTO> userAds = adsService.getAdsForUser(userId);
+    public ResponseEntity<Map<String, Object>> getUserAds(Authentication authentication) {
+        String username = authentication.getName();
+        List<AllAdDTO> ads = adsService.getAdsForUser(username);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("count", userAds.size());
-            response.put("results", userAds);
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", ads.size());
+        response.put("results", ads);
 
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(value ="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -125,7 +120,7 @@ public class AdsController {
             @RequestParam("file") MultipartFile imageFile
     ) {
         try {
-            Image newImage = imageService.uploadImage(imageFile);
+            Image newImage = imageService.uploadImage(imageFile, pk);
             adsService.updateAdImage(pk, newImage);
             return ResponseEntity.ok("Изображение успешно обновлено");
         } catch (IOException e) {

@@ -11,7 +11,11 @@ import java.util.List;
 @Repository
 public interface AdRepository extends JpaRepository<Ad, Long> {
 
-    @Query("SELECT ad FROM Ad ad WHERE ad.user.userID = :userId")
-    List<Ad> findAdsByUserId(@Param("userId") Long userId);
+    @Query("SELECT ad FROM Ad ad WHERE ad.user.userName = :userName")
+    List<Ad> findAdsByUserName(@Param("userName") String userName);
 
+    Ad findByPk(Long pk);
+
+    @Query("SELECT ad FROM Ad ad WHERE ad.user.userID = :userID")
+    List<Ad> findAdsByUserUserID(@Param("userID") Long userID);
 }

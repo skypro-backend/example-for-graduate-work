@@ -28,6 +28,7 @@ public class CommentServiceImpl implements CommentService {
         if (ad != null) {
             Comment comment = new Comment();
             comment.setText(commentDTO.getText());
+            comment.setUserId(ad.getUser().getUserID());
             comment.setPk(pk);
             comment.setTimeStamp(comment.getTimeStamp());
 
@@ -51,9 +52,9 @@ public class CommentServiceImpl implements CommentService {
         for (Comment comment : comments) {
             CommentInfoDTO commentInfo = new CommentInfoDTO();
             commentInfo.setUserName(comment.getUser().getUserName());
-            commentInfo.setAvatarId(comment.getUser().getAvatarId());
+            commentInfo.setAuthorImage(comment.getUser().getImage().getImagePath());
             commentInfo.setFirstName(comment.getUser().getFirstName());
-            commentInfo.setTimeStamp(comment.getTimeStamp());
+            commentInfo.setCreatedAt(comment.getTimeStamp());
             commentInfo.setPk(comment.getPk());
             commentInfo.setText(comment.getText());
 
@@ -89,9 +90,9 @@ public class CommentServiceImpl implements CommentService {
             // Преобразовываем comment в CommentInfoDTO
             CommentInfoDTO commentInfoDTO = new CommentInfoDTO();
             commentInfoDTO.setUserName(comment.getUser().getUserName());
-            commentInfoDTO.setAvatarId(comment.getUser().getAvatarId());
+            commentInfoDTO.setAuthorImage(comment.getUser().getImage().getImagePath());
             commentInfoDTO.setFirstName(comment.getUser().getFirstName());
-            commentInfoDTO.setTimeStamp(comment.getTimeStamp());
+            commentInfoDTO.setCreatedAt(comment.getTimeStamp());
             commentInfoDTO.setPk(comment.getCommentId());
             commentInfoDTO.setText(comment.getText());
 

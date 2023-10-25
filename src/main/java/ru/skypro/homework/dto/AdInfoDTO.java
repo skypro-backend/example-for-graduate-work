@@ -10,8 +10,9 @@ public class AdInfoDTO {
     private String authorLastName;
     private String description;
     private String email;
+    private String image;
     private String phone;
     private Long price;
     private String title;
-    private Image image;
+
 }
