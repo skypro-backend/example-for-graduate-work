@@ -4,16 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
+import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 
 import java.util.ArrayList;
 
@@ -21,48 +16,55 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/ads")
 @Tag(name = "Комментарии")
+@Validated
 public class CommentsController {
-    @DeleteMapping("/{id}/comments/{commentId}")
+    @DeleteMapping("/{adId}/comments/{commentId}")
     @Operation(summary = "Удаление комментария в объявлении",
-            description = "Удаление комментария по идентификационному номеру объявления и комментари авторизованным пользователем")
-    @ApiResponse(responseCode = "204", description = "No Content")
+            description = "Удаление комментария по id объявления и id комментария авторизованным пользователем")
+    @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not Found")
-    public ResponseEntity<Void> removeComment(@PathVariable("id") Long id, @PathVariable("commentId") Long commentId) {
+    public ResponseEntity<Void> removeComment(@PathVariable("adId") Integer adId, @PathVariable("commentId") Integer commentId) {
         // Реализация удаления комментария в объявлений
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/comments")
-    @Operation(summary = "Получение комментариев объявления")
+    @Operation(summary = "Получение комментариев объявления",
+            description = "Получение всех комментариев объявления по id объявления")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<CommentsDto> getCommentsByAd(@PathVariable("id") Integer adId) {
-        CommentsDto list = new CommentsDto(0, new ArrayList<>());
-        return ResponseEntity.ok(list);
+        CommentsDto allCommentsDtoList = new CommentsDto(0, new ArrayList<>());
+        return ResponseEntity.ok(allCommentsDtoList);
     }
-
     @PostMapping("/{id}/comments")
-    @Operation(summary = "Добавление комментария к объявлению")
+    @Operation(summary = "Добавление комментария к объявлению",
+            description = "Добавление комментария к объявлению по его id")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<CommentDto> addCommentToAd(@PathVariable("id") Integer adId,
-                                                     @RequestBody CommentDto newCommentDto) {
+                                                     @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+        CommentDto newCommentDto = new CommentDto(1, "imagePath",
+                "authorFirstName", (long) 100500, 1, createOrUpdateCommentDto.text());
         return ResponseEntity.ok(newCommentDto);
     }
 
-    @PostMapping("/{id}/comments/{comment_id}")
-    @Operation(summary = "Обновление комментария")
+    @PatchMapping("/{adId}/comments/{commentId}")
+    @Operation(summary = "Обновление комментария",
+            description = "Обновление комментария к объявлению по id объявления и id комментария")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public ResponseEntity<CommentDto> updateCommentToAd(@PathVariable("id") Integer adId,
-                                                        @PathVariable("comment_id") Integer commentId,
-                                                        @RequestBody CommentDto updatedCommentDto) {
+    public ResponseEntity<CommentDto> updateCommentToAd(@PathVariable("adId") Integer adId,
+                                                        @PathVariable("commentId") Integer commentId,
+                                                        @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+        CommentDto updatedCommentDto = new CommentDto(1, "imagePath",
+                "authorFirstName", (long) 100500, 1, createOrUpdateCommentDto.text());
         return ResponseEntity.ok(updatedCommentDto);
     }
 
