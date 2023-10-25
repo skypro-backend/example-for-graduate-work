@@ -53,15 +53,9 @@ public class AdsController {
     @ApiResponse(responseCode = "200", description = "OK", content = {
             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema =
             @Schema(implementation = Ads.class))})
-    @ApiResponse(responseCode = "404", description = "Not found")
     @GetMapping
     public ResponseEntity<Ads> getAllAds() {
         Ads receivedAds = adsService.getAllAds();
-        if (receivedAds == null){
-            logger.info("Unable to get ads");
-            return ResponseEntity.notFound().build();
-        }
-        logger.info("Ads sent");
         return ResponseEntity.ok(receivedAds);
     }
 
