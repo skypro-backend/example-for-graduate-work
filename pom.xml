@@ -63,11 +63,11 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
+<!--    <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
-    </dependency>
+    </dependency>-->
 
 
   </dependencies>
@@ -80,12 +80,20 @@
         <configuration>
           <excludes>
             <exclude>
-              <groupId>org.projectlombok</groupId>
+              <groupId>org.project-lombok</groupId>
               <artifactId>lombok</artifactId>
             </exclude>
           </excludes>
         </configuration>
       </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>15</source>
+                <target>15</target>
+            </configuration>
+        </plugin>
     </plugins>
   </build>
 
