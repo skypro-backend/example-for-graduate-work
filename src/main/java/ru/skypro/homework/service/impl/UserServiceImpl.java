@@ -14,6 +14,10 @@ import ru.skypro.homework.exceptions.WrongCurrentPasswordException;
 import ru.skypro.homework.repository.UsersRepository;
 import ru.skypro.homework.service.UserService;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -54,9 +58,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void UpdateImage(MultipartFile file, String username) {
+    public void UpdateImage(MultipartFile file, String username) throws IOException {
         Users users = usersRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
-//        дописать логику работы с файлами
-
+        File files = file.getResource().getFile();
+        String filePath = files.getPath();
+        users.setImage(filePath);
+        usersRepository.save(users);
     }
 }
