@@ -27,7 +27,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
         logger.debug("Пошел запрос на логин");
-        if (authService.login(login.getUserName(), login.getPassword())) {
+        if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
             logger.info("Ничего не вышло");

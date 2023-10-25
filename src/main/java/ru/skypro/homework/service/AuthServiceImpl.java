@@ -3,10 +3,12 @@ package ru.skypro.homework.service;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUserDTO;
+import ru.skypro.homework.dto.UserDetailsDTO;
 import ru.skypro.homework.pojo.User;
 import ru.skypro.homework.repository.UserRepository;
 
@@ -51,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
 //        }
 
         User user = new User();
-        user.setUserName(register.getUserName());
+        user.setUserName(register.getUsername());
 //        String encodedPassword = encoder.encode(register.getPassword());
 //        user.setPassword(encodedPassword);
         user.setPassword(register.getPassword());
@@ -59,13 +61,14 @@ public class AuthServiceImpl implements AuthService {
         user.setFirstName(register.getFirstName());
         user.setLastName(register.getLastName());
         user.setPhone(register.getPhone());
-        user.setEmail(register.getUserName());
+        user.setEmail(register.getUsername());
 
         userRepository.save(user);
         return true;
     }
 
     @Override
+
     public Optional<String> changePassword(String userName, String currentPassword, String newPassword) {
         // Проверяем, существует ли пользователь с заданным именем пользователя.
         User user = userRepository.findUserByUserName(userName);
@@ -74,16 +77,16 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // Проверяем, совпадает ли текущий пароль с паролем пользователя.
-        if (encoder.matches(currentPassword, user.getPassword())) {
+        if (currentPassword.equals(user.getPassword())) {
+            // Если пароль совпадает, обновляем пароль пользователя
+            user.setPassword(newPassword);
+            userRepository.save(user);
+
+            // Возвращаем новый пароль
+            return Optional.of(newPassword);
+        } else {
             return Optional.empty(); // Возвращаем Optional.empty(), если пароль неверный.
         }
-
-        // Если все проверки пройдены, обновляем пароль пользователя
-        user.setPassword(encoder.encode(newPassword));
-        userRepository.save(user);
-
-        // Возвращаем новый пароль
-        return Optional.of(newPassword);
 
     }
 

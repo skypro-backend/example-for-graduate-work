@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import ru.skypro.homework.service.UserService;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 
 
 @RestController
@@ -37,29 +39,40 @@ public class UserController {
 
 
     @GetMapping("/me")
-    public UserDTO me(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+    public meDTO me(Authentication authentication) {
+        UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getPrincipal();
 
 
-        UserDTO userDTO = new UserDTO();
+        meDTO meDTO = new meDTO();
 
-        userDTO.setUserName(userDetails.getUsername());
-        userDTO.setPassword(userDetails.getPassword());
+        meDTO.setId(userDetailsDTO.getId());
+        meDTO.setEmail(userDetailsDTO.getEmail());
+        meDTO.setFirstName(userDetailsDTO.getFirstName());
+        meDTO.setLastName(userDetailsDTO.getLastName());
+        meDTO.setPhone(userDetailsDTO.getPhone());
+        meDTO.setRole(userDetailsDTO.getRole());
+        meDTO.setImage(Arrays.toString(userDetailsDTO.getImage().getData()));
 
-        return userDTO;
+        return meDTO;
     }
 
 
     @PostMapping("/set_password")
     public NewPassword setPassword(@RequestBody NewPassword newPassword, Authentication authentication) {
+        UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getPrincipal();
         NewPassword resultPassword = new NewPassword();
+
+        // Устанавливаем currentPassword в результат перед вызовом changePassword
+        resultPassword.setCurrentPassword(newPassword.getCurrentPassword());
+
         authService.changePassword(
-                        authentication.getName(),
+                        userDetailsDTO.getUsername(),
                         newPassword.getCurrentPassword(),
                         newPassword.getNewPassword()
                 )
-                .ifPresent(resultPassword::setCurrentPassword);
+                .ifPresent(resultPassword::setNewPassword);
         return resultPassword;
+
     }
 
     @PatchMapping("/me")

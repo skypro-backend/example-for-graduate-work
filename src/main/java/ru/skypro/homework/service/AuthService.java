@@ -12,7 +12,7 @@ public interface AuthService {
 
     boolean register(Register register);
 
-    Optional<String> changePassword(String username, String currentPassword, String newPassword);
+    Optional<String> changePassword(String userName, String currentPassword, String newPassword);
 
     User updateUserInfo(Authentication authentication, UpdateUserDTO updateUserDTO);
 

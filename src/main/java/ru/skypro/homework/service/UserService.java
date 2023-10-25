@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.dto.UserDetailsDTO;
 import ru.skypro.homework.pojo.User;
 import ru.skypro.homework.repository.UserRepository;
 
@@ -29,12 +30,27 @@ public class UserService implements UserDetailsService {
         Optional<User> userOptional = Optional.ofNullable(userRepository.findUserByUserName(userName));
         User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + userName));
 
-        // Преобразование сущности User в объект UserDetails
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUserName())
-                .password(user.getPassword())
-                .authorities(getAuthorities(user.getRole()))
-                .build();
+        // Преобразование сущности User в объект UserDetailsDTO
+        UserDetailsDTO userDetails = new UserDetailsDTO(
+                user.getUserID(),
+                user.getEmail(),
+                user.getUserName(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getPhone(),
+                user.getRole(),
+                user.getImage(),
+                user.getPassword()
+        );
+
+        return userDetails;
+
+//        // Преобразование сущности User в объект UserDetails
+//        return org.springframework.security.core.userdetails.User.builder()
+//                .username(user.getUserName())
+//                .password(user.getPassword())
+//                .authorities(getAuthorities(user.getRole()))
+//                .build();
     }
 
     // Преобразование списка ролей в коллекцию GrantedAuthority
