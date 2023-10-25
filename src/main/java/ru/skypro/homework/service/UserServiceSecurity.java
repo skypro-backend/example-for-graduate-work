@@ -1,7 +1,6 @@
 package ru.skypro.homework.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
