@@ -9,4 +9,5 @@ import ru.skypro.homework.service.AdvertisementService;
 public interface AdvertisementRepository extends JpaRepository<Long, Advertisement> {
     void save(Advertisement advertisement);
     void delete(Advertisement advertisement);
+
 }

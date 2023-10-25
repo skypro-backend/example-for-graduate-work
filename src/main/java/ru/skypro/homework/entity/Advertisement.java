@@ -22,6 +22,7 @@ public class Advertisement {
     @Column(name = "author_image")
     @JoinColumn(name = "user_image")
     private String authorImage;
+
     private String title;
     private Integer price;
     private String description;
