@@ -9,19 +9,10 @@ import ru.skypro.homework.model.Comment;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
-    ZoneId DEFAULT_ZONE = ZoneId.systemDefault();
-
-    static Long toLong(LocalDateTime time) {
-        if (time == null) {
-            return null;
-        }
-        return ZonedDateTime.of(time, DEFAULT_ZONE).toInstant().toEpochMilli();
-    }
 
     @Mapping(source = "id", target = "pk")
     @Mapping(source = "author.id", target = "author")
@@ -31,8 +22,14 @@ public interface CommentMapper {
 
     Comment commentDtoToComment(CreateOrUpdateCommentDto createOrUpdateCommentDto);
 
-    void updateCommentFromDto(CreateOrUpdateCommentDto createOrUpdateCommentDto, @MappingTarget Comment comment);
+    void updateCommentFromDto(CreateOrUpdateCommentDto createUpdateCommentDto, @MappingTarget Comment comment);
 
     List<CommentDto> commentsToCommentDtos(List<Comment> comments);
 
+    default long map(LocalDateTime value) {
+        if (value == null) {
+            return 0L;
+        }
+        return value.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
 }
