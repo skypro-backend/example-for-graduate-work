@@ -9,6 +9,8 @@ import ru.skypro.homework.dto.user.*;
 import ru.skypro.homework.security.AdsUserDetails;
 import ru.skypro.homework.service.UserService;
 
+import java.io.IOException;
+
 
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
@@ -34,7 +36,7 @@ public class UserController {
     }
 
     @PatchMapping("/me/image")
-    public void updateImage(@RequestParam("image") MultipartFile image, Authentication authentication) {
+    public void updateImage(@RequestParam("image") MultipartFile image, Authentication authentication) throws IOException {
         userService.UpdateImage(image, authentication.getName());
     }
 

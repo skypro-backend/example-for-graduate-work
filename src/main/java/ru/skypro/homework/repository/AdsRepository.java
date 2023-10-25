@@ -14,8 +14,8 @@ import java.util.Optional;
 public interface AdsRepository extends CrudRepository<Ad, Integer> {
 
 
-//    @Query(value = "SELECT * FROM ads", nativeQuery = true)
-//    List<Ad> findAllAds();
+    @Query(value = "SELECT * FROM ads", nativeQuery = true)
+    List<Ad> findAllAds();
 //
 //    Optional<Ad> findAdById(int id);
 //
