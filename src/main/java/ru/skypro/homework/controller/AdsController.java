@@ -55,7 +55,6 @@ public class AdsController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Ad.class)) }),
             @ApiResponse(responseCode = "401", description = "Требуется авторизация")
     })
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<Ad> postAd(@RequestPart("properties") CreateOrUpdateAd properties,
                                      @RequestPart("image") MultipartFile file, Authentication authentication) {
         Ad ad = adService.postAd(properties, file, authentication.getName());
@@ -72,7 +71,6 @@ public class AdsController {
             @ApiResponse(responseCode = "401", description = "Требуется авторизация"),
             @ApiResponse(responseCode = "404", description = "Объявление не найдено")
     })
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ExtendedAd> getAdById(@PathVariable int id,
                                                 Authentication authentication) throws AdNotFoundException {
         ExtendedAd extendedAd = adService.getAdById(id);
@@ -88,7 +86,6 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Доступ запрещен"),
             @ApiResponse(responseCode = "404", description = "Объявление не найдено")
     })
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<Void> deleteAdById(@PathVariable int id, Authentication authentication) {
         adService.deleteAdById(id, authentication.getName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -104,7 +101,6 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Доступ запрещен"),
             @ApiResponse(responseCode = "404", description = "Объявление не найдено")
     })
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<Ad> patchAdById(@PathVariable int id,
                                           @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd,
                                           Authentication authentication) throws AdNotFoundException {
@@ -119,7 +115,6 @@ public class AdsController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Ads.class)) }),
             @ApiResponse(responseCode = "401", description = "Требуется авторизация")
     })
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<Ads> getMyAds(Authentication authentication) {
         Ads myAds = adService.getMyAds(authentication.getName());
         return new ResponseEntity<>(myAds, HttpStatus.OK);
@@ -135,7 +130,6 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Доступ запрещен"),
             @ApiResponse(responseCode = "404", description = "Объявление не найдено")
     })
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<byte[]> patchAdsImageById(@PathVariable int id,
                                                     @RequestParam("image") MultipartFile file,
                                                     Authentication authentication) {
