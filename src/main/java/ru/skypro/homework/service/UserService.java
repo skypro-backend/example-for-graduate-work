@@ -8,8 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
-public class AvatarService {
-    private static Logger logger = LoggerFactory.getLogger(AvatarService.class);
+public class UserService {
+    private static Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public String uploadAvatar(String username, MultipartFile file) {
         return "done";
