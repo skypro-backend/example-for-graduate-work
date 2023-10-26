@@ -9,11 +9,11 @@ public class CommentMapper {
     public static CommentDTO toCommentDTO(CommentModel commentModel) {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setPk(commentModel.getPk());
-//        commentDTO.setAuthor(commentModel.getAuthor());
-        commentDTO.setText(commentModel.getText());
+        commentDTO.setAuthor(commentModel.getUserModel().getId());
+        commentDTO.setAuthorImage(commentModel.getUserModel().getImage());
+        commentDTO.setAuthorFirstName(commentModel.getUserModel().getFirstName());
         commentDTO.setCreatedAt(commentModel.getCreateAt());
-        commentDTO.setAuthorFirstName(commentDTO.getAuthorFirstName());
-        commentDTO.setAuthorImage(commentDTO.getAuthorImage());
+        commentDTO.setText(commentModel.getText());
         return commentDTO;
     }
 
@@ -24,6 +24,13 @@ public class CommentMapper {
         commentModel.setText(commentDTO.getText());
 //        commentModel.setAuthor(commentDTO.getAuthor());
         return commentModel;
+
+//        "author": 0,
+//        "authorImage": "string",
+//        "authorFirstName": "string",
+//        "createdAt": 0,
+//        "pk": 0,
+//        "text": "string"
     }
 
     public static Comments toComments(CommentModel commentModel) {

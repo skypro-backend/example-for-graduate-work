@@ -1,27 +1,27 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
-import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.exceptions.AdNotFoundException;
-import ru.skypro.homework.exceptions.CommentNotFoundExeption;
-import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.exceptions.CommentNotFoundException;
+import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.AdModel;
 import ru.skypro.homework.model.CommentModel;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.projections.Comments;
 import ru.skypro.homework.projections.CreateOrUpdateComment;
-
 import ru.skypro.homework.repository.AdRepo;
 import ru.skypro.homework.repository.CommentRepo;
+import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.CommentsService;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,6 +35,7 @@ public class CommentsServiceImpl implements CommentsService {
     private final CommentRepo commentRepo;
     private final AdServiceImpl adService;
     private final AdRepo adRepo;
+    private final UserRepo userRepo;
 
 
     /**
@@ -57,7 +58,7 @@ public class CommentsServiceImpl implements CommentsService {
      * Создание комментария
      */
     @Override
-    public Comments addComment(int id, CreateOrUpdateComment createOrUpdateComment) {
+    public CommentDTO addComment(int id, CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
 
 //        Comments comments = getComments(id);
 //        if (comments != null) {
@@ -65,10 +66,17 @@ public class CommentsServiceImpl implements CommentsService {
 //        } else {
 //            throw new CommentNotFoundExeption();
 //        }
+        UserModel user = userRepo.findByUserName(authentication.getName())
+                .orElseThrow(UserNotFoundException::new);
         CommentModel commentModel = new CommentModel();
-        commentModel.setCreateAt(LocalDateTime.now());
+        commentModel.setCreateAt(LocalDateTime.parse(LocalDateTime.now()
+                .format(DateTimeFormatter.ISO_DATE_TIME)));
         commentModel.setText(createOrUpdateComment.getText());
-        return CommentMapper.toComments(commentModel);
+        commentModel.setUserModel(user);
+        commentModel.setAdModel(adRepo.findById(id)
+                .orElseThrow(AdNotFoundException::new));
+        commentRepo.save(commentModel);
+        return CommentMapper.toCommentDTO(commentModel);
     }
 
     /**
@@ -81,7 +89,7 @@ public class CommentsServiceImpl implements CommentsService {
             getComments(commentsId);
             commentRepo.deleteById(commentsId);
         } else {
-            throw new CommentNotFoundExeption();
+            throw new CommentNotFoundException();
         }
     }
 
@@ -95,7 +103,7 @@ public class CommentsServiceImpl implements CommentsService {
             Comments comments = getComments(commentsId);
             return CommentMapper.toCreateOrUpdateComment(comments);
         } else {
-            throw new CommentNotFoundExeption();
+            throw new CommentNotFoundException();
         }
     }
 }

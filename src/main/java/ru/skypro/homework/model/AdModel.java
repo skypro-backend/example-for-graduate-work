@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Entity
@@ -29,11 +30,11 @@ public class AdModel {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne( fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserModel userModel;
 
-    @OneToMany(mappedBy="adModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "adModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentModel> commentModels;
 
 }
