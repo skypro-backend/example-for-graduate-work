@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -18,6 +19,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import org.springframework.util.Base64Utils;
+import org.springframework.web.multipart.MultipartFile;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -26,7 +28,12 @@ import ru.skypro.homework.entity.Users;
 import ru.skypro.homework.repository.UsersRepository;
 import ru.skypro.homework.service.UserService;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 @SpringBootTest
@@ -165,19 +172,24 @@ public class UserControllerIntegrationTests {
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
-//    public void updateImage_status_isOk() throws Exception {
-//        addToDb();
-//
-//
-//
-//
-//        mockMvc.perform(patch("/users/me/image")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(image.toString()))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
+    public void updateImage_status_isOk() throws Exception {
+        addToDb();
+        Path path = Paths.get("user-icon.png");
+        File file = new File("user-icon.png");
+        String name = "user-icon.png";
+        byte[] content = null;
+        try {
+            content = Files.readAllBytes(path);
+        } catch (final IOException e) {
+        }
+        MultipartFile result = new MockMultipartFile(name, content);
+        mockMvc.perform(patch("/users/me/image")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(result.getBytes()))
+                .andExpect(status().isOk());
+    }
 //
 //    @Test
 //    public void updateImage_status_isUnauthorized() throws Exception {
