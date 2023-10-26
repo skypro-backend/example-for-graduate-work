@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -78,11 +79,12 @@ public class AdsServiceImpl implements AdsService {
 
         String curDate = LocalDateTime.now().toString();
         String fileName = "image_" + curDate + "_" + image.getOriginalFilename().toLowerCase().replaceAll(" ", "-");
-        String filePath = directory + "/" + fileName;
+        String filePath = directory + "/" + fileName + "." + "PNG";
+        File newImage = new File(filePath);
 
         try {
-            image.transferTo(new File(filePath));
-//            Files.write(Path.of(filePath), image.getBytes());
+//            image.transferTo(new File(filePath));
+            Files.write(Paths.get(filePath), image.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -93,8 +95,6 @@ public class AdsServiceImpl implements AdsService {
 //        fos.write(file.getBytes());
 //        fos.close();
 
-
-
 //        File file;
 //        try {
 //            file = image.getResource().getFile();
@@ -103,7 +103,7 @@ public class AdsServiceImpl implements AdsService {
 //        }
 //        String filePath = file.getPath();
 
-        ad.setImage(filePath);
+        ad.setImage(newImage.getPath());
         Ad newAd = adsRepository.save(ad);
 
         return AdDTO.fromAd(newAd);
