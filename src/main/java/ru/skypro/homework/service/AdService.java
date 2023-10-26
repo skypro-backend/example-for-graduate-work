@@ -11,7 +11,7 @@ public interface AdService {
 
     Ads getAllAds();
 
-    AdDTO addAd(CreateOrUpdateAd createOrUpdateAdDTO, String pathImage, int userId);
+    AdDTO addAd(CreateOrUpdateAd createOrUpdateAdDTO, String pathImage, String user);
 
     ExtendedAd getAds(int id) throws ChangeSetPersister.NotFoundException;
 

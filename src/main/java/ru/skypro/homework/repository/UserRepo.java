@@ -12,30 +12,12 @@ import java.util.Optional;
 @Repository
 public interface UserRepo extends JpaRepository<UserModel, Integer> {
 
-/*    //    @Query(value = "SELECT * FROM users u WHERE u.email = :email)",
-//            nativeQuery = true)
-    @Query(value = "SELECT user_id AS userId, role AS userRole, email, password FROM users WHERE email = :email",
-            nativeQuery = true)
-    Optional<UserModel> findUserByEmail(@Param("email") String email);*/
-
     Optional<UserModel> findByUserName(String userName);
 
-
-//    @Query(value = "SELECT ad.ad_id AS pk, users.first_name AS authorFirstName, " +
-//            "users.last_name AS authorLastName, ad.description, users.email, users.image, " +
-//            "users.phone, ad.price, ad.title " +
-//            "FROM users JOIN ad on users.user_id = :id",
-//            nativeQuery = true)
-
-
-    // что-то не работает(
-    @Query(value = """
-            SELECT ad.ad_id AS pk, users.first_name AS authorFirstName, users.last_name AS authorLastName,
-            ad.description, users.user_name AS email, ad.ad_image,
-            users.phone, ad.price, ad.title
-            FROM users
-            JOIN ad ON ad.ad_id = :id""",
-            nativeQuery = true)
-
+// получение информации по объявлению
+    @Query("SELECT new ru.skypro.homework.projections." +
+            "ExtendedAd(a.pk, u.firstName, u.lastName, a.description," +
+            " u.userName, a.image, u.phone, a.price, a.title) " +
+            "FROM UserModel u JOIN FETCH AdModel a ON a.userModel.id = u.id AND a.pk = :id")
     Optional<ExtendedAd> getExtendedAd(@Param("id") int id);
 }
