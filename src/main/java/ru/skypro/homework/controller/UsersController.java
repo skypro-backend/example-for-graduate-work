@@ -30,7 +30,7 @@ public class UsersController {
     private final UserService userService;
 
     /**
-     * endpoint 1 - updating password fro existent user
+     * endpoint 1 - updating password from existent user
      * @param passwordDto
      */
     @Operation(summary = "Обновление пароля")
