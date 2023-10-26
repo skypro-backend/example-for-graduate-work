@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 
+import liquibase.util.FilenameUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,14 +10,24 @@ import ru.skypro.homework.dto.user.NewPassword;
 import ru.skypro.homework.dto.user.UpdateUser;
 import ru.skypro.homework.dto.user.User;
 import ru.skypro.homework.entity.Users;
+import ru.skypro.homework.exceptions.UnsupportedFormatException;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.exceptions.WrongCurrentPasswordException;
 import ru.skypro.homework.repository.UsersRepository;
 import ru.skypro.homework.service.UserService;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
+import static java.nio.file.Files.copy;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -60,9 +71,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public void UpdateImage(MultipartFile file, String username) throws IOException {
         Users users = usersRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
-        File files = file.getResource().getFile();
-        String filePath = files.getPath();
-        users.setImage(filePath);
+        List<String> SUPPORTED_EXTENSIONS = Arrays.asList("png", "jpg", "jpeg", "PNG", "JPG", "JPEG","Png", "Jpg", "Jpeg");
+//        String ext = file.getContentType();
+//        String [] ext = file.getName().split("\\.");
+//        if (!SUPPORTED_EXTENSIONS.contains(ext)) {
+//            throw new UnsupportedFormatException();
+//        }
+        byte[] image = file.getBytes();
+        String pathString = "D:\\userImage\\"  + username + "." + "PNG";
+//        String pathString = "D:\\userImage\\"  + username + "." + ext[1];
+        Path path = Paths.get(pathString);
+        File fileImage = new File(pathString);
+        Files.write(path, image);
+        users.setImage(fileImage.getPath());
         usersRepository.save(users);
     }
 }
