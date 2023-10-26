@@ -15,6 +15,9 @@ import ru.skypro.homework.service.AdsService;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +26,7 @@ public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
     private final UsersRepository usersRepository;
+
 
     public AdsServiceImpl(AdsRepository adsRepository, UsersRepository usersRepository) {
         this.adsRepository = adsRepository;
@@ -47,18 +51,62 @@ public class AdsServiceImpl implements AdsService {
 
         Ad ad = createAd.toAd(user);
 
-        File file;
+//        File uploadDir = new File(appProperties.getUploadPath());
+//        // Если директория uploads не существует, то создаем ее
+//        if (!uploadDir.exists()) {
+//            uploadDir.mkdirs();
+//        }
+
+
+//        String userImageHome = System.getProperty("user_image.home");
+//        File directory = new File(userImageHome, "new_image");
+//        if (!directory.exists()) {
+//            directory.mkdir();
+//        }
+//        String curDate = LocalDateTime.now().toString();
+//        // Создаем уникальное название для файла и загружаем файл
+//        String fileName =
+//                "image_" + curDate + "_" + image.getOriginalFilename().toLowerCase().replaceAll(" ", "-");
+//        String filePath = directory + "/" + fileName;
+
+        String uploadDir = "C:/Users/anna/Pictures/ads_image";
+        File directory = new File(uploadDir);
+
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        String curDate = LocalDateTime.now().toString();
+        String fileName = "image_" + curDate + "_" + image.getOriginalFilename().toLowerCase().replaceAll(" ", "-");
+        String filePath = directory + "/" + fileName;
+
         try {
-            file = image.getResource().getFile();
+            image.transferTo(new File(filePath));
+//            Files.write(Path.of(filePath), image.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        String filePath = file.getPath();
+
+//
+//        // Сохраняем файл на файловой системе
+//        FileOutputStream fos = new FileOutputStream(filePath);
+//        fos.write(file.getBytes());
+//        fos.close();
+
+
+
+//        File file;
+//        try {
+//            file = image.getResource().getFile();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        String filePath = file.getPath();
 
         ad.setImage(filePath);
-        adsRepository.save(ad);
+        Ad newAd = adsRepository.save(ad);
 
-        return AdDTO.fromAd(ad);
+        return AdDTO.fromAd(newAd);
     }
 
     @Override
