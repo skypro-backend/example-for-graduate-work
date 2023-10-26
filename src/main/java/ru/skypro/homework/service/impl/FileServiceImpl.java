@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.service.FileService;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
@@ -23,21 +22,19 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 public class FileServiceImpl implements FileService {
     /**
      * Копирование файла картинки. Входной поток получаем
-     * из метода {@link Files#newInputStream(Path, OpenOption...)}. Выходной поток
-     * получаем из метода {@link HttpServletResponse#getOutputStream()}
-     * @param response ответ сервера
-     * @param imagePath путь и название файла с аватаркой
+     * из метода {@link Files#newInputStream(Path, OpenOption...)}
+     * @param imagePath путь и название файла с картинкой
+     * @return image - массив байт картинки
      * @throws IOException ошибка ввода - вывода
      * @see Path#of(URI)
      */
     @Override
-    public void downloadImage(HttpServletResponse response, String imagePath) throws IOException {
+    public byte[] downloadImage(String imagePath) throws IOException {
         Path path = Path.of(imagePath);
-        try (InputStream is = Files.newInputStream(path);
-             OutputStream os = response.getOutputStream()) {
-            response.setStatus(200);
-            is.transferTo(os);
+        try (InputStream is = Files.newInputStream(path)) {
+            byte[] image = is.readAllBytes();
             log.info("Image was downloaded successfully.");
+            return image;
         }
     }
 

@@ -6,7 +6,6 @@ import ru.skypro.homework.dto.ads.Ads;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAd;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public interface AdService {
@@ -59,10 +58,9 @@ public interface AdService {
     /**
      * Выгрузка изображения объявления из файловой системы
      * @param adId идентификатор объявления в БД
-     * @param response ответ сервера
      * @throws IOException выбрасывается при ошибках, возникающих во время выгрузки изображения
      */
-    void downloadAdImageFromDB(int adId, HttpServletResponse response) throws IOException;
+    byte[] downloadAdImageFromFS(int adId) throws IOException;
 
     /**
      * Поиск объявления по заголовку

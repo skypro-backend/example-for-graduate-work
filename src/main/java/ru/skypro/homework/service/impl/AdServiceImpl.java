@@ -238,16 +238,17 @@ public class AdServiceImpl implements AdService {
     /**
      * Выгрузка изображения объявления из файловой системы.<br>
      * - Поиск объявления в базе данных по идентификатору объявления {@link AdRepository#findById(Object)}.<br>
-     * - Копирование данных изображения. Входной поток получаем из метода {@link Files#newInputStream(Path, OpenOption...)}. Выходной поток получаем из метода {@link HttpServletResponse#getOutputStream()}
+     * - Копирование данных изображения. Входной поток получаем из метода {@link Files#newInputStream(Path, OpenOption...)}
      * @param adId идентификатор объявления в БД
-     * @param response ответ сервера
+     * @return image - массив байт картинки
      * @throws IOException выбрасывается при ошибках, возникающих во время выгрузки изображения
      */
     @Override
-    public void downloadAdImageFromDB(int adId, HttpServletResponse response) throws IOException {
+    public byte[] downloadAdImageFromFS(int adId) throws IOException {
         AdEntity adEntity = adRepository.findById(adId).orElseThrow(() -> new IllegalArgumentException(AD_NOT_FOUND));
-        fileService.downloadImage(response, adEntity.getImagePath());
+        byte[] image = fileService.downloadImage(adEntity.getImagePath());
         log.info("Download advertisement image from database method was invoked.");
+        return image;
     }
 
     /**

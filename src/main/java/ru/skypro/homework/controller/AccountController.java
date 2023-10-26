@@ -16,7 +16,6 @@ import ru.skypro.homework.dto.account.NewPassword;
 import ru.skypro.homework.dto.account.User;
 import ru.skypro.homework.service.AccountService;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
@@ -98,10 +97,7 @@ public class AccountController {
     }
 
     @GetMapping(value = "/image/{userId}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public ResponseEntity<?> downloadUserAvatarFromDB(@PathVariable int userId, HttpServletResponse response) throws IOException {
-        if (accountService.downloadAvatarFromDB(userId, response)) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<byte[]> downloadUserAvatarFromFS(@PathVariable int userId) throws IOException {
+        return ResponseEntity.ok(accountService.downloadAvatarFromFS(userId));
     }
 }

@@ -17,7 +17,6 @@ import ru.skypro.homework.service.AccountService;
 import ru.skypro.homework.service.FileService;
 import ru.skypro.homework.service.UserMapper;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -153,25 +152,24 @@ public class AccountServiceImpl implements AccountService {
      * Загрузка аватара из файловой системы по id пользователя. <br> Используется метод
      * {@link UserRepository#findById(Object)} для получения пользователя из базы данных.
      * Для формирования ответа сервера используется метод
-     * {@link FileService#downloadImage(HttpServletResponse, String)}
+     * {@link FileService#downloadImage(String)}
      * @param userId id пользователя
-     * @param response ответ сервера
-     * @return {@code true}, если аватар пользователя успешно загружен
+     * @return image - массив байт картинки
      * @throws IOException ошибка ввода-вывода
      * @throws UsernameNotFoundException если пользователь с данным id не найден в базе данных
-     * @see #downloadAvatarFromDB(int, HttpServletResponse)
+     * @see #downloadAvatarFromFS(int)
      */
     @Override
     @Transactional
-    public boolean downloadAvatarFromDB(int userId, HttpServletResponse response) throws IOException {
+    public byte[] downloadAvatarFromFS(int userId) throws IOException {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         if (userEntity.getImagePath() != null) {
-            fileService.downloadImage(response, userEntity.getImagePath());
+            byte[] image = fileService.downloadImage(userEntity.getImagePath());
             log.info("Download avatar for user: {} method was invoked", userEntity.getEmail());
-            return true;
+            return image;
         }
-        return false;
+        return new byte[0];
     }
 
 }

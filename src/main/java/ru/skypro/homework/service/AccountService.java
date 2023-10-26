@@ -4,7 +4,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.account.NewPassword;
 import ru.skypro.homework.dto.account.User;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public interface AccountService {
@@ -42,9 +41,7 @@ public interface AccountService {
     /**
      * Загрузка аватара пользователя из файловой системы по его id
      * @param userId id пользователя
-     * @param response ответ сервера
-     * @return {@code true}, если аватар пользователя загружен
      * @throws IOException ошибка ввода-вывода
      */
-    boolean downloadAvatarFromDB(int userId, HttpServletResponse response) throws IOException;
+    byte[] downloadAvatarFromFS(int userId) throws IOException;
 }

@@ -19,7 +19,6 @@ import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAd;
 import ru.skypro.homework.service.AdService;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
@@ -168,8 +167,8 @@ public class AdvertisementController {
     }
 
     @GetMapping(value = "/image/{adId}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public void downloadAdImageFromDB(@PathVariable int adId, HttpServletResponse response) throws IOException {
-        adService.downloadAdImageFromDB(adId, response);
+    public ResponseEntity<byte[]> downloadAdImageFromFS(@PathVariable int adId) throws IOException {
+        return ResponseEntity.ok(adService.downloadAdImageFromFS(adId));
     }
 
     @Operation(
