@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.exceptions.AdNotFoundException;
+import ru.skypro.homework.exceptions.CommentNotFoundExeption;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.AdModel;
 import ru.skypro.homework.model.CommentModel;
@@ -46,11 +47,23 @@ public class CommentsServiceImpl implements CommentsService {
         return CommentMapper.toComments(commentModel);
     }
 
+    /**
+     * Создание комментария
+     */
     @Override
     public Comments addComment(int id, CreateOrUpdateComment createOrUpdateComment) {
-        return null;
+
+            Comments comments = getComments(id);
+            if(comments !=null) {
+                return CommentMapper.toCommentsAdd(createOrUpdateComment);
+            }else {
+                throw new CommentNotFoundExeption();
+            }
     }
 
+    /**
+     * Удаление коментария
+     */
     @Override
     public void deleteComment(int id, int commentsId) {
         Optional<AdModel> ad = adRepo.findById(id);
@@ -58,12 +71,21 @@ public class CommentsServiceImpl implements CommentsService {
             getComments(commentsId);
             commentRepo.deleteById(commentsId);
         } else {
-            throw new AdNotFoundException();
+            throw new CommentNotFoundExeption();
         }
     }
 
+    /**
+     * Редактирование комментария
+     */
     @Override
     public CreateOrUpdateComment updateComment(int id, int commentsId, CreateOrUpdateComment createOrUpdateComment) {
-        return null;
+        Optional<AdModel> ad = adRepo.findById(id);
+        if (ad.isPresent()) {
+            Comments comments = getComments(commentsId);
+            return CommentMapper.toCreateOrUpdateComment(comments);
+        } else {
+            throw new CommentNotFoundExeption();
+        }
     }
 }
