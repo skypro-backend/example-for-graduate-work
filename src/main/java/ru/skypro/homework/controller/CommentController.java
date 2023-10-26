@@ -16,6 +16,12 @@ import ru.skypro.homework.dto.comment.Comments;
 import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentService;
 
+/**
+ * Класс-контроллер для комментариев
+ * @see Comment
+ * @see Comments
+ * @see CommentService
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController

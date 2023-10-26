@@ -21,6 +21,12 @@ import ru.skypro.homework.service.AdService;
 
 import java.io.IOException;
 
+/**
+ * Класс-контроллер для объявлений
+ * @see Ad
+ * @see Ads
+ * @see AdService
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController

@@ -16,6 +16,12 @@ import ru.skypro.homework.dto.account.Login;
 import ru.skypro.homework.dto.account.Register;
 import ru.skypro.homework.service.AuthService;
 
+/**
+ * Класс-контроллер для авторизации и регистрации пользователей
+ * @see Login
+ * @see Register
+ * @see AuthService
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController

@@ -18,6 +18,11 @@ import ru.skypro.homework.service.AccountService;
 
 import java.io.IOException;
 
+/**
+ * Класс-контроллер для пользователей
+ * @see User
+ * @see AccountService
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
