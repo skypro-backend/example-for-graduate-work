@@ -21,7 +21,7 @@ public class AdsController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> addAdd(@RequestBody CreateOrUpdateAdDto dto,
+    public ResponseEntity<Void> addAdd(@RequestPart("properties") CreateOrUpdateAdDto dto,
                                        @RequestPart("image") MultipartFile multipartFile) {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
