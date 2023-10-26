@@ -36,13 +36,11 @@ public class AdExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<?> handleNotFoundException(AdNotFoundException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<?> handleNotFoundException(CommentNotFoundException exception) {
+    @ExceptionHandler({
+            AdNotFoundException.class,
+            CommentNotFoundException.class
+    })
+    public ResponseEntity<?> handleNotFoundException(RuntimeException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 

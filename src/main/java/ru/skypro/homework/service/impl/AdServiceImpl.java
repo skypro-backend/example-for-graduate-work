@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AdServiceImpl implements AdService {
 
@@ -54,10 +56,8 @@ public class AdServiceImpl implements AdService {
         try {
             byte[] bytes = file.getBytes();
             image.setImage(bytes);
-            image.setFileName("");
-            image.setMediaType("");
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Failed to transform incoming image to bytes", e);
         }
         imagesRepository.save(image);
         adEntity.setImage(image);
@@ -128,7 +128,7 @@ public class AdServiceImpl implements AdService {
             byte[] bytes = file.getBytes();
             image.setImage(bytes);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Failed to transform incoming image to bytes", e);
         }
         imagesRepository.save(image);
         return image.getImage();
