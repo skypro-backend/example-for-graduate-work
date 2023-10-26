@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
@@ -57,7 +58,7 @@ public class CommentServiceImpl implements CommentsService {
     public void deleteComment(int adId, int commentId, String username) {
         CommentEntity commentEntity = getCommentEntityFromDatabase(commentId, adId);
         if (!checkPermission(commentEntity, username)) {
-            throw new BadCredentialsException("У вас нет прав на редактирование этого комментария");
+            throw new BadCredentialsException("У вас нет прав на удаление этого комментария");
         }
         commentRepository.delete(commentEntity);
     }
@@ -67,7 +68,7 @@ public class CommentServiceImpl implements CommentsService {
                                  String username) {
         CommentEntity commentEntity = getCommentEntityFromDatabase(commentId, adId);
         if (!checkPermission(commentEntity, username)) {
-            throw new BadCredentialsException("У вас нет прав на удаление этого комментария");
+            throw new BadCredentialsException("У вас нет прав на редактирование этого комментария");
         }
         commentEntity.setText(createOrUpdateComment.getText());
         commentRepository.save(commentEntity);
@@ -78,7 +79,7 @@ public class CommentServiceImpl implements CommentsService {
         UserEntity userEntity = commentEntity.getUser();
         UserEntity currentUserEntity = userRepository.findByUsername(username);
         return userEntity.getUsername().equals(currentUserEntity.getUsername()) ||
-                currentUserEntity.getRole().name().equals("ADMIN");
+                currentUserEntity.getRole().equals(Role.ADMIN);
     }
 
     private CommentEntity getCommentEntityFromDatabase(int commentId, int adId) {
