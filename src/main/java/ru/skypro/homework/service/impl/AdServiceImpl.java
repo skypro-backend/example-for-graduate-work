@@ -34,13 +34,14 @@ public class AdServiceImpl implements AdService {
         return new Ads(adsList.size(), adsList);
     }
 
-    public AdDTO addAd(CreateOrUpdateAd createOrUpdateAd, String pathImage, int userId) {
+    public AdDTO addAd(CreateOrUpdateAd createOrUpdateAd, String pathImage, String user) {
         AdModel adModel = new AdModel();
-        adModel.setImage(pathImage);
+        adModel.setImage("Test-path"); // потом удалить
+//        adModel.setImage(pathImage);
         adModel.setPrice(createOrUpdateAd.getPrice());
         adModel.setTitle(createOrUpdateAd.getTitle());
         adModel.setDescription(createOrUpdateAd.getDescription());
-        adModel.setUserModel(userRepo.findById(userId)
+        adModel.setUserModel(userRepo.findByUserName(user)
                 .orElseThrow(() -> new UsernameNotFoundException("Not found")));
         adRepo.save(adModel);
         return AdMapper.toAdDto(adModel);
@@ -49,6 +50,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public ExtendedAd getAds(int id) {
+// позже удалить  System.out.println(userRepo.getExtendedAd(id).orElseThrow(AdNotFoundException::new));
         return userRepo.getExtendedAd(id).orElseThrow(AdNotFoundException::new);
     }
 
