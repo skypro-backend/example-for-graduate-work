@@ -13,6 +13,7 @@ import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -48,7 +49,7 @@ public class AdsController {
             description = "Добавление изображения и всех полей объявления")
     @ApiResponse(responseCode = "201", description = "Created")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<AdDto> addAd(@RequestPart("properties") CreateOrUpdateAdDto createOrUpdateAdDto,
+    public ResponseEntity<AdDto> addAd(@RequestPart("properties")@Valid CreateOrUpdateAdDto createOrUpdateAdDto,
                                        @RequestPart MultipartFile image) throws IOException {
         AdDto addedAdDto = new AdDto(1, "imagePath", 1, createOrUpdateAdDto.price(), createOrUpdateAdDto.title());
         return ResponseEntity.ok(addedAdDto);
@@ -75,7 +76,7 @@ public class AdsController {
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<AdDto> updateAd(@PathVariable("id") Integer id,
-                                          @RequestBody CreateOrUpdateAdDto createOrUpdateAdDto) {
+                                          @RequestBody @Valid CreateOrUpdateAdDto createOrUpdateAdDto) {
         AdDto updatedAdDto = new AdDto(1, "imagePath",
                 id, createOrUpdateAdDto.price(), createOrUpdateAdDto.title());
         return ResponseEntity.ok(updatedAdDto);
