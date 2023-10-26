@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@ToString
 @Entity
 @Table(name = "ads")
 public class AdEntity {
@@ -31,7 +32,6 @@ public class AdEntity {
     private Image image;
 
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
     private List<CommentEntity> adComments;
 
 }

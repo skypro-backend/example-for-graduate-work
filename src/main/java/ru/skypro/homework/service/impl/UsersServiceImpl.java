@@ -1,12 +1,14 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.MyDatabaseUserDetails;
+import ru.skypro.homework.dto.MyUser;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.Image;
@@ -20,6 +22,7 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
 
@@ -70,7 +73,7 @@ public class UsersServiceImpl implements UsersService {
             byte[] bytes = file.getBytes();
             image.setImage(bytes);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Failed to transform incoming image to bytes", e);
         }
         userEntity.setImage(image);
         imagesRepository.save(image);
@@ -81,7 +84,8 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public void createUser(UserDetails myDatabaseUserDetails) {
-        UserEntity userEntity = ((MyDatabaseUserDetails) myDatabaseUserDetails).getUserEntity();
+        MyUser myUser = ((MyDatabaseUserDetails) myDatabaseUserDetails).getMyUser();
+        UserEntity userEntity = userMapper.myUserToUserEntity(myUser);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         userRepository.save(userEntity);
     }
