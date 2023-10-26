@@ -40,7 +40,8 @@ public interface AccountService {
 
     /**
      * Загрузка аватара пользователя из файловой системы по его id
-     * @param userId id пользователя
+     *
+     * @param userId   id пользователя
      * @throws IOException ошибка ввода-вывода
      */
     byte[] downloadAvatarFromFS(int userId) throws IOException;

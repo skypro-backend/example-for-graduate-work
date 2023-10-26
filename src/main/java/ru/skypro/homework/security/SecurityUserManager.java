@@ -29,14 +29,17 @@ public class SecurityUserManager implements UserDetailsManager {
 
     @Override
     public void createUser(UserDetails user) {
+        //no usages
     }
 
     @Override
     public void updateUser(UserDetails user) {
+        //no usages
     }
 
     @Override
     public void deleteUser(String username) {
+        //no usages
     }
 
     @Override

@@ -17,6 +17,7 @@ import ru.skypro.homework.service.AccountService;
 import ru.skypro.homework.service.FileService;
 import ru.skypro.homework.service.UserMapper;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
