@@ -22,8 +22,8 @@ import ru.skypro.homework.service.UserService;
 import javax.persistence.EntityNotFoundException;
 import java.util.Objects;
 
-@Service
-@Transactional
+//@Service
+//@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserDetailsManager userDetailsManager;

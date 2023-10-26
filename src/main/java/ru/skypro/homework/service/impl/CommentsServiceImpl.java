@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.exceptions.CommentNotFoundExeption;
+import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.AdModel;
 import ru.skypro.homework.model.CommentModel;
@@ -18,25 +21,21 @@ import ru.skypro.homework.repository.CommentRepo;
 import ru.skypro.homework.service.CommentsService;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class CommentsServiceImpl implements CommentsService {
-    private final UserServiceImpl userService;
+
     private final CommentRepo commentRepo;
     private final AdServiceImpl adService;
     private final AdRepo adRepo;
 
-    /**
-     * Получение текущего пользователя
-     */
-    private UserModel getUser() {
-        return userService.find();
-    }
 
     /**
      * Поиск комментария
@@ -47,18 +46,29 @@ public class CommentsServiceImpl implements CommentsService {
         return CommentMapper.toComments(commentModel);
     }
 
+    public Comments getAllComments(int adId) {
+        adService.getAds(adId);
+        List<CommentDTO> commentsDTOList = commentRepo.findAll().stream().map(CommentMapper::toCommentDTO).collect(Collectors.toList());
+        return new Comments(commentsDTOList, commentsDTOList.size());
+    }
+
+
     /**
      * Создание комментария
      */
     @Override
     public Comments addComment(int id, CreateOrUpdateComment createOrUpdateComment) {
 
-            Comments comments = getComments(id);
-            if(comments !=null) {
-                return CommentMapper.toCommentsAdd(createOrUpdateComment);
-            }else {
-                throw new CommentNotFoundExeption();
-            }
+//        Comments comments = getComments(id);
+//        if (comments != null) {
+//            return CommentMapper.toCommentsAdd(createOrUpdateComment);
+//        } else {
+//            throw new CommentNotFoundExeption();
+//        }
+        CommentModel commentModel = new CommentModel();
+        commentModel.setCreateAt(LocalDateTime.now());
+        commentModel.setText(createOrUpdateComment.getText());
+        return CommentMapper.toComments(commentModel);
     }
 
     /**
