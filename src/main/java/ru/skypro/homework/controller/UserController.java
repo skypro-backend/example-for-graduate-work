@@ -29,11 +29,6 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
-        userService.updatePassword(newPasswordDto);
-        return ResponseEntity.ok().build();
-    }
 
     @PatchMapping("/me/image")
     public ResponseEntity<Void> updateUserImage(@RequestPart MultipartFile image) {

@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
@@ -17,7 +18,6 @@ import ru.skypro.homework.service.ImageService;
 public class AdController {
     private final AdvertService advertService;
     private final CommentService commentService;
-
     private final ImageService imageService;
 
     @GetMapping("/me")
@@ -39,6 +39,7 @@ public class AdController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_USER')") // Проверка на роль пользователя
     public ResponseEntity<AdDto> addAd(@RequestPart("properties") CreateOrUpdateAdDto createOrUpdateAdDto,
                                        @RequestPart("image") MultipartFile image) {
         var body = advertService.createAdvert(createOrUpdateAdDto, image);
@@ -46,6 +47,7 @@ public class AdController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')") // Проверка на роль пользователя
     public ResponseEntity<AdDto> updateAd(@PathVariable int id,
                                           @RequestBody CreateOrUpdateAdDto createOrUpdateAdDto) {
         var body = advertService.updateAdvert(id, createOrUpdateAdDto);
@@ -53,13 +55,14 @@ public class AdController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')") // Проверка на роль пользователя
     public ResponseEntity<Void> deleteAd(@PathVariable int id) {
-
         advertService.deleteAdvert(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("/{id}/image")
+    @PreAuthorize("hasRole('ROLE_USER')") // Проверка на роль пользователя
     public ResponseEntity<String> updateAdImage(@PathVariable int id,
                                                 @RequestPart MultipartFile image) {
         var body = advertService.update(id, image);
@@ -68,7 +71,6 @@ public class AdController {
 
     @GetMapping
     public ResponseEntity<AdsDto> getAllAds() {
-
         var body = advertService.getAllAdverts();
         return ResponseEntity.ok(body);
     }
@@ -81,17 +83,19 @@ public class AdController {
     }
 
     @DeleteMapping("/{id}/comments/{commentId}")
+    @PreAuthorize("hasRole('ROLE_USER')") // Проверка на роль пользователя
     public ResponseEntity<?> deleteComment(@PathVariable int id, @PathVariable int commentId) {
         commentService.deleteComment(id, commentId);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{id}/comments/{commentId}")
+    @PreAuthorize("hasRole('ROLE_USER')") // Проверка на роль пользователя
     public ResponseEntity<CommentDto> updateComment(@PathVariable int id,
                                                     @PathVariable int commentId,
                                                     @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         var body = commentService.updateComment(id, commentId, createOrUpdateCommentDto);
         return ResponseEntity.ok(body);
     }
-}
 
+}

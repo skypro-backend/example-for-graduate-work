@@ -1,7 +1,11 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
@@ -24,23 +28,12 @@ import java.io.IOException;
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserDetailsManager manager;
+    private final UserDetailsService userDetailsService;
     private final PasswordEncoder encoder;
     private final ImageService imageService;
     private final UserRepository repository;
-    private final UserMapper mapper;
+    private final UserMapper mapper;private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
-    /**
-     * Получение информации о пользователе из репозитория
-     */
-    private User find(String username) {
-        return repository.findByUsername(username)
-                .orElseThrow(EntityNotFoundException::new);
-    }
-
-    /**
-     * Получиение информации о пользователе из автооризации
-     */
     @Override
     public User find() {
         var username = SecurityContextHolder
@@ -50,38 +43,42 @@ public class UserServiceImpl implements UserService {
         return find(username);
     }
 
-    /**
-     * Создание пользователя
-     */
+    private User find(String username) {
+        return repository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException::new);
+    }
     @Override
     public void createUser(RegisterDto registerDto) {
         var user = find(registerDto.getUsername());
         mapper.update(registerDto, user);
-        repository.save(user);
+        try {
+            repository.save(user);
+            logger.info("Пользователь успешно сохранен.", user.getUsername());
+        } catch (Exception e) {
+            logger.error("Не удалось сохранить пользователя{}: {}", user.getUsername(), e.getMessage());
+            throw new RuntimeException("Не удалось сохранить пользователя.", e);
+        }
     }
-
-    /**
-     * Чтение информации о пользователе
-     */
     @Override
     public UserDto getUser() {
         var user = find();
         return mapper.userToUserDto(user);
     }
 
-    /**
-     * Редактирование пароля
-     */
     @Override
     public void updatePassword(NewPasswordDto newPasswordDto) {
         var oldPassword = newPasswordDto.getCurrentPassword();
         var newPassword = encoder.encode(newPasswordDto.getNewPassword());
-        manager.changePassword(oldPassword, newPassword);
+        var user = find();
+        UserDetailsManager userDetailsManager = null;
+        if (userDetailsManager.userExists(user.getUsername())) {
+            userDetailsManager.changePassword(oldPassword, newPassword);
+        } else {
+            throw new IllegalArgumentException("Неверный текущий пароль");
+
+        }
     }
 
-    /**
-     * Обновление информации о пользователе
-     */
     @Override
     public void updateUser(UpdateUserDto updateUserDto) {
         var user = find();
@@ -89,9 +86,6 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
     }
 
-    /**
-     * Обновление информации о пользователе
-     */
     @Override
     public void update(MultipartFile image) {
         var user = find();
