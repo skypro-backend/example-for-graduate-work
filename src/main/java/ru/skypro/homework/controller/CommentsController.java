@@ -3,12 +3,15 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
+import ru.skypro.homework.service.CommentService;
 
 import java.util.ArrayList;
 
@@ -16,8 +19,11 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/ads")
 @Tag(name = "Комментарии")
+@RequiredArgsConstructor
 @Validated
 public class CommentsController {
+
+    private final CommentService commentService;
     @DeleteMapping("/{adId}/comments/{commentId}")
     @Operation(summary = "Удаление комментария в объявлении",
             description = "Удаление комментария по id объявления и id комментария авторизованным пользователем")
@@ -47,10 +53,9 @@ public class CommentsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<CommentDto> addCommentToAd(@PathVariable("id") Integer adId,
-                                                     @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
-        CommentDto newCommentDto = new CommentDto(1, "imagePath",
-                "authorFirstName", (long) 100500, 1, createOrUpdateCommentDto.text());
-        return ResponseEntity.ok(newCommentDto);
+                                                     @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto,
+                                                     Authentication authentication) {
+        return ResponseEntity.ok(commentService.addCommentToAd(adId, createOrUpdateCommentDto, authentication));
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")

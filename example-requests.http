@@ -71,3 +71,12 @@ Authorization: Basic user@gmail.com password
   "title": "123"
 }
 
+###
+POST http://localhost:8080/ads/1/comments
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
+
+{
+"text":"кря-кря-кря"
+}
+
