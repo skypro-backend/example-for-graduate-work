@@ -39,7 +39,7 @@ public class UsersServiceImpl implements UsersService {
             userEntity.setPassword(passwordEncoder.encode(newPassword));
             userRepository.save(userEntity);
         } else {
-            throw new BadCredentialsException("Неверный текущий пароль");
+            throw new BadCredentialsException("Incorrect current password");
         }
     }
 
@@ -54,9 +54,7 @@ public class UsersServiceImpl implements UsersService {
     @Transactional
     public UpdateUser updateUser(UpdateUser updateUser, String username) {
         UserEntity userEntity = userRepository.findByUsername(username);
-        userEntity.setFirstName(updateUser.getFirstName());
-        userEntity.setLastName(updateUser.getLastName());
-        userEntity.setPhone(updateUser.getPhone());
+        userMapper.updateUserToUserEntity(updateUser, userEntity);
         userRepository.save(userEntity);
         return userMapper.userEntityToUpdateUser(userEntity);
     }

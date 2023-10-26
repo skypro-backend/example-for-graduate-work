@@ -20,7 +20,6 @@ import ru.skypro.homework.service.AdService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -35,12 +34,9 @@ public class AdServiceImpl implements AdService {
     @Override
     @Transactional
     public Ads getAllAds() {
-        Ads allAds = new Ads();
         List<AdEntity> list = new ArrayList<>();
         adRepository.findAll().forEach(list::add);
-        allAds.setCount(list.size());
-        allAds.setResults(list.stream().map(adMapper::adEntityToAd).collect(Collectors.toList()));
-        return allAds;
+        return adMapper.listOfAdEntitiesToAds(list);
     }
 
     @Override
@@ -48,9 +44,7 @@ public class AdServiceImpl implements AdService {
     public Ad postAd(CreateOrUpdateAd properties, MultipartFile file, String userName) {
         UserEntity author = usersRepository.findByUsername(userName);
         AdEntity adEntity = new AdEntity();
-        adEntity.setTitle(properties.getTitle());
-        adEntity.setDescription(properties.getDescription());
-        adEntity.setPrice(properties.getPrice());
+        adMapper.createOrUpdateAdToAdEntity(properties, adEntity);
         adEntity.setAuthor(author);
         Image image = new Image();
         try {
@@ -94,9 +88,7 @@ public class AdServiceImpl implements AdService {
         if (!checkPermission(adEntity, user)) {
             throw new PermissionDeniedException("You do not have permission to update ad with id = " + id);
         }
-        adEntity.setTitle(createOrUpdateAd.getTitle());
-        adEntity.setPrice(createOrUpdateAd.getPrice());
-        adEntity.setDescription(createOrUpdateAd.getDescription());
+        adMapper.createOrUpdateAdToAdEntity(createOrUpdateAd, adEntity);
         AdEntity updatedAdEntity = adRepository.save(adEntity);
         return adMapper.adEntityToAd(updatedAdEntity);
     }
@@ -106,10 +98,7 @@ public class AdServiceImpl implements AdService {
     public Ads getMyAds(String userName) {
         UserEntity author = usersRepository.findByUsername(userName);
         List<AdEntity> list = adRepository.findAllByAuthor(author);
-        Ads myAds = new Ads();
-        myAds.setCount(list.size());
-        myAds.setResults(list.stream().map(adMapper::adEntityToAd).collect(Collectors.toList()));
-        return myAds;
+        return adMapper.listOfAdEntitiesToAds(list);
     }
 
     @Override
