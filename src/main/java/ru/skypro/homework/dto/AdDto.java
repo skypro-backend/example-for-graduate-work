@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Data
 public class AdDto {
+
     @Getter
     private int author;
     private String image;

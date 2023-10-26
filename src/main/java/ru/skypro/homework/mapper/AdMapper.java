@@ -7,6 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface AdMapper {
     AdDto toDTO(AdDto model);
-
     AdDto toModel(AdDto dto);
 }

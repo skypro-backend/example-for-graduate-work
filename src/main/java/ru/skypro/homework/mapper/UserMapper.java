@@ -9,4 +9,5 @@ import org.mapstruct.Mapper;
 public interface UserMapper {
     UserDto toDTO(UserDto model);
     UserDto toModel(UserDto dto);
+
 }

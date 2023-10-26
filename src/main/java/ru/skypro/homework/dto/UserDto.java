@@ -22,4 +22,5 @@ public class UserDto {
         this.phone = phone;
         this.image = image;
     }
+
 }

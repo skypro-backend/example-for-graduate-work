@@ -8,4 +8,5 @@ import org.mapstruct.Mapper;
 public interface CommentMapper {
     CommentDto toDTO(CommentDto model);
     CommentDto toModel(CommentDto dto);
+
 }

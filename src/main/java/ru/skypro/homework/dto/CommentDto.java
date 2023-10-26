@@ -18,4 +18,5 @@ public class CommentDto {
         this.authorFirstName = authorFirstName;
         this.text = text;
     }
+
 }
