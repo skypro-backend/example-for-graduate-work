@@ -3,6 +3,7 @@ package ru.skypro.homework.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 import ru.skypro.homework.dto.MyUser;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUser;
@@ -24,6 +25,8 @@ public abstract class UserMapper {
     public abstract UserEntity myUserToUserEntity(MyUser myUser);
 
     public abstract MyUser userEntityToMyUser(UserEntity userEntity);
+
+    public abstract void updateUserToUserEntity(UpdateUser updateUser, @MappingTarget UserEntity userEntity);
 
     protected String getImageUrl(Image image) {
         return "/images/" + image.getId();
