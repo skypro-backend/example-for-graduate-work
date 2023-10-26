@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.projections.Login;
 import ru.skypro.homework.projections.Register;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.UserServiceSecurity;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -19,6 +20,7 @@ import ru.skypro.homework.service.AuthService;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserServiceSecurity serviceSecurity;
 
 
     @PostMapping("/login")
@@ -33,6 +35,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) {
         if (authService.register(register)) {
+            serviceSecurity.createUser(register);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

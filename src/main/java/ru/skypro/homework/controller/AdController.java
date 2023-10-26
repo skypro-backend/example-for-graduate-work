@@ -1,38 +1,41 @@
 package ru.skypro.homework.controller;
 
-import org.springframework.data.crossstore.ChangeSetPersister;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.model.AdsUserDetails;
 import ru.skypro.homework.projections.Ads;
 import ru.skypro.homework.projections.CreateOrUpdateAd;
-
 import ru.skypro.homework.projections.ExtendedAd;
 import ru.skypro.homework.service.impl.AdServiceImpl;
-
-import java.util.List;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
+@RequiredArgsConstructor
 public class AdController {
 
     private final AdServiceImpl adService;
 
-    public AdController(AdServiceImpl adService) {
-        this.adService = adService;
-    }
+//    public AdController(AdServiceImpl adService) {
+//        this.adService = adService;
+//    }
 
 
     //    Получение всех объявлений
     @GetMapping()
     public Ads getAllAds() {
-        return new Ads(1, List.of(new AdDTO(1, "mjrtei/regtr", 321, 123, "frenhj")));
+        return adService.getAllAds();
     }
 
     //Добавление объявления
     @PostMapping()
-    public AdDTO addAd(@RequestBody CreateOrUpdateAd createOrUpdateAdDTO, @RequestParam String imagePath) {
-        return adService.addAd(createOrUpdateAdDTO, imagePath);
+    public AdDTO addAd(@RequestBody CreateOrUpdateAd createOrUpdateAdDTO,
+                       @RequestParam String imagePath,
+                       Authentication authentication) {
+        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
+        return adService.addAd(createOrUpdateAdDTO, imagePath, adsUserDetails.getUser().getUserName());
     }
 
 
@@ -58,8 +61,9 @@ public class AdController {
 
     //Получение объявлений авторизованного пользователя
     @GetMapping("/me")
-    public Ads getAdsMe() {
-        return adService.getAdsMe();
+    public Ads getAdsMe(Authentication authentication) {
+        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
+        return adService.getAdsMe(adsUserDetails.getUser().getId());
     }
 
     // Обновление картинки объявления

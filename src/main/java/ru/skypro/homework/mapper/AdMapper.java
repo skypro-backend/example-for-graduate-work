@@ -4,7 +4,7 @@ import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.model.AdModel;
 
 public class AdMapper {
-    public static AdDTO fromAdDto(AdModel adModel) {
+    public static AdDTO toAdDto(AdModel adModel) {
         AdDTO adDTO = new AdDTO();
         adDTO.setPk(adModel.getPk());
         adDTO.setTitle(adModel.getTitle());
@@ -16,7 +16,6 @@ public class AdMapper {
 
     public static AdModel toAdModel(AdDTO adDTO) {
         AdModel adModel = new AdModel();
-//        adModel.setAuthor(adDTO.getAuthor());
         adModel.setTitle(adDTO.getTitle());
         adModel.setPk(adDTO.getPk());
         adModel.setImage(adDTO.getImage());

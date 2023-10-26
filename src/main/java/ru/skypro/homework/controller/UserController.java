@@ -1,21 +1,37 @@
 package ru.skypro.homework.controller;
 
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.*;
-import ru.skypro.homework.model.Role;
+import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.AdsUserDetails;
 import ru.skypro.homework.projections.NewPassword;
 import ru.skypro.homework.projections.UpdateUser;
+import ru.skypro.homework.repository.UserRepo;
+
+import java.util.Objects;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
+
+    private final UserRepo userRepo; // так... потестить
 
     // Получение пользователя
     @GetMapping("/me")
-    public UserDTO getUser() {
-        return new UserDTO(1, "fe", "fre", "vtgr", "f54", Role.USER.toString(), "/gfd/gtfr");
+    public UserDTO getUser(Authentication authentication) {
+        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
+
+//        return ResponseEntity.ok(new UserDTO(0, "fe@mail.ru", "nameForTest", "LastnameForTest", "+79999999999", Role.USER.name(), null));
+        return UserMapper.mapToUserDTO( //тоже потестить
+                Objects.requireNonNull(userRepo
+                        .findByUserName(adsUserDetails.getUser()
+                                .getUserName()).orElse(null))
+        );
     }
 
     // Создание нового пользователя
@@ -32,9 +48,9 @@ public class UserController {
     }
 
     @PatchMapping("/me/image")
-    public String updateUserImage( @PathVariable String pathImage) {
+    public String updateUserImage(@PathVariable String pathImage) {
         System.out.println("Обновление avatar об авторизованном пользователе");
-        return  "pathImage";
+        return "pathImage";
 
     }
 }

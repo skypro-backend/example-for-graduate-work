@@ -17,22 +17,19 @@ import java.util.List;
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id",nullable = false)
+    @Column(name = "user_id", nullable = false)
     private int id;
 
-    @Column(name = "login",nullable = false)
-    private String login;
+    @Column(name = "user_name")
+    private String userName;
 
-    @Column(name = "password",nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "first_name",nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name",nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @Column(name = "phone")
@@ -41,7 +38,7 @@ public class UserModel {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "role",nullable = false)
+    @Column(name = "role", nullable = false)
     private Role role;
 
     @OneToMany(mappedBy="userModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -52,4 +49,13 @@ public class UserModel {
             fetch = FetchType.LAZY)
     private List<CommentModel> commentModels;
 
+    public UserModel(int id, String userName, String firstName, String lastName, String phone, String image, Role role) {
+        this.id = id;
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.image = image;
+        this.role = role;
+    }
 }
