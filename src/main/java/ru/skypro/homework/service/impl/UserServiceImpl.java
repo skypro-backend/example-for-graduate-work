@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +21,7 @@ import ru.skypro.homework.service.UserService;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -42,11 +41,16 @@ public class UserServiceImpl implements UserService {
                 .getName();
         return find(username);
     }
-
+    /**
+     * Получение информации о пользователе из репозитория
+     */
     private User find(String username) {
         return repository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException::new);
     }
+    /**
+     * Создание пользователя
+     */
     @Override
     public void createUser(RegisterDto registerDto) {
         var user = find(registerDto.getUsername());
@@ -59,6 +63,9 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Не удалось сохранить пользователя.", e);
         }
     }
+    /**
+     * Чтение информации о пользователе
+     */
     @Override
     public UserDto getUser() {
         var user = find();
@@ -67,25 +74,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updatePassword(NewPasswordDto newPasswordDto) {
-        var oldPassword = newPasswordDto.getCurrentPassword();
-        var newPassword = encoder.encode(newPasswordDto.getNewPassword());
-        var user = find();
-        UserDetailsManager userDetailsManager = null;
-        if (userDetailsManager.userExists(user.getUsername())) {
-            userDetailsManager.changePassword(oldPassword, newPassword);
-        } else {
-            throw new IllegalArgumentException("Неверный текущий пароль");
 
+    }
+
+    /**
+     * Редактирование пароля
+     */
+    @Override
+    public void updatePassword(NewPasswordDto newPasswordDto, String username) {
+        Optional<User> user = repository.findByUsername(username);
+      if (encoder.matches(newPasswordDto.getCurrentPassword(), user.get().getPassword()) &&
+              newPasswordDto.getNewPassword() != null &&
+              !newPasswordDto.getNewPassword().equals(newPasswordDto.getCurrentPassword())) {
+          user.get().setPassword(encoder.encode(newPasswordDto.getNewPassword()));
+          repository.save(user.get());
         }
     }
 
+    /**
+     * Обновление информации о пользователе
+     */
     @Override
     public void updateUser(UpdateUserDto updateUserDto) {
         var user = find();
         mapper.update(updateUserDto, user);
         repository.save(user);
     }
-
+    /**
+     * Обновление информации о пользователе
+     */
     @Override
     public void update(MultipartFile image) {
         var user = find();

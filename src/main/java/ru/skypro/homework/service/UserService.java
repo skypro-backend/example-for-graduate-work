@@ -16,6 +16,8 @@ public interface UserService {
 
     void updatePassword(NewPasswordDto newPasswordDto);
 
+    void updatePassword(NewPasswordDto newPasswordDto, String username);
+
     void updateUser(UpdateUserDto updateUserDto);
 
     void update(MultipartFile image);
