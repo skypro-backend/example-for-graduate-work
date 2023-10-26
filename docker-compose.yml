@@ -1,0 +1,18 @@
+version: '3'
+services:
+  psql_bd:
+    image: postgres:15.3
+    container_name: back_online_store
+    environment:
+      POSTGRES_DB: store
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+    ports:
+      - '5435:5432'
+    restart: unless-stopped
+
+  front:
+    image: ghcr.io/bizinmitya/front-react-avito:v1.20
+    container_name: front_online_store
+    ports:
+      - '3000:3000'
