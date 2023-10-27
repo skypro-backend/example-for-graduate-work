@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.entity.UserImage;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
@@ -59,12 +60,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String UpdateUserImage(final MultipartFile file) {
+    public void UpdateUserImage(final MultipartFile file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByLogin(authentication.getName()).map(user -> {
-            var image = (UserImage) imageService.updateImage(file, new UserImage());
-            user.setUserImage(image);
-            return image.getFilePath();
-        }).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+        User user = userRepository.findByLogin(authentication.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+        UserImage image = (UserImage) imageService.updateImage(file, new UserImage());
+        user.setUserImage(image);
+        userRepository.save(user);
     }
 }
