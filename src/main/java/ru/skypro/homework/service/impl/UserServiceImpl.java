@@ -5,6 +5,9 @@ import liquibase.util.FilenameUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -77,21 +80,42 @@ public class UserServiceImpl implements UserService {
         List<String> SUPPORTED_EXTENSIONS = Arrays.asList("png", "jpg", "jpeg");
         String filename = file.getOriginalFilename();
         String type = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
+        //проверка, что переданный файл - изображение
         if (!SUPPORTED_EXTENSIONS.contains(type)) {
             throw new UnsupportedFormatException();
         }
         byte[] image = file.getBytes();
-        String pathString = "D:\\"  + users.getFirstName() + users.getLastName() + "." + type;
-        Path path = Paths.get(pathString);
+        String pathString = "D:\\userImage\\"  + users.getFirstName() + users.getLastName() + "." + type;
+        Path directoryPath = Paths.get("D:\\userImage");
+        //проверка, что директория существует, если нет - создает ее
+        if (!Files.exists(directoryPath)) {
+            Files.createDirectories(directoryPath);
+        }
         File fileImage = new File(pathString);
-        Files.write(path, image);
+        Files.write(Paths.get(pathString), image);
         users.setImage(fileImage.getPath());
         usersRepository.save(users);
     }
 
     @Override
-    public Resource getImage(String username) throws IOException {
+    public ResponseEntity<Resource> getImage(String username) throws IOException {
+//    public byte [] getImage(String username) throws IOException {
         Users users = usersRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
-        return new ByteArrayResource(Files.readAllBytes(Paths.get(users.getImage())));
+        File file  = new File(users.getImage());
+        String fileName = file.getName();
+        String type = fileName.substring(fileName.lastIndexOf(".") + 1);
+        if (type.equals("png")) {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE)
+                    .body(new ByteArrayResource(Files.readAllBytes(Paths.get(users.getImage()))));
+        } else {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE)
+                    .body(new ByteArrayResource(Files.readAllBytes(Paths.get(users.getImage()))));
+        }
+
+//        return Files.readAllBytes(Paths.get(users.getImage()));
     }
 }

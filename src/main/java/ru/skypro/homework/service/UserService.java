@@ -1,6 +1,7 @@
 package ru.skypro.homework.service;
 
 import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.NewPassword;
 import ru.skypro.homework.dto.user.UpdateUser;
@@ -15,7 +16,9 @@ public interface UserService {
     void UpdateImage(MultipartFile file, String username) throws IOException;
 
 //    добавлен метод для вывода изображениея пользователя
-    Resource getImage(String username) throws IOException;
+//    byte [] getImage(String username) throws IOException;
+
+    ResponseEntity<Resource> getImage(String username) throws IOException;
 
 
 }
