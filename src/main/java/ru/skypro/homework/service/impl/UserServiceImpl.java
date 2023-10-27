@@ -74,9 +74,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void UpdateImage(MultipartFile file, String username) throws IOException {
         Users users = usersRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
-        List<String> SUPPORTED_EXTENSIONS = Arrays.asList("png", "jpg", "jpeg", "PNG", "JPG", "JPEG","Png", "Jpg", "Jpeg");
+        List<String> SUPPORTED_EXTENSIONS = Arrays.asList("png", "jpg", "jpeg");
         String filename = file.getOriginalFilename();
-        String type = filename.substring(filename.lastIndexOf(".") + 1);
+        String type = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
         if (!SUPPORTED_EXTENSIONS.contains(type)) {
             throw new UnsupportedFormatException();
         }

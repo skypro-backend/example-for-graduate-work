@@ -45,6 +45,7 @@ public class UserController {
         userService.UpdateImage(image, authentication.getName());
     }
 
+//    энтпоинт для вывода изображения пользователя
     @GetMapping(value ="/me/image")
     public ResponseEntity<Resource> getImage(Authentication authentication) throws IOException {
         return ResponseEntity.ok()

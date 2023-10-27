@@ -41,17 +41,17 @@ public class User {
         return user;
     }
 
-//    public Users fromUser() {
-//        Users users = new Users();
-//        users.setEmail(this.getEmail());
-//        users.setId(this.getId());
-//        users.setFirstName(this.getFirstName());
-//        users.setLastName(this.getLastName());
-//        users.setPhone(this.getPhone());
-//        users.setRole(this.getRole());
-//        users.setImage(this.getImage());
-//        return users;
-//    }
+    public Users fromUser() {
+        Users users = new Users();
+        users.setEmail(this.getEmail());
+        users.setId(this.getId());
+        users.setFirstName(this.getFirstName());
+        users.setLastName(this.getLastName());
+        users.setPhone(this.getPhone());
+        users.setRole(this.getRole());
+        users.setImage(this.getImage());
+        return users;
+    }
 
 
 }

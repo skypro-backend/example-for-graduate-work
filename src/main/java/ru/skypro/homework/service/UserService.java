@@ -14,6 +14,7 @@ public interface UserService {
     UpdateUser updateInformationAboutUser(UpdateUser updateUser, String username);
     void UpdateImage(MultipartFile file, String username) throws IOException;
 
+//    добавлен метод для вывода изображениея пользователя
     Resource getImage(String username) throws IOException;
 
 
