@@ -25,6 +25,9 @@ public class AdServiceImpl implements AdService {
     @Autowired
     UserRepo userRepo;
 
+    /**
+     * получение всех объявлений
+     */
 
     @Override
     public Ads getAllAds() {
@@ -34,6 +37,9 @@ public class AdServiceImpl implements AdService {
         return new Ads(adsList.size(), adsList);
     }
 
+    /**
+     * создание объявления
+     */
     public AdDTO addAd(CreateOrUpdateAd createOrUpdateAd, String pathImage, String user) {
         AdModel adModel = new AdModel();
         adModel.setImage("Test-path"); // потом удалить
@@ -47,6 +53,9 @@ public class AdServiceImpl implements AdService {
         return AdMapper.toAdDto(adModel);
     }
 
+    /**
+     * получение полной информации об объявлении
+     */
 
     @Override
     public ExtendedAd getAds(int id) {
@@ -54,10 +63,16 @@ public class AdServiceImpl implements AdService {
         return userRepo.getExtendedAd(id).orElseThrow(AdNotFoundException::new);
     }
 
+    /**
+     * внесение изменений в объявление
+     */
     public Ads updateAd(int id, CreateOrUpdateAd createOrUpdateAdDTO) {
         return null;
     }
 
+    /**
+     * удаление объявления
+     */
     @Override
     public void removeAd(int id) {
         Optional<AdModel> ad = adRepo.findById(id);
@@ -68,6 +83,9 @@ public class AdServiceImpl implements AdService {
         }
     }
 
+    /**
+     * получение объявлений авторизированного пользователя
+     */
     @Override
     public Ads getAdsMe(int userId) {
         List<AdDTO> list = adRepo.findAll().stream()
@@ -77,6 +95,9 @@ public class AdServiceImpl implements AdService {
         return new Ads(list.size(), list);
     }
 
+    /**
+     * изменение картинки объявления
+     */
     @Override
     public String updateImage(int id, String pathImage) {
         return null;

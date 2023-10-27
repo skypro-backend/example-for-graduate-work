@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class CommentExeptionHandler {
-    @ExceptionHandler(CommentNotFoundExeption.class)
-    public ResponseEntity<?> handleNotFound(CommentNotFoundExeption e) {
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<?> handleNotFound(CommentNotFoundException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body("Комментария нет!");

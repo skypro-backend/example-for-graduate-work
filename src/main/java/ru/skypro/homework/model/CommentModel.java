@@ -19,11 +19,10 @@ public class CommentModel {
     private int pk;
 
     @Column(name = "create_data")
-    private LocalDateTime createAt = LocalDateTime.now();
+    private LocalDateTime createAt;
 
     @Column(name = "text")
     private String text;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -10,6 +10,8 @@ import ru.skypro.homework.projections.CreateOrUpdateAd;
 import ru.skypro.homework.projections.ExtendedAd;
 import ru.skypro.homework.service.impl.AdServiceImpl;
 
+import javax.validation.Valid;
+
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
@@ -17,10 +19,6 @@ import ru.skypro.homework.service.impl.AdServiceImpl;
 public class AdController {
 
     private final AdServiceImpl adService;
-
-//    public AdController(AdServiceImpl adService) {
-//        this.adService = adService;
-//    }
 
 
     //    Получение всех объявлений
@@ -31,7 +29,7 @@ public class AdController {
 
     //Добавление объявления
     @PostMapping()
-    public AdDTO addAd(@RequestBody CreateOrUpdateAd createOrUpdateAdDTO,
+    public AdDTO addAd(@RequestBody @Valid CreateOrUpdateAd createOrUpdateAdDTO,
                        @RequestParam String imagePath,
                        Authentication authentication) {
         AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
@@ -48,7 +46,7 @@ public class AdController {
 
     // Обновление объявления
     @PatchMapping("/{id}")
-    public Ads updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAd createOrUpdateAdDTO) {
+    public Ads updateAds(@PathVariable int id, @Valid @RequestBody CreateOrUpdateAd createOrUpdateAdDTO) {
         return adService.updateAd(id, createOrUpdateAdDTO);
     }
 
@@ -56,6 +54,8 @@ public class AdController {
     // Удалить объявление
     @DeleteMapping("/{id}")
     public void removeAd(@PathVariable int id) {
+        adService.removeAd(id);
+
     }
 
 

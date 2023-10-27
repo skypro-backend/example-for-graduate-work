@@ -1,17 +1,18 @@
 package ru.skypro.homework.projections;
 
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
-import javax.persistence.DiscriminatorColumn;
-@NoArgsConstructor
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 @AllArgsConstructor
 @Data
+@NoArgsConstructor
 public class CreateOrUpdateComment {
-    //    Необходимо ограничить min 8 and max 64
 
+    @NotBlank(message = "Обязательное поле")
+    @Size(min = 8, max = 64, message = "Количество символов от 8 до 64")
     private String text;
 }
