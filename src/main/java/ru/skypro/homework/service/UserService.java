@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.UserEntity;
 
@@ -25,5 +26,9 @@ public class UserService {
 
     private UserEntity convertToUserEntity(UserDto userDto) {
         return mapper.map(userDto, UserEntity.class);
+    }
+
+    private UserEntity convertToUserEntity(Register register) {
+        return mapper.map(register, UserEntity.class);
     }
 }
