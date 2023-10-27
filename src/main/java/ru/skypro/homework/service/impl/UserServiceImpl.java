@@ -20,7 +20,11 @@ import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 @Service
@@ -31,7 +35,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final ImageService imageService;
     private final UserRepository repository;
-    private final UserMapper mapper;private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
+    private final UserMapper mapper;
+    private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
     @Override
     public User find() {
@@ -41,6 +46,7 @@ public class UserServiceImpl implements UserService {
                 .getName();
         return find(username);
     }
+
     /**
      * Получение информации о пользователе из репозитория
      */
@@ -48,6 +54,7 @@ public class UserServiceImpl implements UserService {
         return repository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException::new);
     }
+
     /**
      * Создание пользователя
      */
@@ -63,6 +70,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Не удалось сохранить пользователя.", e);
         }
     }
+
     /**
      * Чтение информации о пользователе
      */
@@ -83,11 +91,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updatePassword(NewPasswordDto newPasswordDto, String username) {
         Optional<User> user = repository.findByUsername(username);
-      if (encoder.matches(newPasswordDto.getCurrentPassword(), user.get().getPassword()) &&
-              newPasswordDto.getNewPassword() != null &&
-              !newPasswordDto.getNewPassword().equals(newPasswordDto.getCurrentPassword())) {
-          user.get().setPassword(encoder.encode(newPasswordDto.getNewPassword()));
-          repository.save(user.get());
+        if (encoder.matches(newPasswordDto.getCurrentPassword(), user.get().getPassword()) &&
+                newPasswordDto.getNewPassword() != null &&
+                !newPasswordDto.getNewPassword().equals(newPasswordDto.getCurrentPassword())) {
+            user.get().setPassword(encoder.encode(newPasswordDto.getNewPassword()));
+            repository.save(user.get());
         }
     }
 
@@ -100,6 +108,7 @@ public class UserServiceImpl implements UserService {
         mapper.update(updateUserDto, user);
         repository.save(user);
     }
+
     /**
      * Обновление информации о пользователе
      */
@@ -114,5 +123,37 @@ public class UserServiceImpl implements UserService {
         }
         user.setImage("/images/" + filename);
         repository.save(user);
+    }
+
+    @Override
+    public void saveUserAvatar(MultipartFile avatar) {
+        String uploadDir = "C:/Referens";
+
+        try {
+            File uploadPath = new File(uploadDir);
+            if (!uploadPath.exists()) {
+                uploadPath.mkdirs();
+            }
+
+            String originalFileName = avatar.getOriginalFilename();
+            String safeFileName = generateSafeFileName(originalFileName);
+
+            File dest = new File(uploadDir + File.separator + safeFileName);
+            avatar.transferTo(dest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private String generateSafeFileName(String originalFileName) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(originalFileName.getBytes());
+            String hashedName = new BigInteger(1, hashBytes).toString(16);
+            String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            return hashedName + fileExtension;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

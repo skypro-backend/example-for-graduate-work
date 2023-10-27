@@ -21,4 +21,6 @@ public interface UserService {
     void updateUser(UpdateUserDto updateUserDto);
 
     void update(MultipartFile image);
+    void saveUserAvatar(MultipartFile avatar);
+
 }

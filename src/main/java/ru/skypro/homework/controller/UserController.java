@@ -1,7 +1,10 @@
 package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
@@ -29,10 +32,23 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
     @PatchMapping("/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
-        userService.updatePassword(newPasswordDto);
+    public ResponseEntity<Void> setNewPassword(Authentication authentication,
+                                               @RequestBody NewPasswordDto newPasswordDto) {
+        String username = authentication.getName();
+        userService.updatePassword(newPasswordDto,username);
         return ResponseEntity.ok().build();
     }
+    @PostMapping("/me/avatar")
+    public ResponseEntity<Void> updateUserAvatar(@RequestPart MultipartFile avatar) {
+        try {
+            userService.saveUserAvatar(avatar);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            // Обработка ошибки
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
     @PostMapping("/me/image")
     public ResponseEntity<Void> updateUserImage(@RequestPart MultipartFile image) {
