@@ -1,5 +1,7 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.AdDTO;
@@ -8,6 +10,8 @@ import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAd;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Users;
+import ru.skypro.homework.exceptions.AccessErrorException;
+import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.UsersRepository;
@@ -32,6 +36,23 @@ public class AdsServiceImpl implements AdsService {
     public AdsServiceImpl(AdsRepository adsRepository, UsersRepository usersRepository) {
         this.adsRepository = adsRepository;
         this.usersRepository = usersRepository;
+    }
+
+    private boolean isAdminOrOwnerAd(Authentication authentication, String ownerAd) {
+        boolean isAdmin = authentication.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList())
+                .contains("ROLE_ADMIN");
+
+        boolean isOwnerAd = authentication.getName().equals(ownerAd);
+
+        return isAdmin || isOwnerAd;
+
+    }
+
+    private Users userMe(Authentication authentication) {
+        return usersRepository.findByUsername(authentication.getName()).orElseThrow(UserNotFoundException::new);
     }
 
     @Override
@@ -110,39 +131,48 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public ExtendedAd getAds(int id, String username) {
-        ExtendedAd extendedAd = new ExtendedAd();
-        extendedAd.setPk(1);
-        extendedAd.setAuthorFirstName("Ivan");
-        extendedAd.setAuthorLastName("Ivanov");
-        extendedAd.setTitle("Заголовок");
-        extendedAd.setPrice(15000);
-        return extendedAd;
+    public ExtendedAd getAds(int id, Authentication authentication) {
+        if (authentication.isAuthenticated()) {
+            Ad extendedAd = adsRepository.findAdByPk(id).orElseThrow(AdNotFoundException::new);
+            return ExtendedAd.fromAd(extendedAd);
+        } else {
+            throw new AccessErrorException();
+        }
     }
 
     @Override
-    public void removeAd(int id, String username) {
-
+    public void removeAd(int id, Authentication authentication) {
+        Ad deletedAd = adsRepository.findAdByPk(id).orElseThrow(AdNotFoundException::new);
+        if (isAdminOrOwnerAd(authentication, deletedAd.getUser().getUsername())) {
+            adsRepository.delete(deletedAd);
+        } else {
+            throw new AccessErrorException();
+        }
     }
 
     @Override
-    public AdDTO updateAds(int id, CreateOrUpdateAd updateAd, String username) {
-        AdDTO dto = new AdDTO();
-        dto.setPk(1);
-        dto.setAuthor(1);
-        dto.setPrice(20000);
-        dto.setTitle("Заголовок");
-        return dto;
+    public AdDTO updateAds(int id, CreateOrUpdateAd updateAd, Authentication authentication) {
+        Ad updatedAd = adsRepository.findAdByPk(id).orElseThrow(AdNotFoundException::new);
+        if (isAdminOrOwnerAd(authentication, updatedAd.getUser().getUsername())) {
+            updatedAd.setTitle(updateAd.getTitle());
+            updatedAd.setPrice(updateAd.getPrice());
+            updatedAd.setDescription(updateAd.getDescription());
+            adsRepository.save(updatedAd);
+        } else {
+            throw new AccessErrorException();
+        }
+
+        return AdDTO.fromAd(updatedAd);
     }
 
+
     @Override
-    public Ads getAdsMe(String username) {
-        AdDTO dto = new AdDTO();
-        dto.setPk(1);
-        dto.setAuthor(1);
-        dto.setPrice(10000);
-        dto.setTitle("Заголовок");
-        return new Ads(List.of(dto));
+    public Ads getAdsMe(Authentication authentication) {
+        Integer meId = userMe(authentication).getId();
+        return new Ads(adsRepository.getAdsMe(meId)
+                .stream()
+                .map(AdDTO::fromAd)
+                .collect(Collectors.toList()));
     }
 
     @Override

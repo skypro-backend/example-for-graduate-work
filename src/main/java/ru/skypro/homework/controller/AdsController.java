@@ -39,13 +39,13 @@ public class AdsController {
     /** Получение информации об объявлении */
     @GetMapping("/{id}")
     public ExtendedAd getAds(@PathVariable int id, Authentication authentication) {
-        return adsService.getAds(id, authentication.getName());
+        return adsService.getAds(id, authentication);
     }
 
     /**  Удаление объявления */
     @DeleteMapping("/{id}")
     public void removeAd (@PathVariable int id, Authentication authentication){
-        adsService.removeAd(id, authentication.getName());
+        adsService.removeAd(id, authentication);
 
     }
 
@@ -54,14 +54,13 @@ public class AdsController {
     public AdDTO updateAds(@PathVariable int id,
                            @RequestBody CreateOrUpdateAd updateAd,
                            Authentication authentication){
-        return adsService.updateAds(id, updateAd, authentication.getName());
+        return adsService.updateAds(id, updateAd, authentication);
     }
 
     /** Получение объявлений авторизованного пользователя */
     @GetMapping("/me")
     public Ads getAdsMe(Authentication authentication){
-        return adsService.getAdsMe(authentication.getName());
-
+        return adsService.getAdsMe(authentication);
     }
 
     /**    Обновление картинки объявления   */

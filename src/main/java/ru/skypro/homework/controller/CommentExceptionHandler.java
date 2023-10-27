@@ -18,7 +18,7 @@ public class CommentExceptionHandler {
 
     @ExceptionHandler(value = {AccessErrorException.class})
     public ResponseEntity<?> handleAccessError(AccessErrorException exception) {
-        String message = "Недостаточно прав для изменения/удаления комментария";
+        String message = "Недостаточно прав";
         return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
     }
 }

@@ -17,6 +17,11 @@ public interface AdsRepository extends CrudRepository<Ad, Integer> {
     @Query(value = "SELECT * FROM ads", nativeQuery = true)
     List<Ad> findAllAds();
 
+
+    @Query(value = "SELECT * FROM ads " +
+            "WHERE user_id = :meId", nativeQuery = true)
+    List<Ad> getAdsMe(Integer meId);
+
     Optional<Ad> findAdByPk(int pk);
 
 //    @Query("SELECT new ru.skypro.homework.dto.ads" +

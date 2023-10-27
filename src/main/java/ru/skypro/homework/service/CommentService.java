@@ -12,12 +12,9 @@ public interface CommentService {
 
     Comments getComments(Integer adId);
 
-//    @PreAuthorize("principal.admin or #username == authentication.principal.username")
     void addComment(Integer id, CreateOrUpdateComment createOrUpdateComment, Authentication authentication);
 
-//    @PreAuthorize("principal.admin or #username == authentication.principal.username")
     void deleteComment(Integer adId, Integer commentId, Authentication authentication);
 
-//    @PreAuthorize("principal.admin or #username == authentication.principal.username")
     void updateComment(Integer adId, Integer commentId,CreateOrUpdateComment createOrUpdateComment, Authentication authentication);
 }
