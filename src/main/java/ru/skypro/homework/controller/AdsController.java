@@ -12,9 +12,6 @@ import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAd;
 import ru.skypro.homework.service.AdsService;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -23,7 +20,6 @@ import java.util.List;
 public class AdsController {
 
     private final AdsService adsService;
-
 
     /** Получение всех объявлений  */
     @GetMapping()
