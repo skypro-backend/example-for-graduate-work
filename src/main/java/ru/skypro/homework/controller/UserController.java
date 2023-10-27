@@ -2,7 +2,10 @@ package ru.skypro.homework.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +43,14 @@ public class UserController {
     @PatchMapping(value ="/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void updateImage(@RequestParam("image") MultipartFile image, Authentication authentication) throws IOException {
         userService.UpdateImage(image, authentication.getName());
+    }
+
+    @GetMapping(value ="/me/image")
+    public ResponseEntity<Resource> getImage(Authentication authentication) throws IOException {
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "userImage" + "\"")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .body(userService.getImage(authentication.getName()));
     }
 
 

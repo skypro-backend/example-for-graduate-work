@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.NewPassword;
 import ru.skypro.homework.dto.user.UpdateUser;
@@ -12,4 +13,8 @@ public interface UserService {
     User getInformation(String username);
     UpdateUser updateInformationAboutUser(UpdateUser updateUser, String username);
     void UpdateImage(MultipartFile file, String username) throws IOException;
+
+    Resource getImage(String username) throws IOException;
+
+
 }
