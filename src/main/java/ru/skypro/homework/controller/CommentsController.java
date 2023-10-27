@@ -10,6 +10,7 @@ import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -47,7 +48,7 @@ public class CommentsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<CommentDto> addCommentToAd(@PathVariable("id") Integer adId,
-                                                     @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+                                                     @RequestBody @Valid CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         CommentDto newCommentDto = new CommentDto(1, "imagePath",
                 "authorFirstName", (long) 100500, 1, createOrUpdateCommentDto.text());
         return ResponseEntity.ok(newCommentDto);
@@ -62,7 +63,7 @@ public class CommentsController {
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<CommentDto> updateCommentToAd(@PathVariable("adId") Integer adId,
                                                         @PathVariable("commentId") Integer commentId,
-                                                        @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+                                                        @RequestBody @Valid CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         CommentDto updatedCommentDto = new CommentDto(1, "imagePath",
                 "authorFirstName", (long) 100500, 1, createOrUpdateCommentDto.text());
         return ResponseEntity.ok(updatedCommentDto);
