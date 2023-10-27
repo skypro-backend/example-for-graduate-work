@@ -1,36 +1,49 @@
 package ru.skypro.homework.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
 public class Comment {
 
-    @javax.persistence.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int pk;
 
     @ManyToOne
     @JoinColumn(name = "author")
-    private int author;
+    private User author;
 
     private String text;
 
     private Long createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "Ad")
-    private int Ad;
+    @JoinColumn(name = "ad")
+    private Ad ad;
 
     public Comment() {
     }
 
-    public Comment(int pk, int author, String text, Long createdAt, int ad) {
+    public Comment(int pk, User author, String text, Long createdAt, Ad ad) {
         this.pk = pk;
         this.author = author;
         this.text = text;
         this.createdAt = createdAt;
-        Ad = ad;
+        this.ad = ad;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment = (Comment) o;
+        return pk == comment.pk && Objects.equals(author, comment.author) && Objects.equals(text, comment.text) && Objects.equals(createdAt, comment.createdAt) && Objects.equals(ad, comment.ad);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pk, author, text, createdAt, ad);
     }
 
     @Override
@@ -40,21 +53,8 @@ public class Comment {
                 ", author=" + author +
                 ", text='" + text + '\'' +
                 ", createdAt=" + createdAt +
-                ", Ad=" + Ad +
+                ", ad=" + ad +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Comment comment = (Comment) o;
-        return pk == comment.pk && author == comment.author && Ad == comment.Ad && Objects.equals(text, comment.text) && Objects.equals(createdAt, comment.createdAt);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(pk, author, text, createdAt, Ad);
     }
 
     public int getPk() {
@@ -65,11 +65,11 @@ public class Comment {
         this.pk = pk;
     }
 
-    public int getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(int author) {
+    public void setAuthor(User author) {
         this.author = author;
     }
 
@@ -89,11 +89,11 @@ public class Comment {
         this.createdAt = createdAt;
     }
 
-    public int getAd() {
-        return Ad;
+    public Ad getAd() {
+        return ad;
     }
 
-    public void setAd(int ad) {
-        Ad = ad;
+    public void setAd(Ad ad) {
+        this.ad = ad;
     }
 }
