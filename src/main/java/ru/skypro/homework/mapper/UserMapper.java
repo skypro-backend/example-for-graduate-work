@@ -29,6 +29,9 @@ public abstract class UserMapper {
     public abstract void updateUserToUserEntity(UpdateUser updateUser, @MappingTarget UserEntity userEntity);
 
     protected String getImageUrl(Image image) {
+        if (image == null) {
+            return null;
+        }
         return "/images/" + image.getId();
     }
 }

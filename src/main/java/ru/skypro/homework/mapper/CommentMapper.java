@@ -33,6 +33,9 @@ public abstract class CommentMapper {
 
 
     protected String getImageUrl(Image image) {
+        if (image == null) {
+            return null;
+        }
         return "/images/" + image.getId();
     }
 
