@@ -20,7 +20,7 @@ import ru.skypro.homework.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-@Mapper
+@Mapper(uses = {LocalDateTime.class})
 public abstract class CommentMapper {
     @Autowired
     private UserRepository userRepository;

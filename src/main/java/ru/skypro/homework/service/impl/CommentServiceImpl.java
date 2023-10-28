@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.exception.CommentInconsistencyToAdException;
+import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.CommentService;
@@ -28,9 +30,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto updateCommentToAd(Integer adId, Integer commentId, CreateOrUpdateCommentDto createOrUpdateCommentDto, Authentication authentication) {
-        Comment comment = commentMapper.updateCommentDtoToEntity(adId, commentId, createOrUpdateCommentDto, authentication);
-        commentRepository.save(comment);
-        return commentMapper.entityToCommentDto(comment, authentication);
+        if(adId.equals(commentRepository.findById(commentId)
+                .orElseThrow(()->new CommentNotFoundException(commentId))
+                .getAd()
+                .getId())){
+            Comment comment = commentMapper.updateCommentDtoToEntity(adId, commentId, createOrUpdateCommentDto, authentication);
+            commentRepository.save(comment);
+            return commentMapper.entityToCommentDto(comment, authentication);
+        }
+        else throw new CommentInconsistencyToAdException();
     }
     @Override
     public void removeComment(Integer adId, Integer commentId, Authentication authentication) {
