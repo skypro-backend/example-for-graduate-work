@@ -1,8 +1,18 @@
 package ru.skypro.homework.dto.user;
 
 import lombok.*;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Users;
+
+import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +27,7 @@ public class User {
     private String phone;
     private Role role;
     private String image;
+
 
     public static User toUser(Users users) {
         User user = new User();
@@ -41,5 +52,6 @@ public class User {
         users.setImage(this.getImage());
         return users;
     }
+
 
 }

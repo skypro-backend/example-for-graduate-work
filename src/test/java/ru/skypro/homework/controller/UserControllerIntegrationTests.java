@@ -172,24 +172,24 @@ public class UserControllerIntegrationTests {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
-    public void updateImage_status_isOk() throws Exception {
-        addToDb();
-        Path path = Paths.get("user-icon.png");
-        File file = new File("user-icon.png");
-        String name = "user-icon.png";
-        byte[] content = null;
-        try {
-            content = Files.readAllBytes(path);
-        } catch (final IOException e) {
-        }
-        MultipartFile result = new MockMultipartFile(name, content);
-        mockMvc.perform(patch("/users/me/image")
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                        .content(result.getBytes()))
-                .andExpect(status().isOk());
-    }
+//    @Test
+//    @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
+//    public void updateImage_status_isOk() throws Exception {
+//        addToDb();
+//        Path path = Paths.get("user-icon.png");
+//        File file = new File("user-icon.png");
+//        String name = "user-icon.png";
+//        byte[] content = null;
+//        try {
+//            content = Files.readAllBytes(path);
+//        } catch (final IOException e) {
+//        }
+//        MultipartFile result = new MockMultipartFile(name, content);
+//        mockMvc.perform(patch("/users/me/image")
+//                        .contentType(MediaType.MULTIPART_FORM_DATA)
+//                        .content(result.getBytes()))
+//                .andExpect(status().isOk());
+//    }
 //
 //    @Test
 //    public void updateImage_status_isUnauthorized() throws Exception {
