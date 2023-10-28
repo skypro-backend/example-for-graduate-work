@@ -41,6 +41,9 @@ public abstract class AdMapper {
     }
 
     protected String getImageUrl(Image image) {
+        if (image == null) {
+            return null;
+        }
         return "/images/" + image.getId();
     }
 }
