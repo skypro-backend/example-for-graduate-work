@@ -12,7 +12,6 @@ import ru.skypro.homework.entity.Users;
 @AllArgsConstructor
 public class UsersDTO {
     private Integer id;
-    private String email;
     private String image;
     private String username;
     private String password;
@@ -24,7 +23,6 @@ public class UsersDTO {
     public static UsersDTO fromUsers(Users users) {
         UsersDTO usersDTO = new UsersDTO();
         usersDTO.setId(users.getId());
-        usersDTO.setEmail(users.getEmail());
         usersDTO.setPassword(users.getPassword());
         usersDTO.setUsername(users.getUsername());
         usersDTO.setPhone(users.getPhone());
@@ -37,7 +35,6 @@ public class UsersDTO {
 
     public Users toUsers() {
         Users users = new Users();
-        users.setEmail(this.getEmail());
         users.setUsername(this.getUsername());
         users.setPassword(this.getPassword());
         users.setId(this.getId());

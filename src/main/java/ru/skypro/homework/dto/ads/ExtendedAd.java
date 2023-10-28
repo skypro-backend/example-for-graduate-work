@@ -27,7 +27,7 @@ public class ExtendedAd {
         extendedAd.setAuthorFirstName(ad.getUser().getFirstName());
         extendedAd.setAuthorLastName(ad.getUser().getLastName());
         extendedAd.setDescription(ad.getDescription());
-        extendedAd.setEmail(ad.getUser().getEmail());
+        extendedAd.setEmail(ad.getUser().getUsername());
         extendedAd.setPhone(ad.getUser().getPhone());
         extendedAd.setTitle(ad.getTitle());
         extendedAd.setPrice(ad.getPrice());

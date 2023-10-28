@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,6 +19,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.multipart.MultipartFile;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -71,8 +73,7 @@ public class UserControllerIntegrationTests {
     private void addToDb() {
         usersRepository.deleteAll();
         Users user = new Users(1,
-                "user@gmail.com",
-                null,
+                "D:\\userImage\\маринасулаева.png",
                 "user@gmail.com",
                 "$2a$10$mShIMZIKnJ.EVqUycC2OE.qunAUqKJPFZq6ADSuJ.IYmVWBmXqWMi",
                 "ivan",
@@ -172,35 +173,53 @@ public class UserControllerIntegrationTests {
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
-//    public void updateImage_status_isOk() throws Exception {
-//        addToDb();
-//        Path path = Paths.get("user-icon.png");
-//        File file = new File("user-icon.png");
-//        String name = "user-icon.png";
-//        byte[] content = null;
-//        try {
-//            content = Files.readAllBytes(path);
-//        } catch (final IOException e) {
-//        }
-//        MultipartFile result = new MockMultipartFile(name, content);
-//        mockMvc.perform(patch("/users/me/image")
-//                        .contentType(MediaType.MULTIPART_FORM_DATA)
-//                        .content(result.getBytes()))
-//                .andExpect(status().isOk());
-//    }
-//
-//    @Test
-//    public void updateImage_status_isUnauthorized() throws Exception {
-//        usersRepository.deleteAll();
-//        addToDb();
-//        JSONObject image = new JSONObject();
-//        image.put("newImage", "path-for-image");
-//
-//        mockMvc.perform(patch("/users/me/image")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(image.toString()))
-//                .andExpect(status().isUnauthorized());
-//    }
+    @Test
+    @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
+    public void updateImage_status_isOk() throws Exception {
+        addToDb();
+        String name = "user-icon.png";
+        byte[] content = Files.readAllBytes(Paths.get("user-icon.png"));
+        MultipartFile result = new MockMultipartFile(name, content);
+        mockMvc.perform(patch("/users/me/image")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(result.getBytes()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateImage_status_isUnauthorized() throws Exception {
+        addToDb();
+        String name = "user-icon.png";
+        byte[] content = Files.readAllBytes(Paths.get("user-icon.png"));
+        MultipartFile result = new MockMultipartFile(name, content);
+        mockMvc.perform(patch("/users/me/image")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(result.getBytes()))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
+    public void updateImage_status_isNotFound() throws Exception {
+        addToDb();
+        String name = "user-icon.tif";
+        byte[] content = Files.readAllBytes(Paths.get("user-icon.tif"));
+        MultipartFile result = new MockMultipartFile(name, content);
+        mockMvc.perform(patch("/users/me/image")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(result.getBytes()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
+    public void getImage_status_isOk() throws Exception {
+        usersRepository.deleteAll();
+        addToDb();
+        MvcResult result = mockMvc.perform(get("/users/me/image"))
+                .andExpect(status().isOk())
+                .andReturn();
+        byte[] resourceContent = result.getResponse().getContentAsByteArray();
+        assertThat(resourceContent).isNotEmpty();
+    }
 }

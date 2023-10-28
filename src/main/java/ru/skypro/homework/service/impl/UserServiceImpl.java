@@ -105,16 +105,12 @@ public class UserServiceImpl implements UserService {
         String type = fileName.substring(fileName.lastIndexOf(".") + 1);
         if (type.equals("png")) {
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE)
                     .body(Files.readAllBytes(Paths.get(users.getImage())));
         } else {
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE)
                     .body(Files.readAllBytes(Paths.get(users.getImage())));
         }
-
-//        return Files.readAllBytes(Paths.get(users.getImage()));
     }
 }
