@@ -21,5 +21,9 @@ public class User {
     private String image;
     @Enumerated(EnumType.STRING)
     private Role role;
+    public void setAvatarData(byte[] bytes) {
+    }
 
+    public void setAvatarPath(String filePath) {
+    }
 }

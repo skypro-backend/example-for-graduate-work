@@ -3,11 +3,14 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.RegisterDto;
@@ -15,16 +18,16 @@ import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.User;
+import ru.skypro.homework.repository.UserAvatarRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
-
 import javax.persistence.EntityNotFoundException;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.io.OutputStream;
+import java.nio.file.AccessDeniedException;
 import java.util.Optional;
 
 @Service
@@ -35,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final ImageService imageService;
     private final UserRepository repository;
+    private final UserAvatarRepository userAvatarRepository;
     private final UserMapper mapper;
     private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
@@ -110,7 +114,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Обновление информации о пользователе
+     * Обновление аватара пользователе
      */
     @Override
     public void update(MultipartFile image) {
@@ -125,35 +129,42 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
     }
 
-    @Override
-    public void saveUserAvatar(MultipartFile avatar) {
-        String uploadDir = "C:/Referens";
 
+    @Value("${avatar.storage.directory}")
+    private String avatarStorageDirectory;
+
+    public void saveUserAvatar(@RequestPart MultipartFile file) {
         try {
-            File uploadPath = new File(uploadDir);
-            if (!uploadPath.exists()) {
-                uploadPath.mkdirs();
+            File directory = new File(avatarStorageDirectory);
+            if (!directory.exists()) {
+                directory.mkdirs();
             }
 
-            String originalFileName = avatar.getOriginalFilename();
-            String safeFileName = generateSafeFileName(originalFileName);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated()) {
+                User user = (User) authentication.getPrincipal();
+                byte[] avatarData = file.getBytes();
 
-            File dest = new File(uploadDir + File.separator + safeFileName);
-            avatar.transferTo(dest);
+                String fileName = "avatar_" + user.getId() + ".jpg";
+
+                String filePath = avatarStorageDirectory + fileName;
+
+                try (OutputStream outputStream = new FileOutputStream(filePath)) {
+                    outputStream.write(avatarData);
+                }
+
+                user.setAvatarPath(filePath);
+                repository.save(user);
+            } else {
+                throw new AccessDeniedException("В доступе отказано: Пользователь не прошел проверку подлинности.");
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Не удалось сохранить аватар", e);
         }
     }
-    private String generateSafeFileName(String originalFileName) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashBytes = digest.digest(originalFileName.getBytes());
-            String hashedName = new BigInteger(1, hashBytes).toString(16);
-            String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-            return hashedName + fileExtension;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return null;
-        }
+
+    @Override
+    public void saveUserAvatar(Authentication authentication, MultipartFile image) {
+
     }
 }
