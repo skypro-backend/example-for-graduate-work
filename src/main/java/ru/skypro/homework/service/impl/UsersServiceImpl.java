@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.MyDatabaseUserDetails;
+import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.Image;
@@ -15,10 +16,10 @@ import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.ImagesRepository;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UsersService;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 
 @Service
 @Slf4j
@@ -29,6 +30,7 @@ public class UsersServiceImpl implements UsersService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final ImagesRepository imagesRepository;
+    private final ImageService imageService;
 
     @Override
     @Transactional
@@ -63,15 +65,7 @@ public class UsersServiceImpl implements UsersService {
     public byte[] updateUserImage(MultipartFile file, String username) {
         UserEntity userEntity = userRepository.findByUsername(username);
         Image image = userEntity.getImage();
-        if (image == null) {
-            image = new Image();
-        }
-        try {
-            byte[] bytes = file.getBytes();
-            image.setImage(bytes);
-        } catch (IOException e) {
-            log.error("Failed to transform incoming image to bytes", e);
-        }
+        image = imageService.updateImage(file, image);
         userEntity.setImage(image);
         imagesRepository.save(image);
         userRepository.save(userEntity);
@@ -81,7 +75,8 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public void createUser(UserDetails myDatabaseUserDetails) {
-        UserEntity userEntity = ((MyDatabaseUserDetails) myDatabaseUserDetails).getUserEntity();
+        Register register = ((MyDatabaseUserDetails) myDatabaseUserDetails).getRegister();
+        UserEntity userEntity = userMapper.registerToUserEntity(register);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         userRepository.save(userEntity);
     }

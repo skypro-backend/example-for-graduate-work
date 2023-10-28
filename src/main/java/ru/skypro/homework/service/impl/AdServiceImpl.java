@@ -16,6 +16,7 @@ import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.ImagesRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.ImageService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class AdServiceImpl implements AdService {
     private final UserRepository usersRepository;
     private final ImagesRepository imagesRepository;
     private final AdMapper adMapper;
+    private final ImageService imageService;
 
     @Override
     @Transactional
@@ -104,22 +106,16 @@ public class AdServiceImpl implements AdService {
     @Override
     @Transactional
     public byte[] patchAdsImageById(int id, MultipartFile file, String userName) {
-
         UserEntity user = usersRepository.findByUsername(userName);
         AdEntity adEntity = adRepository.findById(id)
                 .orElseThrow(() -> new AdNotFoundException("Not found ad with id = " + id));
         if (!checkPermission(adEntity, user)) {
             throw new PermissionDeniedException("You do not have permission to update image in ad with id = " + id);
         }
-
         Image image = adEntity.getImage();
-        try {
-            byte[] bytes = file.getBytes();
-            image.setImage(bytes);
-        } catch (IOException e) {
-            log.error("Failed to transform incoming image to bytes", e);
-        }
+        image = imageService.updateImage(file, image);
         imagesRepository.save(image);
+        adRepository.save(adEntity);
         return image.getImage();
     }
 

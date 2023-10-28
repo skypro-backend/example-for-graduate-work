@@ -3,32 +3,23 @@ package ru.skypro.homework.service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.Image;
 
-import java.io.IOException;
-
 public interface ImageService {
 
-    /** Получение изображения по идентификатору
+    /**
+     * Получение изображения по идентификатору
+     *
      * @param id идентификатор файла
-     * @return массив byte картинки */
+     * @return массив byte картинки
+     */
     byte[] getImageInByteById(int id);
 
-    /** Получение изображения по названию файла
-     * @param fileName название файла {@link String}
-     * @return массив byte картинки */
-    byte[] getImageInByte(String fileName);
-
-    /** Изменение картинки пользователя
-     * @param userId id пользователя {@link Long}
-     * @param imageId id картинки {@link Integer}
-     * @param multipartFile объект {@link  MultipartFile}
-     * @return объект {@link Image} */
-    Image changeUserImage(Long userId, Integer imageId, MultipartFile multipartFile) throws IOException;
-
-    /** Изменение картинки объявления
-     * @param idAd id объявления {@link Long}
-     * @param imageId id картинки {@link Integer}
-     * @param multipartFile объект {@link  MultipartFile}
-     * @return объект {@link Image} */
-    Image changeAdImage(Long idAd, Integer imageId, MultipartFile multipartFile) throws IOException;
+    /**
+     * Обновление изображения
+     *
+     * @param file  {@link MultipartFile}
+     * @param image {@link Image}
+     * @return объект {@link Image}
+     */
+    Image updateImage(MultipartFile file, Image image);
 
 }

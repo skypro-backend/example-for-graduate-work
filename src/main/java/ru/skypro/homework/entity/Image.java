@@ -18,8 +18,7 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String fileName;
-    private String mediaType;
+
     @Lob
     @Type(type="org.hibernate.type.ImageType")
     private byte[] image;

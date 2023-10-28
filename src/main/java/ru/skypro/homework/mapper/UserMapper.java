@@ -21,6 +21,8 @@ public abstract class UserMapper {
 
     public abstract UserEntity registerToUserEntity(Register register);
 
+    public abstract Register userEntityToRegister(UserEntity userEntity);
+
     public abstract void updateUserToUserEntity(UpdateUser updateUser, @MappingTarget UserEntity userEntity);
 
     protected String getImageUrl(Image image) {
