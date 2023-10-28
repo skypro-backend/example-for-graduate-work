@@ -18,6 +18,7 @@ import ru.skypro.homework.repository.AdRepo;
 import ru.skypro.homework.repository.CommentRepo;
 import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.CommentsService;
+import ru.skypro.homework.service.until.Until;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -59,15 +60,10 @@ public class CommentsServiceImpl implements CommentsService {
      */
     @Override
     public CommentDTO addComment(int id, CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
+        UserModel user = Until.addUserFromRepo(authentication);
 
-//        Comments comments = getComments(id);
-//        if (comments != null) {
-//            return CommentMapper.toCommentsAdd(createOrUpdateComment);
-//        } else {
-//            throw new CommentNotFoundExeption();
-//        }
-        UserModel user = userRepo.findByUserName(authentication.getName())
-                .orElseThrow(UserNotFoundException::new);
+//        UserModel user = userRepo.findByUserName(authentication.getName())
+//                .orElseThrow(UserNotFoundException::new);
         CommentModel commentModel = new CommentModel();
         commentModel.setCreateAt(LocalDateTime.parse(LocalDateTime.now()
                 .format(DateTimeFormatter.ISO_DATE_TIME)));
@@ -86,8 +82,6 @@ public class CommentsServiceImpl implements CommentsService {
     public void deleteComment(int id, int commentsId) {
         Optional<AdModel> adModel = adRepo.findById(id);
         commentRepo.deleteById(commentsId);
-
-
     }
 
     /**

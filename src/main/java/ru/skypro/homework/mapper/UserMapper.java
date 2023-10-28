@@ -2,6 +2,7 @@ package ru.skypro.homework.mapper;
 
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.model.UserModel;
+import ru.skypro.homework.projections.UpdateUser;
 
 public class UserMapper {
 
@@ -27,5 +28,30 @@ public class UserMapper {
         userModel.setPhone(userDTO.getPhone());
         return userModel;
     }
+
+    public static UpdateUser mapToUpdateUser(UserModel userModel) {
+        UpdateUser updateUser = new UpdateUser();
+        updateUser.setFirstName(userModel.getFirstName());
+        updateUser.setLastName(userModel.getLastName());
+        updateUser.setPhone(userModel.getPhone());
+        return updateUser;
+
+    }
+    public static UpdateUser mapToUpdateUser(UserDTO userDTO) {
+        UpdateUser updateUser = new UpdateUser();
+        updateUser.setFirstName(userDTO.getFirstName());
+        updateUser.setLastName(userDTO.getLastName());
+        updateUser.setPhone(userDTO.getPhone());
+        return updateUser;
+
+    }
+//    public static UserModel mapToUserModel(UpdateUser u) {
+//        UpdateUser updateUser = new UpdateUser();
+//        updateUser.setFirstName(userDTO.getFirstName());
+//        updateUser.setLastName(userDTO.getLastName());
+//        updateUser.setPhone(userDTO.getPhone());
+//        return updateUser;
+//
+//    }
 }
 

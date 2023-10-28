@@ -1,15 +1,10 @@
 package ru.skypro.homework.service.impl;
 
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.mapper.UserMapper;
@@ -20,6 +15,7 @@ import ru.skypro.homework.projections.Register;
 import ru.skypro.homework.projections.UpdateUser;
 import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.service.until.Until;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Objects;
@@ -32,46 +28,16 @@ public class UserServiceImpl implements UserService {
 //    private  UserDetailsManager userDetailsManager;
 
     @Autowired
-    private  PasswordEncoder encoder;
+    private PasswordEncoder encoder;
     @Autowired
-    private  UserRepo userRepo;
-
-
-    /**
-     * Получение информации о пользователе из репозитория
-     */
-
-    public UserModel find(String username) {
-        return userRepo.findByUserName(username).orElseThrow(EntityNotFoundException::new);
-    }
-
-    /**
-     * Получиение информации о пользователе из автооризации
-     */
-    @Override
-    public UserModel find() {
-        var username = SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName();
-        return find(username);
-    }
-
-    /**
-     * Создание пользователя
-     */
-    @Override
-    public void createUser(Register register) {
-        var user = find(register.getUsername());
-        userRepo.save(user);
-    }
+    private UserRepo userRepo;
 
     /**
      * Чтение информации о пользователе
      */
     @Override
     public UserDTO getUser(Authentication authentication) {
-      AdsUserDetails  adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
+        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
 
         return UserMapper.mapToUserDTO(
                 Objects.requireNonNull(userRepo
@@ -93,17 +59,34 @@ public class UserServiceImpl implements UserService {
     /**
      * Обновление информации о пользователе
      */
+    // change!!
     @Override
-    public void updateUser(UpdateUser updateUserDto) {
-        var user = find();
-        UserMapper.mapToUserDTO(user);
+    public UpdateUser updateUser(UpdateUser updateUser, Authentication authentication) {
+//        UserDTO userDTO = getUser(authentication);
+//
+//        userDTO.setLastName(updateUser.getLastName());
+//        userDTO.setFirstName(updateUser.getFirstName());
+//        userDTO.setPhone(updateUser.getPhone());
+//
+//
+//        UserModel userModel = UserMapper.mapToUserModel(userDTO);
+//        userRepo.save(userModel);
+
+        UserModel user = Until.addUserFromRepo(authentication);
+
+        user.setFirstName(updateUser.getFirstName());
+        user.setLastName(updateUser.getLastName());
+        user.setPhone(updateUser.getPhone());
+
+        userRepo.save(user);
+        return UserMapper.mapToUpdateUser(user);
     }
 
     /**
      * Обновление аватара  пользователя
      */
     @Override
-    public void update(MultipartFile image) {
-
+    public String update(String image) {
+        return "pathImage";
     }
 }

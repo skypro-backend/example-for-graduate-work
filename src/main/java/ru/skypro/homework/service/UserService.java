@@ -9,15 +9,12 @@ import ru.skypro.homework.projections.Register;
 import ru.skypro.homework.projections.UpdateUser;
 
 public interface UserService {
-    UserModel find();
-
-    void createUser(Register register);
 
     UserDTO getUser(Authentication authentication);
 
     void updatePassword(NewPassword newPassword);
 
-    void updateUser(UpdateUser updateUserDto);
+    UpdateUser updateUser(UpdateUser updateUser, Authentication authentication);
 
-    void update(MultipartFile image);
+    String update(String image);
 }
