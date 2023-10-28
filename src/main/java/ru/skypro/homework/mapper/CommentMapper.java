@@ -4,7 +4,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
@@ -21,20 +20,17 @@ import java.time.ZoneOffset;
 
 @Mapper
 public abstract class CommentMapper {
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private AdRepository adRepository;
 
     @Mapping(target = "author", expression = "java(getUserFromAuthentication(authentication).getId())")
-    //@Mapping(target = "authorImage", expression = "java(getImagePathFromUser(getUserFromAuthentication(authentication)))")
-    @Mapping(target = "authorImage", expression = "java(null)")
+    @Mapping(target = "authorImage", expression = "java(getImagePathFromUser(getUserFromAuthentication(authentication)))")
     @Mapping(target = "authorFirstName", expression = "java(getUserFromAuthentication(authentication).getFirstName())")
     @Mapping(target = "createdAt", expression = "java(getLongFromLocalDateTime(comment.getCreatedAt()))")
     @Mapping(target = "pk", expression = "java(comment.getId())")
-    public abstract CommentDto entityToCommentDto(Comment comment,Authentication authentication);
+    public abstract CommentDto entityToCommentDto(Comment comment, Authentication authentication);
 
     //todo вот тут при обновлении дата создания будет также меняться, можно ли оставить так?
     @Mapping(target = "createdAt", expression = "java(getNowLocalDateTime())")
@@ -63,11 +59,11 @@ public abstract class CommentMapper {
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
 
     }
+
     protected Ad getAdByAdId(Integer adId) {
         return adRepository.findById(adId)
                 .orElseThrow(() ->
-          //          log.info("Директория успешно создана: "
-                new AdNotFoundException(adId));
+                        new AdNotFoundException(adId));
     }
 
 

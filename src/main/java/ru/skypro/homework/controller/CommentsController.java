@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class CommentsController {
 
     private final CommentService commentService;
+
     @DeleteMapping("/{adId}/comments/{commentId}")
     @Operation(summary = "Удаление комментария в объявлении",
             description = "Удаление комментария по id объявления и id комментария авторизованным пользователем")
@@ -46,6 +47,7 @@ public class CommentsController {
         CommentsDto allCommentsDtoList = new CommentsDto(0, new ArrayList<>());
         return ResponseEntity.ok(allCommentsDtoList);
     }
+
     @PostMapping("/{id}/comments")
     @Operation(summary = "Добавление комментария к объявлению",
             description = "Добавление комментария к объявлению по его id")
@@ -71,6 +73,12 @@ public class CommentsController {
         CommentDto updatedCommentDto = new CommentDto(1, "imagePath",
                 "authorFirstName", (long) 100500, 1, createOrUpdateCommentDto.text());
         return ResponseEntity.ok(updatedCommentDto);
+    }
+
+
+    @ExceptionHandler(Exception.class)
+    public String departmentNotFoundExceptionHandler(Exception e) {
+        return e.getMessage();
     }
 
 }

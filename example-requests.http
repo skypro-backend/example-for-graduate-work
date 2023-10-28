@@ -72,7 +72,7 @@ Authorization: Basic user@gmail.com password
 }
 
 ###
-POST http://localhost:8080/ads/1/comments
+POST http://localhost:8080/ads/8/comments
 Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
@@ -80,3 +80,11 @@ Authorization: Basic user@gmail.com password
 "text":"кря-кря-кря"
 }
 
+###
+POST http://localhost:8080/ads/3/comments
+Content-Type: application/json
+Authorization: Basic Hi@hi.ru 12345678
+
+{
+  "text":"кря-кря-кря"
+}
