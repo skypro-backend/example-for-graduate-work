@@ -6,4 +6,8 @@ import ru.skypro.homework.entity.Ad;
 
 @Repository
 public interface AdRepository extends JpaRepository<Ad, Integer> {
+
+    void removeAdById(Integer id);
+
+    Ad getAdById(Integer id);
 }

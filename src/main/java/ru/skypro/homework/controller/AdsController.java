@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -12,6 +13,7 @@ import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
+import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +23,11 @@ import java.util.ArrayList;
 @RequestMapping("/ads")
 @Tag(name = "Объявления")
 @Validated
+@RequiredArgsConstructor
+
 public class AdsController {
+    private final AdServiceImpl adService;
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление объявления",
             description = "Удаление объявления по идентификационному номеру авторизованным пользователем")
@@ -30,7 +36,7 @@ public class AdsController {
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not Found")
     public ResponseEntity<Void> removeAd(@PathVariable("id") Integer id) {
-        // Реализация удаления объявления
+        adService.removeAd(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -50,7 +56,7 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     public ResponseEntity<AdDto> addAd(@RequestPart("properties") CreateOrUpdateAdDto createOrUpdateAdDto,
                                        @RequestPart MultipartFile image) throws IOException {
-        AdDto addedAdDto = new AdDto(1, "imagePath", 1, createOrUpdateAdDto.price(), createOrUpdateAdDto.title());
+        AdDto addedAdDto = adService.addAd(createOrUpdateAdDto, image);
         return ResponseEntity.ok(addedAdDto);
     }
 
@@ -61,9 +67,7 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<ExtendedAdDto> getAuthById(@PathVariable("id") Integer id) {
-        ExtendedAdDto extendedAdDto = new ExtendedAdDto(id, "authorFirstName",
-                "authorLastName", "description", "email", "imagePath",
-                "phone", 100, "title");
+        ExtendedAdDto extendedAdDto = adService.getAdById(id);
         return ResponseEntity.ok(extendedAdDto);
     }
 
