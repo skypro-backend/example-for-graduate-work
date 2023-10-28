@@ -63,7 +63,8 @@ public class UserController {
     @Operation(summary = "Обновление аватара авторизованного пользователя")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<String> updateUserImage(@RequestParam("image") MultipartFile image) {
-        return ResponseEntity.ok(userService.UpdateUserImage(image));
+    public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile image) {
+        userService.UpdateUserImage(image);
+        return ResponseEntity.noContent().build();
     }
 }
