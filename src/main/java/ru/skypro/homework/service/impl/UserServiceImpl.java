@@ -2,6 +2,8 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,14 +24,17 @@ import ru.skypro.homework.service.UserService;
 import javax.persistence.EntityNotFoundException;
 import java.util.Objects;
 
-//@Service
+@Service
 //@Transactional
-@RequiredArgsConstructor
+
 public class UserServiceImpl implements UserService {
-    private final UserDetailsManager userDetailsManager;
-    private final AdsUserDetails adsUserDetails;
-    private final PasswordEncoder encoder;
-    private final UserRepo userRepo;
+//    @Autowired
+//    private  UserDetailsManager userDetailsManager;
+
+    @Autowired
+    private  PasswordEncoder encoder;
+    @Autowired
+    private  UserRepo userRepo;
 
 
     /**
@@ -65,8 +70,9 @@ public class UserServiceImpl implements UserService {
      * Чтение информации о пользователе
      */
     @Override
-    public UserDTO getUser() {
-        find();
+    public UserDTO getUser(Authentication authentication) {
+      AdsUserDetails  adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
+
         return UserMapper.mapToUserDTO(
                 Objects.requireNonNull(userRepo
                         .findByUserName(adsUserDetails.getUser()
@@ -78,9 +84,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void updatePassword(NewPassword newPassword) {
+
         var password1 = newPassword.getCurrentPassword();
         var newPassword1 = encoder.encode(newPassword.getNewPassword());
-        userDetailsManager.changePassword(password1, newPassword1);
+//        userDetailsManager.changePassword(password1, newPassword1);
     }
 
     /**

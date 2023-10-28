@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-@Transactional
+//@Transactional
 @RequiredArgsConstructor
 public class CommentsServiceImpl implements CommentsService {
 
@@ -84,13 +84,10 @@ public class CommentsServiceImpl implements CommentsService {
      */
     @Override
     public void deleteComment(int id, int commentsId) {
-        Optional<AdModel> ad = adRepo.findById(id);
-        if (ad.isPresent()) {
-            getComments(commentsId);
-            commentRepo.deleteById(commentsId);
-        } else {
-            throw new CommentNotFoundException();
-        }
+        Optional<AdModel> adModel = adRepo.findById(id);
+        commentRepo.deleteById(commentsId);
+
+
     }
 
     /**

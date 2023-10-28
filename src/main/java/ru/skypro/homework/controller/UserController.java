@@ -10,6 +10,7 @@ import ru.skypro.homework.model.AdsUserDetails;
 import ru.skypro.homework.projections.NewPassword;
 import ru.skypro.homework.projections.UpdateUser;
 import ru.skypro.homework.repository.UserRepo;
+import ru.skypro.homework.service.impl.UserServiceImpl;
 
 import java.util.Objects;
 
@@ -18,20 +19,14 @@ import java.util.Objects;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-
+    private final UserServiceImpl userService;
     private final UserRepo userRepo; // так... потестить
 
     // Получение пользователя
     @GetMapping("/me")
     public UserDTO getUser(Authentication authentication) {
-        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
-
 //        return ResponseEntity.ok(new UserDTO(0, "fe@mail.ru", "nameForTest", "LastnameForTest", "+79999999999", Role.USER.name(), null));
-        return UserMapper.mapToUserDTO( //тоже потестить
-                Objects.requireNonNull(userRepo
-                        .findByUserName(adsUserDetails.getUser()
-                                .getUserName()).orElse(null))
-        );
+        return userService.getUser(authentication);
     }
 
     // Создание нового пользователя

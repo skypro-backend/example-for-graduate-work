@@ -75,12 +75,7 @@ public class AdServiceImpl implements AdService {
      */
     @Override
     public void removeAd(int id) {
-        Optional<AdModel> ad = adRepo.findById(id);
-        if (ad.isPresent()) {
-            adRepo.deleteById(id);
-        } else {
-            throw new AdNotFoundException();
-        }
+        adRepo.deleteById(id);
     }
 
     /**

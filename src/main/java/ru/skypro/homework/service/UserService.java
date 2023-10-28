@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.model.UserModel;
@@ -12,7 +13,7 @@ public interface UserService {
 
     void createUser(Register register);
 
-    UserDTO getUser();
+    UserDTO getUser(Authentication authentication);
 
     void updatePassword(NewPassword newPassword);
 
