@@ -6,7 +6,8 @@ import ru.skypro.homework.dto.Role;
 import javax.persistence.*;
 
 @Data
-@Entity(name = "users")
+@Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +18,6 @@ public class User {
     private String lastName;
     private String phone;
     private String image;
-    private Boolean enabled;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
