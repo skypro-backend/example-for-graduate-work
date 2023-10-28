@@ -11,8 +11,10 @@ import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exception.AdNotFoundException;
+import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.exception.ImageNotFoundException;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 
 import java.time.LocalDateTime;
@@ -24,6 +26,8 @@ public abstract class CommentMapper {
     private UserRepository userRepository;
     @Autowired
     private AdRepository adRepository;
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Mapping(target = "author", expression = "java(getUserFromAuthentication(authentication).getId())")
     @Mapping(target = "authorImage", expression = "java(getImagePathFromUser(getUserFromAuthentication(authentication)))")
@@ -32,15 +36,25 @@ public abstract class CommentMapper {
     @Mapping(target = "pk", expression = "java(comment.getId())")
     public abstract CommentDto entityToCommentDto(Comment comment, Authentication authentication);
 
-    //todo вот тут при обновлении дата создания будет также меняться, можно ли оставить так?
     @Mapping(target = "createdAt", expression = "java(getNowLocalDateTime())")
     @Mapping(target = "user", expression = "java(getUserFromAuthentication(authentication))")
     @Mapping(target = "ad", expression = "java(getAdByAdId(adId))")
-    public abstract Comment createOrUpdateCommentDtoToEntity(Integer adId, CreateOrUpdateCommentDto createOrUpdateCommentDto, Authentication authentication);
+    public abstract Comment createCommentDtoToEntity(Integer adId, CreateOrUpdateCommentDto createOrUpdateCommentDto, Authentication authentication);
 
+    @Mapping(target = "id", source = "commentId")
+    @Mapping(target = "createdAt", expression = "java(findCommentLocalDateTime(commentId))")
+    @Mapping(target = "user", expression = "java(getUserFromAuthentication(authentication))")
+    @Mapping(target = "ad", expression = "java(getAdByAdId(adId))")
+    public abstract Comment updateCommentDtoToEntity(Integer adId, Integer commentId, CreateOrUpdateCommentDto createOrUpdateCommentDto, Authentication authentication);
 
     protected Long getLongFromLocalDateTime(LocalDateTime localDateTime) {
         return localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
+    }
+
+    protected LocalDateTime findCommentLocalDateTime(Integer commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException(commentId))
+                .getCreatedAt();
     }
 
     protected LocalDateTime getNowLocalDateTime() {

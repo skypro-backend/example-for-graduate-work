@@ -21,7 +21,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto addCommentToAd(Integer adId, CreateOrUpdateCommentDto createOrUpdateCommentDto, Authentication authentication) {
-        Comment comment = commentMapper.createOrUpdateCommentDtoToEntity(adId, createOrUpdateCommentDto, authentication);
+        Comment comment = commentMapper.createCommentDtoToEntity(adId, createOrUpdateCommentDto, authentication);
+        commentRepository.save(comment);
+        return commentMapper.entityToCommentDto(comment, authentication);
+    }
+
+    @Override
+    public CommentDto updateCommentToAd(Integer adId, Integer commentId, CreateOrUpdateCommentDto createOrUpdateCommentDto, Authentication authentication) {
+        Comment comment = commentMapper.updateCommentDtoToEntity(adId, commentId, createOrUpdateCommentDto, authentication);
         commentRepository.save(comment);
         return commentMapper.entityToCommentDto(comment, authentication);
     }
