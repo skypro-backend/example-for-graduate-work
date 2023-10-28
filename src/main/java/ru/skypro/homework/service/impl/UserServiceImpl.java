@@ -16,7 +16,6 @@ import ru.skypro.homework.service.util.Util;
 
 import java.util.Objects;
 
-import static ru.skypro.homework.service.util.Util.addUserFromRepo;
 
 @Service
 //@Transactional
@@ -30,6 +29,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private Util util;
+
     /**
      * Чтение информации о пользователе
      */
@@ -41,6 +43,8 @@ public class UserServiceImpl implements UserService {
                 Objects.requireNonNull(userRepo
                         .findByUserName(adsUserDetails.getUser()
                                 .getUserName()).orElse(null)));
+//        UserModel user = Util.addUserFromRepo(adsUserDetails.getUsername().)
+
     }
 
     /**
@@ -69,9 +73,7 @@ public class UserServiceImpl implements UserService {
 //
 //        UserModel userModel = UserMapper.mapToUserModel(userDTO);
 //        userRepo.save(userModel);
-
-        UserModel user = addUserFromRepo(authentication);
-
+        UserModel user = util.addUserFromRepo(authentication);
         user.setFirstName(updateUser.getFirstName());
         user.setLastName(updateUser.getLastName());
         user.setPhone(updateUser.getPhone());

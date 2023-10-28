@@ -36,7 +36,6 @@ public class AdController {
                                        Authentication authentication) {
         AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
         return ResponseEntity.ok(adService.addAd(createOrUpdateAdDTO, imagePath, adsUserDetails.getUser().getUserName()));
-//        return adService.addAd(createOrUpdateAdDTO, imagePath, adsUserDetails.getUser().getUserName());
     }
 
 
