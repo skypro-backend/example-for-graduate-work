@@ -32,4 +32,10 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(comment);
         return commentMapper.entityToCommentDto(comment, authentication);
     }
-}
+    @Override
+    public void removeComment(Integer adId, Integer commentId, Authentication authentication) {
+        Comment comment = commentMapper.deleteCommentDtoToEntity(adId, commentId, authentication);
+        commentRepository.delete(comment);
+        }
+    }
+
