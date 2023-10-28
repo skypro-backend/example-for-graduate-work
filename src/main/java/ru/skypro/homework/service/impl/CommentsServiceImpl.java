@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static ru.skypro.homework.mapper.CommentMapper.toCommentDTO;
+
 
 @Service
 @Transactional
@@ -76,7 +78,7 @@ public class CommentsServiceImpl implements CommentsService {
         commentModel.setAdModel(adRepo.findById(id)
                 .orElseThrow(AdNotFoundException::new));
         commentRepo.save(commentModel);
-        return CommentMapper.toCommentDTO(commentModel);
+        return toCommentDTO(commentModel);
     }
 
     /**

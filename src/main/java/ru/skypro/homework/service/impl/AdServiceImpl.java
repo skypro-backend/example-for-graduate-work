@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
@@ -15,8 +16,9 @@ import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.AdService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static ru.skypro.homework.mapper.AdMapper.toAdDto;
 
 @Service
 public class AdServiceImpl implements AdService {
@@ -50,7 +52,7 @@ public class AdServiceImpl implements AdService {
         adModel.setUserModel(userRepo.findByUserName(user)
                 .orElseThrow(() -> new UsernameNotFoundException("Not found")));
         adRepo.save(adModel);
-        return AdMapper.toAdDto(adModel);
+        return toAdDto(adModel);
     }
 
     /**
@@ -59,28 +61,33 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public ExtendedAd getAds(int id) {
-// позже удалить  System.out.println(userRepo.getExtendedAd(id).orElseThrow(AdNotFoundException::new));
         return userRepo.getExtendedAd(id).orElseThrow(AdNotFoundException::new);
     }
 
     /**
      * внесение изменений в объявление
      */
-    public Ads updateAd(int id, CreateOrUpdateAd createOrUpdateAdDTO) {
-        return null;
+    @Transactional
+    @Override
+    public AdDTO updateAd(int id, CreateOrUpdateAd createOrUpdateAdDTO) {
+        AdModel adModel = adRepo.findById(id).orElseThrow(AdNotFoundException::new);
+        adModel.setTitle(createOrUpdateAdDTO.getTitle());
+        adModel.setPrice(createOrUpdateAdDTO.getPrice());
+        adModel.setDescription(createOrUpdateAdDTO.getDescription());
+        adRepo.saveAndFlush(adModel);
+        return toAdDto(adModel);
     }
 
     /**
      * удаление объявления
      */
+    @Transactional
     @Override
     public void removeAd(int id) {
-        Optional<AdModel> ad = adRepo.findById(id);
-        if (ad.isPresent()) {
-            adRepo.deleteById(id);
-        } else {
+        if (adRepo.findById(id).isEmpty()) {
             throw new AdNotFoundException();
         }
+        adRepo.deleteById(id);
     }
 
     /**
