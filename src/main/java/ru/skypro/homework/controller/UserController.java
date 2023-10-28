@@ -37,7 +37,6 @@ public class UserController {
         return userService.updateInformationAboutUser(updateUser, authentication.getName());
     }
 
-
     @PatchMapping(value ="/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void updateImage(@RequestParam("image") MultipartFile image, Authentication authentication) throws IOException {
         userService.UpdateImage(image, authentication.getName());

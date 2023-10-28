@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.comment.CommentDTO;
+import ru.skypro.homework.dto.comment.Comments;
 import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentService;
 
@@ -24,29 +26,36 @@ public class CommentController {
 
     //Получение комментариев объявления
     @GetMapping("/{id}/comments")
-    public List<CommentDTO> getComments(@PathVariable("id") Integer adId) {
+    public Comments getComments(@PathVariable("id") Integer adId) {
         logger.info("get all comments");
         return commentService.getComments(adId);
     }
 
     //Добавление комментария к объявлению
     @PostMapping("/{id}/comments")
-    public void addComment(@PathVariable("id") Integer adId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+    public void addComment(@PathVariable("id") Integer adId,
+                           @RequestBody CreateOrUpdateComment createOrUpdateComment,
+                           Authentication authentication) {
         logger.info("add new comment");
-        commentService.addComment(adId, createOrUpdateComment);
+        commentService.addComment(adId, createOrUpdateComment, authentication);
     }
 
     //Удаление комментария
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public void deleteComment(@PathVariable("adId") Integer adId, @PathVariable("commentId") Integer commentId) {
+    public void deleteComment(@PathVariable("adId") Integer adId,
+                              @PathVariable("commentId") Integer commentId,
+                              Authentication authentication) {
         logger.info("delete comment");
-        commentService.deleteComment(adId,commentId);
+        commentService.deleteComment(adId,commentId, authentication);
     }
 
     //Обновление комментария
     @PutMapping("/{adId}/comments/{commentId}")
-    public void updateComment(@PathVariable("adId") Integer adId, @PathVariable("commentId") Integer commentId) {
+    public void updateComment(@PathVariable("adId") Integer adId,
+                              @PathVariable("commentId") Integer commentId,
+                              @RequestBody CreateOrUpdateComment createOrUpdateComment,
+                              Authentication authentication) {
         logger.info("update comment");
-        commentService.updateComment(adId,commentId);
+        commentService.updateComment(adId,commentId, createOrUpdateComment,authentication);
     }
 }
