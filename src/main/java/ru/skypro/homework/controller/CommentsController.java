@@ -70,10 +70,9 @@ public class CommentsController {
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<CommentDto> updateCommentToAd(@PathVariable("adId") Integer adId,
                                                         @PathVariable("commentId") Integer commentId,
-                                                        @RequestBody @Valid CreateOrUpdateCommentDto createOrUpdateCommentDto) {
-        CommentDto updatedCommentDto = new CommentDto(1, "imagePath",
-                "authorFirstName", (long) 100500, 1, createOrUpdateCommentDto.text());
-        return ResponseEntity.ok(updatedCommentDto);
+                                                        @RequestBody @Valid CreateOrUpdateCommentDto createOrUpdateCommentDto,
+                                                        Authentication authentication) {
+        return ResponseEntity.ok(commentService.updateCommentToAd(adId, commentId, createOrUpdateCommentDto, authentication));
     }
 
 

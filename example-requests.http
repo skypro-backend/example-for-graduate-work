@@ -88,3 +88,11 @@ Authorization: Basic Hi@hi.ru 12345678
 {
   "text":"кря-кря-кря"
 }
+###
+PATCH http://localhost:8080/ads/8/comments/2
+Content-Type: application/json
+Authorization: Basic Hi@hi.ru 12345678
+
+{
+  "text":"Кукушка не крякает"
+}
