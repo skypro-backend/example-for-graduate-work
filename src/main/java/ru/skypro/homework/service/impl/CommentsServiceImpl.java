@@ -38,7 +38,6 @@ public class CommentsServiceImpl implements CommentsService {
     private final AdRepo adRepo;
     private final UserRepo userRepo;
 
-
     /**
      * Поиск комментария
      */
