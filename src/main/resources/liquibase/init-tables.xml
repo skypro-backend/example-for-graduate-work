@@ -91,14 +91,65 @@
             <column name="id" type="integer" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="images_pk"/>
             </column>
-            <column name="file_name" type="varchar">
-            </column>
-            <column name="media_type" type="varchar">
-            </column>
             <column name="image" type="bytea">
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+
+    <changeSet  author="katiavasileva"  id="28102023_fk_users_images">
+        <addForeignKeyConstraint  baseColumnNames="image_id"
+                                  baseTableName="users"
+                                  baseTableSchemaName="public"
+                                  constraintName="fk_users_images"
+                                  referencedColumnNames="id"
+                                  referencedTableName="images"
+                                  referencedTableSchemaName="public"
+                                  validate="true"/>
+    </changeSet>
+
+    <changeSet  author="katiavasileva"  id="28102023_fk_ads_users">
+        <addForeignKeyConstraint  baseColumnNames="user_id"
+                                  baseTableName="ads"
+                                  baseTableSchemaName="public"
+                                  constraintName="fk_ads_users"
+                                  referencedColumnNames="id"
+                                  referencedTableName="users"
+                                  referencedTableSchemaName="public"
+                                  validate="true"/>
+    </changeSet>
+
+    <changeSet  author="katiavasileva"  id="28102023_fk_ads_images">
+        <addForeignKeyConstraint  baseColumnNames="image_id"
+                                  baseTableName="ads"
+                                  baseTableSchemaName="public"
+                                  constraintName="fk_ads_images"
+                                  referencedColumnNames="id"
+                                  referencedTableName="images"
+                                  referencedTableSchemaName="public"
+                                  validate="true"/>
+    </changeSet>
+
+    <changeSet  author="katiavasileva"  id="28102023_fk_comments_users">
+        <addForeignKeyConstraint  baseColumnNames="user_id"
+                                  baseTableName="comments"
+                                  baseTableSchemaName="public"
+                                  constraintName="fk_comments_users"
+                                  referencedColumnNames="id"
+                                  referencedTableName="users"
+                                  referencedTableSchemaName="public"
+                                  validate="true"/>
+    </changeSet>
+
+    <changeSet  author="katiavasileva"  id="28102023_fk_comments_ads">
+        <addForeignKeyConstraint  baseColumnNames="ad_id"
+                                  baseTableName="comments"
+                                  baseTableSchemaName="public"
+                                  constraintName="fk_comments_ads"
+                                  referencedColumnNames="id"
+                                  referencedTableName="ads"
+                                  referencedTableSchemaName="public"
+                                  validate="true"/>
     </changeSet>
 
 </databaseChangeLog>
