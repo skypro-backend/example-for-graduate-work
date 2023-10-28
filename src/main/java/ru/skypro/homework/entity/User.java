@@ -4,14 +4,15 @@ import lombok.*;
 import org.hibernate.Hibernate;
 import ru.skypro.homework.dto.Role;
 import jakarta.persistence.*;
+
 import java.util.Objects;
 
-@NoArgsConstructor
 @Entity
-@Getter
-@Setter
-@ToString
+@Data
 @RequiredArgsConstructor
+@NoArgsConstructor
+@ToString
+
 public class User {
 
     @Id
