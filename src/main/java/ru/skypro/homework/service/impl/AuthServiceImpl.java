@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean register(Register register) {
         UserEntity userEntity = userMapper.registerToUserEntity(register);
-        MyDatabaseUserDetails myDatabaseUserDetails = new MyDatabaseUserDetails(userMapper.userEntityToMyUser(userEntity));
+        MyDatabaseUserDetails myDatabaseUserDetails = new MyDatabaseUserDetails(userEntity);
         if (! userService.userExists(register.getUsername())) {
             userService.createUser(myDatabaseUserDetails);
             return true;
