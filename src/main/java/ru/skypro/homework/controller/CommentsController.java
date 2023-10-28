@@ -13,10 +13,10 @@ import javax.validation.Valid;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
-public class СommentsController {
+public class CommentsController {
     private final CommentsService commentsService;
 
-    public СommentsController(CommentsService commentsService) {
+    public CommentsController(CommentsService commentsService) {
         this.commentsService = commentsService;
     }
 
