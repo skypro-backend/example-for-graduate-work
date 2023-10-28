@@ -10,7 +10,7 @@ public interface CommentsService {
     Comments getAllComments(int adId);
     CommentDTO addComment(int id, CreateOrUpdateComment createOrUpdateComment, Authentication authentication);
     void deleteComment(int id, int commentsId);
-    CreateOrUpdateComment updateComment(int id, int commentsId, CreateOrUpdateComment createOrUpdateComment);
+    CommentDTO updateComment(int id, int commentsId, CreateOrUpdateComment createOrUpdateComment);
 
 
 }

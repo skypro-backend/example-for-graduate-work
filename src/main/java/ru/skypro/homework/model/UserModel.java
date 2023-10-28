@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

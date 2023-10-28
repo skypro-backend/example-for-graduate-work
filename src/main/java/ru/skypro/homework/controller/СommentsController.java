@@ -32,12 +32,12 @@ public class СommentsController {
 
     @DeleteMapping("/{adId}/comments/{commentId}")
     public void deleteComment(@PathVariable int adId, @PathVariable int commentId) {
-        System.out.println("Удаление комментария ");
-
+//        System.out.println("Удаление комментария ");
+commentsService.deleteComment(adId,commentId);
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
-    public CreateOrUpdateComment updateComment(@PathVariable int adId, @PathVariable int commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+    public CommentDTO updateComment(@PathVariable int adId, @PathVariable int commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         System.out.println("Обновление комментария");
         return commentsService.updateComment(adId, commentId, createOrUpdateComment);
     }
