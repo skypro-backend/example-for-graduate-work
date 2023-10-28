@@ -32,7 +32,6 @@ import static ru.skypro.homework.mapper.CommentMapper.toCommentDTO;
 @RequiredArgsConstructor
 public class CommentsServiceImpl implements CommentsService {
 
-
     private final CommentRepo commentRepo;
     private final AdServiceImpl adService;
     private final AdRepo adRepo;
