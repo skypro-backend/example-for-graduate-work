@@ -10,8 +10,13 @@ spring:
     password: ${DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
   liquibase:
     change-log: "db.changelog/db.changelog.yml"
 
 upload:
-  dir: "src/main/resources/images"
+  dir: "/images/"

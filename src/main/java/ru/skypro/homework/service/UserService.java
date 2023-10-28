@@ -5,11 +5,12 @@ import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
 
 public interface UserService {
+
     void setPassword(String currentPassword, String newPassword);
 
     UserDto getAuthorizedUser();
 
     UpdateUserDto updateUser(UpdateUserDto updateUser);
 
-    String UpdateUserImage(MultipartFile file);
+    void UpdateUserImage(MultipartFile file);
 }
