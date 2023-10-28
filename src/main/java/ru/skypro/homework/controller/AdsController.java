@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +18,6 @@ import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -36,8 +36,8 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not Found")
-    public ResponseEntity<Void> removeAd(@PathVariable("id") Integer id) {
-        adService.removeAd(id);
+    public ResponseEntity<Void> removeAd(@PathVariable("id") Integer id, Authentication authentication) {
+        adService.removeAd(id, authentication);
         return ResponseEntity.noContent().build();
     }
 
@@ -46,7 +46,7 @@ public class AdsController {
             description = "Получение количества и списка всех объявлений")
     @ApiResponse(responseCode = "200", description = "OK")
     public ResponseEntity<AdsDto> getAllAds() {
-        AdsDto allAdsDtoList = new AdsDto(0, new ArrayList<>());
+        AdsDto allAdsDtoList = adService.getAllAds();
         return ResponseEntity.ok(allAdsDtoList);
     }
 
@@ -55,7 +55,7 @@ public class AdsController {
             description = "Добавление изображения и всех полей объявления")
     @ApiResponse(responseCode = "201", description = "Created")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<AdDto> addAd(@RequestPart("properties")@Valid CreateOrUpdateAdDto createOrUpdateAdDto,
+    public ResponseEntity<AdDto> addAd(@RequestPart("properties") @Valid CreateOrUpdateAdDto createOrUpdateAdDto,
                                        @RequestPart MultipartFile image) throws IOException {
         AdDto addedAdDto = adService.addAd(createOrUpdateAdDto, image);
         return ResponseEntity.ok(addedAdDto);
@@ -91,7 +91,7 @@ public class AdsController {
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     public ResponseEntity<AdsDto> getAuthorizedUserAds() {
-        AdsDto userAdsDtoList = new AdsDto(0, new ArrayList<>());
+        AdsDto userAdsDtoList = adService.getAuthorizedUserAds();
         return ResponseEntity.ok(userAdsDtoList);
     }
 
@@ -104,6 +104,7 @@ public class AdsController {
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<String> updateAdImage(@PathVariable("id") Integer id,
                                                 @RequestParam MultipartFile image) throws IOException {
+        adService.UpdateAdImage(id, image);
         return ResponseEntity.ok("Image updated successfully");
     }
 
