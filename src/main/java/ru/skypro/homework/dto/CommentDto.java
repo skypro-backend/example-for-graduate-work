@@ -1,9 +1,6 @@
 package ru.skypro.homework.dto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 public record CommentDto(
 
@@ -12,7 +9,7 @@ public record CommentDto(
             //ссылка на аватар автора комментария
             String authorImage,
             @NotBlank(message = "Имя автора не может быть пустым")
-            @Size(min = 2, max = 50, message = "Имя автора комментария должно быть от 2 до 20 символов")
+            @Size(min = 2, max = 20, message = "Имя автора комментария должно быть от 2 до 20 символов")
             String authorFirstName,
             @PastOrPresent(message = "Поле createdAt должно содержать прошедшую или текущую дату и время создания " +
                     "комментария в миллисекундах с 00:00:00 01.01.1970")
@@ -20,7 +17,7 @@ public record CommentDto(
              //id комментария
             Integer pk,
             @NotBlank(message = "Текст комментария не может быть пустым")
-            @Size(min = 2, max = 500, message = "Текст комментария должно быть от 8 до 64 символов")
+            @Size(min = 2, max = 64, message = "Текст комментария должно быть от 8 до 64 символов")
             String text
     ) {
     }
