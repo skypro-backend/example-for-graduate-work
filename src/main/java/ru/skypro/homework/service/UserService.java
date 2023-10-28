@@ -18,7 +18,7 @@ public interface UserService {
 //    добавлен метод для вывода изображениея пользователя
 //    byte [] getImage(String username) throws IOException;
 
-    ResponseEntity<Resource> getImage(String username) throws IOException;
+    ResponseEntity<byte []> getImage(String username) throws IOException;
 
 
 }

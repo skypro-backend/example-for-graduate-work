@@ -50,7 +50,7 @@ public class UserController {
 //    }
 
     @GetMapping(value ="/me/image")
-    public ResponseEntity<Resource> getImage(Authentication authentication) throws IOException {
+    public ResponseEntity<byte []> getImage(Authentication authentication) throws IOException {
         return userService.getImage(authentication.getName());
     }
 

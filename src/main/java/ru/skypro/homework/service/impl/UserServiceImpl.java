@@ -98,8 +98,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<Resource> getImage(String username) throws IOException {
-//    public byte [] getImage(String username) throws IOException {
+    public ResponseEntity<byte []> getImage(String username) throws IOException {
         Users users = usersRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
         File file  = new File(users.getImage());
         String fileName = file.getName();
@@ -108,12 +107,12 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE)
-                    .body(new ByteArrayResource(Files.readAllBytes(Paths.get(users.getImage()))));
+                    .body(Files.readAllBytes(Paths.get(users.getImage())));
         } else {
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE)
-                    .body(new ByteArrayResource(Files.readAllBytes(Paths.get(users.getImage()))));
+                    .body(Files.readAllBytes(Paths.get(users.getImage())));
         }
 
 //        return Files.readAllBytes(Paths.get(users.getImage()));
