@@ -9,7 +9,6 @@ import ru.skypro.homework.repository.UserRepo;
 
 @Component
 public class Util {
-
     @Autowired
     private UserRepo userRepo;
 
