@@ -17,6 +17,7 @@ import ru.skypro.homework.repository.AdRepo;
 import ru.skypro.homework.repository.CommentRepo;
 import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.CommentsService;
+import ru.skypro.homework.service.until.Until;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -24,11 +25,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.skypro.homework.mapper.CommentMapper.toCommentDTO;
-
 
 @Service
-@Transactional
+//@Transactional
 @RequiredArgsConstructor
 public class CommentsServiceImpl implements CommentsService {
 
@@ -58,15 +57,10 @@ public class CommentsServiceImpl implements CommentsService {
      */
     @Override
     public CommentDTO addComment(int id, CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
+        UserModel user = Until.addUserFromRepo(authentication);
 
-//        Comments comments = getComments(id);
-//        if (comments != null) {
-//            return CommentMapper.toCommentsAdd(createOrUpdateComment);
-//        } else {
-//            throw new CommentNotFoundExeption();
-//        }
-        UserModel user = userRepo.findByUserName(authentication.getName())
-                .orElseThrow(UserNotFoundException::new);
+//        UserModel user = userRepo.findByUserName(authentication.getName())
+//                .orElseThrow(UserNotFoundException::new);
         CommentModel commentModel = new CommentModel();
         commentModel.setCreateAt(LocalDateTime.parse(LocalDateTime.now()
                 .format(DateTimeFormatter.ISO_DATE_TIME)));
@@ -75,7 +69,7 @@ public class CommentsServiceImpl implements CommentsService {
         commentModel.setAdModel(adRepo.findById(id)
                 .orElseThrow(AdNotFoundException::new));
         commentRepo.save(commentModel);
-        return toCommentDTO(commentModel);
+        return CommentMapper.toCommentDTO(commentModel);
     }
 
     /**
@@ -83,10 +77,13 @@ public class CommentsServiceImpl implements CommentsService {
      */
     @Override
     public void deleteComment(int id, int commentsId) {
+
         if (commentRepo.findById(commentsId).isEmpty()) {
             throw new CommentNotFoundException();
         }
             commentRepo.deleteById(commentsId);
+
+
     }
 
     /**

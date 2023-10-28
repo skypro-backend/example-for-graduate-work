@@ -12,8 +12,8 @@ import ru.skypro.homework.projections.NewPassword;
 import ru.skypro.homework.projections.UpdateUser;
 import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.impl.UserServiceImpl;
-
 import javax.validation.Valid;
+
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
