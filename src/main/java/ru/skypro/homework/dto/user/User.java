@@ -32,7 +32,7 @@ public class User {
     public static User toUser(Users users) {
         User user = new User();
         user.setId(users.getId());
-        user.setEmail(users.getEmail());
+        user.setEmail(users.getUsername());
         user.setPhone(users.getPhone());
         user.setFirstName(users.getFirstName());
         user.setLastName(users.getLastName());
@@ -43,7 +43,7 @@ public class User {
 
     public Users fromUser() {
         Users users = new Users();
-        users.setEmail(this.getEmail());
+        users.setUsername(this.getEmail());
         users.setId(this.getId());
         users.setFirstName(this.getFirstName());
         users.setLastName(this.getLastName());

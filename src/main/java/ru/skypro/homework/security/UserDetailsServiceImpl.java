@@ -31,19 +31,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return !userNotExists.equals(users);
     }
 
-//    public void createUser(UserDetails user) {
-//        AdsUserDetails userDetails = (AdsUserDetails) user;
-//        Users users = userDetails.toAdsUserDetails();
-//        usersRepository.save(users);
-//    }
-
     public void createUser(Register register, String password) {
         Users users = new Users();
         users.setPassword(password);
         users.setPhone(register.getPhone());
         users.setUsername(register.getUsername());
         users.setFirstName(register.getFirstName());
-        users.setEmail(register.getUsername());
         users.setLastName(register.getLastName());
         users.setRole(register.getRole());
         usersRepository.save(users);

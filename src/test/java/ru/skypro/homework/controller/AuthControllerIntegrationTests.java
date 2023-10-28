@@ -65,7 +65,6 @@ public class AuthControllerIntegrationTests {
     private void addToDb() {
         usersRepository.deleteAll();
         Users user = new Users(1,
-                "user@gmail.com",
                 "path-for-image",
                 "user@gmail.com",
                 "$2a$10$mShIMZIKnJ.EVqUycC2OE.qunAUqKJPFZq6ADSuJ.IYmVWBmXqWMi",
