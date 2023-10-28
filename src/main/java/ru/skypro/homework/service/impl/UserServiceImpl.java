@@ -2,15 +2,8 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.AdsUserDetails;
@@ -19,11 +12,7 @@ import ru.skypro.homework.projections.NewPassword;
 import ru.skypro.homework.projections.UpdateUser;
 import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.UserService;
-
 import ru.skypro.homework.service.util.Util;
-
-import ru.skypro.homework.service.until.Until;
-
 
 import java.util.Objects;
 
@@ -35,7 +24,6 @@ public class UserServiceImpl implements UserService {
 //    @Autowired
 //    private  UserDetailsManager userDetailsManager;
 
-
     @Autowired
     private PasswordEncoder encoder;
     @Autowired
@@ -43,7 +31,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private Util util;
-
 
     /**
      * Чтение информации о пользователе
@@ -87,8 +74,6 @@ public class UserServiceImpl implements UserService {
 //        UserModel userModel = UserMapper.mapToUserModel(userDTO);
 //        userRepo.save(userModel);
         UserModel user = util.addUserFromRepo(authentication);
-
-        
         user.setFirstName(updateUser.getFirstName());
         user.setLastName(updateUser.getLastName());
         user.setPhone(updateUser.getPhone());

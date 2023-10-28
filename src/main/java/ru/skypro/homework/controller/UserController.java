@@ -1,6 +1,5 @@
 package ru.skypro.homework.controller;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import ru.skypro.homework.projections.UpdateUser;
 import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.impl.UserServiceImpl;
 import javax.validation.Valid;
-
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
