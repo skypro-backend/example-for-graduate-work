@@ -13,4 +13,6 @@ public interface CommentService {
                                  Integer commentId,
                                  CreateOrUpdateCommentDto createOrUpdateCommentDto,
                                  Authentication authentication);
+
+    void removeComment(Integer adId, Integer commentId, Authentication authentication);
 }

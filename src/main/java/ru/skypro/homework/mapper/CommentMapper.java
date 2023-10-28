@@ -47,6 +47,12 @@ public abstract class CommentMapper {
     @Mapping(target = "ad", expression = "java(getAdByAdId(adId))")
     public abstract Comment updateCommentDtoToEntity(Integer adId, Integer commentId, CreateOrUpdateCommentDto createOrUpdateCommentDto, Authentication authentication);
 
+    @Mapping(target = "id", source = "commentId")
+    @Mapping(target = "user", expression = "java(getUserFromAuthentication(authentication))")
+    @Mapping(target = "ad", expression = "java(getAdByAdId(adId))")
+    public abstract Comment deleteCommentDtoToEntity(Integer adId, Integer commentId,  Authentication authentication);
+
+
     protected Long getLongFromLocalDateTime(LocalDateTime localDateTime) {
         return localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
     }
