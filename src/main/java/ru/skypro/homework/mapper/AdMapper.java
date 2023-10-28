@@ -17,10 +17,6 @@ import java.util.List;
  */
 @Mapper (componentModel = "spring")
 public interface AdMapper {
-      @Mapping(target = "id", ignore = true)
-      @Mapping(target = "author", source = "author")
-      @Mapping(target = "image", ignore = true)
-      Ad toAd(Ad adDto); // конвертация DTO в сущность
 
       @Mapping(target = "image", source = "image", qualifiedByName = "imageToPathString")
       @Mapping(target = "pk", source = "id")
@@ -31,12 +27,13 @@ public interface AdMapper {
       default String imageToPathString(Image image) {
             return "/ads/image/" + image.getId();
       }
+
       List <AdDto> toAdsDto(List<Ad> ads);
 
       @Mapping(target = "id", ignore = true)
       @Mapping(target = "author", ignore = true)
       @Mapping(target = "image", ignore = true)
-      Ad toAd(CreateOrUpdateAdDto dto); // конвертация получить или обновить объявление от автора
+      Ad toAdCreate(CreateOrUpdateAdDto dto); // конвертация получить или обновить объявление от автора
 
       @Mapping(target = "pk", source = "id")
       @Mapping(target = "authorFirstName", source = "author.firstName")

@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table (name = "images")
+@Table (name = "image")
 public class Image {
       @Id
       @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -20,7 +20,6 @@ public class Image {
 
       @Lob
       @Type (type = "binary")
-      @Column(name = "data_image")
       private byte[] data; // тип данных изображения
 
       @Column(name = "file_size")

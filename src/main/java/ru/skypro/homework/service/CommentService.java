@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Сервис для работы с комментариями.
  */
+
 public interface CommentService {
 
       List <CommentDto> getAdComments (Integer id); // Получение комментариев объявления
@@ -17,7 +18,7 @@ public interface CommentService {
       // Добавление комментария к объявлению
       Comment addCommentToAd (Integer id , CreateOrUpdateCommentDto createOrUpdateCommentDto , Authentication authentication);
 
-      void deleteComment (Integer adId , Integer commentId); // Удаление комментария
+      void deleteComment (Integer adId , Integer commentId , Authentication authentication); // Удаление комментария
 
       // Обновление комментария
       Comment updateComment (Integer adId , Integer commentId , CreateOrUpdateCommentDto createOrUpdateCommentDto);

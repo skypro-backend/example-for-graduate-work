@@ -8,7 +8,6 @@ import ru.skypro.homework.dto.model_dto.UserDto;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
 
-
 /**
  * Маппинг сущности пользователя
  */
@@ -16,7 +15,7 @@ import ru.skypro.homework.model.User;
 public interface UserMapper {
 
       @Mapping(target = "password", ignore = true)
-      @Mapping(target = "image", source = "image", ignore = true)
+      @Mapping(target = "image", ignore = true)
       User toUser(UserDto userDto); // конвертация DTO в сущность
 
       @Mapping(target = "image", source = "image", qualifiedByName = "imageToPathString")
@@ -34,12 +33,14 @@ public interface UserMapper {
       @Mapping(target = "email", source = "username")
       @Mapping(target = "image", ignore = true)
       @Mapping(target = "role", defaultValue = "USER")
-      User toUser(Register register); // конвертация получение регистрции от пользователя
+      User toUserRegister(Register register); // конвертация получение регистрции от пользователя
 
       @Mapping(source = "email", target = "username")
       Register toRegister(User user);
 
       @Mapping (target = "id", ignore = true)
       User toUserUpdateUserDto(UpdateUserDto updateUserDto); // конвертация получение изменений пользователя
+
+      UpdateUserDto toUpdateUserDto(User user);
 
 }

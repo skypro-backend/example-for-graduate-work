@@ -8,7 +8,6 @@ import ru.skypro.homework.model.User;
 import java.util.List;
 
 public interface AdRepository extends JpaRepository <Ad, Integer>, JpaSpecificationExecutor <Ad> {
-      Ad findAllByAuthorId(Integer id);
       List <Ad> findByAuthor(User author);
-      List<Ad> findByTitleContainingIgnoreCase(String title);
+      List<Ad> findAllByAuthorId(long id);
 }
