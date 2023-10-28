@@ -10,9 +10,9 @@ import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.exception.AdNotFoundException;
-import ru.skypro.homework.exception.CommentNotFoundException;
-import ru.skypro.homework.exception.ImageNotFoundException;
+import ru.skypro.homework.exceptions.AdNotFoundException;
+import ru.skypro.homework.exceptions.CommentNotFoundException;
+import ru.skypro.homework.exceptions.ImageNotFoundException;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
@@ -36,7 +36,7 @@ public abstract class CommentMapper {
     @Mapping(target = "pk", expression = "java(comment.getId())")
     public abstract CommentDto entityToCommentDto(Comment comment, Authentication authentication);
 
-    @Mapping(target = "createdAt", expression = "java(getNowLocalDateTime())")
+    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", expression = "java(getUserFromAuthentication(authentication))")
     @Mapping(target = "ad", expression = "java(getAdByAdId(adId))")
     public abstract Comment createCommentDtoToEntity(Integer adId, CreateOrUpdateCommentDto createOrUpdateCommentDto, Authentication authentication);
@@ -63,9 +63,12 @@ public abstract class CommentMapper {
                 .getCreatedAt();
     }
 
+    /*
     protected LocalDateTime getNowLocalDateTime() {
         return LocalDateTime.now();
     }
+
+     */
 
     protected String getImagePathFromUser(User user) {
         if (user.getUserImage().getFilePath() == null) {
