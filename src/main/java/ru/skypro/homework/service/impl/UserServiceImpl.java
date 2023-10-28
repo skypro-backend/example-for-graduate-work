@@ -1,5 +1,9 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +26,14 @@ import java.util.Objects;
 
 @Service
 //@Transactional
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
+
+    private final UserDetailsManager userDetailsManager;
+    private final AdsUserDetails adsUserDetails;
+    private final PasswordEncoder encoder;
+    private final UserRepo userRepo;
+
 
 public class UserServiceImpl implements UserService {
 //    @Autowired
