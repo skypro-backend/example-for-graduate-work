@@ -12,6 +12,8 @@ import ru.skypro.homework.projections.NewPassword;
 import ru.skypro.homework.projections.UpdateUser;
 import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.impl.UserServiceImpl;
+import javax.validation.Valid;
+
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -30,12 +32,12 @@ public class UserController {
 
 
     @PostMapping("/set_password")
-    public void setPassword(@RequestBody NewPassword newPassword) {
+    public void setPassword(@RequestBody @Valid NewPassword newPassword) {
         userService.updatePassword(newPassword);
     }
 
     @PatchMapping("/me")
-    public UpdateUser updateUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
+    public UpdateUser updateUser(@RequestBody @Valid UpdateUser updateUser, Authentication authentication) {
         return userService.updateUser(updateUser, authentication);
     }
 

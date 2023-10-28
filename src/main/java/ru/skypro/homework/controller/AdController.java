@@ -33,7 +33,7 @@ public class AdController {
                        @RequestParam String imagePath,
                        Authentication authentication) {
         AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
-        return adService.addAd(createOrUpdateAdDTO, imagePath, adsUserDetails.getUser().getUserName());
+        return ResponseEntity.ok(adService.addAd(createOrUpdateAdDTO, imagePath, adsUserDetails.getUser().getUserName()));
     }
 
 
