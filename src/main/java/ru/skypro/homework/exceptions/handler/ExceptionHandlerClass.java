@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.exceptions.ImageNotFoundException;
 
 @ControllerAdvice
@@ -21,6 +22,9 @@ public class ExceptionHandlerClass {
         } else if (e instanceof ImageNotFoundException) {
             status = HttpStatus.NOT_FOUND;
             message = "Не найден Image по данному пути";
+        } else if (e instanceof AdNotFoundException) {
+            status = HttpStatus.NOT_FOUND;
+            message = "Объявление не найдено";
         }
 
         e.printStackTrace(System.err);
