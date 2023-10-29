@@ -1,7 +1,10 @@
 package ru.skypro.homework.exceptions;
 
 public class PermissionDeniedException extends RuntimeException {
-    public PermissionDeniedException(String message) {
-        super(message);
+
+    public static final String DEFAULT_MESSAGE = "You have no permission";
+
+    public PermissionDeniedException() {
+        super(DEFAULT_MESSAGE);
     }
 }
