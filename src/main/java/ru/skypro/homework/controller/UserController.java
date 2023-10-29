@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,13 +24,13 @@ public class UserController {
 
     // Получение пользователя
     @GetMapping("/me")
-    public UserDTO getUser() {
+    public UserDTO getUser() throws ChangeSetPersister.NotFoundException {
         return userService.getUser();
     }
 
 
     @PostMapping("/set_password")
-    public void setPassword(@RequestBody @Valid NewPassword newPassword) {
+    public void setPassword(@RequestBody @Valid NewPassword newPassword) throws ChangeSetPersister.NotFoundException {
         userService.updatePassword(newPassword);
     }
 

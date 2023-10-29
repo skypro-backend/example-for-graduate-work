@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UserDTO;
@@ -13,9 +14,9 @@ import java.util.Optional;
 public interface UserService {
 
     Optional<UserModel> findUser();
-    UserDTO getUser();
+    UserDTO getUser() throws ChangeSetPersister.NotFoundException;
 
-    void updatePassword(NewPassword newPassword);
+    void updatePassword(NewPassword newPassword) throws ChangeSetPersister.NotFoundException;
 
     UpdateUser updateUser(UpdateUser updateUser);
 
