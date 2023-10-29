@@ -88,8 +88,8 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-  "username": "user@gmail.com",
-  "password": "password"
+  "username": "slavamarchkov@yandex.ru",
+  "password": "slavamarchkov"
 }
 
 ### Register
@@ -97,11 +97,11 @@ POST http://localhost:8080/register
 Content-Type: application/json
 
 {
-  "username": "user@gmail.com",
-  "password": "password",
-  "firstName": " asdad",
-  "lastName": " asdad",
-  "phone": " asdad",
+  "username": "slavamarchkov@mail.ru",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
   "role": "USER"
 }
 

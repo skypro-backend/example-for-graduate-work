@@ -1,10 +1,9 @@
 package ru.skypro.homework.entity;
 
 import lombok.*;
-import org.hibernate.Hibernate;
 import ru.skypro.homework.dto.Role;
-import javax.persistence.*;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -21,6 +20,8 @@ public class User {
 
     @NonNull
     private String email;
+    @NonNull
+    private String password;
     @NonNull
     private String firstName;
     @NonNull
