@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  */
 @Data
 public class AdInfoDto {
-    private int pk;
+    private long pk;
     private String authorFirstName;
     private String authorLastName;
     private String description;
