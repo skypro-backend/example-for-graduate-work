@@ -30,4 +30,6 @@ public class ExceptionHandlerClass {
         e.printStackTrace(System.err);
         return ResponseEntity.status(status).body(message);
     }
+
+
 }

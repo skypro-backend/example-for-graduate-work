@@ -89,7 +89,7 @@ Authorization: Basic Hi@hi.ru 12345678
   "text":"Совершенно новый комментарий"
 }
 ###
-PATCH http://localhost:8080/ads/8/comments/15
+PATCH http://localhost:8080/ads/8/comments/37
 Content-Type: application/json
 Authorization: Basic Hi@hi.ru 12345678
 
@@ -98,5 +98,5 @@ Authorization: Basic Hi@hi.ru 12345678
 }
 
 ###
-DELETE http://localhost:8080/ads/3/comments/1
+DELETE http://localhost:8080/ads/8/comments/8
 Authorization: Basic Hi@hi.ru 12345678
