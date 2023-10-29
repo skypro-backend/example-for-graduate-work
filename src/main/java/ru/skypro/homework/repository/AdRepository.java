@@ -7,6 +7,6 @@ import ru.skypro.homework.entity.Ad;
 import java.util.List;
 
 @Repository
-public interface AdRepository extends JpaRepository< Ad , Integer> {
-    List<Ad> findAllByAuthorEmail(String email);
+public interface AdRepository extends JpaRepository<Ad , Integer> {
+
 }

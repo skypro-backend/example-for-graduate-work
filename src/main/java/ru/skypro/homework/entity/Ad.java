@@ -16,9 +16,11 @@ public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ad_Id")
-    private int Id;
-    private Integer Price;
+    private int id;
+    private Integer price;
     private String title;
+    private Integer pk;
+    private String description;
 
     @OneToOne
     @JoinColumn(name = "image_id")

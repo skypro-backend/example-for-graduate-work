@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 @Entity
 @Data
 @Table(name = "users")
-public class User {
+public class  User {
 
     @Id
     @Column(name = "user_id")
