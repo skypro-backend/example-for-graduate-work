@@ -22,6 +22,8 @@ public class User {
     @NonNull
     private String email;
     @NonNull
+    private String password;
+    @NonNull
     private String firstName;
     @NonNull
     private String lastName;

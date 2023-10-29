@@ -4,9 +4,9 @@
 
 CREATE TABLE ads (
                        pk SERIAL PRIMARY KEY,
-                       title TEXT NOT NULL,
+                       title VARCHAR(255) NOT NULL,
                        price INT NOT NULL,
                        description TEXT,
-                       image TEXT,
+                       image VARCHAR(255),
                        author INT REFERENCES users (id)
 )

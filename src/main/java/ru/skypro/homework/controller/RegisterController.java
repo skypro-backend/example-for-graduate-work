@@ -9,7 +9,7 @@ import ru.skypro.homework.dto.RegisterDto;
 import ru.skypro.homework.service.RegisterService;
 
 @RestController
-@RequestMapping(name = "/register")
+@RequestMapping(path = "/register")
 public class RegisterController {
 
     private final RegisterService registerService;
