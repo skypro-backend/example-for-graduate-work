@@ -4,21 +4,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.pojo.Ad;
 import ru.skypro.homework.pojo.Image;
-import ru.skypro.homework.pojo.User;
 import ru.skypro.homework.service.AdsService;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,9 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 
 @RestController
 @RequestMapping("/ads")
+@CrossOrigin(value = "http://localhost:3000")
 public class AdsController {
 
     private final AdsService adsService;
@@ -43,17 +42,17 @@ public class AdsController {
         this.userService = userService;
     }
 
-    @PostMapping(value ="", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdDTO> createAd(
+    @PostMapping(value ="", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdCreateDTO> createAd(
             Authentication authentication,
-            @RequestPart("adDTO") AdDTO adDTO,
-            @RequestPart("imageFile") MultipartFile imageFile
+            @RequestPart("properties") AdCreateDTO adCreateDTO,
+            @RequestPart("file") MultipartFile file
     ) {
-        UserDetails userDetails = userService.loadUserByUsername(authentication.getName());
-
+        String userName = authentication.getName();
 
         // Вызываем сервис для создания объявления
-        AdDTO createdAd = adsService.createAd(adDTO, imageFile);
+        AdCreateDTO createdAd = adsService.createAd(userName, adCreateDTO, file);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAd);
     }
 
@@ -120,7 +119,7 @@ public class AdsController {
             @RequestParam("file") MultipartFile imageFile
     ) {
         try {
-            Image newImage = imageService.uploadImage(imageFile, pk);
+            Image newImage = imageService.uploadImageByPk(imageFile, pk);
             adsService.updateAdImage(pk, newImage);
             return ResponseEntity.ok("Изображение успешно обновлено");
         } catch (IOException e) {

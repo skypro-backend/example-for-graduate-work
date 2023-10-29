@@ -44,13 +44,6 @@ public class UserService implements UserDetailsService {
         );
 
         return userDetails;
-
-//        // Преобразование сущности User в объект UserDetails
-//        return org.springframework.security.core.userdetails.User.builder()
-//                .username(user.getUserName())
-//                .password(user.getPassword())
-//                .authorities(getAuthorities(user.getRole()))
-//                .build();
     }
 
     // Преобразование списка ролей в коллекцию GrantedAuthority

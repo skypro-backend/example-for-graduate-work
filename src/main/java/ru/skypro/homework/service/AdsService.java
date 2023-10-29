@@ -1,10 +1,7 @@
 package ru.skypro.homework.service;
 
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.AdInfoDTO;
-import ru.skypro.homework.dto.AdUpdateDTO;
-import ru.skypro.homework.dto.AllAdDTO;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.pojo.Ad;
 import ru.skypro.homework.pojo.Image;
 
@@ -12,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface AdsService {
-    AdDTO createAd(AdDTO adDTO, MultipartFile imageFile);
+    AdCreateDTO createAd(String userName, AdCreateDTO adCreateDTO, MultipartFile imageFile);
 
     List<AllAdDTO> getAllAds();
 

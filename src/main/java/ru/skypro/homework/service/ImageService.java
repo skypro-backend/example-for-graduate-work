@@ -12,8 +12,10 @@ public interface ImageService {
 
     Image uploadAvatar(MultipartFile file, Authentication authentication) throws IOException;
 
-    Image uploadImage(MultipartFile file, Long pk) throws IOException;
+    Image uploadImageByPk(MultipartFile file, Long pk) throws IOException;
 
     Image saveImage(Image image);
+
+    Image uploadImage(MultipartFile file) throws IOException;
 
 }

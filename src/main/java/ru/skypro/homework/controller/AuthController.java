@@ -22,15 +22,15 @@ public class AuthController {
 
     private final AuthService authService;
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
-        logger.debug("Пошел запрос на логин");
+
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
-            logger.info("Ничего не вышло");
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 

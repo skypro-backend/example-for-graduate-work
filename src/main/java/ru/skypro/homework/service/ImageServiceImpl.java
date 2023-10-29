@@ -42,6 +42,30 @@ public class ImageServiceImpl implements ImageService {
         return imageRepository.save(image);
     }
 
+    @Override
+    public Image uploadImage(MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
+            byte[] data = file.getBytes();
+            String fileName = file.getOriginalFilename();
+
+            // Сохранение файла на локальный диск
+            String filePath = saveFile(data, fileName);
+
+            // Сохранение пути к файлу в базе данных
+            Image image = new Image();
+            image.setData(file.getBytes());
+            image.setImagePath(filePath);
+            image.setImageSize(file.getSize());
+            image.setImageType(file.getContentType());
+
+
+            return image;
+        } else {
+            throw new IllegalArgumentException("Uploaded file is empty");
+        }
+    }
+
+
 
     public String saveFile(byte[] data, String fileName) throws IOException {
         String filePath = Paths.get(uploadDirectory, fileName).toString();
@@ -84,7 +108,7 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
-    public Image uploadImage(MultipartFile file, Long pk) throws IOException {
+    public Image uploadImageByPk(MultipartFile file, Long pk) throws IOException {
         if (!file.isEmpty()) {
             byte[] data = file.getBytes();
             String fileName = file.getOriginalFilename();

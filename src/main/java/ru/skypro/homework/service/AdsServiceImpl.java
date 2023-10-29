@@ -2,10 +2,7 @@ package ru.skypro.homework.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.AdInfoDTO;
-import ru.skypro.homework.dto.AdUpdateDTO;
-import ru.skypro.homework.dto.AllAdDTO;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.pojo.Ad;
 import ru.skypro.homework.pojo.Image;
 import ru.skypro.homework.pojo.User;
@@ -37,38 +34,52 @@ public class AdsServiceImpl implements AdsService {
 
 
     @Override
-    public AdDTO createAd(AdDTO adDTO, MultipartFile imageFile) {
-        User user = new User();
-        user.setUserID(user.getUserID());
+    public AdCreateDTO createAd (String userName, AdCreateDTO adCreateDTO, MultipartFile imageFile) {
+        // Находим пользователя по его имени (userName)
+        User user = userRepository.findUserByUserName(userName);
 
-        Ad ad = new Ad();
-        ad.setUser(user);
-        ad.setDescription(adDTO.getDescription());
-        ad.setPrice(adDTO.getPrice());
-        ad.setTitle(adDTO.getTitle());
+        if (user != null) {
+            // Создаем объявление
+            Ad ad = new Ad();
+            ad.setUserID(user.getUserID()); // Связываем объявление с пользователем
+            ad.setPrice(adCreateDTO.getPrice());
+            ad.setTitle(adCreateDTO.getTitle());
+            ad.setDescription(adCreateDTO.getDescription());
 
-        try {
-            // Вызываем метод uploadImage и передаем в него imageFile
-            Image uploadedImage = imageService.uploadImage(imageFile, ad.getPk());
+            Ad createdAd = adRepository.save(ad);
 
-            // Связываем изображение с объявлением
-            ad.setImage(uploadedImage);
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Обработка ошибки загрузки изображения
-            throw new RuntimeException("Failed to upload image", e);
+            try {
+                // Вызываем метод uploadImage и передаем в него imageFile
+                Image uploadedImage = imageService.uploadImage(imageFile);
+
+                // Получаем идентификатор сохраненного изображения
+                Long imageId = uploadedImage.getImageId();
+
+                // Связываем изображение с объявлением
+                createdAd.setImageId(imageId);
+
+                // Пересохраняем объявление с обновленным image_id
+                adRepository.save(createdAd);
+
+                // Создаем DTO для ответа
+                AdCreateDTO createdAdDTO = new AdCreateDTO();
+                createdAdDTO.setAuthor(user.getUserID()); // Устанавливаем идентификатор пользователя
+                createdAdDTO.setDescription(createdAd.getDescription());
+                createdAdDTO.setPrice(createdAd.getPrice());
+                createdAdDTO.setTitle(createdAd.getTitle());
+                createdAdDTO.setPk(createdAd.getPk());
+                createdAdDTO.setImage(uploadedImage.getImagePath()); // Устанавливаем идентификатор изображения
+
+                return createdAdDTO;
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Обработка ошибки загрузки изображения
+                throw new RuntimeException("Failed to upload image", e);
+            }
+        } else {
+            // Если пользователь не найден, обработка ошибки
+            throw new RuntimeException("User not found for username: " + userName);
         }
-
-        // Сохраняем объявление в базе данных
-        Ad createdAd = adRepository.save(ad);
-
-        AdDTO createdAdDTO = new AdDTO();
-        createdAdDTO.setAuthor(createdAd.getUser().getUserID());
-        createdAdDTO.setDescription(createdAd.getDescription());
-        createdAdDTO.setPrice(createdAd.getPrice());
-        createdAdDTO.setTitle(createdAd.getTitle());
-        createdAdDTO.setPk(createdAd.getPk());
-        return createdAdDTO;
     }
 
     @Override
