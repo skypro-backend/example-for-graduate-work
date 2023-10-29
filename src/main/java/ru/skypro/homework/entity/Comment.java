@@ -5,7 +5,8 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 @Data
-@Entity(name = "comments")
+@Entity
+@Table(name = "comments")
 public class Comment {
 
     @Id
