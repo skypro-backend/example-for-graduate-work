@@ -29,7 +29,7 @@
             <column name="phone" type="VARCHAR(255)"/>
             <column name="user_name" type="VARCHAR(255)"/>
             <column name="password" type="VARCHAR(255)"/>
-            <column name="avatar" type="BLOB"/>
+            <column name="avatar_path" type="TEXT"/>
         </createTable>
     </changeSet>
 

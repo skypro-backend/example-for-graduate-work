@@ -23,7 +23,7 @@
             <column name="price" type="INT">
                 <constraints nullable="false"/>
             </column>
-            <column name="image" type="BLOB"/>
+            <column name="image_path" type="TEXT"/>
             <column name="description" type="VARCHAR(255)"/>
             <column name="user_id" type="INT"/>
 

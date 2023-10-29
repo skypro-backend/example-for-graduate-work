@@ -41,6 +41,13 @@ public class AdsController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getAdImage(@PathVariable Integer id) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(null);
+    }
+
     @GetMapping("/me")
     public ResponseEntity<AdsDto> getAdsMe() {
         return ResponseEntity.ok(null);
