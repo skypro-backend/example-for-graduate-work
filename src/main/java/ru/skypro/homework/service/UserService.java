@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -12,9 +13,10 @@ import ru.skypro.homework.entity.UserEntity;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class UserService {
     private static Logger logger = LoggerFactory.getLogger(UserService.class);
-    private ModelMapper mapper;
+    private final ModelMapper mapper;
 
     public String uploadAvatar(String username, MultipartFile file) {
         return "done";
