@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "ads")
@@ -21,4 +22,6 @@ public class AdEntity {
     private String title;
     @Column(columnDefinition = "text")
     private String description;
+    @OneToMany(mappedBy = "ad")
+    private Collection<CommentEntity> comments;
 }
