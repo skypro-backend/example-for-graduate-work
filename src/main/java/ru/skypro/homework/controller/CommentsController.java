@@ -27,21 +27,19 @@ public class CommentsController {
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDTO> addComment(@PathVariable int id,
-                                                 @Valid @RequestBody CreateOrUpdateComment createOrUpdateComment,
-                                                 Authentication authentication) {
-        return ResponseEntity.ok(commentsService.addComment(id, createOrUpdateComment, authentication));
+                                                 @Valid @RequestBody CreateOrUpdateComment createOrUpdateComment
+                                                 ) {
+        return ResponseEntity.ok(commentsService.addComment(id, createOrUpdateComment));
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
     public void deleteComment(@PathVariable int adId, @PathVariable int commentId) {
-//        System.out.println("Удаление комментария ");
         commentsService.deleteComment(adId, commentId);
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
     public CommentDTO updateComment(@PathVariable int adId, @PathVariable int commentId,
                                     @Valid @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        System.out.println("Обновление комментария");
         return commentsService.updateComment(adId, commentId, createOrUpdateComment);
     }
 }
