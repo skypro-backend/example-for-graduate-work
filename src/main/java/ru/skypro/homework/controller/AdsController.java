@@ -40,7 +40,7 @@ public class AdsController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addAd(@RequestPart(value = "properties") CreateOrUpdateAd createOrUpdateAd, @RequestPart(value = "image") MultipartFile image) {
         logger.info("Ads Controller image {}, createOrUpdateAd {}", image.getContentType(), createOrUpdateAd.getTitle());
-        Ad addedAd = adsService.addNewAd(createOrUpdateAd);
+        Ad addedAd = adsService.addAd(createOrUpdateAd);
         if (addedAd == null) {
             logger.info("Unable to save the ad");
             return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
