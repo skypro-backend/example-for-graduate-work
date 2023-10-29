@@ -27,7 +27,7 @@ public class Ad {
     @Column(name = "description")
     private String description;
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     @OneToMany(mappedBy = "ad")
     private List<Comment> comments;
