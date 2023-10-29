@@ -16,7 +16,9 @@ public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long pk;
-    private long author;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private UserEntity author;
     private String image;
     private int price;
     private String title;

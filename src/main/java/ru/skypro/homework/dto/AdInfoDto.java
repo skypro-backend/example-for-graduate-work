@@ -16,6 +16,6 @@ public class AdInfoDto {
     private String email;
     private String image;
     private String phone;
-    private BigDecimal price;
+    private int price;
     private String title;
 }
