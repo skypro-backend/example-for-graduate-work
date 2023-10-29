@@ -76,6 +76,7 @@ public class AdServiceImpl implements AdService {
         adModel.setDescription(createOrUpdateAdDTO.getDescription());
         adRepo.saveAndFlush(adModel);
         return toAdDto(adModel);
+
     }
 
     /**

@@ -11,6 +11,4 @@ public interface CommentsService {
     CommentDTO addComment(int id, CreateOrUpdateComment createOrUpdateComment, Authentication authentication);
     void deleteComment(int id, int commentsId);
     CommentDTO updateComment(int id, int commentsId, CreateOrUpdateComment createOrUpdateComment);
-
-
 }

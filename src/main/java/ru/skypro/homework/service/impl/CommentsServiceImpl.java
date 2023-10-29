@@ -31,11 +31,10 @@ import static ru.skypro.homework.mapper.CommentMapper.toCommentDTO;
 @Transactional
 @RequiredArgsConstructor
 public class CommentsServiceImpl implements CommentsService {
-
+    private final UserServiceImpl userService;
     private final CommentRepo commentRepo;
     private final AdServiceImpl adService;
     private final AdRepo adRepo;
-    private final UserRepo userRepo;
 
     /**
      * Поиск комментария
@@ -52,30 +51,23 @@ public class CommentsServiceImpl implements CommentsService {
         return new Comments(commentsDTOList, commentsDTOList.size());
     }
 
-
     /**
      * Создание комментария
      */
     @Override
-    public CommentDTO addComment(int id, CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
+    public CommentDTO addComment(int id, CreateOrUpdateComment createOrUpdateComment) {
 
-//        Comments comments = getComments(id);
-//        if (comments != null) {
-//            return CommentMapper.toCommentsAdd(createOrUpdateComment);
-//        } else {
-//            throw new CommentNotFoundExeption();
-//        }
-        UserModel user = userRepo.findByUserName(authentication.getName())
-                .orElseThrow(UserNotFoundException::new);
+        UserModel user = userService.findUser().get();
+        AdModel adModel = adRepo.findById(id).orElseThrow();
+
         CommentModel commentModel = new CommentModel();
+        commentModel.setAdModel(adModel);
+        commentModel.setText(createOrUpdateComment.getText());
         commentModel.setCreateAt(LocalDateTime.parse(LocalDateTime.now()
                 .format(DateTimeFormatter.ISO_DATE_TIME)));
-        commentModel.setText(createOrUpdateComment.getText());
         commentModel.setUserModel(user);
-        commentModel.setAdModel(adRepo.findById(id)
-                .orElseThrow(AdNotFoundException::new));
         commentRepo.save(commentModel);
-        return toCommentDTO(commentModel);
+        return CommentMapper.toCommentDTO(commentModel);
     }
 
     /**
@@ -86,7 +78,7 @@ public class CommentsServiceImpl implements CommentsService {
         if (commentRepo.findById(commentsId).isEmpty()) {
             throw new CommentNotFoundException();
         }
-            commentRepo.deleteById(commentsId);
+        commentRepo.deleteById(commentsId);
     }
 
     /**
@@ -94,13 +86,6 @@ public class CommentsServiceImpl implements CommentsService {
      */
     @Override
     public CommentDTO updateComment(int id, int commentsId, CreateOrUpdateComment createOrUpdateComment) {
-//        Optional<AdModel> ad = adRepo.findById(id);
-//        if (ad.isPresent()) {
-//            Comments comments = getComments(commentsId);
-//            return CommentMapper.toCreateOrUpdateComment(comments);
-//        } else {
-//            throw new CommentNotFoundException();
-//        }
 
         CommentModel comment = commentRepo.findById(commentsId).orElseThrow(CommentNotFoundException::new);
         comment.setText(createOrUpdateComment.getText());

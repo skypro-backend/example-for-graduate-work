@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.UserDTO;
@@ -15,14 +16,13 @@ import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.util.Util;
 
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
 //@Transactional
 
 public class UserServiceImpl implements UserService {
-//    @Autowired
-//    private  UserDetailsManager userDetailsManager;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -32,6 +32,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private Util util;
 
+    public Optional<UserModel> findUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        return userRepo.findByUserName(currentPrincipalName);
+    }
     /**
      * Чтение информации о пользователе
      */
@@ -52,34 +57,29 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void updatePassword(NewPassword newPassword) {
-
-        var password1 = newPassword.getCurrentPassword();
-        var newPassword1 = encoder.encode(newPassword.getNewPassword());
-//        userDetailsManager.changePassword(password1, newPassword1);
+        UserModel userModel = findUser().orElseThrow();
+        boolean currentUserPassword = encoder.matches(newPassword.getCurrentPassword(), userModel.getPassword());
+        if (currentUserPassword) {
+            userModel.setPassword(encoder.encode(newPassword.getNewPassword()));
+            userRepo.save(userModel);
+        }
     }
-
     /**
      * Обновление информации о пользователе
      */
-    // change!!
-    @Override
-    public UpdateUser updateUser(UpdateUser updateUser, Authentication authentication) {
-//        UserDTO userDTO = getUser(authentication);
-//
-//        userDTO.setLastName(updateUser.getLastName());
-//        userDTO.setFirstName(updateUser.getFirstName());
-//        userDTO.setPhone(updateUser.getPhone());
-//
-//
-//        UserModel userModel = UserMapper.mapToUserModel(userDTO);
-//        userRepo.save(userModel);
-        UserModel user = util.addUserFromRepo(authentication);
-        user.setFirstName(updateUser.getFirstName());
-        user.setLastName(updateUser.getLastName());
-        user.setPhone(updateUser.getPhone());
 
-        userRepo.save(user);
-        return UserMapper.mapToUpdateUser(user);
+    @Override
+        public UpdateUser updateUser(UpdateUser updateUser) {
+            Optional<UserModel> currentUser = findUser();
+            UserModel userModel = new UserModel();
+            if (currentUser.isPresent()) {
+                userModel = currentUser.get();
+                userModel.setFirstName(updateUser.getFirstName());
+                userModel.setLastName(updateUser.getLastName());
+                userModel.setPhone(updateUser.getPhone());
+                userRepo.save(userModel);
+            }
+            return UserMapper.mapToUpdateUser(userModel);
     }
 
     /**
