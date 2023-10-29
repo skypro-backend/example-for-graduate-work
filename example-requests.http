@@ -77,7 +77,7 @@ Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
 {
-"text":"кря-кря-кря"
+"text":"Совершенно новый комментарий"
 }
 
 ###
@@ -86,13 +86,22 @@ Content-Type: application/json
 Authorization: Basic Hi@hi.ru 12345678
 
 {
-  "text":"кря-кря-кря"
+  "text":"Совершенно новый комментарий"
 }
 ###
-PATCH http://localhost:8080/ads/8/comments/2
+PATCH http://localhost:8080/ads/8/comments/37
 Content-Type: application/json
 Authorization: Basic Hi@hi.ru 12345678
 
 {
-  "text":"Кукушка не крякает"
+  "text":"Перезаписанный обновленный комментарий"
 }
+
+###
+DELETE http://localhost:8080/ads/8/comments/8
+Authorization: Basic Hi@hi.ru 12345678
+
+###
+GET http://localhost:8080/ads/3/comments
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
