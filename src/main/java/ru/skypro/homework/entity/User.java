@@ -27,22 +27,27 @@ public class User {
     private String lastName;
     @NonNull
     private String phone;
+    @Getter
     @NonNull
     @Enumerated(EnumType.STRING)
     private Role role;
     private String image;
 
+    public void setRole(final @NonNull Role role) {
+        this.role = role;
+    }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        User user = (User) o;
-        return id != null && Objects.equals(id, user.id);
+    public boolean equals(final Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        final User user = (User) object;
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(phone, user.phone) && role == user.role && Objects.equals(image, user.image);
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(id, email, firstName, lastName, phone, role, image);
     }
+
 }

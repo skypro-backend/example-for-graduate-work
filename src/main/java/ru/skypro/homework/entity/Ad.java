@@ -1,8 +1,11 @@
 package ru.skypro.homework.entity;
 
-import javax.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -15,15 +18,18 @@ public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pk;
-    @NonNull
-    private String title;
-    @NonNull
-    private Integer price;
-    private String description;
-    private String image;
+    @Getter
     @ManyToOne
     @JoinColumn(name = "author")
     private User author;
+    private String title;
+    private Integer price;
+    private String description;
+    private String image;
+
+    public void setAuthor(final User author) {
+        this.author = author;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -37,4 +43,5 @@ public class Ad {
     public int hashCode() {
         return Objects.hash(pk, title, price, description, image, author);
     }
+
 }

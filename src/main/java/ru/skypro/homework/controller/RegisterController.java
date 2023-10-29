@@ -22,4 +22,5 @@ public class RegisterController {
     public ResponseEntity<String> registerUser(@RequestBody RegisterDto register) {
         return registerService.registerUser(register);
     }
+
 }
