@@ -4,32 +4,36 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import ru.skypro.homework.dto.model_dto.AdDto;
-import ru.skypro.homework.dto.model_dto.AdsDto;
 import ru.skypro.homework.dto.model_dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.model_dto.ExtendedAdDto;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Маппинг сущности объявления
  */
 @Mapper (componentModel = "spring")
 public interface AdMapper {
-      @Mapping(target = "id", source = "pk")
-      @Mapping(target = "author.id", source = "author")
-      Ad toAd(AdDto adDto); // конвертация DTO в сущность
 
+      @Mapping(target = "image", source = "image", qualifiedByName = "imageToPathString")
       @Mapping(target = "pk", source = "id")
       @Mapping(target = "author", source = "author.id")
       AdDto toAdDto(Ad ad); // конвертация сущности в DTO
 
+      @Named("imageToPathString")
+      default String imageToPathString(Image image) {
+            return "/ads/image/" + image.getId();
+      }
+
+      List <AdDto> toAdsDto(List<Ad> ads);
+
       @Mapping(target = "id", ignore = true)
       @Mapping(target = "author", ignore = true)
       @Mapping(target = "image", ignore = true)
-      Ad toAd(CreateOrUpdateAdDto dto); // конвертация получить или обновить объявление от автора
+      Ad toAdCreate(CreateOrUpdateAdDto dto); // конвертация получить или обновить объявление от автора
 
       @Mapping(target = "pk", source = "id")
       @Mapping(target = "authorFirstName", source = "author.firstName")
@@ -37,10 +41,12 @@ public interface AdMapper {
       @Mapping(target = "email", source = "author.email")
       @Mapping(target = "phone", source = "author.phone")
       @Mapping(target = "description", ignore = true)
+      @Mapping(target = "image", source = "image", qualifiedByName = "imageToPathString")
       ExtendedAdDto toExtendedAdDto(Ad ad); // конвертация объявления к расширенному объявлению
 
-      default AdsDto toAdsDto(List<Ad> ads) {
-            List<AdDto> adsDtoList = ads.stream().map(this::toAdDto).collect(Collectors.toList());
-            return new AdsDto(adsDtoList.size(), adsDtoList);
+      @Named("authorToInt")
+      default Integer authorToInt(User user) {
+            return user.getId();
       }
+
 }

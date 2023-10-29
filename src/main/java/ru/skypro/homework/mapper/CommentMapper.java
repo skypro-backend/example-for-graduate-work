@@ -6,18 +6,14 @@ import org.mapstruct.Named;
 import ru.skypro.homework.dto.model_dto.CommentDto;
 import ru.skypro.homework.dto.model_dto.CreateOrUpdateCommentDto;
 import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.model.User;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.List;
 
 @Mapper (componentModel = "spring")
 public interface CommentMapper {
-      @Mapping(target = "id", source = "pk")
-      @Mapping(target = "author", ignore = true)
-      @Mapping (target = "createdAt", ignore = true)
-      @Mapping (target = "ad", ignore = true)
-      Comment toCommenty (CommentDto commentDto); // конвертация DTO в сущность
+      List <CommentDto> toCommentsDto(List<Comment> comments);
 
       @Mapping(source = "id", target = "pk")
       @Mapping(target = "author", source = "author.id")
@@ -28,7 +24,7 @@ public interface CommentMapper {
       @Mapping(target = "author", ignore = true)
       @Mapping(target = "createdAt", ignore = true)
       @Mapping (target = "ad", ignore = true)
-      Comment toCommenty (CreateOrUpdateCommentDto dto); // конвертация новых комментарий
+      Comment toCommentyCr (CreateOrUpdateCommentDto dto); // конвертация новых комментарий
 
       @Named("instantToInteger")
       default long instantToInteger(Instant instant) {
