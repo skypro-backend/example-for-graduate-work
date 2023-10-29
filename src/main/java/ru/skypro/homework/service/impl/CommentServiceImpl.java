@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.CommentDto;
+import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Comment;
@@ -20,6 +21,7 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -67,6 +69,13 @@ public class CommentServiceImpl implements CommentService {
         if (adId.equals(getCommentByCommentId(commentId).getAd().getId())) {
             commentRepository.delete(getCommentByCommentId(commentId));
         } else throw new CommentInconsistencyToAdException();
+    }
+
+    @Override
+    public CommentsDto getCommentsByAd(Integer adId) {
+        List<CommentDto> commentsByAd = commentRepository.findAllByAdId(adId).stream()
+                .map(commentMapper::entityToCommentDto).toList();
+        return commentMapper.commentDtoListToCommentsDto(commentsByAd);
     }
 
     protected User getUserFromAuthentication(Authentication authentication) {

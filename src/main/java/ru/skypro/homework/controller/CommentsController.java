@@ -15,7 +15,6 @@ import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 import ru.skypro.homework.service.CommentService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -48,8 +47,7 @@ public class CommentsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<CommentsDto> getCommentsByAd(@PathVariable("id") Integer adId) {
-        CommentsDto allCommentsDtoList = new CommentsDto(0, new ArrayList<>());
-        return ResponseEntity.ok(allCommentsDtoList);
+        return ResponseEntity.ok(commentService.getCommentsByAd(adId));
     }
 
     @PostMapping("/{id}/comments")
