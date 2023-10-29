@@ -100,3 +100,8 @@ Authorization: Basic Hi@hi.ru 12345678
 ###
 DELETE http://localhost:8080/ads/8/comments/8
 Authorization: Basic Hi@hi.ru 12345678
+
+###
+GET http://localhost:8080/ads/3/comments
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
