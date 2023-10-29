@@ -60,7 +60,6 @@ public class UserServiceImpl implements UserService {
         if (currentUserPassword) {
             userModel.setPassword(encoder.encode(newPassword.getNewPassword()));
             userRepo.save(userModel);
-
         }
     }
     /**
