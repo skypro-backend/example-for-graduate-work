@@ -78,12 +78,15 @@ public class CommentsController {
         return ResponseEntity.ok(commentService.updateCommentToAd(adId, commentId, createOrUpdateCommentDto, authentication));
     }
 
+
     /*
     @ExceptionHandler(Exception.class)
     public String exceptionHandler(Exception e) {
         return e.getMessage();
     }
     //todo нужно перенести в ExceptionHandlerClass
+
      */
+
 
 }
