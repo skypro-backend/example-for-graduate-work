@@ -2,8 +2,10 @@ package ru.skypro.homework.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import ru.skypro.homework.utils.MyMapper;
 
+@Configuration
 public class MapperConfig {
 
     @Bean
