@@ -25,7 +25,7 @@ public class SecurityUser implements UserDetails {
                 .map(role -> "ROLE_" + role)
                 .map(SimpleGrantedAuthority::new)
                 .map(Collections::singleton)
-                .orElse(null);
+                .orElseGet(Collections::emptySet);
     }
 
     @Override
