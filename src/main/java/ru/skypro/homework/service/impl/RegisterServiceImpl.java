@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterDto;
-import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.RegisterService;
 
@@ -25,7 +25,7 @@ public class RegisterServiceImpl implements RegisterService {
         if (!validateRegister(register)) {
             return ResponseEntity.badRequest().body("Неверные данные пользователя");
         }
-        UserDto newUser = new UserDto();
+        User newUser = new User();
         newUser.setFirstName(register.getFirstName());
         newUser.setLastName(register.getLastName());
         newUser.setPhone(register.getPhone());

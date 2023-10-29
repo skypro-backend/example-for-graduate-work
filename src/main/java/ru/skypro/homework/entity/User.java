@@ -3,7 +3,7 @@ package ru.skypro.homework.entity;
 import lombok.*;
 import org.hibernate.Hibernate;
 import ru.skypro.homework.dto.Role;
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.util.Objects;
 
@@ -12,25 +12,25 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @ToString
-
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
 
     @NonNull
-    String email;
+    private String email;
     @NonNull
-    String firstName;
+    private String firstName;
     @NonNull
-    String lastName;
+    private String lastName;
     @NonNull
-    String phone;
+    private String phone;
     @NonNull
-    Role role;
-    @NonNull
-    String image;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    private String image;
 
 
     @Override

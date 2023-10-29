@@ -1,6 +1,6 @@
 package ru.skypro.homework.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 import java.util.Objects;
@@ -9,6 +9,7 @@ import java.util.Objects;
 @Data
 @RequiredArgsConstructor
 @ToString
+@Table(name = "comments")
 public class Comment {
 
     @Id
