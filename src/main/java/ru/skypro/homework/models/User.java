@@ -1,17 +1,18 @@
 package ru.skypro.homework.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"comments", "ads"})
+@ToString(exclude = {"comments", "ads"})
+@Getter
+@Setter
 @Table(name = "users")
 public class User {
     @Id
@@ -33,9 +34,8 @@ public class User {
     private String username;
     @Column(name = "password")
     private String password;
-    @Column(name = "avatar")
-    @Lob
-    private byte[] avatar;
+    @Column(name = "avatar_path")
+    private String avatarPath;
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
     @OneToMany(mappedBy = "user")

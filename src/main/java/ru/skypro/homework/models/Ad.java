@@ -1,15 +1,16 @@
 package ru.skypro.homework.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"user", "comments"})
+@ToString(exclude = {"user", "comments"})
+@Getter
+@Setter
 @Entity
 @Table(name = "ads")
 public class Ad {
@@ -21,9 +22,8 @@ public class Ad {
     private String title;
     @Column(name = "price")
     private Integer price;
-    @Column(name = "image")
-    @Lob
-    private byte[] image;
+    @Column(name = "image_path")
+    private String imagePath;
     @Column(name = "description")
     private String description;
     @ManyToOne

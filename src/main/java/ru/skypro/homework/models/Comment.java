@@ -1,15 +1,17 @@
 package ru.skypro.homework.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"user", "ad"})
+@ToString(exclude = {"user", "ad"})
+@Getter
+@Setter
 @Entity
 @Table(name = "comment")
 public class Comment {
