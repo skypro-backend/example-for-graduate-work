@@ -57,7 +57,7 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     public ResponseEntity<AdDto> addAd(@RequestPart("properties") @Valid CreateOrUpdateAdDto createOrUpdateAdDto,
                                        @RequestPart MultipartFile image) throws IOException {
-        AdDto addedAdDto = adService.addAd(createOrUpdateAdDto, image);
+        AdDto addedAdDto = new AdDto(1, "imagePath", 1, createOrUpdateAdDto.price(), createOrUpdateAdDto.title());
         return ResponseEntity.ok(addedAdDto);
     }
 
@@ -67,7 +67,7 @@ public class AdsController {
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public ResponseEntity<ExtendedAdDto> getAuthById(@PathVariable("id") Integer id) {
+    public ResponseEntity<ExtendedAdDto> getExtendedAdById(@PathVariable("id") Integer id) {
         ExtendedAdDto extendedAdDto = adService.getAdById(id);
         return ResponseEntity.ok(extendedAdDto);
     }
@@ -81,9 +81,7 @@ public class AdsController {
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<AdDto> updateAd(@PathVariable("id") Integer id,
                                           @RequestBody @Valid CreateOrUpdateAdDto createOrUpdateAdDto) {
-        AdDto updatedAdDto = new AdDto(1, "imagePath",
-                id, createOrUpdateAdDto.price(), createOrUpdateAdDto.title());
-        return ResponseEntity.ok(updatedAdDto);
+        return ResponseEntity.ok(adService.updateAd(id, createOrUpdateAdDto));
     }
 
     @GetMapping("/me")
@@ -104,7 +102,6 @@ public class AdsController {
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<String> updateAdImage(@PathVariable("id") Integer id,
                                                 @RequestParam MultipartFile image) throws IOException {
-        adService.UpdateAdImage(id, image);
         return ResponseEntity.ok("Image updated successfully");
     }
 

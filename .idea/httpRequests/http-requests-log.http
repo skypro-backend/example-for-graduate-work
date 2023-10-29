@@ -1,3 +1,167 @@
+DELETE http://localhost:8080/ads/5
+Authorization: Basic user@gmail.com password
+
+###
+
+GET http://localhost:8080/ads/me
+Authorization: Basic Hi@hi.ru 12345678
+Content-Type: application/json
+
+<> 2023-10-29T203318.200.json
+
+###
+
+PATCH http://localhost:8080/ads/5
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+  "title": "Ivanov",
+  "price": "33333",
+  "description": "Ivan"
+}
+
+<> 2023-10-29T203249.200.json
+
+###
+
+PATCH http://localhost:8080/ads/8
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+  "title": "Ivanov",
+  "price": "33333",
+  "description": "Ivan"
+}
+
+<> 2023-10-29T203220.200.json
+
+###
+
+GET http://localhost:8080/ads
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+<> 2023-10-29T203155.200.json
+
+###
+
+PATCH http://localhost:8080/ads/8
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+  "title": "Ivanov",
+  "price": "33333",
+  "description": "Ivan"
+}
+
+<> 2023-10-29T202051.200.json
+
+###
+
+PATCH http://localhost:8080/ads/8
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+  "title": "Ivanov",
+  "price": "33333",
+  "description": "Ivan"
+}
+
+<> 2023-10-29T201005.400.txt
+
+###
+
+PATCH http://localhost:8080/ads/8
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+  "title": "Ivanov",
+  "price": "33333",
+  "description": "Ivan"
+}
+
+<> 2023-10-29T200738.400.txt
+
+###
+
+DELETE http://localhost:8080/ads/7
+Authorization: Basic user@gmail.com password
+
+###
+
+GET http://localhost:8080/ads/me
+Authorization: Basic Hi@hi.ru 12345678
+Content-Type: application/json
+
+<> 2023-10-29T185136.200.json
+
+###
+
+GET http://localhost:8080/ads/me
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+<> 2023-10-29T185041.200.json
+
+###
+
+PATCH http://localhost:8080/ads/3
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+  "title": "Ivanov",
+  "price": "33333",
+  "description": "Ivan"
+}
+
+<> 2023-10-29T184433.200.json
+
+###
+
+GET http://localhost:8080/ads
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+<> 2023-10-29T183203.200.json
+
+###
+
+GET http://localhost:8080/ads/3
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+<> 2023-10-29T183151.200.json
+
+###
+
+GET http://localhost:8080/ads
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+<> 2023-10-29T182516.200.json
+
+###
+
+POST http://localhost:8080/ads
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+  "price": 123,
+  "description": "123",
+  "title": "123"
+}
+
+<> 2023-10-29T182219.400.txt
+
+###
+
 POST http://localhost:8080/ads/8/comments
 Authorization: Basic user@gmail.com password
 Content-Type: application/json
@@ -308,198 +472,6 @@ Content-Type: application/json
 }
 
 <> 2023-10-29T143050.200.json
-
-###
-
-PATCH http://localhost:8080/ads/3/comments/30
-Authorization: Basic Hi@hi.ru 12345678
-Content-Type: application/json
-
-{
-  "text":"Перезаписанный обновленный комментарий"
-}
-
-<> 2023-10-29T142948.200.json
-
-###
-
-PATCH http://localhost:8080/ads/3/comments/30
-Authorization: Basic Hi@hi.ru 12345678
-Content-Type: application/json
-
-{
-  "text":"Перезаписанный обновленный комментарий"
-}
-
-<> 2023-10-29T142101.200.txt
-
-###
-
-PATCH http://localhost:8080/ads/3/comments/30
-Authorization: Basic Hi@hi.ru 12345678
-Content-Type: application/json
-
-{
-  "text":"Перезаписанный обновленный комментарий"
-}
-
-<> 2023-10-29T141104.200.txt
-
-###
-
-PATCH http://localhost:8080/ads/3/comments/30
-Authorization: Basic Hi@hi.ru 12345678
-Content-Type: application/json
-
-{
-  "text":"Перезаписанный обновленный комментарий"
-}
-
-<> 2023-10-29T135735.200.txt
-
-###
-
-PATCH http://localhost:8080/ads/8/comments/30
-Authorization: Basic Hi@hi.ru 12345678
-Content-Type: application/json
-
-{
-  "text":"Перезаписанный обновленный комментарий"
-}
-
-<> 2023-10-29T135708.200.txt
-
-###
-
-POST http://localhost:8080/ads/3/comments
-Authorization: Basic Hi@hi.ru 12345678
-Content-Type: application/json
-
-{
-  "text":"Совершенно новый комментарий"
-}
-
-<> 2023-10-29T134351.200.json
-
-###
-
-POST http://localhost:8080/ads/8/comments
-Authorization: Basic user@gmail.com password
-Content-Type: application/json
-
-{
-"text":"Совершенно новый комментарий"
-}
-
-<> 2023-10-29T134335.200.json
-
-###
-
-POST http://localhost:8080/ads/3/comments
-Authorization: Basic Hi@hi.ru 12345678
-Content-Type: application/json
-
-{
-  "text":"Совершенно новый комментарий"
-}
-
-<> 2023-10-29T133844.200.json
-
-###
-
-POST http://localhost:8080/ads/3/comments
-Authorization: Basic Hi@hi.ru 12345678
-Content-Type: application/json
-
-{
-  "text":"Совершенно новый комментарий"
-}
-
-<> 2023-10-29T003933.200.txt
-
-###
-
-POST http://localhost:8080/ads/8/comments
-Authorization: Basic user@gmail.com password
-Content-Type: application/json
-
-{
-"text":"Совершенно новый комментарий"
-}
-
-<> 2023-10-29T003921.200.txt
-
-###
-
-POST http://localhost:8080/ads/3/comments
-Authorization: Basic Hi@hi.ru 12345678
-Content-Type: application/json
-
-{
-  "text":"Совершенно новый комментарий"
-}
-
-<> 2023-10-29T003853.200.txt
-
-###
-
-POST http://localhost:8080/ads/3/comments
-Authorization: Basic Hi@hi.ru 12345678
-Content-Type: application/json
-
-{
-  "text":"Совершенно новый комментарий"
-}
-
-<> 2023-10-29T003210.200.txt
-
-###
-
-POST http://localhost:8080/ads/8/comments
-Authorization: Basic user@gmail.com password
-Content-Type: application/json
-
-{
-"text":"Совершенно новый комментарий"
-}
-
-<> 2023-10-29T001046.400.txt
-
-###
-
-POST http://localhost:8080/ads/8/comments
-Authorization: Basic user@gmail.com password
-Content-Type: application/json
-
-{
-"text":"Совершенно новый комментарий"
-}
-
-<> 2023-10-29T000521.400.txt
-
-###
-
-POST http://localhost:8080/ads/3/comments
-Authorization: Basic Hi@hi.ru 12345678
-Content-Type: application/json
-
-{
-  "text":"Совершенно новый комментарий"
-}
-
-<> 2023-10-28T235829.400.txt
-
-###
-
-POST http://localhost:8080/ads/3/comments
-Authorization: Basic Hi@hi.ru 12345678
-Content-Type: application/json
-
-{
-  "text":"Совершенно новый комментарий"
-}
-
-<> 2023-10-28T234621.400.txt
 
 ###
 

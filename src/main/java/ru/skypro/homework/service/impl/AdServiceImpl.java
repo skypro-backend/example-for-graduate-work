@@ -11,14 +11,12 @@ import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.AdImage;
-import ru.skypro.homework.entity.UserImage;
-import ru.skypro.homework.exception.AdNotFoundException;
+import ru.skypro.homework.entity.User;
+import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
-import ru.skypro.homework.service.ImageService;
 
 import java.util.List;
 
@@ -30,7 +28,6 @@ public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
     private final UserRepository userRepository;
     private final AdMapper adMapper;
-    private final ImageService imageService;
 
     @Override
     public void removeAd(Integer id, Authentication authentication) {
@@ -40,17 +37,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public AdDto addAd(CreateOrUpdateAdDto createOrUpdateAdDto, MultipartFile image) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        Ad ad = new Ad();
-        ad.setUser(userRepository.findByLogin(authentication.getName()).orElseThrow());
-        ad.setPrice(createOrUpdateAdDto.price());
-        ad.setTitle(createOrUpdateAdDto.title());
-        ad.setImage(adMapper.toAdImage(image));
-
-        adRepository.save(ad);
-
-        return adMapper.toAdDto(ad);
+        return null;
     }
 
     @Override
@@ -59,13 +46,9 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDto updateAd(Integer id, CreateOrUpdateAdDto createOrUpdateAdDto) {
-        Ad ad = adRepository.getAdById(id);
-        ad.setPrice(createOrUpdateAdDto.price());
-        ad.setTitle(createOrUpdateAdDto.title());
-
+    public AdDto updateAd(Integer id, CreateOrUpdateAdDto createOrUpdateAdDto) throws AdNotFoundException {
+        Ad ad = adMapper.updateAdDtoToAd(id, createOrUpdateAdDto, getUserByAdId(id));
         adRepository.save(ad);
-
         return adMapper.toAdDto(ad);
     }
 
@@ -81,11 +64,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public void UpdateAdImage(Integer id, final MultipartFile file) {
-        Ad ad = adRepository.findById(id)
-                .orElseThrow(() -> new AdNotFoundException(id));
-        AdImage image = (AdImage) imageService.updateImage(file, new UserImage());
-        ad.setImage(image);
-        adRepository.save(ad);
+
     }
 
     @Override
@@ -94,6 +73,14 @@ public class AdServiceImpl implements AdService {
         List<AdDto> adsDtoList = adMapper.toAdsDto(list);
 
         return new AdsDto(adsDtoList.size(), adsDtoList);
+    }
+
+    protected User getUserByAdId(Integer adId) {
+        return adRepository.findById(adId)
+                .orElseThrow(() ->
+                        new AdNotFoundException(adId))
+                .getUser();
+
     }
 
 

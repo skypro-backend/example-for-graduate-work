@@ -25,11 +25,6 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/ads/me
-Content-Type: application/json
-Authorization: Basic user@gmail.com password
-
-###
 GET http://localhost:8080/users/me
 Content-Type: application/json
 Authorization: Basic user@gmail.com password
@@ -46,11 +41,6 @@ Authorization: Basic user@gmail.com password
 }
 
 ###
-GET http://localhost:8080/ads
-Content-Type: application/json
-Authorization: Basic user@gmail.com password
-
-###
 POST http://localhost:8080/users/set_password
 Content-Type: application/json
 Authorization: Basic user@gmail.com password
@@ -59,6 +49,37 @@ Authorization: Basic user@gmail.com password
   "newPassword": "password",
   "currentPassword": "password1"
 }
+
+###
+GET http://localhost:8080/ads
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
+
+###
+GET http://localhost:8080/ads/3
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
+
+###
+GET http://localhost:8080/ads/me
+Content-Type: application/json
+Authorization: Basic Hi@hi.ru 12345678
+
+###
+DELETE http://localhost:8080/ads/5
+Authorization: Basic user@gmail.com password
+
+###
+PATCH http://localhost:8080/ads/5
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
+
+{
+  "title": "Ivanov",
+  "price": "33333",
+  "description": "Ivan"
+}
+
 
 ###
 POST http://localhost:8080/ads
