@@ -2,6 +2,7 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
@@ -15,8 +16,12 @@ import ru.skypro.homework.dto.ExtendedAdDto;
 public class AdsController {
 
     @GetMapping
-    public AdsDto getAllAds() {
-     return new AdsDto();
+//    public AdsDto getAllAds() {
+//     return new AdsDto();
+//    }
+
+    public ResponseEntity<AdsDto> getAllAds(){
+        return ResponseEntity.ok(new AdsDto());
     }
 
 //    @GetMapping
