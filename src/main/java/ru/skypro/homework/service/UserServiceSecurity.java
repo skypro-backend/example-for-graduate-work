@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.model.AdsUserDetails;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.projections.Register;
@@ -19,7 +20,7 @@ public class UserServiceSecurity implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         UserModel user = userRepo.findByUserName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return new AdsUserDetails(user);

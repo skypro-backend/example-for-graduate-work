@@ -14,9 +14,9 @@ import java.util.Optional;
 public interface UserService {
 
     Optional<UserModel> findUser();
-    UserDTO getUser() throws ChangeSetPersister.NotFoundException;
+    UserDTO getUser();
 
-    void updatePassword(NewPassword newPassword) throws ChangeSetPersister.NotFoundException;
+    void updatePassword(NewPassword newPassword);
 
     UpdateUser updateUser(UpdateUser updateUser);
 

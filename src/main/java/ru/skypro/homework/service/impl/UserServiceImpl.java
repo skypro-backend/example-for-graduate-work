@@ -7,8 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
-import ru.skypro.homework.model.AdsUserDetails;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.projections.NewPassword;
 import ru.skypro.homework.projections.UpdateUser;
@@ -16,7 +16,6 @@ import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.util.Util;
 
-import java.util.Objects;
 import java.util.Optional;
 
 
@@ -38,14 +37,15 @@ public class UserServiceImpl implements UserService {
         String currentPrincipalName = authentication.getName();
         return userRepo.findByUserName(currentPrincipalName);
     }
+
     /**
      * Чтение информации о пользователе
      */
     @Override
-    public UserDTO getUser() throws ChangeSetPersister.NotFoundException {
-        UserModel currentUser = findUser().orElseThrow(ChangeSetPersister.NotFoundException::new);
+    public UserDTO getUser() {
+        UserModel currentUser = findUser().orElseThrow(UserNotFoundException::new);
         UserDTO userDTO = new UserDTO();
-            userDTO = UserMapper.mapToUserDTO(currentUser);
+        userDTO = UserMapper.mapToUserDTO(currentUser);
         return userDTO;
     }
 
@@ -53,30 +53,31 @@ public class UserServiceImpl implements UserService {
      * Редактирование пароля
      */
     @Override
-    public void updatePassword(NewPassword newPassword) throws ChangeSetPersister.NotFoundException {
-        UserModel userModel = findUser().orElseThrow(ChangeSetPersister.NotFoundException::new);
+    public void updatePassword(NewPassword newPassword) {
+        UserModel userModel = findUser().orElseThrow(UserNotFoundException::new);
         boolean currentUserPassword = encoder.matches(newPassword.getCurrentPassword(), userModel.getPassword());
         if (currentUserPassword) {
             userModel.setPassword(encoder.encode(newPassword.getNewPassword()));
             userRepo.save(userModel);
         }
     }
+
     /**
      * Обновление информации о пользователе
      */
 
     @Override
-        public UpdateUser updateUser(UpdateUser updateUser) {
-            Optional<UserModel> currentUser = findUser();
-            UserModel userModel = new UserModel();
-            if (currentUser.isPresent()) {
-                userModel = currentUser.get();
-                userModel.setFirstName(updateUser.getFirstName());
-                userModel.setLastName(updateUser.getLastName());
-                userModel.setPhone(updateUser.getPhone());
-                userRepo.save(userModel);
-            }
-            return UserMapper.mapToUpdateUser(userModel);
+    public UpdateUser updateUser(UpdateUser updateUser) {
+        Optional<UserModel> currentUser = findUser();
+        UserModel userModel = new UserModel();
+        if (currentUser.isPresent()) {
+            userModel = currentUser.get();
+            userModel.setFirstName(updateUser.getFirstName());
+            userModel.setLastName(updateUser.getLastName());
+            userModel.setPhone(updateUser.getPhone());
+            userRepo.save(userModel);
+        }
+        return UserMapper.mapToUpdateUser(userModel);
     }
 
     /**

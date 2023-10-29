@@ -1,13 +1,10 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.exceptions.CommentNotFoundException;
-import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.AdModel;
 import ru.skypro.homework.model.CommentModel;
@@ -16,10 +13,8 @@ import ru.skypro.homework.projections.Comments;
 import ru.skypro.homework.projections.CreateOrUpdateComment;
 import ru.skypro.homework.repository.AdRepo;
 import ru.skypro.homework.repository.CommentRepo;
-import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.CommentsService;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -42,14 +37,15 @@ public class CommentsServiceImpl implements CommentsService {
      */
     @Override
     public Comments getComments(int id) {
-        CommentModel commentModel = commentRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        CommentModel commentModel = commentRepo.findById(id).orElseThrow(CommentNotFoundException::new);
         return CommentMapper.toComments(commentModel);
         }
 
 
     public Comments getAllComments(int adId) {
         adService.getAds(adId);
-        List<CommentDTO> commentsDTOList = commentRepo.findAll().stream().map(CommentMapper::toCommentDTO).collect(Collectors.toList());
+        List<CommentDTO> commentsDTOList = commentRepo.findAll().stream()
+                .map(CommentMapper::toCommentDTO).collect(Collectors.toList());
         return new Comments(commentsDTOList, commentsDTOList.size());
     }
 
