@@ -42,14 +42,8 @@ public class CommentsServiceImpl implements CommentsService {
      */
     @Override
     public Comments getComments(int id) {
-            List<CommentDTO> comments = commentRepo.findById(id)
-                    .stream()
-                    .map(CommentMapper::toCommentDTO)
-                    .collect(Collectors.toList());
-            if (comments.isEmpty())
-                throw new CommentNotFoundException();
-            else
-                return CommentMapper.toComments((CommentModel) comments);
+        CommentModel commentModel = commentRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        return CommentMapper.toComments(commentModel);
         }
 
 

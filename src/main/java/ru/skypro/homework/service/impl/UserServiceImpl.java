@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,12 +42,10 @@ public class UserServiceImpl implements UserService {
      * Чтение информации о пользователе
      */
     @Override
-    public UserDTO getUser() {
-        Optional<UserModel> currentUser = findUser();
+    public UserDTO getUser() throws ChangeSetPersister.NotFoundException {
+        UserModel currentUser = findUser().orElseThrow(ChangeSetPersister.NotFoundException::new);
         UserDTO userDTO = new UserDTO();
-        if (currentUser.isPresent()) {
-            userDTO = UserMapper.mapToUserDTO(currentUser.get());
-        }
+            userDTO = UserMapper.mapToUserDTO(currentUser);
         return userDTO;
     }
 
@@ -54,8 +53,8 @@ public class UserServiceImpl implements UserService {
      * Редактирование пароля
      */
     @Override
-    public void updatePassword(NewPassword newPassword) {
-        UserModel userModel = findUser().orElseThrow();
+    public void updatePassword(NewPassword newPassword) throws ChangeSetPersister.NotFoundException {
+        UserModel userModel = findUser().orElseThrow(ChangeSetPersister.NotFoundException::new);
         boolean currentUserPassword = encoder.matches(newPassword.getCurrentPassword(), userModel.getPassword());
         if (currentUserPassword) {
             userModel.setPassword(encoder.encode(newPassword.getNewPassword()));
