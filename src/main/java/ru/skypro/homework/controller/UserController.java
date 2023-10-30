@@ -28,7 +28,6 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-@CrossOrigin(value = "http://localhost:3000")
 @Tag (name = "Пользователи", description = "работа с пользователями")
 public class UserController {
 

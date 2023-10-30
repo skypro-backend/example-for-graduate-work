@@ -9,7 +9,7 @@ import javax.persistence.*;
  * Класс, описывающий объявление
  */
 @Entity // сущность
-@Table (name = "ad")
+@Table (name = "ad_table")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,7 +33,6 @@ public class Ad {
       @Column(name = "title")
       private String title;
 
-      @Column(nullable = false)
+      @Column(name = "description")
       private String description;
-
 }

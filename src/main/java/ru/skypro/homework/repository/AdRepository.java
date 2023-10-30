@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface AdRepository extends JpaRepository <Ad, Integer>, JpaSpecificationExecutor <Ad> {
       List <Ad> findByAuthor(User author);
-      List<Ad> findAllByAuthorId(long id);
+      List<Ad> findAllByAuthorId(Integer id);
 }

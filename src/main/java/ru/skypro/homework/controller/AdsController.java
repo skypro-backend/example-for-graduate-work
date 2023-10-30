@@ -30,7 +30,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/ads")
 @RequiredArgsConstructor
-@CrossOrigin(value = "http://localhost:3000")
 @Tag (name = "Объявления", description = "работа с объявлениями")
 public class AdsController {
 
@@ -44,9 +43,9 @@ public class AdsController {
     })
     @GetMapping
     public ResponseEntity<AdsDto> getAllAds() {
-        return ResponseEntity.ok((AdsDto) adService.getAllAds ());
+        List<AdDto> ads = adService.getAllAds();
+        return ResponseEntity.ok(new AdsDto(ads.size(), ads));
     }
-
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Добавление (создание) объявления", responses = {
@@ -57,7 +56,7 @@ public class AdsController {
     })
     public ResponseEntity<AdDto> addAd(@RequestPart("properties") @Valid CreateOrUpdateAdDto createOrUpdateAdDto,
                                        @RequestPart("image") @Valid MultipartFile image) {
-            return ResponseEntity.ok (adService.addAd (createOrUpdateAdDto, image));
+            return ResponseEntity.ok (adService.addAd(createOrUpdateAdDto, image));
     }
 
 
@@ -110,8 +109,9 @@ public class AdsController {
               @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @GetMapping("/me")
-    public ResponseEntity<AdDto> getAuthorizedUserAds(Authentication authentication) {
-        return ResponseEntity.ok((AdDto) adService.getAuthorizedUserAds(authentication));
+    public ResponseEntity<AdsDto> getAuthorizedUserAds(Authentication authentication) {
+        List<AdDto> ads = adService.getAuthorizedUserAds(authentication);
+        return ResponseEntity.ok(new AdsDto(ads.size(), ads));
     }
 
 

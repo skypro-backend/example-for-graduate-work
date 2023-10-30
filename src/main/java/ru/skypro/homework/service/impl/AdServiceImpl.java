@@ -67,9 +67,9 @@ public class AdServiceImpl implements AdService {
    @Override
       public void deleteAd (Integer id , Authentication authentication) {
          log.info("Был вызван метод для удаления объявления по идентификатору");
-         User user = userRepository.findByEmail (authentication.getName ()).orElseThrow ();
-         Ad ad = adRepository.findById (id).orElseThrow ();
-         securityCheck.checkAd (id);
+         User user = userRepository.findByEmail(authentication.getName()).orElseThrow ();
+         Ad ad = adRepository.findById(id).orElseThrow();
+         securityCheck.checkAd(id);
 
             if (securityCheck.isAdmin (user) || securityCheck.isAuthorAd (user, ad)) {
                   commentRepository.deleteById (id);
@@ -82,8 +82,8 @@ public class AdServiceImpl implements AdService {
       public AdDto updateAdInformation (Integer id , CreateOrUpdateAdDto createOrUpdateAdDto ,
                                         Authentication authentication) {
             log.info ("Был вызван метод для обновления объявления по идентификатору");
-            User user = userRepository.findByEmail (authentication.getName ()).orElseThrow ();
-            Ad ad = adRepository.findById (id).orElseThrow ();
+            User user = userRepository.findByEmail(authentication.getName()).orElseThrow ();
+            Ad ad = adRepository.findById(id).orElseThrow ();
             securityCheck.checkAd (id);
 
             if (securityCheck.isAdmin (user) || securityCheck.isAuthorAd (user , ad)) {
@@ -97,7 +97,7 @@ public class AdServiceImpl implements AdService {
 
       public List<AdDto> getAuthorizedUserAds (Authentication authentication) {
             log.info("Был вызван метод для получения объявлений авторизованного пользователя");
-            User user = userRepository.findByEmail (authentication.getName()).orElseThrow ();
+            User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
             return adMapper.toAdsDto(adRepository.findAllByAuthorId(user.getId ()));
       }
 
@@ -105,7 +105,7 @@ public class AdServiceImpl implements AdService {
       public void updateImageAd (Integer adsId , MultipartFile imageFile ,
                                  Authentication authentication) throws Exception {
             log.info("завершено обновление изображения объявления");
-            User userAd = userRepository.findUserByUserName (authentication.getName()).orElseThrow ();
+            User userAd = userRepository.findByEmail(authentication.getName()).orElseThrow ();
             Ad adImage = adRepository.findById (adsId).orElseThrow ();
             if (securityCheck.isAdmin(userAd) || securityCheck.isAuthorAd(userAd, adImage)) {
                   Image imageAd = imageRepository.findById(adImage.getImage().getId()).orElseThrow ();

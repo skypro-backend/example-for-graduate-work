@@ -26,7 +26,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ads")
-@CrossOrigin(value = "http://localhost:3000")
 @Tag (name = "Комментарии", description = "работа с коментариями")
 public class CommentsController {
 

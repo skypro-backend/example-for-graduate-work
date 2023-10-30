@@ -12,29 +12,30 @@ import java.time.Instant;
  * Класс, описывающий комментарий
  */
 @Entity
-@Table (name = "comment")
+@Table (name = "comment_table")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comment {
-     @ManyToOne(fetch = FetchType.LAZY)
-     @JoinColumn(name = "ad_id")
-     private Ad ad;
 
-     @Id
-      @GeneratedValue (strategy = GenerationType.IDENTITY)
-      @Column (nullable = false)
-      private Integer id;
+    @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Column (nullable = false)
+    private Integer id;
 
-      @ManyToOne(fetch = FetchType.LAZY)
-      @JoinColumn(name = "author_id")
-      private User author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ad_id")
+    private Ad ad;
 
-      // для автоматической установки метки времени при первом сохранении
-      @CreationTimestamp
-      private Instant createdAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private User author;
 
-      @Column(name = "text", nullable = false, length = 1000)
-      private String text;
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    @Column(name = "text", nullable = false, length = 1000)
+    private String text;
 
 }

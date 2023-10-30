@@ -12,7 +12,7 @@ import java.util.Set;
  * Класс пользователя системы онлайн-продаж.
  */
 @Entity // сущность
-@Table(name = "users")
+@Table(name = "user_table")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,11 +33,11 @@ public class User {
       @Size (min = 8)
       private String password;
 
-      @Column (name = "firstName", length = 32)
+      @Column (name = "first_name", length = 32)
       @NotBlank
       private String firstName;
 
-      @Column (name = "lastName", length = 32)
+      @Column (name = "last_name", length = 32)
       @NotBlank
       private String lastName;
 

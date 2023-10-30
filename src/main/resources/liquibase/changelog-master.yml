@@ -6,3 +6,5 @@ databaseChangeLog:
       file: liquibase/scripts/ad.sql
   - include:
       file: liquibase/scripts/comment.sql
+  - include:
+      file: liquibase/scripts/image.sql

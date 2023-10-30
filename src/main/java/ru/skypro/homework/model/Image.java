@@ -19,7 +19,8 @@ public class Image {
       private Integer id; // идентификация изображения
 
       @Lob
-      @Type (type = "binary")
+      @Type(type="org.hibernate.type.BinaryType")
+      @Column(name = "data")
       private byte[] data; // тип данных изображения
 
       @Column(name = "file_size")
@@ -27,6 +28,5 @@ public class Image {
 
       @Column(name = "media_type")
       private String mediaType; // тип изображения
-
 
 }

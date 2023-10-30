@@ -18,11 +18,8 @@ public class RegisterUserController {
     private final AuthService authService;
 
     @PostMapping()
-    public ResponseEntity<?> register(@RequestBody Register register) {
-        if (authService.register(register)) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResponseEntity<Void> register(@RequestBody Register register) {
+        authService.register(register);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

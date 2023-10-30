@@ -1,4 +1,6 @@
+-- liquibase formatted sql
 
+-- changeset DrogolovaNadezhda: comment-1
 CREATE TABLE comment_table
 (
    id SERIAL PRIMARY KEY,

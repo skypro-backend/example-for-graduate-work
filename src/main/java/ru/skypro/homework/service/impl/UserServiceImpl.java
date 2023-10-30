@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
       private final UserRepository userRepository;
       private final UserMapper userMapper;
       private final PasswordEncoder passwordEncoder;
-      private final MyUserDetailsService userDetailsServicer;
+      private final MyUserDetailsService userDetailsService;
       private final SecurityCheck securityCheck;
       private final ImageService imageService;
 
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
                   user.setPassword(passwordEncoder.encode(newPasswordDto.getNewPassword()));
                   userRepository.save(user);
                   log.info("пароль обновлен");
-                  userDetailsServicer.loadUserByUsername (user.getEmail ());
+                  userDetailsService.loadUserByUsername (user.getEmail ());
             }
       }
       @Override

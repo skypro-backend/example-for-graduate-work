@@ -13,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdsDto {
-
       private Integer count; // количество объявлений в списке
       private List<AdDto> results; // список объявлений
 }
