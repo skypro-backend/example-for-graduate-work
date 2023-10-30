@@ -16,9 +16,11 @@ import ru.skypro.homework.dto.user.NewPassword;
 import ru.skypro.homework.dto.user.UpdateUser;
 import ru.skypro.homework.dto.user.User;
 import ru.skypro.homework.entity.Users;
+import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.exceptions.UnsupportedFormatException;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.exceptions.WrongCurrentPasswordException;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UsersRepository;
 import ru.skypro.homework.service.UserService;
 
@@ -32,6 +34,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 import static java.nio.file.Files.copy;
 
@@ -42,6 +46,10 @@ public class UserServiceImpl implements UserService {
     private UsersRepository usersRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ImageRepository imageRepository;
+
 
 //    public UserServiceImpl(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
 //        this.usersRepository = usersRepository;;
@@ -73,44 +81,34 @@ public class UserServiceImpl implements UserService {
         usersRepository.save(users);
         return UpdateUser.toUpdateUser(users);
     }
-
     @Override
-    public void UpdateImage(MultipartFile file, String username) throws IOException {
+    public Image updateImage(MultipartFile file, String username) {
         Users users = usersRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
-        List<String> SUPPORTED_EXTENSIONS = Arrays.asList("png", "jpg", "jpeg");
-        String filename = file.getOriginalFilename();
-        String type = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
-        //проверка, что переданный файл - изображение
-        if (!SUPPORTED_EXTENSIONS.contains(type)) {
-            throw new UnsupportedFormatException();
-        }
-        byte[] image = file.getBytes();
-        String pathString = "D:\\userImage\\"  + users.getFirstName() + users.getLastName() + "." + type;
-        Path directoryPath = Paths.get("D:\\userImage");
-        //проверка, что директория существует, если нет - создает ее
-        if (!Files.exists(directoryPath)) {
-            Files.createDirectories(directoryPath);
-        }
-        File fileImage = new File(pathString);
-        Files.write(Paths.get(pathString), image);
-        users.setImage(fileImage.getPath());
-        usersRepository.save(users);
-    }
-
-    @Override
-    public ResponseEntity<byte []> getImage(String username) throws IOException {
-        Users users = usersRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
-        File file  = new File(users.getImage());
-        String fileName = file.getName();
-        String type = fileName.substring(fileName.lastIndexOf(".") + 1);
-        if (type.equals("png")) {
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE)
-                    .body(Files.readAllBytes(Paths.get(users.getImage())));
+        Image image;
+        if (!Objects.isNull(users.getImage())) {
+            image = imageRepository.findById(users.getImage().getId()).orElse(new Image());
         } else {
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE)
-                    .body(Files.readAllBytes(Paths.get(users.getImage())));
+            image = new Image();
         }
+        try {
+            byte[] imageBytes = file.getBytes();
+            image.setImage(imageBytes);
+            image.setId(UUID.randomUUID().toString());
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+        Image returnImage = imageRepository.save(image);
+        users.setImage(image);
+        usersRepository.save(users);
+        return returnImage;
     }
+
+    @Override
+    public byte[] getImage(String id) {
+        Image image = imageRepository.findById(id).orElseThrow();
+        return image.getImage();
+    }
+
+
+
 }

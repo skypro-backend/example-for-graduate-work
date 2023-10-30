@@ -65,14 +65,13 @@ public class AuthControllerIntegrationTests {
     private void addToDb() {
         usersRepository.deleteAll();
         Users user = new Users(1,
-                "path-for-image",
+                null,
                 "user@gmail.com",
                 "$2a$10$mShIMZIKnJ.EVqUycC2OE.qunAUqKJPFZq6ADSuJ.IYmVWBmXqWMi",
                 "ivan",
                 "ivanov",
                 "+7 777-77-77",
-                Role.USER,
-                new ArrayList<>());
+                Role.USER);
         usersRepository.save(user);
     }
 

@@ -37,21 +37,19 @@ public class UserController {
         return userService.updateInformationAboutUser(updateUser, authentication.getName());
     }
 
-    @PatchMapping(value ="/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void updateImage(@RequestParam("image") MultipartFile image, Authentication authentication) throws IOException {
-        userService.UpdateImage(image, authentication.getName());
+    @PatchMapping("/me/image")
+    public ResponseEntity<byte []> updateImage(@RequestPart MultipartFile image, Authentication authentication) {
+        userService.updateImage(image, authentication.getName());
+        return ResponseEntity.ok().build();
     }
 
-//    энтпоинт для вывода изображения пользователя
-//    @GetMapping(value ="/me/image", produces = MediaType.IMAGE_JPEG_VALUE)
-//    public byte [] getImage(Authentication authentication) throws IOException {
-//        return userService.getImage(authentication.getName());
-//    }
 
-    @GetMapping(value ="/me/image")
-    public ResponseEntity<byte []> getImage(Authentication authentication) throws IOException {
-        return userService.getImage(authentication.getName());
+    @GetMapping(value ="/{id}/image", produces = MediaType.IMAGE_PNG_VALUE)
+//    @GetMapping(value ="/{id}/image", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
+    public byte [] getImage(@PathVariable("id") String id) {
+        return userService.getImage(id);
     }
+
 
 
 }

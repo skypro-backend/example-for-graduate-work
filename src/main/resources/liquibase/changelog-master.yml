@@ -1,5 +1,7 @@
 databaseChangeLog:
   - include:
+      file: liquibase/changesets/create-table-image.yml
+  - include:
       file: liquibase/changesets/create-table-Users.yml
   - include:
       file: liquibase/changesets/create-table-Ads.yml
