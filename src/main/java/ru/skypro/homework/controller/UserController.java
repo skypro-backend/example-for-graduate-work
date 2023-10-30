@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.*;
 import ru.skypro.homework.service.UserService;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 
@@ -23,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/set_password")
-    public void updatePassword(@RequestBody NewPassword newPassword, Authentication authentication) {
+    public void updatePassword(@RequestBody @Valid NewPassword newPassword, Authentication authentication) {
         userService.updatePassword(newPassword, authentication.getName());
     }
 
@@ -33,7 +34,7 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public UpdateUser updateInformationAboutUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
+    public UpdateUser updateInformationAboutUser(@RequestBody @Valid UpdateUser updateUser, Authentication authentication) {
         return userService.updateInformationAboutUser(updateUser, authentication.getName());
     }
 
@@ -45,7 +46,6 @@ public class UserController {
 
 
     @GetMapping(value ="/{id}/image", produces = MediaType.IMAGE_PNG_VALUE)
-//    @GetMapping(value ="/{id}/image", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
     public byte [] getImage(@PathVariable("id") String id) {
         return userService.getImage(id);
     }

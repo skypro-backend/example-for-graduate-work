@@ -1,10 +1,9 @@
-package ru.skypro.homework.controller;
+package ru.skypro.homework.ExceptionHandlers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.skypro.homework.exceptions.UnsupportedFormatException;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.exceptions.WrongCurrentPasswordException;
 
@@ -19,12 +18,6 @@ public class UserExceptionHandler {
     @ExceptionHandler(value = {UserNotFoundException.class})
     public ResponseEntity<?> handleUserNotFound(UserNotFoundException exception) {
         String message = "Пользователь не найден";
-        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(value = {UnsupportedFormatException.class})
-    public ResponseEntity<?> handleUnsupportedFormatEzception(UnsupportedFormatException exception) {
-        String message = "Изображение должно быть разрешения png, jpg,jpeg";
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
     }
 }

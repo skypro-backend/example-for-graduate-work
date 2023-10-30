@@ -1,14 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 
-import liquibase.util.FilenameUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,23 +10,13 @@ import ru.skypro.homework.dto.user.UpdateUser;
 import ru.skypro.homework.dto.user.User;
 import ru.skypro.homework.entity.Users;
 import ru.skypro.homework.entity.Image;
-import ru.skypro.homework.exceptions.UnsupportedFormatException;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.exceptions.WrongCurrentPasswordException;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UsersRepository;
 import ru.skypro.homework.service.UserService;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -89,11 +72,11 @@ public class UserServiceImpl implements UserService {
             image = imageRepository.findById(users.getImage().getId()).orElse(new Image());
         } else {
             image = new Image();
+            image.setId(users.getId().toString());
         }
         try {
             byte[] imageBytes = file.getBytes();
             image.setImage(imageBytes);
-            image.setId(UUID.randomUUID().toString());
         } catch (IOException e) {
             throw new RuntimeException();
         }
