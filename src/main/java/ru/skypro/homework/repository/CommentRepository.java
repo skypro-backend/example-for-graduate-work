@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository <Comment, Integer>, JpaSpecificationExecutor <Comment> {
-      Optional<Comment> findByIdAndAdId(Integer id, Integer adId);
-
       List<Comment> findAllByAdId(Integer id);
 
+      void deleteByAdId(Integer id);
 }

@@ -39,10 +39,10 @@ public class UserServiceImpl implements UserService {
       private final ImageService imageService;
 
       @Override
-      public void newPassword (NewPasswordDto newPasswordDto , Authentication authentication) {
+      public void newPassword(NewPasswordDto newPasswordDto , Authentication authentication) {
             log.info("вызван метод для создания нового пароля");
-            User user = userRepository.findByEmail (SecurityContextHolder.getContext ()
-                                .getAuthentication ().getName ()).orElseThrow ();
+            User user = userRepository.findByEmail (SecurityContextHolder.getContext()
+                                .getAuthentication().getName ()).orElseThrow();
 
             if (passwordEncoder.matches(newPasswordDto.getCurrentPassword(), user.getPassword())) {
                   user.setPassword(passwordEncoder.encode(newPasswordDto.getNewPassword()));
@@ -52,26 +52,26 @@ public class UserServiceImpl implements UserService {
             }
       }
       @Override
-      public UserDto findAuthUser (Authentication authentication) {
+      public UserDto findAuthUser(Authentication authentication) {
             log.info("получение информации об авторизованном пользователе");
-            User user = userRepository.findByEmail (authentication.getName()).orElseThrow ();
+            User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
             return userMapper.toUserDto (user);
       }
       @Override
-      public UpdateUserDto updateUser (UpdateUserDto updateUserDto , Authentication authentication) {
+      public UpdateUserDto updateUser(UpdateUserDto updateUserDto, Authentication authentication) {
             log.info("обновление авторизованного пользователя");
-            User user = userRepository.findByEmail(authentication.getName()).orElseThrow ();
+            User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
             user.setFirstName(updateUserDto.getFirstName());
             user.setLastName(updateUserDto.getLastName());
             user.setPhone(updateUserDto.getPhone());
-            return userMapper.toUpdateUserDto (userRepository.save (user));
+            return userMapper.toUpdateUserDto(userRepository.save(user));
       }
 
       @Override
-      public void updateAvatar (MultipartFile multipartFile , Authentication authentication) throws IOException {
+      public void updateAvatar(MultipartFile multipartFile, Authentication authentication) throws IOException {
             User userAvatar = securityCheck.checkUser(authentication);
             log.info("обновление изображения пользователя");
-            userAvatar.setImage(imageService.uploadImage (multipartFile));
+            userAvatar.setImage(imageService.uploadImage(multipartFile));
             userRepository.save(userAvatar);
       }
 

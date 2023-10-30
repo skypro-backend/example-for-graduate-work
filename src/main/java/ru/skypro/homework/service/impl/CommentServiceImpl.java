@@ -41,52 +41,48 @@ public class CommentServiceImpl implements CommentService {
       private final SecurityCheck securityCheck;
 
       @Override
-      public List <CommentDto> getAdComments (Integer id) {
+      public List <CommentDto> getAdComments(Integer id) {
             log.info("Метод получения комментариев");
             return commentMapper.toCommentsDto (commentRepository.findAllByAdId(id));
       }
 
       @Override
-      public Comment addCommentToAd (Integer id , CreateOrUpdateCommentDto createOrUpdateCommentDto,
+      public Comment addCommentToAd(Integer id, CreateOrUpdateCommentDto createOrUpdateCommentDto,
                                      Authentication authentication) {
-            User user = userRepository.findByEmail (SecurityContextHolder.getContext ()
-                      .getAuthentication ().getName ()).orElseThrow ();
+            User user = userRepository.findByEmail(SecurityContextHolder.getContext()
+                      .getAuthentication().getName()).orElseThrow ();
             Ad ad = adRepository.findById(id).orElseThrow();
             log.info("Был вызван метод для добавления комментария к объявлениюу");
             Comment comment = commentMapper.toCommentyCr (createOrUpdateCommentDto);
-            comment.setAuthor (user);
+            comment.setAuthor(user);
             comment.setAd(ad);
             comment.setCreatedAt(Instant.now());
             return commentRepository.save(comment);
       }
 
       @Override
-      public void deleteComment (Integer adId , Integer commentId , Authentication authentication) {
+      public void deleteComment (Integer adId, Integer commentId, Authentication authentication) {
             log.info("Был вызван метод для удаления комментария по идентификатору");
-            User user = userRepository.findByEmail (SecurityContextHolder.getContext ()
-                      .getAuthentication ().getName ()).orElseThrow ();
-            Comment comment = commentRepository.findAllByAdId (adId).get (commentId);
-            securityCheck.checkComment (adId);
-            if (securityCheck.isAdmin (user) || securityCheck.isAuthorComment (user, comment)) {
+            User user = userRepository.findByEmail(SecurityContextHolder.getContext()
+                      .getAuthentication().getName()).orElseThrow();
+            Comment comment = commentRepository.findById(commentId).orElseThrow();
+            if (securityCheck.isAdmin(user) || securityCheck.isAuthorComment(user, comment)) {
                   commentRepository.delete(comment);
             }
       }
 
       @Override
-      public Comment updateComment (Integer adId, Integer commentId,
-                                    CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+      public CommentDto updateComment(Integer adId, Integer commentId,
+                                       CreateOrUpdateCommentDto createOrUpdateCommentDto) {
             log.info("Был вызван метод для обновления комментария");
-            User user = userRepository.findByEmail (SecurityContextHolder.getContext ()
-                      .getAuthentication ().getName ()).orElseThrow ();
-            Ad ad = adRepository.findById(adId).orElseThrow();
-            Comment comment = commentRepository.findAllByAdId (adId).get (commentId);
-            securityCheck.checkComment (adId);
-
-            if (securityCheck.isAdmin (user) || securityCheck.isAuthorComment (user, comment)) {
-                  comment.setText (createOrUpdateCommentDto.getText ());
+            User user = userRepository.findByEmail(SecurityContextHolder.getContext()
+                      .getAuthentication().getName()).orElseThrow();
+            Comment comment = commentRepository.findById(commentId).orElseThrow();
+            if (securityCheck.isAdmin(user) || securityCheck.isAuthorComment(user, comment)) {
+                  comment.setText(createOrUpdateCommentDto.getText());
+            } else {
+                  throw new RuntimeException();
             }
-            return commentRepository.save(comment);
+            return commentMapper.toCommentDto(commentRepository.save(comment));
       }
-
-
 }

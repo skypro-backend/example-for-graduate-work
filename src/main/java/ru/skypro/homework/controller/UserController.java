@@ -40,9 +40,9 @@ public class UserController {
               @ApiResponse(responseCode = "403", description = "Forbidden")
     })
     @PostMapping("/set_password")
-    public ResponseEntity<?> setPassword(@RequestBody @Valid NewPasswordDto newPasswordDto,
+    public ResponseEntity<Void> setPassword(@RequestBody @Valid NewPasswordDto newPasswordDto,
                                          Authentication authentication) {
-        userService.newPassword (newPasswordDto, authentication);
+        userService.newPassword(newPasswordDto, authentication);
         return ResponseEntity.ok().build();
     }
 
@@ -64,9 +64,9 @@ public class UserController {
               @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUserDto> updateUserImage(@RequestBody @Valid UpdateUserDto updateUserDto,
+    public ResponseEntity<UpdateUserDto> updateUserData(@RequestBody @Valid UpdateUserDto updateUserDto,
                                                     Authentication authentication) {
-        return ResponseEntity.ok(userService.updateUser (updateUserDto, authentication));
+        return ResponseEntity.ok(userService.updateUser(updateUserDto, authentication));
     }
 
     @Operation(summary = "Обновление аватара авторизованного пользователя", responses = {

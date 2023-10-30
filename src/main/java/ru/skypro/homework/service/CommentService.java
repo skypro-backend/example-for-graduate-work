@@ -21,5 +21,5 @@ public interface CommentService {
       void deleteComment (Integer adId , Integer commentId , Authentication authentication); // Удаление комментария
 
       // Обновление комментария
-      Comment updateComment (Integer adId , Integer commentId , CreateOrUpdateCommentDto createOrUpdateCommentDto);
+      CommentDto updateComment (Integer adId , Integer commentId , CreateOrUpdateCommentDto createOrUpdateCommentDto);
 }

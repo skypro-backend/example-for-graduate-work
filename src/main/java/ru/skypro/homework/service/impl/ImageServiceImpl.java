@@ -23,7 +23,7 @@ public class ImageServiceImpl implements ImageService {
       @Override
       public Image uploadImage (MultipartFile multipartFile) throws IOException {
             log.info ("Было создано изображение");
-            Image image = new Image ();
+            Image image = new Image();
             image.setData(multipartFile.getBytes());
             image.setFileSize(multipartFile.getSize());
             image.setMediaType(multipartFile.getContentType());

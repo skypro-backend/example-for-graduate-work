@@ -20,11 +20,11 @@ public class MyUserDetails implements UserDetails {
       @Override
       public Collection<? extends GrantedAuthority> getAuthorities() {
 
-            Set <Role> roles = Collections.singleton (user.getRole ());
-            List <SimpleGrantedAuthority> authorities = new ArrayList <> ();
+            Set<Role> roles = Collections.singleton (user.getRole());
+            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
             for (Role role : roles) {
-                  authorities.add(new SimpleGrantedAuthority(role.name ()));
+                  authorities.add(new SimpleGrantedAuthority(role.name()));
             }
             return authorities;
       }

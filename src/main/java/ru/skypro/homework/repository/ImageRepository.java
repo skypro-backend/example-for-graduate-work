@@ -7,5 +7,4 @@ import java.awt.*;
 
 
 public interface ImageRepository extends JpaRepository<Image, Integer> {
-
 }

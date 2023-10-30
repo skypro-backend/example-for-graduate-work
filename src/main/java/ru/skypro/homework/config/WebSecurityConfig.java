@@ -67,7 +67,6 @@ public class WebSecurityConfig  {
                 .cors()
                 .and()
                 .httpBasic(withDefaults());
-
         return http.build();
     }
 

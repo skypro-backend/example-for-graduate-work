@@ -26,44 +26,44 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ads")
-@Tag (name = "Комментарии", description = "работа с коментариями")
+@Tag(name = "Комментарии", description = "работа с коментариями")
 public class CommentsController {
 
     private final ImageService imageService;
     private final CommentService commentService;
 
     @Operation(summary = "Получение комментариев объявления", responses = {
-              @ApiResponse (responseCode = "200", description = "OK", content = {
-                        @Content (mediaType = "application/json", array = @ArraySchema (schema =
-                        @Schema (implementation = CommentsDto.class)))}),
-              @ApiResponse(responseCode = "401", description = "Unauthorized"),
-              @ApiResponse(responseCode = "404", description = "Not found")
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema =
+                    @Schema(implementation = CommentsDto.class)))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Not found")
     })
     @GetMapping("/{id}/comments")
-    public ResponseEntity<CommentDto> getAdComments(@PathVariable("id") Integer id) {
-        List <CommentDto> commentsDto = commentService.getAdComments(id);
-        return ResponseEntity.ok((CommentDto) commentsDto);
+    public ResponseEntity<CommentsDto> getAdComments(@PathVariable("id") Integer id) {
+        List<CommentDto> commentsDto = commentService.getAdComments(id);
+        return ResponseEntity.ok(new CommentsDto(commentsDto.size(), commentsDto));
     }
 
     @Operation(summary = "Добавление комментария к объявлению", responses = {
-              @ApiResponse(responseCode = "200", description = "OK", content = {
-                        @Content(mediaType = "application/json", array = @ArraySchema(schema =
-                        @Schema(implementation = CommentDto.class)))}),
-              @ApiResponse(responseCode = "401", description = "Unauthorized"),
-              @ApiResponse(responseCode = "404", description = "Not found")
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema =
+                    @Schema(implementation = CommentDto.class)))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Not found")
     })
     @PostMapping("/{id}/comments")
-    public ResponseEntity <Comment> addCommentToAd(@PathVariable("id") Integer id,
-                                                   @RequestBody @Valid CreateOrUpdateCommentDto createOrUpdateCommentDto,
-                                                   Authentication authentication) {
+    public ResponseEntity<Comment> addCommentToAd(@PathVariable("id") Integer id,
+                                                  @RequestBody @Valid CreateOrUpdateCommentDto createOrUpdateCommentDto,
+                                                  Authentication authentication) {
         return ResponseEntity.ok(commentService.addCommentToAd(id, createOrUpdateCommentDto, authentication));
     }
 
     @Operation(summary = "Удаление комментария", responses = {
-              @ApiResponse(responseCode = "200", description = "OK"),
-              @ApiResponse(responseCode = "401", description = "Unauthorized"),
-              @ApiResponse(responseCode = "403", description = "Forbidden"),
-              @ApiResponse(responseCode = "404", description = "Not found")
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found")
     })
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable("adId") Integer adId,
@@ -74,17 +74,17 @@ public class CommentsController {
     }
 
     @Operation(summary = "Обновление комментария", responses = {
-              @ApiResponse(responseCode = "200", description = "OK", content = {
-                        @Content(mediaType = "application/json", array = @ArraySchema(schema =
-                        @Schema(implementation = CommentDto.class)))}),
-              @ApiResponse(responseCode = "401", description = "Unauthorized"),
-              @ApiResponse(responseCode = "403", description = "Forbidden"),
-              @ApiResponse(responseCode = "404", description = "Not found")
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema =
+                    @Schema(implementation = CommentDto.class)))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found")
     })
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity <Comment> updateComment(@PathVariable("adId") Integer adId,
-                                                  @PathVariable("commentId") Integer commentId,
-                                                  @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
-        return ResponseEntity.ok(commentService.updateComment (adId, commentId, createOrUpdateCommentDto));
+    public ResponseEntity<CommentDto> updateComment(@PathVariable("adId") Integer adId,
+                                                    @PathVariable("commentId") Integer commentId,
+                                                    @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+        return ResponseEntity.ok(commentService.updateComment(adId, commentId, createOrUpdateCommentDto));
     }
 }
