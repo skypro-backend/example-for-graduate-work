@@ -17,8 +17,6 @@
             <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="email" type="VARCHAR(255)">
-            </column>
             <column name="first_name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -27,7 +25,7 @@
             </column>
             <column name="role" type="VARCHAR(255)"/>
             <column name="phone" type="VARCHAR(255)"/>
-            <column name="user_name" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)"/>
             <column name="password" type="VARCHAR(255)"/>
             <column name="avatar_path" type="TEXT"/>
         </createTable>

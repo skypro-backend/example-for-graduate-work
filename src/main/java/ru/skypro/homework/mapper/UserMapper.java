@@ -10,17 +10,14 @@ import ru.skypro.homework.models.User;
 @Mapper
 public abstract class UserMapper {
 
-    @Mapping(target = "image", expression = "java(setImageURI())")
+    @Mapping(target = "image", expression = "java(setImageURI(entity))")
     public abstract UserDto toDto(User entity);
 
     public abstract User toEntity(UpdateUserDto dto);
 
-    public String setImageURI() {
+    public String setImageURI(User user) {
         return UriComponentsBuilder.newInstance()
-                .scheme("http")
-                .host("localhost")
-                .port("8080")
-                .pathSegment("users", "me", "image")
+                .pathSegment("users", user.getId().toString(), "image")
                 .toUriString();
     }
 

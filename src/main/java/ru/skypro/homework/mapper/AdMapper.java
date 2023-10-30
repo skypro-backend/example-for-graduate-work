@@ -20,15 +20,11 @@ public abstract class AdMapper {
     @Mapping(target = "image", expression = "java(setImageURI(entity))")
     @Mapping(target = "authorFirstName", source = "user.firstName")
     @Mapping(target = "authorLastName", source = "user.lastName")
-    @Mapping(target = "email", source = "user.email")
     @Mapping(target = "phone", source = "user.phone")
     abstract ExtendedAdDto toExtendedDto(Ad entity);
 
     public String setImageURI(Ad source) {
         return UriComponentsBuilder.newInstance()
-                .scheme("http")
-                .host("localhost")
-                .port("8080")
                 .pathSegment("ads", source.getPk().toString(), "image")
                 .toUriString();
     }

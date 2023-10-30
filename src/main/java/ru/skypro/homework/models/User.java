@@ -19,8 +19,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "email")
-    private String email;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
@@ -30,8 +28,8 @@ public class User {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
-    @Column(name = "user_name")
-    private String username;
+    @Column(name = "email")
+    private String email;
     @Column(name = "password")
     private String password;
     @Column(name = "avatar_path")

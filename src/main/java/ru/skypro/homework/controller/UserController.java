@@ -28,8 +28,8 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping(path = "/me/image")
-    public ResponseEntity<byte[]> getUserImage() {
+    @GetMapping(path = "/{id}/image")
+    public ResponseEntity<byte[]> getUserImage(@PathVariable Integer id) {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(null);

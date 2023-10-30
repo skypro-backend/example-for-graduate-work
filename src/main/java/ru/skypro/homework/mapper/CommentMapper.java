@@ -1,17 +1,17 @@
 package ru.skypro.homework.mapper;
 
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 import ru.skypro.homework.models.Comment;
 
 @Mapper
-@RequiredArgsConstructor
 public abstract class CommentMapper {
 
-    private final UserMapper userMapper;
+    @Autowired
+    public UserMapper userMapper;
 
     @Mapping(target = "author", source = "user.id")
     @Mapping(target = "authorFirstName", source = "user.firstName")
