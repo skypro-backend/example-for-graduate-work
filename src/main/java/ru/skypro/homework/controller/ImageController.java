@@ -21,7 +21,7 @@ public class ImageController {
      * @return Возвращает байтовое представление картинки
      */
     @GetMapping(value = "/{imageName}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
-    public ResponseEntity<byte[]> getImage2(@PathVariable String imageName) {
-        return new ResponseEntity<>(imageService.getImage(imageName), HttpStatus.OK);
+    public byte[] getImage2(@PathVariable String imageName) {
+        return imageService.getImage(imageName);
     }
 }
