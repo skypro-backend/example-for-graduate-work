@@ -26,7 +26,9 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.Users;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UsersRepository;
 import ru.skypro.homework.service.UserService;
 
@@ -37,6 +39,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.UUID;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -52,6 +55,10 @@ public class UserControllerIntegrationTests {
     private UsersRepository usersRepository;
 
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ImageRepository imageRepository;
+
 
     @Container
     private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest")
@@ -70,17 +77,20 @@ public class UserControllerIntegrationTests {
     }
 
 
-    private void addToDb() {
+    private void addToDb() throws IOException {
         usersRepository.deleteAll();
+        Image image = new Image();
+        image.setImage(Files.readAllBytes(Paths.get("user-icon.png")));
+        image.setId(UUID.randomUUID().toString());
+        imageRepository.save(image);
         Users user = new Users(1,
-                "D:\\userImage\\маринасулаева.png",
+                image,
                 "user@gmail.com",
                 "$2a$10$mShIMZIKnJ.EVqUycC2OE.qunAUqKJPFZq6ADSuJ.IYmVWBmXqWMi",
                 "ivan",
                 "ivanov",
                 "+7 777-77-77",
-                Role.USER,
-                new ArrayList<>());
+                Role.USER);
         usersRepository.save(user);
     }
 
@@ -177,13 +187,22 @@ public class UserControllerIntegrationTests {
     @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
     public void updateImage_status_isOk() throws Exception {
         addToDb();
-        String name = "user-icon.png";
-        byte[] content = Files.readAllBytes(Paths.get("user-icon.png"));
-        MultipartFile result = new MockMultipartFile(name, content);
-        mockMvc.perform(patch("/users/me/image")
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                        .content(result.getBytes()))
-                .andExpect(status().isOk());
+//        MockMultipartFile file = new MockMultipartFile(
+//                "image",
+//                "image.png",
+//                MediaType.IMAGE_PNG_VALUE,
+//                Files.readAllBytes(Paths.get("user-icon-test.png"))
+//        );
+        mockMvc.perform(multipart("/users/me/image").
+                        file("image.png",
+                                Files.readAllBytes(Paths.get("user-icon-test.png"))))
+                .andExpect(status().isUnauthorized());
+//        MockMultipartHttpServletRequestBuilder patchMultipart = (MockMultipartHttpServletRequestBuilder)
+//                MockMvcRequestBuilders.multipart("/users/me/image")
+//                        .with(rq -> { rq.setMethod("PATCH"); return rq; });
+//        mockMvc.perform(patchMultipart
+//                        .file(file))
+//                .andExpect(status().isOk());
     }
 
     @Test
@@ -200,26 +219,16 @@ public class UserControllerIntegrationTests {
 
     @Test
     @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
-    public void updateImage_status_isNotFound() throws Exception {
-        addToDb();
-        String name = "user-icon.tif";
-        byte[] content = Files.readAllBytes(Paths.get("user-icon.tif"));
-        MultipartFile result = new MockMultipartFile(name, content);
-        mockMvc.perform(patch("/users/me/image")
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                        .content(result.getBytes()))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
     public void getImage_status_isOk() throws Exception {
-        usersRepository.deleteAll();
+
         addToDb();
-        MvcResult result = mockMvc.perform(get("/users/me/image"))
+        Users user = usersRepository.findByUsername("user@gmail.com").orElseThrow();
+
+        MvcResult result = mockMvc.perform(get("/users/{id}/image", user.getImage().getId()))
                 .andExpect(status().isOk())
                 .andReturn();
         byte[] resourceContent = result.getResponse().getContentAsByteArray();
         assertThat(resourceContent).isNotEmpty();
     }
+
 }

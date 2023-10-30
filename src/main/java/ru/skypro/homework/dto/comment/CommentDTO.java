@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import ru.skypro.homework.entity.Comment;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Data
 @AllArgsConstructor
@@ -22,7 +23,8 @@ public class CommentDTO {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setPk(comment.getPk());
         commentDTO.setAuthor(comment.getUsers().getId());
-        commentDTO.setAuthorImage(comment.getUsers().getImage());
+        Optional.ofNullable(comment.getUsers().getImage()).ifPresent(image -> commentDTO.setAuthorImage(
+                "/users/" + comment.getUsers().getImage().getId() + "/image"));
         commentDTO.setAuthorFirstName(comment.getUsers().getFirstName());
         commentDTO.setCreatedAt(comment.getCreatedAt());
         commentDTO.setText(comment.getText());
