@@ -30,6 +30,10 @@ public class ImageServiceImpl implements ImageService {
     @Value("${image.upload.directory}")
     private String uploadDirectory;
 
+    @Override
+    public String getUploadDirectory() {
+        return uploadDirectory;
+    }
 
     public ImageServiceImpl(ImageRepository imageRepository, UserRepository userRepository, AdRepository adRepository) {
         this.imageRepository = imageRepository;

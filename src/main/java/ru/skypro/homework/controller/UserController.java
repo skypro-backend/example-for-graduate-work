@@ -17,6 +17,7 @@ import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -32,6 +33,7 @@ public class UserController {
 
     private final UserService userService;
 
+
     public UserController(AuthService authService, ImageService imageService, UserService userService) {
         this.authService = authService;
         this.imageService = imageService;
@@ -42,7 +44,7 @@ public class UserController {
     @GetMapping("/me")
     public meDTO me(Authentication authentication) {
         UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getPrincipal();
-
+        String uploadDirectory = imageService.getUploadDirectory();
 
         meDTO meDTO = new meDTO();
 
@@ -52,7 +54,9 @@ public class UserController {
         meDTO.setLastName(userDetailsDTO.getLastName());
         meDTO.setPhone(userDetailsDTO.getPhone());
         meDTO.setRole(userDetailsDTO.getRole());
-        meDTO.setImage(userDetailsDTO.getImage().getImagePath().replace("\\", "/"));
+
+        meDTO.setImage("/"+userDetailsDTO.getImage().getImagePath().replace("\\", "/"));
+
 
         return meDTO;
     }
