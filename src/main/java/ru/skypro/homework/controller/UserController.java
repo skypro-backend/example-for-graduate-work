@@ -23,13 +23,12 @@ public class UserController {
 
     // Получение пользователя
     @GetMapping("/me")
-    public UserDTO getUser(){
+    public UserDTO getUser() {
         return userService.getUser();
     }
 
-
     @PostMapping("/set_password")
-    public void setPassword(@RequestBody @Valid NewPassword newPassword){
+    public void setPassword(@RequestBody @Valid NewPassword newPassword) {
         userService.updatePassword(newPassword);
     }
 

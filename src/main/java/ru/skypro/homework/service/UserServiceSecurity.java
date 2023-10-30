@@ -3,7 +3,6 @@ package ru.skypro.homework.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.exceptions.UserNotFoundException;
@@ -22,7 +21,7 @@ public class UserServiceSecurity implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         UserModel user = userRepo.findByUserName(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(UserNotFoundException::new);
         return new AdsUserDetails(user);
     }
 

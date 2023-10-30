@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,9 +43,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUser() {
         UserModel currentUser = findUser().orElseThrow(UserNotFoundException::new);
-        UserDTO userDTO = new UserDTO();
-        userDTO = UserMapper.mapToUserDTO(currentUser);
-        return userDTO;
+        return UserMapper.mapToUserDTO(currentUser);
     }
 
     /**
