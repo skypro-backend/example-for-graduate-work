@@ -29,8 +29,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: image
-                  type: varchar
+                  name: image_id
+                  type: varchar(255)
+                  constraints:
+                    foreignKeyName: image_id
+                    references: image(id)
               - column:
                   name: user_id
                   type: integer

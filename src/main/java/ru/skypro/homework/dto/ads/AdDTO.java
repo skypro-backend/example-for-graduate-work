@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Users;
 
+import java.util.Optional;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,17 +25,18 @@ public class AdDTO {
         adDTO.setAuthor(ad.getUser().getId());
         adDTO.setTitle(ad.getTitle());
         adDTO.setPrice(ad.getPrice());
-        adDTO.setImage(ad.getImage());
+        Optional.ofNullable(ad.getImage()).ifPresent(image -> adDTO.setImage(
+                "/ads/" + ad.getImage().getId() + "/image"));
         return adDTO;
     }
 
-    public Ad toAd(Users user){
-        Ad ad = new Ad();
-        ad.setPk(this.getPk());
-        ad.setUser(user);
-        ad.setTitle(this.getTitle());
-        ad.setPrice(this.getPrice());
-        ad.setImage(this.getImage());
-        return ad;
-    }
+//    public Ad toAd(Users user){
+//        Ad ad = new Ad();
+//        ad.setPk(this.getPk());
+//        ad.setUser(user);
+//        ad.setTitle(this.getTitle());
+//        ad.setPrice(this.getPrice());
+//        ad.setImage(this.getImage());
+//        return ad;
+//    }
 }

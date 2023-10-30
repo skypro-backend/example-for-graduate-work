@@ -23,11 +23,11 @@ public class CreateOrUpdateAd {
     @Size(min = 8, max = 64)
     private String description;
 
-    public Ad toAd(Users user){
+    public Ad toAd(){
         Ad ad = new Ad();
-        ad.setUser(user);
         ad.setTitle(this.getTitle());
         ad.setPrice(this.getPrice());
+        ad.setDescription(this.getDescription());
         return ad;
     }
 
