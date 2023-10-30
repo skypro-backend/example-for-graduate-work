@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/ads")
 @CrossOrigin(value = "http://localhost:3000")
-public class AdsController {
+public class AdController {
 
     @GetMapping
     public AdsDto getAllAds() {

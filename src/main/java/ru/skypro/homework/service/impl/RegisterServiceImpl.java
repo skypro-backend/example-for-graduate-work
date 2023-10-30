@@ -1,6 +1,5 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterDto;
@@ -15,7 +14,6 @@ public class RegisterServiceImpl implements RegisterService {
 
     private final UserRepository userRepository;
 
-    @Autowired
     public RegisterServiceImpl(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -34,7 +32,7 @@ public class RegisterServiceImpl implements RegisterService {
         return ResponseEntity.ok("Пользователь успешно зарегистрирован");
     }
 
-    public static boolean validateRegister(RegisterDto register) {
+    public boolean validateRegister(RegisterDto register) {
 
         Pattern pattern = Pattern.compile("\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}");
         boolean matcher = pattern.matcher(register.getPhone()).matches();
@@ -45,4 +43,5 @@ public class RegisterServiceImpl implements RegisterService {
                && (register.getLastName().length() >= 2 && register.getLastName().length() <= 16)
                && (!matcher);
     }
+
 }
