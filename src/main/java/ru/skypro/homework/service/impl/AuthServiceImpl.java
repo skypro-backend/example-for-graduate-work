@@ -12,15 +12,9 @@ import ru.skypro.homework.service.UserServiceSecurity;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    //        private final UserDetailsManager manager;
     private final UserServiceSecurity manager;
     private final PasswordEncoder encoder;
 
-//    public AuthServiceImpl(UserDetailsManager manager,
-//                           PasswordEncoder passwordEncoder) {
-//        this.manager = manager;
-//        this.encoder = passwordEncoder;
-//    }
 
     @Override
     public boolean login(String userName, String password) {
@@ -41,13 +35,7 @@ public class AuthServiceImpl implements AuthService {
                 || register.getPassword() == null || register.getPassword().isBlank()){
             return false;
         }
-//        manager.createUser(
-//                User.builder()
-//                        .passwordEncoder(this.encoder::encode)
-//                        .password(register.getPassword())
-//                        .username(register.getUsername())
-//                        .roles(register.getRole().name())
-//                        .build());
+
         return true;
     }
 
