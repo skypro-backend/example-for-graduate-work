@@ -13,8 +13,8 @@ public abstract class CommentMapper {
 
     private final UserMapper userMapper;
 
-    @Mapping(target = "author", source = "entity.user.id")
-    @Mapping(target = "authorFirstName", source = "entity.user.firstName")
+    @Mapping(target = "author", source = "user.id")
+    @Mapping(target = "authorFirstName", source = "user.firstName")
     @Mapping(target = "authorImage", expression = "java(userMapper.setImageURI(entity.getUser()))")
     public abstract CommentDto toDto(Comment entity);
 
