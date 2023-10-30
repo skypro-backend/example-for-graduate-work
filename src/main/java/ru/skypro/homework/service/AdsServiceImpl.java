@@ -93,7 +93,7 @@ public class AdsServiceImpl implements AdsService {
             adsRequestDTO.setPk(ad.getPk());
             adsRequestDTO.setPrice(ad.getPrice());
             adsRequestDTO.setTitle(ad.getTitle());
-            adsRequestDTO.setImage(ad.getImage().getImagePath());
+            adsRequestDTO.setImage(ad.getImage().getImagePath().replace("\\", "/"));
 
 
             adsRequestDTOs.add(adsRequestDTO);

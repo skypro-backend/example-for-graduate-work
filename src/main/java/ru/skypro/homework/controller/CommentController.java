@@ -59,7 +59,7 @@ public class CommentController {
         }
     }
 
-    @PutMapping("/{adId}/comments/{commentId}")
+    @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentInfoDTO> updateCommentAndGetInfo(
             @PathVariable("adId") Long pk,
             @PathVariable("commentId") Long commentId,

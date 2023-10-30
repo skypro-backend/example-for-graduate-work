@@ -58,7 +58,7 @@ public class AdsController {
 
 
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getAllAds() {
+    public ResponseEntity <?> getAllAds() {
         List<AllAdDTO> ads = adsService.getAllAds();
 
         Map<String, Object> response = new HashMap<>();
@@ -90,7 +90,7 @@ public class AdsController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<AdUpdateDTO> updateAd(@PathVariable("id") Long pk, @RequestBody AdUpdateDTO updatedAd) {
         AdUpdateDTO updated = adsService.updateAd(pk, updatedAd);
 
@@ -113,7 +113,7 @@ public class AdsController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping(value ="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value ="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateAdImage(
             @PathVariable("id") Long pk,
             @RequestParam("file") MultipartFile imageFile

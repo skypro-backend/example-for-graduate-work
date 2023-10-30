@@ -52,7 +52,7 @@ public class UserController {
         meDTO.setLastName(userDetailsDTO.getLastName());
         meDTO.setPhone(userDetailsDTO.getPhone());
         meDTO.setRole(userDetailsDTO.getRole());
-        meDTO.setImage(userDetailsDTO.getImage().getImagePath());
+        meDTO.setImage(userDetailsDTO.getImage().getImagePath().replace("\\", "/"));
 
         return meDTO;
     }
@@ -89,7 +89,7 @@ public class UserController {
     }
     }
 
-    @PostMapping(value ="/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value ="/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateAvatar(Authentication authentication, @RequestParam("file") MultipartFile file) {
         UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getPrincipal();
 
