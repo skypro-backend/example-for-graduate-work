@@ -1,6 +1,5 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,8 @@ import java.util.regex.Pattern;
 @Service
 public class RegisterServiceImpl implements RegisterService {
 
+    private static final String PHONE_NUMBER_PATTERN = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}";
+
     private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
 
@@ -26,13 +27,9 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public ResponseEntity<String> registerUser(RegisterDto register) {
-        // TODO: метод manager.userExists не работает
-        if (manager.userExists(register.getUsername())) {
-            return ResponseEntity.badRequest().body("Пользователь уже существует");
-        }
-        if (!validateRegister(register)) {
-            return ResponseEntity.badRequest().body("Неверные данные пользователя");
+    public boolean registerUser(RegisterDto register) {
+        if (manager.userExists(register.getUsername()) || !validateRegister(register)) {
+            return false;
         }
 
         String password = encoder.encode(register.getPassword());
@@ -46,12 +43,11 @@ public class RegisterServiceImpl implements RegisterService {
         newUser.setRole(register.getRole());
         userRepository.save(newUser);
 
-        return ResponseEntity.ok("Пользователь успешно зарегистрирован");
+        return true;
     }
 
     public boolean validateRegister(RegisterDto register) {
-
-        Pattern pattern = Pattern.compile("\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}");
+        Pattern pattern = Pattern.compile(PHONE_NUMBER_PATTERN);
         boolean matcher = pattern.matcher(register.getPhone()).matches();
 
         return (register.getUsername().length() >= 4 && register.getUsername().length() <= 32)

@@ -8,9 +8,6 @@ import ru.skypro.homework.entity.Comment;
 @Component
 public class CommentMapper {
 
-    public CommentMapper() {
-    }
-
     public CommentDto toDto(@NonNull Comment comment) {
         CommentDto commentDto = new CommentDto();
 

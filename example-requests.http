@@ -97,7 +97,7 @@ POST http://localhost:8080/register
 Content-Type: application/json
 
 {
-  "username": "slavamarchkov@mail.ru",
+  "username": "slavamarchkov@gmail.com",
   "password": "slavamarchkov",
   "firstName": "Viacheslav",
   "lastName": "Marchkov",

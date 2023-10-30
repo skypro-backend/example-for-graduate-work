@@ -8,9 +8,6 @@ import ru.skypro.homework.entity.User;
 @Component
 public class UserMapper {
 
-    public UserMapper() {
-    }
-
     public UserDto toDto(@NonNull User user) {
         UserDto userDto = new UserDto();
 
