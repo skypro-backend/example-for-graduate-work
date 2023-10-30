@@ -44,7 +44,6 @@ public class UserController {
     @GetMapping("/me")
     public meDTO me(Authentication authentication) {
         UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getPrincipal();
-        String uploadDirectory = imageService.getUploadDirectory();
 
         meDTO meDTO = new meDTO();
 
