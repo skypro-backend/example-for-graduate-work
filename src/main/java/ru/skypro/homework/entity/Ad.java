@@ -30,8 +30,8 @@ public class Ad {
     private int price; //цена объявления
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "image_id")
-    private Image image; //  путь к картинке объявления
+    @JoinColumn(name = "image_ad_id")
+    private ImageAd image; //  путь к картинке объявления
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

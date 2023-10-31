@@ -9,6 +9,7 @@ import ru.skypro.homework.dto.ads.Ads;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAd;
 import ru.skypro.homework.entity.Image;
+import ru.skypro.homework.entity.ImageAd;
 
 
 public interface AdsService {
@@ -26,7 +27,7 @@ public interface AdsService {
     Ads getAdsMe(Authentication authentication);
 
 //    @PreAuthorize("principal.admin or #username == authentication.principal.username")
-    Image updateImage(int id, MultipartFile image, Authentication authentication);
+    ImageAd updateImage(int id, MultipartFile image, Authentication authentication);
 
     byte [] getImage (String id);
 

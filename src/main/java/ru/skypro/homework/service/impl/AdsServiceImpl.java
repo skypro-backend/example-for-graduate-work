@@ -10,11 +10,13 @@ import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAd;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Image;
+import ru.skypro.homework.entity.ImageAd;
 import ru.skypro.homework.entity.Users;
 import ru.skypro.homework.exceptions.AccessErrorException;
 import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.repository.AdsRepository;
+import ru.skypro.homework.repository.ImageAdRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UsersRepository;
 import ru.skypro.homework.service.AdsService;
@@ -34,14 +36,14 @@ public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
     private final UsersRepository usersRepository;
-    private final ImageRepository imageRepository;
+    private final ImageAdRepository imageAdRepository;
 
     public AdsServiceImpl(AdsRepository adsRepository,
                           UsersRepository usersRepository,
-                          ImageRepository imageRepository) {
+                          ImageAdRepository imageAdRepository) {
         this.adsRepository = adsRepository;
         this.usersRepository = usersRepository;
-        this.imageRepository = imageRepository;
+        this.imageAdRepository = imageAdRepository;
     }
 
 
@@ -82,7 +84,7 @@ public class AdsServiceImpl implements AdsService {
         ad.setUser(user);
         ad = adsRepository.save(ad);
 
-        Image image = new Image();
+        ImageAd image = new ImageAd();
         image.setId(ad.getPk().toString());
 
         try {
@@ -91,7 +93,7 @@ public class AdsServiceImpl implements AdsService {
         } catch (IOException e) {
             throw new RuntimeException();
         }
-        Image returnImage = imageRepository.save(image);
+        ImageAd returnImage = imageAdRepository.save(image);
         ad.setImage(returnImage);
 
         AdDTO adDTO = AdDTO.fromAd(adsRepository.save(ad));
@@ -145,15 +147,15 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Image updateImage(int id, MultipartFile file, Authentication authentication) {
+    public ImageAd updateImage(int id, MultipartFile file, Authentication authentication) {
 
         Ad ad = adsRepository.findAdByPk(id).orElseThrow(AdNotFoundException::new);
 
-        Image image;
+        ImageAd image;
         if (!Objects.isNull(ad.getImage())) {
-            image = imageRepository.findById(ad.getImage().getId()).orElse(new Image());
+            image = imageAdRepository.findById(ad.getImage().getId()).orElse(new ImageAd());
         } else {
-            image = new Image();
+            image = new ImageAd();
             image.setId(ad.getPk().toString());
         }
         try {
@@ -162,7 +164,7 @@ public class AdsServiceImpl implements AdsService {
         } catch (IOException e) {
             throw new RuntimeException();
         }
-        Image returnImage = imageRepository.save(image);
+        ImageAd returnImage = imageAdRepository.save(image);
         ad.setImage(image);
         adsRepository.save((ad));
 
@@ -171,7 +173,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public byte [] getImage (String id){
-        Image image = imageRepository.findById(id).orElseThrow();
+        ImageAd image = imageAdRepository.findById(id).orElseThrow();
         return image.getImage();
     }
 
