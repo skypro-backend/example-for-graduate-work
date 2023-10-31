@@ -57,6 +57,8 @@ public class WebSecurityConfig {
                                 .permitAll()
                                 .mvcMatchers("/ads/**", "/users/**")
                                 .authenticated()
+
+
                 )
                 .httpBasic(withDefaults());
 

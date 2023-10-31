@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        user.setImage("/images/" + filename);
+        user.setImage("/users/images/" + filename);
         repository.save(user);
     }
 

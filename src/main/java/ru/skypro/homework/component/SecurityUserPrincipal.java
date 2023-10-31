@@ -1,15 +1,17 @@
 package ru.skypro.homework.component;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.model.User;
+
 import java.util.Collection;
+import java.util.Collections;
 
 @Component
 public class SecurityUserPrincipal implements UserDetails {
     private User user;
-
 
     public SecurityUserPrincipal(User user) {
         this.user = user;
@@ -17,7 +19,8 @@ public class SecurityUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        // Возвращаем роль пользователя в виде GrantedAuthority
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
     @Override
@@ -46,9 +49,7 @@ public class SecurityUserPrincipal implements UserDetails {
     }
 
     @Override
-
     public boolean isEnabled() {
         return true;
     }
-
 }
