@@ -7,10 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.MyDatabaseUserDetails;
-import ru.skypro.homework.dto.Register;
-import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.mapper.UserMapper;
@@ -75,8 +72,8 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public void createUser(UserDetails myDatabaseUserDetails) {
-        Register register = ((MyDatabaseUserDetails) myDatabaseUserDetails).getRegister();
-        UserEntity userEntity = userMapper.registerToUserEntity(register);
+        MyDatabaseUser myDatabaseUser = ((MyDatabaseUserDetails) myDatabaseUserDetails).getMyDatabaseUser();
+        UserEntity userEntity = userMapper.myDatabaseUserToUserEntity(myDatabaseUser);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         userRepository.save(userEntity);
     }

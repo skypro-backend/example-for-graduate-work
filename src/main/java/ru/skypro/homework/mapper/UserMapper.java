@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
+import ru.skypro.homework.dto.MyDatabaseUser;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
@@ -21,7 +22,9 @@ public abstract class UserMapper {
 
     public abstract UserEntity registerToUserEntity(Register register);
 
-    public abstract Register userEntityToRegister(UserEntity userEntity);
+    public abstract UserEntity myDatabaseUserToUserEntity(MyDatabaseUser myDatabaseUser);
+
+    public abstract MyDatabaseUser userEntityToMyDatabaseUser(UserEntity userEntity);
 
     public abstract void updateUserToUserEntity(UpdateUser updateUser, @MappingTarget UserEntity userEntity);
 

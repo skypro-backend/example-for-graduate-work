@@ -17,23 +17,23 @@ import java.util.Collections;
 
 public class MyDatabaseUserDetails implements UserDetails {
 
-    private Register register;
+    private MyDatabaseUser myDatabaseUser;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority =
-                new SimpleGrantedAuthority("ROLE_" + register.getRole().name());
+                new SimpleGrantedAuthority("ROLE_" + myDatabaseUser.getRole().name());
         return Collections.singleton(authority);
     }
 
     @Override
     public String getPassword() {
-        return this.register.getPassword();
+        return this.myDatabaseUser.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.register.getUsername();
+        return this.myDatabaseUser.getUsername();
     }
 
     @Override
