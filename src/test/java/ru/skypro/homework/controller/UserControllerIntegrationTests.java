@@ -20,6 +20,8 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.multipart.MultipartFile;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -241,33 +243,34 @@ public class UserControllerIntegrationTests {
     @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
     public void updateImage_status_isOk() throws Exception {
         addToDb();
-//        MockMultipartFile file = new MockMultipartFile(
-//                "image",
-//                "image.png",
-//                MediaType.IMAGE_PNG_VALUE,
-//                Files.readAllBytes(Paths.get("user-icon-test.png"))
-//        );
-        mockMvc.perform(multipart("/users/me/image").
-                        file("image.png",
-                                Files.readAllBytes(Paths.get("user-icon-test.png"))))
-                .andExpect(status().isUnauthorized());
-//        MockMultipartHttpServletRequestBuilder patchMultipart = (MockMultipartHttpServletRequestBuilder)
-//                MockMvcRequestBuilders.multipart("/users/me/image")
-//                        .with(rq -> { rq.setMethod("PATCH"); return rq; });
-//        mockMvc.perform(patchMultipart
-//                        .file(file))
-//                .andExpect(status().isOk());
+        MockMultipartFile file = new MockMultipartFile(
+                "image",
+                "image.png",
+                MediaType.IMAGE_PNG_VALUE,
+                Files.readAllBytes(Paths.get("user-icon-test.png"))
+        );
+        MockMultipartHttpServletRequestBuilder patchMultipart = (MockMultipartHttpServletRequestBuilder)
+                MockMvcRequestBuilders.multipart("/users/me/image")
+                        .with(rq -> { rq.setMethod("PATCH"); return rq; });
+        mockMvc.perform(patchMultipart
+                        .file(file))
+                .andExpect(status().isOk());
     }
 
     @Test
     public void updateImage_status_isUnauthorized() throws Exception {
         addToDb();
-        String name = "user-icon.png";
-        byte[] content = Files.readAllBytes(Paths.get("user-icon.png"));
-        MultipartFile result = new MockMultipartFile(name, content);
-        mockMvc.perform(patch("/users/me/image")
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                        .content(result.getBytes()))
+        MockMultipartFile file = new MockMultipartFile(
+                "image",
+                "image.png",
+                MediaType.IMAGE_PNG_VALUE,
+                Files.readAllBytes(Paths.get("user-icon-test.png"))
+        );
+        MockMultipartHttpServletRequestBuilder patchMultipart = (MockMultipartHttpServletRequestBuilder)
+                MockMvcRequestBuilders.multipart("/users/me/image")
+                        .with(rq -> { rq.setMethod("PATCH"); return rq; });
+        mockMvc.perform(patchMultipart
+                        .file(file))
                 .andExpect(status().isUnauthorized());
     }
 
