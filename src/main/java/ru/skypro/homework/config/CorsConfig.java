@@ -19,7 +19,7 @@ public class CorsConfig {
 
         // Разрешите доступ с фронтенда (или "*" для всех доменов)
         config.setAllowedOrigins(List.of("http://localhost:3000"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT","PATCH", "DELETE"));
         config.setAllowCredentials(true);
         config.addAllowedHeader("*");
 
