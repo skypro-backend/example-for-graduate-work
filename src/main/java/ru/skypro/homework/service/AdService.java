@@ -11,7 +11,7 @@ public interface AdService {
 
     void removeAd(Integer id, Authentication authentication);
 
-    AdDto addAd(CreateOrUpdateAdDto createOrUpdateAdDto, MultipartFile image);
+    AdDto addAd(CreateOrUpdateAdDto createOrUpdateAdDto, MultipartFile image, Authentication authentication);
 
     ExtendedAdDto getAdById(Integer id);
 

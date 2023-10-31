@@ -14,4 +14,6 @@ public interface AdRepository extends JpaRepository<Ad, Integer> {
     Ad getAdById(Integer id);
 
     List<Ad> getAdsByUserId(Integer id);
+
+
 }

@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -11,12 +12,15 @@ import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.AdImage;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.entity.UserImage;
 import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.ImageService;
 
 import java.util.List;
 
@@ -28,6 +32,7 @@ public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
     private final UserRepository userRepository;
     private final AdMapper adMapper;
+    private final ImageService imageService;
 
     @Override
     public void removeAd(Integer id, Authentication authentication) {
@@ -36,7 +41,10 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDto addAd(CreateOrUpdateAdDto createOrUpdateAdDto, MultipartFile image) {
+    public AdDto addAd(CreateOrUpdateAdDto createOrUpdateAdDto, MultipartFile image, Authentication authentication) {
+        authentication.isAuthenticated();
+
+
         return null;
     }
 
@@ -64,7 +72,11 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public void UpdateAdImage(Integer id, final MultipartFile file) {
-
+        Ad ad = adRepository.findById(id)
+                .orElseThrow(() -> new AdNotFoundException(id));
+        AdImage image = (AdImage) imageService.updateImage(file, new AdImage());
+        ad.setImage(image);
+        adRepository.save(ad);
     }
 
     @Override

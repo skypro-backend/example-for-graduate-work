@@ -102,6 +102,7 @@ public class AdsController {
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<String> updateAdImage(@PathVariable("id") Integer id,
                                                 @RequestParam MultipartFile image) throws IOException {
+        adService.UpdateAdImage(id, image);
         return ResponseEntity.ok("Image updated successfully");
     }
 
