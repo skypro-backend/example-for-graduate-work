@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.PasswordDto;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.utils.MyMapper;
@@ -30,6 +31,13 @@ public class UserService {
         // here working with AuthRepository(?) should follow
         // saving new password by user id
         // TODO implement the above mentioned functionality
+    }
+
+    public UserDto getUserInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        UserEntity userEntity = userRepository.findByUsername(username);
+        return mapper.map(userEntity);
     }
 
     public String uploadAvatar(String username, MultipartFile file) {
