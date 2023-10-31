@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.service.ImageService;
@@ -18,11 +19,12 @@ import java.util.zip.Adler32;
 public class ImageServiceImpl implements ImageService {
     private final Adler32 adler32 = new Adler32();
 
+    @Value("${image.store.path}")
     private String storePath;
 
     private Path getPath(String filename) throws IOException {
-        var path = Paths.get(storePath, filename);
-        if (!path.normalize().startsWith(storePath)) {
+        var path = Paths.get(storePath, filename).toAbsolutePath().normalize();
+        if (!path.startsWith(Paths.get(storePath).toAbsolutePath())) {
             throw new IOException("Access denied");
         }
         return path;
@@ -33,7 +35,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     /**
-     * запись изображения в хранилище
+     * Запись изображения в хранилище
      */
     @Override
     public String create(MultipartFile multipartFile) throws IOException {
@@ -42,10 +44,11 @@ public class ImageServiceImpl implements ImageService {
         var ext = getFileExt(multipartFile.getOriginalFilename());
         var filename = adler32.getValue() + "." + ext;
         var path = getPath(filename);
-        if (Files.notExists(path)) {
+
+        if (!Files.exists(path)) {
+            Files.createDirectories(path.getParent());
             Files.write(path, multipartFile.getBytes());
         }
         return filename;
     }
-
 }

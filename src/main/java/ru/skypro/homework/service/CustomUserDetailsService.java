@@ -1,6 +1,8 @@
 package ru.skypro.homework.service;
 
+import org.mapstruct.Qualifier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,6 +13,7 @@ import ru.skypro.homework.repository.UserRepository;
 
 
 @Service
+@Primary
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired

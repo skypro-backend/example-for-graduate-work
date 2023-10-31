@@ -1,10 +1,12 @@
 package ru.skypro.homework.model;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
 @Data
+@Component
 @Entity(name = "users")
 public class User {
 
@@ -17,8 +19,11 @@ public class User {
     private String lastName;
     private String phone;
     private String image;
-
     @Enumerated(EnumType.STRING)
     private Role role;
+    public void setAvatarData(byte[] bytes) {
+    }
 
+    public void setAvatarPath(String filePath) {
+    }
 }
