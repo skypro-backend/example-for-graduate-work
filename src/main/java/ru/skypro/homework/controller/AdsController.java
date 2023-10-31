@@ -116,7 +116,7 @@ public class AdsController {
     @PatchMapping(value ="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateAdImage(
             @PathVariable("id") Long pk,
-            @RequestParam("file") MultipartFile image
+            @RequestParam("image") MultipartFile image
     ) {
         try {
             Image newImage = imageService.uploadImageByPk(image, pk);
