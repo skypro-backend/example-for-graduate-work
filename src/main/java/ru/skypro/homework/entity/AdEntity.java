@@ -11,13 +11,13 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ad {
+public class AdEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ad_Id")
+    @Column(name = "ad_id")
     private int Id;
-    private Integer Price;
+    private Integer price;
     private String title;
 
     @OneToOne
@@ -26,5 +26,5 @@ public class Ad {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User author;
+    private UserEntity author;
 }
