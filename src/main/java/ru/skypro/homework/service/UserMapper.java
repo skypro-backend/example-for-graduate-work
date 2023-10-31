@@ -1,14 +1,18 @@
 package ru.skypro.homework.service;
 
 import ru.skypro.homework.dto.authentication.Register;
+import ru.skypro.homework.dto.user.NewPassword;
+import ru.skypro.homework.dto.user.UpdateUser;
 import ru.skypro.homework.dto.user.User;
 import ru.skypro.homework.entity.UserEntity;
 
 public interface UserMapper {
 
-    UserEntity toUserEntity(Register register);
+    public UserEntity newPasswordDtoToUser(NewPassword newPassword);
 
-    User toUser(UserEntity userEntity);
+    public User userEntityToUserDto(UserEntity userEntityInp);
 
-    UserEntity updateUserEntity(UserEntity userEntity, User user);
+    public UserEntity updateUserDtoToUserEntity(UpdateUser updateUser);
+
+    public UserEntity registerDTOtoUserEntity (Register register);
 }

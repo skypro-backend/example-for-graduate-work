@@ -4,6 +4,8 @@ import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @ToString
@@ -15,32 +17,27 @@ import java.util.Objects;
 @Table(name = "users")
 public class UserEntity {
 
-    @Id
-    @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(name = "phone_user", nullable = false)
-    private String phone;
-
-    @Column(name = "first_name", nullable = false)
     private String firstName;
-
-    @Column(name = "last_name", nullable = false)
     private String lastName;
-
-    @Column(name = "email_user", nullable = false)
-    private String email;
-
-    @Column(name = "password_user", nullable = false)
+    private String phone;
+    private Role role;
+    @OneToOne
+    @JoinColumn(name = "USER_IMAGE", nullable = true)
+    private Image imageAvatar;
+    private String username;
     private String password;
 
-    @Column(name = "image_path")
-    private String imagePath;
+    @OneToMany(mappedBy = "userRelated",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
+    List<AdEntity> ads = new ArrayList<>();
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @OneToMany(mappedBy = "userRelated",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
+    List<AdEntity> comments = new ArrayList<>();
+
 
     @Override
     public boolean equals(Object o) {

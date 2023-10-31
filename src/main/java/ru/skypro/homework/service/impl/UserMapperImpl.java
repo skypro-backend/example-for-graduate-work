@@ -1,41 +1,62 @@
 package ru.skypro.homework.service.impl;
 
 import ru.skypro.homework.dto.authentication.Register;
+import ru.skypro.homework.dto.user.NewPassword;
+import ru.skypro.homework.dto.user.UpdateUser;
 import ru.skypro.homework.dto.user.User;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.service.UserMapper;
 
 public class UserMapperImpl implements UserMapper {
+
     @Override
-    public UserEntity toUserEntity(Register register) {
+    public UserEntity newPasswordDtoToUser(NewPassword newPassword) {
+        if (newPassword == null) {
+            return null;
+        }
         UserEntity userEntity = new UserEntity();
-        userEntity.setEmail(register.getUsername());
-        userEntity.setPassword(register.getPassword());
-        userEntity.setFirstName(register.getFirstName());
-        userEntity.setLastName(register.getLastName());
-        userEntity.setPhone(register.getPhone());
-        userEntity.setRole(register.getRole());
+        userEntity.setPassword(newPassword.getNewPassword());
         return userEntity;
     }
 
     @Override
-    public User toUser(UserEntity userEntity) {
+    public User userEntityToUserDto(UserEntity userEntityInp) {
+        if (userEntityInp == null) {
+            return null;
+        }
         User user = new User();
-        user.setId(userEntity.getId());
-        user.setEmail(userEntity.getEmail());
-        user.setFirstName(userEntity.getFirstName());
-        user.setLastName(userEntity.getLastName());
-        user.setPhone(userEntity.getPhone());
-        user.setRole(userEntity.getRole());
-        user.setImage("/users/image/" + userEntity.getId());
+        user.setId(userEntityInp.getId());
+        user.setFirstName(userEntityInp.getFirstName());
+        user.setLastName(userEntityInp.getLastName());
+        user.setPhone(userEntityInp.getPhone());
+        user.setRole(userEntityInp.getRole());
         return user;
     }
 
     @Override
-    public UserEntity updateUserEntity(UserEntity userEntity, User user) {
-        userEntity.setFirstName(user.getFirstName());
-        userEntity.setLastName(user.getLastName());
-        userEntity.setPhone(user.getPhone());
+    public UserEntity updateUserDtoToUserEntity(UpdateUser updateUser) {
+        if (updateUser == null) {
+            return null;
+        }
+        UserEntity user = new UserEntity();
+        user.setFirstName(updateUser.getFirstName());
+        user.setLastName(updateUser.getLastName());
+        user.setPhone(user.getPhone());
+        return user;
+    }
+
+    @Override
+    public UserEntity registerDTOtoUserEntity(Register register) {
+        if (register == null) {
+            return null;
+        }
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(register.getUsername());
+        userEntity.setFirstName(register.getFirstName());
+        userEntity.setLastName(register.getLastName());
+        userEntity.setPassword(register.getPassword());
+        userEntity.setPhone(register.getPhone());
+        userEntity.setRole(register.getRole());
         return userEntity;
     }
 }
