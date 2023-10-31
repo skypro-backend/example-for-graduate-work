@@ -46,19 +46,19 @@ public class AdsController {
     public ResponseEntity<AdCreateDTO> createAd(
             Authentication authentication,
             @RequestPart("properties") AdCreateDTO adCreateDTO,
-            @RequestPart("file") MultipartFile file
+            @RequestPart("image") MultipartFile image
     ) {
         String userName = authentication.getName();
 
         // Вызываем сервис для создания объявления
-        AdCreateDTO createdAd = adsService.createAd(userName, adCreateDTO, file);
+        AdCreateDTO createdAd = adsService.createAd(userName, adCreateDTO, image);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAd);
     }
 
 
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getAllAds() {
+    public ResponseEntity <?> getAllAds() {
         List<AllAdDTO> ads = adsService.getAllAds();
 
         Map<String, Object> response = new HashMap<>();
@@ -90,7 +90,7 @@ public class AdsController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<AdUpdateDTO> updateAd(@PathVariable("id") Long pk, @RequestBody AdUpdateDTO updatedAd) {
         AdUpdateDTO updated = adsService.updateAd(pk, updatedAd);
 
@@ -113,13 +113,13 @@ public class AdsController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping(value ="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value ="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateAdImage(
             @PathVariable("id") Long pk,
-            @RequestParam("file") MultipartFile imageFile
+            @RequestParam("image") MultipartFile image
     ) {
         try {
-            Image newImage = imageService.uploadImageByPk(imageFile, pk);
+            Image newImage = imageService.uploadImageByPk(image, pk);
             adsService.updateAdImage(pk, newImage);
             return ResponseEntity.ok("Изображение успешно обновлено");
         } catch (IOException e) {

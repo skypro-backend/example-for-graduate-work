@@ -18,4 +18,6 @@ public interface ImageService {
 
     Image uploadImage(MultipartFile file) throws IOException;
 
+
+
 }

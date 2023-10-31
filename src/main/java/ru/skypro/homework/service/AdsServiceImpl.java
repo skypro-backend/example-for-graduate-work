@@ -34,14 +34,14 @@ public class AdsServiceImpl implements AdsService {
 
 
     @Override
-    public AdCreateDTO createAd (String userName, AdCreateDTO adCreateDTO, MultipartFile imageFile) {
+    public AdCreateDTO createAd (String userName, AdCreateDTO adCreateDTO, MultipartFile image) {
         // Находим пользователя по его имени (userName)
         User user = userRepository.findUserByUserName(userName);
 
         if (user != null) {
             // Создаем объявление
             Ad ad = new Ad();
-            ad.setUserID(user.getUserID()); // Связываем объявление с пользователем
+            ad.setUser(user); // Устанавливаем связь между объявлением и пользователем
             ad.setPrice(adCreateDTO.getPrice());
             ad.setTitle(adCreateDTO.getTitle());
             ad.setDescription(adCreateDTO.getDescription());
@@ -50,7 +50,7 @@ public class AdsServiceImpl implements AdsService {
 
             try {
                 // Вызываем метод uploadImage и передаем в него imageFile
-                Image uploadedImage = imageService.uploadImage(imageFile);
+                Image uploadedImage = imageService.uploadImage(image);
 
                 // Получаем идентификатор сохраненного изображения
                 Long imageId = uploadedImage.getImageId();
@@ -68,7 +68,7 @@ public class AdsServiceImpl implements AdsService {
                 createdAdDTO.setPrice(createdAd.getPrice());
                 createdAdDTO.setTitle(createdAd.getTitle());
                 createdAdDTO.setPk(createdAd.getPk());
-                createdAdDTO.setImage(uploadedImage.getImagePath()); // Устанавливаем идентификатор изображения
+                createdAdDTO.setImage("/" + uploadedImage.getImagePath().replace("\\", "/"));
 
                 return createdAdDTO;
             } catch (IOException e) {
@@ -93,7 +93,7 @@ public class AdsServiceImpl implements AdsService {
             adsRequestDTO.setPk(ad.getPk());
             adsRequestDTO.setPrice(ad.getPrice());
             adsRequestDTO.setTitle(ad.getTitle());
-            adsRequestDTO.setImage(ad.getImage().getImagePath());
+            adsRequestDTO.setImage("/"+ ad.getImage().getImagePath().replace("\\", "/"));
 
 
             adsRequestDTOs.add(adsRequestDTO);
@@ -117,7 +117,7 @@ public class AdsServiceImpl implements AdsService {
             adInfoDTO.setAuthorLastName(ad.getUser().getLastName());
             adInfoDTO.setDescription(ad.getDescription());
             adInfoDTO.setEmail(ad.getUser().getEmail());
-            adInfoDTO.setImage(ad.getImage().getImagePath());
+            adInfoDTO.setImage("/"+ ad.getImage().getImagePath().replace("\\", "/"));
             adInfoDTO.setPhone(ad.getUser().getPhone());
             adInfoDTO.setPrice(ad.getPrice());
             adInfoDTO.setTitle(ad.getTitle());
@@ -188,7 +188,7 @@ public class AdsServiceImpl implements AdsService {
         for (Ad ad : userAds) {
             AllAdDTO adDTO = new AllAdDTO();
             adDTO.setAuthor(ad.getUser().getUserID()); // Устанавливаем айдишник объявления
-            adDTO.setImage(ad.getImage().getImagePath()); // Устанавливаем путь к изображению
+            adDTO.setImage("/"+ ad.getImage().getImagePath().replace("\\", "/")); // Устанавливаем путь к изображению
             adDTO.setPk(ad.getPk());
             adDTO.setPrice(ad.getPrice());
             adDTO.setTitle(ad.getTitle());
