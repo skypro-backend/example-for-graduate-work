@@ -41,6 +41,7 @@ public class UsersController {
     })
     @PostMapping(value = "/set_password")
     public void updatePassword(@RequestBody PasswordDto passwordDto) {
+        userService.updatePassword(passwordDto);
     }
 
     /**
