@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 2
+      id: 4
       author: Anna
       changes:
         - createTable:
@@ -29,8 +29,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: image
-                  type: varchar
+                  name: image_ad_id
+                  type: varchar(255)
+                  constraints:
+                    foreignKeyName: image_ad_id
+                    references: image_ad(id)
               - column:
                   name: user_id
                   type: integer

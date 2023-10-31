@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,6 +12,8 @@ import ru.skypro.homework.dto.ads.Ads;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAd;
 import ru.skypro.homework.service.AdsService;
+
+import java.io.IOException;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -28,12 +31,11 @@ public class AdsController {
     }
 
     /** Добавление объявления */
-    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public AdDTO addAd(@RequestParam("properties") CreateOrUpdateAd createAd,
-                       @RequestParam("image") MultipartFile image,
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdDTO> addAd(@RequestPart("properties") CreateOrUpdateAd properties,
+                       @RequestPart("image") MultipartFile image,
                        Authentication authentication){
-        return adsService.addAd(createAd, image, authentication.getName());
-
+        return ResponseEntity.ok(adsService.addAd(properties, image, authentication.getName()));
     }
 
     /** Получение информации об объявлении */
@@ -65,10 +67,17 @@ public class AdsController {
 
     /**    Обновление картинки объявления   */
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String updateImage(@PathVariable int id,
-                              @RequestParam("image") MultipartFile image,
+    public ResponseEntity<byte []> updateImage(@PathVariable int id,
+                              @RequestPart("image") MultipartFile image,
                               Authentication authentication){
-        return adsService.updateImage(id, image, authentication.getName());
+        adsService.updateImage(id, image, authentication);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping(value ="/{id}/image", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte [] getImage(@PathVariable("id") String id) {
+        return adsService.getImage(id);
     }
 
 }

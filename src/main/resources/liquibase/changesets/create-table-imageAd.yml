@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: Marina
+      changes:
+        - createTable:
+            tableName: image_ad
+            columns:
+              - column:
+                  name: id
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: image
+                  type: bytea
