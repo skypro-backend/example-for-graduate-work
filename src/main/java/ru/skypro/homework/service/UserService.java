@@ -22,6 +22,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final MyMapper mapper;
 
+    /**
+     * method to update user password
+     * @param passwordDto
+     */
     public void updatePassword(PasswordDto passwordDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // since username is email it should be unique
@@ -33,11 +37,25 @@ public class UserService {
         // TODO implement the above mentioned functionality
     }
 
+    /**
+     * method to get info about registered user
+     * @return
+     */
     public UserDto getUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         UserEntity userEntity = userRepository.findByUsername(username);
         return mapper.map(userEntity);
+    }
+
+    public UserDto updateUserInfo(UserDto userDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        UserEntity userEntityOld = userRepository.findByUsername(username);
+        UserEntity userEntityNew = mapper.map(userDto);
+        userEntityNew.setId(userEntityOld.getId());
+        userRepository.save(userEntityNew);
+        return mapper.map(userEntityNew);
     }
 
     public String uploadAvatar(String username, MultipartFile file) {

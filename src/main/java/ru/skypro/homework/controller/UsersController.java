@@ -70,7 +70,7 @@ public class UsersController {
     })
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUserInfo(@RequestBody UserDto userDto) {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(userService.updateUserInfo(userDto));
     }
 
     @Operation(summary = "Обновление аватара авторизованного пользователя")
