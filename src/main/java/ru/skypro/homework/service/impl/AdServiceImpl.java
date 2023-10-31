@@ -63,7 +63,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void UpdateAdImage(Integer id, final MultipartFile file) {
+    public void updateAdImage(Integer id, final MultipartFile file) {
 
     }
 

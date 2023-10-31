@@ -1,18 +1,20 @@
 package ru.skypro.homework.exceptions.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.exceptions.ImageNotFoundException;
 
-@ControllerAdvice
+@Slf4j
+@RestControllerAdvice
 public class ExceptionHandlerClass {
 
     @ExceptionHandler
-    public <T extends Throwable> ResponseEntity<String> handleException(T e) {
+    public ResponseEntity<String> handleException(Throwable e) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         String message = e.getMessage();
 
@@ -27,7 +29,7 @@ public class ExceptionHandlerClass {
             message = "Объявление не найдено";
         }
 
-        e.printStackTrace(System.err);
+        log.error(message);
         return ResponseEntity.status(status).body(message);
     }
 

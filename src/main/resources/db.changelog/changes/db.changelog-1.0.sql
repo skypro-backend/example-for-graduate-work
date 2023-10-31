@@ -43,7 +43,7 @@ create table if not exists users
     phone         varchar(255)      not null,
     role          varchar(255)      not null,
     user_image_id integer
-        constraint fk_users_user_images references user_images
+        constraint fk_users_user_images references user_images(id)
 );
 
 --changeset pruglo-ve:20231025-4 failOnError:true
@@ -58,9 +58,9 @@ create table if not exists ads
     price       integer             not null,
     title       varchar(255)        not null,
     image_id    integer
-        constraint fk_ads_ad_images references ad_images,
+        constraint fk_ads_ad_images references ad_images(id),
     user_id     integer             not null
-        constraint fk_ads_users references users
+        constraint fk_ads_users references users(id)
 );
 
 --changeset pruglo-ve:20231025-5 failOnError:true
@@ -74,7 +74,7 @@ create table if not exists comments
     created_at timestamp default current_timestamp,
     text       varchar(255)         not null,
     ad_id      integer              not null
-        constraint fk_comments_ads references ads,
+        constraint fk_comments_ads references ads(id),
     user_id    integer              not null
-        constraint fk_comments_users references users
+        constraint fk_comments_users references users(id)
 );

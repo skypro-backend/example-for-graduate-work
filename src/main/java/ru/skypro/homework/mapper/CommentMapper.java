@@ -14,34 +14,33 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 @Mapper
-public abstract class CommentMapper {
+public interface CommentMapper {
 
     @Mapping(target = "author", source = "user.id")
     @Mapping(target = "authorImage", source = "user.userImage.filePath")
     @Mapping(target = "authorFirstName", source = "user.firstName")
     @Mapping(target = "createdAt", expression = "java(getLongFromLocalDateTime(comment.getCreatedAt()))")
     @Mapping(target = "pk", source = "id")
-    public abstract CommentDto entityToCommentDto(Comment comment);
+    CommentDto entityToCommentDto(Comment comment);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", source = "user")
     @Mapping(target = "ad", source = "ad")
-    public abstract Comment createCommentDtoToEntity(Ad ad, CreateOrUpdateCommentDto createOrUpdateCommentDto, User user);
+    Comment createCommentDtoToEntity(Ad ad, CreateOrUpdateCommentDto createOrUpdateCommentDto, User user);
 
     @Mapping(target = "id", source = "commentId")
-    @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "user", source = "user")
     @Mapping(target = "ad", source = "ad")
-    public abstract Comment updateCommentDtoToEntity(Ad ad, Integer commentId,
+    Comment updateCommentDtoToEntity(Ad ad, Integer commentId,
                                                      CreateOrUpdateCommentDto createOrUpdateCommentDto,
                                                      LocalDateTime createdAt, User user);
 
-    public CommentsDto commentDtoListToCommentsDto(List<CommentDto> commentDtoList) {
+    default CommentsDto commentDtoListToCommentsDto(List<CommentDto> commentDtoList) {
         return new CommentsDto(commentDtoList.size(), commentDtoList);
     }
 
-    protected Long getLongFromLocalDateTime(LocalDateTime localDateTime) {
+    default Long getLongFromLocalDateTime(LocalDateTime localDateTime) {
         return localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
     }
 

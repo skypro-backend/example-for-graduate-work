@@ -9,5 +9,5 @@ public interface ImageService {
 
     Image updateImage(MultipartFile file, Image image);
 
-    ResponseEntity<Resource> getImageFromFile(String imageName);
+    Resource getImageFromFile(String imageName);
 }

@@ -19,7 +19,7 @@ public interface AdService {
 
     AdsDto getAuthorizedUserAds();
 
-    void UpdateAdImage(Integer id, final MultipartFile file);
+    void updateAdImage(Integer id, final MultipartFile file);
 
     AdsDto getAllAds();
 

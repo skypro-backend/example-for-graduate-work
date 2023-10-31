@@ -30,7 +30,6 @@ public interface AdMapper {
     AdDto toAdDto(Ad ad);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "image", source = "image")
     @Mapping(target = "user", source = "user")
     Ad createAdDtoToAd(CreateOrUpdateAdDto createOrUpdateAdDto, User user, Image image);
 

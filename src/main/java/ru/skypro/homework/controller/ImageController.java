@@ -25,6 +25,8 @@ public class ImageController {
             MediaType.IMAGE_GIF_VALUE,
     })
     public ResponseEntity<Resource> getImage(@PathVariable String name) {
-        return imageService.getImageFromFile(name);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(imageService.getImageFromFile(name));
     }
 }

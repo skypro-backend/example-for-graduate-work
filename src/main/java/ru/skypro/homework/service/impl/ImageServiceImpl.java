@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +27,7 @@ import java.nio.file.Paths;
 public class ImageServiceImpl implements ImageService {
 
     @Value("${upload.dir}")
-    private String UPLOAD_DIR;
+    private String uploadDir;
 
     public static final String USER_DIR = "user.dir";
 
@@ -41,14 +39,14 @@ public class ImageServiceImpl implements ImageService {
         try {
             String fileName = file.getOriginalFilename();
             String projectRoot = System.getProperty(USER_DIR);
-            Path path = Paths.get(projectRoot, UPLOAD_DIR);
+            Path path = Paths.get(projectRoot, uploadDir);
 
             Files.createDirectories(path);
 
             File imageFile = Paths.get(path.toString(), fileName).toFile();
             file.transferTo(imageFile);
 
-            image.setFilePath(UPLOAD_DIR + fileName);
+            image.setFilePath(uploadDir + fileName);
             image.setFileSize(file.getSize());
             image.setMediaType(file.getContentType());
             image.setFileName(fileName);
@@ -59,10 +57,10 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ResponseEntity<Resource> getImageFromFile(final String imageName) {
+    public Resource getImageFromFile(final String imageName) {
         log.info("Was invoked method for : getImageFromFile");
         String projectRoot = System.getProperty(USER_DIR);
-        Path imagePath = Paths.get(projectRoot, UPLOAD_DIR);
+        Path imagePath = Paths.get(projectRoot, uploadDir);
         File imageFile = Paths.get(imagePath.toString(), imageName).toFile();
         if (imageFile.exists()) {
             Path path = Paths.get(imageFile.getPath());
@@ -76,9 +74,7 @@ public class ImageServiceImpl implements ImageService {
 
             if (resource.exists()) {
                 log.debug("Image resource found for path: {}", imageFile.getPath());
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_PNG)
-                        .body(resource);
+                return resource;
             }
         }
         throw new ImageNotFoundException();
