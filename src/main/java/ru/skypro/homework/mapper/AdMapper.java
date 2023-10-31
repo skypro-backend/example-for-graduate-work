@@ -19,7 +19,6 @@ public interface AdMapper {
         return null;
     }
 
-    List<AdDto> toAdsDto(List<Ad> ads);
 
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "image", ignore = true)
@@ -38,7 +37,7 @@ public interface AdMapper {
     }
 
     @Named("imageToPathString")
-    default String imageToPathString(Image image) {
+    default String imageToPathString(Image image){
         return "/ads/image/" + image.getId();
     }
 

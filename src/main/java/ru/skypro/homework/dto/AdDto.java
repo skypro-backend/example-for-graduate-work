@@ -10,5 +10,4 @@ public class AdDto {
     private int pk;
     private int price;
     private String title;
-
 }
