@@ -65,58 +65,34 @@ public class AdServiceImpl implements AdService {
     @Override
     @Transactional
     public ExtendedAd getAdById(int id) throws AdNotFoundException {
-        try {
-            ExtendedAd extendedAd = adRepository.findById(id).map(adMapper::adEntityToExtendedAd)
-                    .orElseThrow(AdNotFoundException::new);
-            log.info("Ad with id = {} is found: {}", id, extendedAd);
-            return extendedAd;
-        } catch (AdNotFoundException e) {
-            log.error("Ad with id = {} is not found", id, e);
-            throw new AdNotFoundException();
-        }
-
+        return adRepository.findById(id).map(adMapper::adEntityToExtendedAd)
+                .orElseThrow(() -> new AdNotFoundException("Not found ad with id = " + id));
     }
 
     @Override
     @Transactional
     public void deleteAdById(int id, String userName) {
-        try {
-            UserEntity user = usersRepository.findByUsername(userName);
-            AdEntity adEntity = adRepository.findById(id)
-                    .orElseThrow(AdNotFoundException::new);
-            if (!checkPermission(adEntity, user)) {
-                throw new PermissionDeniedException();
-            }
-            adRepository.deleteById(id);
-        } catch (AdNotFoundException e) {
-            log.error("Ad with id = {} is not found", id, e);
-            throw new AdNotFoundException();
-        } catch (PermissionDeniedException e) {
-            log.error("You have no permission to delete ad with id = {}", id,  e);
+        UserEntity user = usersRepository.findByUsername(userName);
+        AdEntity adEntity = adRepository.findById(id)
+                .orElseThrow(() -> new AdNotFoundException("Not found ad with id = " + id));
+        if (!checkPermission(adEntity, user)) {
             throw new PermissionDeniedException();
         }
+        adRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public Ad patchAdById(int id, CreateOrUpdateAd createOrUpdateAd, String userName)  {
-        try {
-            UserEntity user = usersRepository.findByUsername(userName);
-            AdEntity adEntity = adRepository.findById(id)
-                    .orElseThrow(AdNotFoundException::new);
-            if (!checkPermission(adEntity, user)) {
-                throw new PermissionDeniedException();
-            }
-            adMapper.createOrUpdateAdToAdEntity(createOrUpdateAd, adEntity);
-            AdEntity updatedAdEntity = adRepository.save(adEntity);
-            return adMapper.adEntityToAd(updatedAdEntity);
-        } catch (AdNotFoundException e) {
-            log.error("Ad with id = {} is not found", id, e);
-            throw new AdNotFoundException();
-        } catch (PermissionDeniedException e) {
-            log.error("You have no permission to update ad with id = {}", id,  e);
+        UserEntity user = usersRepository.findByUsername(userName);
+        AdEntity adEntity = adRepository.findById(id)
+                .orElseThrow(() -> new AdNotFoundException("Not found ad with id = " + id));
+        if (!checkPermission(adEntity, user)) {
             throw new PermissionDeniedException();
         }
+        adMapper.createOrUpdateAdToAdEntity(createOrUpdateAd, adEntity);
+        AdEntity updatedAdEntity = adRepository.save(adEntity);
+        return adMapper.adEntityToAd(updatedAdEntity);
     }
 
     @Override
@@ -130,25 +106,17 @@ public class AdServiceImpl implements AdService {
     @Override
     @Transactional
     public byte[] patchAdsImageById(int id, MultipartFile file, String userName) {
-        try {
-            UserEntity user = usersRepository.findByUsername(userName);
-            AdEntity adEntity = adRepository.findById(id)
-                    .orElseThrow(AdNotFoundException::new);
-            if (!checkPermission(adEntity, user)) {
-                throw new PermissionDeniedException();
-            }
-            Image image = adEntity.getImage();
-            image = imageService.updateImage(file, image);
-            imagesRepository.save(image);
-            adRepository.save(adEntity);
-            return image.getImage();
-        } catch (AdNotFoundException e) {
-            log.error("Ad with id = {} is not found", id, e);
-            throw new AdNotFoundException();
-        } catch (PermissionDeniedException e) {
-            log.error("You have no permission to update image of ad with id = {}", id,  e);
+        UserEntity user = usersRepository.findByUsername(userName);
+        AdEntity adEntity = adRepository.findById(id)
+                .orElseThrow(() -> new AdNotFoundException("Not found ad with id = " + id));
+        if (!checkPermission(adEntity, user)) {
             throw new PermissionDeniedException();
         }
+        Image image = adEntity.getImage();
+        image = imageService.updateImage(file, image);
+        imagesRepository.save(image);
+        adRepository.save(adEntity);
+        return image.getImage();
     }
 
     private boolean checkPermission(AdEntity ad, UserEntity user) {
