@@ -21,7 +21,7 @@ public class MyDatabaseUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByUsername(username);
         if (userEntity == null) {
-            throw new UsernameNotFoundException("Пользователь не найден");
+            throw new UsernameNotFoundException("User is not found");
         }
         return new MyDatabaseUserDetails(userMapper.userEntityToRegister(userEntity));
     }
