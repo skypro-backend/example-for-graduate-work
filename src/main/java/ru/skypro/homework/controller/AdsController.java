@@ -56,8 +56,8 @@ public class AdsController {
     @ApiResponse(responseCode = "201", description = "Created")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     public ResponseEntity<AdDto> addAd(@RequestPart("properties") @Valid CreateOrUpdateAdDto createOrUpdateAdDto,
-                                       @RequestPart MultipartFile image) throws IOException {
-        AdDto addedAdDto = new AdDto(1, "imagePath", 1, createOrUpdateAdDto.price(), createOrUpdateAdDto.title());
+                                       @RequestPart MultipartFile image, Authentication authentication) throws IOException {
+        AdDto addedAdDto = adService.addAd(createOrUpdateAdDto, image, authentication);
         return ResponseEntity.ok(addedAdDto);
     }
 
@@ -102,7 +102,7 @@ public class AdsController {
     @ApiResponse(responseCode = "404", description = "Not found")
     public ResponseEntity<String> updateAdImage(@PathVariable("id") Integer id,
                                                 @RequestParam MultipartFile image) throws IOException {
-        adService.UpdateAdImage(id, image);
+        adService.updateAdImage(id, image);
         return ResponseEntity.ok("Image updated successfully");
     }
 

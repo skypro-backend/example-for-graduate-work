@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.AdImage;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.entity.UserImage;
 import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
@@ -41,11 +39,19 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDto addAd(CreateOrUpdateAdDto createOrUpdateAdDto, MultipartFile image, Authentication authentication) {
+    public AdDto addAd(CreateOrUpdateAdDto createOrUpdateAdDto, MultipartFile file, Authentication authentication) {
         authentication.isAuthenticated();
 
+        Ad ad = new Ad();
+        ad.setUser(userRepository.findByLogin(authentication.getName()).orElseThrow());
+        ad.setPrice(createOrUpdateAdDto.price());
+        ad.setTitle(createOrUpdateAdDto.title());
+        AdImage image = (AdImage) imageService.updateImage(file, new AdImage());
+        ad.setImage(image);
 
-        return null;
+        adRepository.save(ad);
+
+        return adMapper.toAdDto(ad);
     }
 
     @Override
@@ -71,7 +77,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void UpdateAdImage(Integer id, final MultipartFile file) {
+    public void updateAdImage(Integer id, final MultipartFile file) {
         Ad ad = adRepository.findById(id)
                 .orElseThrow(() -> new AdNotFoundException(id));
         AdImage image = (AdImage) imageService.updateImage(file, new AdImage());
