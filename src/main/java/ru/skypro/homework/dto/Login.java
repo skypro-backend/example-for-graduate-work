@@ -3,7 +3,9 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
-
+/**
+ * Класс-обертка входных данных для входа в учетку пользователя с валидацией
+ */
 @Data
 public class Login {
 

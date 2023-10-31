@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Size;
 
+/**
+ * Класс-обертка входных данных для смены пароля с валидацией
+ * @autor Сулаева Марина
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

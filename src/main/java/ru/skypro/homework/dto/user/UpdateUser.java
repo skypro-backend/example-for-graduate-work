@@ -9,6 +9,10 @@ import ru.skypro.homework.entity.Users;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * Класс-обертка входных данных для обновления информации (имя, фамилия, телефон) с валидацией
+ * @autor Сулаева Марина
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,6 +24,10 @@ public class UpdateUser {
     @Pattern(message = "введите номер телефона согласно шаблона +7(777)777-77-77", regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
     private String phone;
 
+    /**
+     * Метод для маппинга из сущности Users в класс-обертку
+     * для возврата измененных значений в базе данных
+     */
     public static UpdateUser toUpdateUser(Users users) {
         UpdateUser updateUser = new UpdateUser();
         updateUser.setPhone(users.getPhone());

@@ -5,6 +5,9 @@ import lombok.Data;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * Класс-обертка входных данных для регистрации пользователя с валидацией
+ */
 @Data
 public class Register {
 

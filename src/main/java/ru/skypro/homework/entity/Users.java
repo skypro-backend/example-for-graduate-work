@@ -10,7 +10,6 @@ import ru.skypro.homework.dto.Role;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,7 +18,11 @@ import java.util.Optional;
 
 import javax.persistence.*;
 
-
+/**
+ * Класс-сущность с данными пользователя в базе данных
+ * Также класс используется в проверках авторизации и аутентификации, имплементируя класс UserDerails
+ * @autor Сулаева Марина
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
