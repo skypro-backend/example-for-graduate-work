@@ -77,8 +77,12 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile file, String username) {
+    public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile file, Authentication authentication) {
+
+        String username = authentication.getName();
         Users user = usersRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+
+        if (authentication.isAuthenticated()) {
 
         Ad ad = properties.toAd();
         ad.setUser(user);
@@ -99,6 +103,10 @@ public class AdsServiceImpl implements AdsService {
         AdDTO adDTO = AdDTO.fromAd(adsRepository.save(ad));
 
         return adDTO;
+
+        } else {
+            throw new AccessErrorException();
+        }
     }
 
     @Override
@@ -151,6 +159,7 @@ public class AdsServiceImpl implements AdsService {
 
         Ad ad = adsRepository.findAdByPk(id).orElseThrow(AdNotFoundException::new);
 
+        if (isAdminOrOwnerAd(authentication, ad.getUser().getUsername())) {
         ImageAd image;
         if (!Objects.isNull(ad.getImage())) {
             image = imageAdRepository.findById(ad.getImage().getId()).orElse(new ImageAd());
@@ -169,6 +178,10 @@ public class AdsServiceImpl implements AdsService {
         adsRepository.save((ad));
 
         return returnImage;
+
+        } else {
+            throw new AccessErrorException();
+        }
     }
 
     @Override

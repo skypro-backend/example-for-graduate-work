@@ -35,7 +35,7 @@ public class AdsController {
     public ResponseEntity<AdDTO> addAd(@RequestPart("properties") CreateOrUpdateAd properties,
                        @RequestPart("image") MultipartFile image,
                        Authentication authentication){
-        return ResponseEntity.ok(adsService.addAd(properties, image, authentication.getName()));
+        return ResponseEntity.ok(adsService.addAd(properties, image, authentication));
     }
 
     /** Получение информации об объявлении */

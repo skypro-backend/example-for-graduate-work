@@ -14,7 +14,7 @@ import ru.skypro.homework.entity.ImageAd;
 
 public interface AdsService {
     Ads getAllAds();
-    AdDTO addAd(CreateOrUpdateAd createAd, MultipartFile image, String username);
+    AdDTO addAd(CreateOrUpdateAd createAd, MultipartFile image, Authentication authentication);
 
     ExtendedAd getAds(int id, Authentication authentication);
 
