@@ -143,6 +143,18 @@ public class UserControllerIntegrationTests {
                         .content(newPassword.toString()))
                 .andExpect(status().isForbidden());
     }
+    @Test
+    public void setPassword_status_NotValid() throws Exception {
+        addToDb();
+        JSONObject newPassword = new JSONObject();
+        newPassword.put("currentPassword", "password");
+        newPassword.put("newPassword", "passwordpasswordpasswordpassword");
+        mockMvc.perform(post("/users/set_password")
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + base64Encoded("user@gmail.com", "password"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newPassword.toString()))
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     public void setPassword_status_isUnauthorized() throws Exception {
@@ -162,7 +174,7 @@ public class UserControllerIntegrationTests {
         JSONObject updateUser = new JSONObject();
         updateUser.put("firstName", "ivan");
         updateUser.put("lastName", "ivanova");
-        updateUser.put("phone", "+7(777)-777-77-77");
+        updateUser.put("phone", "+7(777)777-77-77");
         mockMvc.perform(patch("/users/me")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateUser.toString()))
@@ -176,11 +188,53 @@ public class UserControllerIntegrationTests {
         JSONObject updateUser = new JSONObject();
         updateUser.put("firstName", "ivan");
         updateUser.put("lastName", "ivanova");
-        updateUser.put("phone", "+7(777)-777-77-77");
+        updateUser.put("phone", "+7(777)777-77-77");
         mockMvc.perform(patch("/users/me")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateUser.toString()))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
+    public void updateInformationAboutUser_status_isNotValid_phone() throws Exception {
+        addToDb();
+        JSONObject updateUser = new JSONObject();
+        updateUser.put("firstName", "ivan");
+        updateUser.put("lastName", "ivanova");
+        updateUser.put("phone", "+7(777)-777-77-77");
+        mockMvc.perform(patch("/users/me")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateUser.toString()))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
+    public void updateInformationAboutUser_status_isNotValid_firstname() throws Exception {
+        addToDb();
+        JSONObject updateUser = new JSONObject();
+        updateUser.put("firstName", "ivannnnnnnnnnnnnnnnnnnn");
+        updateUser.put("lastName", "ivanova");
+        updateUser.put("phone", "+7(777)777-77-77");
+        mockMvc.perform(patch("/users/me")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateUser.toString()))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(username = "user@gmail.com", roles = "USER", password = "password")
+    public void updateInformationAboutUser_status_isNotValid_lastname() throws Exception {
+        addToDb();
+        JSONObject updateUser = new JSONObject();
+        updateUser.put("firstName", "ivan");
+        updateUser.put("lastName", "ivanovaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        updateUser.put("phone", "+7(777)777-77-77");
+        mockMvc.perform(patch("/users/me")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateUser.toString()))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
