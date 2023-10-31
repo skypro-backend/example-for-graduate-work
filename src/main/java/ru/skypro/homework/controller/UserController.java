@@ -93,12 +93,12 @@ public class UserController {
     }
 
     @PatchMapping(value ="/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateAvatar(Authentication authentication, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> updateAvatar(Authentication authentication, @RequestParam("image") MultipartFile image) {
         UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getPrincipal();
 
         if (userDetailsDTO != null) {
             try {
-                imageService.uploadAvatar(file, authentication);
+                imageService.uploadAvatar(image, authentication);
                 return ResponseEntity.ok().build();
             } catch (IOException e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update avatar");

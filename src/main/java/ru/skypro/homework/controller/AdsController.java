@@ -46,12 +46,12 @@ public class AdsController {
     public ResponseEntity<AdCreateDTO> createAd(
             Authentication authentication,
             @RequestPart("properties") AdCreateDTO adCreateDTO,
-            @RequestPart("file") MultipartFile file
+            @RequestPart("image") MultipartFile image
     ) {
         String userName = authentication.getName();
 
         // Вызываем сервис для создания объявления
-        AdCreateDTO createdAd = adsService.createAd(userName, adCreateDTO, file);
+        AdCreateDTO createdAd = adsService.createAd(userName, adCreateDTO, image);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAd);
     }
@@ -116,10 +116,10 @@ public class AdsController {
     @PatchMapping(value ="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateAdImage(
             @PathVariable("id") Long pk,
-            @RequestParam("file") MultipartFile imageFile
+            @RequestParam("file") MultipartFile image
     ) {
         try {
-            Image newImage = imageService.uploadImageByPk(imageFile, pk);
+            Image newImage = imageService.uploadImageByPk(image, pk);
             adsService.updateAdImage(pk, newImage);
             return ResponseEntity.ok("Изображение успешно обновлено");
         } catch (IOException e) {

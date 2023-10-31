@@ -93,7 +93,7 @@ public class AdsServiceImpl implements AdsService {
             adsRequestDTO.setPk(ad.getPk());
             adsRequestDTO.setPrice(ad.getPrice());
             adsRequestDTO.setTitle(ad.getTitle());
-            adsRequestDTO.setImage(ad.getImage().getImagePath().replace("\\", "/"));
+            adsRequestDTO.setImage("/"+ ad.getImage().getImagePath().replace("\\", "/"));
 
 
             adsRequestDTOs.add(adsRequestDTO);
@@ -117,7 +117,7 @@ public class AdsServiceImpl implements AdsService {
             adInfoDTO.setAuthorLastName(ad.getUser().getLastName());
             adInfoDTO.setDescription(ad.getDescription());
             adInfoDTO.setEmail(ad.getUser().getEmail());
-            adInfoDTO.setImage(ad.getImage().getImagePath());
+            adInfoDTO.setImage("/"+ ad.getImage().getImagePath().replace("\\", "/"));
             adInfoDTO.setPhone(ad.getUser().getPhone());
             adInfoDTO.setPrice(ad.getPrice());
             adInfoDTO.setTitle(ad.getTitle());
@@ -188,7 +188,7 @@ public class AdsServiceImpl implements AdsService {
         for (Ad ad : userAds) {
             AllAdDTO adDTO = new AllAdDTO();
             adDTO.setAuthor(ad.getUser().getUserID()); // Устанавливаем айдишник объявления
-            adDTO.setImage(ad.getImage().getImagePath()); // Устанавливаем путь к изображению
+            adDTO.setImage("/"+ ad.getImage().getImagePath().replace("\\", "/")); // Устанавливаем путь к изображению
             adDTO.setPk(ad.getPk());
             adDTO.setPrice(ad.getPrice());
             adDTO.setTitle(ad.getTitle());
