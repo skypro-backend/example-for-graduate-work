@@ -102,4 +102,17 @@ public class MyMapper {
     public UserEntity map(RegisterUserDto dto) {
         return modelMapper.map(dto, UserEntity.class);
     }
+
+    public UserEntity map(UserDto userDto) {
+        UserEntity userEntity = new UserEntity();
+
+        userEntity.setUsername(userDto.getEmail());
+        userEntity.setFirstName(userDto.getFirstName());
+        userEntity.setLastName(userDto.getLastName());
+        userEntity.setPhone(userDto.getPhone());
+        userEntity.setRole(userDto.getRole());
+        userEntity.setImage(userDto.getImage());
+
+        return userEntity;
+    }
 }
