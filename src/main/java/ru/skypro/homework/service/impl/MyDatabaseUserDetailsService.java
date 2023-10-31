@@ -23,6 +23,6 @@ public class MyDatabaseUserDetailsService implements UserDetailsService {
         if (userEntity == null) {
             throw new UsernameNotFoundException("User is not found");
         }
-        return new MyDatabaseUserDetails(userMapper.userEntityToRegister(userEntity));
+        return new MyDatabaseUserDetails(userMapper.userEntityToMyDatabaseUser(userEntity));
     }
 }
