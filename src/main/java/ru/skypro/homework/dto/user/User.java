@@ -7,8 +7,8 @@ import ru.skypro.homework.entity.Users;
 import java.util.Optional;
 
 /**
- * Класс-обертка отображаемых данных в профиле пользователя
- * @autor Сулаева Марина
+ * The class-wrapper for outputting data in user's profile
+ * @autor Sulaeva Marina
  */
 @Data
 @NoArgsConstructor
@@ -25,8 +25,8 @@ public class User {
     private String image;
 
     /**
-     * Метод для маппинга из сущности Users в класс-обертку
-     * для отображения данных в профиле пользователя
+     * The method for mapping from entity Users to class-wrapper
+     * for getting data in user's profile
      */
     public static User toUser(Users users) {
         User user = new User();

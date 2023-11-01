@@ -8,6 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * the class-entity for saving pictures from ads
+ * @author Sulaeva Marina
+ */
 @Entity
 @Table(name = "image_ad")
 @Data

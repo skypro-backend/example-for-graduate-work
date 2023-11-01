@@ -10,8 +10,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
- * Класс-обертка входных данных для обновления информации (имя, фамилия, телефон) с валидацией
- * @autor Сулаева Марина
+ * The class-wrapper input data for updating information (first name, last name and phone) with validation
+ * @author Sulaeva Marina
  */
 @Data
 @NoArgsConstructor
@@ -25,8 +25,8 @@ public class UpdateUser {
     private String phone;
 
     /**
-     * Метод для маппинга из сущности Users в класс-обертку
-     * для возврата измененных значений в базе данных
+     * The method for mapping form entity Users to class-wrapper
+     * for returning changeable data in database
      */
     public static UpdateUser toUpdateUser(Users users) {
         UpdateUser updateUser = new UpdateUser();

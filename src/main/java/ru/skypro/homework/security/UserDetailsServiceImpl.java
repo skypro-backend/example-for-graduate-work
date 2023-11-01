@@ -9,6 +9,10 @@ import ru.skypro.homework.entity.Users;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.repository.UsersRepository;
 
+/**
+ * The class with methods for working with authentication and creating a new user account
+ * @author Sulaeva Marina
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 

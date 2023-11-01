@@ -18,10 +18,11 @@ import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.UUID;
 
-import static java.nio.file.Files.copy;
-
+/**
+ * The class with methods for updating and getting user's account
+ * @author Sulaeva Marina
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -33,11 +34,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ImageRepository imageRepository;
 
-
-//    public UserServiceImpl(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
-//        this.usersRepository = usersRepository;;
-//    }
-
+    /**
+     * The method for updating password
+     */
     @Override
     public void updatePassword(NewPassword newPassword, String username) {
         Users users = usersRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
@@ -48,13 +47,18 @@ public class UserServiceImpl implements UserService {
             throw new WrongCurrentPasswordException();
         }
     }
-
+    /**
+     * The method for getting information about user's account
+     */
     @Override
     public User getInformation(String username) {
         Users users = usersRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
         return User.toUser(users);
     }
 
+    /**
+     * The method for updating information (first name, last name and phone) for user's account
+     */
     @Override
     public UpdateUser updateInformationAboutUser(UpdateUser updateUser, String username) {
         Users users = usersRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
@@ -64,6 +68,10 @@ public class UserServiceImpl implements UserService {
         usersRepository.save(users);
         return UpdateUser.toUpdateUser(users);
     }
+
+    /**
+     * The method for updating image for user's account
+     */
     @Override
     public Image updateImage(MultipartFile file, String username) {
         Users users = usersRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
@@ -85,7 +93,9 @@ public class UserServiceImpl implements UserService {
         usersRepository.save(users);
         return returnImage;
     }
-
+    /**
+     * The method for getting image for user's account
+     */
     @Override
     public byte[] getImage(String id) {
         Image image = imageRepository.findById(id).orElseThrow();

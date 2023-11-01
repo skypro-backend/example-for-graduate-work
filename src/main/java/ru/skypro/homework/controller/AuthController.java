@@ -15,7 +15,7 @@ import ru.skypro.homework.service.AuthService;
 import javax.validation.Valid;
 
 /**
- * Класс-контроллер для запуска эндпоинтов для регистрации и аутентификации пользователя
+ * The class-controller for running endpoints for registration and authentication users
  */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -26,7 +26,7 @@ public class AuthController {
     private final AuthService authService;
 
     /**
-     * метод для аутентификации пользователя с валидацией входных значений
+     * The method for user's authentication with checking input data
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid Login login) {
@@ -37,7 +37,7 @@ public class AuthController {
         }
     }
     /**
-     * метод для регистрации пользователя с валидацией входных значений
+     * The method for registration to user with checking input data
      */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid Register register) {

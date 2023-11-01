@@ -12,7 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
-
+/**
+*Spring Security module configuration class
+ */
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfig {
@@ -30,6 +32,9 @@ public class WebSecurityConfig {
             "/ads"
     };
 
+    /**
+     *TThe bean for working with authentication using database
+     */
     @Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -38,6 +43,9 @@ public class WebSecurityConfig {
         return authProvider;
     }
 
+    /**
+     * This bean is chains of filters for processing incoming requests according to security settings.
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()
@@ -55,6 +63,9 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    /**
+     * The bean for encoding passwords
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

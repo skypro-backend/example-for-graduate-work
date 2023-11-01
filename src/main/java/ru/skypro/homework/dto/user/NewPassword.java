@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Size;
 
 /**
- * Класс-обертка входных данных для смены пароля с валидацией
- * @autor Сулаева Марина
+ * The class-wrapper input data for updating password with validation
+ * @author Sulaeva Marina
  */
 @Data
 @NoArgsConstructor

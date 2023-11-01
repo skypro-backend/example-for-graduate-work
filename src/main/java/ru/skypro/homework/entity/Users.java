@@ -19,9 +19,9 @@ import java.util.Optional;
 import javax.persistence.*;
 
 /**
- * Класс-сущность с данными пользователя в базе данных
- * Также класс используется в проверках авторизации и аутентификации, имплементируя класс UserDerails
- * @autor Сулаева Марина
+ * The class-entity with user's data in database
+ * Also this class uses in checking for authentication and authorization, implements UserDetails's class
+ * @author Sulaeva Marina
  */
 @Data
 @AllArgsConstructor
@@ -53,6 +53,9 @@ public class Users implements UserDetails {
     @Enumerated
     private Role role;
 
+    /**
+     * The overridden method for getting list of user's roles
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Optional.ofNullable(role)
@@ -62,21 +65,31 @@ public class Users implements UserDetails {
                 .orElse(Collections.emptyList());
     }
 
+    /**
+     * the overridden method to verify the user of an expired account
+     */
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
-
+    /**
+     * the overridden method to verify the user with unlocked or locked account
+     */
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
-
+    /**
+     * the overridden method to verify the user of an expired credentials
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    /**
+     * the overridden method to verify the user's account is enabled or not
+     */
     @Override
     public boolean isEnabled() {
         return true;

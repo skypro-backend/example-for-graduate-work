@@ -6,7 +6,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
- * Класс-обертка входных данных для регистрации пользователя с валидацией
+ * The class-wrapper with input data for registration user with validation
  */
 @Data
 public class Register {

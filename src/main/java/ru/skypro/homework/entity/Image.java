@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+/**
+ * the class-entity for saving pictures from user's avatar
+ * @author Sulaeva Marina
+ */
 @Entity
 @Table(name = "image")
 @Data

@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.Size;
 /**
- * Класс-обертка входных данных для входа в учетку пользователя с валидацией
+ * The class-wrapper with input data for login user with validation
  */
 @Data
 public class Login {

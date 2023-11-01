@@ -1,20 +1,20 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.security.UserDetailsServiceImpl;
-
+/**
+ * The class with methods to login and register users
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
 
-//    private final UserDetailsManager manager;
+
     private final UserDetailsServiceImpl userService;
     private PasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -24,6 +24,9 @@ public class AuthServiceImpl implements AuthService {
         this.encoder = passwordEncoder;
     }
 
+    /**
+     * The method to login users
+     */
     @Override
     public boolean login(String userName, String password) {
         if (!userService.userExists(userName)) {
@@ -33,21 +36,10 @@ public class AuthServiceImpl implements AuthService {
         return encoder.matches(password, userDetails.getPassword());
     }
 
-//    @Override
-//    public boolean register(Register register) {
-//        if (userService.userExists(register.getUsername())) {
-//            return false;
-//        }
-//        userService.createUser(
-//                User.builder()
-//                        .passwordEncoder(this.encoder::encode)
-//                        .password(register.getPassword())
-//                        .username(register.getUsername())
-//                        .roles(register.getRole().name())
-//                        .build());
-//        return true;
-//    }
 
+    /**
+     * The method to register users
+     */
     @Override
     public boolean register(Register register) {
         if (userService.userExists(register.getUsername())) {

@@ -9,7 +9,10 @@ import ru.skypro.homework.dto.user.User;
 import ru.skypro.homework.entity.Image;
 
 import java.io.IOException;
-
+/**
+ * The interface with methods for updating and getting user's account
+ * @author Sulaeva Marina
+ */
 public interface UserService {
     void updatePassword(NewPassword newPassword, String username);
     User getInformation(String username);

@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.Base64Utils;
-import org.springframework.web.multipart.MultipartFile;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -34,14 +33,10 @@ import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UsersRepository;
 import ru.skypro.homework.service.UserService;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.UUID;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -81,18 +76,19 @@ public class UserControllerIntegrationTests {
 
     private void addToDb() throws IOException {
         usersRepository.deleteAll();
-        Image image = new Image();
-        image.setImage(Files.readAllBytes(Paths.get("user-icon.png")));
-        image.setId(UUID.randomUUID().toString());
-        imageRepository.save(image);
-        Users user = new Users(1,
-                image,
+        Users user = usersRepository.save(new Users(1,
+                null,
                 "user@gmail.com",
                 "$2a$10$mShIMZIKnJ.EVqUycC2OE.qunAUqKJPFZq6ADSuJ.IYmVWBmXqWMi",
                 "ivan",
                 "ivanov",
                 "+7 777-77-77",
-                Role.USER);
+                Role.USER));
+        Image image = new Image();
+        image.setImage(Files.readAllBytes(Paths.get("user-icon.png")));
+        image.setId(user.getId().toString());
+        imageRepository.save(image);
+        user.setImage(image);
         usersRepository.save(user);
     }
 
