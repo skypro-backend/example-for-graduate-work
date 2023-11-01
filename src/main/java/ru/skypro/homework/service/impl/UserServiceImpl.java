@@ -42,6 +42,11 @@ public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
     private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
+
+    /**
+     * find() is a public method used to get the current user
+     * @author radyushinaalena
+     */
     @Override
     public User find() {
         var username = SecurityContextHolder
@@ -51,16 +56,20 @@ public class UserServiceImpl implements UserService {
         return find(username);
     }
 
+
     /**
-     * Получение информации о пользователе из репозитория
+     * find(String username) is a public method used to get user information from a repository
+     * @author AlexBoko
      */
     private User find(String username) {
         return repository.findByUsername(username)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
+
     /**
-     * Создание пользователя
+     * createUser(RegisterDto registerDto) is a public method used to create a user
+     * @author AlexBoko + radyushinaalena
      */
     @Override
     public void createUser(RegisterDto registerDto) {
@@ -75,8 +84,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     /**
-     * Чтение информации о пользователе
+     * getUser() is a public method used to read user information
+     * @author radyushinaalena
      */
     @Override
     public UserDto getUser() {
@@ -84,13 +95,16 @@ public class UserServiceImpl implements UserService {
         return mapper.userToUserDto(user);
     }
 
+
     @Override
     public void updatePassword(NewPasswordDto newPasswordDto) {
 
     }
 
+
     /**
-     * Редактирование пароля
+     * updatePassword(NewPasswordDto newPasswordDto, String username) is a public method used to update the password
+     * @author AlexBoko
      */
     @Override
     public void updatePassword(NewPasswordDto newPasswordDto, String username) {
@@ -103,8 +117,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     /**
-     * Обновление информации о пользователе
+     * updateUser(UpdateUserDto updateUserDto) is a public method used to update user information
+     * @author radyushinaalena
      */
     @Override
     public void updateUser(UpdateUserDto updateUserDto) {
@@ -113,8 +129,10 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
     }
 
+
     /**
-     * Обновление аватара пользователе
+     * update(MultipartFile image) is a public method used to update a user's avatar
+     * @author radyushinaalena + AlexBoko
      */
     @Override
     public void update(MultipartFile image) {
@@ -133,6 +151,11 @@ public class UserServiceImpl implements UserService {
     @Value("${avatar.storage.directory}")
     private String avatarStorageDirectory;
 
+
+    /**
+     * saveUserAvatar(@RequestPart MultipartFile file) is a public method used to save a user's avatar
+     * @author AlexBoko
+     */
     public void saveUserAvatar(@RequestPart MultipartFile file) {
         try {
             File directory = new File(avatarStorageDirectory);
@@ -163,6 +186,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * saveUserAvatar(Authentication authentication, MultipartFile image) is a public method used to save a user's avatar
+     * @author AlexBoko
+     */
     @Override
     public void saveUserAvatar(Authentication authentication, MultipartFile image) {
 

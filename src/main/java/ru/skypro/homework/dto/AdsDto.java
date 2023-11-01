@@ -5,6 +5,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * AdsDto is the Data Transfer Object used to receive all ads and all ads of an authorized user
+ * @author radyushinaalena + AlexBoko
+ */
 @Data
 @NoArgsConstructor
 public class AdsDto {

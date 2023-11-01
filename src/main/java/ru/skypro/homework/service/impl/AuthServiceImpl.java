@@ -21,7 +21,10 @@ public class AuthServiceImpl implements AuthService {
     private final CustomUserDetailsService customUserDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-
+    /**
+     * login(String userName, String password) is a public method used for user authorization
+     * @author SergeiAnishchenko + 1
+     */
     @Override
     public boolean login(String userName, String password) {
 
@@ -34,6 +37,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
+    /**
+     * register(RegisterDto registerDto) is a public method used for user registration
+     * @author SergeiAnishchenko + 1
+     */
     @Override
     public boolean register(RegisterDto registerDto) {
         if (userRepository.findByUsername(registerDto.getUsername()).isPresent()) {

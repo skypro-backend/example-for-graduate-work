@@ -29,21 +29,26 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper mapper;
 
     /**
-     * Получение текущего пользователя
+     * getUser() is a method used to get the current user
+     * @author radyushinaalena
      */
     private User getUser() {
         return userService.find();
     }
 
+
     /**
-     * Получиение объявления
+     * getAdvert(int advertId) is a method used to get an ad
+     * @author radyushinaalena
      */
     private Advert getAdvert(int advertId) {
         return advertService.find(advertId);
     }
 
+
     /**
-     * Поиск комментария
+     * find(int commentId) is a public method used to search for a comment
+     * @author radyushinaalena
      */
     @Override
     public Comment find(int commentId) {
@@ -51,8 +56,10 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
+
     /**
-     * Создание комментария
+     * createComment(int advertId, CreateOrUpdateCommentDto createOrUpdateCommentDto) is a public method used to create a comment
+     * @author radyushinaalena
      */
     @Override
     public CommentDto createComment(int advertId, CreateOrUpdateCommentDto createOrUpdateCommentDto) {
@@ -67,8 +74,10 @@ public class CommentServiceImpl implements CommentService {
         return mapper.commentToCommentDto(comment);
     }
 
+
     /**
-     * Прочитение всех комментариев объявления
+     * getAllCommentsAdvert(int advertId) is a public method used to get all the comments of an ad
+     * @author radyushinaalena
      */
     @Override
     public CommentsDto getAllCommentsAdvert(int advertId) {
@@ -77,8 +86,10 @@ public class CommentServiceImpl implements CommentService {
         return new CommentsDto(commentDtoList);
     }
 
+
     /**
-     * Редактирование комментария
+     * updateComment(int advertId, int commentId, CreateOrUpdateCommentDto createOrUpdateCommentDto) is a public method used to update an ad comment
+     * @author radyushinaalena
      */
     @Override
     public CommentDto updateComment(int advertId, int commentId, CreateOrUpdateCommentDto createOrUpdateCommentDto) {
@@ -91,8 +102,10 @@ public class CommentServiceImpl implements CommentService {
         return mapper.commentToCommentDto(comment);
     }
 
+
     /**
-     * Удаление коментария
+     * deleteComment(int advertId, int commentId) is a public method used to delete an ad comment
+     * @author radyushinaalena
      */
     @Override
     public void deleteComment(int advertId, int commentId) {

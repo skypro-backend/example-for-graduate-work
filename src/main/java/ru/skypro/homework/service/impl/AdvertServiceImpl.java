@@ -28,15 +28,19 @@ public class AdvertServiceImpl implements AdvertService {
     private final AdvertRepository repository;
     private final AdvertMapper mapper;
 
+
     /**
-     * Получение текущего пользователя
+     * getUser() is a method used to get the current user
+     * @author radyushinaalena
      */
     private User getUser() {
         return userService.find();
     }
 
+
     /**
-     * Нахождение объявления
+     * find(int id) is a public method used to find an ad
+     * @author radyushinaalena
      */
     @Override
     public Advert find(int id) {
@@ -44,8 +48,10 @@ public class AdvertServiceImpl implements AdvertService {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
+
     /**
-     * Создание объявления
+     * createAdvert(CreateOrUpdateAdDto dto, MultipartFile image) is a public method used to create an ad
+     * @author radyushinaalena
      */
     @Override
     public AdDto createAdvert(CreateOrUpdateAdDto dto, MultipartFile image) {
@@ -63,8 +69,10 @@ public class AdvertServiceImpl implements AdvertService {
         return mapper.advertToAdvertDto(advert);
     }
 
+
     /**
-     * Чтение объявления по id
+     * getAdvertById(int id) is a public method used to read an ad
+     * @author radyushinaalena
      */
     @Override
     public ExtendedAdDto getAdvertById(int id) {
@@ -72,8 +80,10 @@ public class AdvertServiceImpl implements AdvertService {
         return mapper.toExtendedDto(advert);
     }
 
+
     /**
-     * Чтение всех объявлений автора
+     * getAdvert() is a public method used to read all the author's ads
+     * @author radyushinaalena
      */
     @Override
     public AdsDto getAdvert() {
@@ -83,8 +93,10 @@ public class AdvertServiceImpl implements AdvertService {
         return new AdsDto(advertDtoList);
     }
 
+
     /**
-     * Чтение всех объявлений всех авторов
+     * getAllAdverts() is a public method used to read all the ads of all the authors
+     * @author radyushinaalena
      */
     @Override
     public AdsDto getAllAdverts() {
@@ -93,8 +105,10 @@ public class AdvertServiceImpl implements AdvertService {
         return new AdsDto(advertDtoList);
     }
 
+
     /**
-     * Редактирование обьявления
+     * updateAdvert(int id, CreateOrUpdateAdDto dto) is a public method used to update an ad
+     * @author radyushinaalena
      */
     @Override
     public AdDto updateAdvert(int id, CreateOrUpdateAdDto dto) {
@@ -104,8 +118,10 @@ public class AdvertServiceImpl implements AdvertService {
         return mapper.advertToAdvertDto(advert);
     }
 
+
     /**
-     * Обновление обьявления
+     * update(int id, MultipartFile image) is a public method used to update the ad image
+     * @author radyushinaalena
      */
     @Override
     public String update(int id, MultipartFile image) {
@@ -121,8 +137,10 @@ public class AdvertServiceImpl implements AdvertService {
         return filename;
     }
 
+
     /**
-     * Удаление объявления
+     * deleteAdvert(int id) is a public method used to remove an ad
+     * @author radyushinaalena
      */
     @Override
     public void deleteAdvert(int id) {

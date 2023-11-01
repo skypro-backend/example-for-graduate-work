@@ -35,7 +35,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     /**
-     * Запись изображения в хранилище
+     * create(MultipartFile multipartFile) is a public method used to write an image to the storage
+     * @author radyushinaalena and AlexBoko
      */
     @Override
     public String create(MultipartFile multipartFile) throws IOException {
