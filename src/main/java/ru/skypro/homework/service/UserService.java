@@ -58,7 +58,7 @@ public class UserService {
         return mapper.map(userEntityNew);
     }
 
-    public String uploadAvatar(String username, MultipartFile file) {
+    public String updateUserImage(String username, MultipartFile file) {
         return "done";
     }
 }
