@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.user.ImageDTO;
 import ru.skypro.homework.dto.user.NewPassword;
 import ru.skypro.homework.dto.user.UpdateUser;
 import ru.skypro.homework.dto.user.User;
@@ -73,7 +74,7 @@ public class UserServiceImpl implements UserService {
      * The method for updating image for user's account
      */
     @Override
-    public Image updateImage(MultipartFile file, String username) {
+    public ImageDTO updateImage(MultipartFile file, String username) {
         Users users = usersRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
         Image image;
         if (!Objects.isNull(users.getImage())) {
@@ -91,7 +92,7 @@ public class UserServiceImpl implements UserService {
         Image returnImage = imageRepository.save(image);
         users.setImage(image);
         usersRepository.save(users);
-        return returnImage;
+        return ImageDTO.fromImage(returnImage);
     }
     /**
      * The method for getting image for user's account

@@ -2,19 +2,13 @@ package ru.skypro.homework.entity;
 
 
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.dto.Role;
 
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Table;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+
 
 import javax.persistence.*;
 
@@ -31,7 +25,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 
-public class Users implements UserDetails {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -52,47 +46,5 @@ public class Users implements UserDetails {
 
     @Enumerated
     private Role role;
-
-    /**
-     * The overridden method for getting list of user's roles
-     */
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Optional.ofNullable(role)
-                .map(role -> "ROLE_" + role)
-                .map(SimpleGrantedAuthority::new)
-                .map(List::of)
-                .orElse(Collections.emptyList());
-    }
-
-    /**
-     * the overridden method to verify the user of an expired account
-     */
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-    /**
-     * the overridden method to verify the user with unlocked or locked account
-     */
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-    /**
-     * the overridden method to verify the user of an expired credentials
-     */
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    /**
-     * the overridden method to verify the user's account is enabled or not
-     */
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 
 }

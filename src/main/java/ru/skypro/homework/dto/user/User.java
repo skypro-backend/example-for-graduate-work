@@ -8,7 +8,7 @@ import java.util.Optional;
 
 /**
  * The class-wrapper for outputting data in user's profile
- * @autor Sulaeva Marina
+ * @author Sulaeva Marina
  */
 @Data
 @NoArgsConstructor
