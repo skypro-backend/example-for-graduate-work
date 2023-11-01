@@ -180,8 +180,8 @@ public class AdvertisementController {
     @Operation(
             summary = "Найти объявление по названию"
     )
-    @GetMapping("/find")
-    public ResponseEntity<Ads> findAdsByTitle(@RequestParam String title) {
+    @GetMapping("/find/{title}")
+    public ResponseEntity<Ads> findAdsByTitle(@PathVariable String title) {
         return ResponseEntity.ok(adService.findByTitle(title));
     }
 

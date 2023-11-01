@@ -188,12 +188,14 @@ class AdvertisementControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test // not completed yet
+    @Test
     @DisplayName("Поиск объявления по названию")
     @WithMockUser
     void shouldReturnAdCollectionWhenKeywordCalled() throws Exception {
         AdEntity adEntity = testService.createTestAd();
-        mockMvc.perform(MockMvcRequestBuilders.get("/ads/find"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/ads/find/{title}", adEntity.getTitle())
+                        .contentType(objectMapper.writeValueAsString(adEntity.getTitle()))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.count").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.results[0].author").value(adEntity.getUserEntity().getId()))
