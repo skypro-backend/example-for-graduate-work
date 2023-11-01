@@ -1,20 +1,15 @@
 package ru.skypro.homework.dto.user;
 
 import lombok.*;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Users;
 
-import javax.annotation.Resource;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Optional;
 
+/**
+ * The class-wrapper for outputting data in user's profile
+ * @author Sulaeva Marina
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,7 +24,10 @@ public class User {
     private Role role;
     private String image;
 
-
+    /**
+     * The method for mapping from entity Users to class-wrapper
+     * for getting data in user's profile
+     */
     public static User toUser(Users users) {
         User user = new User();
         user.setId(users.getId());
@@ -42,18 +40,4 @@ public class User {
                 "/users/" + users.getImage().getId() + "/image"));
         return user;
     }
-
-//    public Users fromUser() {
-//        Users users = new Users();
-//        users.setUsername(this.getEmail());
-//        users.setId(this.getId());
-//        users.setFirstName(this.getFirstName());
-//        users.setLastName(this.getLastName());
-//        users.setPhone(this.getPhone());
-//        users.setRole(this.getRole());
-//        users.setImage(this.getImage());
-//        return users;
-//    }
-
-
 }

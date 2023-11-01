@@ -3,7 +3,9 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
-
+/**
+ * The class-wrapper with input data for login user with validation
+ */
 @Data
 public class Login {
 

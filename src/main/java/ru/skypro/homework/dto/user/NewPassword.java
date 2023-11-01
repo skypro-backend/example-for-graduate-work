@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Size;
 
+/**
+ * The class-wrapper input data for updating password with validation
+ * @author Sulaeva Marina
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

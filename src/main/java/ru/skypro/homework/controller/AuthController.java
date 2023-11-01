@@ -14,6 +14,9 @@ import ru.skypro.homework.service.AuthService;
 
 import javax.validation.Valid;
 
+/**
+ * The class-controller for running endpoints for registration and authentication users
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -22,6 +25,9 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * The method for user's authentication with checking input data
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
@@ -30,7 +36,9 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-
+    /**
+     * The method for registration to user with checking input data
+     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid Register register) {
         if (authService.register(register)) {
