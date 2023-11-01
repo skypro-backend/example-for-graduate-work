@@ -1,15 +1,31 @@
 package ru.skypro.homework.mapper;
 
-import org.mapstruct.InjectionStrategy;
-import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.dto.*;
 import org.mapstruct.Mapper;
-import ru.skypro.homework.model.UserModel;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
+import ru.skypro.homework.entity.*;
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
-    UserDto toDTO(UserDto model);
+    @Mapping(target = "image", source = "image", qualifiedByName = "imageToPathString")
+    default UserDto toUserDto(User user) {
+        return null;
+    }
 
-    UserDto toDTO(UserModel model);
-    UserDto toModel(UserDto dto);
+    @Mapping(target = "email", source = "username")
+    default User toUserEntity(RegisterDto registerDto) {
+        return null;
+    }
 
+    UpdateUserDto toUpdateUserDto(User user);
+
+    @Named("imageToPathString")
+    default String imageToPathString(Image image) {
+        if (image == null) {
+            return null;
+        }
+        return "/users/image/" + image.getId();
+    }
 }

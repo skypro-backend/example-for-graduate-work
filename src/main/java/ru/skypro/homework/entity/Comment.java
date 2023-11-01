@@ -1,28 +1,34 @@
 package ru.skypro.homework.entity;
 
-import lombok.Data;
+import lombok.*;
+import org.apache.catalina.User;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-@Data
+
+
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(of = {"pk"})
+@RequiredArgsConstructor
 @Entity
-@Table(name = "comments")
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
-    private int pk;
+    private Integer pk;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
-    private User user;
+    @JoinColumn(name = "user_id")
+    private User author;
+
+    @Column(nullable = false)
+    private Long createdAt;
+
+    @Column(nullable = false)
+    private String text;
 
     @ManyToOne
     @JoinColumn(name = "ad_id")
     private Ad ad;
-
-    private LocalDateTime createdAt;
-    private String text;
-
 }
