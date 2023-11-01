@@ -5,13 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ads")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdEntity {
+public class Ad {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +26,13 @@ public class AdEntity {
     @JoinColumn(name = "image_id")
     private Image image;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id")
-    private UserEntity author;
+    private UserEntity userRelated;
+
+    @OneToMany(mappedBy = "adRelated",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    List<CommentEntity> comments = new ArrayList<>();
 }

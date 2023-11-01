@@ -17,6 +17,7 @@ import java.util.Objects;
 @Table(name = "users")
 public class UserEntity {
 
+    @Id
     private int id;
     private String firstName;
     private String lastName;
@@ -31,12 +32,12 @@ public class UserEntity {
     @OneToMany(mappedBy = "userRelated",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
-    List<AdEntity> ads = new ArrayList<>();
+    List<Ad> ads = new ArrayList<>();
 
     @OneToMany(mappedBy = "userRelated",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
-    List<AdEntity> comments = new ArrayList<>();
+    List<Ad> comments = new ArrayList<>();
 
 
     @Override

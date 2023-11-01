@@ -1,12 +1,13 @@
-package ru.skypro.homework.service.impl;
+package ru.skypro.homework.service.mapping.impl;
 
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.authentication.Register;
 import ru.skypro.homework.dto.user.NewPassword;
 import ru.skypro.homework.dto.user.UpdateUser;
 import ru.skypro.homework.dto.user.User;
 import ru.skypro.homework.entity.UserEntity;
-import ru.skypro.homework.service.UserMapper;
-
+import ru.skypro.homework.service.mapping.UserMapper;
+@Component
 public class UserMapperImpl implements UserMapper {
 
     @Override

@@ -1,4 +1,4 @@
-package ru.skypro.homework.service;
+package ru.skypro.homework.service.mapping;
 
 import ru.skypro.homework.dto.authentication.Register;
 import ru.skypro.homework.dto.user.NewPassword;

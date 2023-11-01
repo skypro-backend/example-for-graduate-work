@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public interface CommentService {
 
-    Comments getComments(Integer id);
-    Comment addComment(Integer id, CreateOrUpdateComment createOrUpdateComment);
-    boolean deleteComment(Integer adId, Integer commentId);
-    Comment updateComment(Integer adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment);
+    public Comments getCommentsOfOneAd(int adId);
+    public Comment addCommentToAd(CreateOrUpdateComment commentToAdd, int adId);
+    public boolean patchCommentByIdAndAdId(int adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment, String username);
+    public boolean deleteCommentByIdAndAdId(int adId, Integer commentId, String username);
 
 }
