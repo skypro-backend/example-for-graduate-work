@@ -14,12 +14,6 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: ad_image
-                  type: varchar(255)
-                  constraints:
-                    unique: true
-                    nullable: false
-              - column:
                   name: price
                   type: int
                   constraints:
@@ -34,6 +28,17 @@ databaseChangeLog:
                   type: varchar(64)
                   constraints:
                     nullable: false
+              - column:
+                  name: image_id
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - addForeignKeyConstraint:
+                  baseTableName: ad
+                  baseColumnNames: ad_id
+                  referencedTableName: image
+                  referencedColumnNames: image_id
               - column:
                   name: user_id
                   type: int

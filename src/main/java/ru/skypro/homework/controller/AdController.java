@@ -1,9 +1,11 @@
 package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.model.AdsUserDetails;
 import ru.skypro.homework.projections.Ads;
@@ -30,12 +32,11 @@ public class AdController {
     }
 
     //Добавление объявления
-    @PostMapping()
-    public ResponseEntity<AdDTO> addAd(@RequestBody @Valid CreateOrUpdateAd createOrUpdateAdDTO,
-                                       @RequestParam String imagePath,
-                                       Authentication authentication) {
-        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
-        return ResponseEntity.ok(adService.addAd(createOrUpdateAdDTO, imagePath, adsUserDetails.getUser().getUserName()));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdDTO>  addAd(@RequestPart(value = "properties", required = true) CreateOrUpdateAd properties,
+                       @RequestPart("image") MultipartFile image,
+                       Authentication authentication) {
+        return ResponseEntity.ok(adService.addAd(properties, image, authentication));
     }
 
 
@@ -71,8 +72,9 @@ public class AdController {
 
     // Обновление картинки объявления
     @PatchMapping("/{id}/image")
-    public ResponseEntity<String> updateImage(@PathVariable int id, @RequestBody String pathImage) {
-        return ResponseEntity.ok(adService.updateImage(id, pathImage));
+    public ResponseEntity<String> updateImage(@PathVariable int id,
+                                              @RequestPart("image") MultipartFile image) {
+        return ResponseEntity.ok(adService.updateImage(id, image));
     }
 
 

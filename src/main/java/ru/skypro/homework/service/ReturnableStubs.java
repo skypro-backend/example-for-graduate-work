@@ -3,7 +3,6 @@ package ru.skypro.homework.service;
 
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.projections.Ads;
-import ru.skypro.homework.projections.ExtendedAd;
 
 import java.util.List;
 
@@ -22,16 +21,16 @@ public class ReturnableStubs {
         return new Ads(getListAdDTO().size(), getListAdDTO());
     }
 
-    public static ExtendedAd getExtendedAdd() {
-        AdDTO adDTO = getListAdDTO().get(0);
-        return new ExtendedAd(adDTO.getPk(),
-                "name1",
-                "surname1",
-                "description1",
-                "email1", adDTO.getImage(),
-                "phone1", adDTO.getPrice(),
-                adDTO.getTitle());
-    }
+//    public static ExtendedAd getExtendedAdd() {
+//        AdDTO adDTO = getListAdDTO().get(0);
+//        return new ExtendedAd(adDTO.getPk(),
+//                "name1",
+//                "surname1",
+//                "description1",
+//                "email1", adDTO.getImage(),
+//                "phone1", adDTO.getPrice(),
+//                adDTO.getTitle());
+//    }
 
 
 }

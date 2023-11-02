@@ -17,8 +17,9 @@ public class AdModel {
     @Column(name = "ad_id")
     private int pk;
 
-    @Column(name = "ad_image")
-    private String image;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "image_id")
+    private ImageModel image;
 
     @Column(name = "price")
     private int price;
