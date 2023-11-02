@@ -61,7 +61,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public ExtendedAd getAds(int id) {
-        return userRepo.getExtendedAd(id).orElseThrow(AdNotFoundException::new);
+        return adRepo.getExtendedAd(id).orElseThrow(AdNotFoundException::new);
     }
 
     /**
@@ -76,7 +76,6 @@ public class AdServiceImpl implements AdService {
         adModel.setDescription(createOrUpdateAdDTO.getDescription());
         adRepo.saveAndFlush(adModel);
         return toAdDto(adModel);
-
     }
 
     /**

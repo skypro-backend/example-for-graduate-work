@@ -1,16 +1,16 @@
 databaseChangeLog:
   - changeSet:
-      id: 2 # идентификатор набора изменений
-      author: dmitrii_gienko # имя разработчика, который добавил набор изменений
-      changes: # список изменений в этом наборе
-        - createTable: # команда liquibase — создает таблицу
-            tableName: ad # название таблицы
-            columns: # колонки к данной таблице
-              - column: # колонка
-                  name: ad_id # название колонки
-                  type: int # тип
-                  autoIncrement: true # признак автоинкремента колонки
-                  constraints: # ограничения колонки
+      id: 2
+      author: dmitrii_gienko
+      changes:
+        - createTable:
+            tableName: ad
+            columns:
+              - column:
+                  name: ad_id
+                  type: int
+                  autoIncrement: true
+                  constraints:
                     primaryKey: true
                     nullable: false
               - column:
