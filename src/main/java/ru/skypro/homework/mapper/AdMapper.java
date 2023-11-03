@@ -11,9 +11,7 @@ public class AdMapper {
         adDTO.setTitle(adModel.getTitle());
         adDTO.setPrice(adModel.getPrice());
         adDTO.setAuthor(adModel.getUserModel().getId());
-//        Optional.ofNullable(adModel.getImage()).ifPresent(image -> adDTO.setImage(
-//                "/ads/" + adModel.getImage().getId() + "/image"));
-        adDTO.setImage("/ads/" + adModel.getImage().getId() + "/image");
+        adDTO.setImage("/image/" + adModel.getImage().getId());
         return adDTO;
     }
 
@@ -26,7 +24,7 @@ public class AdMapper {
         extendedAd.setPhone(ad.getUserModel().getPhone());
         extendedAd.setTitle(ad.getTitle());
         extendedAd.setDescription(ad.getDescription());
-        extendedAd.setImage("/ads/" + ad.getImage().getId() + "/image");
+        extendedAd.setImage("/image/" + ad.getImage().getId());
         extendedAd.setPrice(ad.getPrice());
         return extendedAd;
     }

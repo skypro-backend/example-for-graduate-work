@@ -40,10 +40,16 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: image
+                  name: image_id
                   type: varchar(255)
                   constraints:
-                    nullable: true #позже исправить на false
+                    unique: true
+#                    nullable: false
+              - addForeignKeyConstraint:
+                  baseTableName: users
+                  baseColumnNames: user_id
+                  referencedTableName: image
+                  referencedColumnNames: image_id
               - column:
                   name: role
                   type: int
