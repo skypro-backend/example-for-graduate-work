@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
-@Tag(name = "Auth controller", description = "контроллер для работы с комментариями")
+@Tag(name = "Комментарии", description = "контроллер для работы с комментариями")
 @RestController
 @RequiredArgsConstructor
 

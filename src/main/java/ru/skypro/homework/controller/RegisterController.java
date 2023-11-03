@@ -8,12 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.dto.RegisterDto;
 import ru.skypro.homework.service.AuthService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
-@Tag(name = "Auth controller", description = "контроллер для работы с регистрацией пользователя")
+@Tag(name = "Регистрация", description = "контроллер для работы с регистрацией пользователя")
 @RestController
 @RequiredArgsConstructor
 
@@ -35,7 +35,7 @@ public class RegisterController {
             }
     )
     @PostMapping("")
-    public ResponseEntity<?> register(@RequestBody Register register) {
+    public ResponseEntity<?> register(@RequestBody RegisterDto register) {
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {

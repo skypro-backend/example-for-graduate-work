@@ -11,7 +11,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
-@Tag(name = "Auth controller", description = "контроллер для работы с пользователями")
+@Tag(name = "Пользователи", description = "контроллер для работы с пользователями")
 @RestController
 @RequiredArgsConstructor
 
