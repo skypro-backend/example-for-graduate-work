@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @Schema(description = "смена пароля")
-public class NewPassword {
+public class NewPasswordDto {
     @Schema(description = "текущий пароль")
     @NotBlank
     @Size(min = 8, max = 16)

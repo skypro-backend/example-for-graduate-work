@@ -5,14 +5,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Register;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
-@Tag(name = "Auth controller", description = "контроллер для работы с объявлениями")
+@Tag(name = "Объявления", description = "контроллер для работы с объявлениями")
 @RestController
 @RequiredArgsConstructor
 
