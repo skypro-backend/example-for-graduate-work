@@ -1,23 +1,31 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.exceptions.AdNotFoundException;
+import ru.skypro.homework.exceptions.ImageNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.AdModel;
+import ru.skypro.homework.model.AdsUserDetails;
+import ru.skypro.homework.model.ImageModel;
 import ru.skypro.homework.projections.Ads;
 import ru.skypro.homework.projections.CreateOrUpdateAd;
 import ru.skypro.homework.projections.ExtendedAd;
 import ru.skypro.homework.repository.AdRepo;
+import ru.skypro.homework.repository.ImageRepo;
 import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.AdService;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static ru.skypro.homework.mapper.AdMapper.getExtendedAd;
 import static ru.skypro.homework.mapper.AdMapper.toAdDto;
 
 @Service
@@ -26,6 +34,8 @@ public class AdServiceImpl implements AdService {
     AdRepo adRepo;
     @Autowired
     UserRepo userRepo;
+    @Autowired
+    ImageRepo imageRepo;
 
     /**
      * получение всех объявлений
@@ -42,17 +52,27 @@ public class AdServiceImpl implements AdService {
     /**
      * создание объявления
      */
-    public AdDTO addAd(CreateOrUpdateAd createOrUpdateAd, String pathImage, String user) {
+    public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile file, Authentication authentication) {
+        AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
+        String username = authentication.getName();
+//        UserModel user = userRepo.findByUserName(username).orElseThrow(UserNotFoundException::new);
+        ImageModel imageModel = new ImageModel();
+        imageModel.setId(UUID.randomUUID().toString());
+        try {
+            imageModel.setBytes(file.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        imageRepo.save(imageModel);
+
         AdModel adModel = new AdModel();
-        adModel.setImage("Test-path"); // потом удалить
-//        adModel.setImage(pathImage);
-        adModel.setPrice(createOrUpdateAd.getPrice());
-        adModel.setTitle(createOrUpdateAd.getTitle());
-        adModel.setDescription(createOrUpdateAd.getDescription());
-        adModel.setUserModel(userRepo.findByUserName(user)
-                .orElseThrow(() -> new UsernameNotFoundException("Not found")));
+        adModel.setImage(imageModel);
+        adModel.setPrice(properties.getPrice());
+        adModel.setTitle(properties.getTitle());
+        adModel.setDescription(properties.getDescription());
+        adModel.setUserModel(adsUserDetails.getUser());
         adRepo.save(adModel);
-        return toAdDto(adModel);
+        return AdMapper.toAdDto(adModel);
     }
 
     /**
@@ -61,7 +81,8 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public ExtendedAd getAds(int id) {
-        return userRepo.getExtendedAd(id).orElseThrow(AdNotFoundException::new);
+        AdModel ad = adRepo.findById(id).orElseThrow(AdNotFoundException::new);
+        return getExtendedAd(ad);
     }
 
     /**
@@ -76,7 +97,6 @@ public class AdServiceImpl implements AdService {
         adModel.setDescription(createOrUpdateAdDTO.getDescription());
         adRepo.saveAndFlush(adModel);
         return toAdDto(adModel);
-
     }
 
     /**
@@ -107,8 +127,17 @@ public class AdServiceImpl implements AdService {
      * изменение картинки объявления
      */
     @Override
-    public String updateImage(int id, String pathImage) {
-        return null;
+    public String updateImage(int id, MultipartFile file) {
+        AdModel ad = adRepo.findById(id).orElseThrow(AdNotFoundException::new);
+
+        ImageModel imageModel = imageRepo.findById(ad.getImage().getId()).orElseThrow(ImageNotFoundException::new);
+        try {
+            imageModel.setBytes(file.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        imageRepo.saveAndFlush(imageModel);
+        return ("/ads/" + imageModel.getId() + "/image");
     }
 
 

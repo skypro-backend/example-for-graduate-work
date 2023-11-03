@@ -1,6 +1,8 @@
 package ru.skypro.homework.service;
 
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.projections.Ads;
 
@@ -11,7 +13,7 @@ public interface AdService {
 
     Ads getAllAds();
 
-    AdDTO addAd(CreateOrUpdateAd createOrUpdateAdDTO, String pathImage, String user);
+    AdDTO addAd(CreateOrUpdateAd createOrUpdateAdDTO, MultipartFile file, Authentication authentication);
 
     ExtendedAd getAds(int id) throws ChangeSetPersister.NotFoundException;
 
@@ -21,7 +23,7 @@ public interface AdService {
 
     Ads getAdsMe(int userId);
 
-    String updateImage(int id, String pathImage);
+    String updateImage(int id, MultipartFile file);
 
 
 }

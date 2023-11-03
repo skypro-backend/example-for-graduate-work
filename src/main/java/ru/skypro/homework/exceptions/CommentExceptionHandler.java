@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class CommentExeptionHandler {
+public class CommentExceptionHandler {
     @ExceptionHandler(CommentNotFoundException.class)
     public ResponseEntity<?> handleNotFound(CommentNotFoundException e) {
         return ResponseEntity
