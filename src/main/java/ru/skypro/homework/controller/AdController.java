@@ -33,9 +33,9 @@ public class AdController {
 
     //Добавление объявления
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDTO>  addAd(@RequestPart(value = "properties", required = true) CreateOrUpdateAd properties,
-                       @RequestPart("image") MultipartFile image,
-                       Authentication authentication) {
+    public ResponseEntity<AdDTO> addAd(@RequestPart(value = "properties") @Valid CreateOrUpdateAd properties,
+                                       @RequestPart("image") MultipartFile image,
+                                       Authentication authentication) {
         return ResponseEntity.ok(adService.addAd(properties, image, authentication));
     }
 
