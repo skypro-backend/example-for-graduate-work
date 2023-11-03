@@ -15,7 +15,7 @@ public class UserMapper {
         userDTO.setLastName(userModel.getLastName());
         userDTO.setPhone(userModel.getPhone());
         userDTO.setRole(userModel.getRole().name());
-//        userDTO.setImage(userModel.getImage());
+        userDTO.setImage("/user/"+userModel.getImage().getId());
         return userDTO;
     }
 
@@ -45,13 +45,5 @@ public class UserMapper {
         return updateUser;
 
     }
-//    public static UserModel mapToUserModel(UpdateUser u) {
-//        UpdateUser updateUser = new UpdateUser();
-//        updateUser.setFirstName(userDTO.getFirstName());
-//        updateUser.setLastName(userDTO.getLastName());
-//        updateUser.setPhone(userDTO.getPhone());
-//        return updateUser;
-//
-//    }
 }
 

@@ -5,15 +5,22 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.exceptions.AdNotFoundException;
+import ru.skypro.homework.exceptions.ImageNotFoundException;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.AdModel;
+import ru.skypro.homework.model.ImageModel;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.projections.NewPassword;
 import ru.skypro.homework.projections.UpdateUser;
+import ru.skypro.homework.repository.ImageRepo;
 import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.UserService;
 
+import java.io.IOException;
 import java.util.Optional;
 
 
@@ -26,12 +33,31 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder encoder;
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    ImageServiceImpl imageService;
+    @Autowired
+    ImageRepo imageRepo;
 
-
+    /**
+     *
+     * Поиск авторизированного пользователя
+     */
     public Optional<UserModel> findUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         return userRepo.findByUserName(currentPrincipalName);
+    }
+    /**
+     * Сравнение пользователя авторизованного и из репозитория
+     */
+    public boolean comparisonUsers(){
+        UserModel userModel = findUser().orElseThrow(UserNotFoundException::new);
+        try {
+            userRepo.findById(userModel.getId());
+        }catch (UserNotFoundException e){
+            throw new UserNotFoundException();
+        }
+        return true;
     }
 
     /**
@@ -77,8 +103,25 @@ public class UserServiceImpl implements UserService {
     /**
      * Обновление аватара  пользователя
      */
+//    @Override
+//    public void update(MultipartFile image) {
+//
+//        UserModel userModel = findUser().orElseThrow(UserNotFoundException::new);
+//        userModel.getImage().getId();
+//        imageService.updateImage(image,userModel.getImage().getId());
+//
+//    }
     @Override
-    public String update(String image) {
-        return "pathImage";
+    public String updateImage( MultipartFile file) {
+        UserModel userModel = findUser().orElseThrow(UserNotFoundException::new);
+
+        ImageModel imageModel = imageRepo.findById(userModel.getImage().getId()).orElseThrow(ImageNotFoundException::new);
+        try {
+            imageModel.setBytes(file.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        imageRepo.saveAndFlush(imageModel);
+        return ("/user/" + imageModel.getId() + "/image");
     }
 }

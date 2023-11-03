@@ -14,11 +14,13 @@ import java.util.Optional;
 public interface UserService {
 
     Optional<UserModel> findUser();
+
     UserDTO getUser();
 
     void updatePassword(NewPassword newPassword);
 
     UpdateUser updateUser(UpdateUser updateUser);
 
-    String update(String image);
+    //    void update(MultipartFile image);
+    String updateImage(MultipartFile file);
 }

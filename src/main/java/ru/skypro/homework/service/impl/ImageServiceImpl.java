@@ -5,6 +5,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.exceptions.ImageNotFoundException;
 import ru.skypro.homework.model.ImageModel;
 import ru.skypro.homework.repository.ImageRepo;
@@ -18,11 +19,11 @@ public class ImageServiceImpl implements ImageService {
     ImageRepo imageRepo;
 
     public ResponseEntity<?> getImage(String id) {
-
         ImageModel image = imageRepo.findById(id).orElseThrow(ImageNotFoundException::new);
         assert image != null;
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(new InputStreamResource(new ByteArrayInputStream(image.getBytes())));
     }
+
 }
