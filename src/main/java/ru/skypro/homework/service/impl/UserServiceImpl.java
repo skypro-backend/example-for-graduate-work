@@ -1,5 +1,8 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +28,7 @@ import java.util.Optional;
 
 
 @Service
-//@Transactional
+@Slf4j
 
 public class UserServiceImpl implements UserService {
 
@@ -39,24 +42,27 @@ public class UserServiceImpl implements UserService {
     ImageRepo imageRepo;
 
     /**
-     *
      * Поиск авторизированного пользователя
      */
     public Optional<UserModel> findUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
+        log.info("Пользователь авторизован");
         return userRepo.findByUserName(currentPrincipalName);
+
     }
+
     /**
-     * Сравнение пользователя авторизованного и из репозитория
+     * Сравнение пользователя авторизованного и из БД
      */
-    public boolean comparisonUsers(){
+    public boolean comparisonUsers() {
         UserModel userModel = findUser().orElseThrow(UserNotFoundException::new);
         try {
             userRepo.findById(userModel.getId());
-        }catch (UserNotFoundException e){
+        } catch (UserNotFoundException e) {
             throw new UserNotFoundException();
         }
+        log.info("Пользователь есть в БД");
         return true;
     }
 
@@ -80,6 +86,7 @@ public class UserServiceImpl implements UserService {
             userModel.setPassword(encoder.encode(newPassword.getNewPassword()));
             userRepo.save(userModel);
         }
+        log.info("Пароль изменен");
     }
 
     /**
@@ -97,6 +104,7 @@ public class UserServiceImpl implements UserService {
             userModel.setPhone(updateUser.getPhone());
             userRepo.save(userModel);
         }
+        log.info("Данные пользователя изменены");
         return UserMapper.mapToUpdateUser(userModel);
     }
 
@@ -112,7 +120,7 @@ public class UserServiceImpl implements UserService {
 //
 //    }
     @Override
-    public String updateImage( MultipartFile file) {
+    public String updateImage(MultipartFile file) {
         UserModel userModel = findUser().orElseThrow(UserNotFoundException::new);
 
         ImageModel imageModel = imageRepo.findById(userModel.getImage().getId()).orElseThrow(ImageNotFoundException::new);
@@ -122,6 +130,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException(e);
         }
         imageRepo.saveAndFlush(imageModel);
+        log.info("Аватар пользователя изменен");
         return ("/user/" + imageModel.getId() + "/image");
     }
 }
