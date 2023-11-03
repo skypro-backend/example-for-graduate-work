@@ -52,6 +52,7 @@ public class AdServiceImpl implements AdService {
     /**
      * создание объявления
      */
+    @Transactional
     public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile file, Authentication authentication) {
         AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
         String username = authentication.getName();
@@ -126,6 +127,7 @@ public class AdServiceImpl implements AdService {
     /**
      * изменение картинки объявления
      */
+    @Transactional
     @Override
     public String updateImage(int id, MultipartFile file) {
         AdModel ad = adRepo.findById(id).orElseThrow(AdNotFoundException::new);
@@ -137,7 +139,7 @@ public class AdServiceImpl implements AdService {
             throw new RuntimeException(e);
         }
         imageRepo.saveAndFlush(imageModel);
-        return ("/ads/" + imageModel.getId() + "/image");
+        return ("/image/" + imageModel.getId());
     }
 
 

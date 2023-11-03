@@ -1,20 +1,16 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UserDTO;
-import ru.skypro.homework.exceptions.AdNotFoundException;
-import ru.skypro.homework.exceptions.ImageNotFoundException;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
-import ru.skypro.homework.model.AdModel;
 import ru.skypro.homework.model.ImageModel;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.projections.NewPassword;
@@ -24,7 +20,9 @@ import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -111,26 +109,28 @@ public class UserServiceImpl implements UserService {
     /**
      * Обновление аватара  пользователя
      */
-//    @Override
-//    public void update(MultipartFile image) {
-//
-//        UserModel userModel = findUser().orElseThrow(UserNotFoundException::new);
-//        userModel.getImage().getId();
-//        imageService.updateImage(image,userModel.getImage().getId());
-//
-//    }
+    @Transactional
     @Override
-    public String updateImage(MultipartFile file) {
-        UserModel userModel = findUser().orElseThrow(UserNotFoundException::new);
-
-        ImageModel imageModel = imageRepo.findById(userModel.getImage().getId()).orElseThrow(ImageNotFoundException::new);
-        try {
-            imageModel.setBytes(file.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public String updateImage(MultipartFile file, Authentication authentication) {
+        UserModel userModel = userRepo.findByUserName(authentication.getName()).orElseThrow(UserNotFoundException::new);
+        ImageModel imageModel;
+        if (!Objects.isNull(userModel.getImage())) {
+            imageModel = imageRepo.findById(userModel.getImage().getId()).orElse(new ImageModel());
+        } else {
+            imageModel = new ImageModel();
+            imageModel.setId(UUID.randomUUID().toString());
         }
+        try {
+            byte[] imageBytes = file.getBytes();
+            imageModel.setBytes(imageBytes);
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+
         imageRepo.saveAndFlush(imageModel);
+        userModel.setImage(imageModel);
+        userRepo.save(userModel);
         log.info("Аватар пользователя изменен");
-        return ("/user/" + imageModel.getId() + "/image");
+        return ("/image/" + imageModel.getId());
     }
 }

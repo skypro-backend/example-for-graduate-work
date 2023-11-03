@@ -11,13 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepo extends JpaRepository<UserModel, Integer> {
-
     Optional<UserModel> findByUserName(String userName);
 
-// получение информации по объявлению
-//    @Query("SELECT new ru.skypro.homework.projections." +
-//            "ExtendedAd(a.pk, u.firstName, u.lastName, a.description," +
-//            " u.userName, a.image, u.phone, a.price, a.title) " +
-//            "FROM UserModel u JOIN FETCH AdModel a ON a.userModel.id = u.id AND a.pk = :id")
-//    Optional<ExtendedAd> getExtendedAd(@Param("id") int id);
 }

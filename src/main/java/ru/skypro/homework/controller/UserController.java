@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UserDTO;
@@ -38,8 +39,9 @@ public class UserController {
     }
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateUserImage(@RequestPart("image") MultipartFile newImage) {
+    public ResponseEntity<?> updateUserImage(@RequestPart("image") MultipartFile image,
+                                             Authentication authentication) {
 
-        return ResponseEntity.ok(userService.updateImage(newImage));
+        return ResponseEntity.ok(userService.updateImage(image, authentication));
     }
 }

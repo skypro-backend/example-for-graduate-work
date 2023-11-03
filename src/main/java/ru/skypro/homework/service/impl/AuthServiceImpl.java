@@ -15,7 +15,6 @@ public class AuthServiceImpl implements AuthService {
     private final UserServiceSecurity manager;
     private final PasswordEncoder encoder;
 
-
     @Override
     public boolean login(String userName, String password) {
         if (manager.loadUserByUsername(userName) == null) {

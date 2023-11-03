@@ -21,6 +21,5 @@ public interface UserService {
 
     UpdateUser updateUser(UpdateUser updateUser);
 
-    //    void update(MultipartFile image);
-    String updateImage(MultipartFile file);
+    String updateImage(MultipartFile file, Authentication authentication);
 }

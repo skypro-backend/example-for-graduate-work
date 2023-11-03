@@ -5,7 +5,6 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.exceptions.ImageNotFoundException;
 import ru.skypro.homework.model.ImageModel;
 import ru.skypro.homework.repository.ImageRepo;

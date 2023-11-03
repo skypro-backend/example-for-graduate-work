@@ -17,10 +17,8 @@ public class AdsUserDetails implements UserDetails {
         this.user = user;
     }
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
 
@@ -33,7 +31,6 @@ public class AdsUserDetails implements UserDetails {
     public String getUsername() {
         return user.getUserName();
     }
-
 
     @Override
     public boolean isAccountNonExpired() {

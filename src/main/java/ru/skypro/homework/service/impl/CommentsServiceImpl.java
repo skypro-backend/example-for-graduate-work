@@ -52,6 +52,7 @@ public class CommentsServiceImpl implements CommentsService {
     /**
      * Создание комментария
      */
+    @Transactional
     @Override
     public CommentDTO addComment(int id, CreateOrUpdateComment createOrUpdateComment) {
 
