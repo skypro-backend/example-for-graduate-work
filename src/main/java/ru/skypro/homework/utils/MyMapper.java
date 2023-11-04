@@ -79,7 +79,7 @@ public class MyMapper {
      * @param entity
      * @return
      */
-    private CommentDto map(CommentEntity entity){
+    public CommentDto map(CommentEntity entity){
         CommentDto dto = new CommentDto();
 
         dto.setPk(entity.getPk());
@@ -131,6 +131,13 @@ public class MyMapper {
         adEntity.setPrice(createOrUpdateAd.getPrice());
 
         return adEntity;
+    }
+    public CommentEntity map(CreateOrUpdateComment text, UserEntity user, AdEntity ad){
+        CommentEntity comment = new CommentEntity();
+        comment.setAd(ad);
+        comment.setText(text.getText());
+        comment.setAuthor(user);
+        return comment;
     }
 
 }
