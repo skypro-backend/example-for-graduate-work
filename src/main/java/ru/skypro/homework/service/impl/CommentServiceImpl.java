@@ -9,8 +9,8 @@ import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
-import ru.skypro.homework.exception.AdNotFoundException;
-import ru.skypro.homework.exception.CommentNotFoundException;
+import ru.skypro.homework.exception.NoAccessToAdException;
+import ru.skypro.homework.exception.NoAccessToCommentException;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
@@ -33,7 +33,10 @@ public class CommentServiceImpl  implements CommentService {
         this.commentMapper = commentMapper;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
+
     }
+
+
 
     @Override
     public Comments getCommentsOfOneAd(int adId) {
@@ -42,7 +45,7 @@ public class CommentServiceImpl  implements CommentService {
             Comments retrievedComments = commentMapper.adCommentsToCommentsDTO(adToRetrieveCommentsFrom);
             return retrievedComments;
         } else {
-            throw new AdNotFoundException();
+            throw new NoAccessToAdException();
         }
     }
 
@@ -57,7 +60,7 @@ public class CommentServiceImpl  implements CommentService {
             commentRepository.save(mapperToDto);
             return commentMapper.commentEntityToCommentDto(mapperToDto);
         } else {
-            throw new AdNotFoundException();
+            throw new NoAccessToAdException();
         }
     }
 
@@ -74,7 +77,7 @@ public class CommentServiceImpl  implements CommentService {
             commentRepository.save(commentFound);
             return true;
         } else {
-            throw new CommentNotFoundException();
+            throw new NoAccessToCommentException();
         }
     }
 
@@ -82,16 +85,16 @@ public class CommentServiceImpl  implements CommentService {
     public boolean deleteCommentByIdAndAdId(int adId, Integer commentId, String username) {
         Ad adFound = adRepository.getReferenceById(adId);
         CommentEntity commentFound = commentRepository.findByAdRelatedAndId(adFound, commentId);
-        UserEntity userCommented = commentFound.getUserRelated();
+        UserEntity userWhoCommented = commentFound.getUserRelated();
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();
-
-        if ((userCommented.equals(authorizedUser) || authorizedUserRole == Role.ADMIN)) {
+        if ((userWhoCommented.equals(authorizedUser)) || authorizedUserRole == Role.ADMIN) {
             commentRepository.deleteById(commentFound.getId());
             commentRepository.flush();
             return true;
         } else {
-            throw new CommentNotFoundException();
+
+            throw new NoAccessToCommentException();
         }
     }
 }

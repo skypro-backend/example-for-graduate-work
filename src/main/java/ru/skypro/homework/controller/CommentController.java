@@ -9,10 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.comment.Comment;
 import ru.skypro.homework.dto.comment.Comments;
 import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
+import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.service.CommentService;
 
 @Slf4j
 @RestController
@@ -22,6 +26,14 @@ import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
 @Tag(name = "Комментарии")
 public class CommentController {
 
+    private final CommentService commentService;
+    private final AdRepository adRepository;
+
+
+    public CommentController(CommentService commentService, AdRepository adRepository) {
+        this.commentService = commentService;
+        this.adRepository = adRepository;
+    }
 
     @GetMapping("/{id}/comments")
     @Operation(
@@ -38,7 +50,12 @@ public class CommentController {
             }
     )
     public ResponseEntity<Comments> getComments(@PathVariable(name = "id") Integer id) {
-        return ResponseEntity.ok(new Comments());
+        if (commentService.getCommentsOfOneAd(id.intValue()) == null) {
+            return ResponseEntity.ok().build();
+        } else {
+            Comments retrievedComments = commentService.getCommentsOfOneAd(id.intValue());
+            return ResponseEntity.ok(retrievedComments);
+        }
     }
 
 
@@ -57,12 +74,17 @@ public class CommentController {
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
             }
     )
-    public ResponseEntity<Comments> addComment(@RequestBody Comment comment, @PathVariable(name = "id") Integer id) {
-        return ResponseEntity.ok(new Comments());
+    public ResponseEntity<?> addComment(@RequestBody CreateOrUpdateComment createOrUpdateComment, @PathVariable(name = "id") Integer id) {
+        if (adRepository.getReferenceById(id.intValue()) == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            Comment addedComment = commentService.addCommentToAd(createOrUpdateComment, id.intValue());
+            return ResponseEntity.ok(addedComment);
+        }
     }
 
 
-
+    @Transactional
     @DeleteMapping("/{adId}/comments/{commentId}")
     @Operation(
             summary = "Добавить комментарий к объявлению",
@@ -80,8 +102,12 @@ public class CommentController {
             }
     )
     public ResponseEntity<Comment> deleteComment(@PathVariable (name = "adId") Integer adId,
-                                           @PathVariable(name = "commentId") Integer commentId) {
-        return ResponseEntity.ok(new Comment());
+                                           @PathVariable(name = "commentId") Integer commentId, Authentication authentication) {
+        boolean deleteOrNot = commentService.deleteCommentByIdAndAdId(adId, commentId, authentication.getName());
+        if (deleteOrNot) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
 
@@ -100,10 +126,13 @@ public class CommentController {
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
             }
     )
-    public ResponseEntity<Comment> updateComment(@PathVariable(name = "adId") Integer adId,
+    public ResponseEntity<?> updateComment(@PathVariable(name = "adId") Integer adId,
                                                  @PathVariable(name = "commentId") Integer commentId,
-                                                 @RequestBody CreateOrUpdateComment comment) {
-        return ResponseEntity.ok(new Comment());
+                                                 @RequestBody CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
+        if (commentService.patchCommentByIdAndAdId(adId, commentId, createOrUpdateComment,authentication.getName())) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }

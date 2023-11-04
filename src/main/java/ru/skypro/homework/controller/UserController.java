@@ -4,13 +4,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.NewPassword;
 import ru.skypro.homework.dto.user.UpdateUser;
 import ru.skypro.homework.dto.user.User;
+import ru.skypro.homework.service.UserService;
 
 @RestController
 @RequestMapping("/users")
@@ -18,6 +21,11 @@ import ru.skypro.homework.dto.user.User;
 public class UserController {
 
 
+  private final UserService userService;
+
+  public UserController(UserService userService) {
+    this.userService = userService;
+  }
 
   @PostMapping("/set_password")
   @Operation(
@@ -29,8 +37,12 @@ public class UserController {
 
           }
   )
-  public ResponseEntity<NewPassword> updatePassword(@RequestBody NewPassword newPassword) {
-    return ResponseEntity.ok(new NewPassword());
+  public ResponseEntity<?> updatePassword(@RequestBody NewPassword newPassword, Authentication authentication) {
+    if (userService.changePassword(newPassword, authentication.getName())) {
+      return ResponseEntity.ok().build();
+    } else {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
   }
 
   @GetMapping("/me")
@@ -45,8 +57,9 @@ public class UserController {
     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
   }
   )
-  public ResponseEntity<User> getUser() {
-    return ResponseEntity.ok(new User());
+  public ResponseEntity<?> getUser(Authentication authentication) {
+    User userRetrieved = userService.retrieveAuthorizedInformation(authentication.getName());
+    return ResponseEntity.ok(userRetrieved);
   }
 
 
@@ -62,8 +75,9 @@ public class UserController {
                   @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
           }
   )
-  public ResponseEntity<User> updateUser(@RequestBody User user) {
-    return ResponseEntity.ok(new User());
+  public ResponseEntity<?> updateUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
+    UpdateUser updateUser1 = userService.patchAuthorizedUserInformation(updateUser, authentication.getName());
+    return ResponseEntity.ok(updateUser1);
   }
 
 
@@ -76,7 +90,7 @@ public class UserController {
                   @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
           }
   )
-  public ResponseEntity<UpdateUser> updateUserImage(@RequestParam MultipartFile image) {
-    return ResponseEntity.ok(new UpdateUser());
+  public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile image) {
+    return ResponseEntity.ok().build();
   }
 }

@@ -22,7 +22,7 @@ public class CommentMapperImpl  implements CommentMapper {
         Comment comment = new Comment();
         comment.setAuthor(commentEntity.getUserRelated().getId());
         if (commentEntity.getUserRelated().getImageAvatar() != null) {
-            comment.setImage("/users/" + commentEntity.getUserRelated().getImageAvatar().getId() + "/avatar/");
+            comment.setImage("/users/" + commentEntity.getUserRelated().getImageAvatar().getId() + "/avatar");
         } else {
             comment.setImage(null);
         }
