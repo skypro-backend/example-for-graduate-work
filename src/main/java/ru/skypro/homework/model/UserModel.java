@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "users")
@@ -38,12 +39,13 @@ public class UserModel {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy="userModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AdModel> adModels;
 
     @OneToMany(mappedBy = "userModel",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<CommentModel> commentModels;
+
 
 }

@@ -50,15 +50,17 @@ public class AdController {
     // Обновление объявления
     @PatchMapping("/{id}")
     public ResponseEntity<AdDTO> updateAds(@PathVariable int id,
-                                           @Valid @RequestBody CreateOrUpdateAd createOrUpdateAdDTO) {
-        return ResponseEntity.ok(adService.updateAd(id, createOrUpdateAdDTO));
+                                           @Valid @RequestBody CreateOrUpdateAd createOrUpdateAdDTO,
+                                           Authentication authentication) {
+        return ResponseEntity.ok(adService.updateAd(id, createOrUpdateAdDTO, authentication));
     }
 
 
     // Удалить объявление
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removeAd(@PathVariable int id) {
-        adService.removeAd(id);
+    public ResponseEntity<?> removeAd(@PathVariable int id,
+                                      Authentication authentication) {
+        adService.removeAd(id, authentication);
         return ResponseEntity.ok().build();
     }
 

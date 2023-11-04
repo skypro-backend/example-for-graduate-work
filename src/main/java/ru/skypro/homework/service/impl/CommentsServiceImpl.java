@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.exceptions.CommentNotFoundException;
+import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.AdModel;
 import ru.skypro.homework.model.CommentModel;
@@ -43,8 +44,9 @@ public class CommentsServiceImpl implements CommentsService {
 
 
     public Comments getAllComments(int adId) {
-        adService.getAds(adId);
+//        adService.getAds(adId);
         List<CommentDTO> commentsDTOList = commentRepo.findAll().stream()
+                .filter(commentModel -> commentModel.getAdModel().getPk() == adId)
                 .map(CommentMapper::toCommentDTO).collect(Collectors.toList());
         return new Comments(commentsDTOList, commentsDTOList.size());
     }
@@ -56,7 +58,7 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     public CommentDTO addComment(int id, CreateOrUpdateComment createOrUpdateComment) {
 
-        UserModel user = userService.findUser().get();
+        UserModel user = userService.findUser().orElseThrow(UserNotFoundException::new);
         AdModel adModel = adRepo.findById(id).orElseThrow();
 
         CommentModel commentModel = new CommentModel();

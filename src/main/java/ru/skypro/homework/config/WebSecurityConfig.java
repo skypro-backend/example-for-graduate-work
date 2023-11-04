@@ -20,9 +20,9 @@ public class WebSecurityConfig {
             "/login",
             "/register",
             "/ads",
-            "/ads/*",
-            "/ads/image/**",
-            "/ads/*/comments",
+//            "/ads/*",
+//            "/ads/image/**",
+//            "/ads/*/comments",
             "/image/**"
     };
 

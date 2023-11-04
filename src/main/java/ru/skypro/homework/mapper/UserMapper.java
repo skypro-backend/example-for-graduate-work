@@ -17,9 +17,9 @@ public class UserMapper {
         userDTO.setLastName(userModel.getLastName());
         userDTO.setPhone(userModel.getPhone());
         userDTO.setRole(userModel.getRole().name());
-//        Optional.ofNullable(userModel.getImage()).ifPresent(image -> userDTO.setImage(
-//                "/image/" + userModel.getImage().getId()));
-        userDTO.setImage("/image/" + userModel.getImage().getId());
+        Optional.ofNullable(userModel.getImage()).ifPresent(image -> userDTO.setImage(
+                "/image/" + userModel.getImage().getId()));
+//        userDTO.setImage("/image/" + userModel.getImage().getId());
         return userDTO;
     }
 
