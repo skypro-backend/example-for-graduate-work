@@ -1,6 +1,8 @@
 package ru.skypro.homework.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 @Getter
 @Setter
@@ -12,8 +14,12 @@ public class Image {
     @Id
     @Column(name = "image_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Lob
+    @Type(type = "org.hibernate.type.BinaryType")
     private byte[] data;
+
+    private String mediaType;
+
 }
