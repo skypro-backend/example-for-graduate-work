@@ -1,28 +1,40 @@
 package ru.skypro.homework.entity;
 
-import lombok.Data;
+
+import lombok.*;
+import org.apache.catalina.User;
 
 import javax.persistence.*;
-import java.util.List;
-@Data
+import java.awt.*;
+
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(of = {"pk"})
+@RequiredArgsConstructor
 @Entity
-@Table(name = "ads")
 public class Ad {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ad_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pk;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User author;
 
-    private int price;
-    private String title;
+    @OneToOne
+    @ToString.Exclude
+    @JoinColumn(name = "image_id")
+    private Image image;
+
+    @Column(nullable = false)
+    private Integer price;
+
+    @Column(nullable = false)
     private String description;
-    private String image;
 
-    @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
-
+    @Column(nullable = false)
+    private String title;
 }
