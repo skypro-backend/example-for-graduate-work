@@ -42,7 +42,13 @@ public class MyMapper {
      * @return
      */
     public AdDto map(AdEntity entity) {
-        return modelMapper.map(entity, AdDto.class);
+        AdDto adDto = new AdDto();
+        adDto.setAuthor((int)entity.getAuthor().getId());
+        adDto.setImage(entity.getImage());
+        adDto.setPk((int)entity.getPk());
+        adDto.setPrice(entity.getPrice());
+        adDto.setTitle(entity.getTitle());
+        return adDto;
     }
 
     /**
@@ -115,4 +121,16 @@ public class MyMapper {
 
         return userEntity;
     }
+
+    public AdEntity map(CreateOrUpdateAd createOrUpdateAd, UserEntity author, String image){
+        AdEntity adEntity = new AdEntity();
+        adEntity.setAuthor(author);
+        adEntity.setImage(image);
+        adEntity.setTitle(createOrUpdateAd.getTitle());
+        adEntity.setDescription(createOrUpdateAd.getDescription());
+        adEntity.setPrice(createOrUpdateAd.getPrice());
+
+        return adEntity;
+    }
+
 }
