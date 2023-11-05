@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.exceptions.AccessErrorException;
 import ru.skypro.homework.exceptions.AdNotFoundException;
-import ru.skypro.homework.exceptions.ImageNotFoundException;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.*;
@@ -38,7 +37,7 @@ public class AdServiceImpl implements AdService {
     ImageRepo imageRepo;
 
     /**
-     * получение всех объявлений
+     * Получение всех объявлений
      */
 
     @Override
@@ -50,7 +49,7 @@ public class AdServiceImpl implements AdService {
     }
 
     /**
-     * создание объявления
+     * Создание объявления
      */
     @Transactional
     public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile file, Authentication authentication) {
@@ -76,7 +75,7 @@ public class AdServiceImpl implements AdService {
     }
 
     /**
-     * получение полной информации об объявлении
+     * Получение полной информации об объявлении
      */
 
     @Override
@@ -86,7 +85,7 @@ public class AdServiceImpl implements AdService {
     }
 
     /**
-     * внесение изменений в объявление
+     * Внесение изменений в объявление
      */
     @Transactional
     @Override
@@ -103,7 +102,7 @@ public class AdServiceImpl implements AdService {
     }
 
     /**
-     * удаление объявления
+     * Удаление объявления
      */
     @Transactional
     @Override
@@ -118,7 +117,7 @@ public class AdServiceImpl implements AdService {
     }
 
     /**
-     * получение объявлений авторизированного пользователя
+     * Получение объявлений авторизированного пользователя
      */
     @Override
     public Ads getAdsMe(int userId) {
@@ -129,26 +128,9 @@ public class AdServiceImpl implements AdService {
         return new Ads(list.size(), list);
     }
 
-    /**
-     * изменение картинки объявления
-     */
-    @Transactional
-    @Override
-    public String updateImage(int id, MultipartFile file) {
-        AdModel ad = adRepo.findById(id).orElseThrow(AdNotFoundException::new);
-
-        ImageModel imageModel = imageRepo.findById(ad.getImage().getId()).orElseThrow(ImageNotFoundException::new);
-        try {
-            imageModel.setBytes(file.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        imageRepo.saveAndFlush(imageModel);
-        return ("/image/" + imageModel.getId());
-    }
 
     /**
-     * проверка доступа к работе с объявлениями
+     * Проверка доступа к работе с объявлениями
      */
     public boolean isAllowed(Authentication authentication, AdModel ad) {
         UserModel user = userRepo.findByUserName(authentication.getName())

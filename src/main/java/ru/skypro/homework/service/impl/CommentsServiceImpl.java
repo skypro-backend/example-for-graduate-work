@@ -1,19 +1,23 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.exceptions.AccessErrorException;
 import ru.skypro.homework.exceptions.CommentNotFoundException;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.AdModel;
 import ru.skypro.homework.model.CommentModel;
+import ru.skypro.homework.model.Role;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.projections.Comments;
 import ru.skypro.homework.projections.CreateOrUpdateComment;
 import ru.skypro.homework.repository.AdRepo;
 import ru.skypro.homework.repository.CommentRepo;
+import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.CommentsService;
 
 import java.time.LocalDateTime;
@@ -33,6 +37,7 @@ public class CommentsServiceImpl implements CommentsService {
     private final CommentRepo commentRepo;
     private final AdServiceImpl adService;
     private final AdRepo adRepo;
+    private final UserRepo userRepo;
 
     /**
      * Поиск комментария
@@ -75,12 +80,13 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     /**
-     * Удаление коментария
+     * Удаление комментария
      */
     @Override
-    public void deleteComment(int id, int commentsId) {
-        if (commentRepo.findById(commentsId).isEmpty()) {
-            throw new CommentNotFoundException();
+    public void deleteComment(int id, int commentsId, Authentication authentication) {
+        CommentModel comment = getCommentFromDB(commentsId);
+        if (!isAllowed(authentication, comment)) {
+            throw new AccessErrorException();
         }
         commentRepo.deleteById(commentsId);
     }
@@ -89,11 +95,33 @@ public class CommentsServiceImpl implements CommentsService {
      * Редактирование комментария
      */
     @Override
-    public CommentDTO updateComment(int id, int commentsId, CreateOrUpdateComment createOrUpdateComment) {
+    public CommentDTO updateComment(int id, int commentsId,
+                                    CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
 
-        CommentModel comment = commentRepo.findById(commentsId).orElseThrow(CommentNotFoundException::new);
+        CommentModel comment = getCommentFromDB(commentsId);
+
+        if (!isAllowed(authentication, comment)) {
+            throw new AccessErrorException();
+        }
         comment.setText(createOrUpdateComment.getText());
         commentRepo.save(comment);
         return toCommentDTO(comment);
+    }
+
+
+    /**
+     * Проверка доступа к работе с объявлениями
+     */
+    public boolean isAllowed(Authentication authentication, CommentModel comment) {
+        UserModel user = userRepo.findByUserName(authentication.getName())
+                .orElseThrow(UserNotFoundException::new);
+        return user.getId() == comment.getUserModel().getId() || user.getRole().equals(Role.ADMIN);
+    }
+
+    /**
+     * Получение комментария из базы данных
+     */
+    public CommentModel getCommentFromDB(int id) {
+        return commentRepo.findById(id).orElseThrow(CommentNotFoundException::new);
     }
 }

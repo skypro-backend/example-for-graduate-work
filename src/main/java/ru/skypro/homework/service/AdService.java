@@ -23,7 +23,5 @@ public interface AdService {
 
     Ads getAdsMe(int userId);
 
-    String updateImage(int id, MultipartFile file);
-
 
 }

@@ -23,14 +23,17 @@ public class AdController {
 
     private final AdServiceImpl adService;
 
-
-    //    Получение всех объявлений
+    /**
+     * Получение всех объявлений
+     */
     @GetMapping()
     public ResponseEntity<Ads> getAllAds() {
         return ResponseEntity.ok(adService.getAllAds());
     }
 
-    //Добавление объявления
+    /**
+     * Добавление объявления
+     */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdDTO> addAd(@RequestPart(value = "properties") @Valid CreateOrUpdateAd properties,
                                        @RequestPart("image") MultipartFile image,
@@ -38,15 +41,17 @@ public class AdController {
         return ResponseEntity.ok(adService.addAd(properties, image, authentication));
     }
 
-
-    // Получение информации об объявлении
+    /**
+     * Получение информации об объявлении
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> getAds(@PathVariable int id) {
         return ResponseEntity.ok(adService.getAds(id));
     }
 
-
-    // Обновление объявления
+    /**
+     * Обновление объявления
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<AdDTO> updateAds(@PathVariable int id,
                                            @Valid @RequestBody CreateOrUpdateAd createOrUpdateAdDTO,
@@ -54,29 +59,22 @@ public class AdController {
         return ResponseEntity.ok(adService.updateAd(id, createOrUpdateAdDTO, authentication));
     }
 
-
-    // Удалить объявление
+    /**
+     * Удаление объявления
+     */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removeAd(@PathVariable int id,
-                                      Authentication authentication) {
+    public ResponseEntity<?> removeAd(@PathVariable int id, Authentication authentication) {
         adService.removeAd(id, authentication);
         return ResponseEntity.ok().build();
     }
 
-
-    //Получение объявлений авторизованного пользователя
+    /**
+     * Получение объявлений авторизованного пользователя
+     */
     @GetMapping("/me")
     public ResponseEntity<Ads> getAdsMe(Authentication authentication) {
         AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
         return ResponseEntity.ok(adService.getAdsMe(adsUserDetails.getUser().getId()));
     }
-
-    // Обновление картинки объявления
-    @PatchMapping("/{id}/image")
-    public ResponseEntity<String> updateImage(@PathVariable int id,
-                                              @RequestPart("image") MultipartFile image) {
-        return ResponseEntity.ok(adService.updateImage(id, image));
-    }
-
 
 }

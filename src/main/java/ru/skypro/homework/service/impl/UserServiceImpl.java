@@ -6,23 +6,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
-import ru.skypro.homework.model.ImageModel;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.projections.NewPassword;
 import ru.skypro.homework.projections.UpdateUser;
-import ru.skypro.homework.repository.ImageRepo;
 import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.UserService;
 
-import java.io.IOException;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 
 @Service
@@ -34,10 +27,6 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder encoder;
     @Autowired
     private UserRepo userRepo;
-    @Autowired
-    ImageServiceImpl imageService;
-    @Autowired
-    ImageRepo imageRepo;
 
     /**
      * Поиск авторизированного пользователя
@@ -106,31 +95,5 @@ public class UserServiceImpl implements UserService {
         return UserMapper.mapToUpdateUser(userModel);
     }
 
-    /**
-     * Обновление аватара  пользователя
-     */
-    @Transactional
-    @Override
-    public String updateImage(MultipartFile file, Authentication authentication) {
-        UserModel userModel = userRepo.findByUserName(authentication.getName()).orElseThrow(UserNotFoundException::new);
-        ImageModel imageModel;
-        if (!Objects.isNull(userModel.getImage())) {
-            imageModel = imageRepo.findById(userModel.getImage().getId()).orElse(new ImageModel());
-        } else {
-            imageModel = new ImageModel();
-            imageModel.setId(UUID.randomUUID().toString());
-        }
-        try {
-            byte[] imageBytes = file.getBytes();
-            imageModel.setBytes(imageBytes);
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
 
-        imageRepo.saveAndFlush(imageModel);
-        userModel.setImage(imageModel);
-        userRepo.save(userModel);
-        log.info("Аватар пользователя изменен");
-        return ("/image/" + imageModel.getId());
-    }
 }
