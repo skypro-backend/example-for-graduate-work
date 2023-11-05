@@ -83,7 +83,7 @@ public class UsersController {
     public ResponseEntity<String> updateUserImage(@RequestParam MultipartFile image) {
         logger.info("Avatar Controller {}", image.getContentType());
         String username = "authenticatedUsername"; // Get from Authentication
-        String imageString = userService.uploadAvatar(username, image);
+        String imageString = userService.updateUserImage(username, image);
         if (imageString == null) {
             logger.info("Unable to save avatar: {}", image.getName());
             return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
