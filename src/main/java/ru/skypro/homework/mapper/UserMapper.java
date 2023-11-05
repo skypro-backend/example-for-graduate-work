@@ -5,7 +5,9 @@ import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.projections.UpdateUser;
 
 import java.util.Optional;
-
+/**
+ * Класс мапинга из сущности в DTO и наоборот
+ */
 public class UserMapper {
 
     public static UserDTO mapToUserDTO(UserModel userModel) {

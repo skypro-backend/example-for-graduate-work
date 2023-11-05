@@ -7,7 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-
+/**
+ * Класс для реализации аунтентификации пользователя
+ */
 @Getter
 public class AdsUserDetails implements UserDetails {
 

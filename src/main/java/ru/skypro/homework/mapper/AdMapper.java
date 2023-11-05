@@ -5,7 +5,9 @@ import ru.skypro.homework.model.AdModel;
 import ru.skypro.homework.projections.ExtendedAd;
 
 import java.util.Optional;
-
+/**
+ * Класс мапинга из сущности в DTO и наоборот
+ */
 public class AdMapper {
     public static AdDTO toAdDto(AdModel adModel) {
         AdDTO adDTO = new AdDTO();

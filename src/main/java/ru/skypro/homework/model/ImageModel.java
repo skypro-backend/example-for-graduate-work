@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-
+/**
+ * Класс сущности изображения
+ */
     @Entity
     @NoArgsConstructor
     @AllArgsConstructor

@@ -8,7 +8,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
-
+/**
+ * Класс объявлений DTO
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

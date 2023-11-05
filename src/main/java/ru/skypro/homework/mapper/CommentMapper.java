@@ -6,7 +6,9 @@ import ru.skypro.homework.projections.Comments;
 import ru.skypro.homework.projections.CreateOrUpdateComment;
 
 import java.util.Optional;
-
+/**
+ * Класс мапинга из сущности в DTO и наоборот
+ */
 public class CommentMapper {
     public static CommentDTO toCommentDTO(CommentModel commentModel) {
         CommentDTO commentDTO = new CommentDTO();

@@ -14,7 +14,9 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserServiceSecurity manager;
     private final PasswordEncoder encoder;
-
+    /**
+     * Метод авторизации пользователя
+     */
     @Override
     public boolean login(String userName, String password) {
         if (manager.loadUserByUsername(userName) == null) {
@@ -24,7 +26,9 @@ public class AuthServiceImpl implements AuthService {
         UserDetails userDetails = manager.loadUserByUsername(userName);
         return encoder.matches(password, userDetails.getPassword());
     }
-
+    /**
+     * Метод регистрации пользователя
+     */
     @Override
     public boolean register(Register register) {
         return register.getUsername() != null && !register.getUsername().isBlank()

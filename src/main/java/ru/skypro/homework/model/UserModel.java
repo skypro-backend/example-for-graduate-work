@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
-
+/**
+ * Класс сущности пользователя
+ */
 @Entity
 @Table(name = "users")
 @AllArgsConstructor
