@@ -24,7 +24,9 @@ public class AuthController {
     private final AuthService authService;
     private final UserServiceSecurity serviceSecurity;
 
-
+    /**
+     * Авторизация пользователя
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
@@ -33,7 +35,9 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-
+    /**
+     * Регистрация пользователя
+     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid Register register) {
         if (authService.register(register)) {

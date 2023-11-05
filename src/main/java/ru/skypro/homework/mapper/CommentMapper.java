@@ -6,7 +6,9 @@ import ru.skypro.homework.projections.Comments;
 import ru.skypro.homework.projections.CreateOrUpdateComment;
 
 import java.util.Optional;
-
+/**
+ * Класс мапинга из сущности в DTO и наоборот
+ */
 public class CommentMapper {
     public static CommentDTO toCommentDTO(CommentModel commentModel) {
         CommentDTO commentDTO = new CommentDTO();
@@ -21,31 +23,9 @@ public class CommentMapper {
         return commentDTO;
     }
 
-    public static CommentModel toCommentModel(CommentDTO commentDTO) {
-        CommentModel commentModel = new CommentModel();
-        commentModel.setPk(commentModel.getPk());
-        commentModel.setCreateAt(commentDTO.getCreatedAt());
-        commentModel.setText(commentDTO.getText());
-        return commentModel;
-
-    }
-
     public static Comments toComments(CommentModel commentModel) {
         Comments comments = new Comments();
         comments.setCount(comments.getCount());
-        comments.setResults(comments.getResults());
-        return comments;
-    }
-
-    public static CreateOrUpdateComment toCreateOrUpdateComment(Comments comments) {
-        CreateOrUpdateComment createOrUpdateComment = new CreateOrUpdateComment();
-        createOrUpdateComment.setText(createOrUpdateComment.getText());
-        return createOrUpdateComment;
-    }
-
-    public static Comments toCommentsAdd(CreateOrUpdateComment createOrUpdateComment) {
-        Comments comments = new Comments();
-        comments.setResults(comments.getResults());
         comments.setResults(comments.getResults());
         return comments;
     }

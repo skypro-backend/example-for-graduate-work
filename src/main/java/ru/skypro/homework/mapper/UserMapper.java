@@ -5,7 +5,9 @@ import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.projections.UpdateUser;
 
 import java.util.Optional;
-
+/**
+ * Класс мапинга из сущности в DTO и наоборот
+ */
 public class UserMapper {
 
     public static UserDTO mapToUserDTO(UserModel userModel) {
@@ -20,17 +22,6 @@ public class UserMapper {
                 "/image/" + userModel.getImage().getId()));
         return userDTO;
     }
-
-    public static UserModel mapToUserModel(UserDTO userDTO) {
-        UserModel userModel = new UserModel();
-        userModel.setId(userDTO.getId());
-        userModel.setUserName(userDTO.getEmail());
-        userModel.setFirstName(userDTO.getFirstName());
-        userModel.setLastName(userDTO.getLastName());
-        userModel.setPhone(userDTO.getPhone());
-        return userModel;
-    }
-
     public static UpdateUser mapToUpdateUser(UserModel userModel) {
         UpdateUser updateUser = new UpdateUser();
         updateUser.setFirstName(userModel.getFirstName());
@@ -39,12 +30,5 @@ public class UserMapper {
         return updateUser;
     }
 
-    public static UpdateUser mapToUpdateUser(UserDTO userDTO) {
-        UpdateUser updateUser = new UpdateUser();
-        updateUser.setFirstName(userDTO.getFirstName());
-        updateUser.setLastName(userDTO.getLastName());
-        updateUser.setPhone(userDTO.getPhone());
-        return updateUser;
-    }
 }
 
