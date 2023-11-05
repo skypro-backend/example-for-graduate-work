@@ -10,14 +10,10 @@ import ru.skypro.homework.entity.*;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
     @Mapping(target = "image", source = "image", qualifiedByName = "imageToPathString")
-    default UserDto toUserDto(User user) {
-        return null;
-    }
+    UserDto toUserDto(User user);
 
     @Mapping(target = "email", source = "username")
-    default User toUserEntity(RegisterDto registerDto) {
-        return null;
-    }
+    User toUserEntity(Register registerDto);
 
     UpdateUserDto toUpdateUserDto(User user);
 

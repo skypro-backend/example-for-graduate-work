@@ -4,12 +4,14 @@ import lombok.*;
 import javax.persistence.*;
 import ru.skypro.homework.dto.Role;
 
-@Getter
-@Setter
 @ToString
 @EqualsAndHashCode(of = {"id"})
 @RequiredArgsConstructor
 @Entity
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
     @Id

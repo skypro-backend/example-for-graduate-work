@@ -2,12 +2,16 @@ package ru.skypro.homework.entity;
 
 import lombok.*;
 import javax.persistence.*;
-@Getter
-@Setter
+
 @ToString
 @EqualsAndHashCode(of = {"id"})
 @RequiredArgsConstructor
 @Entity
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class Image {
     @Id
     @Column(name = "image_id")
