@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 
 import static ru.skypro.homework.mapper.AdMapper.getExtendedAd;
 import static ru.skypro.homework.mapper.AdMapper.toAdDto;
-
+@Slf4j
 @Service
 public class AdServiceImpl implements AdService {
     @Autowired
@@ -45,7 +46,9 @@ public class AdServiceImpl implements AdService {
         List<AdDTO> adsList = adRepo.findAll().stream()
                 .map(AdMapper::toAdDto)
                 .collect(Collectors.toList());
+        log.info("Все объявления получены");
         return new Ads(adsList.size(), adsList);
+
     }
 
     /**
@@ -63,6 +66,7 @@ public class AdServiceImpl implements AdService {
             throw new RuntimeException(e);
         }
         imageRepo.save(imageModel);
+        log.info("Сохранили картинку к объявлению");
 
         AdModel adModel = new AdModel();
         adModel.setImage(imageModel);
@@ -71,6 +75,7 @@ public class AdServiceImpl implements AdService {
         adModel.setDescription(properties.getDescription());
         adModel.setUserModel(adsUserDetails.getUser());
         adRepo.save(adModel);
+        log.info("Создали объявление");
         return AdMapper.toAdDto(adModel);
     }
 
@@ -81,6 +86,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public ExtendedAd getAds(int id) {
         AdModel ad = adRepo.findById(id).orElseThrow(AdNotFoundException::new);
+        log.info("Получение полной информации объявления");
         return getExtendedAd(ad);
     }
 
@@ -98,6 +104,7 @@ public class AdServiceImpl implements AdService {
         adModel.setPrice(createOrUpdateAdDTO.getPrice());
         adModel.setDescription(createOrUpdateAdDTO.getDescription());
         adRepo.saveAndFlush(adModel);
+        log.info("Изменение объявления");
         return toAdDto(adModel);
     }
 
@@ -112,7 +119,7 @@ public class AdServiceImpl implements AdService {
         if (!isAllowed(authentication, adModel)) {
             throw new AccessErrorException();
         }
-
+        log.info("Объявлене удалено");
         adRepo.deleteById(id);
     }
 
@@ -125,6 +132,7 @@ public class AdServiceImpl implements AdService {
                 .filter(adModel -> adModel.getUserModel().getId() == userId)
                 .map(AdMapper::toAdDto)
                 .collect(Collectors.toList());
+        log.info("Получение объявлений авторизированного пользователя");
         return new Ads(list.size(), list);
     }
 
@@ -135,6 +143,7 @@ public class AdServiceImpl implements AdService {
     public boolean isAllowed(Authentication authentication, AdModel ad) {
         UserModel user = userRepo.findByUserName(authentication.getName())
                 .orElseThrow(UserNotFoundException::new);
+        log.info("Доступ разрешен к работе с объявлениям");
         return user.getId() == ad.getUserModel().getId() || user.getRole().equals(Role.ADMIN);
     }
 
