@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.exceptions.ForbiddenException;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.UserModel;
@@ -72,7 +73,7 @@ public class UserServiceImpl implements UserService {
         if (currentUserPassword) {
             userModel.setPassword(encoder.encode(newPassword.getNewPassword()));
             userRepo.save(userModel);
-        }
+        } else throw new ForbiddenException();
         log.info("Пароль изменен");
     }
 

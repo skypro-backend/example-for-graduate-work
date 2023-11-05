@@ -14,4 +14,11 @@ public class UserExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body("Not found");
     }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<?> handleNotFound(ForbiddenException e) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body("forbidden");
+    }
 }

@@ -50,5 +50,14 @@ public class UserModel {
             fetch = FetchType.LAZY)
     private List<CommentModel> commentModels;
 
-
+    public UserModel(int id, String userName, String password, String firstName, String lastName, String phone, ImageModel image, Role role) {
+        this.id = id;
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.image = image;
+        this.role = role;
+    }
 }

@@ -37,7 +37,7 @@ public class UserController {
      * Изменение пользователя
      */
     @PatchMapping("/me")
-    public UpdateUser updateUser(@RequestBody UpdateUser updateUser) {
+    public UpdateUser updateUser(@RequestBody @Valid UpdateUser updateUser) {
         return userService.updateUser(updateUser);
     }
 
