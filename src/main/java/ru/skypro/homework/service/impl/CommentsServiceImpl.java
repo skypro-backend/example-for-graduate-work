@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 
 import static ru.skypro.homework.mapper.CommentMapper.toCommentDTO;
 
-
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -44,6 +45,7 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     public Comments getComments(int id) {
         CommentModel commentModel = commentRepo.findById(id).orElseThrow(CommentNotFoundException::new);
+        log.info("Найден комментарий");
         return CommentMapper.toComments(commentModel);
     }
 
@@ -55,6 +57,7 @@ public class CommentsServiceImpl implements CommentsService {
         List<CommentDTO> commentsDTOList = commentRepo.findAll().stream()
                 .filter(commentModel -> commentModel.getAdModel().getPk() == adId)
                 .map(CommentMapper::toCommentDTO).collect(Collectors.toList());
+        log.info("Все комментарии получены");
         return new Comments(commentsDTOList, commentsDTOList.size());
     }
 
@@ -75,6 +78,7 @@ public class CommentsServiceImpl implements CommentsService {
                 .format(DateTimeFormatter.ISO_DATE_TIME)));
         commentModel.setUserModel(user);
         commentRepo.save(commentModel);
+        log.info("Комментарий создан");
         return CommentMapper.toCommentDTO(commentModel);
     }
 
@@ -87,6 +91,7 @@ public class CommentsServiceImpl implements CommentsService {
         if (!isAllowed(authentication, comment)) {
             throw new AccessErrorException();
         }
+        log.info("Комментарий удален");
         commentRepo.deleteById(commentsId);
     }
 
@@ -104,16 +109,18 @@ public class CommentsServiceImpl implements CommentsService {
         }
         comment.setText(createOrUpdateComment.getText());
         commentRepo.save(comment);
+        log.info("Комментарий изменен");
         return toCommentDTO(comment);
     }
 
 
     /**
-     * Проверка доступа к работе с объявлениями
+     * Проверка доступа к работе с комментариями
      */
     public boolean isAllowed(Authentication authentication, CommentModel comment) {
         UserModel user = userRepo.findByUserName(authentication.getName())
                 .orElseThrow(UserNotFoundException::new);
+        log.info("Доступ к работе с комментариями разрешен");
         return user.getId() == comment.getUserModel().getId() || user.getRole().equals(Role.ADMIN);
     }
 
@@ -122,5 +129,6 @@ public class CommentsServiceImpl implements CommentsService {
      */
     public CommentModel getCommentFromDB(int id) {
         return commentRepo.findById(id).orElseThrow(CommentNotFoundException::new);
+
     }
 }

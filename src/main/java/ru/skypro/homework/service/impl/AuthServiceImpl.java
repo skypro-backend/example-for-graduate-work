@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -8,12 +9,14 @@ import ru.skypro.homework.projections.Register;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserServiceSecurity;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final UserServiceSecurity manager;
     private final PasswordEncoder encoder;
+
     /**
      * Метод авторизации пользователя
      */
@@ -22,10 +25,11 @@ public class AuthServiceImpl implements AuthService {
         if (manager.loadUserByUsername(userName) == null) {
             return false;
         }
-
+        log.info("Пользователь авторизирован");
         UserDetails userDetails = manager.loadUserByUsername(userName);
         return encoder.matches(password, userDetails.getPassword());
     }
+
     /**
      * Метод регистрации пользователя
      */
@@ -36,6 +40,7 @@ public class AuthServiceImpl implements AuthService {
                 && register.getLastName() != null && !register.getLastName().isBlank()
                 && register.getPhone() != null && !register.getPhone().isBlank()
                 && register.getPassword() != null && !register.getPassword().isBlank();
+
     }
 
 }

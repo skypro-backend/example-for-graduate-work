@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -23,7 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
-
+@Slf4j
 @Service
 public class ImageServiceImpl implements ImageService {
     @Autowired
@@ -39,9 +40,11 @@ public class ImageServiceImpl implements ImageService {
     public ResponseEntity<?> getImage(String id) {
         ImageModel image = imageRepo.findById(id).orElseThrow(ImageNotFoundException::new);
         assert image != null;
+        log.info("Картинка найдена в репозитории");
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(new InputStreamResource(new ByteArrayInputStream(image.getBytes())));
+
     }
 
     /**
@@ -58,6 +61,7 @@ public class ImageServiceImpl implements ImageService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        log.info("Картинка объявления изменена");
         imageRepo.saveAndFlush(imageModel);
         return ("/image/" + imageModel.getId());
     }
@@ -86,6 +90,7 @@ public class ImageServiceImpl implements ImageService {
         imageRepo.saveAndFlush(imageModel);
         userModel.setImage(imageModel);
         userRepo.save(userModel);
+        log.info("Аватарка пользователя обновлена");
         return ("/image/" + imageModel.getId());
     }
 
