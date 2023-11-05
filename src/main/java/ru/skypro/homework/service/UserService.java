@@ -33,7 +33,7 @@ public class UserService {
         UserEntity userEntity = userRepository.findByUsername(username);
         Long id = userEntity.getId();
         // here working with AuthRepository(?) should follow
-        // saving new password by user id
+        // saving new password using JdbcUserDetailsManager(?)
         // TODO implement the above mentioned functionality
     }
 
