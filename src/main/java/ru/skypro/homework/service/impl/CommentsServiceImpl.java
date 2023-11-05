@@ -35,7 +35,6 @@ public class CommentsServiceImpl implements CommentsService {
 
     private final UserServiceImpl userService;
     private final CommentRepo commentRepo;
-    private final AdServiceImpl adService;
     private final AdRepo adRepo;
     private final UserRepo userRepo;
 
