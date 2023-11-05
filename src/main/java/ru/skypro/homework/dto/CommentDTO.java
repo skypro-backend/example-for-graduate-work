@@ -20,7 +20,6 @@ public class CommentDTO {
     @NotBlank(message = "Обязательное поле")
     private int author;
 
-// - потом удалить @NotBlank(message = "Обязательное поле")
     private String authorImage;
 
     @NotBlank(message = "Обязательное поле")

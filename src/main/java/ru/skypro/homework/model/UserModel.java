@@ -1,9 +1,8 @@
 package ru.skypro.homework.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,8 +11,7 @@ import java.util.List;
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,12 +40,13 @@ public class UserModel {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy="userModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AdModel> adModels;
 
     @OneToMany(mappedBy = "userModel",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<CommentModel> commentModels;
+
 
 }

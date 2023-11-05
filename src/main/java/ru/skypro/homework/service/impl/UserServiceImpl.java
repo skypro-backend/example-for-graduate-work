@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +19,7 @@ import java.util.Optional;
 
 
 @Service
-//@Transactional
+@Slf4j
 
 public class UserServiceImpl implements UserService {
 
@@ -27,11 +28,29 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
 
-
+    /**
+     * Поиск авторизированного пользователя
+     */
     public Optional<UserModel> findUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
+        log.info("Пользователь авторизован");
         return userRepo.findByUserName(currentPrincipalName);
+
+    }
+
+    /**
+     * Сравнение пользователя авторизованного и из БД
+     */
+    public boolean comparisonUsers() {
+        UserModel userModel = findUser().orElseThrow(UserNotFoundException::new);
+        try {
+            userRepo.findById(userModel.getId());
+        } catch (UserNotFoundException e) {
+            throw new UserNotFoundException();
+        }
+        log.info("Пользователь есть в БД");
+        return true;
     }
 
     /**
@@ -54,6 +73,7 @@ public class UserServiceImpl implements UserService {
             userModel.setPassword(encoder.encode(newPassword.getNewPassword()));
             userRepo.save(userModel);
         }
+        log.info("Пароль изменен");
     }
 
     /**
@@ -71,14 +91,9 @@ public class UserServiceImpl implements UserService {
             userModel.setPhone(updateUser.getPhone());
             userRepo.save(userModel);
         }
+        log.info("Данные пользователя изменены");
         return UserMapper.mapToUpdateUser(userModel);
     }
 
-    /**
-     * Обновление аватара  пользователя
-     */
-    @Override
-    public String update(String image) {
-        return "pathImage";
-    }
+
 }

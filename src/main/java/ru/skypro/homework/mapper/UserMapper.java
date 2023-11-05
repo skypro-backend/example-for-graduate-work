@@ -4,8 +4,9 @@ import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.projections.UpdateUser;
 
-public class UserMapper {
+import java.util.Optional;
 
+public class UserMapper {
 
     public static UserDTO mapToUserDTO(UserModel userModel) {
         UserDTO userDTO = new UserDTO();
@@ -15,7 +16,8 @@ public class UserMapper {
         userDTO.setLastName(userModel.getLastName());
         userDTO.setPhone(userModel.getPhone());
         userDTO.setRole(userModel.getRole().name());
-//        userDTO.setImage(userModel.getImage());
+        Optional.ofNullable(userModel.getImage()).ifPresent(image -> userDTO.setImage(
+                "/image/" + userModel.getImage().getId()));
         return userDTO;
     }
 
@@ -35,23 +37,14 @@ public class UserMapper {
         updateUser.setLastName(userModel.getLastName());
         updateUser.setPhone(userModel.getPhone());
         return updateUser;
-
     }
+
     public static UpdateUser mapToUpdateUser(UserDTO userDTO) {
         UpdateUser updateUser = new UpdateUser();
         updateUser.setFirstName(userDTO.getFirstName());
         updateUser.setLastName(userDTO.getLastName());
         updateUser.setPhone(userDTO.getPhone());
         return updateUser;
-
     }
-//    public static UserModel mapToUserModel(UpdateUser u) {
-//        UpdateUser updateUser = new UpdateUser();
-//        updateUser.setFirstName(userDTO.getFirstName());
-//        updateUser.setLastName(userDTO.getLastName());
-//        updateUser.setPhone(userDTO.getPhone());
-//        return updateUser;
-//
-//    }
 }
 

@@ -1,14 +1,10 @@
 package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.projections.NewPassword;
 import ru.skypro.homework.projections.UpdateUser;
-import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.impl.UserServiceImpl;
 
 import javax.validation.Valid;
@@ -18,27 +14,32 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserServiceImpl userService;
-    private final UserRepo userRepo; // так... потестить
 
-    // Получение пользователя
+    private final UserServiceImpl userService;
+
+    /**
+     * Получение пользователя
+     */
     @GetMapping("/me")
     public UserDTO getUser() {
         return userService.getUser();
     }
 
+    /**
+     * Изменение пароля пользователя
+     */
     @PostMapping("/set_password")
     public void setPassword(@RequestBody @Valid NewPassword newPassword) {
         userService.updatePassword(newPassword);
     }
 
+    /**
+     * Изменение пользователя
+     */
     @PatchMapping("/me")
     public UpdateUser updateUser(@RequestBody UpdateUser updateUser) {
         return userService.updateUser(updateUser);
     }
 
-    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateUserImage(@RequestPart("image") MultipartFile newImage) {
-        return ResponseEntity.ok("OK");
-    }
+
 }

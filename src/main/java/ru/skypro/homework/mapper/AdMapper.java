@@ -4,6 +4,8 @@ import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.model.AdModel;
 import ru.skypro.homework.projections.ExtendedAd;
 
+import java.util.Optional;
+
 public class AdMapper {
     public static AdDTO toAdDto(AdModel adModel) {
         AdDTO adDTO = new AdDTO();
@@ -11,7 +13,9 @@ public class AdMapper {
         adDTO.setTitle(adModel.getTitle());
         adDTO.setPrice(adModel.getPrice());
         adDTO.setAuthor(adModel.getUserModel().getId());
-        adDTO.setImage("/image/" + adModel.getImage().getId());
+        Optional.ofNullable(adModel.getImage()).ifPresent(image -> adDTO.setImage(
+                "/image/" + adModel.getImage().getId()));
+//        adDTO.setImage("/image/" + adModel.getImage().getId());
         return adDTO;
     }
 
@@ -29,12 +33,5 @@ public class AdMapper {
         return extendedAd;
     }
 
-//    public static AdModel toAdModel(AdDTO adDTO) {
-//        AdModel adModel = new AdModel();
-//        adModel.setTitle(adDTO.getTitle());
-//        adModel.setPk(adDTO.getPk());
-//        adModel.setImage(adDTO.getImage());
-//        adModel.setPrice(adDTO.getPrice());
-//        return adModel;
-//    }
+
 }
