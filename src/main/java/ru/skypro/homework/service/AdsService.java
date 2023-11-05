@@ -47,7 +47,6 @@ public class AdsService {
              BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, 1024);
              BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream, 1024);
         ) {
-
             bufferedInputStream.transferTo(bufferedOutputStream);
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,12 +59,9 @@ public class AdsService {
     }
 
     public Ads getAllAds() {
-        List<AdDto> allAd = adRepository.findAll().stream().map(mapper::map).collect(Collectors.toList());
-        Ads ads = new Ads();
-        ads.setCount(allAd.size());
-        ads.setResults(allAd);
-        logger.info("Number of ads sent: {}", ads.getCount());
-        return ads;
+        List<AdEntity> entities = adRepository.findAll();
+        logger.info("Number of ads sent: {}", entities.size());
+        return mapper.map(entities);
     }
 
     public AdInfoDto getAdInfo(Integer id) {
@@ -83,6 +79,60 @@ public class AdsService {
         }
         adRepository.deleteById((long) id);
         return adEntity;
+    }
+
+    public AdDto updateImage(Integer id, MultipartFile image) throws IOException {
+        AdEntity adEntity = adRepository.getReferenceById((long) id);
+        if (adEntity == null) {
+            return null;
+        }
+
+        Path filePath = Path.of(imageDir, UUID.randomUUID().toString() + "." + getExtension(image.getOriginalFilename()));
+        Files.createDirectories(filePath.getParent());
+        Files.deleteIfExists(filePath);
+        try (InputStream inputStream = image.getInputStream();
+             OutputStream outputStream = Files.newOutputStream(filePath, CREATE_NEW);
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, 1024);
+             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream, 1024);
+        ) {
+            bufferedInputStream.transferTo(bufferedOutputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String path = adEntity.getImage();
+        if (path != null) {
+            File file = new File(path);
+            file.delete();
+        }
+
+        adEntity.setImage(filePath.toString());
+        adRepository.save(adEntity);
+        logger.info("Image updated successfully: {}", adEntity.getImage());
+
+        return mapper.map(adEntity);
+    }
+
+    public AdDto patchAd(Integer id, AdUpdateDto adUpdateDto) {
+        AdEntity adEntity = adRepository.getReferenceById((long) id);
+        if (adEntity == null) {
+            return null;
+        }
+        adEntity.setTitle(adUpdateDto.getTitle());
+        adEntity.setPrice(adUpdateDto.getPrice());
+        adEntity.setDescription(adUpdateDto.getDescription());
+        adRepository.save(adEntity);
+        logger.info("Ad updated successfully: {}", adEntity.getTitle());
+        return mapper.map(adEntity);
+    }
+
+    public Ads getAdsMe() {
+        String username = "Get from authority";
+        UserEntity userEntity = userRepository.findByUsername(username);
+        List<AdEntity> entities = adRepository.findAllByAuthor(userEntity.getId());
+        logger.info("Number of ads sent: {}", entities.size());
+        return mapper.map(entities);
+
     }
 
     private String getExtension(String fileName) {

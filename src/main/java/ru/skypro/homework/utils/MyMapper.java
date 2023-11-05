@@ -9,6 +9,8 @@ import ru.skypro.homework.entity.UserEntity;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class MyMapper {
@@ -138,6 +140,14 @@ public class MyMapper {
         comment.setText(text.getText());
         comment.setAuthor(user);
         return comment;
+    }
+
+    public Ads map(List<AdEntity> entities) {
+        List<AdDto> allAd = entities.stream().map(this::map).collect(Collectors.toList());
+        Ads ads = new Ads();
+        ads.setCount(allAd.size());
+        ads.setResults(allAd);
+        return ads;
     }
 
 }
