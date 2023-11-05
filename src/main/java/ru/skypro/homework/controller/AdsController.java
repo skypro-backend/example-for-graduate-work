@@ -103,7 +103,12 @@ public class AdsController {
     @PatchMapping("/{id}")
     public ResponseEntity<AdDto> patchAd(@PathVariable("id") Integer id,
                                          @RequestBody AdUpdateDto adUpdateDto) {
-        return ResponseEntity.ok(new AdDto());
+        AdDto adDto = adsService.patchAd(id, adUpdateDto);
+        if (adDto == null) {
+            logger.info("Not Found. Ad id {}", id);
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(adDto);
     }
 
     @Operation(summary = "Получение объявлений авторизованного пользователя")
@@ -126,7 +131,13 @@ public class AdsController {
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not found")
     @PatchMapping("/{id}/image")
-    public ResponseEntity<AdDto> updateImage(@PathVariable("id") Integer id, @RequestParam MultipartFile image) {
-        return ResponseEntity.ok(new AdDto());
+    public ResponseEntity<AdDto> updateImage(@PathVariable("id") Integer id, @RequestParam MultipartFile image) throws IOException {
+
+        AdDto adDto = adsService.updateImage(id, image);
+        if (adDto == null) {
+            logger.info("Not Found. Ad id {}", id);
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(adDto);
     }
 }
