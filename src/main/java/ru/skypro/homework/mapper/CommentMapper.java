@@ -12,13 +12,9 @@ public class CommentMapper {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setPk(commentModel.getPk());
         commentDTO.setAuthor(commentModel.getUserModel().getId());
-
-        Optional.ofNullable(commentModel.getUserModel().getImage()).ifPresent(comment -> commentDTO.setAuthorImage(
+        Optional.ofNullable(commentModel.getUserModel().getImage())
+                .ifPresent(comment -> commentDTO.setAuthorImage(
                 "/image/" + commentModel.getUserModel().getImage().getId()));
-
-//        commentDTO.setAuthorImage("/image/" + commentModel.getUserModel().getImage().getId());
-//        commentDTO.setAuthorImage(commentModel.getUserModel().getImage().getId());
-
         commentDTO.setAuthorFirstName(commentModel.getUserModel().getFirstName());
         commentDTO.setCreatedAt(commentModel.getCreateAt());
         commentDTO.setText(commentModel.getText());

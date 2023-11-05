@@ -26,8 +26,6 @@ databaseChangeLog:
               - column:
                   name: user_id
                   type: int
-#                  constraints:
-#                    nullable: false
               - addForeignKeyConstraint:
                   baseTableName: comment
                   baseColumnNames: comment_id

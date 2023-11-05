@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
@@ -12,12 +13,10 @@ import javax.validation.Valid;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
+@RequiredArgsConstructor
 public class CommentsController {
-    private final CommentsService commentsService;
 
-    public CommentsController(CommentsService commentsService) {
-        this.commentsService = commentsService;
-    }
+    private final CommentsService commentsService;
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<Comments> getComments(@PathVariable int id) {

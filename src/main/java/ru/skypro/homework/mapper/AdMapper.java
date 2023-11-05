@@ -15,7 +15,7 @@ public class AdMapper {
         adDTO.setAuthor(adModel.getUserModel().getId());
         Optional.ofNullable(adModel.getImage()).ifPresent(image -> adDTO.setImage(
                 "/image/" + adModel.getImage().getId()));
-        adDTO.setImage("/image/" + adModel.getImage().getId());
+//        adDTO.setImage("/image/" + adModel.getImage().getId());
         return adDTO;
     }
 
@@ -33,12 +33,5 @@ public class AdMapper {
         return extendedAd;
     }
 
-//    public static AdModel toAdModel(AdDTO adDTO) {
-//        AdModel adModel = new AdModel();
-//        adModel.setTitle(adDTO.getTitle());
-//        adModel.setPk(adDTO.getPk());
-//        adModel.setImage(adDTO.getImage());
-//        adModel.setPrice(adDTO.getPrice());
-//        return adModel;
-//    }
+
 }

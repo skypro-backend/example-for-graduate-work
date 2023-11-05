@@ -21,7 +21,6 @@ import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.AdService;
 
 import java.io.IOException;
-import java.rmi.AccessException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -56,8 +55,7 @@ public class AdServiceImpl implements AdService {
     @Transactional
     public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile file, Authentication authentication) {
         AdsUserDetails adsUserDetails = (AdsUserDetails) authentication.getPrincipal();
-//        String username = authentication.getName();
-//        UserModel user = userRepo.findByUserName(username).orElseThrow(UserNotFoundException::new);
+
         ImageModel imageModel = new ImageModel();
         imageModel.setId(UUID.randomUUID().toString());
         try {
@@ -115,9 +113,7 @@ public class AdServiceImpl implements AdService {
         if (!isAllowed(authentication, adModel)) {
             throw new AccessErrorException();
         }
-//        if (adRepo.findById(id).isEmpty()) {
-//            throw new AdNotFoundException();
-//        }
+
         adRepo.deleteById(id);
     }
 

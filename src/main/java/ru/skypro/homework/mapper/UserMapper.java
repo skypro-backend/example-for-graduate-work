@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public class UserMapper {
 
-
     public static UserDTO mapToUserDTO(UserModel userModel) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(userModel.getId());
@@ -19,7 +18,6 @@ public class UserMapper {
         userDTO.setRole(userModel.getRole().name());
         Optional.ofNullable(userModel.getImage()).ifPresent(image -> userDTO.setImage(
                 "/image/" + userModel.getImage().getId()));
-//        userDTO.setImage("/image/" + userModel.getImage().getId());
         return userDTO;
     }
 
@@ -39,7 +37,6 @@ public class UserMapper {
         updateUser.setLastName(userModel.getLastName());
         updateUser.setPhone(userModel.getPhone());
         return updateUser;
-
     }
 
     public static UpdateUser mapToUpdateUser(UserDTO userDTO) {
@@ -48,7 +45,6 @@ public class UserMapper {
         updateUser.setLastName(userDTO.getLastName());
         updateUser.setPhone(userDTO.getPhone());
         return updateUser;
-
     }
 }
 

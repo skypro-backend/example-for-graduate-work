@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.projections.NewPassword;
 import ru.skypro.homework.projections.UpdateUser;
-import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.impl.UserServiceImpl;
 
 import javax.validation.Valid;
@@ -19,8 +18,8 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserServiceImpl userService;
-    private final UserRepo userRepo; // так... потестить
 
     // Получение пользователя
     @GetMapping("/me")

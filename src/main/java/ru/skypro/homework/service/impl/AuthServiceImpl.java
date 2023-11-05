@@ -27,15 +27,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(Register register) {
-        if (register.getUsername() == null || register.getUsername().isBlank()
-                || register.getFirstName() == null || register.getFirstName().isBlank()
-                || register.getLastName() == null || register.getLastName().isBlank()
-                || register.getPhone() == null || register.getPhone().isBlank()
-                || register.getPassword() == null || register.getPassword().isBlank()){
-            return false;
-        }
-
-        return true;
+        return register.getUsername() != null && !register.getUsername().isBlank()
+                && register.getFirstName() != null && !register.getFirstName().isBlank()
+                && register.getLastName() != null && !register.getLastName().isBlank()
+                && register.getPhone() != null && !register.getPhone().isBlank()
+                && register.getPassword() != null && !register.getPassword().isBlank();
     }
 
 }

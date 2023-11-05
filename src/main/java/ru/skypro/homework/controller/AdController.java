@@ -15,7 +15,6 @@ import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import javax.validation.Valid;
 
-
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")

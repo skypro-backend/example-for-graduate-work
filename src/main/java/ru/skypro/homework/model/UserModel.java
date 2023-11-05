@@ -1,10 +1,11 @@
 package ru.skypro.homework.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Table(name = "users")

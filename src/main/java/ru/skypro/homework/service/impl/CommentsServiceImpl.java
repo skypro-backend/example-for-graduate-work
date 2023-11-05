@@ -28,6 +28,7 @@ import static ru.skypro.homework.mapper.CommentMapper.toCommentDTO;
 @Transactional
 @RequiredArgsConstructor
 public class CommentsServiceImpl implements CommentsService {
+
     private final UserServiceImpl userService;
     private final CommentRepo commentRepo;
     private final AdServiceImpl adService;
@@ -40,11 +41,13 @@ public class CommentsServiceImpl implements CommentsService {
     public Comments getComments(int id) {
         CommentModel commentModel = commentRepo.findById(id).orElseThrow(CommentNotFoundException::new);
         return CommentMapper.toComments(commentModel);
-        }
+    }
 
 
+    /**
+     * Получение всех комментариев по объявлению
+     */
     public Comments getAllComments(int adId) {
-//        adService.getAds(adId);
         List<CommentDTO> commentsDTOList = commentRepo.findAll().stream()
                 .filter(commentModel -> commentModel.getAdModel().getPk() == adId)
                 .map(CommentMapper::toCommentDTO).collect(Collectors.toList());
