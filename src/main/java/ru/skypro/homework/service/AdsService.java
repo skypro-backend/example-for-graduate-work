@@ -73,6 +73,11 @@ public class AdsService {
         if (adEntity == null) {
             return null;
         }
+        String path = adEntity.getImage();
+        if (path != null) {
+            File file = new File(path);
+            file.delete();
+        }
         adRepository.deleteById(id);
         return adEntity;
     }
