@@ -202,7 +202,7 @@ class UserControllerTest {
 
     @DisplayName("Изменение данных - короткое имя")
     @Test
-    void shouldNotUpdateUser_Ok() throws Exception {
+    void shouldNotUpdateUser_BadRequest() throws Exception {
         addToDb();
         JSONObject updateUser = new JSONObject();
         updateUser.put("firstName", "ne");
