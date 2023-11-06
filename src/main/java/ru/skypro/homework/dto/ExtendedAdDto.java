@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-@Schema(description = "расширенное объявление объявление")
+@Schema(description = "расширенное объявление")
 public class ExtendedAdDto {
 
     @Schema(description = "id объявления",

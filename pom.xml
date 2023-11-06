@@ -38,6 +38,11 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.3.2</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
@@ -72,16 +77,24 @@
       <artifactId>springdoc-openapi-ui</artifactId>
       <version>1.6.3</version>
     </dependency>
-
       <dependency>
           <groupId>jakarta.validation</groupId>
           <artifactId>jakarta.validation-api</artifactId>
           <version>2.0.2</version>
       </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>5.6.5.Final</version>
+    </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.liquibase</groupId>-->
 <!--      <artifactId>liquibase-core</artifactId>-->
 <!--    </dependency>-->
+    <dependency>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
