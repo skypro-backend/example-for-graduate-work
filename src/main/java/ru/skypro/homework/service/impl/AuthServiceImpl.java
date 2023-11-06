@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.exceptions.UserAlreadyExistsException;
 import ru.skypro.homework.projections.Login;
 import ru.skypro.homework.projections.Register;
+import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserServiceSecurity;
 
@@ -19,6 +21,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserServiceSecurity manager;
     private final PasswordEncoder encoder;
+    private final UserRepo userRepo;
 
     /**
      * Метод авторизации пользователя
@@ -43,7 +46,6 @@ public class AuthServiceImpl implements AuthService {
                 && register.getLastName() != null && !register.getLastName().isBlank()
                 && register.getPhone() != null && !register.getPhone().isBlank()
                 && register.getPassword() != null && !register.getPassword().isBlank();
-
     }
 
     /**
@@ -51,6 +53,9 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public ResponseEntity<?> getRegistration(Register register) {
+        if (userRepo.findByUserName(register.getUsername()).isPresent()) {
+            throw new UserAlreadyExistsException();
+        }
         if (validRegister(register)) {
             manager.createUser(register);
             return ResponseEntity.status(HttpStatus.CREATED).build();
