@@ -24,6 +24,6 @@ public class AdEntity {
     private String title;
     @Column(columnDefinition = "text")
     private String description;
-    @OneToMany(mappedBy = "ad")
+    @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
     private Collection<CommentEntity> comments;
 }
