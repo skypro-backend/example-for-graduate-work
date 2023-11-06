@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,9 +67,9 @@ public class AdsController {
 //    }
 
     @PatchMapping("/{id}")
-    public CreateOrUpdateAdDto updateAds(@PathVariable int id,
+    public ResponseEntity updateAds(@PathVariable int id,
                                          @RequestBody CreateOrUpdateAdDto dto) {
-      return new CreateOrUpdateAdDto();
+      return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 //    @PatchMapping("/{id}")
