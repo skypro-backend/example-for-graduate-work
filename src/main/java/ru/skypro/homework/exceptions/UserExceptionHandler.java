@@ -21,4 +21,11 @@ public class UserExceptionHandler {
                 .status(HttpStatus.FORBIDDEN)
                 .body("forbidden");
     }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<?> handleNotFound(UserAlreadyExistsException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("Пользователь с таким именем уже существует");
+    }
 }
