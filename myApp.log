@@ -1,2 +1,0 @@
-16:46:39.267 [main] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - ОШИБКА: значение NULL в столбце "image_id" отношения "ad" нарушает ограничение NOT NULL
-  Подробности: Ошибочная строка содержит (6, 100, Title1, Description1, null, 256).
