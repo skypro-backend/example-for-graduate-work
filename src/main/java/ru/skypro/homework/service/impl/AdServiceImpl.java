@@ -9,8 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.*;
 import ru.skypro.homework.service.*;
-import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.mapper.*;
 import ru.skypro.homework.repository.*;
+import ru.skypro.homework.Exceptions.NotFoundExpection.*;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public AdsDto getAllAds() {
         List<AdDto> adDto = adMapper.toAdsDto(adRepository.findAll());
-        return new AdsDto(adDto.size(), adDto);
+        return new AdsDto();
     }
 
     @Override
@@ -47,7 +48,7 @@ public class AdServiceImpl implements AdService {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
 
         Ad ad = adMapper.toAdEntity(properties);
-        ad.setImage(imageService.upload(image));
+        ad.setImage(imageService.downloadImage(image));
         ad.setAuthor(user);
         adRepository.save(ad);
         log.debug("Created ad " + ad);
@@ -61,7 +62,7 @@ public class AdServiceImpl implements AdService {
 
         Ad ad = findAdById(id);
         imageRepository.delete(ad.getImage());
-        ad.setImage(imageService.upload(image));
+        ad.setImage(imageService.downloadImage(image));
         adRepository.save(ad);
         log.debug("Update image ad with id - {}", id);
     }
@@ -87,7 +88,7 @@ public class AdServiceImpl implements AdService {
 
         commentRepository.deleteAllByAdPk(ad.getPk());
         adRepository.deleteById(id);
-        imageRepository.deleteById(ad.getImage().getId());
+        imageRepository.deleteById(Math.toIntExact(ad.getImage().getId()));
 
         log.debug("ad with id - {} was delete", id);
     }
