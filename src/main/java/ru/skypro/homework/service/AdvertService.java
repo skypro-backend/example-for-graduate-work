@@ -19,9 +19,9 @@ public interface AdvertService {
 
     AdsDto getAllAdverts();
 
-    AdDto updateAdvert(int id, CreateOrUpdateAdDto dto);
+    AdDto updateAdvert(String username, int id, CreateOrUpdateAdDto dto);
 
     String update(int id, MultipartFile image);
 
-    void deleteAdvert(int id);
+    void deleteAdvert(String username,int id);
 }

@@ -12,7 +12,7 @@ public interface CommentService {
 
     CommentsDto getAllCommentsAdvert(int advertId);
 
-    CommentDto updateComment(int advertId, int commentId, CreateOrUpdateCommentDto dto);
+    CommentDto updateComment(String username,int advertId, int commentId, CreateOrUpdateCommentDto dto);
 
-    void deleteComment(int advertId, int commentId);
+    void deleteComment(String username, int advertId, int commentId);
 }

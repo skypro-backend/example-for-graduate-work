@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdvertService;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.ImageService;
+
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,19 +53,22 @@ public class AdController {
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AdDto> updateAd(@PathVariable int id,
+    public ResponseEntity<AdDto> updateAd(Authentication authentication,
+                                          @PathVariable int id,
                                           @RequestBody CreateOrUpdateAdDto createOrUpdateAdDto) {
-        var body = advertService.updateAdvert(id, createOrUpdateAdDto);
+        String username = authentication.getName();
+        var body = advertService.updateAdvert(username, id, createOrUpdateAdDto);
         return ResponseEntity.ok(body);
     }
 
+
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteAd(@PathVariable int id) {
-        advertService.deleteAdvert(id);
+    public ResponseEntity<Void> deleteAd(Authentication authentication, @PathVariable int id) {
+        String username = authentication.getName();
+        advertService.deleteAdvert(username,id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 
     @PatchMapping("/{id}/image")
     @PreAuthorize("hasRole('USER')")
@@ -88,18 +94,21 @@ public class AdController {
     }
 
     @DeleteMapping("/{id}/comments/{commentId}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> deleteComment(@PathVariable int id, @PathVariable int commentId) {
-        commentService.deleteComment(id, commentId);
+    public ResponseEntity<?> deleteComment(Authentication authentication,@PathVariable int id, @PathVariable int commentId) {
+        String username = authentication.getName();
+        commentService.deleteComment(username, id, commentId);
         return ResponseEntity.ok().build();
     }
 
+
     @PatchMapping("/{id}/comments/{commentId}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<CommentDto> updateComment(@PathVariable int id,
+    public ResponseEntity<CommentDto> updateComment(Authentication authentication,
+                                                    @PathVariable int id,
                                                     @PathVariable int commentId,
                                                     @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
-        var body = commentService.updateComment(id, commentId, createOrUpdateCommentDto);
+        String username = authentication.getName();
+        var body = commentService.updateComment(username, id, commentId, createOrUpdateCommentDto);
         return ResponseEntity.ok(body);
     }
+
 }

@@ -10,4 +10,6 @@ import java.util.List;
 public interface AdvertRepository extends JpaRepository<Advert, Integer> {
     List<Advert> findByAuthorId(int userId);
 
+    Advert getAdById(Integer id);
+
 }
