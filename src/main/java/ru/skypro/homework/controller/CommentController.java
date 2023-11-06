@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.exceptions.AdNotFoundException;
+import ru.skypro.homework.exceptions.CommentNotFoundException;
 import ru.skypro.homework.service.CommentService;
 
 @Slf4j
@@ -22,6 +24,7 @@ import ru.skypro.homework.service.CommentService;
 @Tag(name = "Комментарии")
 public class CommentController {
     private final CommentService commentService;
+
     @GetMapping("/{id}/comments")
     @Operation(summary = "Получение комментариев объявления")
     @ApiResponses(value = {
@@ -34,8 +37,10 @@ public class CommentController {
 
     })
     public ResponseEntity<Comments> getCommentsByAds(@PathVariable("id") Integer id) {
-        Comments comments = commentService.getCommentsByAds(id);
-        if (comments.getCount() ==0){
+        Comments comments;
+        try {
+            comments = commentService.getCommentsByAds(id);
+        } catch (AdNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(comments);
@@ -52,7 +57,12 @@ public class CommentController {
 
     })
     public ResponseEntity<CommentDto> addComment(@PathVariable("id") Integer id, @RequestBody CreateOrUpdateComment text) {
-        CommentDto comment = commentService.addComment(id,text);
+        CommentDto comment;
+        try{
+                comment = commentService.addComment(id, text);
+        }catch (AdNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(comment);
     }
 
@@ -82,9 +92,14 @@ public class CommentController {
     })
     @PatchMapping("/{id}/comments/{commentId}")
     public ResponseEntity<CommentDto> updateComment(@PathVariable("id") Integer id,
-                                               @PathVariable("commentId") Integer commentId,
-                                               @RequestBody CreateOrUpdateComment text) {
-        CommentDto comment = commentService.updateComment(commentId,text);
+                                                    @PathVariable("commentId") Integer commentId,
+                                                    @RequestBody CreateOrUpdateComment text) {
+        CommentDto comment;
+        try {
+            comment = commentService.updateComment(commentId, text);
+        } catch (CommentNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(comment);
     }
 
