@@ -13,21 +13,21 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "comment")
+@Table(name = "comments")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
-    private Integer pk;
+    @Column(name = "id")
+    private Integer id;
     @Column(name = "text")
     private String text;
-    @Column(name = "creat_at")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     @ManyToOne
-    @JoinColumn(name = "ad_id",referencedColumnName = "ad_id")
+    @JoinColumn(name = "ad_id",referencedColumnName = "id")
     private Ad ad;
 
     @PrePersist

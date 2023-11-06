@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-    <changeSet id="1" author="rempll">
+    <changeSet id="4-base" author="rempll">
 
         <preConditions>
             <not>
@@ -23,12 +23,18 @@
             <column name="last_name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="image_id" type="INT">
+            </column>
             <column name="role" type="VARCHAR(255)"/>
             <column name="phone" type="VARCHAR(255)"/>
             <column name="email" type="VARCHAR(255)"/>
             <column name="password" type="VARCHAR(255)"/>
-            <column name="avatar_path" type="TEXT"/>
         </createTable>
+        <addForeignKeyConstraint constraintName="FK_USER_TO_IMAGE_ID"
+                                 baseColumnNames="image_id"
+                                 baseTableName="users"
+                                 referencedColumnNames="id"
+                                 referencedTableName="images"/>
     </changeSet>
 
 </databaseChangeLog>

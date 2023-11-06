@@ -11,22 +11,25 @@ import ru.skypro.homework.models.Ad;
 @Mapper
 public abstract class AdMapper {
 
+    @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "user.id")
-    @Mapping(target = "image", expression = "java(setImageURI(entity))")
-    abstract AdDto toDto(Ad entity);
+    @Mapping(target = "image", expression = "java(getImageUri(source))")
+    public abstract AdDto convertToDto(Ad source);
 
-    abstract Ad toEntity(CreateOrUpdateAdDto dto);
-
-    @Mapping(target = "image", expression = "java(setImageURI(entity))")
+    @Mapping(target = "pk", source = "id")
     @Mapping(target = "authorFirstName", source = "user.firstName")
     @Mapping(target = "authorLastName", source = "user.lastName")
+    @Mapping(target = "email", source = "user.email")
     @Mapping(target = "phone", source = "user.phone")
-    abstract ExtendedAdDto toExtendedDto(Ad entity);
+    @Mapping(target = "image", expression = "java(getImageUri(source))")
+    public abstract ExtendedAdDto convertToExtendedDto(Ad source);
 
-    public String setImageURI(Ad source) {
-        return UriComponentsBuilder.newInstance()
-                .pathSegment("ads", source.getPk().toString(), "image")
+    public abstract Ad convertToEntity(CreateOrUpdateAdDto source);
+
+    public String getImageUri(Ad source) {
+        return UriComponentsBuilder
+                .newInstance()
+                .pathSegment("ads", source.getId().toString(), "image")
                 .toUriString();
     }
-
 }

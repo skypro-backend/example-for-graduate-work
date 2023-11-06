@@ -13,11 +13,12 @@ public abstract class CommentMapper {
     @Autowired
     public UserMapper userMapper;
 
+    @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "user.id")
     @Mapping(target = "authorFirstName", source = "user.firstName")
-    @Mapping(target = "authorImage", expression = "java(userMapper.setImageURI(entity.getUser()))")
-    public abstract CommentDto toDto(Comment entity);
+    @Mapping(target = "authorImage", expression = "java(userMapper.getImageUri(source.getUser()))")
+    public abstract CommentDto convertToDto(Comment source);
 
-    public abstract Comment toEntity(CreateOrUpdateCommentDto dto);
+    public abstract Comment convertToEntity(CreateOrUpdateCommentDto source);
 
 }

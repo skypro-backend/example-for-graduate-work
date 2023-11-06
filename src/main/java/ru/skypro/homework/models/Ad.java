@@ -16,19 +16,27 @@ import java.util.List;
 public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ad_id")
-    private Integer pk;
-    @Column(name = "title")
-    private String title;
+    @Column(name = "id")
+    private Integer id;
+
     @Column(name = "price")
     private Integer price;
-    @Column(name = "image_path")
-    private String imagePath;
+
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "description")
     private String description;
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+
     @OneToMany(mappedBy = "ad")
     private List<Comment> comments;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
+
 }
