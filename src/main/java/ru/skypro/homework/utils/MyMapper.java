@@ -45,9 +45,9 @@ public class MyMapper {
      */
     public AdDto map(AdEntity entity) {
         AdDto adDto = new AdDto();
-        adDto.setAuthor((int)entity.getAuthor().getId());
+        adDto.setAuthor(entity.getAuthor().getId());
         adDto.setImage(entity.getImage());
-        adDto.setPk((int)entity.getPk());
+        adDto.setPk(entity.getPk());
         adDto.setPrice(entity.getPrice());
         adDto.setTitle(entity.getTitle());
         return adDto;

@@ -32,7 +32,7 @@ public class CommentService {
     private final AdRepository adRepository;
 
     public Comments getCommentsByAds(Integer id) {
-        Optional<AdEntity> ad = adRepository.findById(Long.valueOf(id));
+        Optional<AdEntity> ad = adRepository.findById(id);
         if(ad.isEmpty()){
             throw new AdNotFoundException();
         }
@@ -46,7 +46,7 @@ public class CommentService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         UserEntity user = userRepository.findByUsername(username);
-        Optional<AdEntity> ad = adRepository.findById(Long.valueOf(id));
+        Optional<AdEntity> ad = adRepository.findById(id);
         if(ad.isEmpty()){
             throw new AdNotFoundException();
         }

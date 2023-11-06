@@ -15,7 +15,7 @@ import java.util.Collection;
 public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long pk;
+    private int pk;
     @ManyToOne
     @JoinColumn(name = "author_id")
     private UserEntity author;
