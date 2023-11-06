@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-    <changeSet id="1" author="rempll">
+    <changeSet id="1-base" author="rempll">
 
         <preConditions>
             <not>
@@ -14,7 +14,7 @@
         </preConditions>
 
         <createTable tableName="ads">
-            <column name="ad_id" type="INT" autoIncrement="true">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="title" type="VARCHAR(255)">
@@ -23,7 +23,9 @@
             <column name="price" type="INT">
                 <constraints nullable="false"/>
             </column>
-            <column name="image_path" type="TEXT"/>
+            <column name="image_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
             <column name="description" type="VARCHAR(255)"/>
             <column name="user_id" type="INT"/>
 
@@ -33,5 +35,10 @@
                                  baseTableName="ads"
                                  referencedColumnNames="id"
                                  referencedTableName="users"/>
+        <addForeignKeyConstraint constraintName="FK_AD_TO_IMAGE_ID"
+                                 baseColumnNames="image_id"
+                                 baseTableName="ads"
+                                 referencedColumnNames="id"
+                                 referencedTableName="images"/>
     </changeSet>
 </databaseChangeLog>

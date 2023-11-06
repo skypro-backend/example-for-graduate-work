@@ -9,11 +9,12 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"comments", "ads"})
-@ToString(exclude = {"comments", "ads"})
+@EqualsAndHashCode(exclude = {"comments", "image", "ads"})
+@ToString(exclude = {"comments", "image", "ads"})
 @Getter
 @Setter
 @Table(name = "users")
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +33,9 @@ public class User {
     private String email;
     @Column(name = "password")
     private String password;
-    @Column(name = "avatar_path")
-    private String avatarPath;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
     @OneToMany(mappedBy = "user")

@@ -5,22 +5,22 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-    <changeSet id="1" author="rempll">
+    <changeSet id="2-base" author="rempll">
 
         <preConditions>
             <not>
-                <tableExists tableName="comment"/>
+                <tableExists tableName="comments"/>
             </not>
         </preConditions>
 
-        <createTable tableName="comment">
-            <column name="comment_id" type="INT" autoIncrement="true">
+        <createTable tableName="comments">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="text" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="creat_at" type="DATETIME">
+            <column name="created_at" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
             <column name="user_id" type="INT"/>
@@ -31,14 +31,14 @@
 
         <addForeignKeyConstraint constraintName="FK_COMMENT_TO_USER_ID"
                                  baseColumnNames="user_id"
-                                 baseTableName="comment"
+                                 baseTableName="comments"
                                  referencedColumnNames="id"
                                  referencedTableName="users"/>
 
         <addForeignKeyConstraint constraintName="FK_COMMENT_TO_AD_ID"
                                  baseColumnNames="ad_id"
-                                 baseTableName="comment"
-                                 referencedColumnNames="ad_id"
+                                 baseTableName="comments"
+                                 referencedColumnNames="id"
                                  referencedTableName="ads"/>
 
     </changeSet>
