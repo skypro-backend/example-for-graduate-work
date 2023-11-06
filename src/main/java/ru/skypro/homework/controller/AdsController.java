@@ -67,12 +67,11 @@ public class AdsController {
 //    }
 
     @PatchMapping("/{id}")
-    public ResponseEntity updateAds(@PathVariable int id,
-                                         @RequestBody CreateOrUpdateAdDto dto) {
-      return new ResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity<AdDto> updateAds(@PathVariable int id,
+        @RequestBody CreateOrUpdateAdDto dto){
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
-
-//    @PatchMapping("/{id}")
+//   было
 //    public ResponseEntity<AdDto> updateAds(@PathVariable int id,
 //                                           @RequestBody CreateOrUpdateAdDto dto) {
 //        var body = service.update(id, dto);
