@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
@@ -37,20 +39,14 @@ public class AdsService {
 
     public AdDto addAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image) throws IOException {
 
-        UserEntity userEntity = userRepository.findByUsername("username1");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity userEntity = userRepository.findByUsername(authentication.getName());
 
         Path filePath = Path.of(imageDir, UUID.randomUUID().toString() + "." + getExtension(image.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
-        try (InputStream inputStream = image.getInputStream();
-             OutputStream outputStream = Files.newOutputStream(filePath, CREATE_NEW);
-             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, 1024);
-             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream, 1024);
-        ) {
-            bufferedInputStream.transferTo(bufferedOutputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        Files.write(filePath,image.getBytes());
 
         AdEntity adEntity = adRepository.save(mapper.map(createOrUpdateAd, userEntity, filePath.toString()));
         logger.info("Ad was successfully added: {}", createOrUpdateAd.getTitle());
@@ -65,7 +61,7 @@ public class AdsService {
     }
 
     public AdInfoDto getAdInfo(Integer id) {
-        AdEntity adEntity = adRepository.getReferenceById((long) id);
+        AdEntity adEntity = adRepository.getReferenceById(id);
         if (adEntity == null) {
             return null;
         }
@@ -73,16 +69,16 @@ public class AdsService {
     }
 
     public AdEntity deleteAd(Integer id) {
-        AdEntity adEntity = adRepository.getReferenceById((long) id);
+        AdEntity adEntity = adRepository.getReferenceById(id);
         if (adEntity == null) {
             return null;
         }
-        adRepository.deleteById((long) id);
+        adRepository.deleteById(id);
         return adEntity;
     }
 
     public AdDto updateImage(Integer id, MultipartFile image) throws IOException {
-        AdEntity adEntity = adRepository.getReferenceById((long) id);
+        AdEntity adEntity = adRepository.getReferenceById(id);
         if (adEntity == null) {
             return null;
         }
@@ -90,15 +86,8 @@ public class AdsService {
         Path filePath = Path.of(imageDir, UUID.randomUUID().toString() + "." + getExtension(image.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
-        try (InputStream inputStream = image.getInputStream();
-             OutputStream outputStream = Files.newOutputStream(filePath, CREATE_NEW);
-             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, 1024);
-             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream, 1024);
-        ) {
-            bufferedInputStream.transferTo(bufferedOutputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        Files.write(filePath,image.getBytes());
 
         String path = adEntity.getImage();
         if (path != null) {
@@ -114,7 +103,7 @@ public class AdsService {
     }
 
     public AdDto patchAd(Integer id, AdUpdateDto adUpdateDto) {
-        AdEntity adEntity = adRepository.getReferenceById((long) id);
+        AdEntity adEntity = adRepository.getReferenceById(id);
         if (adEntity == null) {
             return null;
         }
@@ -127,8 +116,8 @@ public class AdsService {
     }
 
     public Ads getAdsMe() {
-        String username = "Get from authority";
-        UserEntity userEntity = userRepository.findByUsername(username);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity userEntity = userRepository.findByUsername(authentication.getName());
         List<AdEntity> entities = adRepository.findAllByAuthor(userEntity.getId());
         logger.info("Number of ads sent: {}", entities.size());
         return mapper.map(entities);

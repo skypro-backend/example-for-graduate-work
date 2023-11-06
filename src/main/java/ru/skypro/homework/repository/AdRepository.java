@@ -5,6 +5,6 @@ import ru.skypro.homework.entity.AdEntity;
 
 import java.util.List;
 
-public interface AdRepository extends JpaRepository<AdEntity, Long> {
+public interface AdRepository extends JpaRepository<AdEntity, Integer> {
     List<AdEntity> findAllByAuthor(long id);
 }
