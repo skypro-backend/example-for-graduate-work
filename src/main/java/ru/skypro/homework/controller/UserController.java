@@ -73,9 +73,6 @@ public class UserController {
     }
 
 
-    @Value("${image.store.path}")
-    private String storePath;
-
     @GetMapping(value = "/images/{file.png}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> getAvatar(@PathVariable("file.png") String file, Authentication authentication) {
         byte[] avatarData = userService.getAvatarImage(file);
