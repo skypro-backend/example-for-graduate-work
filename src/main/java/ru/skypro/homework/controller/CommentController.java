@@ -37,12 +37,7 @@ public class CommentController {
 
     })
     public ResponseEntity<Comments> getCommentsByAds(@PathVariable("id") Integer id) {
-        Comments comments;
-        try {
-            comments = commentService.getCommentsByAds(id);
-        } catch (AdNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        Comments comments = commentService.getCommentsByAds(id);
         return ResponseEntity.ok(comments);
     }
 
@@ -57,12 +52,7 @@ public class CommentController {
 
     })
     public ResponseEntity<CommentDto> addComment(@PathVariable("id") Integer id, @RequestBody CreateOrUpdateComment text) {
-        CommentDto comment;
-        try{
-                comment = commentService.addComment(id, text);
-        }catch (AdNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
+        CommentDto comment = commentService.addComment(id, text);
         return ResponseEntity.ok(comment);
     }
 
@@ -94,12 +84,7 @@ public class CommentController {
     public ResponseEntity<CommentDto> updateComment(@PathVariable("id") Integer id,
                                                     @PathVariable("commentId") Integer commentId,
                                                     @RequestBody CreateOrUpdateComment text) {
-        CommentDto comment;
-        try {
-            comment = commentService.updateComment(commentId, text);
-        } catch (CommentNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        CommentDto comment = commentService.updateComment(commentId, text);
         return ResponseEntity.ok(comment);
     }
 
