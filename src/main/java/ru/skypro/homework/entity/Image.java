@@ -10,6 +10,9 @@ import javax.persistence.*;
 @EqualsAndHashCode(of = {"id"})
 @RequiredArgsConstructor
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Image {
     @Id
     @Column(name = "image_id")

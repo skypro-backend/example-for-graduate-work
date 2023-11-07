@@ -15,7 +15,7 @@ public interface UserMapper {
     }
 
     @Mapping(target = "email", source = "username")
-    default User toUserEntity(RegisterDto registerDto) {
+    default User toUserEntity(Register register) {
         return null;
     }
 

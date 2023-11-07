@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.Exceptions.ImageNotFoundException;
+import ru.skypro.homework.Exceptions.NotFoundExpection.ImageNotFoundException;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.ImageService;
@@ -29,7 +29,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public byte[] getImage(Long id) {
-        return imageRepository.findById(id).orElseThrow(ImageNotFoundException::new).getData();
+        return imageRepository.findById(Math.toIntExact(id)).orElseThrow(ImageNotFoundException::new).getData();
     }
 
 
