@@ -8,11 +8,13 @@ import ru.skypro.homework.model.Comment;
 public interface CommentService {
     Comment find(int commentId);
 
-    CommentDto createComment(int advertId, CreateOrUpdateCommentDto dto);
+    CommentDto createComment(String username, int advertId, CreateOrUpdateCommentDto dto);
 
     CommentsDto getAllCommentsAdvert(int advertId);
 
-    CommentDto updateComment(String username,int advertId, int commentId, CreateOrUpdateCommentDto dto);
+    CommentDto updateComment(String username, int advertId, int commentId, CreateOrUpdateCommentDto dto);
 
     void deleteComment(String username, int advertId, int commentId);
+
+    void deleteComment(int id, int commentId);
 }

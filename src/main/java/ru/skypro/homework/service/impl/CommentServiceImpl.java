@@ -19,9 +19,6 @@ import ru.skypro.homework.service.UserService;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.Optional;
-
 
 @Service
 @Transactional
@@ -32,14 +29,13 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final CommentMapper mapper;
-
     /**
      * getUser() is a method used to get the current user
      *
      * @author radyushinaalena
      */
-    private User getUser() {
-        return userService.find();
+    private User getUser(String username) {
+        return userRepository.getUserByUsername(username);
     }
 
 
@@ -51,8 +47,6 @@ public class CommentServiceImpl implements CommentService {
     private Advert getAdvert(int advertId) {
         return advertService.find(advertId);
     }
-
-
     /**
      * find(int commentId) is a public method used to search for a comment
      *
@@ -71,9 +65,9 @@ public class CommentServiceImpl implements CommentService {
      * @author radyushinaalena
      */
     @Override
-    public CommentDto createComment(int advertId, CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+    public CommentDto createComment(String username, int advertId, CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         var advert = getAdvert(advertId);
-        var author = getUser();
+        var author = getUser(username);
         var createTime = LocalDateTime.now();
         var comment = mapper.commentDtoToComment(createOrUpdateCommentDto);
         comment.setAdvert(advert);
@@ -109,7 +103,7 @@ public class CommentServiceImpl implements CommentService {
         if (comment.getAdvert().getId() != advertId) {
             throw new RuntimeException();
         }
-        if (isAuthor(user.getUsername(), commentId) || user.getRole().equals(Role.ADMIN)) {
+        if (isAuthor(username, commentId) || user.getRole().equals(Role.ADMIN)) {
             mapper.updateCommentFromDto(createOrUpdateCommentDto, comment);
             commentRepository.save(comment);
         }
@@ -132,6 +126,11 @@ public class CommentServiceImpl implements CommentService {
         if (isAuthor(username, commentId) || user.getRole().equals(Role.ADMIN)) {
             commentRepository.delete(comment);
         }
+    }
+
+    @Override
+    public void deleteComment(int id, int commentId) {
+
     }
 
 

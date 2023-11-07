@@ -20,8 +20,7 @@ import ru.skypro.homework.service.UserService;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Optional;
+
 
 @Service
 @Transactional
@@ -33,23 +32,19 @@ public class AdvertServiceImpl implements AdvertService {
     private final UserRepository userRepository;
     private final AdvertMapper mapper;
 
-
     /**
      * getUser() is a method used to get the current user
      *
      * @author radyushinaalena
      */
-    private User getUser() {
-        return userService.find();
+    private User getUser(String username) {
+        return userRepository.getUserByUsername(username);
     }
-
-
     /**
      * find(int id) is a public method used to find an ad
      *
      * @author radyushinaalena
      */
-    @Override
     public Advert find(int id) {
         return repository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
@@ -62,9 +57,9 @@ public class AdvertServiceImpl implements AdvertService {
      * @author radyushinaalena
      */
     @Override
-    public AdDto createAdvert(CreateOrUpdateAdDto dto, MultipartFile image) {
+    public AdDto createAdvert(String username, CreateOrUpdateAdDto dto, MultipartFile image) {
         var advert = mapper.toAdvert(dto);
-        var user = getUser();
+        User user = getUser(username);
         String filename;
         try {
             filename = imageService.create(image);
@@ -77,7 +72,6 @@ public class AdvertServiceImpl implements AdvertService {
         return mapper.advertToAdvertDto(advert);
     }
 
-
     /**
      * getAdvertById(int id) is a public method used to read an ad
      *
@@ -89,6 +83,11 @@ public class AdvertServiceImpl implements AdvertService {
         return mapper.toExtendedDto(advert);
     }
 
+    @Override
+    public AdsDto getAdvert() {
+        return null;
+    }
+
 
     /**
      * getAdvert() is a public method used to read all the author's ads
@@ -96,26 +95,26 @@ public class AdvertServiceImpl implements AdvertService {
      * @author radyushinaalena
      */
     @Override
-    public AdsDto getAdvert() {
-        var authorId = getUser().getId();
+    public AdsDto getAdvert(String username) {
+        User user = getUser(username);
+        var authorId = user.getId();
         var advertList = repository.findByAuthorId(authorId);
         var advertDtoList = mapper.advertsToAdvertDtos(advertList);
         return new AdsDto(advertDtoList);
     }
-
 
     /**
      * getAllAdverts() is a public method used to read all the ads of all the authors
      *
      * @author radyushinaalena
      */
+
     @Override
     public AdsDto getAllAdverts() {
         var advertList = repository.findAll();
         var advertDtoList = mapper.advertsToAdvertDtos(advertList);
         return new AdsDto(advertDtoList);
     }
-
 
     /**
      * updateAdvert(int id, CreateOrUpdateAdDto dto) is a public method used to update an ad
@@ -139,17 +138,36 @@ public class AdvertServiceImpl implements AdvertService {
      * @author radyushinaalena
      */
     @Override
-    public String update(int id, MultipartFile image) {
+    public String updateAdImage(String username, int id, MultipartFile image) {
         var advert = find(id);
-        String filename;
-        try {
-            filename = imageService.create(image);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        User user = getUser(username);
+        if (user.getRole().equals(Role.ADMIN) || isAuthor(username, id)) {
+            String filename;
+            try {
+                filename = imageService.create(image);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            advert.setImage("/images/" + filename);
+            repository.save(advert);
+            return filename;
         }
-        advert.setImage("/images/" + filename);
-        repository.save(advert);
-        return filename;
+        return null;
+    }
+
+    @Override
+    public void deleteAdvert(int id) {
+
+    }
+
+    @Override
+    public Object updateAdvert(int id, CreateOrUpdateAdDto createOrUpdateAdDto) {
+        return null;
+    }
+
+    @Override
+    public Object createAdvert(CreateOrUpdateAdDto createOrUpdateAdDto, MultipartFile image) {
+        return null;
     }
 
 
@@ -160,13 +178,22 @@ public class AdvertServiceImpl implements AdvertService {
      */
     @Override
     public void deleteAdvert(String username, int id) {
-        User user = userRepository.getUserByUsername(username);
+        User user = getUser(username);
         var advert = find(id);
         if (isAuthor(username, id) || user.getRole().equals(Role.ADMIN)) {
             repository.delete(advert);
         }
     }
 
+    @Override
+    public byte[] getAvatarImage(String filename) {
+        return new byte[0];
+    }
+
+    @Override
+    public void updateUserImage(String username, MultipartFile image) throws IOException {
+
+    }
 
     private boolean isAuthor(String username, Integer id) {
         return repository.getAdById(id).getAuthor().getId().equals(userRepository.getUserByUsername(username).getId());

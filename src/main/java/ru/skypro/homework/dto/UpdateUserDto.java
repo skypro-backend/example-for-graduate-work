@@ -11,4 +11,8 @@ public class UpdateUserDto {
     private String firstName;
     private String lastName;
     private String phone;
+
+    public String getUsername() {
+        return null;
+    }
 }

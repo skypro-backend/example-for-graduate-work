@@ -10,6 +10,7 @@ import ru.skypro.homework.model.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+
     @Mapping(source = "username", target = "email")
     UserDto userToUserDto(User user);
 

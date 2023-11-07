@@ -7,21 +7,32 @@ import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.model.Advert;
 
+import java.io.IOException;
 
 public interface AdvertService {
     Advert find(int id);
 
-    AdDto createAdvert(CreateOrUpdateAdDto dto, MultipartFile image);
+    AdDto createAdvert(String username, CreateOrUpdateAdDto dto, MultipartFile image);
 
     ExtendedAdDto getAdvertById(int id);
 
     AdsDto getAdvert();
 
+    AdsDto getAdvert(String username);
+
     AdsDto getAllAdverts();
 
     AdDto updateAdvert(String username, int id, CreateOrUpdateAdDto dto);
 
-    String update(int id, MultipartFile image);
+    String updateAdImage(String username, int id, MultipartFile image);
 
-    void deleteAdvert(String username,int id);
+    void deleteAdvert(int id);
+
+    Object updateAdvert(int id, CreateOrUpdateAdDto createOrUpdateAdDto);
+
+    Object createAdvert(CreateOrUpdateAdDto createOrUpdateAdDto, MultipartFile image);
+
+    void deleteAdvert(String username, int id);
+    byte[] getAvatarImage(String filename);
+    void updateUserImage(String username, MultipartFile image) throws IOException;
 }
