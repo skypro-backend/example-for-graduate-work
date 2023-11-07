@@ -1,20 +1,24 @@
 package ru.skypro.homework.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.skypro.homework.dto.User;
+import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.NewPasswordDTO;
+import ru.skypro.homework.dto.UserDTO;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
     @PostMapping ("/set_password")
-    public ResponseEntity setPassword(@RequestBody String password) {
-        User user = new User();
+    public ResponseEntity setPassword(@RequestBody NewPasswordDTO newPassword) {
+        return ResponseEntity.ok(newPassword);
+    }
+    @GetMapping("/me")
+    public ResponseEntity getUser() {
+        UserDTO user = new UserDTO();
         return ResponseEntity.ok(user);
     }
+
+
 }
 
 
