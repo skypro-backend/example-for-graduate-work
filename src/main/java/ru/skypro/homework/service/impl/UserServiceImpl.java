@@ -23,7 +23,7 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 import org.springframework.security.access.AccessDeniedException;
-
+import java.nio.file.Paths;
 import javax.persistence.EntityNotFoundException;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
 import java.util.Optional;
 
 @Service
@@ -45,8 +46,10 @@ public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
     private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
-    @Value("${avatar.storage.directory}")
+    @Value("${image.store.path}")
     private String avatarStorageDirectory;
+    @Value("${image.store.path}")
+    private String storePath;
 
     @Override
     public User find() {
@@ -86,6 +89,11 @@ public class UserServiceImpl implements UserService {
         return mapper.userToUserDto(user);
     }
 
+    @Override
+    public boolean isUserAllowedToUpdate(String username, UpdateUserDto updateUserDto) {
+        return false;
+    }
+
 
     @Override
     public void updatePassword(NewPasswordDto newPasswordDto) {
@@ -107,14 +115,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     @Override
     public void updateUser(UpdateUserDto updateUserDto) {
-        String username = SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName();
-        updateUser(updateUserDto, username);
+        var user = find();
+        mapper.update(updateUserDto, user);
+        repository.save(user);
     }
+
 
     @Override
     public void updateUser(UpdateUserDto updateUserDto, String username) {
@@ -136,7 +144,6 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
     }
 
-    @Override
     public void saveUserAvatar(@RequestPart MultipartFile file) {
         try {
             File directory = new File(avatarStorageDirectory);
@@ -186,6 +193,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     @Override
     public void updateUserImage(MultipartFile image, String username) {
         if (isUserAllowedToUpdateImage(username)) {
@@ -206,39 +214,40 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public byte[] getAvatarImage(String filename) {
-        try {
-            File imageFile = new File(avatarStorageDirectory + filename);
-            if (imageFile.exists()) {
-                Path imagePath = imageFile.toPath();
-                return Files.readAllBytes(imagePath);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Не удалось получить аватар", e);
+    public boolean isUserAllowedToUpdate(UpdateUserDto updateUserDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return false;
         }
 
-        return null;
-    }
+        String usernameToUpdate = updateUserDto.getUsername();
 
+        String currentUser = authentication.getName();
 
-    @Override
-    public boolean isUserAllowedToUpdate(UpdateUserDto updateUserDto) {
+        if (currentUser.equals(usernameToUpdate)) {
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
 
     @Override
     public boolean isUserAllowedToSetPassword(String username) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return false;
+        }
 
-        return true;
+        String currentUser = authentication.getName();
+
+        if (currentUser.equals(username)) {
+            return true;
+        }
+
+        return false;
     }
 
-    @Override
-    public boolean isUserAllowedToUpdate(String username, UpdateUserDto updateUserDto) {
-
-        return true;
-    }
 
     @Override
     public void updateUser(String username, UpdateUserDto updateUserDto) {
@@ -260,23 +269,48 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isUserAllowedToUpdateImage(String username) {
-
-        return true;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return true;
+        } else {
+            throw new AccessDeniedException("В доступе отказано: Пользователь не прошел проверку подлинности.");
+        }
     }
+    @Override
+    public String getAvatarUrlByUsername(String username) {
+        var user = find(username);
+        return user.getImage();
+    }
+
 
     @Override
     public void updateImage(String username, MultipartFile image) {
         if (isUserAllowedToUpdateImage(username)) {
+            var user = find(username);
+            String filename;
             try {
-                var user = find(username);
-                String filename = imageService.create(image);
-                user.setImage("/users/images/" + filename);
-                repository.save(user);
+                filename = imageService.create(image);
             } catch (IOException e) {
-                throw new RuntimeException("Не удалось обновить изображение пользователя", e);
+                throw new RuntimeException("Не удалось создать изображение пользователя", e);
             }
+
+            user.setImage("/users/images/" + filename);
+            repository.save(user);
         } else {
             throw new AccessDeniedException("Недостаточно прав для обновления изображения пользователя");
         }
     }
+    @Override
+    public byte[] getAvatarImage(String filename) {
+        Path path = Paths.get(storePath, filename).toAbsolutePath().normalize();
+        if(Files.exists(path)) {
+            try {
+                byte[] avatarBytes = Files.readAllBytes(path);
+                return avatarBytes;
+            } catch (IOException e) {
+                throw new RuntimeException("Не удалось получить аватар", e);
+            }
+        } else return new byte[0];
+    }
 }
+

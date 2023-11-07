@@ -43,6 +43,10 @@ public interface UserService {
     void updateUser(String username, UpdateUserDto updateUserDto);
     void updatePassword(String username, NewPasswordDto newPasswordDto);
     boolean isUserAllowedToUpdateImage(String username);
+
+    String getAvatarUrlByUsername(String username);
+
     void updateImage(String username, MultipartFile image) throws AccessDeniedException;
+
 
 }
