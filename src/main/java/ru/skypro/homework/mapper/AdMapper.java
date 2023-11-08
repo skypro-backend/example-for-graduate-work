@@ -6,19 +6,21 @@ import ru.skypro.homework.entity.*;
 import org.springframework.stereotype.Component;
 
 @Component
-public abstract class AdMapper {
+public class AdMapper {
     public AdDto entityToAdDto(Ad entity) {
         return new AdDto(entity.getAuthor().getId(), entity.getImagePath(),
                 entity.getPk(), entity.getPrice(), entity.getTitle());
     }
 
-    public abstract Ad adEntityToAd(Ad adEntity);
+//    public Ad adEntityToAd(Ad adEntity);
+//
+//    public abstract AdDto AdToAdDto(Ad Ad);
+//
+//    public abstract Ad adToAdEntity(Ad ad);
 
-    public abstract AdDto AdToAdDto(Ad Ad);
-
-    public abstract Ad adToAdEntity(Ad ad);
-
-    public abstract Ad entityToAdsDto(Ad entity);
+    public Ad entityToAdsDto(Ad entity){
+        return null;
+    }
 
     public ExtendedAdDto entityToExtendedAdsDto(Ad entity) {
         return new ExtendedAdDto(entity.getPk(), entity.getAuthor().getFirstName(), entity.getAuthor().getLastName(),

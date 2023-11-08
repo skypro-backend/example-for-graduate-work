@@ -27,7 +27,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentsDto getComments(int id) {
         List<CommentDto> result = new LinkedList<>();
-        commentRepository.findAllByAd_Id(id).forEach(entity -> result.add(mapper.entityToCommentDto(entity)));
+        commentRepository.findAllByAd_Pk(id).forEach(entity -> result.add(mapper.entityToCommentDto(entity)));
         return new CommentsDto(result.size(), result);
     }
 

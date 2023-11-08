@@ -1,6 +1,5 @@
 package ru.skypro.homework.service.impl;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(String name) {
-        userRepository.deleteByEmail(name);
+        userRepository.deleteByUsername(name);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getEntity(String name) {
-        return userRepository.findByEmail(name).orElseThrow(() -> new FindNoEntityException("User with name: " + name + "not found"));
+        return userRepository.findByUsername(name).orElseThrow(() -> new FindNoEntityException("User with name: " + name + "not found"));
     }
 
     @Override
@@ -54,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean userExists(String username) {
-        return userRepository.findByEmail(username).isPresent();
+        return userRepository.findByUsername(username).isPresent();
     }
 
     @Override

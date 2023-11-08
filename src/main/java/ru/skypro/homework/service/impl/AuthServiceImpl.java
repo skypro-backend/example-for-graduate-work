@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +17,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserDetailsService manager;
     private final PasswordEncoder encoder;
     private final UserService userService;
-    private final ru.skypro.homework.mapper.UserMapper userMapper;
+    private final UserMapper userMapper;
 
     @Override
     public boolean login(String userName, String password) {
