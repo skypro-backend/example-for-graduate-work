@@ -13,7 +13,7 @@ public abstract class CommentMapper {
     public CommentDto entityToCommentDto(Comment entity) {
         return new CommentDto (entity.getAuthor().getId(), entity.getAuthor().getImagePath(),
                 entity.getAuthor().getFirstName(), getMillis(entity.getCreatedAt()),
-                entity.getId(), entity.getText());
+                entity.getPk(), entity.getText());
     }
 
 

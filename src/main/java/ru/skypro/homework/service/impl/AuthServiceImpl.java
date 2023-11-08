@@ -28,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean register(RegisterDto register) {
+    public boolean register(Register register) {
         if (userService.userExists(register.getUsername())) {
             return false;
         }

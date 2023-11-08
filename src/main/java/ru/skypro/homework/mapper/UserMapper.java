@@ -18,7 +18,7 @@ public abstract class UserMapper {
         return entity;
     }
 
-    public User registerReqDtoToEntity(RegisterDto req) {
+    public User registerReqDtoToEntity(Register req) {
         return new User(req.getPassword(), req.getUsername(), req.getFirstName(),
                 req.getLastName(), req.getPhone(), req.getRole());
     }
@@ -30,5 +30,5 @@ public abstract class UserMapper {
 
     public abstract UserDto UsertoUserDto(User user);
 
-    public abstract User UserDtoToUser(RegisterDto register);
+    public abstract User UserDtoToUser(Register register);
 }
