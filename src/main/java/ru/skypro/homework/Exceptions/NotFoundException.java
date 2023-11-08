@@ -1,4 +1,4 @@
-package ru.skypro.homework.Exceptions.NotFoundExpection;
+package ru.skypro.homework.Exceptions;
 
 public class NotFoundException extends RuntimeException {
 

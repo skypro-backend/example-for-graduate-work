@@ -1,97 +1,58 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.Exceptions.FindNoEntityException;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.*;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.*;
+import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.CommentService;
-import ru.skypro.homework.Exceptions.NotFoundExpection.*;
+import ru.skypro.homework.service.UserService;
 
-import javax.transaction.Transactional;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
-@Service
-@Slf4j
-@Transactional
 @RequiredArgsConstructor
+@Service
 public class CommentServiceImpl implements CommentService {
-
+    private final UserService userService;
+    private final AdService adService;
     private final CommentRepository commentRepository;
-    private final CommentMapper commentMapper;
-    private final AdRepository adRepository;
-    private final UserRepository userRepository;
+    private final CommentMapper mapper;
+
     @Override
-    public List<CommentDto> getCommentByIdAd(Integer id) {
-        return commentMapper.toCommentsDto(commentRepository.findAllByAdPk(id));
+    public CommentsDto getComments(int id) {
+        List<Comment> result = new LinkedList<>();
+        commentRepository.findAllByAd_Id(id).forEach(entity -> result.add(mapper.entityToCommentDto(entity)));
+        return new CommentsDto(result.size(), result);
     }
 
     @Override
-    public CommentDto createAdComment(Integer id,
-                                      CreateOrUpdateCommentDto createOrUpdateCommentDto,
-                                      Authentication authentication) {
-
-        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
-        Ad ad = adRepository.findById(id).orElseThrow(AdNotFoundException::new);
-        Comment comment = commentMapper.toCommentEntityFromCreateOrUpdateComment(createOrUpdateCommentDto);
-
-        comment.setAd(ad);
-        comment.setAuthor(user);
-
-        commentRepository.save(comment);
-        log.debug("Comment with id - {} was created", id);
-        return commentMapper.toCommentDto(comment);
+    public CommentDto add(int id, CreateOrUpdateCommentDto comment, String name) {
+        Comment entity = mapper.commentToEntity(comment, adService.getEntity(id), userService.getEntity(name));
+        return mapper.entityToCommentDto(commentRepository.save(entity));
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN') or " +
-            "@commentServiceImpl.findCommentById(#commentId).getAuthor().getEmail()==authentication.name")
-    public void deleteCommentById(Integer commentId) {
+    public void delete(int commentId) {
         commentRepository.deleteById(commentId);
-        log.debug("Comment with id - {} was deleted", commentId);
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN') or " +
-            "@commentServiceImpl.findCommentById(#commentId).getAuthor().getEmail()==authentication.name")
-    public CommentDto updateComment(Integer adId,
-                                    Integer commentId,
-                                    CreateOrUpdateCommentDto createOrUpdateCommentDto,
-                                    Authentication authentication) {
-
-
-        String email = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new).getAuthor().getName();
-        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
-        Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
-        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-
-        comment.setText(createOrUpdateCommentDto.getText());
-        comment.setCreatedAt(Instant.now().toEpochMilli());
-        comment.setAd(ad);
-        comment.setAuthor(user);
-        commentRepository.save(comment);
-
-        log.debug("Comment with id - {} was updated in ad with id - {}", commentId, adId);
-        return commentMapper.toCommentDto(comment);
+    public Comment update(int commentId, Comment comment, String email) {
+        Comment entity = getEntity(commentId);
+        entity.setText(comment.getText() + "(отредактировал(а) " + userService.getEntity(email).getFirstName() +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern(" dd MMMM yyyy в HH:mm:ss)")));
+        return mapper.entityToCommentDto(commentRepository.save(entity));
     }
 
-    public Comment findCommentById(Integer id) {
-
-        Optional<Comment> comment = commentRepository.findById(id);
-
-        if (comment.isEmpty()) {
-            log.error("Comment not found");
-            throw new CommentNotFoundException();
-
-        } else {
-            return comment.get();
-        }
-
+    @Override
+    public Comment getEntity(int commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new FindNoEntityException("There is no comment with the specified id"));
     }
 }

@@ -9,8 +9,4 @@ public class CreateOrUpdateAdDto {
     private String title;
     private int price;
     private String description;
-
-    public CreateOrUpdateAdDto() {
-
-    }
 }

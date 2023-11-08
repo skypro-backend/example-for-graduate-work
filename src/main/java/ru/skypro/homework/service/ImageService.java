@@ -7,16 +7,12 @@ import java.io.IOException;
 
 public interface ImageService {
 
-    /**
-     * Сохранение изображения в базу данных
-     * image файл изображения, не может быть {@code null}.
-     */
-    Image downloadImage(MultipartFile image) throws IOException;
+    Image saveImage(MultipartFile image) throws IOException;
 
-    /**
-     * Получение изображения из базы данных
-     * id - идентификатор изображения, не может быть {@code null}.
-     */
-    byte[] getImage(Long id);
 
+    byte[] getImage(long id) throws IOException;
+
+    void deleteImage(Image entity) throws IOException;
+
+    Image getEntity(long id);
 }

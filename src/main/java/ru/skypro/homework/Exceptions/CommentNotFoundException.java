@@ -1,4 +1,6 @@
-package ru.skypro.homework.Exceptions.NotFoundExpection;
+package ru.skypro.homework.Exceptions;
+
+import ru.skypro.homework.Exceptions.NotFoundException;
 
 public class CommentNotFoundException extends NotFoundException {
 

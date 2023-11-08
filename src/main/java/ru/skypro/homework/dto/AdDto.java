@@ -1,12 +1,10 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Data
-@Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AdDto {
 
     private String image;

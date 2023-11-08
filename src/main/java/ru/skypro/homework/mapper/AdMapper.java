@@ -1,44 +1,32 @@
 package ru.skypro.homework.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.Named;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.*;
 
-import java.util.Collection;
-import java.util.List;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface AdMapper {
-
-    @Mapping(target = "image", source = "image", qualifiedByName = "imageToPathString")
-    @Mapping(target = "author", source = "author", qualifiedByName = "authorToInt")
-    AdDto toAdDto(Ad ad);
-
-    List<AdDto> toAdsDto(List<Ad> ads);
-
-
-    @Mapping(target = "author", ignore = true)
-    @Mapping(target = "image", ignore = true)
-    @Mapping(target = "pk", ignore = true)
-    Ad toAdEntity(CreateOrUpdateAdDto createOrUpdateAdDto);
-
-    @Mapping(target = "authorFirstName", source = "author.firstName")
-    @Mapping(target = "authorLastName", source = "author.lastName")
-    @Mapping(target = "email", source = "author.email")
-    @Mapping(target = "phone", source = "author.phone")
-    @Mapping(target = "image", source = "image", qualifiedByName = "imageToPathString")
-    ExtendedAdDto toExtendAdDto(Ad ad);
-
-    @Named("imageToPathString")
-    default String imageToPathString(Image image) {
-        return "/ads/image/" + image.getId();
+@Component
+public abstract class AdMapper {
+    public AdDto entityToAdsDto(AdDto entity) {
+        return new AdDto(entity.getAuthor().getId(), entity.getImagePath(),
+                entity.getId(), entity.getPrice(), entity.getTitle());
     }
 
-    @Named("authorToInt")
-    default Integer authorToInt(User user) {
-        return user.getId();
+    public abstract Ad adEntityToAd(Ad adEntity);
+
+    public abstract AdDto AdToAdDto(Ad Ad);
+
+    public abstract Ad adToAdEntity(Ad ad);
+
+    public abstract Ad entityToAdsDto(Ad entity);
+
+    public ExtendedAdDto entityToExtendedAdsDto(Ad entity) {
+        return new ExtendedAdDto(entity.getId(), entity.getAuthor().getFirstName(), entity.getAuthor().getLastName(), entity.getDescription(),
+                entity.getAuthor().getEmail(), entity.getImagePath(),
+                entity.getAuthor().getPhone(), entity.getPrice(), entity.getTitle());
+    }
+
+    public Ad createOrUpdateAdToEntity(CreateOrUpdateAdDto ads, User author) {
+        return new Ad(author, ads.getTitle(), ads.getPrice(), ads.getDescription());
     }
 }
