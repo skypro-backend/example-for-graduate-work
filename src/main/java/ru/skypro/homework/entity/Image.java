@@ -1,19 +1,23 @@
 package ru.skypro.homework.entity;
 
 import lombok.*;
-
 import javax.persistence.*;
 
+@ToString
+@EqualsAndHashCode(of = {"id"})
+@RequiredArgsConstructor
 @Entity
-@Table(name = "images")
+@Builder
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
+
 public class Image {
     @Id
     @Column(name = "image_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Integer id;
+
+    @Lob
+    private byte[] data;
 }

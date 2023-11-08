@@ -1,12 +1,13 @@
 package ru.skypro.homework.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder
+
 public class UserDto {
 
     private int id;

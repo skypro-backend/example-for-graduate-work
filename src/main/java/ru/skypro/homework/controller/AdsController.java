@@ -4,69 +4,102 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.*;
-import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.service.AdService;
-import ru.skypro.homework.service.ImageService;
-
-import java.io.IOException;
-
+import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.AdsDto;
+import ru.skypro.homework.dto.CreateOrUpdateAdDto;
+import ru.skypro.homework.dto.ExtendedAdDto;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ads")
-@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin("http://localhost:3000")
 public class AdsController {
-    private final AdService adService;
-    private final ImageService imageService;
 
     @GetMapping
-    public ResponseEntity<AdsDto> getAds() {
-        return ResponseEntity.ok(adService.getAllAds());
+//    public AdsDto getAllAds() {
+//     return new AdsDto();
+//    }
+
+    public ResponseEntity<AdsDto> getAllAds(){
+        return ResponseEntity.ok(new AdsDto());
     }
+
+//    @GetMapping
+//    public ResponseEntity<AdsDto> getAllAds() {
+//        var body = service.readAll();
+//        return ResponseEntity.ok(body);
+//    }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Ad> postAds(@RequestPart CreateOrUpdateAdDto properties,
-                                      @RequestPart MultipartFile image, Authentication authentication) throws IOException {
-        return ResponseEntity.status(201).body(adService.add(properties, image, authentication.getName()));
+    public AdDto addAd(@RequestPart(name = "properties") CreateOrUpdateAdDto dto,
+                       @RequestPart(name = "image") MultipartFile image) {
+       return new AdDto();
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<ExtendedAdDto> getById(@PathVariable Integer id) {
-        return ResponseEntity.ok(adService.getFullAdsById(id));
+//    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<AdDto> addAd(@RequestPart(name = "properties") CreateOrUpdateAdDto dto,
+//                                       @RequestPart(name = "image") MultipartFile image) {
+//        var body = service.create(dto, image);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(body);
+//    }
+
+    @GetMapping("/{id}")
+    public ExtendedAdDto getAds(@PathVariable int id) {
+       return new ExtendedAdDto();
     }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<ExtendedAdDto> getAds(@PathVariable int id) {
+//        var body = service.read(id);
+//        return ResponseEntity.ok(body);
+//    }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("@adServiceImpl.getEntity(#id).author.email.equals(#auth.name) or hasAuthority('DELETE_ANY_AD')")
-    public ResponseEntity<?> removeAd(@PathVariable int id, Authentication auth) throws IOException {
-        adService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public AdDto removeAd(@PathVariable int id) {
+       return new AdDto();
     }
+
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<?> removeAd(@PathVariable int id) {
+//        service.delete(id);
+//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//    }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("@adServiceImpl.getEntity(#id).author.email.equals(#auth.name) or hasAuthority('UPDATE_ANY_AD')")
-    public ResponseEntity<Ad> updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAdDto ads, Authentication auth) {
-        return ResponseEntity.ok(adService.update(id, ads));
+    public ResponseEntity<AdDto> updateAds(@PathVariable int id,
+        @RequestBody CreateOrUpdateAdDto dto){
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+//   было
+//    public ResponseEntity<AdDto> updateAds(@PathVariable int id,
+//                                           @RequestBody CreateOrUpdateAdDto dto) {
+//        var body = service.update(id, dto);
+//        return ResponseEntity.ok(body);
+//    }
 
     @GetMapping("/me")
-    public ResponseEntity<AdsDto> getAdsByRegisterUser(Authentication authentication) {
-        return ResponseEntity.ok(adService.getAllMyAds(authentication.getName()));
+    public AdsDto getAdsMe() {
+        return new AdsDto();
     }
 
-    @PatchMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateImage(@PathVariable(name = "id") Integer id,
-                                         @RequestParam MultipartFile image) throws IOException {
-        adService.uploadImage(id, image);
-        return ResponseEntity.ok().build();
+//    @GetMapping("/me")
+//    public ResponseEntity<AdsDto> getAdsMe() {
+//        var body = service.read();
+//        return ResponseEntity.ok(body);
+//    }
+
+    @PatchMapping("{id}/image")
+    public AdDto updateImage(@PathVariable int id,
+                             @RequestPart MultipartFile image) {
+        return new AdDto();
     }
 
-    @GetMapping("/image/{id}")
-    public ResponseEntity<byte[]> getImage(@PathVariable int id) throws IOException {
-        long imageId = adService.getEntity(id).getImage().getId();
-        return ResponseEntity.ok(imageService.getImage(imageId));
-    }
+//    @PatchMapping("{id}/image")
+//    public ResponseEntity<String> updateImage(@RequestPart(name = "image") MultipartFile image) {
+//        var body = service.update(id, image);
+//        return ResponseEntity.ok(body);
+//    }
+
+
 }
