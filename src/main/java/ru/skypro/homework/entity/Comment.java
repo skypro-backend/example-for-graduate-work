@@ -19,7 +19,7 @@ public class Comment {
     private int pk;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User author;
+    private ru.skypro.homework.entity.User author;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @Column(name = "comments_text")
@@ -29,7 +29,7 @@ public class Comment {
     private Ad ad;
 
     public Comment (User author, LocalDateTime createdAt, String text, Ad ad) {
-        this.author = author;
+        this.author = (ru.skypro.homework.entity.User) author;
         this.createdAt = createdAt;
         this.text = text;
         this.ad = ad;

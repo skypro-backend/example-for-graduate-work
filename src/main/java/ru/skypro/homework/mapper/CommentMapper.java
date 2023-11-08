@@ -9,11 +9,11 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 @Component
-public abstract class CommentMapper {
+public class CommentMapper {
     public CommentDto entityToCommentDto(Comment entity) {
         return new CommentDto (entity.getAuthor().getId(), entity.getAuthor().getImagePath(),
                 entity.getAuthor().getFirstName(), getMillis(entity.getCreatedAt()),
-                entity.getId(), entity.getText());
+                entity.getPk(), entity.getText());
     }
 
 
@@ -26,15 +26,15 @@ public abstract class CommentMapper {
         return time.toInstant(ZoneOffset.ofHours(5)).toEpochMilli();
     }
 
-    public abstract CommentDto toCommentDto(Comment comment);
+//    public abstract CommentDto toCommentDto(Comment comment);
+//
+//    public abstract List<CommentDto> toCommentsDto(List<Comment> comments);
+//
+//    public abstract CommentDto CommentToCommentDto(Comment comment);
+//
+//    public abstract Comment toCommentFromCreateOrUpdateComment(CreateOrUpdateCommentDto createOrUpdateCommentDto);
+//
+//    public abstract Comment toCommenFromCreateOrUpdateComment(CreateOrUpdateCommentDto createOrUpdateCommentDto);
 
-    public abstract List<CommentDto> toCommentsDto(List<Comment> comments);
-
-    public abstract CommentDto CommentToCommentDto(Comment comment);
-
-    public abstract Comment toCommentFromCreateOrUpdateComment(CreateOrUpdateCommentDto createOrUpdateCommentDto);
-
-    public abstract Comment toCommenFromCreateOrUpdateComment(CreateOrUpdateCommentDto createOrUpdateCommentDto);
-
-    public abstract String authorImageToString(User user);
+//    public abstract String authorImageToString(User user);
 }

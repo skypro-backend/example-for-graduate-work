@@ -8,5 +8,5 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 @Repository
 public interface AdRepository extends JpaRepository<Ad, Integer>{
-    List<Ad> findAllByAuthor_email(String author);
+    List<Ad> findAllByAuthor_Username(String author);
 }
