@@ -11,7 +11,7 @@ import ru.skypro.homework.model.User;
 
 @Mapper
 public interface CommentMapper {
-    CommentDto INSTANCE = Mappers.getMapper(CommentDto.class);
+    CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
     @Mapping(source = "user.id", target = "author")
     @Mapping(source = "user.image", target = "authorImage")
     @Mapping(source = "user.firstName", target = "authorFirstName")
