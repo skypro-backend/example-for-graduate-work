@@ -48,8 +48,9 @@ public class UserServiceImpl implements UserService {
 
     @Value("${image.store.path}")
     private String avatarStorageDirectory;
-    @Value("${image.store.path}")
+    @Value("${storePath}")
     private String storePath;
+
 
     @Override
     public User find() {
@@ -276,6 +277,7 @@ public class UserServiceImpl implements UserService {
             throw new AccessDeniedException("В доступе отказано: Пользователь не прошел проверку подлинности.");
         }
     }
+
     @Override
     public String getAvatarUrlByUsername(String username) {
         var user = find(username);
@@ -300,20 +302,22 @@ public class UserServiceImpl implements UserService {
             throw new AccessDeniedException("Недостаточно прав для обновления изображения пользователя");
         }
     }
+
     @Override
     public byte[] getAvatarImage(String filename) {
-        Path path = Paths.get(storePath, filename).toAbsolutePath().normalize();
-        if(Files.exists(path)) {
+        Path path = Paths.get(avatarStorageDirectory, filename).toAbsolutePath().normalize();
+        if (Files.exists(path)) {
             try {
                 byte[] avatarBytes = Files.readAllBytes(path);
                 return avatarBytes;
             } catch (IOException e) {
                 throw new RuntimeException("Не удалось получить аватар", e);
             }
-        } else return new byte[0];
+        } else {
+            return new byte[0];
+        }
     }
 }
-
 
 
 
