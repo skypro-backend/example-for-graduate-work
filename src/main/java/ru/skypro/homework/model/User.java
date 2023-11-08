@@ -5,6 +5,7 @@ import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,6 +18,11 @@ public class User {
     private String firstName;
     private String lastName;
     private String phone;
+    @Enumerated(EnumType.STRING)
     private Role role;
     private String image;
+    private String userName;
+    private String password;
+    @Transient
+    private List<Ad> adList;
 }
