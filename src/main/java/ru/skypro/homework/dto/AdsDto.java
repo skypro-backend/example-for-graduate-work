@@ -1,11 +1,14 @@
 package ru.skypro.homework.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+@Setter
+@Getter
+@ToString
+@AllArgsConstructor
 @Schema(description = "список объявлений")
 public class AdsDto {
 

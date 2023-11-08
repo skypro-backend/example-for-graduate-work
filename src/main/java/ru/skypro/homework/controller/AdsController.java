@@ -5,8 +5,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.AdsDto;
+import ru.skypro.homework.service.AdService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -16,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/ads")
 public class AdsController {
+//    private final AdService adService;
+
+
 
     @Operation(
             summary = "Получение всех объявлений",
@@ -27,9 +33,12 @@ public class AdsController {
             }
     )
     @GetMapping("")
-    public ResponseEntity<?> getAllAds() {
+    public ResponseEntity<AdsDto> getAllAds() {
         return ResponseEntity.ok().build();
+
+//        return new ResponseEntity <> (adService.getAll(), HttpStatus.OK);
     }
+
     @Operation(
             summary = "Добавление объявления",
             responses = {
@@ -47,6 +56,7 @@ public class AdsController {
     public ResponseEntity<?> addAds() {
         return ResponseEntity.ok().build();
     }
+
     @Operation(
             summary = "Получение информации об объявлении",
             responses = {
@@ -68,6 +78,7 @@ public class AdsController {
     public ResponseEntity<?> getAds() {
         return ResponseEntity.ok().build();
     }
+
     @Operation(
             summary = "Удаление объявления",
             responses = {
@@ -93,6 +104,7 @@ public class AdsController {
     public ResponseEntity<?> removeAd() {
         return ResponseEntity.ok().build();
     }
+
     @Operation(
             summary = "Обновление информации об объявлении",
             responses = {
@@ -118,6 +130,7 @@ public class AdsController {
     public ResponseEntity<?> updateAds() {
         return ResponseEntity.ok().build();
     }
+
     @Operation(
             summary = "Получение объявлений авторизованного пользователя",
             responses = {
