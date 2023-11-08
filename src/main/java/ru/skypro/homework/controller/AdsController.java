@@ -23,7 +23,7 @@ public class AdsController {
     private final AdService adService;
     private final ImageService imageService;
 
-
+//
     @GetMapping
     public ResponseEntity<AdsDto> getAds() {
         return ResponseEntity.ok(adService.getAllAds());
