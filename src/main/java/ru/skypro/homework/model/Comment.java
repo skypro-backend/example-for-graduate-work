@@ -13,11 +13,11 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long authorId;
+    private long pk;
 
+    private long authorId;
     private String authorImage;
     private String authorFirstName;
     private long createdAt;
-    private long pk;
     private String text;
 }
