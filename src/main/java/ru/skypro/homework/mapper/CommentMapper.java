@@ -1,50 +1,40 @@
 package ru.skypro.homework.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.Named;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.*;
-import org.mapstruct.Mapper;
-import ru.skypro.homework.model.CommentModel;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = Instant.class)
-public interface CommentMapper {
-
-    @Mapping(target = "author", source = "author", qualifiedByName = "authorToInteger")
-    @Mapping(target = "authorFirstName", source = "author", qualifiedByName = "authorFirstNameFromAuthor")
-    @Mapping(target = "authorImage", source = "author", qualifiedByName = "authorImageToString")
-    default CommentDto toCommentDto(Comment comment) {
-        return null;
+@Component
+public abstract class CommentMapper {
+    public CommentDto entityToCommentDto(Comment entity) {
+        return new CommentDto (entity.getAuthor().getId(), entity.getAuthor().getImagePath(),
+                entity.getAuthor().getFirstName(), getMillis(entity.getCreatedAt()),
+                entity.getId(), entity.getText());
     }
 
-//    List<CommentDto> toCommentsDto(List<Comment> comments);
 
-/*
-    @Mapping(target = "createdAt", expression = "java(Instant.now().toEpochMilli())")
-    Comment toCommentEntityFromCreateOrUpdateComment(CreateOrUpdateCommentDto createOrUpdateCommentDto);
-*/
 
-    @Named("authorImageToString")
-    default String authorImageToString(User user) {
-        if (user.getImage() == null) {
-            return null;
-        }
-        return "/users/image/" + user.getImage().getId();
+    public Comment commentToEntity(CreateOrUpdateCommentDto createOrUpdateCommentDto, Ad ad, User author) {
+        return new Comment((org.apache.catalina.User) author, LocalDateTime.now(), createOrUpdateCommentDto.getText(), ad);
     }
 
-    @Named("authorToInteger")
-    default Integer authorToInteger(User user) {
-        return user.getId();
+    private long getMillis(LocalDateTime time) {
+        return time.toInstant(ZoneOffset.ofHours(5)).toEpochMilli();
     }
 
-    @Named("authorFirstNameFromAuthor")
-    default String authorFirstNameFromAuthor(User author) {
-        return author.getFirstName();
-    }
+    public abstract CommentDto toCommentDto(Comment comment);
 
+    public abstract List<CommentDto> toCommentsDto(List<Comment> comments);
+
+    public abstract CommentDto CommentToCommentDto(Comment comment);
+
+    public abstract Comment toCommentFromCreateOrUpdateComment(CreateOrUpdateCommentDto createOrUpdateCommentDto);
+
+    public abstract Comment toCommenFromCreateOrUpdateComment(CreateOrUpdateCommentDto createOrUpdateCommentDto);
+
+    public abstract String authorImageToString(User user);
 }

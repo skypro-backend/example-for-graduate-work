@@ -1,48 +1,33 @@
 package ru.skypro.homework.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.Named;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.*;
 
-import java.util.Collection;
-import java.util.List;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface AdMapper {
-
-    @Mapping(target = "image", source = "image", qualifiedByName = "imageToPathString")
-    @Mapping(target = "author", source = "author", qualifiedByName = "authorToInt")
-    default AdDto toAdDto(Ad ad) {
-        return null;
+@Component
+public abstract class AdMapper {
+    public AdDto entityToAdDto(Ad entity) {
+        return new AdDto(entity.getAuthor().getId(), entity.getImagePath(),
+                entity.getPk(), entity.getPrice(), entity.getTitle());
     }
 
+    public abstract Ad adEntityToAd(Ad adEntity);
 
-    @Mapping(target = "author", ignore = true)
-    @Mapping(target = "image", ignore = true)
-    @Mapping(target = "pk", ignore = true)
-    default Ad toAdEntity(CreateOrUpdateAdDto createOrUpdateAdDto) {
-        return null;
+    public abstract AdDto AdToAdDto(Ad Ad);
+
+    public abstract Ad adToAdEntity(Ad ad);
+
+    public abstract Ad entityToAdsDto(Ad entity);
+
+    public ExtendedAdDto entityToExtendedAdsDto(Ad entity) {
+        return new ExtendedAdDto(entity.getPk(), entity.getAuthor().getFirstName(), entity.getAuthor().getLastName(),
+                entity.getDescription(), entity.getAuthor().getUsername(), entity.getImagePath(),
+                entity.getAuthor().getPhone(), entity.getPrice(), entity.getTitle());
     }
 
-    @Mapping(target = "authorFirstName", source = "author.firstName")
-    @Mapping(target = "authorLastName", source = "author.lastName")
-    @Mapping(target = "email", source = "author.email")
-    @Mapping(target = "phone", source = "author.phone")
-    @Mapping(target = "image", source = "image", qualifiedByName = "imageToPathString")
-    default ExtendedAdDto toExtendAdDto(Ad ad) {
-        return null;
+    public Ad createOrUpdateAdToEntity(CreateOrUpdateAdDto ads, User author) {
+        return new Ad(author, ads.getTitle(), ads.getPrice(), ads.getDescription());
     }
 
-    @Named("imageToPathString")
-    default String imageToPathString(Image image){
-        return "/ads/image/" + image.getId();
-    }
-
-    @Named("authorToInt")
-    default Integer authorToInt(User user) {
-        return user.getId();
-    }
 }

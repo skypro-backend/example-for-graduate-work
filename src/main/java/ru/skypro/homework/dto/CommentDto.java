@@ -1,8 +1,10 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CommentDto {
 
     private int author;
@@ -11,5 +13,4 @@ public class CommentDto {
     private long createdAt;
     private int pk;
     private String text;
-
 }

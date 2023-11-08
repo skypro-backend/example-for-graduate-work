@@ -4,31 +4,34 @@ import lombok.*;
 import org.apache.catalina.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode(of = {"pk"})
-@RequiredArgsConstructor
 @Entity
+@Table(name = "comments")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Comment {
-
     @Id
+    @Column(name = "comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer pk;
-
+    private int pk;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User author;
-
-    @Column(nullable = false)
-    private Long createdAt;
-
-    @Column(nullable = false)
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    @Column(name = "comments_text")
     private String text;
-
     @ManyToOne
     @JoinColumn(name = "ad_id")
     private Ad ad;
+
+    public Comment (User author, LocalDateTime createdAt, String text, Ad ad) {
+        this.author = author;
+        this.createdAt = createdAt;
+        this.text = text;
+        this.ad = ad;
+    }
 }
