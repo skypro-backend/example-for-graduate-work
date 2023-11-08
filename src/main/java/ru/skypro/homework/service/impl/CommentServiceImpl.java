@@ -26,7 +26,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentsDto getComments(int id) {
-        List<Comment> result = new LinkedList<>();
+        List<CommentDto> result = new LinkedList<>();
         commentRepository.findAllByAd_Id(id).forEach(entity -> result.add(mapper.entityToCommentDto(entity)));
         return new CommentsDto(result.size(), result);
     }
@@ -43,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment update(int commentId, Comment comment, String email) {
+    public CommentDto update (int commentId, CommentDto comment, String email) {
         Comment entity = getEntity(commentId);
         entity.setText(comment.getText() + "(отредактировал(а) " + userService.getEntity(email).getFirstName() +
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(" dd MMMM yyyy в HH:mm:ss)")));

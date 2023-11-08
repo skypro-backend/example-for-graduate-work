@@ -1,48 +1,40 @@
-CREATE TABLE ads
+create table users
 (
-    pk_id         SERIAL PRIMARY KEY,
-    user_id       INT NOT NULL,
-    image_address VARCHAR(255),
-    description   VARCHAR(255),
-    price         INT,
-    title         TEXT
-
+    user_id serial primary key ,
+    password varchar(10000) not null ,
+    username varchar(255)not null unique ,
+    first_name varchar(30) not null ,
+    last_name varchar(30) not null ,
+    phone varchar(12) not null ,
+    role varchar(10) not null
 );
 
-CREATE TABLE comments
+create table ads
 (
-    comment_id     SERIAL PRIMARY KEY,
-    ad_id          INT NOT NULL,
-    user_id        INT NOT NULL,
-    created_time   BIGINT,
-    text           VARCHAR(255)
+    ad_id serial primary key ,
+    user_id int not null references users(user_id) on delete cascade ,
+    title text not null ,
+    price int not null ,
+    description text
 );
 
-CREATE TABLE users
+create table comments
 (
-    id            SERIAL PRIMARY KEY,
-    username      VARCHAR(255) UNIQUE,
-    email         VARCHAR(255) ,
-    password      VARCHAR(255) ,
-    first_name    VARCHAR(255) ,
-    last_name     VARCHAR(255) ,
-    phone         VARCHAR(255) ,
-    image_path         TEXT,
-    pk_id         INT,
-    role          VARCHAR(255) ,
-    ad_id         INT
+    comment_id serial primary key ,
+    user_id int not null references users(user_id) on delete cascade ,
+    created_at timestamp not null ,
+    comment_text text,
+    ad_id int not null references ads(ad_id) on delete cascade
 );
 
-CREATE TABLE user_images
+create table images
 (
-    image_id      SERIAL PRIMARY KEY,
-    user_id       INT,
-    image_address TEXT
+    image_id bigserial primary key
 );
 
-CREATE TABLE ads_images
-(
-    ads_image_id   SERIAL PRIMARY KEY,
-    ad_pk          INT,
-    image_address  TEXT
-);
+alter table users
+    add column image_id bigint references images(image_id);
+
+alter table ads
+    add column image_id bigint references images(image_id);
+

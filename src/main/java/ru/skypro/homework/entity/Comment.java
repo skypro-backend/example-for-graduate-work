@@ -16,7 +16,7 @@ public class Comment {
     @Id
     @Column(name = "comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int pk;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User author;
@@ -28,7 +28,7 @@ public class Comment {
     @JoinColumn(name = "ad_id")
     private Ad ad;
 
-    public Comment(User author, LocalDateTime createdAt, String text, Ad ad) {
+    public Comment (User author, LocalDateTime createdAt, String text, Ad ad) {
         this.author = author;
         this.createdAt = createdAt;
         this.text = text;

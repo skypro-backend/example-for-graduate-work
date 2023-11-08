@@ -78,8 +78,9 @@ public class AdServiceImpl implements AdService {
     }
 
     private AdsDto getWrapper(List<Ad> list) {
-        List<Ad> result = new LinkedList<>();
-        list.forEach((entity -> result.add(mapper.entityToAdsDto(entity))));
+        List<AdDto> result = new LinkedList<>();
+        list.forEach((entity -> result.add(mapper.entityToAdDto(entity))));
         return new AdsDto(result.size(), result);
     }
+
 }

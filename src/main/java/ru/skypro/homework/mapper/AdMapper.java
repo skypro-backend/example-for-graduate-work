@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public abstract class AdMapper {
-    public AdDto entityToAdsDto(AdDto entity) {
+    public AdDto entityToAdDto(Ad entity) {
         return new AdDto(entity.getAuthor().getId(), entity.getImagePath(),
-                entity.getId(), entity.getPrice(), entity.getTitle());
+                entity.getPk(), entity.getPrice(), entity.getTitle());
     }
 
     public abstract Ad adEntityToAd(Ad adEntity);
@@ -21,12 +21,13 @@ public abstract class AdMapper {
     public abstract Ad entityToAdsDto(Ad entity);
 
     public ExtendedAdDto entityToExtendedAdsDto(Ad entity) {
-        return new ExtendedAdDto(entity.getId(), entity.getAuthor().getFirstName(), entity.getAuthor().getLastName(), entity.getDescription(),
-                entity.getAuthor().getEmail(), entity.getImagePath(),
+        return new ExtendedAdDto(entity.getPk(), entity.getAuthor().getFirstName(), entity.getAuthor().getLastName(),
+                entity.getDescription(), entity.getAuthor().getUsername(), entity.getImagePath(),
                 entity.getAuthor().getPhone(), entity.getPrice(), entity.getTitle());
     }
 
     public Ad createOrUpdateAdToEntity(CreateOrUpdateAdDto ads, User author) {
         return new Ad(author, ads.getTitle(), ads.getPrice(), ads.getDescription());
     }
+
 }

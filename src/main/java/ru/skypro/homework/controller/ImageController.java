@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.service.ImageService;
 
+import java.io.IOException;
+
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -21,7 +23,7 @@ public class ImageController {
     }
     @GetMapping(value = "{id}",
             produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
-    public byte[] getImage(@PathVariable Long id) {
+    public byte[] getImage(@PathVariable Long id) throws IOException {
         return imageService.getImage(id);
     }
 }

@@ -26,7 +26,7 @@ public class UserSecurityDto implements UserDetails {
 
     @Override
     public String getUsername() {
-        return entity.getEmail();
+        return entity.getUsername();
     }
 
     @Override

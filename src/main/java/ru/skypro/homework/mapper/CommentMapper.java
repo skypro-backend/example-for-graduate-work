@@ -10,15 +10,18 @@ import java.util.List;
 
 @Component
 public abstract class CommentMapper {
-    public Comment entityToCommentDto(Comment entity) {
-        return new Comment(entity.getAuthor().getId(), entity.getAuthor().getImagePath(),
+    public CommentDto entityToCommentDto(Comment entity) {
+        return new CommentDto (entity.getAuthor().getId(), entity.getAuthor().getImagePath(),
                 entity.getAuthor().getFirstName(), getMillis(entity.getCreatedAt()),
                 entity.getId(), entity.getText());
     }
 
-    public Comment commentToEntity(CreateOrUpdateCommentDto createComment, Ad ad, User author) {
-        return new Comment(author, LocalDateTime.now(), createComment.getText(), ad);
+
+
+    public Comment commentToEntity(CreateOrUpdateCommentDto createOrUpdateCommentDto, Ad ad, User author) {
+        return new Comment((org.apache.catalina.User) author, LocalDateTime.now(), createOrUpdateCommentDto.getText(), ad);
     }
+
     private long getMillis(LocalDateTime time) {
         return time.toInstant(ZoneOffset.ofHours(5)).toEpochMilli();
     }

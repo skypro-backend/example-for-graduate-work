@@ -9,13 +9,15 @@ import ru.skypro.homework.dto.Role;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String email;
+    private int id;
     private String password;
+    private String username;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
@@ -27,9 +29,9 @@ public class User {
     @JoinColumn(name = "image_id")
     private Image image;
 
-    public User(String password, String email, String firstName, String lastName, String phone, Role role) {
+    public User (String password, String username, String firstName, String lastName, String phone, Role role) {
         this.password = password;
-        this.email = email;
+        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -39,4 +41,5 @@ public class User {
     public String getImagePath() {
         return image == null ? null : "/users/image/" + id;
     }
+
 }

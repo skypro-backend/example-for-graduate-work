@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User get(String name) {
+    public UserDto get(String name) {
         return mapper.entityToUserDto(getEntity(name));
     }
 
@@ -62,13 +62,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void uploadImage(MultipartFile image, String name) throws IOException {
-        User user = getEntity(name);
-        Image image = user.getImage();
+    public void uploadImage(MultipartFile image, String username) throws IOException {
+        User user = getEntity(username);
+        Image imageEntity = user.getImage();
         user.setImage(imageService.saveImage(image));
         userRepository.save(user);
-        if (image != null) {
-            imageService.deleteImage(image);
+        if (imageEntity != null) {
+            imageService.deleteImage((Image) image);
         }
     }
+
 }

@@ -13,6 +13,4 @@ public class CommentDto {
     private long createdAt;
     private int pk;
     private String text;
-    private String email;
-
 }

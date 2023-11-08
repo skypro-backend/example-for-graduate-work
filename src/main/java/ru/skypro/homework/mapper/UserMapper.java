@@ -7,7 +7,7 @@ import ru.skypro.homework.entity.*;
 @Component
 public abstract class UserMapper {
     public UserDto entityToUserDto(User entity) {
-        return new UserDto(entity.getId(), entity.getEmail(), entity.getFirstName(),
+        return new UserDto(entity.getId(), entity.getUsername(), entity.getFirstName(),
                 entity.getLastName(), entity.getPhone(), entity.getRole(), entity.getImagePath());
     }
 

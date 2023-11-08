@@ -11,9 +11,7 @@ public interface CommentService {
 
     void delete(int commentId);
 
-    CommentDto update(int commentId, CommentDto newComment, String email);
-
-    Comment update(int commentId, Comment comment, String email);
+    CommentDto update(int commentId, CommentDto comment, String email);
 
     Comment getEntity(int commentId);
 
