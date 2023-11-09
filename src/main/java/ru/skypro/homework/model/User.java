@@ -20,9 +20,10 @@ public class User {
     private String phone;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private String image;
+    private String userImage;
     private String userName;
     private String password;
+    private int countAd;
     @Transient
     private List<Ad> adList;
 }

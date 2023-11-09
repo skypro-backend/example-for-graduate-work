@@ -12,8 +12,13 @@ import java.util.List;
 public interface AdMapper {
     AdMapper INSTANCE = Mappers.getMapper(AdMapper.class);
     @Mapping(source = "user_id", target = "author")
+    @Mapping(source = "adImage", target = "image")
+    @Mapping(target = "description", ignore = true)
+    @Mapping(target = "countComment", ignore = true)
+    @Mapping(target = "commentList", ignore = true)
     AdDto toDto(Ad ad);
-    @Mapping(source = "author", target = "user_id")
+    @Mapping(target = "user_id", source = "author")
+    @Mapping(target = "adImage", source = "image")
     Ad toModel(AdDto adDto);
 
 }

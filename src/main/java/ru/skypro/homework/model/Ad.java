@@ -15,10 +15,11 @@ public class Ad {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    private String image;
+    private String adImage;
     private int price;
     private String title;
     private String description;
+    private int countComment;
     @Transient
     private List<Comment> commentList;
 }
