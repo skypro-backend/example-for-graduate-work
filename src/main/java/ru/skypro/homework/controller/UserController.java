@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.SetPasswordDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.impl.UserServiceImpl;
@@ -16,8 +17,11 @@ import ru.skypro.homework.service.impl.UserServiceImpl;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
+    public UserController(UserServiceImpl userService) {
+        this.userService = userService;
+    }
     @Operation(
             tags = "Пользователи",
             summary = "Получить информацию об авторизованном пользователе",
@@ -138,6 +142,29 @@ public class UserController {
         }
         return ResponseEntity.ok().build();
     }
-
+    @Operation(
+            tags = "Пользователи",
+            summary = "Обновить аватар авторизованного пользователя",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Картинка загружена",
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Пользователь не найден (not found)",
+                            content = @Content()
+                    )
+            }
+    )
+    @PatchMapping("/me/image")
+    public ResponseEntity<?> loadUserImage(@RequestBody MultipartFile image) {
+        UserDto editedUser = userService.loadUserImage(image);
+        if (null == editedUser) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().build();
+    }
 
 }
