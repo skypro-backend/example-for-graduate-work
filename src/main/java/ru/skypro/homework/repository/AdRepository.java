@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface AdRepository extends JpaRepository<Ad, Integer>{
     List<Ad> findAllByAuthor_Username(String author);
+
 }
