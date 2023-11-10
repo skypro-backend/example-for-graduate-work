@@ -7,7 +7,7 @@ import ru.skypro.homework.entity.Ad;
 import java.io.IOException;
 
 public interface AdService {
-    Ad add(CreateOrUpdateAdDto properties, MultipartFile image, String email) throws IOException;
+    AdDto add(CreateOrUpdateAdDto properties, MultipartFile image, String email) throws IOException;
 
     ExtendedAdDto getFullAdsById(int id);
 
@@ -17,9 +17,10 @@ public interface AdService {
 
     void delete(int id) throws IOException;
 
-    Ad update(int id, CreateOrUpdateAdDto ads);
+    AdDto update(int id, CreateOrUpdateAdDto ads);
 
     Ad getEntity(int id);
 
     void uploadImage(int id, MultipartFile image) throws IOException;
+
 }

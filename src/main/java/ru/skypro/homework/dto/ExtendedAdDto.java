@@ -3,8 +3,6 @@ package ru.skypro.homework.dto;
 import lombok.*;
 
 @Data
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExtendedAdDto {

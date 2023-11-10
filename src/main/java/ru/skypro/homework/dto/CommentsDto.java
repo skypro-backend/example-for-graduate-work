@@ -5,7 +5,7 @@ import lombok.*;
 import java.util.List;
 @Data
 @AllArgsConstructor
-//@NoArgsConstructor
+@NoArgsConstructor
 
 public class CommentsDto {
     private Integer count;

@@ -23,20 +23,19 @@ public class AdsController {
     private final AdService adService;
     private final ImageService imageService;
 
-//
     @GetMapping
     public ResponseEntity<AdsDto> getAds() {
         return ResponseEntity.ok(adService.getAllAds());
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Ad> postAds(@RequestPart CreateOrUpdateAdDto properties,
-                                      @RequestPart MultipartFile image, Authentication authentication) throws IOException {
-        return ResponseEntity.status(201).body(adService.add(properties, image, authentication.getName()));
+    public ResponseEntity<AdDto> adAds(@RequestPart CreateOrUpdateAdDto properties,
+                                      @RequestPart MultipartFile image, Authentication auth) throws IOException {
+        return ResponseEntity.ok(adService.add(properties, image, auth.getName()));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ExtendedAdDto> getById(@PathVariable Integer id) {
+    public ResponseEntity<ExtendedAdDto> getById(@PathVariable int id) {
         return ResponseEntity.ok(adService.getFullAdsById(id));
     }
 
@@ -49,17 +48,17 @@ public class AdsController {
 
     @PatchMapping("/{id}")
     @PreAuthorize("@adServiceImpl.getEntity(#id).author.email.equals(#auth.name) or hasAuthority('UPDATE_ANY_AD')")
-    public ResponseEntity<Ad> updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAdDto ads, Authentication auth) {
+    public ResponseEntity<AdDto> updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAdDto ads, Authentication auth) {
         return ResponseEntity.ok(adService.update(id, ads));
     }
 
     @GetMapping("/me")
-    public ResponseEntity<AdsDto> getAdsByRegisterUser(Authentication authentication) {
-        return ResponseEntity.ok(adService.getAllMyAds(authentication.getName()));
+    public ResponseEntity<AdsDto> getAdsMe(Authentication auth) {
+        return ResponseEntity.ok(adService.getAllMyAds(auth.getName()));
     }
 
     @PatchMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateImage(@PathVariable(name = "id") Integer id,
+    public ResponseEntity<?> updateImage(@PathVariable int id,
                                          @RequestParam MultipartFile image) throws IOException {
         adService.uploadImage(id, image);
         return ResponseEntity.ok().build();

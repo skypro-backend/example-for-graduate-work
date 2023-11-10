@@ -23,15 +23,15 @@ public class AdServiceImpl implements AdService {
     private final AdMapper mapper;
 
     @Override
-    public Ad add(CreateOrUpdateAdDto properties, MultipartFile image, String email) throws IOException {
+    public AdDto add(CreateOrUpdateAdDto properties, MultipartFile image, String email) throws IOException {
         Ad ad = mapper.createOrUpdateAdToEntity(properties, userService.getEntity(email));
         ad.setImage(imageService.saveImage(image));
-        return mapper.entityToAdsDto(adRepository.save(ad));
+        return mapper.entityToAdDto(adRepository.save(ad));
     }
 
     @Override
     public ExtendedAdDto getFullAdsById(int id) {
-        return mapper.entityToExtendedAdsDto(getEntity(id));
+        return mapper.entityToExtendedAdDto(getEntity(id));
     }
 
     @Override
@@ -42,13 +42,13 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Ad update(int id, CreateOrUpdateAdDto ads) {
+    public AdDto update(int id, CreateOrUpdateAdDto ads) {
         Ad entity = getEntity(id);
         entity.setTitle(ads.getTitle());
         entity.setDescription(ads.getDescription());
         entity.setPrice(ads.getPrice());
         adRepository.save(entity);
-        return mapper.entityToAdsDto(entity);
+        return mapper.entityToAdDto(entity);
     }
 
     @Override
@@ -66,6 +66,7 @@ public class AdServiceImpl implements AdService {
             imageService.deleteImage(imageEntity);
         }
     }
+
 
     @Override
     public AdsDto getAllAds() {
