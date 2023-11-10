@@ -18,11 +18,11 @@ public class AdMapper {
 //
 //    public abstract Ad adToAdEntity(Ad ad);
 
-    public Ad entityToAdsDto(Ad entity){
-        return null;
-    }
-
-    public ExtendedAdDto entityToExtendedAdsDto(Ad entity) {
+//    public Ad entityToAdsDto(Ad entity){
+//        return null;
+//    }
+//
+    public ExtendedAdDto entityToExtendedAdDto(Ad entity) {
         return new ExtendedAdDto(entity.getPk(), entity.getAuthor().getFirstName(), entity.getAuthor().getLastName(),
                 entity.getDescription(), entity.getAuthor().getUsername(), entity.getImagePath(),
                 entity.getAuthor().getPhone(), entity.getPrice(), entity.getTitle());
