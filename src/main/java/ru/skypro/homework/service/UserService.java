@@ -30,14 +30,6 @@ public class UserService {
      * @param passwordDto
      */
     public void updatePassword(PasswordDto passwordDto) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        // since username is email it should be unique
-//        String username = authentication.getName();
-//        UserEntity userEntity = userRepository.findByUsername(username);
-//        Long id = userEntity.getId();
-        // here working with AuthRepository(?) should follow
-        // saving new password using JdbcUserDetailsManager(?)
-        // TODO implement the above mentioned functionality
         userDetailsManager.changePassword(passwordDto.getCurrentPassword(), passwordDto.getNewPassword());
     }
 
