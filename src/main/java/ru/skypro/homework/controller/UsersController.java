@@ -30,7 +30,7 @@ public class UsersController {
     private final UserService userService;
 
     /**
-     * endpoint 1 - updating password from existent user
+     * endpoint 1 - updating password for existent user
      * @param passwordDto
      */
     @Operation(summary = "Обновление пароля")
@@ -39,7 +39,7 @@ public class UsersController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden")
     })
-    @PostMapping(value = "/set_password")
+    @PostMapping(value = "/users/set_password")
     public void updatePassword(@RequestBody PasswordDto passwordDto) {
         userService.updatePassword(passwordDto);
     }
@@ -53,10 +53,10 @@ public class UsersController {
             @ApiResponse(responseCode = "200", description = "Ok"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    @GetMapping("/me")
+    @GetMapping("/user/me")
     public ResponseEntity<UserDto> getUserInfo() {
-        UserDto userDto = userService.getUserInfo();
-        return ResponseEntity.ok(userDto);
+        var user = userService.getUserInfo();
+        return ResponseEntity.ok(user);
     }
 
     /**
@@ -68,9 +68,9 @@ public class UsersController {
             @ApiResponse(responseCode = "200", description = "Ok"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    @PatchMapping("/me")
+    @PatchMapping("/user/me")
     public ResponseEntity<UserDto> updateUserInfo(@RequestBody UserDto userDto) {
-        return ResponseEntity.ok(userService.updateUserInfo(userDto));
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Обновление аватара авторизованного пользователя")
@@ -80,7 +80,7 @@ public class UsersController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> updateUserImage(@RequestParam MultipartFile image) {
+    public ResponseEntity<String> uploadAvatar(@RequestParam MultipartFile image) {
         logger.info("Avatar Controller {}", image.getContentType());
         String username = "authenticatedUsername"; // Get from Authentication
         String imageString = userService.updateUserImage(username, image);
