@@ -1,6 +1,9 @@
 package ru.skypro.homework.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 @Data
 public class UserDTO {
@@ -9,6 +12,7 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String phone;
-    private UserDTO role;
+    @JsonIgnore
+    private String regDate = String.valueOf(LocalDateTime.now());
     private String image;
 }
