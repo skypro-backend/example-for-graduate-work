@@ -19,7 +19,6 @@ import ru.skypro.homework.utils.MyMapper;
 @Service
 @AllArgsConstructor
 public class UserService {
-    private static Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final MyMapper mapper;
 
