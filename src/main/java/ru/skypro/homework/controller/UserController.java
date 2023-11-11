@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.SetPasswordDto;
 import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.service.impl.UserServiceImpl;
+import ru.skypro.homework.service.UserService;
 
 @CrossOrigin("http://locallhost:3000")
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
     @Operation(
@@ -159,7 +159,7 @@ public class UserController {
             }
     )
     @PatchMapping("/me/image")
-    public ResponseEntity<?> loadUserImage(@RequestBody MultipartFile image) {
+    public ResponseEntity<?> loadUserImage(@RequestPart MultipartFile image) {
         UserDto editedUser = userService.loadUserImage(image);
         if (null == editedUser) {
             return ResponseEntity.notFound().build();

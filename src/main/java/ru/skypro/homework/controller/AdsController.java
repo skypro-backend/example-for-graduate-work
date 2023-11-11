@@ -9,7 +9,7 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.FullAdds;
-import ru.skypro.homework.service.impl.AdsServiceImpl;
+import ru.skypro.homework.service.AdsService;
 
 import java.util.List;
 
@@ -17,9 +17,9 @@ import java.util.List;
 @CrossOrigin(value = "<http://localhost:3000>")
 @RequestMapping("/ads")
 public class AdsController {
-    private final AdsServiceImpl adsService;
+    private final AdsService adsService;
 
-    public AdsController(AdsServiceImpl adsService) {
+    public AdsController(AdsService adsService) {
         this.adsService = adsService;
     }
 
@@ -34,7 +34,7 @@ public class AdsController {
 
     // Добавить объявление
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> addAds(@RequestBody CreateAds properties, @RequestBody MultipartFile image) {
+    public ResponseEntity<?> addAds(@RequestPart CreateAds properties, @RequestPart MultipartFile image) {
         adsService.addAds(properties, image);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -73,7 +73,7 @@ public class AdsController {
     }
     // --------------------------------------------------------------------------------------
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateAdsImage(@PathVariable int id, @RequestBody MultipartFile image){
+    public ResponseEntity<?> updateAdsImage(@PathVariable int id, @RequestPart MultipartFile image){
         adsService.updateAdsImage(id, image);
         return ResponseEntity.ok(null);
     }
