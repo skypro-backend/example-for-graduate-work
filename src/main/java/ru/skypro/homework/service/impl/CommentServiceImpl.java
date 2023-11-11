@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto add(int id, CreateOrUpdateCommentDto comment, String name) {
-        Comment entity = mapper.commentToEntity(comment, adService.getEntity(id), userService.getEntity(name));
+        Comment entity = mapper.createСommentToEntity(comment, adService.getEntity(id), userService.getEntity(name));
         return mapper.entityToCommentDto(commentRepository.save(entity));
     }
 

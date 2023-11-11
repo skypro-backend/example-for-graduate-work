@@ -28,7 +28,4 @@ public class UserMapper {
                 entity.getLastName(), entity.getPhone());
     }
 
-//    public abstract UserDto UsertoUserDto(User user);
-//
-//    public abstract User UserDtoToUser(Register register);
 }

@@ -18,9 +18,11 @@ import java.util.List;
 @Service
 public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
     private final ImageService imageService;
     private final AdMapper mapper;
+
 
     @Override
     public AdDto add(CreateOrUpdateAdDto properties, MultipartFile image, String email) throws IOException {
@@ -36,10 +38,11 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public void delete(int id) throws IOException {
-        Image image = getEntity(id).getImage();
+        Image imageEntity = getEntity(id).getImage();
         adRepository.deleteById(id);
-        imageService.deleteImage(image);
+        imageService.deleteImage(imageEntity);
     }
+
 
     @Override
     public AdDto update(int id, CreateOrUpdateAdDto ads) {
@@ -75,7 +78,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public AdsDto getAllMyAds(String name) {
-        return getWrapper(adRepository.findAllByAuthor_Username(name));
+        return getWrapper(adRepository.findAllByAuthorUsername(name));
     }
 
     private AdsDto getWrapper(List<Ad> list) {

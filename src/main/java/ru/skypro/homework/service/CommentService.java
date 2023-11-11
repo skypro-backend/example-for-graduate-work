@@ -8,7 +8,6 @@ public interface CommentService {
     CommentsDto getComments(int id);
 
     CommentDto add(int id, CreateOrUpdateCommentDto comment, String name);
-
     void delete(int commentId);
 
     CommentDto update(int commentId, CommentDto comment, String email);

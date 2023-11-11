@@ -12,16 +12,6 @@ public class AdMapper {
                 entity.getPk(), entity.getPrice(), entity.getTitle());
     }
 
-//    public Ad adEntityToAd(Ad adEntity);
-//
-//    public abstract AdDto AdToAdDto(Ad Ad);
-//
-//    public abstract Ad adToAdEntity(Ad ad);
-
-//    public Ad entityToAdsDto(Ad entity){
-//        return null;
-//    }
-//
     public ExtendedAdDto entityToExtendedAdDto(Ad entity) {
         return new ExtendedAdDto(entity.getPk(), entity.getAuthor().getFirstName(), entity.getAuthor().getLastName(),
                 entity.getDescription(), entity.getAuthor().getUsername(), entity.getImagePath(),
