@@ -7,8 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +68,7 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<AdInfoDto> getAdInfo(@PathVariable("id") Integer id) {
         AdInfoDto adInfoDto = adsService.getAdInfo(id);
         if (adInfoDto == null) {
@@ -124,7 +122,7 @@ public class AdsController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @GetMapping("/me")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<Ads> getAdsMe() {
         return ResponseEntity.ok(adsService.getAdsMe());
     }

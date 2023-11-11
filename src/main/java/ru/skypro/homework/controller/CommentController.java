@@ -10,10 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.exceptions.AdNotFoundException;
-import ru.skypro.homework.exceptions.CommentNotFoundException;
 import ru.skypro.homework.service.CommentService;
 
 @Slf4j
@@ -36,6 +35,7 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
 
     })
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<Comments> getCommentsByAds(@PathVariable("id") Integer id) {
         Comments comments = commentService.getCommentsByAds(id);
         return ResponseEntity.ok(comments);
@@ -43,6 +43,7 @@ public class CommentController {
 
     @PostMapping("/{id}/comments")
     @Operation(summary = "Добавление комментария к объявлению")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema =
@@ -58,6 +59,7 @@ public class CommentController {
 
     @DeleteMapping("/{adId}/comments/{commentId}")
     @Operation(summary = "Удаление комментария")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content()),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
@@ -80,6 +82,7 @@ public class CommentController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PatchMapping("/{id}/comments/{commentId}")
     public ResponseEntity<CommentDto> updateComment(@PathVariable("id") Integer id,
                                                     @PathVariable("commentId") Integer commentId,
