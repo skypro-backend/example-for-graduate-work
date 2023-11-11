@@ -1,13 +1,13 @@
 package ru.skypro.homework.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.skypro.homework.dto.*;
-import ru.skypro.homework.entity.*;
-
+import ru.skypro.homework.dto.CommentDto;
+import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
+import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.entity.User;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
-
 @Component
 public class CommentMapper {
     public CommentDto entityToCommentDto(Comment entity) {
@@ -16,25 +16,13 @@ public class CommentMapper {
                 entity.getPk(), entity.getText());
     }
 
-
-
-    public Comment commentToEntity(CreateOrUpdateCommentDto createOrUpdateCommentDto, Ad ad, User author) {
-        return new Comment((org.apache.catalina.User) author, LocalDateTime.now(), createOrUpdateCommentDto.getText(), ad);
+    public Comment createСommentToEntity(CreateOrUpdateCommentDto createOrUpdateCommentDto, Ad ad, User author) {
+        return new Comment (author, LocalDateTime.now(), createOrUpdateCommentDto.getText(), ad);
     }
 
     private long getMillis(LocalDateTime time) {
         return time.toInstant(ZoneOffset.ofHours(5)).toEpochMilli();
     }
 
-//    public abstract CommentDto toCommentDto(Comment comment);
-//
-//    public abstract List<CommentDto> toCommentsDto(List<Comment> comments);
-//
-//    public abstract CommentDto CommentToCommentDto(Comment comment);
-//
-//    public abstract Comment toCommentFromCreateOrUpdateComment(CreateOrUpdateCommentDto createOrUpdateCommentDto);
-//
-//    public abstract Comment toCommenFromCreateOrUpdateComment(CreateOrUpdateCommentDto createOrUpdateCommentDto);
 
-//    public abstract String authorImageToString(User user);
 }

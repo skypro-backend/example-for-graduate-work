@@ -1,12 +1,9 @@
 package ru.skypro.homework.entity;
-
-import lombok.*;
-import org.apache.catalina.User;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
-
 @Entity
 @Table(name = "comments")
 @Data
@@ -19,7 +16,7 @@ public class Comment {
     private int pk;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private ru.skypro.homework.entity.User author;
+    private User author;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @Column(name = "comments_text")
@@ -29,7 +26,7 @@ public class Comment {
     private Ad ad;
 
     public Comment (User author, LocalDateTime createdAt, String text, Ad ad) {
-        this.author = (ru.skypro.homework.entity.User) author;
+        this.author = author;
         this.createdAt = createdAt;
         this.text = text;
         this.ad = ad;
