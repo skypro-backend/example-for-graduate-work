@@ -9,16 +9,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
 
 import java.io.IOException;
 
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ads")
-@CrossOrigin(value = "http://localhost:3000")
 public class AdsController {
     private final AdService adService;
     private final ImageService imageService;
@@ -40,14 +39,15 @@ public class AdsController {
     }
 
     @DeleteMapping("/{id}")
-   @PreAuthorize("@adServiceImpl.getEntity(#id).author.username.equals(#auth.name) or hasAuthority('DELETE_ANY_AD')")
+    @PreAuthorize("@adServiceImpl.getEntity(#id).author.username.equals(#auth.name) || hasAuthority('DELETE_ANY_AD')")
     public ResponseEntity<?> removeAd(@PathVariable int id, Authentication auth) throws IOException {
         adService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
     @PatchMapping("/{id}")
-    @PreAuthorize("@adServiceImpl.getEntity(#id).author.username.equals(#auth.name) or hasAuthority('UPDATE_ANY_AD')")
+    @PreAuthorize("@adServiceImpl.getEntity(#id).author.username.equals(#auth.name) || hasAuthority('UPDATE_ANY_AD')")
     public ResponseEntity<AdDto> updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAdDto ads, Authentication auth) {
         return ResponseEntity.ok(adService.update(id, ads));
     }

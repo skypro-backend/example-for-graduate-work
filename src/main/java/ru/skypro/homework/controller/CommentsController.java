@@ -22,14 +22,14 @@ public class CommentsController {
 
     @PostMapping("{id}/comments")
     public ResponseEntity<CommentDto> postComments(@PathVariable Integer id,
-                                                @RequestBody CreateOrUpdateCommentDto text, Authentication authentication) {
-        return ResponseEntity.ok(commentService.add(id, text, authentication.getName()));
+                                                @RequestBody CreateOrUpdateCommentDto comment, Authentication authentication) {
+        return ResponseEntity.ok(commentService.add(id, comment, authentication.getName()));
     }
 
     @DeleteMapping("{adId}/comments/{commentId}")
     @PreAuthorize("@commentServiceImpl.getEntity(#commentId).author.username.equals(#auth.name) " +
             "or hasAuthority('DELETE_ANY_COMMENT')")
-    public ResponseEntity<?> removeComment(@PathVariable int adId, @PathVariable int commentId, Authentication auth) {
+    public ResponseEntity<?> deleteComment(@PathVariable int adId, @PathVariable int commentId, Authentication auth) {
         commentService.delete(commentId);
         return ResponseEntity.ok().build();
     }
@@ -41,5 +41,4 @@ public class CommentsController {
                                                  Authentication auth, @PathVariable String adId) {
         return ResponseEntity.ok(commentService.update(commentId, newComment, auth.getName()));
     }
-
 }
