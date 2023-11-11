@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.SetPasswordDto;
+import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.UserService;
 
@@ -135,7 +135,7 @@ public class UserController {
             }
     )
     @PostMapping("/set_password")
-    public ResponseEntity<?> setUserPassword(@RequestBody SetPasswordDto passwordDto) {
+    public ResponseEntity<?> setUserPassword(@RequestBody NewPassword passwordDto) {
         UserDto editedUser = userService.setUserPassword(passwordDto);
         if (null == editedUser) {
             return ResponseEntity.notFound().build();
