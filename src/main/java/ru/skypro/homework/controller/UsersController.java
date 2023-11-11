@@ -25,7 +25,6 @@ import ru.skypro.homework.service.UserService;
 @RequiredArgsConstructor
 @Tag(name="Пользователи")
 public class UsersController {
-    private static Logger logger = LoggerFactory.getLogger(UsersController.class);
 
     private final UserService userService;
 
@@ -81,14 +80,14 @@ public class UsersController {
     })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadAvatar(@RequestParam MultipartFile image) {
-        logger.info("Avatar Controller {}", image.getContentType());
+        log.debug("Avatar Controller {}", image.getContentType());
         String username = "authenticatedUsername"; // Get from Authentication
         String imageString = userService.updateUserImage(username, image);
         if (imageString == null) {
-            logger.info("Unable to save avatar: {}", image.getName());
+            log.debug("Unable to save avatar: {}", image.getName());
             return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         }
-        logger.info("Avatar saved");
+        log.debug("Avatar saved");
         return ResponseEntity.ok().build();
     }
 }
