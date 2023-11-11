@@ -1,10 +1,7 @@
 package ru.skypro.homework.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,14 +17,11 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.utils.MyMapper;
 
 import java.io.*;
-import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Slf4j
 @Service
@@ -63,19 +57,11 @@ public class AdsService {
     }
 
     public AdInfoDto getAdInfo(Integer id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity userEntity = userRepository.findByUsername(authentication.getName());
-
         AdEntity adEntity = adRepository.getReferenceById(id);
         if (adEntity == null) {
             return null;
         }
-
-        if (userEntity.getId() == adEntity.getAuthor().getId()) {
             return mapper.map(adEntity,true);
-        } else {
-            throw new UserAccessDeniedException();
-        }
     }
 
     public AdEntity deleteAd(Integer id) {
