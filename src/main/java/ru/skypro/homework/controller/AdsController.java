@@ -1,82 +1,145 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CommentDTO;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.*;
+import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.CommentService;
 
 import java.util.List;
 
-@Slf4j
+
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ads")
 public class AdsController {
-    //Получение всех объявлений
+
+    private final AdsService adsService;
+    private final CommentService commentService;
+
     @GetMapping("/")
-    public List<AdsDTO> getAllAds() {
-        return null;
+    @Operation(summary = "Получить все объявления")
+    @ApiResponse(responseCode = "200", description = "OK")
+    public AllAdsDTO getAllAds() {
+        List<AdsDTO> results = adsService.getAllAds();
+        int count = results.size();
+        return new AllAdsDTO(count, results);
     }
 
-    //Добавление объявления
     @PostMapping("/")
-    public AdsDTO addAds(@RequestBody AdsDTO adsDTO) {
-        return null;
+    @Operation(summary = "Добавление объявления")
+    @ApiResponse(responseCode = "200", description = "Created")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "404", description = "Not Found")
+    public AdsDTO addAds(@RequestPart(name = "image") MultipartFile image,
+                         @RequestPart(name = "properties") CreateAdsDTO properties) {
+
+        return adsService.addAds(image, properties);
     }
 
-    //Получение информации об объявлении по id
     @GetMapping("/{id}")
-    public AdsDTO getAds(@PathVariable long id) {
-        return null;
+    @Operation(summary = "Получить информацию об объявлении по id")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "404", description = "Not Found")
+    public AdsInfoDTO getAdsById(@PathVariable long id) {
+
+        return adsService.getAdsById(id);
     }
 
-    //Удаление объявления по id
     @DeleteMapping("/{id}")
+    @Operation(summary = "Удалить объявление по id")
+    @ApiResponse(responseCode = "204", description = "No Content")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "404", description = "Not Found")
     public void deleteAds (@PathVariable long id) {
 
     }
 
-    //Обновить информацию об объявлении
     @PatchMapping("/{id}")
-    public AdsDTO updateAdsInfo(@PathVariable long id) {
-        return null;
+    @Operation(summary = "Обновить информацию об объявлении по id")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "404", description = "Not Found")
+    public AdsDTO updateAds(@PathVariable long id,
+                            @RequestBody CreateAdsDTO properties) {
+        return adsService.updateAds(id, properties);
     }
 
-    //Получение информации об объявлениях пользователя
     @GetMapping("/me")
-    public List<AdsDTO> getUserAds() {
-        return null;
+    @Operation(summary = "Получение информации об объявлениях пользователя")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    public AllAdsDTO getUserAds() {
+        List<AdsDTO> results = adsService.getUserAds();
+        int count = results.size();
+        return new AllAdsDTO(count, results);
     }
 
-    //Обновить изображение объявления
     @PatchMapping("/{id}/image")
-    public AdsDTO updateAdsImage(@PathVariable long id) {
-        return null;
+    @Operation(summary = "Обновить картинки объявлении по id")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "404", description = "Not Found")
+    public String updateAdsImage(@PathVariable long id,
+                                 @RequestPart(name = "image") MultipartFile image) {
+        return adsService.updateAdsImage(id, image);
     }
 
-    //Получение комментариев об объявлении
     @GetMapping("/{id}/comments")
-    public CommentDTO getComment (@PathVariable long id) {
-        return null;
+    @Operation(summary = "Получение комментариев по id объявления")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "404", description = "Not Found")
+    public GetCommentDTO getCommentsByAdsId (@PathVariable long id) {
+        List<CommentDTO> results = commentService.getCommentsByAdsId(id);
+        int count = results.size();
+
+        return new GetCommentDTO(count, results);
     }
 
-    //Добавление комментариев об объявлении
+
     @PostMapping("/{id}/comments")
+    @Operation(summary = "Добавление комментария к объявлению")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "404", description = "Not Found")
     public CommentDTO addComment (@PathVariable long id, @RequestBody String text) {
-        return null;
+
+        return commentService.addComment(id, text);
     }
 
     //Удаление комментария по его id
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public void deleteComment (@PathVariable long commentId) {
+    @Operation(summary = "Удаление комментария по id и id объявления")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "404", description = "Not Found")
+    public void deleteComment (@PathVariable long adsId, @PathVariable long commentId) {
+        commentService.deleteComment(adsId, commentId);
 
     }
     //Обновить комментарий
     @PatchMapping("/{adId}/comments/{commentId}")
-    public AdsDTO updateComment(@PathVariable long id, @RequestBody String text) {
-        return null;
+    @Operation(summary = "Обновление комментария по id и id объявления")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "404", description = "Not Found")
+    public CommentDTO updateComment(@PathVariable long adsId,
+                                @PathVariable long commentId,
+                                @RequestBody String text) {
+        return commentService.updateComment(adsId, commentId, text);
     }
 
 }
