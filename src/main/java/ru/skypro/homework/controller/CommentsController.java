@@ -27,7 +27,7 @@ public class CommentsController {
     }
 
     @DeleteMapping("{adId}/comments/{commentId}")
-    @PreAuthorize("@commentServiceImpl.getEntity(#commentId).author.email.equals(#auth.name) " +
+    @PreAuthorize("@commentServiceImpl.getEntity(#commentId).author.username.equals(#auth.name) " +
             "or hasAuthority('DELETE_ANY_COMMENT')")
     public ResponseEntity<?> removeComment(@PathVariable int adId, @PathVariable int commentId, Authentication auth) {
         commentService.delete(commentId);
@@ -35,7 +35,7 @@ public class CommentsController {
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
-    @PreAuthorize("@commentServiceImpl.getEntity(#commentId).author.email.equals(#auth.name) " +
+    @PreAuthorize("@commentServiceImpl.getEntity(#commentId).author.username.equals(#auth.name) " +
             "or hasAuthority('UPDATE_ANY_COMMENT')")
     public ResponseEntity<CommentDto> updateComment(@PathVariable int commentId, @RequestBody CommentDto newComment,
                                                  Authentication auth, @PathVariable String adId) {
