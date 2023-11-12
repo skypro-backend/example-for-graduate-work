@@ -9,6 +9,8 @@ public interface ImageService {
 
     void deleteFromDisk(String imagePath);
 
+    void delete(Image image);
+
     void update(Image image, MultipartFile file);
 
     byte[] download(String imagePath);

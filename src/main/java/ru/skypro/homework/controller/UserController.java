@@ -24,7 +24,7 @@ public class UserController {
         if (userService.setPassword(newPasswordDto)) {
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @GetMapping("/me")

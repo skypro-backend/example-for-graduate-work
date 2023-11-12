@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
@@ -37,12 +38,14 @@ public class AdsController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or @adServiceImpl.existByAdIdAndUsername(#id, authentication.name)")
     public ResponseEntity<Void> removeAd(@PathVariable Integer id) {
         adService.removeAd(id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or @adServiceImpl.existByAdIdAndUsername(#id, authentication.name)")
     public ResponseEntity<AdDto> updateAd(@PathVariable Integer id, @RequestBody CreateOrUpdateAdDto dto) {
         return ResponseEntity.ok(adService.updateAd(id, dto));
     }
@@ -57,6 +60,7 @@ public class AdsController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
     )
+    @PreAuthorize("hasAuthority('ADMIN') or @adServiceImpl.existByAdIdAndUsername(#id, authentication.name)")
     public ResponseEntity<byte[]> updateImage(@PathVariable Integer id,
                                               @RequestPart("image") MultipartFile multipartFile) {
         return ResponseEntity.ok(adService.updateAdImage(id, multipartFile));

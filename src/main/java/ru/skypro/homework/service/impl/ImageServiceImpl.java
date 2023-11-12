@@ -53,6 +53,13 @@ public class ImageServiceImpl implements ImageService {
 
     @Transactional
     @Override
+    public void delete(Image image) {
+        repository.delete(image);
+        deleteFromDisk(image.getImagePath());
+    }
+
+    @Transactional
+    @Override
     public void update(Image image, MultipartFile file) {
         String oldImagePath = image.getImagePath();
         String newImagePath = createImagePath(file);

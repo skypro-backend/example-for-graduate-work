@@ -34,7 +34,8 @@
                                  baseColumnNames="user_id"
                                  baseTableName="ads"
                                  referencedColumnNames="id"
-                                 referencedTableName="users"/>
+                                 referencedTableName="users"
+                                 onDelete="CASCADE"/>
         <addForeignKeyConstraint constraintName="FK_AD_TO_IMAGE_ID"
                                  baseColumnNames="image_id"
                                  baseTableName="ads"

@@ -24,4 +24,6 @@ public interface AdService {
 
     byte[] getImage(Integer id);
 
+    boolean existByAdIdAndUsername(Integer id, String username);
+
 }

@@ -13,4 +13,8 @@ public interface CommentService {
     void deleteComment(Integer id, Integer adId);
 
     CommentDto updateComment(Integer id, Integer adId, CreateOrUpdateCommentDto dto);
+
+    boolean existsCommentByIdAndUsername(Integer id, String username);
+
 }
+

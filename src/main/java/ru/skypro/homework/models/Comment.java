@@ -23,10 +23,10 @@ public class Comment {
     private String text;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
-    @ManyToOne
+    private Users user;
+    @ManyToOne(optional = false)
     @JoinColumn(name = "ad_id",referencedColumnName = "id")
     private Ad ad;
 

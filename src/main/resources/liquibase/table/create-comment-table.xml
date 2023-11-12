@@ -33,13 +33,15 @@
                                  baseColumnNames="user_id"
                                  baseTableName="comments"
                                  referencedColumnNames="id"
-                                 referencedTableName="users"/>
+                                 referencedTableName="users"
+                                 onDelete="CASCADE"/>
 
         <addForeignKeyConstraint constraintName="FK_COMMENT_TO_AD_ID"
                                  baseColumnNames="ad_id"
                                  baseTableName="comments"
                                  referencedColumnNames="id"
-                                 referencedTableName="ads"/>
+                                 referencedTableName="ads"
+                                 onDelete="CASCADE"/>
 
     </changeSet>
 </databaseChangeLog>

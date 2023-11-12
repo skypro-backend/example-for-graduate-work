@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AdServiceImpl implements AdService {
 
     private final AdRepository repository;
@@ -64,10 +66,14 @@ public class AdServiceImpl implements AdService {
     @Transactional
     @Override
     public void removeAd(Integer id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-        }
-        throw new AdNotFoundException();
+        repository.findById(id)
+                .ifPresentOrElse(ad -> {
+                    Image image = ad.getImage();
+                    repository.deleteById(ad.getId());
+                    imageService.delete(image);
+                }, () -> {
+                    throw new AdNotFoundException();
+                });
     }
 
     @Transactional
@@ -119,4 +125,10 @@ public class AdServiceImpl implements AdService {
                 .map(image -> imageService.download(image.getImagePath()))
                 .orElse(null);
     }
+
+    @Override
+    public boolean existByAdIdAndUsername(Integer id, String username) {
+        return repository.existsByIdAndUserEmail(id, username);
+    }
+
 }

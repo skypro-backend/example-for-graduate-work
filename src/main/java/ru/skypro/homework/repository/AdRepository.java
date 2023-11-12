@@ -11,4 +11,6 @@ public interface AdRepository extends JpaRepository<Ad, Integer> {
 
     List<Ad> findByUserEmail(String email);
 
+    boolean existsByIdAndUserEmail(Integer id, String email);
+
 }

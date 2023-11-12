@@ -74,4 +74,10 @@ public class CommentServiceImpl implements CommentService {
                 })
                 .orElseThrow(CommentNotFoundException::new);
     }
+
+    @Override
+    public boolean existsCommentByIdAndUsername(Integer id, String username) {
+        return repository.existsByIdAndUserEmail(id, username);
+    }
+
 }
