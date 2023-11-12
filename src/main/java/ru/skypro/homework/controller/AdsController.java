@@ -68,7 +68,6 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<AdInfoDto> getAdInfo(@PathVariable("id") Integer id) {
         AdInfoDto adInfoDto = adsService.getAdInfo(id);
         if (adInfoDto == null) {
@@ -84,7 +83,6 @@ public class AdsController {
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not found")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<AdEntity> deleteAd(@PathVariable("id") Integer id) {
         AdEntity adEntity = adsService.deleteAd(id);
         if (adEntity == null) {
@@ -102,7 +100,6 @@ public class AdsController {
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not found")
     @PatchMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<AdDto> patchAd(@PathVariable("id") Integer id,
                                          @RequestBody AdUpdateDto adUpdateDto) {
         AdDto adDto = adsService.patchAd(id, adUpdateDto);
@@ -122,7 +119,7 @@ public class AdsController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @GetMapping("/me")
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<Ads> getAdsMe() {
         return ResponseEntity.ok(adsService.getAdsMe());
     }
@@ -134,7 +131,6 @@ public class AdsController {
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not found")
     @PatchMapping("/{id}/image")
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<AdDto> updateImage(@PathVariable("id") Integer id, @RequestParam MultipartFile image) throws IOException {
 
         AdDto adDto = adsService.updateImage(id, image);
