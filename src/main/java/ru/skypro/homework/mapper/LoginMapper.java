@@ -13,7 +13,7 @@ public interface LoginMapper {
 //    @Mapping(target = "user.password", ignore = true)
 //    @Mapping(source = "user.userName", target = "userName")
 //    LoginDto toDto(User user);
-    @Mapping(source = "userName", target = "user.userName")
-    @Mapping(source = "password", target = "user.password")
+    @Mapping(source = "loginDto.username", target = "userName")
+    @Mapping(source = "loginDto.password", target = "password")
     User toModel(LoginDto loginDto);
 }

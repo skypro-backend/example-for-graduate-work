@@ -11,11 +11,11 @@ import ru.skypro.homework.model.User;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RegisterMapper {
-    @Mapping(source = "userName", target = "user.userName")
-    @Mapping(source = "password", target = "user.password")
-    @Mapping(source = "firstName", target = "user.firstName")
-    @Mapping(source = "lastName", target = "user.lastName")
-    @Mapping(source = "phone", target = "user.phone")
-    @Mapping(source = "role", target = "user.role")
+    @Mapping(source = "registerDto.username", target = "userName")
+    @Mapping(source = "registerDto.password", target = "password")
+    @Mapping(source = "registerDto.firstName", target = "firstName")
+    @Mapping(source = "registerDto.lastName", target = "lastName")
+    @Mapping(source = "registerDto.phone", target = "phone")
+    @Mapping(source = "registerDto.role", target = "role")
     User toModel(RegisterDto registerDto);
 }

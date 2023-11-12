@@ -15,6 +15,6 @@ import java.util.List;
 public interface AdsMapper {
     AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 @Mapping(source = "user.countAd", target = "count")
-@Mapping(source = "user.adList", target = "result")
+@Mapping(source = "user.adList", target = "results")
     AdsDto toDTO(User user);
 }

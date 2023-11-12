@@ -10,6 +10,6 @@ import ru.skypro.homework.model.User;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CreateOrUpdateCommentMapper {
-    @Mapping(target = "comment.text", source = "text")
+    @Mapping(target = "text", source = "createOrUpdateCommentDto.text")
     Comment toModel(CreateOrUpdateCommentDto createOrUpdateCommentDto);
 }

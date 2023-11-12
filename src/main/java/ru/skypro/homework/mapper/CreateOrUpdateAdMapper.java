@@ -10,8 +10,8 @@ import ru.skypro.homework.model.Comment;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CreateOrUpdateAdMapper {
-    @Mapping(target = "ad.title", source = "title")
-    @Mapping(target = "ad.price", source = "price")
-    @Mapping(target = "ad.description", source = "description")
+    @Mapping(target = "title", source = "createOrUpdateAdDto.title")
+    @Mapping(target = "price", source = "createOrUpdateAdDto.price")
+    @Mapping(target = "description", source = "createOrUpdateAdDto.description")
     Ad toModel(CreateOrUpdateAdDto createOrUpdateAdDto);
 }
