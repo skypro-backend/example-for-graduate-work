@@ -13,7 +13,7 @@ import ru.skypro.homework.model.User;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CommentMapper {
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
-    @Mapping(source = "comment.createAt", target = "createAt")
+    @Mapping(source = "comment.createdAt", target = "createdAt")
     @Mapping(source = "comment.pk", target = "pk")
     @Mapping(source = "comment.text", target = "text")
     @Mapping(source = "user.id", target = "author")

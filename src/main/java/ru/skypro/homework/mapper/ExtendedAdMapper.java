@@ -17,9 +17,9 @@ public interface ExtendedAdMapper {
     @Mapping(source = "user.lastName", target = "authorLastName")
     @Mapping(source = "ad.description", target = "description")
     @Mapping(source = "user.email", target = "email")
-    @Mapping(source = "ad.image", target = "image")
+    @Mapping(source = "ad.adImage", target = "image")
     @Mapping(source = "user.phone", target = "phone")
-    @Mapping(source = "ad.price", target = "prise")
+    @Mapping(source = "ad.price", target = "price")
     @Mapping(source = "ad.title", target = "title")
     ExtendedAdDto toDTO(Ad ad, User user);
 }

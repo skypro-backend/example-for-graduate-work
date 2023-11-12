@@ -13,6 +13,6 @@ import ru.skypro.homework.model.User;
 public interface CommentsMapper {
     CommentsMapper INSTANCE = Mappers.getMapper(CommentsMapper.class);
     @Mapping(source = "ad.countComment", target = "count")
-    @Mapping(source = "ad.commentList", target = "result")
+    @Mapping(source = "ad.commentList", target = "results")
     CommentsDto toDTO(Ad ad);
 }

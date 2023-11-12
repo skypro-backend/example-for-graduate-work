@@ -26,5 +26,5 @@ public class CreateOrUpdateAdDto {
     @Schema(description = "Описание объявления")
     @NotBlank
     @Size(min = 4, max = 64)
-    private String  descption;
+    private String  description;
 }

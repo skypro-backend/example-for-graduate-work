@@ -16,6 +16,7 @@ public class AdsDto {
     private int count;
 
     @Schema(description = "объявления")
+//    private List<Ad> results;
     private List<AdDto> results;
 
 }
