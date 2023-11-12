@@ -66,7 +66,7 @@ public class UserServiceImpl  implements UserService {
         try {
             byte[] imageBytes = image.getBytes();
             Image multipartToEntity = new Image();
-            multipartToEntity.setData(imageBytes);
+            multipartToEntity.setImage(imageBytes);
             imageRepository.save(multipartToEntity);
             authorizedUser.setImageAvatar(multipartToEntity);
         } catch (IOException e) {
