@@ -10,7 +10,7 @@ import static liquibase.repackaged.net.sf.jsqlparser.util.validation.metadata.Na
 
 @Entity
 @Data
-@Table(name = "Комментарии")
+@Table(name = "Comments")
 public class Comment {
     @ManyToOne
     @JoinColumn(name = "user_id")
