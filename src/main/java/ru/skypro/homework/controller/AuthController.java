@@ -27,13 +27,6 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Operation(
-            summary = "Авторизация пользователя ",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(hidden = true))),
-            },
-            tags = "Авторизация"
-    )
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
@@ -43,13 +36,7 @@ public class AuthController {
         }
     }
 
-    @Operation(
-            summary = "Регистрация пользователя",
-            responses = {
-                    @ApiResponse(responseCode = "201",description = "Created", content = @Content(schema = @Schema(hidden = true)))
 
-            }
-    )
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid Register register) {
         if (authService.register(register)) {

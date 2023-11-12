@@ -23,9 +23,9 @@ public class CustomUserDetailService implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String username) throws NoAccessToUserException {
 
-        UserEntity userEntity = userRepository.findByUsername(username);
-        ExtendedLoginViaDB userEntityDTO = userMapper.extendedLoginViaDB(userEntity);
-        if (userEntity == null) {
+        UserEntity user = userRepository.findByUsername(username);
+        ExtendedLoginViaDB userEntityDTO = userMapper.extendedLoginViaDB(user);
+        if (user == null) {
             throw new NoAccessToUserException();
         }
         return new CustomUserDetails(userEntityDTO);

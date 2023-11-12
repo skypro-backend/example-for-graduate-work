@@ -3,11 +3,10 @@ package ru.skypro.homework.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.dto.comment.Comment;
 import ru.skypro.homework.dto.comment.Comments;
 import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
 import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.CommentEntity;
+import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exception.NoAccessToCommentException;
 import ru.skypro.homework.exception.NoAccessToAdException;
@@ -47,10 +46,10 @@ public class CommentServiceImpl  implements CommentService {
     }
 
     @Override
-    public Comment addCommentToAd(CreateOrUpdateComment commentToAdd, int adId) {
+    public ru.skypro.homework.dto.comment.Comment addCommentToAd(CreateOrUpdateComment commentToAdd, int adId) {
         if (adRepository.getReferenceById(adId) != null) {
             Ad adToAddComment = adRepository.getReferenceById(adId);
-            CommentEntity mapperToDto = commentMapper.createOrUpdateCommentDtoToCommentEntity(commentToAdd);
+            Comment mapperToDto = commentMapper.createOrUpdateCommentDtoToCommentEntity(commentToAdd);
             mapperToDto.setUserRelated(adToAddComment.getUserRelated());
             mapperToDto.setAdRelated(adToAddComment);
             mapperToDto.setCreatedAt(Instant.now().toEpochMilli());
@@ -64,7 +63,7 @@ public class CommentServiceImpl  implements CommentService {
     @Override
     public boolean patchCommentByIdAndAdId(int adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment, String username) {
         Ad adFound = adRepository.getReferenceById(adId);
-        CommentEntity commentFound = commentRepository.findByAdRelatedAndId(adFound, commentId);
+        Comment commentFound = commentRepository.findByAdRelatedAndId(adFound, commentId);
         UserEntity userCommented = commentFound.getUserRelated();
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();
@@ -81,7 +80,7 @@ public class CommentServiceImpl  implements CommentService {
     @Override
     public boolean deleteCommentByIdAndAdId(int adId, Integer commentId, String username) {
         Ad adFound = adRepository.getReferenceById(adId);
-        CommentEntity commentFound = commentRepository.findByAdRelatedAndId(adFound, commentId);
+        Comment commentFound = commentRepository.findByAdRelatedAndId(adFound, commentId);
         UserEntity userCommented = commentFound.getUserRelated();
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();

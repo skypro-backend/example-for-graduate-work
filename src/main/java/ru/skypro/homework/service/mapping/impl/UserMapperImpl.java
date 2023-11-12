@@ -5,7 +5,6 @@ import ru.skypro.homework.dto.authentication.ExtendedLoginViaDB;
 import ru.skypro.homework.dto.authentication.Register;
 import ru.skypro.homework.dto.user.NewPassword;
 import ru.skypro.homework.dto.user.UpdateUser;
-import ru.skypro.homework.dto.user.User;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.service.mapping.UserMapper;
 @Component
@@ -16,22 +15,22 @@ public class UserMapperImpl implements UserMapper {
         if (newPassword == null) {
             return null;
         }
-        UserEntity userEntity = new UserEntity();
-        userEntity.setPassword(newPassword.getNewPassword());
-        return userEntity;
+        UserEntity user = new UserEntity();
+        user.setPassword(newPassword.getNewPassword());
+        return user;
     }
 
     @Override
-    public User userEntityToUserDto(UserEntity userEntityInp) {
-        if (userEntityInp == null) {
+    public ru.skypro.homework.dto.user.User userEntityToUserDto(UserEntity userInp) {
+        if (userInp == null) {
             return null;
         }
-        User user = new User();
-        user.setId(userEntityInp.getId());
-        user.setFirstName(userEntityInp.getFirstName());
-        user.setLastName(userEntityInp.getLastName());
-        user.setPhone(userEntityInp.getPhone());
-        user.setRole(userEntityInp.getRole());
+        ru.skypro.homework.dto.user.User user = new ru.skypro.homework.dto.user.User();
+        user.setId(userInp.getId());
+        user.setFirstName(userInp.getFirstName());
+        user.setLastName(userInp.getLastName());
+        user.setPhone(userInp.getPhone());
+        user.setRole(userInp.getRole());
         return user;
     }
 
@@ -52,26 +51,26 @@ public class UserMapperImpl implements UserMapper {
         if (register == null) {
             return null;
         }
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(register.getUsername());
-        userEntity.setFirstName(register.getFirstName());
-        userEntity.setLastName(register.getLastName());
-        userEntity.setPassword(register.getPassword());
-        userEntity.setPhone(register.getPhone());
-        userEntity.setRole(register.getRole());
-        return userEntity;
+        UserEntity user = new UserEntity();
+        user.setUsername(register.getUsername());
+        user.setFirstName(register.getFirstName());
+        user.setLastName(register.getLastName());
+        user.setPassword(register.getPassword());
+        user.setPhone(register.getPhone());
+        user.setRole(register.getRole());
+        return user;
     }
 
     @Override
-    public ExtendedLoginViaDB extendedLoginViaDB(UserEntity userEntity) {
-        if (userEntity == null) {
+    public ExtendedLoginViaDB extendedLoginViaDB(UserEntity user) {
+        if (user == null) {
             return null;
         }
 
         ExtendedLoginViaDB extendedLoginViaDB = new ExtendedLoginViaDB();
-        extendedLoginViaDB.setPassword(userEntity.getPassword());
-        extendedLoginViaDB.setUsername(userEntity.getUsername());
-        extendedLoginViaDB.setRole(userEntity.getRole());
+        extendedLoginViaDB.setPassword(user.getPassword());
+        extendedLoginViaDB.setUsername(user.getUsername());
+        extendedLoginViaDB.setRole(user.getRole());
         return extendedLoginViaDB;
     }
 }

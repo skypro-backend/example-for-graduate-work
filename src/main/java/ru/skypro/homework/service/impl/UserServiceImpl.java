@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.NewPassword;
 import ru.skypro.homework.dto.user.UpdateUser;
-import ru.skypro.homework.dto.user.User;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.service.mapping.UserMapper;
@@ -43,9 +42,9 @@ public class UserServiceImpl  implements UserService {
     }
 
     @Override
-    public User retrieveAuthorizedInformation(String userName) {
+    public ru.skypro.homework.dto.user.User retrieveAuthorizedInformation(String userName) {
         UserEntity authorizedUser = userRepository.findByUsername(userName);
-        User authorizedUserMapper = userMapper.userEntityToUserDto(authorizedUser);
+        ru.skypro.homework.dto.user.User authorizedUserMapper = userMapper.userEntityToUserDto(authorizedUser);
         return authorizedUserMapper;
     }
 
@@ -60,7 +59,7 @@ public class UserServiceImpl  implements UserService {
     }
 
     @Override
-    public boolean patchAuthorizedUserPicture(MultipartFile image, String username) {
+    public void patchAuthorizedUserPicture(MultipartFile image, String username) {
         UserEntity authorizedUser = userRepository.findByUsername(username);
 
         try {
@@ -73,6 +72,5 @@ public class UserServiceImpl  implements UserService {
             throw new RuntimeException(e);
         }
         userRepository.save(authorizedUser);
-        return true;
     }
 }

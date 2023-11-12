@@ -4,8 +4,6 @@ import lombok.Data;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Image;
 
-import javax.validation.constraints.Pattern;
-
 @Data
 public class User {
     private int id;

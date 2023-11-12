@@ -1,11 +1,10 @@
 package ru.skypro.homework.service.mapping.impl;
 
 import org.springframework.stereotype.Component;
-import ru.skypro.homework.dto.comment.Comment;
 import ru.skypro.homework.dto.comment.Comments;
 import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
 import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.CommentEntity;
+import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.service.mapping.CommentMapper;
 
 import java.util.ArrayList;
@@ -15,11 +14,11 @@ import java.util.List;
 public class CommentMapperImpl  implements CommentMapper {
 
     @Override
-    public Comment commentEntityToCommentDto(CommentEntity commentEntity) {
+    public ru.skypro.homework.dto.comment.Comment commentEntityToCommentDto(Comment commentEntity) {
         if (commentEntity == null) {
             return null;
         }
-        Comment comment = new Comment();
+        ru.skypro.homework.dto.comment.Comment comment = new ru.skypro.homework.dto.comment.Comment();
         comment.setAuthor(commentEntity.getUserRelated().getId());
         if (commentEntity.getUserRelated().getImageAvatar() != null) {
             comment.setImage("/users/" + commentEntity.getUserRelated().getImageAvatar().getId() + "/avatar/");
@@ -36,13 +35,13 @@ public class CommentMapperImpl  implements CommentMapper {
 
 
     @Override
-    public List<Comment> listFromCommentEntityToDto(List<CommentEntity> inputCommentsList) {
+    public List<ru.skypro.homework.dto.comment.Comment> listFromCommentEntityToDto(List<Comment> inputCommentsList) {
         if (inputCommentsList == null) {
             return null;
         }
-        List<Comment> mapList = new ArrayList<>(inputCommentsList.size());
-        for (CommentEntity commentEntity : inputCommentsList) {
-            mapList.add(commentEntityToCommentDto(commentEntity));
+        List<ru.skypro.homework.dto.comment.Comment> mapList = new ArrayList<>(inputCommentsList.size());
+        for (Comment comment : inputCommentsList) {
+            mapList.add(commentEntityToCommentDto(comment));
 
         }
         return mapList;
@@ -60,12 +59,12 @@ public class CommentMapperImpl  implements CommentMapper {
     }
 
     @Override
-    public CommentEntity createOrUpdateCommentDtoToCommentEntity(CreateOrUpdateComment createOrUpdateComment) {
+    public Comment createOrUpdateCommentDtoToCommentEntity(CreateOrUpdateComment createOrUpdateComment) {
         if (createOrUpdateComment == null) {
             return null;
         }
-        CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setText(createOrUpdateComment.getText());
-        return commentEntity;
+        Comment comment = new Comment();
+        comment.setText(createOrUpdateComment.getText());
+        return comment;
     }
 }

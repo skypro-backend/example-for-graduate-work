@@ -1,9 +1,7 @@
 package ru.skypro.homework.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +11,14 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.NewPassword;
 import ru.skypro.homework.dto.user.UpdateUser;
 import ru.skypro.homework.dto.user.User;
+import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
+import javax.transaction.Transactional;
+import java.io.IOException;
+
+@Slf4j
 @RestController
 @RequestMapping("/users")
 @CrossOrigin(value = "http://localhost:3000")
@@ -31,15 +34,6 @@ public class UserController {
 
 
   @PostMapping("/set_password")
-  @Operation(
-          summary = "Обновление пароля",
-          responses = {
-                  @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(hidden = true))),
-                  @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
-                  @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(schema = @Schema(hidden = true))),
-
-          }
-  )
   public ResponseEntity<?> updatePassword(@RequestBody NewPassword newPassword, Authentication authentication) {
 
     if (userService.changePassword(newPassword, authentication.getName())) {
@@ -50,17 +44,6 @@ public class UserController {
   }
 
   @GetMapping("/me")
-  @Operation(
-          summary = "Получение информации об авторизованном пользователе",
-          responses = {
-    @ApiResponse(responseCode = "200",
-            content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = User.class)
-            )),
-    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
-  }
-  )
   public ResponseEntity<?> getUser(Authentication authentication) {
 
     User userRetrieved = userService.retrieveAuthorizedInformation(authentication.getName());
@@ -69,17 +52,6 @@ public class UserController {
 
 
   @PatchMapping("/me")
-  @Operation(
-          summary = "Обновление информации об авторизованном пользователе",
-          responses = {
-                  @ApiResponse(responseCode = "200",
-                          content = @Content(
-                                  mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                  schema = @Schema(implementation = User.class)
-                          )),
-                  @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
-          }
-  )
   public ResponseEntity<?> updateUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
     UpdateUser user = userService.patchAuthorizedUserInformation(updateUser, authentication.getName());
     return ResponseEntity.ok(user);
@@ -88,15 +60,15 @@ public class UserController {
 
 
   @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  @Operation(
-          summary = "Обновление аватара авторизованного пользователя",
-          responses = {
-                  @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(hidden = true))),
-                  @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
-          }
-  )
   public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile linkedPicture,Authentication authentication ) {
     userService.patchAuthorizedUserPicture(linkedPicture, authentication.getName());
     return ResponseEntity.ok().build();
+  }
+
+  @Transactional
+  @GetMapping(value = "/{id}/avatar", produces = {MediaType.IMAGE_PNG_VALUE,MediaType.IMAGE_JPEG_VALUE,MediaType.IMAGE_GIF_VALUE,"image/*"})
+  public byte[] getImage(@PathVariable Integer id) throws IOException {
+    Image image = imageService.callImageById(id);
+    return image.getImage();
   }
 }

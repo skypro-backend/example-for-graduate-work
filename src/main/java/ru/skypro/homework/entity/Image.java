@@ -2,6 +2,7 @@ package ru.skypro.homework.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Image {
 
     @Id
@@ -22,9 +24,9 @@ public class Image {
     private byte[] image;
 
     @OneToOne(mappedBy = "imageAvatar")
-    private UserEntity userEntity;
+    private UserEntity user;
 
     @OneToOne(mappedBy = "imageAd")
-    private Ad adEntity;
+    private Ad ad;
 
 }

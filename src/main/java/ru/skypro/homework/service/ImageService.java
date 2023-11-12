@@ -1,12 +1,9 @@
 package ru.skypro.homework.service;
 
-import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.ads.AdDTO;
-
-import java.io.IOException;
+import ru.skypro.homework.entity.Image;
 
 public interface ImageService {
 
-    void uploadImg(AdDTO adDTO, MultipartFile img) throws IOException;
+    Image callImageById(int id);
 
 }

@@ -6,18 +6,16 @@ import ru.skypro.homework.dto.Role;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-@ToString
+
 @NoArgsConstructor
-@Getter
-@Setter
 @Data
 @Entity
-@Table(name = "users")
+@EqualsAndHashCode
 public class UserEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String firstName;
     private String lastName;
@@ -32,7 +30,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "userRelated",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
-    List<Ad> ads = new ArrayList<>();
+    List<Ad> ad = new ArrayList<>();
 
     @OneToMany(mappedBy = "userRelated",
             fetch = FetchType.EAGER,

@@ -2,10 +2,11 @@ package ru.skypro.homework.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.lang.Nullable;
+
 
 import javax.persistence.*;
 
@@ -13,8 +14,8 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Comments")
-public class CommentEntity {
+@EqualsAndHashCode
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
