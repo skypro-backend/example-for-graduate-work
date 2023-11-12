@@ -19,10 +19,7 @@ public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Nullable
     private Long createdAt;
-
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -3,26 +3,28 @@ package ru.skypro.homework.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "images")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Image {
 
     @Id
-    @Column(name = "image_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Lob
-    private byte[] data;
+    @Type(type = "org.hibernate.type.ImageType")
+    private byte[] image;
 
-    private Long fileSize;
-    private String filePath;
-    private String mediaType;
+    @OneToOne(mappedBy = "imageAvatar")
+    private UserEntity userEntity;
+
+    @OneToOne(mappedBy = "imageAd")
+    private Ad adEntity;
 
 }

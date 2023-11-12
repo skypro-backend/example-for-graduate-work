@@ -39,19 +39,4 @@ public class UserEntity {
             cascade = CascadeType.ALL)
     List<Ad> comments = new ArrayList<>();
 
-
-    @Override
-    public boolean equals(Object o) {
-
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserEntity user = (UserEntity) o;
-        return id == user.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
 }

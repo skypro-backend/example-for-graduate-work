@@ -17,17 +17,17 @@ public class Ad {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ad_id")
     private int Id;
+    private String description;
     private Integer price;
     private String title;
 
     @OneToOne
-    @JoinColumn(name = "image_id")
-    private Image image;
+    @JoinColumn(name = "AD_IMAGE", nullable = true)
+    private Image imageAd;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "USER_ID", nullable = true)
     private UserEntity userRelated;
 
     @OneToMany(mappedBy = "adRelated",
