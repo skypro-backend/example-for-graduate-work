@@ -20,7 +20,9 @@ public class Image {
 
     @Lob
     private byte[] data;
-    private Long fileSize;
 
+    private Long fileSize;
+    private String filePath;
+    private String mediaType;
 
 }

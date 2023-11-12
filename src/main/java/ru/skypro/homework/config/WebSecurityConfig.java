@@ -33,6 +33,7 @@ public class WebSecurityConfig {
                         .password("password")
                         .passwordEncoder(passwordEncoder::encode)
                         .roles(Role.USER.name())
+                        //.roles("USER")
                         .build();
         return new InMemoryUserDetailsManager(user);
     }

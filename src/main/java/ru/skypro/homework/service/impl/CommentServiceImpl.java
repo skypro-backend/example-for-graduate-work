@@ -9,8 +9,8 @@ import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
-import ru.skypro.homework.exception.AdNotFoundException;
-import ru.skypro.homework.exception.CommentNotFoundException;
+import ru.skypro.homework.exception.NoAccessToCommentException;
+import ru.skypro.homework.exception.NoAccessToAdException;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
@@ -42,7 +42,7 @@ public class CommentServiceImpl  implements CommentService {
             Comments retrievedComments = commentMapper.adCommentsToCommentsDTO(adToRetrieveCommentsFrom);
             return retrievedComments;
         } else {
-            throw new AdNotFoundException();
+            throw new NoAccessToAdException();
         }
     }
 
@@ -57,7 +57,7 @@ public class CommentServiceImpl  implements CommentService {
             commentRepository.save(mapperToDto);
             return commentMapper.commentEntityToCommentDto(mapperToDto);
         } else {
-            throw new AdNotFoundException();
+            throw new NoAccessToAdException();
         }
     }
 
@@ -74,7 +74,7 @@ public class CommentServiceImpl  implements CommentService {
             commentRepository.save(commentFound);
             return true;
         } else {
-            throw new CommentNotFoundException();
+            throw new NoAccessToCommentException();
         }
     }
 
@@ -91,7 +91,7 @@ public class CommentServiceImpl  implements CommentService {
             commentRepository.flush();
             return true;
         } else {
-            throw new CommentNotFoundException();
+            throw new NoAccessToCommentException();
         }
     }
 }
