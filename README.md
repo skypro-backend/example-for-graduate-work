@@ -37,7 +37,7 @@
 - клонировать проект в среду разработки;
 - настроить подключение к базе данных в файле application.properties;
 - установить приложение Docker и запустить его;
-- скачать Docker образ с помощью команды docker docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.19
+- скачать Docker образ с помощью команды docker: docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.19
 - запустить Docker образ в командной строке с помощью команды docker run -p 3000:3000 ghcr.io/bizinmitya/front-react-avito:latest
 - Запустить метод main в файле HomeworkApplication.java
 - После этого вам будет доступен сайт http://localhost:3000 и Swagger UI http://localhost:8080/swagger-ui/index.html#.
