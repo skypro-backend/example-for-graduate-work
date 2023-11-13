@@ -36,14 +36,14 @@ public class AdsService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity = userRepository.findByUsername(authentication.getName());
-
-        Path filePath = Path.of(imageDir, UUID.randomUUID().toString() + "." + getExtension(image.getOriginalFilename()));
+        String fileName = UUID.randomUUID().toString() + "." + getExtension(image.getOriginalFilename());
+        Path filePath = Path.of(imageDir, fileName);
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
         Files.write(filePath,image.getBytes());
 
-        AdEntity adEntity = adRepository.save(mapper.map(createOrUpdateAd, userEntity, filePath.toString()));
+        AdEntity adEntity = adRepository.save(mapper.map(createOrUpdateAd, userEntity, fileName));
         log.debug("Ad was successfully added: {}", createOrUpdateAd.getTitle());
 
         return mapper.map(adEntity);
@@ -73,8 +73,8 @@ public class AdsService {
         }
 
 
-        String path = adEntity.getImage();
-        if (path != null) {
+        String path = imageDir + "\\" + adEntity.getImage();
+        if (adEntity.getImage() != null) {
             File file = new File(path);
             file.delete();
         }
@@ -97,19 +97,20 @@ public class AdsService {
         }
 
         if (userEntity.getRole() == Role.ADMIN || userEntity.getId() == adEntity.getAuthor().getId()) {
-            Path filePath = Path.of(imageDir, UUID.randomUUID().toString() + "." + getExtension(image.getOriginalFilename()));
+            String fileName = UUID.randomUUID().toString() + "." + getExtension(image.getOriginalFilename());
+            Path filePath = Path.of(imageDir, fileName);
             Files.createDirectories(filePath.getParent());
             Files.deleteIfExists(filePath);
 
             Files.write(filePath,image.getBytes());
 
-            String path = adEntity.getImage();
+            String path = imageDir + "\\" + adEntity.getImage();
             if (path != null) {
                 File file = new File(path);
                 file.delete();
             }
 
-            adEntity.setImage(filePath.toString());
+            adEntity.setImage(fileName);
             adRepository.save(adEntity);
             log.debug("Image updated successfully: {}", adEntity.getImage());
 
