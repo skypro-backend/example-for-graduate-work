@@ -3,6 +3,7 @@ package ru.skypro.homework.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +13,23 @@ import org.springframework.security.web.SecurityFilterChain;
 import ru.skypro.homework.dto.Role;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+
+
+//@Override
+//protected void configure(HttpSecurity http) throws Exception {
+//    http
+//            .authorizeRequests()
+//            .antMatchers("/public").permitAll() // указываем эндпоинт, который должен быть доступен всем
+//            .anyRequest().authenticated() // все остальные эндпоинты требуют аутентификации
+//            .and()
+//            .formLogin()
+//            .and()
+//            .httpBasic();
+//}
+//}
+//В этом примере эндпоинт `/public` доступен для всех пользователей без аутентификации, а все остальные эндпоинты требуют аутентификации.
+// Обратите внимание, что этот пример использует базовую аутентификацию (Basic Authentication) и форму аутентификации (Form Login). Вы можете настроить другие методы аутентификации, такие как OAuth, в зависимости от ваших требований.
+//Надеюсь, это поможет вам настроить Spring Security для неавторизованных пользователей!
 
 @Configuration
 public class WebSecurityConfig {
@@ -55,8 +73,15 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public SecurityFilterChain filterNoChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeRequests().antMatchers("/ads/**").permitAll().and().formLogin().and().httpBasic();
+        return httpSecurity.build();
+    }
+
+    
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
