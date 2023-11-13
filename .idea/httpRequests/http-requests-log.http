@@ -1,0 +1,956 @@
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 230
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=197C5A4B4FB47A887C6FA0FAD7BE8E11
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "ViacheslavViacheslavViacheslavViacheslavViacheslavViacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=197C5A4B4FB47A887C6FA0FAD7BE8E11
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-30T205724.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=197C5A4B4FB47A887C6FA0FAD7BE8E11
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=197C5A4B4FB47A887C6FA0FAD7BE8E11
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@mail.ru",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T212046.200.txt
+
+###
+
+POST http://localhost:8080/login
+Content-Type: application/json
+Content-Length: 74
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=197C5A4B4FB47A887C6FA0FAD7BE8E11
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@yandex.ru",
+  "password": "slavamarchkov"
+}
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=197C5A4B4FB47A887C6FA0FAD7BE8E11
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@yandex.ru",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T211616.200.txt
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=197C5A4B4FB47A887C6FA0FAD7BE8E11
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T211459.401.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=197C5A4B4FB47A887C6FA0FAD7BE8E11
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@yandex.ru",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T211433.401.json
+
+###
+
+POST http://localhost:8080/login
+Content-Type: application/json
+Content-Length: 60
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=197C5A4B4FB47A887C6FA0FAD7BE8E11
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "user@gmail.com",
+  "password": "password"
+}
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=0C842BA0DE27B8D9B0336E6773E72635
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@yandex.ru",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T211358.401.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@yandex.ru",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T211200.401.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T210711.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T210417.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T210001.200.txt
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T195335.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 162
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59"
+}
+
+<> 2023-10-29T195231.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 181
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "ADMIN"
+}
+
+<> 2023-10-29T195143.200.txt
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 171
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "123@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "ADMIN"
+}
+
+<> 2023-10-29T194952.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 181
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "ADMIN"
+}
+
+<> 2023-10-29T194818.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 181
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "ADMIN"
+}
+
+<> 2023-10-29T194408.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 182
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "'USER'"
+}
+
+<> 2023-10-29T194348.400.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "user"
+}
+
+<> 2023-10-29T194258.400.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 162
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59"
+}
+
+<> 2023-10-29T194208.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T194106.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 162
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59"
+}
+
+<> 2023-10-29T193032.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 162
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59"
+}
+
+<> 2023-10-29T192301.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T192116.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T191047.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 162
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59"
+}
+
+<> 2023-10-29T191015.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T174844.200.txt
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T174806.200.txt
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T174540.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T173632.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T173452.500.json
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 180
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T173406.400.txt
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 179
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viachelav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T173218.400.txt
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 178
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viachelav",
+  "lastName": "Marchkov",
+  "phone": "+7(913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T173115.400.txt
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 179
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viachelav",
+  "lastName": "Marchkov",
+  "phone": "+7 (913) 213-55-59",
+  "role": "USER"
+}
+
+<> 2023-10-29T173055.400.txt
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 173
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viachelav",
+  "lastName": "Marchkov",
+  "phone": "+79132135559",
+  "role": "USER"
+}
+
+<> 2023-10-29T173007.400.txt
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 174
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=D763E48C2BD0390C7B7E96D53CD6AA42
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+79132135559",
+  "role": "USER"
+}
+
+###
+
+GET http://localhost:8080/ads
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=66A17542894B74194AF4D3D24916A8C6
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-29T165959.200.json
+
+###
+
+POST http://localhost:8080/login
+Content-Type: application/json
+Content-Length: 60
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=66A17542894B74194AF4D3D24916A8C6
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "user@gmail.com",
+  "password": "password"
+}
+
+###
+
+POST http://localhost:8080/login
+Content-Type: application/json
+Content-Length: 60
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=695D0D0D329B39791FF5374B9FF6A216
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "user@gmail.com",
+  "password": "password"
+}
+
+###
+
+GET http://localhost:8080/users/me
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=E7678F931E121BF6E1EC245AD3DD44EE
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+GET http://localhost:8080/ads
+Authorization: Basic user@gmail.com 03d75b00-bdca-4fd3-90e6-b97cf2bcf98e
+Content-Type: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=E7678F931E121BF6E1EC245AD3DD44EE
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+GET http://localhost:8080/ads
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=E7678F931E121BF6E1EC245AD3DD44EE
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 184
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=6B4CD78CC0C4A815742DFBBB59228F74
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov@gmail.com",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+79132135559",
+  "role": "USER"
+}
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 197
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=6B4CD78CC0C4A815742DFBBB59228F74
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "d4df73f3-61bb-44ca-a98b-79fa726d2487",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+79132135559",
+  "role": "USER"
+}
+
+###
+
+POST http://localhost:8080/register
+Content-Type: application/json
+Content-Length: 184
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=6B4CD78CC0C4A815742DFBBB59228F74
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "username": "slavamarchkov@gmail.com",
+  "password": "slavamarchkov@gmail.com",
+  "firstName": "Viacheslav",
+  "lastName": "Marchkov",
+  "phone": "+79132135559",
+  "role": "USER"
+}
+
+###
+
+GET http://localhost:8080/users/me
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: JSESSIONID=EFF280AB6C0B8E12AE21D810FF668E82
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
