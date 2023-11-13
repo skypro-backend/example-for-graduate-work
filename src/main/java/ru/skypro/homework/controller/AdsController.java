@@ -39,7 +39,6 @@ public class AdsController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> addAd(@RequestPart(value = "properties") CreateOrUpdateAd createOrUpdateAd, @RequestPart(value = "image") MultipartFile image) throws IOException {
         log.debug("Ads Controller image {}, createOrUpdateAd {}", image.getContentType(), createOrUpdateAd.getTitle());
         AdDto addedAd = adsService.addAd(createOrUpdateAd, image);
@@ -119,7 +118,6 @@ public class AdsController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @GetMapping("/me")
-    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<Ads> getAdsMe() {
         return ResponseEntity.ok(adsService.getAdsMe());
     }
