@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.PasswordDto;
@@ -81,11 +83,12 @@ public class UsersController {
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadAvatar(@RequestParam MultipartFile image) {
         log.debug("Avatar Controller {}", image.getContentType());
-        String username = "authenticatedUsername"; // Get from Authentication
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
         String imageString = userService.updateUserImage(username, image);
         if (imageString == null) {
             log.debug("Unable to save avatar: {}", image.getName());
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+           // here image save should be done
         }
         log.debug("Avatar saved");
         return ResponseEntity.ok().build();

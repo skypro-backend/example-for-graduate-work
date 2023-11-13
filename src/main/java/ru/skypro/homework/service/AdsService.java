@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -80,7 +79,7 @@ public class AdsService {
             file.delete();
         }
 
-        if (userEntity.getRole() == Role.ROLE_ADMIN || userEntity.getId() == adEntity.getAuthor().getId()) {
+        if (userEntity.getRole() == Role.ADMIN || userEntity.getId() == adEntity.getAuthor().getId()) {
             adRepository.deleteById(id);
             return adEntity;
         } else {
@@ -97,7 +96,7 @@ public class AdsService {
             return null;
         }
 
-        if (userEntity.getRole() == Role.ROLE_ADMIN || userEntity.getId() == adEntity.getAuthor().getId()) {
+        if (userEntity.getRole() == Role.ADMIN || userEntity.getId() == adEntity.getAuthor().getId()) {
             Path filePath = Path.of(imageDir, UUID.randomUUID().toString() + "." + getExtension(image.getOriginalFilename()));
             Files.createDirectories(filePath.getParent());
             Files.deleteIfExists(filePath);
@@ -131,7 +130,7 @@ public class AdsService {
             return null;
         }
 
-        if (userEntity.getRole() == Role.ROLE_ADMIN || userEntity.getId() == adEntity.getAuthor().getId()) {
+        if (userEntity.getRole() == Role.ADMIN || userEntity.getId() == adEntity.getAuthor().getId()) {
             adEntity.setTitle(adUpdateDto.getTitle());
             adEntity.setPrice(adUpdateDto.getPrice());
             adEntity.setDescription(adUpdateDto.getDescription());
