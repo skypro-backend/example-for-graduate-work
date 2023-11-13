@@ -27,6 +27,6 @@ public class Image {
     private UserEntity user;
 
     @OneToOne(mappedBy = "imageAd")
-    private Ad ad;
+    private AdEntity ad;
 
 }

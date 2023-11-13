@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.comment.Comments;
 import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
-import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exception.NoAccessToCommentException;
@@ -37,7 +37,7 @@ public class CommentServiceImpl  implements CommentService {
     @Override
     public Comments getCommentsOfOneAd(int adId) {
         if (adRepository.getReferenceById(adId) != null) {
-            Ad adToRetrieveCommentsFrom = adRepository.getReferenceById(adId);
+            AdEntity adToRetrieveCommentsFrom = adRepository.getReferenceById(adId);
             Comments retrievedComments = commentMapper.adCommentsToCommentsDTO(adToRetrieveCommentsFrom);
             return retrievedComments;
         } else {
@@ -48,7 +48,7 @@ public class CommentServiceImpl  implements CommentService {
     @Override
     public ru.skypro.homework.dto.comment.Comment addCommentToAd(CreateOrUpdateComment commentToAdd, int adId) {
         if (adRepository.getReferenceById(adId) != null) {
-            Ad adToAddComment = adRepository.getReferenceById(adId);
+            AdEntity adToAddComment = adRepository.getReferenceById(adId);
             Comment mapperToDto = commentMapper.createOrUpdateCommentDtoToCommentEntity(commentToAdd);
             mapperToDto.setUserRelated(adToAddComment.getUserRelated());
             mapperToDto.setAdRelated(adToAddComment);
@@ -62,7 +62,7 @@ public class CommentServiceImpl  implements CommentService {
 
     @Override
     public boolean patchCommentByIdAndAdId(int adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment, String username) {
-        Ad adFound = adRepository.getReferenceById(adId);
+        AdEntity adFound = adRepository.getReferenceById(adId);
         Comment commentFound = commentRepository.findByAdRelatedAndId(adFound, commentId);
         UserEntity userCommented = commentFound.getUserRelated();
         UserEntity authorizedUser = userRepository.findByUsername(username);
@@ -79,7 +79,7 @@ public class CommentServiceImpl  implements CommentService {
 
     @Override
     public boolean deleteCommentByIdAndAdId(int adId, Integer commentId, String username) {
-        Ad adFound = adRepository.getReferenceById(adId);
+        AdEntity adFound = adRepository.getReferenceById(adId);
         Comment commentFound = commentRepository.findByAdRelatedAndId(adFound, commentId);
         UserEntity userCommented = commentFound.getUserRelated();
         UserEntity authorizedUser = userRepository.findByUsername(username);

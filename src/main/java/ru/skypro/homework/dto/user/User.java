@@ -12,5 +12,5 @@ public class User {
     private String lastName;
     private String phone;
     private Role role;
-    private Image imageAvatar;
+    private String image;
 }

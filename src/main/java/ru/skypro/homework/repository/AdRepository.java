@@ -4,21 +4,21 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.AdEntity;
 
 import java.util.List;
 
 @Repository
-public interface AdRepository extends JpaRepository<Ad, Long> {
+public interface AdRepository extends JpaRepository<AdEntity, Long> {
 
-    List<Ad> findAllBy();
+    List<AdEntity> findAllBy();
 
-    Ad getReferenceById(int id);
+    AdEntity getReferenceById(int id);
 
-    Ad findById(int id);
+    AdEntity findById(int id);
 
     @Modifying
-    @Query("delete from Ad b where b.id=:id")
+    @Query("delete from AdEntity b where b.id=:id")
     void deleteById(int id);
-    Ad saveAndFlush(Ad ad);
+    AdEntity saveAndFlush(AdEntity ad);
 }

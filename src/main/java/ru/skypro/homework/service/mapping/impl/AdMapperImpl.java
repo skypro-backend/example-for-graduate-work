@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.ads.Ads;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAd;
-import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
@@ -24,7 +24,7 @@ public class AdMapperImpl  implements AdMapper {
     }
 
     @Override
-    public ru.skypro.homework.dto.ads.Ad adEntityToAdDto(Ad ad) {
+    public ru.skypro.homework.dto.ads.Ad adEntityToAdDto(AdEntity ad) {
         if (ad == null) {
             return null;
         }
@@ -42,7 +42,7 @@ public class AdMapperImpl  implements AdMapper {
     }
 
     @Override
-    public ExtendedAd adEntityToExtendedAdDto(Ad ad) {
+    public ExtendedAd adEntityToExtendedAdDto(AdEntity ad) {
         if (ad == null) {
             return null;
         }
@@ -64,11 +64,11 @@ public class AdMapperImpl  implements AdMapper {
     }
 
     @Override
-    public Ad createOrUpdateAdDtoToAdEntity(CreateOrUpdateAd createOrUpdateAd) {
+    public AdEntity createOrUpdateAdDtoToAdEntity(CreateOrUpdateAd createOrUpdateAd) {
         if (createOrUpdateAd == null) {
             return null;
         }
-        Ad modifiedAd = new Ad();
+        AdEntity modifiedAd = new AdEntity();
         modifiedAd.setPrice(createOrUpdateAd.getPrice());
         modifiedAd.setTitle(createOrUpdateAd.getTitle());
         modifiedAd.setDescription(createOrUpdateAd.getDescription());
@@ -76,12 +76,12 @@ public class AdMapperImpl  implements AdMapper {
     }
 
     @Override
-    public List<ru.skypro.homework.dto.ads.Ad> adEntityToAdsDto(List<Ad> inputAdList) {
+    public List<ru.skypro.homework.dto.ads.Ad> adEntityToAdsDto(List<AdEntity> inputAdList) {
         if (inputAdList == null) {
             return null;
         }
         List<ru.skypro.homework.dto.ads.Ad> mapperList = new ArrayList<ru.skypro.homework.dto.ads.Ad>(inputAdList.size());
-        for (Ad ad : inputAdList) {
+        for (AdEntity ad : inputAdList) {
             mapperList.add(adEntityToAdDto(ad));
         }
         return mapperList;

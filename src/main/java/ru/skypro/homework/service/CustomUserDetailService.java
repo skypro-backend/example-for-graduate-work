@@ -2,6 +2,7 @@ package ru.skypro.homework.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.authentication.ExtendedLoginViaDB;
 import ru.skypro.homework.entity.UserEntity;
@@ -21,12 +22,12 @@ public class CustomUserDetailService implements UserDetailsService{
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws NoAccessToUserException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         UserEntity user = userRepository.findByUsername(username);
         ExtendedLoginViaDB userEntityDTO = userMapper.extendedLoginViaDB(user);
         if (user == null) {
-            throw new NoAccessToUserException();
+            throw new UsernameNotFoundException(username);
         }
         return new CustomUserDetails(userEntityDTO);
     }

@@ -30,7 +30,7 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "AD_ID", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Ad adRelated;
+    private AdEntity adRelated;
 
 
 

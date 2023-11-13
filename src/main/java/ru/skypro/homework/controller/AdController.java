@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.Ads;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAd;
-import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
@@ -54,7 +54,7 @@ public class AdController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<CreateOrUpdateAd> patchAdById (@PathVariable Integer id, @RequestBody CreateOrUpdateAd createOrUpdateAd, Authentication authentication) {
-        Ad ad = adService.editPatch(createOrUpdateAd, id, authentication.getName());
+        AdEntity ad = adService.editPatch(createOrUpdateAd, id, authentication.getName());
         if (ad == null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -94,7 +94,7 @@ public class AdController {
     }
 
     @Transactional
-    @GetMapping(value = "/{id}/avatar", produces = {MediaType.IMAGE_PNG_VALUE,MediaType.IMAGE_JPEG_VALUE,MediaType.IMAGE_GIF_VALUE,"image/*"})
+    @GetMapping(value = "/{id}/adPicture", produces = {MediaType.IMAGE_PNG_VALUE,MediaType.IMAGE_JPEG_VALUE,MediaType.IMAGE_GIF_VALUE,"image/*"})
     public byte[] getImage(@PathVariable Integer id) throws IOException {
         Image image = imageService.callImageById(id);
         return image.getImage();

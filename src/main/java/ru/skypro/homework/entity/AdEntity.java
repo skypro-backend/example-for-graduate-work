@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Ad {
+public class AdEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

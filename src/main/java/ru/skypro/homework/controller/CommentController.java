@@ -30,10 +30,10 @@ public class CommentController {
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<Comments> getComments(@PathVariable int id) {
-        if (commentService.getCommentsOfOneAd(id) == null) {
+        Comments retrievedComments = commentService.getCommentsOfOneAd(id);
+        if (retrievedComments == null) {
             return ResponseEntity.notFound().build();
         } else {
-            Comments retrievedComments = commentService.getCommentsOfOneAd(id);
             return ResponseEntity.ok(retrievedComments);
         }
     }

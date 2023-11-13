@@ -3,7 +3,7 @@ package ru.skypro.homework.service.mapping.impl;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.comment.Comments;
 import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
-import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.service.mapping.CommentMapper;
 
@@ -21,7 +21,7 @@ public class CommentMapperImpl  implements CommentMapper {
         ru.skypro.homework.dto.comment.Comment comment = new ru.skypro.homework.dto.comment.Comment();
         comment.setAuthor(commentEntity.getUserRelated().getId());
         if (commentEntity.getUserRelated().getImageAvatar() != null) {
-            comment.setImage("/users/" + commentEntity.getUserRelated().getImageAvatar().getId() + "/avatar/");
+            comment.setImage("/users/" + commentEntity.getUserRelated().getImageAvatar().getId() + "/avatar");
         } else {
             comment.setImage(null);
         }
@@ -48,7 +48,7 @@ public class CommentMapperImpl  implements CommentMapper {
     }
 
     @Override
-    public Comments adCommentsToCommentsDTO(Ad ad) {
+    public Comments adCommentsToCommentsDTO(AdEntity ad) {
         if (ad == null) {
             return null;
         }

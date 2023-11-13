@@ -30,11 +30,11 @@ public class UserEntity {
     @OneToMany(mappedBy = "userRelated",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
-    List<Ad> ad = new ArrayList<>();
+    List<AdEntity> ad = new ArrayList<>();
 
     @OneToMany(mappedBy = "userRelated",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
-    List<Ad> comments = new ArrayList<>();
+    List<AdEntity> comments = new ArrayList<>();
 
 }
