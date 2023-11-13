@@ -20,6 +20,7 @@ public class WebSecurityConfig {
             "/v3/api-docs",
             "/webjars/**",
             "/ads",
+            "/ads/images/**",
             "/login",
             "/register"
     };
