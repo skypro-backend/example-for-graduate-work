@@ -80,7 +80,7 @@ public class AdsService {
             file.delete();
         }
 
-        if (userEntity.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")) || userEntity.getId() == adEntity.getAuthor().getId()) {
+        if (userEntity.getRole() == Role.ROLE_ADMIN || userEntity.getId() == adEntity.getAuthor().getId()) {
             adRepository.deleteById(id);
             return adEntity;
         } else {
@@ -97,7 +97,7 @@ public class AdsService {
             return null;
         }
 
-        if (userEntity.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")) || userEntity.getId() == adEntity.getAuthor().getId()) {
+        if (userEntity.getRole() == Role.ROLE_ADMIN || userEntity.getId() == adEntity.getAuthor().getId()) {
             Path filePath = Path.of(imageDir, UUID.randomUUID().toString() + "." + getExtension(image.getOriginalFilename()));
             Files.createDirectories(filePath.getParent());
             Files.deleteIfExists(filePath);
@@ -131,7 +131,7 @@ public class AdsService {
             return null;
         }
 
-        if (userEntity.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")) || userEntity.getId() == adEntity.getAuthor().getId()) {
+        if (userEntity.getRole() == Role.ROLE_ADMIN || userEntity.getId() == adEntity.getAuthor().getId()) {
             adEntity.setTitle(adUpdateDto.getTitle());
             adEntity.setPrice(adUpdateDto.getPrice());
             adEntity.setDescription(adUpdateDto.getDescription());

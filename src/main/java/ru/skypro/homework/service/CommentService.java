@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
@@ -65,7 +66,7 @@ public class CommentService {
             throw new CommentNotFoundException();
         }
         CommentEntity comment = opComment.get();
-        if(comment.getAuthor().getId() == userEntity.getId() || userEntity.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+        if(comment.getAuthor().getId() == userEntity.getId() || userEntity.getRole() == Role.ROLE_ADMIN) {
             commentRepository.deleteById(commentId);
         }else {
             throw new UserAccessDeniedException();
@@ -80,7 +81,7 @@ public class CommentService {
             throw new CommentNotFoundException();
         }
         CommentEntity comment = opComment.get();
-        if(comment.getAuthor().getId() == userEntity.getId() || userEntity.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+        if(comment.getAuthor().getId() == userEntity.getId() || userEntity.getRole() == Role.ROLE_ADMIN) {
             comment.setText(text.getText());
             commentRepository.save(comment);
             return mapper.map(comment);
