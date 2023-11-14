@@ -19,6 +19,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -67,12 +68,12 @@ public class AdsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity = userRepository.findByUsername(authentication.getName());
 
-        AdEntity adEntity = adRepository.getReferenceById(id);
-        if (adEntity == null) {
+        Optional<AdEntity> ad = adRepository.findById(id);
+        if (ad.isEmpty()) {
             return null;
         }
 
-
+        AdEntity adEntity = ad.get();
         String path = imageDir + "\\" + adEntity.getImage();
         if (adEntity.getImage() != null) {
             File file = new File(path);
