@@ -50,29 +50,30 @@ public class AdServiceImpl implements AdService {
     @Override
     public Ads allAdsPassToController() {
         Ads ads = new Ads();
-        ads.setResults(getAllAdsFromDatabase());
-        ads.setCount(getAllAdsFromDatabase().size());
+        List<Ad> adList = getAllAdsFromDatabase();
+        ads.setResults(adList);
+        ads.setCount(adList.size());
         return ads;
     }
 
     @Transactional
     @Override
-    public Ad newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username) {
+    public AdEntity newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username) {
 
-        AdEntity mapperDto = adMapper.createOrUpdateAdDtoToAdEntity(createOrUpdateAd);
-        mapperDto.setUserRelated(userRepository.findByUsername(username));
+        AdEntity adEntity = adMapper.createOrUpdateAdDtoToAdEntity(createOrUpdateAd);
+        adEntity.setUserRelated(userRepository.findByUsername(username));
 
         try {
             byte[] imageToBytes = image.getBytes();
             Image multipartToEntity = new Image();
             multipartToEntity.setImage(imageToBytes);
             imageRepository.save(multipartToEntity);
-            mapperDto.setImageAd(multipartToEntity);
-            adRepository.saveAndFlush(mapperDto);
+            adEntity.setImageAd(multipartToEntity);
+            adRepository.saveAndFlush(adEntity);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return adMapper.adEntityToAdDto(mapperDto);
+        return adEntity;
     }
 
     @Override
@@ -123,7 +124,7 @@ public class AdServiceImpl implements AdService {
             throw new RuntimeException(e);
         }
 
-        if (authorizedUserRole == Role.USER && userPostedAd.equals(authorizedUser) || authorizedUserRole == Role.ADMIN) {
+        if ((authorizedUserRole == Role.USER && userPostedAd.equals(authorizedUser)) || authorizedUserRole == Role.ADMIN) {
 
             adToModify.setImageAd(multipartToImage);
             adRepository.save(adToModify);

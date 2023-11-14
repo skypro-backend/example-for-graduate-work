@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.Ads;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAd;
@@ -41,9 +42,9 @@ public class AdController {
 
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addAd(@RequestPart("properties") @Valid CreateOrUpdateAd createOrUpdateAd,
+    public ResponseEntity<AdEntity> addAd(@RequestPart("properties") @Valid CreateOrUpdateAd createOrUpdateAd,
                                    @RequestParam("image")@Valid MultipartFile picture, Authentication authentication) {
-        ru.skypro.homework.dto.ads.Ad createdAdd = adService.newAd(createOrUpdateAd, picture, authentication.getName());
+        AdEntity createdAdd = adService.newAd(createOrUpdateAd, picture, authentication.getName());
 
         if (createdAdd != null) {
             return ResponseEntity.ok(createdAdd);
@@ -99,4 +100,5 @@ public class AdController {
         Image image = imageService.callImageById(id);
         return image.getImage();
     }
+
 }

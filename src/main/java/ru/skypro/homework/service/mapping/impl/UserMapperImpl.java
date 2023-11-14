@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.mapping.impl;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.authentication.ExtendedLoginViaDB;
 import ru.skypro.homework.dto.authentication.Register;
@@ -10,13 +11,19 @@ import ru.skypro.homework.service.mapping.UserMapper;
 @Component
 public class UserMapperImpl implements UserMapper {
 
+    private final PasswordEncoder encoder;
+
+    public UserMapperImpl(PasswordEncoder encoder) {
+        this.encoder = encoder;
+    }
+
     @Override
     public UserEntity newPasswordDtoToUser(NewPassword newPassword) {
         if (newPassword == null) {
             return null;
         }
         UserEntity user = new UserEntity();
-        user.setPassword(newPassword.getNewPassword());
+        user.setPassword(encoder.encode(newPassword.getNewPassword()));
         return user;
     }
 
@@ -31,6 +38,11 @@ public class UserMapperImpl implements UserMapper {
         user.setLastName(userInp.getLastName());
         user.setPhone(userInp.getPhone());
         user.setRole(userInp.getRole());
+        if (userInp.getImageAvatar() != null) {
+            user.setImage("/users/" + String.valueOf(userInp.getImageAvatar().getId()) + "/avatar");
+        } else {
+            user.setImage(null);
+        }
         return user;
     }
 

@@ -35,6 +35,7 @@ public class UserServiceImpl  implements UserService {
         UserEntity authorizedUser = userRepository.findByUsername(userName);
         if (passwordEncoder.matches(newPassword.getCurrentPassword(), authorizedUser.getPassword())) {
             authorizedUser.setPassword(passwordEncoder.encode(newPassword.getNewPassword()));
+            userRepository.save(authorizedUser);
             return true;
         } else {
             return false;

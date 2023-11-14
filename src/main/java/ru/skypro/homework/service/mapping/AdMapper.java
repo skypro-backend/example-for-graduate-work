@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.mapping;
 
+import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.Ads;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAd;
@@ -12,7 +13,7 @@ public interface AdMapper {
 
     public List<ru.skypro.homework.dto.ads.Ad> adEntityToAdsDto(List<AdEntity> inputAdList);
 
-    ru.skypro.homework.dto.ads.Ad adEntityToAdDto(AdEntity ad);
+    public Ad adEntityToAdDto(AdEntity ad);
 
     public ExtendedAd adEntityToExtendedAdDto(AdEntity ad);
 
