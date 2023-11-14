@@ -2,7 +2,9 @@ package ru.skypro.homework.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,14 +20,14 @@ public class WebSecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
-            "/swagger-ui.html",
-            "/v3/api-docs",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
             "/webjars/**",
             "/login",
             "/register"
     };
 
-    @Bean
+/*    @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user =
                 User.builder()
@@ -35,21 +37,21 @@ public class WebSecurityConfig {
                         .roles(Role.USER.name())
                         .build();
         return new InMemoryUserDetailsManager(user);
-    }
+    }*/
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
+        http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorization ->
                                 authorization
-                                        .mvcMatchers(AUTH_WHITELIST)
+                                        .requestMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .mvcMatchers("/ads/**", "/users/**")
+                                        .requestMatchers(HttpMethod.GET,"/ads")
+                                        .permitAll()
+                                        .requestMatchers("/ads/**", "/users/**")
                                         .authenticated())
-                .cors()
-                .and()
+                .cors(withDefaults())
                 .httpBasic(withDefaults());
         return http.build();
     }

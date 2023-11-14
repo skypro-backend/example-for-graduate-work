@@ -1,9 +1,9 @@
 package ru.skypro.homework.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class UserInfo {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column (name = "user_id")
+    @Column(name = "user_id")
     private long id;
 
     private String password;

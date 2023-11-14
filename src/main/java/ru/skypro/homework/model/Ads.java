@@ -1,10 +1,11 @@
 package ru.skypro.homework.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.AdsInfoDTO;
 
-import javax.persistence.*;
+
 import java.util.List;
 
 @Entity
@@ -13,7 +14,7 @@ public class Ads {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column (name = "ads_id")
+    @Column(name = "ads_id")
     private long id;
 
     private String description;
