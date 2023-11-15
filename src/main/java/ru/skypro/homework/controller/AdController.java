@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +16,10 @@ import ru.skypro.homework.service.AdService;
 @RestController
 @CrossOrigin(value = "<http://localhost:3000>")
 @RequestMapping("/ads")
-public class AdsController {
+public class AdController {
     private final AdService adService;
 
-    public AdsController(AdService adService) {
+    public AdController(AdService adService) {
         this.adService = adService;
     }
 
@@ -136,9 +135,8 @@ public class AdsController {
             }
     )
     @DeleteMapping("{adId}")
-    public ResponseEntity<?> removeAds(@PathVariable Long adId) {
-        adService.deleteAd(adId);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<Void> removeAds(@PathVariable Long adId) {
+        return ResponseEntity.ok(adService.deleteAd(adId));
     }
     // --------------------------------------------------------------------------------------
 
@@ -173,7 +171,7 @@ public class AdsController {
             }
     )
     @PatchMapping(value = "/{adId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateAds(@PathVariable Long adId, @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+    public ResponseEntity<AdDTO> updateAds(@PathVariable Long adId, @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
         return ResponseEntity.ok(adService.patchAd(adId, createOrUpdateAdDTO));
     }
     // --------------------------------------------------------------------------------------
@@ -205,7 +203,7 @@ public class AdsController {
             }
     )
     @GetMapping("me")
-    public ResponseEntity<?> getAdsMe() {
+    public ResponseEntity<AdsDTO> getAdsMe() {
         return ResponseEntity.ok(adService.getAllAdsByAuthor());
     }
     // --------------------------------------------------------------------------------------
@@ -230,7 +228,7 @@ public class AdsController {
             }
     )
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateAdImage(@PathVariable Long adId, @RequestPart MultipartFile image){
+    public ResponseEntity<String> updateAdImage(@PathVariable Long adId, @RequestPart MultipartFile image){
 
         return ResponseEntity.ok(adService.patchAdImage(adId, image));
     }
@@ -293,7 +291,7 @@ public class AdsController {
             }
     )
     @PostMapping(value = "{adId}/comments", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addComments(@PathVariable Long adId, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+    public ResponseEntity<CommentDTO> addComments(@PathVariable Long adId, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         return ResponseEntity.ok(adService.addComment(adId, createOrUpdateCommentDTO));
     }
     // --------------------------------------------------------------------------------------
@@ -326,7 +324,7 @@ public class AdsController {
             }
     )
     @DeleteMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteComments(@PathVariable Long adId, @PathVariable Long commentId) {
+    public ResponseEntity<Void> deleteComments(@PathVariable Long adId, @PathVariable Long commentId) {
         return ResponseEntity.ok(adService.deleteComment(adId, commentId));
     }
     // --------------------------------------------------------------------------------------
@@ -361,7 +359,7 @@ public class AdsController {
             }
     )
     @PatchMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<?> updateComments(@PathVariable Long adId, @PathVariable Long commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+    public ResponseEntity<CommentDTO> updateComments(@PathVariable Long adId, @PathVariable Long commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         return ResponseEntity.ok(adService.patchComment(adId, commentId, createOrUpdateCommentDTO));
     }
     // --------------------------------------------------------------------------------------
