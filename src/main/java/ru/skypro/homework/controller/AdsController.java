@@ -11,18 +11,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.AdService;
 
-import java.util.List;
 
 @RestController
 @CrossOrigin(value = "<http://localhost:3000>")
 @RequestMapping("/ads")
 public class AdsController {
-    private final AdsService adsService;
+    private final AdService adService;
 
-    public AdsController(AdsService adsService) {
-        this.adsService = adsService;
+    public AdsController(AdService adService) {
+        this.adService = adService;
     }
 
     // --------------------------------------------------------------------------------------
@@ -36,15 +35,14 @@ public class AdsController {
                             description = "OK",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseWrapperAds.class)
+                                    schema = @Schema(implementation = AdsDTO.class)
                             )
                     )
             }
     )
     @GetMapping
-    public ResponseEntity<?> getAds() {
-        List<Ads> ads = adsService.getAds();
-        return ResponseEntity.ok(ads);
+    public ResponseEntity<AdsDTO> getAds() {
+        return ResponseEntity.ok(adService.getAllAds());
     }
     // --------------------------------------------------------------------------------------
 
@@ -59,7 +57,7 @@ public class AdsController {
                             description = "Created",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Ads.class)
+                                    schema = @Schema(implementation = AdDTO.class)
                             )
                     ),
                     @ApiResponse(
@@ -81,9 +79,8 @@ public class AdsController {
     )
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     //@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> addAds(@RequestPart CreateAds properties, @RequestPart MultipartFile image) {
-        adsService.addAds(properties, image);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<AdDTO> addAds(@RequestPart CreateOrUpdateAdDTO createOrUpdateAdDTO, @RequestPart MultipartFile image) {
+        return ResponseEntity.ok(adService.addAd(createOrUpdateAdDTO, image));
     }
     // --------------------------------------------------------------------------------------
 
@@ -99,7 +96,7 @@ public class AdsController {
                             description = "OK",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = FullAdds.class)
+                                    schema = @Schema(implementation = AdsDTO.class)
                             )
                     ),
                     @ApiResponse(
@@ -109,10 +106,9 @@ public class AdsController {
                     )
             }
     )
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getFullAd(@PathVariable int id) {
-        FullAdds fullAdds = adsService.getFullAd(id);
-        return ResponseEntity.ok(fullAdds);
+    @GetMapping("/{adId}")
+    public ResponseEntity<ExtendedAdDTO> getAdInfo(@PathVariable long adId) {
+        return ResponseEntity.ok(adService.getAdInfo(adId));
     }
     // --------------------------------------------------------------------------------------
 
@@ -139,10 +135,10 @@ public class AdsController {
                     )
             }
     )
-    @DeleteMapping("{id}")
-    public ResponseEntity<?> removeAds(@PathVariable int id) {
-        adsService.removeAds(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    @DeleteMapping("{adId}")
+    public ResponseEntity<?> removeAds(@PathVariable Long adId) {
+        adService.deleteAd(adId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
     // --------------------------------------------------------------------------------------
 
@@ -156,7 +152,7 @@ public class AdsController {
                             description = "OK",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Ads.class)
+                                    schema = @Schema(implementation = AdDTO.class)
                             )
                     ),
                     @ApiResponse(
@@ -176,10 +172,9 @@ public class AdsController {
                     )
             }
     )
-    @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateAds(@PathVariable int id, @RequestBody CreateAds createAds) {
-        adsService.updateAds(id, createAds);
-        return ResponseEntity.ok(null);
+    @PatchMapping(value = "/{adId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateAds(@PathVariable Long adId, @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+        return ResponseEntity.ok(adService.patchAd(adId, createOrUpdateAdDTO));
     }
     // --------------------------------------------------------------------------------------
 
@@ -194,7 +189,7 @@ public class AdsController {
                             description = "OK",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseWrapperAds.class)
+                                    schema = @Schema(implementation = AdsDTO.class)
                             )
                     ),
                     @ApiResponse(
@@ -211,8 +206,7 @@ public class AdsController {
     )
     @GetMapping("me")
     public ResponseEntity<?> getAdsMe() {
-        List<Ads> ads = adsService.getAdsMe();
-        return ResponseEntity.ok(ads);
+        return ResponseEntity.ok(adService.getAllAdsByAuthor());
     }
     // --------------------------------------------------------------------------------------
 
@@ -235,10 +229,10 @@ public class AdsController {
                     )
             }
     )
-    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateAdsImage(@PathVariable int id, @RequestPart MultipartFile image){
-        adsService.updateAdsImage(id, image);
-        return ResponseEntity.ok(null);
+    @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateAdImage(@PathVariable Long adId, @RequestPart MultipartFile image){
+
+        return ResponseEntity.ok(adService.patchAdImage(adId, image));
     }
 
     // ======================================================================================
@@ -252,7 +246,7 @@ public class AdsController {
                             description = "OK",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseWrapperComment.class)
+                                    schema = @Schema(implementation = CommentsDTO.class)
                             )
                     ),
                     @ApiResponse(
@@ -262,10 +256,9 @@ public class AdsController {
                     )
             }
     )
-    @GetMapping("{id}/comments")
-    public ResponseEntity<?> getComments(@PathVariable int id) {
-        List<Comment> comments = adsService.getComments(id);
-        return ResponseEntity.ok(comments);
+    @GetMapping("{adId}/comments")
+    public ResponseEntity<CommentsDTO> getComments(@PathVariable Long adId) {
+        return ResponseEntity.ok(adService.getComments(adId));
     }
     // --------------------------------------------------------------------------------------
 
@@ -279,7 +272,7 @@ public class AdsController {
                             description = "OK",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Comment.class)
+                                    schema = @Schema(implementation = CommentDTO.class)
                             )
                     ),
                     @ApiResponse(
@@ -299,10 +292,9 @@ public class AdsController {
                     )
             }
     )
-    @PostMapping(value = "{id}/comments", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addComments(@PathVariable int id, @RequestBody Comment comment) {
-        Comment res = adsService.addComments(id, comment);
-        return ResponseEntity.ok(res);
+    @PostMapping(value = "{adId}/comments", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addComments(@PathVariable Long adId, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+        return ResponseEntity.ok(adService.addComment(adId, createOrUpdateCommentDTO));
     }
     // --------------------------------------------------------------------------------------
 
@@ -334,9 +326,8 @@ public class AdsController {
             }
     )
     @DeleteMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteComments(@PathVariable int adId, @PathVariable int commentId) {
-        Comment comment = adsService.deleteComments(adId, commentId).orElse(null);
-        return ResponseEntity.ok(comment);
+    public ResponseEntity<?> deleteComments(@PathVariable Long adId, @PathVariable Long commentId) {
+        return ResponseEntity.ok(adService.deleteComment(adId, commentId));
     }
     // --------------------------------------------------------------------------------------
     // Обновить комментарий
@@ -349,7 +340,7 @@ public class AdsController {
                             description = "OK",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Comment.class)
+                                    schema = @Schema(implementation = CommentDTO.class)
                             )
                     ),
                     @ApiResponse(
@@ -370,9 +361,8 @@ public class AdsController {
             }
     )
     @PatchMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<?> updateComments(@PathVariable int adId, @PathVariable int commentId) {
-        Comment comment = adsService.updateComments(adId, commentId).orElse(null);
-        return ResponseEntity.ok(null);
+    public ResponseEntity<?> updateComments(@PathVariable Long adId, @PathVariable Long commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+        return ResponseEntity.ok(adService.patchComment(adId, commentId, createOrUpdateCommentDTO));
     }
     // --------------------------------------------------------------------------------------
 }
