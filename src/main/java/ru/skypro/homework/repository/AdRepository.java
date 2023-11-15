@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface AdRepository extends JpaRepository<AdEntity, Long> {
 
-    List<AdEntity> findAllBy();
+    List<AdEntity> findAllByUserRelated(int id);
 
     AdEntity getReferenceById(int id);
 

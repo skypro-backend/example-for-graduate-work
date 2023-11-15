@@ -11,7 +11,7 @@ import ru.skypro.homework.entity.AdEntity;
 import java.util.List;
 
 public interface AdService {
-    public List<ru.skypro.homework.dto.ads.Ad> getAllAdsFromDatabase();
+    public List<ru.skypro.homework.dto.ads.Ad> getAllAdsFromDatabase(String userName);
     public Ads allAdsPassToController();
     public AdEntity newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username);
     public ExtendedAd requestAdFromDbById(int id);

@@ -42,15 +42,15 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public List<Ad> getAllAdsFromDatabase() {
-        List<AdEntity> allAdsFromDbCollect = adRepository.findAll();
+    public List<Ad> getAllAdsFromDatabase(String userName) {
+        List<AdEntity> allAdsFromDbCollect = adRepository.findAllByUserRelated(userRepository.findByUsername(userName).getId());
         return adMapper.adEntityToAdsDto(allAdsFromDbCollect);
     }
 
     @Override
     public Ads allAdsPassToController() {
         Ads ads = new Ads();
-        List<Ad> adList = getAllAdsFromDatabase();
+        List<Ad> adList = adMapper.adEntityToAdsDto(adRepository.findAll());
         ads.setResults(adList);
         ads.setCount(adList.size());
         return ads;

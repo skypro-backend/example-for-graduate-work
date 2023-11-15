@@ -2,6 +2,7 @@ package ru.skypro.homework.entity;
 
 import lombok.*;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.dto.ads.Ad;
 
 import javax.persistence.*;
 import java.util.ArrayList;

@@ -4,6 +4,6 @@ import ru.skypro.homework.entity.Image;
 
 public interface ImageService {
 
-    Image callImageById(int id);
+    Image callImageById(long id);
 
 }

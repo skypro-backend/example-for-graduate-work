@@ -15,7 +15,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image callImageById(int id) {
+    public Image callImageById(long id) {
         Image image = imageRepository.getReferenceById(id);
         return image;
     }
