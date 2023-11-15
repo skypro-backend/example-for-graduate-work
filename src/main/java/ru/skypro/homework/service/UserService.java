@@ -72,7 +72,7 @@ public class UserService {
         Files.createDirectories(path.getParent());
         Files.deleteIfExists(path);
         Files.write(path, file.getBytes());
-        user.setImage(fileName);
+        user.setImage("/users/" + path);
         userRepository.save(user);
 
         return path.toString();

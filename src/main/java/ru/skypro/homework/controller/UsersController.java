@@ -98,7 +98,7 @@ public class UsersController {
         return ResponseEntity.ok(filePath);
     }
 
-    @GetMapping(value = "/images/{id}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
+    @GetMapping(value = "/avatars/{id}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
     public byte[] getImage(@PathVariable("id") String id) throws IOException {
         log.info("Here is id {}", id);
         Path path = Path.of("avatars", id);
