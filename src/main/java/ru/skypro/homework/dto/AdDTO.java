@@ -11,7 +11,7 @@ import java.util.Objects;
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-11-05T13:56:03.406359+03:00[Europe/Moscow]")
 public class AdDTO {
   @JsonProperty("author")
-  private Integer author;
+  private Long author;
 
   @JsonProperty("image")
   private String image;
@@ -25,7 +25,7 @@ public class AdDTO {
   @JsonProperty("title")
   private String title;
 
-  public AdDTO author(Integer author) {
+  public AdDTO author(Long author) {
     this.author = author;
     return this;
   }
@@ -37,11 +37,11 @@ public class AdDTO {
   @ApiModelProperty(value = "id автора объявления")
 
 
-  public Integer getAuthor() {
+  public Long getAuthor() {
     return author;
   }
 
-  public void setAuthor(Integer author) {
+  public void setAuthor(Long author) {
     this.author = author;
   }
 
