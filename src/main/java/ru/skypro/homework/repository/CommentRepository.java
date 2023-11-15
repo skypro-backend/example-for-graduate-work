@@ -7,5 +7,5 @@ import ru.skypro.homework.model.Comment;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByAd(Ad ad);
+    List<Comment> findAllByAd(Ad ad);
 }

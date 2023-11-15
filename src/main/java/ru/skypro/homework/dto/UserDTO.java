@@ -12,7 +12,7 @@ import java.util.Objects;
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-11-05T13:56:03.406359+03:00[Europe/Moscow]")
 public class UserDTO {
   @JsonProperty("id")
-  private Integer id;
+  private Long id;
 
   @JsonProperty("email")
   private String email;
@@ -32,7 +32,7 @@ public class UserDTO {
   @JsonProperty("image")
   private String image;
 
-  public UserDTO id(Integer id) {
+  public UserDTO id(Long id) {
     this.id = id;
     return this;
   }
@@ -44,11 +44,11 @@ public class UserDTO {
   @ApiModelProperty(value = "id пользователя")
 
 
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
