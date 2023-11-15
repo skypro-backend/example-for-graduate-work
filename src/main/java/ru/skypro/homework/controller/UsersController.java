@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -19,6 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.PasswordDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.UserService;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Slf4j
 @RestController
@@ -81,16 +86,22 @@ public class UsersController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadAvatar(@RequestParam MultipartFile image) {
-        log.debug("Avatar Controller {}", image.getContentType());
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<String> uploadAvatar(@RequestParam MultipartFile image,
+                                               @Parameter(hidden = true) Authentication auth) throws IOException {
         String username = auth.getName();
-        String imageString = userService.updateUserImage(username, image);
-        if (imageString == null) {
-            log.debug("Unable to save avatar: {}", image.getName());
-           // here image save should be done
+        String filePath = "";
+        UserDto user;
+
+        if (image != null) {
+             filePath = userService.updateUserImage(username, image);
         }
-        log.debug("Avatar saved");
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(filePath);
+    }
+
+    @GetMapping(value = "/images/{id}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
+    public byte[] getImage(@PathVariable("id") String id) throws IOException {
+        log.info("Here is id {}", id);
+        Path path = Path.of("avatars", id);
+        return Files.readAllBytes(path);
     }
 }
