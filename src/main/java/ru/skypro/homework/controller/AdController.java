@@ -1,6 +1,5 @@
 package ru.skypro.homework.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Ad;
@@ -17,8 +16,12 @@ import java.util.List;
 @RequestMapping("/api/ads")
 public class AdController {
 
-    @Autowired
+
     private AdService adService;
+
+    public AdController(AdService adService) {
+        this.adService = adService;
+    }
 
     @PostMapping
     public ResponseEntity<Ad> addAd(@RequestParam("image") MultipartFile image,
