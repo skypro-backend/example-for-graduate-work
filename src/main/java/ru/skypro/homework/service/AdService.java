@@ -2,25 +2,21 @@ package ru.skypro.homework.service;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 
 @Service
 public class AdService {
 
     private final AdRepository adRepository;
+    private final AdMapper adMapping;
 
-    public AdService(AdRepository adRepository) {
+    public AdService(AdRepository adRepository, AdMapper adMapping) {
         this.adRepository = adRepository;
+        this.adMapping = adMapping;
     }
 
     public void createAd(AdDTO adDTO) {
-        Ad ad = new Ad();
-        ad.setAuthor(adDTO.getAuthor());
-        ad.setImage(adDTO.getImage());
-        ad.setPk(adDTO.getPk());
-        ad.setPrice(adDTO.getPrice());
-        ad.setTitle(adDTO.getTitle());
-        adRepository.save(ad);
+        adRepository.save(adMapping.mapToAd(adDTO));
     }
 }

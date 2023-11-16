@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Comment {
 
     @Column(name = "id_author")
-    private long author;
+    private int author;
     @Column(name = "author_Path_Image")
     private String authorImage;
     @Column(name = "author_FirstName")
