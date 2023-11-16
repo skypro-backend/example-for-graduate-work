@@ -2,12 +2,11 @@ package ru.skypro.homework.mapper;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.LoginDTO;
-import ru.skypro.homework.dto.RoleDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.model.User;
 
 @Service
-public class UserMapping {
+public class UserMapper {
     //из model в dto
     public UserDTO mapToUserDto(User user){
         UserDTO userDTO = new UserDTO();
