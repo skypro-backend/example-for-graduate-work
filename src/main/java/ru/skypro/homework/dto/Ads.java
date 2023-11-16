@@ -5,16 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Register {
+public class Ads {
 
-    private String username;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String phone;
-    private Role role;
+    private Integer count;
+    private List<Ad> results;
 }
