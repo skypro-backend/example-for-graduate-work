@@ -14,11 +14,6 @@ public class RegistrationController {
 
     @PostMapping
     public ResponseEntity<Object> registerUser(@RequestBody Register registerData) {
-        // Ваша логика регистрации пользователя на основе данных из Register объекта
-        // Пример:
-        // userService.registerUser(registerData);
-
-        // Возвращаем статус 201 при успешной регистрации
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
