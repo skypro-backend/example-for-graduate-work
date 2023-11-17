@@ -4,7 +4,6 @@ import lombok.*;
 import ru.skypro.homework.dto.Comment;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Collection;
 
 @Entity
@@ -18,7 +17,7 @@ public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
+    private String title;
     private Integer price;
     private String description;
 
