@@ -1,12 +1,11 @@
 package ru.skypro.homework.models;
 
 import lombok.Data;
-import ru.skypro.homework.dto.UserDTO;
 
 import javax.persistence.*;
 @Entity
 @Data
-public class Photo {
+public class PhotoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,5 +15,5 @@ public class Photo {
     @Lob
     private  byte[] data;
     @OneToOne
-    private Item itemId;
+    private ItemEntity itemId;
 }

@@ -1,17 +1,15 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.models;
 
 import lombok.Data;
+import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.models.Avatar;
-import ru.skypro.homework.models.Comment;
-import ru.skypro.homework.models.Item;
 
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
 @Data
-public class UserDTO {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,13 +20,13 @@ public class UserDTO {
     private String phone;
     private Role role;
     @OneToOne
-    private Avatar avatarId;
+    private AvatarEntity avatarId;
     @OneToMany
-    private Collection<Item> itemId;
+    private Collection<ItemEntity> itemId;
     @OneToMany
-    private Collection<Comment> commentId;
+    private Collection<CommentEntity> commentId;
 
-    public UserDTO() {
+    public UserEntity() {
     }
 
     public void setName(Register register) {

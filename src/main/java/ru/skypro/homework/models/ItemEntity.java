@@ -1,14 +1,13 @@
 package ru.skypro.homework.models;
 
 import lombok.Data;
-import ru.skypro.homework.dto.UserDTO;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Data
-public class Item {
+public class ItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,7 +15,7 @@ public class Item {
     private BigDecimal price;
     private String description;
     @OneToOne
-    private Photo photo;
+    private PhotoEntity photo;
     @OneToOne
-    private UserDTO userId;
+    private UserEntity userId;
 }

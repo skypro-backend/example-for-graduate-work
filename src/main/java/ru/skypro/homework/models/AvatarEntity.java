@@ -1,11 +1,9 @@
 package ru.skypro.homework.models;
 
-import ru.skypro.homework.dto.UserDTO;
-
 import javax.persistence.*;
 
 @Entity
-public class Avatar {
+public class AvatarEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,7 +14,7 @@ public class Avatar {
     private  byte[] data;
 
     @OneToOne
-    private UserDTO userId;
+    private UserEntity userId;
 
 
     public Long getId() {
@@ -59,11 +57,11 @@ public class Avatar {
         this.data = data;
     }
 
-    public UserDTO getStudent() {
+    public UserEntity getStudent() {
         return userId;
     }
 
-    public void setStudent(UserDTO userId) {
+    public void setStudent(UserEntity userId) {
         this.userId = userId;
     }
 }
