@@ -9,13 +9,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.model.Role;
+import ru.skypro.homework.repository.UserRepository;
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class WebSecurityConfig {
+    private final UserRepository userRepository;
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -26,16 +30,30 @@ public class WebSecurityConfig {
             "/register"
     };
 
+    public WebSecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user =
+       /* UserDetails user =
                 User.builder()
                         .username("user@gmail.com")
                         .password("password")
                         .passwordEncoder(passwordEncoder::encode)
                         .roles(Role.USER.name())
-                        .build();
-        return new InMemoryUserDetailsManager(user);
+                        .build();*/
+        return new InMemoryUserDetailsManager(getUserDetails());
+    }
+
+    private List<UserDetails> getUserDetails() {
+        List<UserDetails> result = new ArrayList<>();
+        userRepository.findAll().forEach(e -> result.add(User.builder()
+                .username(e.getEmail())
+                .password(e.getPassword())
+                .roles(e.getRole().name())
+                .build()));
+        return result;
     }
 
     @Bean
