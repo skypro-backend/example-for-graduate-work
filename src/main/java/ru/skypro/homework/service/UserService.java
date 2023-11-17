@@ -16,5 +16,5 @@ public interface UserService {
      * Метод возвращает информацию об авторизованном пользователе.
      * @return объект UserEntity, содержащий информацию о пользователе.
      */
-    UserEntity getUserInfo(String userName);
+    UserEntity getUserInfo();
 }
