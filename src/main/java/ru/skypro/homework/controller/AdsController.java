@@ -5,25 +5,28 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.ExtendedAd;
 
+@RequestMapping("/ads")
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 public class AdsController {
-    @GetMapping("/ads")
+
+    @GetMapping
     public Ads getAds() {
         return new Ads(); // Возвращает пустой объект Ads
     }
 
-    @GetMapping("/ads/{id}")
+    @GetMapping
     public ExtendedAd getAdById(@PathVariable int id) {
         return new ExtendedAd(); // Возвращает пустой объект ExtendedAd
     }
 
-    @PostMapping("/ads")
+    @PostMapping
     public Ad createAd(@RequestBody Ad ad) {
         return new Ad(); // Возвращает пустой объект Ad
     }
 
-    @DeleteMapping("/ads/{id}")
+    @DeleteMapping
     public void deleteAd(@PathVariable int id) {
-        // Удаление объявления
+        return ;
     }
 }
