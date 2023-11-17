@@ -76,9 +76,9 @@ public class AdController {
                     )
             }
     )
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    //@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<AdDTO> addAds(@RequestPart CreateOrUpdateAdDTO createOrUpdateAdDTO, @RequestPart MultipartFile image) {
+//    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<AdDTO> addAds(@RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO, @RequestParam MultipartFile image) {
         return ResponseEntity.ok(adService.addAd(createOrUpdateAdDTO, image));
     }
     // --------------------------------------------------------------------------------------

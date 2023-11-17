@@ -7,5 +7,5 @@ import ru.skypro.homework.model.User;
 import java.util.List;
 
 public interface AdRepository extends JpaRepository <Ad, Long> {
-    List<Ad> findByAuthor(User author);
+    List<Ad> findAllByAuthor(User author);
 }

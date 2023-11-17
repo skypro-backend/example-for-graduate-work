@@ -19,7 +19,7 @@ public class AdsDTO {
 
   @JsonProperty("results")
   @Valid
-  private List<Ad> results = null;
+  private List<AdDTO> results = null;
 
   public AdsDTO count(Integer count) {
     this.count = count;
@@ -41,12 +41,12 @@ public class AdsDTO {
     this.count = count;
   }
 
-  public AdsDTO results(List<Ad> results) {
+  public AdsDTO results(List<AdDTO> results) {
     this.results = results;
     return this;
   }
 
-  public AdsDTO addResultsItem(Ad resultsItem) {
+  public AdsDTO addResultsItem(AdDTO resultsItem) {
     if (this.results == null) {
       this.results = new ArrayList<>();
     }
@@ -62,11 +62,11 @@ public class AdsDTO {
 
   @Valid
 
-  public List<Ad> getResults() {
+  public List<AdDTO> getResults() {
     return results;
   }
 
-  public void setResults(List<Ad> results) {
+  public void setResults(List<AdDTO> results) {
     this.results = results;
   }
 
