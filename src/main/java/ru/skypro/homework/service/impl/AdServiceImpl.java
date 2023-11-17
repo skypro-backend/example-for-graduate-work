@@ -38,7 +38,8 @@ public class AdServiceImpl implements AdService {
     @Override
     public AdsDTO getAllAds() {
         AdsDTO adsDTO = new AdsDTO();
-        List<Ad> result = adRepository.findAll();
+        List<AdDTO> result = new ArrayList<>();
+        adRepository.findAll().forEach(u -> result.add(AdMapper.INSTANCE.adToAdDTO(u)));
         adsDTO.setResults(result);
         adsDTO.setCount(result.size());
         return adsDTO;
@@ -82,11 +83,11 @@ public class AdServiceImpl implements AdService {
         String name = auth.getName();
 
         User user = userRepository.findByEmail(name);
-        List<Ad> adList = adRepository.findByAuthor(user);
-
+        List<AdDTO> result = new ArrayList<>();
+        adRepository.findAllByAuthor(user).forEach(u -> result.add(AdMapper.INSTANCE.adToAdDTO(u)));
         AdsDTO adsDTO = new AdsDTO();
-        adsDTO.setResults(adList);
-        adsDTO.setCount(adList.size());
+        adsDTO.setResults(result);
+        adsDTO.setCount(result.size());
         return adsDTO;
     }
 
