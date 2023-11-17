@@ -26,17 +26,17 @@ public class AdsController {
     }
 
     @PostMapping
-    public ResponseEntity<Ad> addAd(@RequestBody Ad adExample, @RequestParam MultipartFile image) { // что за proper
+    public ResponseEntity<Ad> addAd(@RequestPart("properties") CreateOrUpdateAd properties, @RequestPart("image") MultipartFile image) { 
         return ResponseEntity.status(HttpStatus.CREATED).body(new Ad());
     }
 
-    @GetMapping(value = "/{pkId}")
-    public ResponseEntity<ExtendedAd> getAds (@PathVariable Integer pkId) {
+    @GetMapping(value = "/{Id}")
+    public ResponseEntity<ExtendedAd> getAds (@PathVariable Integer Id) {
         return new ResponseEntity<>(new ExtendedAd(), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{pkId}")
-    public ResponseEntity<Void> removeAd(@PathVariable Integer pkId) {
+    @DeleteMapping(value = "/{Id}")
+    public ResponseEntity<Void> removeAd(@PathVariable Integer Id) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -50,9 +50,8 @@ public class AdsController {
         return new ResponseEntity<>(new Ads(), HttpStatus.OK);
     }
 
-
-    @PutMapping(value = "/{pkId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<byte[]> updateImage(@PathVariable Integer pkId,
+    @PutMapping(value = "/{Id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<byte[]> updateImage(@PathVariable Integer Id,
                                               @RequestParam MultipartFile image) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         return ResponseEntity.ok().headers(headers).body(image.getBytes());
