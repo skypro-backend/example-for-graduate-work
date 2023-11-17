@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
-import ru.skypro.homework.models.UserEntity;
+import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.service.AuthService;
 
 @Service

@@ -1,9 +1,9 @@
 package ru.skypro.homework.dto;
 
-import ru.skypro.homework.models.AvatarEntity;
+import ru.skypro.homework.model.AvatarEntity;
 
 public class AvatarDTO {
-    public Long getId(AvatarEntity avatar) {
+    public Integer getId(AvatarEntity avatar) {
         return avatar.getId();
     }
 

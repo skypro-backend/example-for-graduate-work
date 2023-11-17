@@ -1,19 +1,28 @@
-package ru.skypro.homework.models;
+package ru.skypro.homework.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
+
 @Entity
 @Data
-public class PhotoEntity {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "avatars")
+public class AvatarEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private  String filePath;
     private  long fileSize;
     private  String mediaType;
+
     @Lob
     private  byte[] data;
+
     @OneToOne
-    private ItemEntity itemId;
+    private UserEntity user;
+
 }
