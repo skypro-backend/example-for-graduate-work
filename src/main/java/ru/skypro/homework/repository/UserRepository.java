@@ -8,9 +8,9 @@ import ru.skypro.homework.models.UserEntity;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     /**
-     * Поиск пароля в таблице с пользователями
+     * Поиск пользователя по паролю.
      * @param oldPass искомый пароль
-     * @return пользователя с подходящим паролем
+     * @return объект userEntity
      */
     UserEntity findUserEntityByPassword(String oldPass);
 
@@ -20,4 +20,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
      * @return объект userEntity
      */
     UserEntity findUserEntityByUsername(String username);
+
+    /**
+     * Поиск пользователя по логину и паролю.
+     * @param userName логин
+     * @param password пароль
+     * @return объект userEntity
+     */
+    UserEntity findUserEntityByUsernameAndPassword(String userName, String password);
 }

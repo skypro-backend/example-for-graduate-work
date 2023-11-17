@@ -36,11 +36,19 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findUserEntityByPassword(oldPassword);
         userEntity.setPassword(newPassword);
         userRepository.save(userEntity);
+        //меняем данные авторизованного пользователя в AuthService
         authService.getUserDetailsManager().changePassword(newPass.getCurrentPassword(), newPass.getNewPassword());
+        authService.getUserEntity().setPassword(newPassword);
     }
 
+    /**
+     * Метод возвращает информацию о текущем, авторизованном пользователе.
+     * @return объект userEntity
+     */
     @Override
-    public UserEntity getUserInfo(String userName) { //userName надо получить из authService
+    public UserEntity getUserInfo() {
+
+        String userName = authService.getLogin().getUsername();
         String login = authService.getUserDetailsManager().loadUserByUsername(userName).getUsername();
         userRepository.findUserEntityByUsername(login);
         return null;
