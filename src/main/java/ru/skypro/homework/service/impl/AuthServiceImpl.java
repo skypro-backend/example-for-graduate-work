@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.models.UserEntity;
 import ru.skypro.homework.service.AuthService;
 
 @Service
@@ -13,6 +14,10 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
+    /**
+     * создаем пустую сущность userEntity
+     */
+    private UserEntity userEntity = new UserEntity();
 
     public AuthServiceImpl(UserDetailsManager manager,
                            PasswordEncoder passwordEncoder) {
@@ -41,7 +46,15 @@ public class AuthServiceImpl implements AuthService {
                         .username(register.getUsername())
                         .roles(register.getRole().name())
                         .build());
+
+        //устанавливаем поля для сущности userEntity
+        userEntity.setAllFields(register);
+
         return true;
+    }
+
+    public UserDetailsManager getUserDetailsManager(){
+        return manager;
     }
 
 }
