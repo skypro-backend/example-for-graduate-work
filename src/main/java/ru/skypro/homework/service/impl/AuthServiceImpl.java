@@ -1,38 +1,35 @@
 package ru.skypro.homework.service.impl;
 
 
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterDTO;
+import ru.skypro.homework.exception.IncorrectPasswordException;
 import ru.skypro.homework.mapper.UserMapper;
-import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
-
-    private final UserDetailsManager manager;
+    private final MyUserDetailsService myUserDetailsService;
     private final PasswordEncoder encoder;
 
-    public AuthServiceImpl(UserRepository userRepository, UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
+    public AuthServiceImpl(UserRepository userRepository, MyUserDetailsService myUserDetailsService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.manager = manager;
+        this.myUserDetailsService = myUserDetailsService;
         this.encoder = passwordEncoder;
     }
 
     @Override
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
-            return false;
+        UserDetails userDetails = myUserDetailsService.loadUserByUsername(userName);
+        if (!encoder.matches(password, userDetails.getPassword())) {
+            throw new IncorrectPasswordException();
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
+        return true;
     }
 
     @Override
