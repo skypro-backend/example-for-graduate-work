@@ -13,9 +13,9 @@ import ru.skypro.homework.model.User;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-//    @Mapping(target = "id", ignore = true) // Игнорируем id, так как он будет присвоен автоматически
-//    @Mapping(target = "email", source = "username")
-//    User registerDTOToUser(RegisterDTO registerDTO);
+
+    @Mapping(target = "email", source = "username")
+    User registerDTOToUser(RegisterDTO registerDTO);
 
 
     UserDTO toUserDTO(User user);
