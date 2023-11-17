@@ -26,7 +26,7 @@ public class AdsController {
     }
 
     @PostMapping
-    public ResponseEntity<Ad> addAd(@RequestPart("properties") CreateOrUpdateAd properties, @RequestPart("image") MultipartFile image) { // что за proper
+    public ResponseEntity<Ad> addAd(@RequestPart("properties") CreateOrUpdateAd properties, @RequestPart("image") MultipartFile image) { 
         return ResponseEntity.status(HttpStatus.CREATED).body(new Ad());
     }
 
@@ -49,7 +49,6 @@ public class AdsController {
     public ResponseEntity<Ads> getAdsMe() {
         return new ResponseEntity<>(new Ads(), HttpStatus.OK);
     }
-
 
     @PutMapping(value = "/{Id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<byte[]> updateImage(@PathVariable Integer Id,
