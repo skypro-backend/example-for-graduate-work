@@ -1,9 +1,6 @@
 package ru.skypro.homework.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class AdEntity {
 
     @Id
@@ -35,5 +33,8 @@ public class AdEntity {
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true)
+//    @OneToMany
+//    @JoinColumn(name = "adRelated")
+//    @OneToMany(mappedBy = "adRelated")
     List<Comment> comments = new ArrayList<>();
 }

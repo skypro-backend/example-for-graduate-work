@@ -13,6 +13,8 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 
 @Service
@@ -68,10 +70,17 @@ public class UserServiceImpl  implements UserService {
             Image multipartToEntity = new Image();
             multipartToEntity.setImage(imageBytes);
             imageRepository.save(multipartToEntity);
+//            Path filePath = Path.of("/users/" + multipartToEntity.getId() + "/avatar",  "." + getExtension(image.getOriginalFilename()));
+//            Files.createDirectories(filePath.getParent());
+//            Files.deleteIfExists(filePath);
             authorizedUser.setImageAvatar(multipartToEntity);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         userRepository.save(authorizedUser);
+    }
+    private String getExtension(String originalFilename) {
+        return originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+
     }
 }

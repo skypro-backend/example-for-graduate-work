@@ -46,11 +46,11 @@ public class CommentServiceImpl  implements CommentService {
     }
 
     @Override
-    public ru.skypro.homework.dto.comment.Comment addCommentToAd(CreateOrUpdateComment commentToAdd, int adId) {
+    public ru.skypro.homework.dto.comment.Comment addCommentToAd(CreateOrUpdateComment commentToAdd, int adId, String userName) {
         if (adRepository.getReferenceById(adId) != null) {
             AdEntity adToAddComment = adRepository.getReferenceById(adId);
             Comment mapperToDto = commentMapper.createOrUpdateCommentDtoToCommentEntity(commentToAdd);
-            mapperToDto.setUserRelated(adToAddComment.getUserRelated());
+            mapperToDto.setUserRelated(userRepository.findByUsername(userName));
             mapperToDto.setAdRelated(adToAddComment);
             mapperToDto.setCreatedAt(Instant.now().toEpochMilli());
             commentRepository.save(mapperToDto);

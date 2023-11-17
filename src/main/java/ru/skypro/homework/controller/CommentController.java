@@ -41,11 +41,11 @@ public class CommentController {
 
 
     @PostMapping("/{id}/comments")
-    public ResponseEntity<?> addComment(@RequestBody CreateOrUpdateComment createOrUpdateComment, @PathVariable Integer id) {
+    public ResponseEntity<?> addComment(@RequestBody CreateOrUpdateComment createOrUpdateComment, @PathVariable Integer id, Authentication authentication) {
         if (adService.callAdById(id) == null) {
             return ResponseEntity.notFound().build();
         } else {
-            Comment addedComment = commentService.addCommentToAd(createOrUpdateComment, id);
+            Comment addedComment = commentService.addCommentToAd(createOrUpdateComment, id, authentication.getName());
             return ResponseEntity.ok(addedComment);
         }
     }

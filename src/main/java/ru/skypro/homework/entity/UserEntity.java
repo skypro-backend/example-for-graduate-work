@@ -13,6 +13,7 @@ import java.util.List;
 @Data
 @Entity
 @EqualsAndHashCode
+@ToString
 public class UserEntity {
 
     @Id
@@ -33,9 +34,9 @@ public class UserEntity {
             cascade = CascadeType.ALL)
     List<AdEntity> ad = new ArrayList<>();
 
-    @OneToMany(mappedBy = "userRelated",
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
-    List<AdEntity> comments = new ArrayList<>();
+//    @OneToMany(mappedBy = "userRelated",
+//            fetch = FetchType.EAGER,
+//            cascade = CascadeType.ALL)
+//    List<Comment> comments = new ArrayList<>();
 
 }

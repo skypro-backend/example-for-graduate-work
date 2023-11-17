@@ -28,7 +28,7 @@ public class CommentMapperImpl  implements CommentMapper {
         comment.setAuthorFirstName(commentEntity.getUserRelated().getFirstName());
         comment.setCreatedAt(commentEntity.getCreatedAt());
         comment.setPk(commentEntity.getId());
-        comment.setText(comment.getText());
+        comment.setText(commentEntity.getText());
         return comment;
     }
 
