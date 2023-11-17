@@ -36,6 +36,9 @@ public class UserEntity {
     public void setPassword(Register register) {
         this.password = register.getPassword();
     }
+    public void setPassword(String password){
+        this.password = password;
+    }
 
     public void setFirsName(Register register) {
         this.firstName = register.getFirstName();
@@ -51,6 +54,15 @@ public class UserEntity {
 
     public void setRole(Register register) {
         this.role = register.getRole();
+    }
+
+    public void setAllFields(Register register){
+        setName(register);
+        setPassword(register);
+        setFirsName(register);
+        setLastName(register);
+        setPhone(register);
+        setRole(register);
     }
 
 
