@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
@@ -41,8 +42,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findUserEntityByPassword(oldPassword);
         userEntity.setPassword(newPassword);
         userRepository.save(userEntity);
-        //меняем данные авторизованного пользователя в AuthService
-//        authService.getUserDetailsManager().changePassword(newPass.getCurrentPassword(), newPass.getNewPassword());
+        //меняем пароль авторизованного пользователя в AuthService
         authService.getUserEntity().setPassword(newPassword);
     }
 
@@ -55,12 +55,33 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserEntity getUserInfo() {
-
         String userName = authService.getLogin().getUsername();
-//        String login = authService.getUserDetailsManager().loadUserByUsername(userName).getUsername();
-//        String password = authService.getUserDetailsManager().loadUserByUsername(userName).getPassword();
-//        return userRepository.findUserEntityByUserNameAndPassword(userName, password);
         return userRepository.findUserEntityByUserName(userName);
+    }
+
+    /**
+     * Метод изменяет данные пользователя, а именно имя, фамилию и номер телефона.
+     * <p>В начале метод получает из {@link AuthServiceImpl} логин авторизованного пользователя
+     * и записывает его в переменную.</p>
+     * <p>По логину находит данные пользователя в БД и кладет их в сущность user.
+     * Сущность user заполняется измененными данными из парамера updateUser.</p>
+     * <p>В итоге измененный объект user сохраняется в БД, и он же возвращается из метода.</p>
+     * @param updateUser объект содержащий поля с именем, фамилией и номером телефона.
+     * @return объект user
+     */
+    @Override
+    public UserEntity updateUserInfo(UpdateUser updateUser) {
+        //Получаем логин авторизованного пользователя из БД
+        String userName = authService.getLogin().getUsername();
+        //Находим данные авторизованного пользователя
+        UserEntity user = userRepository.findUserEntityByUserName(userName);
+        //Меняем данные пользователя на данные из DTO updateUser
+        user.setFirstName(updateUser.getFirstName());
+        user.setLastName(updateUser.getLastName());
+        user.setPhone(updateUser.getPhone());
+        //сохраняем измененные данные в БД
+        userRepository.save(user);
+        return user;
     }
 
 
