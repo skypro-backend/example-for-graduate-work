@@ -10,5 +10,5 @@ public class User {
     private String firstName; // имя пользователя
     private String lastName; // фамилия пользователя
     private String phone; // телефон пользователя
-    private String image; // ссылка на аватар пользователя
+//    private String image; // ссылка на аватар пользователя
 }

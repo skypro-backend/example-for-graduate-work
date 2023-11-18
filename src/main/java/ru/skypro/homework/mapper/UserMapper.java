@@ -14,9 +14,9 @@ public class UserMapper {
      * @param dto input dto class
      * @return entity class
      */
-    public UserEntity mapToUserEntity(Register dto) {
+    public static UserEntity mapToUserEntity(Register dto) {
         UserEntity entity = new UserEntity();
-        entity.setUsername(dto.getUsername());
+        entity.setUserName(dto.getUsername());
         entity.setPassword(dto.getPassword());
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
@@ -31,14 +31,14 @@ public class UserMapper {
      * @param entity input entity class
      * @return dto class
      */
-    public User mapToUserDto(UserEntity entity) {
+    public static User mapToUserDto(UserEntity entity) {
         User dto = new User();
         dto.setId(entity.getId());
-        dto.setEmail(entity.getUsername());
+        dto.setEmail(entity.getUserName());
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setPhone(entity.getPhone());
-        dto.setImage(entity.getAvatar().getFilePath()); // вот это момент на подумать
+//        dto.setImage(entity.getAvatar().getFilePath()); // вот это момент на подумать
         return dto;
     }
 }

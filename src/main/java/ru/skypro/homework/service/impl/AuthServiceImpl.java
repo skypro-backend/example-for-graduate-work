@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -7,6 +8,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
@@ -20,7 +22,7 @@ public class AuthServiceImpl implements AuthService {
     /**
      * создаем пустую сущность userEntity
      */
-    private final UserEntity userEntity = new UserEntity();
+    private UserEntity userEntity;
     private Login authorizationData;
 
     public AuthServiceImpl(UserDetailsManager manager,
@@ -57,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
                         .build());
 
         //устанавливаем поля для сущности userEntity, которые берем из регистрационных данных
-        userEntity.setAllFields(register);
+        this.userEntity = UserMapper.mapToUserEntity(register);
 
         //сохраняем нового пользователя в БД
         userRepository.save(userEntity);

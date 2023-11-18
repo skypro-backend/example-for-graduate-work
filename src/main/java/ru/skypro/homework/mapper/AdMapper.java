@@ -34,7 +34,7 @@ public class AdMapper {
         dto.setAuthorFirstName(entity.getAuthor().getFirstName());
         dto.setAuthorLastName(entity.getAuthor().getLastName());
         dto.setDescription(entity.getDescription());
-        dto.setEmail(entity.getAuthor().getUsername());
+        dto.setEmail(entity.getAuthor().getUserName());
         dto.setImage(entity.getPhoto().getFilePath()); // надо продумать этот момент
         dto.setPhone(entity.getAuthor().getPhone());
         dto.setPrice(entity.getPrice());
