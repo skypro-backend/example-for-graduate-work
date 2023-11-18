@@ -4,53 +4,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.service.CommentService;
 
+import java.time.Instant;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/ads")
+@CrossOrigin("http://localhost:3000/")
 public class CommentController {
 
-    @Autowired
-    private CommentService commentService;
 
     // Получение комментариев объявления
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<Comment>> getCommentsForAd(@PathVariable Long id) {
-        List<Comment> comments = commentService.getCommentsForAd(id);
-        return ResponseEntity.ok(comments);
+    public Comments getCommentsForAd(@PathVariable Long id) {
+
+        return new Comments(1, List.of(new Comment(1, "",
+                "Homer", Instant.now().toEpochMilli(), 1, "TestComment")));
     }
 
     // Добавление комментария к объявлению
     @PostMapping("/{id}/comments")
-    public ResponseEntity<Comment> addCommentToAd(@PathVariable Long id,
-                                                  @RequestBody CreateOrUpdateComment commentDetails) {
-        Comment newComment = commentService.addCommentToAd(id, commentDetails);
-        return ResponseEntity.ok(newComment);
+    public Comment addCommentToAd(@PathVariable Long id,
+                                  @RequestBody CreateOrUpdateComment commentDetails) {
+
+        return new Comment(1, "", "Homer", Instant.now().toEpochMilli(), 1, "text");
     }
 
     // Удаление комментария
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long adId, @PathVariable Long commentId) {
-        if (commentService.deleteComment(adId, commentId)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<String> deleteComment(@PathVariable Long adId,
+                                                @PathVariable Long commentId) {
+        return ResponseEntity.ok().build();
     }
 
     // Обновление комментария
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Long adId,
-                                                 @PathVariable Long commentId,
-                                                 @RequestBody CreateOrUpdateComment commentDetails) {
-        Comment updatedComment = commentService.updateComment(adId, commentId, commentDetails);
-        if (updatedComment != null) {
-            return ResponseEntity.ok(updatedComment);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public Comment updateComment(@PathVariable Long adId,
+                                 @PathVariable Long commentId,
+                                 @RequestBody CreateOrUpdateComment commentDetails) {
+
+        return new Comment(1, "", "Homer", Instant.now().toEpochMilli(), 1, "text");
     }
 }
