@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
@@ -14,6 +15,7 @@ import ru.skypro.homework.service.UserService;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
     private final AuthServiceImpl authService;
 
     public UserServiceImpl(UserRepository userRepository, AuthServiceImpl authService) {
@@ -33,10 +35,11 @@ public class UserServiceImpl implements UserService {
      * используя метод: {@link AuthServiceImpl#getUserDetailsManager()}</p>
      * <p>Последней строкой, меняем пароль в объекте {@link AuthServiceImpl#userEntity},
      * который является связью для {@link AuthServiceImpl} и БД</p>
+     *
      * @param newPass объект NewPassword, содержащий старый и новый пароли.
      */
     @Override
-    public void setNewPassword(NewPassword newPass) {
+    public void setPassword(NewPassword newPass) {
         String oldPassword = newPass.getCurrentPassword();
         String newPassword = newPass.getNewPassword();
         UserEntity userEntity = userRepository.findUserEntityByPassword(oldPassword);
@@ -51,10 +54,11 @@ public class UserServiceImpl implements UserService {
      * Метод находит в {@link AuthServiceImpl} текущие логин и пароль, и присваивает их в переменные.
      * Далее метод находит в БД, используя {@link UserRepository}, пользователя с соответствующими
      * данными и возвращает его.
+     *
      * @return объект userEntity
      */
     @Override
-    public UserEntity getUserInfo() {
+    public UserEntity getUser() {
         String userName = authService.getLogin().getUsername();
         return userRepository.findUserEntityByUserName(userName);
     }
@@ -66,11 +70,12 @@ public class UserServiceImpl implements UserService {
      * <p>По логину находит данные пользователя в БД и кладет их в сущность user.
      * Сущность user заполняется измененными данными из парамера updateUser.</p>
      * <p>В итоге измененный объект user сохраняется в БД, и он же возвращается из метода.</p>
+     *
      * @param updateUser объект содержащий поля с именем, фамилией и номером телефона.
      * @return объект user
      */
     @Override
-    public UserEntity updateUserInfo(UpdateUser updateUser) {
+    public UserEntity updateUser(UpdateUser updateUser) {
         //Получаем логин авторизованного пользователя из БД
         String userName = authService.getLogin().getUsername();
         //Находим данные авторизованного пользователя

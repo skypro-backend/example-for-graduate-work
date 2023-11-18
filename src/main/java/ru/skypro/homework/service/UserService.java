@@ -11,18 +11,18 @@ public interface UserService {
      * @param oldPass старый пароль
      * @param newPass новый пароль
      */
-    void setNewPassword(NewPassword newPass);
+    void setPassword(NewPassword newPass);
 
     /**
      * Метод возвращает информацию об авторизованном пользователе.
      * @return объект {@link UserEntity}, содержащий информацию о пользователе.
      */
-    UserEntity getUserInfo();
+    UserEntity getUser();
 
     /**
      * Метод обновляет информацию о пользователе.
      * @param updateUser объект содержащий поля с именем, фамилией и номером телефона.
      * @return объект {@link UserEntity}
      */
-    UserEntity updateUserInfo(UpdateUser updateUser);
+    UserEntity updateUser(UpdateUser updateUser);
 }
