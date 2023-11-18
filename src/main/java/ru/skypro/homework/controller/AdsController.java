@@ -60,6 +60,7 @@ public class AdsController {
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not Found")
     public void deleteAds (@PathVariable long id) {
+        adsService.deleteAds(id);
 
     }
 

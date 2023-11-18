@@ -10,6 +10,7 @@ import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exception.InvalidPasswordException;
 import ru.skypro.homework.model.UserInfo;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.mapper.UserMapper;
 
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ImageService imageService;
 
     @Override
     public void setPassword(NewPasswordDTO newPassword) {
@@ -53,6 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserImage(MultipartFile image) {
+        String uploadImage = imageService.uploadImage(image);
 
     }
 }

@@ -11,6 +11,7 @@ import ru.skypro.homework.model.UserInfo;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.mapper.AdsMapper;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class AdsServiceImpl implements AdsService {
     private final AdsRepository adsRepository;
     private final AdsMapper adsMapper;
     private final AuthServiceImpl authService;
+    private final ImageService imageService;
     @Override
     public List<AdsDTO> getAllAds() {
         List<Ads> adsList = adsRepository.findAll();
@@ -35,7 +37,9 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdsDTO addAds(MultipartFile image, CreateAdsDTO properties) {
+        String uploadImage = imageService.uploadImage(image);
         Ads ads = adsMapper.createAdsDtoToModel(properties);
+        ads.setImage(uploadImage);
         adsRepository.save(ads);
         return adsMapper.adsToAdsDto(ads);
     }
@@ -77,11 +81,12 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public String updateAdsImage(long id, MultipartFile image) {
         Ads ads = adsRepository.findById(id).orElse(null);
+        String uploadImage = imageService.uploadImage(image);
 
-        ads.setImage("Test");
+        ads.setImage(uploadImage);
         adsRepository.save(ads);
 
-        return "Test";
+        return uploadImage;
     }
 
 
