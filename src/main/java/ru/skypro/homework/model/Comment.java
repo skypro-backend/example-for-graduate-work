@@ -19,31 +19,14 @@ public class Comment {
     private String createdAt = String.valueOf(LocalDateTime.now());
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    })
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "user_id")
     UserInfo author;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    })
-    @JoinColumn(name = "ads_id", referencedColumnName = "ads_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ads_id")
     Ads ads;
 
-    public static CommentDTO mapToCommentDto(Comment comment) {
-        return new CommentDTO(comment.getAuthor().getId(),
-                comment.getAuthorImage(comment),
-                comment.getAuthor().getFirstName(),
-                comment.getCreatedAt(),
-                comment.getId(),
-                comment.getText());
-    }
 
     private String getAuthorImage(Comment comment) {
         return null;

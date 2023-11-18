@@ -7,7 +7,7 @@ import ru.skypro.homework.model.Comment;
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
 
-    CommentDTO commentToDto(Comment comment);
+    CommentDTO commentToCommentDto(Comment comment);
 
     Comment commentDtoToModel(CommentDTO commentDTO);
 }

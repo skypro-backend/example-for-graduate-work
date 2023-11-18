@@ -10,6 +10,8 @@ import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.UserInfo;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.mapper.AdsMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,30 +21,29 @@ import java.util.List;
 public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
+    private final AdsMapper adsMapper;
+    private final AuthServiceImpl authService;
     @Override
     public List<AdsDTO> getAllAds() {
         List<Ads> adsList = adsRepository.findAll();
         List<AdsDTO> adsDTOList = new ArrayList<>();
         for (Ads ads:adsList) {
-            adsDTOList.add(Ads.mapToAdsDto(ads));
+            adsDTOList.add(adsMapper.adsToAdsDto(ads));
         }
         return adsDTOList;
     }
 
     @Override
     public AdsDTO addAds(MultipartFile image, CreateAdsDTO properties) {
-        Ads ads = new Ads(properties.getDescription(),
-                properties.getPrice(),
-                properties.getTitle());
-
+        Ads ads = adsMapper.createAdsDtoToModel(properties);
         adsRepository.save(ads);
-        return Ads.mapToAdsDto(ads);
+        return adsMapper.adsToAdsDto(ads);
     }
 
     @Override
     public AdsInfoDTO getAdsById(long id) {
         Ads ads = adsRepository.findById(id).orElse(null);
-        return Ads.mapToAdsInfoDto(ads);
+        return adsMapper.adsToAdsInfoDto(ads);
     }
 
     @Override
@@ -59,16 +60,16 @@ public class AdsServiceImpl implements AdsService {
 
         adsRepository.save(ads);
 
-        return Ads.mapToAdsDto(ads);
+        return adsMapper.adsToAdsDto(ads);
     }
 
     @Override
     public List<AdsDTO> getUserAds() {
-        UserInfo user = new UserInfo();
+        UserInfo user = authService.getCurrentUser();
         List<Ads> adsList = user.getAds();
         List<AdsDTO> adsDTOList = new ArrayList<>();
         for (Ads ads:adsList) {
-            adsDTOList.add(Ads.mapToAdsDto(ads));
+            adsDTOList.add(adsMapper.adsToAdsDto(ads));
         }
         return adsDTOList;
     }

@@ -11,12 +11,13 @@ import ru.skypro.homework.repository.UserRepository;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-    //репозиторий пользователей
+
     private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserInfo userInfo = userRepository.findByEmail(username).orElseThrow(()->new UsernameNotFoundException("User not found"));
+        UserInfo userInfo = userRepository.findByEmail(username).orElseThrow(()
+                ->new UsernameNotFoundException("User not found"));
         return User.builder()
                 .username(userInfo.getEmail())
                 .password(userInfo.getPassword())

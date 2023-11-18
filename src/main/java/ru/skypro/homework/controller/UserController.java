@@ -1,9 +1,15 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.NewPasswordDTO;
+import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.service.UserService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -12,27 +18,43 @@ import ru.skypro.homework.dto.UserDTO;
 @RequestMapping("/users")
 public class UserController {
 
-    //Изменить пароль
+    private final UserService userService;
+
     @PostMapping("/set_password")
-    public UserDTO setPassword(@RequestBody String newPassword) {
-        return null;
+    @Operation(summary = "Сменить пароль пользователя")
+    @ApiResponse(responseCode = "200",description = "OK")
+    @ApiResponse(responseCode = "401",description = "Unauthorized")
+    @ApiResponse(responseCode = "403",description = "Forbidden")
+    void setPassword(@RequestBody NewPasswordDTO newPassword) {
+
+        userService.setPassword(newPassword);
     }
 
-    //Информация о пользователе
     @GetMapping("/me")
+    @Operation(summary = "Получение информации об авторизованном пользователе")
+    @ApiResponse(responseCode = "200",description = "OK")
+    @ApiResponse(responseCode = "401",description = "Unauthorized")
     public UserDTO getUserInfo() {
-        return null;
+
+        return userService.getUserInfo();
     }
 
-    //Обновить информацию о пользователе
     @PatchMapping("/me")
-    public UserDTO updateUserInfo(UserDTO userDTO) {
-        return null;
+    @Operation(summary = "Обновление информации об авторизованном пользователе")
+    @ApiResponse(responseCode = "200",description = "OK")
+    @ApiResponse(responseCode = "401",description = "Unauthorized")
+    public UpdateUserDTO updateUserInfo(UpdateUserDTO user) {
+
+        return userService.updateUser(user);
     }
 
     //Обновить изображение о пользователе
     @PatchMapping("/me/image")
-    public UserDTO updateUserImage(UserDTO userDTO) {
-        return null;
+    @Operation(summary = "Обновление аватара авторизованного пользователе")
+    @ApiResponse(responseCode = "200",description = "OK")
+    @ApiResponse(responseCode = "401",description = "Unauthorized")
+    void updateUserImage(MultipartFile image) {
+
+        userService.updateUserImage(image);
     }
 }

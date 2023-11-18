@@ -22,10 +22,9 @@ public class UserInfo {
     private String firstName;
     private String lastName;
     private String phone;
-    private String image;
-    private String regDate = String.valueOf(LocalDateTime.now());
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String image;
 
     @OneToMany(mappedBy = "author",
             cascade = CascadeType.ALL,
@@ -36,4 +35,8 @@ public class UserInfo {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<Comment> comments;
+
+    @OneToOne (cascade = CascadeType.ALL)
+    private Image imageModel;
+
 }
