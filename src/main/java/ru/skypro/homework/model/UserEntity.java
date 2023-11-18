@@ -18,7 +18,7 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String username;
+    private String userName;
     private String password;
     private String firstName;
     private String lastName;
@@ -33,6 +33,5 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "author")
     private Collection<CommentEntity> comments;
-
 
 }

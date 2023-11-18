@@ -15,10 +15,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     /**
      * Пиоск пользователя по логину
-     * @param username логин
+     * @param userName логин
      * @return объект userEntity
      */
-    UserEntity findUserEntityByUsername(String username);
+    UserEntity findUserEntityByUserName(String userName);
 
     /**
      * Поиск пользователя по логину и паролю.
@@ -26,5 +26,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
      * @param password пароль
      * @return объект userEntity
      */
-    UserEntity findUserEntityByUsernameAndPassword(String userName, String password);
+    UserEntity findUserEntityByUserNameAndPassword(String userName, String password);
 }

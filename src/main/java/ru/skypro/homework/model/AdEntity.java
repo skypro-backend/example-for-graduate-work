@@ -29,5 +29,5 @@ public class AdEntity {
     private UserEntity author;
 
     @OneToMany(mappedBy = "ad")
-    private Collection<Comment> comments;
+    private Collection<CommentEntity> comments;
 }
