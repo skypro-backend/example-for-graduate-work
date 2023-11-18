@@ -9,6 +9,21 @@ public class User {
     private String firstName;
     private String lastName;
     private String phone;
-    private String role;
+    private Role role;
     private String image;
+
+    public User(int id, String email, String firstName,
+                String lastName, String phone, Role role, String image) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.role = role;
+        this.image = image;
+    }
+
+    public User() {
+    }
+
 }
