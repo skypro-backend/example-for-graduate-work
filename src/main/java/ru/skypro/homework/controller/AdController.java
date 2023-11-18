@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.service.AdService;
 
-@RestController("/ads")
+@RestController("/ad")
 public class AdController {
     AdService adService;
     public AdController(AdService adService) {
