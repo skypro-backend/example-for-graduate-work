@@ -1,46 +1,52 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterDto;
+import ru.skypro.homework.mapper.RegisterMapper;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.User;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-
-    private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
+    private final UserRepository userRepository;
+    private final UserServiceImpl userService;
+    private final RegisterMapper registerMapper;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
-        this.encoder = passwordEncoder;
-    }
 
+
+    /**
+     * Авторизация пользователя
+     * @return {@link PasswordEncoder#matches(CharSequence, String)}
+     */
     @Override
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
+        if (userRepository.findByUserName(userName).isPresent()) {
             return false;
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
+        UserDetails userDetails = userService.loadUserByUsername(userName);
         return encoder.matches(password, userDetails.getPassword());
     }
-
+    /**
+     * Регистрация пользователя в системе:
+     * {@link UserRepository#findByUserName(String)}
+     * {@link RegisterMapper#toModel(RegisterDto)}
+     * @return {@link UserRepository#save(Object)}
+     */
     @Override
     public boolean register(RegisterDto register) {
-        if (manager.userExists(register.getUsername())) {
+        if (userRepository.findByUserName(register.getUsername()).isPresent()) {
             return false;
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
+        User user = registerMapper.toModel(register);
+       // user.setPassword(encoder.encode(user.getPassword()));
+        userRepository.save(user);
         return true;
     }
 

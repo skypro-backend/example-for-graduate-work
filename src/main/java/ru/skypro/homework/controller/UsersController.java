@@ -83,7 +83,7 @@ public class UsersController {
                     ),
             }
     )
-    @PatchMapping("/me")
+    @PatchMapping("/update")
     public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto updateUserDto,
                                                     Authentication authentication) {
         log.info("запрос на обновление информации");

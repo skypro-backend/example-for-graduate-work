@@ -22,7 +22,6 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.security.MyUserPrincipal;
 import ru.skypro.homework.service.UserService;
 
-import java.awt.*;
 
 
 @Service
@@ -32,6 +31,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
 
+    /**
+     * Редиктирование данных пользователя
+     * {@link UpdateUserMapper#toModel(UpdateUserDto, User)}
+     * @return {@link UserRepository#save(Object)},
+     */
     @Override
     public UpdateUserDto update(UpdateUserDto updateUserDto, Authentication authentication) {
         User user = findUserByUsername(authentication);
@@ -41,7 +45,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return UpdateUserMapper.INSTANCE.toDTO(user);
 
     }
-
+    /**
+     * Изменение пароля пользователя
+     * {@link PasswordEncoder#encode(CharSequence)}
+     * {@link NewPasswordMapper#toDto(User)},
+     * @return {@link UserRepository#save(Object)},
+     * @throws PasswordChangeException пароль не изменен
+     */
     @Override
     public NewPasswordDto setPassword(NewPasswordDto newPasswordDto, Authentication authentication) {
         User user = findUserByUsername(authentication);
@@ -56,14 +66,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new PasswordChangeException("ошибка изменения пароля");
         }
     }
-
+    /**
+     * Предоставление информации о зарегистрированном пользователе
+     * @return {@link UserMapper#toDto(User)},
+     */
     @Override
     public UserDto getUserDto(Authentication authentication) {
         User user = findUserByUsername(authentication);
         log.info("пользователь найден");
         return UserMapper.INSTANCE.toDto(user);
     }
-
+    /**
+     * Обновление аватарки пользователя
+     * {@link User#setUserImage(String)}
+     * @return {@link String},
+     */
     @Override
     public String updateImage(MultipartFile image, Authentication authentication) {
         User user = findUserByUsername(authentication);
@@ -71,7 +88,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("изображение обновлено");
         return "изображение обновлено";
     }
-
+    /**
+     * Проверка авторизации пользователя в базе
+     * {@link UserRepository#findByUserName(String)}
+     * @throws UsernameNotFoundException пользователь не найден
+     * @return {@link MyUserPrincipal}
+     */
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -80,7 +102,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                         String.format("Пользователь '%s' не найден", username)));
         return new MyUserPrincipal(user);
     }
-
+    /**
+     * Проверка авторизованного пользователя в базе
+     * @throws UsernameNotFoundException пользователь не найден
+     * @return {@link UserRepository#findByUserName(String)}
+     */
     private User findUserByUsername(Authentication authentication) {
         return userRepository.findByUserName(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException(
