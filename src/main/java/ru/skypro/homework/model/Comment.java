@@ -8,19 +8,13 @@ import javax.persistence.*;
 @Table(name = "comments")
 @Data
 public class Comment {
-
-    @Column(name = "id_author")
-    private long author;
-    @Column(name = "author_Path_Image")
-    private String authorImage;
-    @Column(name = "author_FirstName")
-    private String authorFirstName;
-    @Column(name = "time_Create_Comment")
-    private long createdAt;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pk;
-    @Column(name = "text_Comment")
+    private int author;
+    private String authorImage;
+    private String authorFirstName;
+    private int createdAt;
     private String text;
 
 /*    properties:
