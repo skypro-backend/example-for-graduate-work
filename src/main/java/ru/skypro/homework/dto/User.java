@@ -1,24 +1,21 @@
-package ru.skypro.homework.model;
+package ru.skypro.homework.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import lombok.Data;
+
 import java.util.Objects;
 
-@Entity
+@Data
 public class User {
-    @Id
-    @GeneratedValue
-    private Long id;
-    private String username;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private Integer phone;
-    private String role = "USER";
-    private String image;
+    private Long id = 0L;
+    private String username = "string";
+    private String password = "string";
+    private String firstName = "string";
+    private String lastName = "string";
+    private Integer phone = 0;
+    private Role role = Role.USER;
+    private String image = "string";
 
-    public User(Long id, String username, String password, String firstName, String lastName, Integer phone, String role, String image) {
+    public User(Long id, String username, String password, String firstName, String lastName, Integer phone, Role role, String image) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -29,7 +26,9 @@ public class User {
         this.image = image;
     }
 
-    public User getId() {
+    public User() {}
+
+    public Long getId() {
         return id;
     }
 
@@ -77,11 +76,11 @@ public class User {
         this.phone = phone;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -98,7 +97,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id.equals(user.id) && username.equals(user.username) && password.equals(user.password) && firstName.equals(user.firstName) && Objects.equals(lastName, user.lastName) && phone.equals(user.phone) && role.equals(user.role) && image.equals(user.image);
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(phone, user.phone) && role == user.role && Objects.equals(image, user.image);
     }
 
     @Override
@@ -108,17 +107,15 @@ public class User {
 
     @Override
     public String toString() {
-        return "Users{" +
+        return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phone=" + phone +
-                ", role='" + role + '\'' +
+                ", role=" + role +
                 ", image='" + image + '\'' +
                 '}';
     }
-
-
 }

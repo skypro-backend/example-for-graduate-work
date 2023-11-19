@@ -1,50 +1,38 @@
 package ru.skypro.homework.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.model.User;
-import ru.skypro.homework.service.UserService;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.User;
 
+@Slf4j
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
-    private Long id;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @GetMapping("/{me}")
-    public User get(@PathVariable long id) {
-        return userService.get(id);
+    @GetMapping("/users/me")
+    public ResponseEntity<User> get() {
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.ok(new User());
     }
 
-    @PutMapping("/{me}")
-    public ResponseEntity<User> update() {
-        return update(null);
+    @PatchMapping("/users/me")
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new User());
     }
 
-    @PutMapping("/{me}")
-    public ResponseEntity<User> update(@PathVariable Long id) {
-        ResponseEntity<User> result;
-        this.id = id;
-        User savedUser = userService.update(id, user);
-        if (savedUser == null) {
-            result = ResponseEntity.badRequest().build();
-        } else {
-            result = ResponseEntity.ok(savedUser);
-        }
-        return result;
+    @PatchMapping("/users/me/image")
+    public ResponseEntity<String> updateUserImage(@RequestBody MultipartFile file) {
+        return ResponseEntity.ok().build();
     }
-    @PutMapping("/{set_password}")
-    public ResponseEntity<User> update(@PathVariable Long set_password, @RequestBody User user) {
-        User savedUser = userService.update(set_password, user);
-        if (savedUser == null) {
-            return ResponseEntity.badRequest().build();
-        } else {
-            return ResponseEntity.ok(savedUser);
-        }
+    @PutMapping("/users/set_password")
+    public ResponseEntity<User> updatePassword(@RequestBody String password) {
+        return ResponseEntity.ok().build();
     }
-//    set_password
 }
