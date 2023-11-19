@@ -30,12 +30,12 @@ Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
 ###
-GET http://localhost:8080/users/me
+GET http://localhost:8080/user/me
 Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
 ###
-PATCH http://localhost:8080/users/me
+PATCH http://localhost:8080/user/me
 Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
@@ -51,7 +51,7 @@ Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
 ###
-POST http://localhost:8080/users/set_password
+POST http://localhost:8080/user/set_password
 Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
