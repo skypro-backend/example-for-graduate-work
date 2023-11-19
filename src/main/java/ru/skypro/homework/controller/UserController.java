@@ -2,6 +2,7 @@ package ru.skypro.homework.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
@@ -37,12 +38,21 @@ public class UserController {
         }
     }
 
+    //    @PatchMapping("/me") // http://localhost:8080/users/me
+//    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
+//        UserEntity user = userService.updateUser(updateUser);
+//        if (user != null) {
+//            return ResponseEntity.ok(UserMapper.mapFromUserEntityToUpdateUser(user));
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//    }
     @PatchMapping("/me") // http://localhost:8080/users/me
-    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
-        UserEntity user = userService.updateUser(updateUser);
+    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
+        UserEntity user = userService.updateUser(updateUser, authentication);
         if (user != null) {
             return ResponseEntity.ok(UserMapper.mapFromUserEntityToUpdateUser(user));
-        } else {
+        }else{
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }

@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.security.core.Authentication;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.model.UserEntity;
@@ -25,4 +26,5 @@ public interface UserService {
      * @return объект {@link UserEntity}
      */
     UserEntity updateUser(UpdateUser updateUser);
+    UserEntity updateUser(UpdateUser updateUser, Authentication authentication);
 }

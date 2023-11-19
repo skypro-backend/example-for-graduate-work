@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
@@ -89,5 +90,15 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public UserEntity updateUser(UpdateUser updateUser, Authentication authentication) {
+        String login = authentication.getName();
+        UserEntity user = userRepository.findUserEntityByUserName(login);
+        user.setFirstName(updateUser.getFirstName());
+        user.setLastName(updateUser.getLastName());
+        user.setPhone(updateUser.getPhone());
+        userRepository.save(user);
+        return user;
+    }
 
 }
