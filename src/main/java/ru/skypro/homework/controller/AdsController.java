@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import ru.skypro.homework.service.AdService;
 @RequestMapping("/ads")
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
+@Slf4j
 public class AdsController {
 
     private final AdService adService;

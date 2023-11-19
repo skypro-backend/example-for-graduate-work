@@ -25,7 +25,7 @@ public class Comment {
     private LocalDateTime createdAt;
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Users user;
+    private User user;
     @ManyToOne(optional = false)
     @JoinColumn(name = "ad_id",referencedColumnName = "id")
     private Ad ad;

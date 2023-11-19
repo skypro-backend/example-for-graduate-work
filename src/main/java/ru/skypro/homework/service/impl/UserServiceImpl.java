@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +10,7 @@ import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.models.Image;
-import ru.skypro.homework.models.Users;
+import ru.skypro.homework.models.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.security.AuthProvider;
 import ru.skypro.homework.service.AuthService;
@@ -39,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UpdateUserDto updateUser(UpdateUserDto updateUser) {
-        Users user = repository.findAuthUserByEmail(authProvider.getUsername());
+        User user = repository.findAuthUserByEmail(authProvider.getUsername());
 
         if (updateUser.getFirstName() != null) {
             user.setFirstName(updateUser.getFirstName());
@@ -57,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void updateUserImage(MultipartFile file) {
-        Users user = repository.findAuthUserByEmail(authProvider.getUsername());
+        User user = repository.findAuthUserByEmail(authProvider.getUsername());
         if (user.getImage() == null) {
             user.setImage(new Image());
         }
@@ -68,9 +67,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean setPassword(NewPasswordDto newPassword) {
-        User securityUser = (User) authProvider.getAuthentication().getPrincipal();
-        if (authService.checkPasswords(newPassword.getCurrentPassword(), securityUser.getPassword())) {
-            Users user = repository.findAuthUserByEmail(securityUser.getUsername());
+        User user = repository.findAuthUserByEmail(authProvider.getUsername());
+        if (authService.checkPasswords(newPassword.getCurrentPassword(), user.getPassword())) {
             user.setPassword(passwordEncoder.encode(newPassword.getNewPassword()));
             repository.save(user);
             return true;
