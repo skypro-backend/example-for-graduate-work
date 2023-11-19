@@ -1,8 +1,12 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Register {
 
     private String username;
@@ -11,4 +15,5 @@ public class Register {
     private String lastName;
     private String phone;
     private Role role;
+
 }
