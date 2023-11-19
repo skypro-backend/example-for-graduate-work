@@ -6,7 +6,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.NewPasswordDto;
+import ru.skypro.homework.dto.UpdateUserDto;
+import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.service.UserService;
+
 import javax.validation.Valid;
 
 @Slf4j
@@ -17,6 +24,7 @@ import javax.validation.Valid;
 
 @RequestMapping("/users")
 public class UsersController {
+    private final UserService userService;
 
     @Operation(
             summary = "Обновление пароля",
@@ -37,8 +45,10 @@ public class UsersController {
             }
     )
     @PostMapping("/set_password")
-    public ResponseEntity<?> setPassword() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPasswordDto,
+                                                      Authentication authentication) {
+        log.info("запрос на обновление пароля");
+        return ResponseEntity.ok(userService.setPassword(newPasswordDto, authentication));
     }
 
     @Operation(
@@ -55,8 +65,9 @@ public class UsersController {
             }
     )
     @GetMapping("/me")
-    public ResponseEntity<?> getUser() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UserDto> getUser(Authentication authentication) {
+        log.info("запрос на получение пользователя");
+        return ResponseEntity.ok(userService.getUserDto(authentication));
     }
 
     @Operation(
@@ -73,8 +84,10 @@ public class UsersController {
             }
     )
     @PatchMapping("/me")
-    public ResponseEntity<?> updateUser() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto updateUserDto,
+                                                    Authentication authentication) {
+        log.info("запрос на обновление информации");
+        return ResponseEntity.ok(userService.update(updateUserDto, authentication));
     }
 
     @Operation(
@@ -91,8 +104,10 @@ public class UsersController {
             }
     )
     @PatchMapping("/me/image")
-    public ResponseEntity<?> updateUserImage() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> updateUserImage(MultipartFile image, Authentication authentication) {
+        log.info("запрос на добаление аватара");
+
+        return ResponseEntity.ok(userService.updateImage(image, authentication));
     }
 
 
