@@ -7,10 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Login {
-
-    private String username;
-    private String password;
-
+public class NewPassword {
+    private String currentPassword;
+    private String newPassword;
 }
-
