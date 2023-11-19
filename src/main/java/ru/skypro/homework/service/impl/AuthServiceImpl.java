@@ -5,8 +5,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterDto;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.mapper.RegisterMapper;
-import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
@@ -17,12 +17,11 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final UserServiceImpl userService;
-    private final RegisterMapper registerMapper;
-
 
 
     /**
      * Авторизация пользователя
+     *
      * @return {@link PasswordEncoder#matches(CharSequence, String)}
      */
     @Override
@@ -33,19 +32,21 @@ public class AuthServiceImpl implements AuthService {
         UserDetails userDetails = userService.loadUserByUsername(userName);
         return encoder.matches(password, userDetails.getPassword());
     }
+
     /**
      * Регистрация пользователя в системе:
      * {@link UserRepository#findByUserName(String)}
      * {@link RegisterMapper#toModel(RegisterDto)}
+     *
      * @return {@link UserRepository#save(Object)}
      */
     @Override
-    public boolean register(RegisterDto register) {
+    public boolean register(RegisterDto register, Role role) {
         if (userRepository.findByUserName(register.getUsername()).isPresent()) {
             return false;
         }
-        User user = registerMapper.toModel(register);
-       // user.setPassword(encoder.encode(user.getPassword()));
+        User user = RegisterMapper.INSTANCE.toModel(register);
+        user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
     }
