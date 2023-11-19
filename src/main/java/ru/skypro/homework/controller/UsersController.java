@@ -84,16 +84,12 @@ public class UsersController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadAvatar(@RequestParam MultipartFile image,
+    public ResponseEntity<UserDto> uploadAvatar(@RequestParam MultipartFile image,
                                                @Parameter(hidden = true) Authentication auth) throws IOException {
         String username = auth.getName();
-        String filePath = "";
-        UserDto user;
+        UserDto user = userService.updateUserImage(username, image);
 
-        if (image != null) {
-             filePath = userService.updateUserImage(username, image);
-        }
-        return ResponseEntity.ok(filePath);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping(value = "/avatars/{id}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
