@@ -20,24 +20,29 @@ public class UserController {
         this.userService = userService;
         this.authService = authService;
     }
+
     @PostMapping("/set_password") // http://localhost:8080/users/set_password
-    public ResponseEntity setNewPassword(@RequestBody NewPassword newPass){
-        userService.setNewPassword(newPass);
+    public ResponseEntity setPassword(@RequestBody NewPassword newPass) {
+        userService.setPassword(newPass);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/me") // http://localhost:8080/users/me
-    public User getUserInfo(){
-        User user = UserMapper.mapToUserDto(userService.getUserInfo());
-        return user;
+    public ResponseEntity<User> getUser() {
+        UserEntity user = userService.getUser();
+        if (user != null) {
+            return ResponseEntity.ok(UserMapper.mapFromUserEntityToUser(user));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @PatchMapping("/me") // http://localhost:8080/users/me
-    public ResponseEntity updateUserInfo(@RequestBody UpdateUser updateUser){
-        UserEntity user = userService.updateUserInfo(updateUser);
+    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
+        UserEntity user = userService.updateUser(updateUser);
         if (user != null) {
-            return ResponseEntity.ok().build();
-        }else{
+            return ResponseEntity.ok(UserMapper.mapFromUserEntityToUpdateUser(user));
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
