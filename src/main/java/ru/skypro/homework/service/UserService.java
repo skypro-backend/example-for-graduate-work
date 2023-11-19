@@ -63,7 +63,7 @@ public class UserService {
         return mapper.map(userEntityNew);
     }
 
-    public String updateUserImage(String username, MultipartFile file) throws IOException {
+    public UserDto updateUserImage(String username, MultipartFile file) throws IOException {
         String fileName = username.replaceAll("[@.]", "_")
                 + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
         Path path = Path.of(avatarDir, fileName);
@@ -75,6 +75,6 @@ public class UserService {
         user.setImage("/users/" + path);
         userRepository.save(user);
 
-        return path.toString();
+        return mapper.map(user);
     }
 }
