@@ -20,10 +20,10 @@ public class WebSecurityConfig {
             "/v3/api-docs",
             "/webjars/**",
             "/ads",
-            "/ads/images/**",
+            "/ads/images/*",
             "/login",
             "/register",
-            "/users/avatars/**"
+            "/users/avatars/*"
     };
 
     @Bean
