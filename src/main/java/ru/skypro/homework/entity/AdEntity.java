@@ -33,8 +33,5 @@ public class AdEntity {
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-//    @OneToMany
-//    @JoinColumn(name = "adRelated")
-//    @OneToMany(mappedBy = "adRelated")
     List<Comment> comments = new ArrayList<>();
 }

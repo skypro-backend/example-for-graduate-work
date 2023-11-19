@@ -38,8 +38,7 @@ public class CommentServiceImpl  implements CommentService {
     public Comments getCommentsOfOneAd(int adId) {
         if (adRepository.getReferenceById(adId) != null) {
             AdEntity adToRetrieveCommentsFrom = adRepository.getReferenceById(adId);
-            Comments retrievedComments = commentMapper.adCommentsToCommentsDTO(adToRetrieveCommentsFrom);
-            return retrievedComments;
+            return commentMapper.adCommentsToCommentsDTO(adToRetrieveCommentsFrom);
         } else {
             throw new NoAccessToAdException();
         }

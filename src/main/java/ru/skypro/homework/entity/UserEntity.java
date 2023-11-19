@@ -37,6 +37,6 @@ public class UserEntity {
 //    @OneToMany(mappedBy = "userRelated",
 //            fetch = FetchType.EAGER,
 //            cascade = CascadeType.ALL)
-//    List<Comment> comments = new ArrayList<>();
+//    List<AdEntity> comments = new ArrayList<>();
 
 }

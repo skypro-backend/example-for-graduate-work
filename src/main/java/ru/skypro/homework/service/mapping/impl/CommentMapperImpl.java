@@ -21,9 +21,9 @@ public class CommentMapperImpl  implements CommentMapper {
         ru.skypro.homework.dto.comment.Comment comment = new ru.skypro.homework.dto.comment.Comment();
         comment.setAuthor(commentEntity.getUserRelated().getId());
         if (commentEntity.getUserRelated().getImageAvatar() != null) {
-            comment.setImage("/users/" + commentEntity.getUserRelated().getImageAvatar().getId() + "/avatar");
+            comment.setAuthorImage("/users/" + commentEntity.getUserRelated().getImageAvatar().getId() + "/avatar");
         } else {
-            comment.setImage(null);
+            comment.setAuthorImage(null);
         }
         comment.setAuthorFirstName(commentEntity.getUserRelated().getFirstName());
         comment.setCreatedAt(commentEntity.getCreatedAt());

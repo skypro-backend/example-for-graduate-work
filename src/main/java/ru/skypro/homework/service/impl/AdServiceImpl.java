@@ -137,12 +137,11 @@ public class AdServiceImpl implements AdService {
     @Transactional
     @Override
     public boolean deleteAdById(int id, String username) {
-        AdEntity adFromRepository = adRepository.findById(id);
         UserEntity userPostedAd = adRepository.findById(id).getUserRelated();
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();
 
-        if (userPostedAd.equals(authorizedUser) || authorizedUserRole == Role.ADMIN) {
+        if (authorizedUserRole == Role.USER && userPostedAd.equals(authorizedUser) || authorizedUserRole == Role.ADMIN) {
             adRepository.deleteById(id);
             commentRepository.deleteById(id);
             adRepository.flush();
