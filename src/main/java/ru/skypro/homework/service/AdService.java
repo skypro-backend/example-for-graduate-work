@@ -1,19 +1,21 @@
 package ru.skypro.homework.service;
 
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.AdEntity;
 
 public interface AdService {
 
-    /**
-     * Метод добавляет товар.
-     * @return объект {@link AdEntity}, содержащий информацию о товаре.
-     */
-    AdEntity createAd(AdEntity createAd);
+    Ads getAllAds();
 
-    /**
-     * Метод обновляет информацию о товаре.
-     * @param updateAd объект содержащий поля с заголовком, ценой и описанием товара.
-     * @return объект {@link AdEntity}, содержащий информацию о товаре.
-     */
-    AdEntity updateAd(AdEntity updateAd);
+    Ad addAd(CreateOrUpdateAd properties, MultipartFile image);
+
+    ExtendedAd getAds(Integer id);
+
+    boolean removeAd(Integer id);
+
+    Ad updateAds(Integer id, CreateOrUpdateAd dto);
 }

@@ -12,7 +12,8 @@ import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
 
-@RestController("/users")
+@RestController
+@RequestMapping("users/")
 public class UserController {
     UserService userService;
     AuthServiceImpl authService;
