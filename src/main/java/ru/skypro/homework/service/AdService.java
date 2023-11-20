@@ -18,4 +18,8 @@ public interface AdService {
     boolean removeAd(Integer id);
 
     Ad updateAds(Integer id, CreateOrUpdateAd dto);
+
+    Ads getAdsMe(String username);
+
+    MultipartFile updateImage(Integer id, MultipartFile image); // todo возвращаемое значение
 }

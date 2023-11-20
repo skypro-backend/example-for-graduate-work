@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
@@ -88,6 +89,15 @@ public class UserServiceImpl implements UserService {
         user.setPhone(updateUser.getPhone());
         //сохраняем измененные данные в БД
         userRepository.save(user);
+        return user;
+    }
+
+    @Override
+    public UserEntity checkUserByUsername(String username) {
+        UserEntity user = userRepository.findUserEntityByUserName(username);
+        if (user == null) {
+            throw new UserNotFoundException("User not found"); // todo придумать сообщение
+        }
         return user;
     }
 
