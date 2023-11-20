@@ -18,6 +18,7 @@ import ru.skypro.homework.utils.MyMapper;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -156,6 +157,11 @@ public class AdsService {
     private String getExtension(String fileName) {
         log.debug("Method getExtension is called, argument(s) passed: {}", fileName);
         return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+
+    public byte[] getImageFromFS(String id) throws IOException {
+        Path path = Paths.get(imageDir + id);
+        return Files.readAllBytes(path);
     }
 
 }
