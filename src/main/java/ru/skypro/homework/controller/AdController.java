@@ -8,10 +8,12 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -32,8 +34,8 @@ public class AdController {
     }
 
     @PostMapping
-    public ResponseEntity<Ad> addAd(@RequestParam CreateOrUpdateAd properties, @RequestParam MultipartFile image) {
-        Ad ad = adService.addAd(properties, image); // метод в разработке
+    public ResponseEntity<AdEntity> addAd(@RequestParam CreateOrUpdateAd properties, @RequestParam MultipartFile image) throws IOException {
+        AdEntity ad = adService.addAd(properties, image); // метод в разработке
         return ResponseEntity.ok(ad);
     }
 
