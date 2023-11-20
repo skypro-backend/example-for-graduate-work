@@ -6,11 +6,13 @@ import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.User;
 
 @Mapper
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
     @Mapping(target = "user.adList", ignore = true)
-    UserDto toDto(Ad ad);
+    UserDto toDto(User user);
+
 //    Ad toModel(AdDto adDto);
 }

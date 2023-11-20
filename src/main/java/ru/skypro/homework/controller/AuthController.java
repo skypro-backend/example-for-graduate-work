@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.LoginDto;
+import ru.skypro.homework.dto.RegisterDto;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.service.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -35,7 +37,7 @@ public class AuthController {
             }
     )
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto login) {
+    public ResponseEntity<Boolean> login(@RequestBody LoginDto login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
@@ -43,12 +45,13 @@ public class AuthController {
         }
     }
 
-//    @PostMapping("/register")
-//    public ResponseEntity<?> register(@RequestBody Register register) {
-//        if (authService.register(register)) {
-//            return ResponseEntity.status(HttpStatus.CREATED).build();
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//    }
+    @PostMapping("/register")
+    public ResponseEntity<Boolean> register(@RequestBody RegisterDto register) {
+        Role role = register.getRole();
+        if (authService.register(register, role)) {
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 }

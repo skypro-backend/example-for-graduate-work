@@ -11,9 +11,12 @@ import ru.skypro.homework.model.User;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UpdateUserMapper {
-//    UpdateUserMapper INSTANCE = Mappers.getMapper(UpdateUserMapper.class);
+    UpdateUserMapper INSTANCE = Mappers.getMapper(UpdateUserMapper.class);
+
     @Mapping(target = "firstName", source = "updateUserDto.firstName")
     @Mapping(target = "lastName", source = "updateUserDto.lastName")
     @Mapping(target = "phone", source = "updateUserDto.phone")
-    User toModel(UpdateUserDto updateUserDto);
+    User toModel(UpdateUserDto updateUserDto, User user);
+
+    UpdateUserDto toDTO(User user);
 }
