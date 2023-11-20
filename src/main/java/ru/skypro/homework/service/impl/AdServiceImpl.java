@@ -89,4 +89,5 @@ public class AdServiceImpl implements AdService {
     public MultipartFile updateImage(Integer id, MultipartFile image) {
         return null; // todo прописать логику сервиса
     }
+
 }

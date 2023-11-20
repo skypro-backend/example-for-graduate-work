@@ -35,7 +35,7 @@ public class CommentController {
     public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id,
                                               @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         if (authService.getLogin() != null) {
-            return ResponseEntity.ok(commentService.addComment(id, createOrUpdateComment));
+            return ResponseEntity.ok(commentService.addComment(id, createOrUpdateComment, authService.getLogin().getUsername()));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
