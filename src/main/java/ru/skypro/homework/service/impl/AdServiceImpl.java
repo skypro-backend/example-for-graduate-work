@@ -8,8 +8,10 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.AdEntity;
+import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,9 +22,12 @@ public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
     private final AdMapper adMapper;
 
-    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper) {
+    private final UserService userService;
+
+    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper, UserService userService) {
         this.adRepository = adRepository;
         this.adMapper = adMapper;
+        this.userService = userService;
     }
 
     @Override
@@ -68,4 +73,21 @@ public class AdServiceImpl implements AdService {
         return adMapper.mapToAdDto(entity);
 
     }
+
+    @Override
+    public Ads getAdsMe(String username) {
+        UserEntity author = userService.checkUserByUsername(username);
+
+        List<Ad> ads = adRepository.findByAuthor(author).stream()
+                .map(ad -> adMapper.mapToAdDto(ad))
+                .collect(Collectors.toList());
+
+        return new Ads(ads.size(), ads);
+    }
+
+    @Override
+    public MultipartFile updateImage(Integer id, MultipartFile image) {
+        return null; // todo прописать логику сервиса
+    }
+
 }

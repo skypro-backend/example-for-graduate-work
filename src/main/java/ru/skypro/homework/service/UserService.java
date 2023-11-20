@@ -27,4 +27,6 @@ public interface UserService {
      */
     UserEntity updateUser(UpdateUser updateUser);
 //    UserEntity updateUser(UpdateUser updateUser, Authentication authentication);
+
+    UserEntity checkUserByUsername(String username);
 }

@@ -21,7 +21,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @GetMapping("{id}/comments")
+    @GetMapping("/{id}/comments")
     public ResponseEntity<Comments> getComments(@PathVariable("id") Integer id) {
         //todo добавить условие???? если role = admin то можно смотреть все комменты, юзер - только свои
         if (authService.getLogin() != null) {
@@ -31,11 +31,11 @@ public class CommentController {
         }
     }
 
-    @PostMapping("{id}/comments")
+    @PostMapping("/{id}/comments")
     public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id,
                                               @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         if (authService.getLogin() != null) {
-            return ResponseEntity.ok(commentService.addComment(id, createOrUpdateComment));
+            return ResponseEntity.ok(commentService.addComment(id, createOrUpdateComment, authService.getLogin().getUsername()));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
