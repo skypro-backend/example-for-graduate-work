@@ -8,12 +8,10 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
-import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @RestController
