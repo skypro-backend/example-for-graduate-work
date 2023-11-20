@@ -21,7 +21,6 @@ import ru.skypro.homework.service.mapping.AdMapper;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AdServiceImpl implements AdService {
@@ -124,7 +123,7 @@ public class AdServiceImpl implements AdService {
             throw new RuntimeException(e);
         }
 
-        if ((authorizedUserRole == Role.USER && userPostedAd.equals(authorizedUser)) || authorizedUserRole == Role.ADMIN) {
+        if ((userPostedAd.equals(authorizedUser)) || authorizedUserRole == Role.ADMIN) {
 
             adToModify.setImageAd(multipartToImage);
             adRepository.save(adToModify);
@@ -141,7 +140,7 @@ public class AdServiceImpl implements AdService {
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();
 
-        if (authorizedUserRole == Role.USER && userPostedAd.equals(authorizedUser) || authorizedUserRole == Role.ADMIN) {
+        if ((userPostedAd.equals(authorizedUser)) || authorizedUserRole == Role.ADMIN) {
             adRepository.deleteById(id);
             commentRepository.deleteById(id);
             adRepository.flush();

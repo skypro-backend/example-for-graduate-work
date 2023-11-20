@@ -67,7 +67,7 @@ public class CommentServiceImpl  implements CommentService {
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();
 
-        if ((userCommented.equals(authorizedUser) || authorizedUserRole == Role.ADMIN)) {
+        if ((userCommented.equals(authorizedUser)) || authorizedUserRole == Role.ADMIN) {
             commentFound.setText(createOrUpdateComment.getText());
             commentRepository.save(commentFound);
             return true;
@@ -84,7 +84,7 @@ public class CommentServiceImpl  implements CommentService {
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();
 
-        if ((userCommented.equals(authorizedUser) || authorizedUserRole == Role.ADMIN)) {
+        if ((userCommented.equals(authorizedUser)) || authorizedUserRole == Role.ADMIN) {
             commentRepository.deleteById(commentFound.getId());
             commentRepository.flush();
             return true;
