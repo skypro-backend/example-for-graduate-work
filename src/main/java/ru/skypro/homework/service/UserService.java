@@ -26,5 +26,5 @@ public interface UserService {
      * @return объект {@link UserEntity}
      */
     UserEntity updateUser(UpdateUser updateUser);
-    UserEntity updateUser(UpdateUser updateUser, Authentication authentication);
+//    UserEntity updateUser(UpdateUser updateUser, Authentication authentication);
 }

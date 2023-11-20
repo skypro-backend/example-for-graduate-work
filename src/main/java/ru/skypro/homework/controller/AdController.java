@@ -10,16 +10,21 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.impl.AuthServiceImpl;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
 
 @RestController
-@RequestMapping("ads/")
+@RequestMapping("/ads/")
 public class AdController {
     AdService adService;
+    AuthServiceImpl authService;
 
-    public AdController(AdService adService) {
+    public AdController(AdService adService, AuthService authService) {
         this.adService = adService;
+        this.authService = (AuthServiceImpl) authService;
     }
 
     @GetMapping
@@ -62,5 +67,25 @@ public class AdController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
         }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<List<Ads>> getAdsMe() {
+        if (authService.getLogin() != null) {   //если пользователь авторизовался
+            return ResponseEntity.ok(adService.getAdsMe());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @PatchMapping("/{id}/image")
+    public ResponseEntity updateImage(@PathVariable("id") Integer id,
+                                          @RequestParam MultipartFile image) {
+        if (authService.getLogin() != null) {
+            return ResponseEntity.ok(adService.updateImage(id, image));
+        } else if (authService.getLogin() == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return null; //todo разобраться с ошибками 403 и 404, как и в остальных методах выше, если есть
     }
 }

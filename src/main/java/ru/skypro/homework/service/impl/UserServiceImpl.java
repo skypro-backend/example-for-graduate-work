@@ -4,7 +4,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
@@ -16,12 +15,14 @@ import ru.skypro.homework.service.UserService;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
+//    private Authentication userAusentication;
     private final AuthServiceImpl authService;
 
-    public UserServiceImpl(UserRepository userRepository, AuthServiceImpl authService) {
+    public UserServiceImpl(UserRepository userRepository, /*Authentication userAusentication,*/ AuthServiceImpl authService) {
         this.userRepository = userRepository;
+//        this.userAusentication = userAusentication;
         this.authService = authService;
+
     }
 
     /**
@@ -90,15 +91,17 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public UserEntity updateUser(UpdateUser updateUser, Authentication authentication) {
-        String login = authentication.getName();
-        UserEntity user = userRepository.findUserEntityByUserName(login);
-        user.setFirstName(updateUser.getFirstName());
-        user.setLastName(updateUser.getLastName());
-        user.setPhone(updateUser.getPhone());
-        userRepository.save(user);
-        return user;
-    }
+//    @Override
+//    public UserEntity updateUser(UpdateUser updateUser, Authentication authentication) {
+//        String login = userDetails.getUsername();
+////        String login = inMemoryUserDetailsManager.updateUser();
+//
+//        UserEntity user = userRepository.findUserEntityByUserName(login);
+//        user.setFirstName(updateUser.getFirstName());
+//        user.setLastName(updateUser.getLastName());
+//        user.setPhone(updateUser.getPhone());
+//        userRepository.save(user);
+//        return user;
+//    }
 
 }
