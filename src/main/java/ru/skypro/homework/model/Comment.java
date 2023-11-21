@@ -1,15 +1,18 @@
 package ru.skypro.homework.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 import static liquibase.repackaged.net.sf.jsqlparser.util.validation.metadata.NamedObject.user;
 
 @Entity
-@Data
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
+@RequiredArgsConstructor
 @Table(name = "Comments")
 public class Comment {
     @ManyToOne

@@ -1,12 +1,16 @@
 package ru.skypro.homework.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
+@RequiredArgsConstructor
 @Table(name = "Ads")
 public class Ad {
     @Id

@@ -18,5 +18,6 @@ public interface RegisterMapper {
     @Mapping(source = "registerDto.lastName", target = "lastName")
     @Mapping(source = "registerDto.phone", target = "phone")
     @Mapping(source = "registerDto.role", target = "role")
+    @Mapping(source = "registerDto.username", target = "email")
     User toModel(RegisterDto registerDto);
 }

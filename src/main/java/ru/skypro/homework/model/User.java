@@ -1,14 +1,18 @@
 package ru.skypro.homework.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
+@RequiredArgsConstructor
 @Table(name = "Users")
 public class User {
     @Id
