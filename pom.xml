@@ -77,7 +77,21 @@
       <artifactId>mapstruct</artifactId>
       <version>1.4.2.Final</version>
     </dependency>
-
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+      <version>3.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <version>2.3.8</version>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <version>2.2.9</version>
+    </dependency>
 
   </dependencies>
 
@@ -101,8 +115,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
-          <source>11</source>
-          <target>11</target>
+          <source>15</source>
+          <target>15</target>
           <annotationProcessorPaths>
 <!--            <path></path>-->
             <path>

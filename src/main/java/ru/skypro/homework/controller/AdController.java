@@ -1,13 +1,15 @@
 package ru.skypro.homework.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.service.AdService;
 
+@Slf4j
 @RestController
+@Validated
 @RequestMapping("/ads")
 public class AdController {
 
@@ -18,7 +20,7 @@ public class AdController {
     }
 
     @PostMapping
-    public void createAd(@RequestBody AdDTO adDTO) {
+    public void createAd(@RequestParam AdDTO adDTO) {
         adService.createAd(adDTO);
 
     }

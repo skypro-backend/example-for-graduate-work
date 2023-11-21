@@ -1,14 +1,37 @@
 package ru.skypro.homework.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
+@Schema(description = "Регистрация пользователя")
 public class RegisterDTO {
 
+    @Schema(description = "логин")
+    @NotBlank
+    @Size(min = 10, max = 20)
     private String username;
+    @Schema(description = "пароль")
+    @NotBlank
+    @Size(min = 10, max = 20)
     private String password;
+    @Schema(description = "имя")
+    @NotBlank
+    @Size(min = 1, max = 20)
     private String firstName;
+    @Schema(description = "фамилия")
+    @NotBlank
+    @Size(min = 1, max = 20)
     private String lastName;
+    @Schema(description = "номер телефона")
+    @NotBlank
+    @Pattern(regexp = "\\+7\s?\\(?\\d{3}\\)?\s?\\d{3}-?\\d{2}-?\\d{2}")
     private String phone;
+    @Schema(description = "роль пользователя")
+    @NotBlank
     private RoleDTO role;
+
 }
