@@ -2,6 +2,7 @@ package ru.skypro.homework.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.AdDto;
@@ -13,10 +14,8 @@ import ru.skypro.homework.model.User;
 public interface UpdateUserMapper {
     UpdateUserMapper INSTANCE = Mappers.getMapper(UpdateUserMapper.class);
 
-    @Mapping(target = "firstName", source = "updateUserDto.firstName")
-    @Mapping(target = "lastName", source = "updateUserDto.lastName")
-    @Mapping(target = "phone", source = "updateUserDto.phone")
-    User toModel(UpdateUserDto updateUserDto, User user);
+
+    User toModel(UpdateUserDto updateUserDto, @MappingTarget User user);
 
     UpdateUserDto toDTO(User user);
 }
