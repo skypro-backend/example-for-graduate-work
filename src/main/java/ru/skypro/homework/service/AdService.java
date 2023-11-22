@@ -2,11 +2,14 @@ package ru.skypro.homework.service;
 
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.model.Ad;
+
+import java.io.IOException;
 
 public interface AdService {
     AdsDTO getAllAds();
 
-    AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image);
+    AdDTO addAd(Ad ad, MultipartFile image) throws IOException;
 
     ExtendedAdDTO getAdInfo(Long adId);
 

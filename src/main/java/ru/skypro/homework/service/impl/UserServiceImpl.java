@@ -11,6 +11,7 @@ import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exception.IncorrectPasswordException;
 import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.PhotoAd;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;

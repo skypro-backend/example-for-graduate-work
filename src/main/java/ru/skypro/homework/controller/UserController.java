@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,9 @@ import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.UserService;
 
-@CrossOrigin("http://locallhost:3000")
+@CrossOrigin("*")
 @RestController
+@Tag(name = "\uD83D\uDE4B Пользователи")
 @RequestMapping("/users")
 public class UserController {
 
@@ -25,7 +27,6 @@ public class UserController {
     }
 
     @Operation(
-            tags = "Пользователи",
             summary = "Получить информацию об авторизованном пользователе",
             responses = {
                     @ApiResponse(
@@ -59,7 +60,6 @@ public class UserController {
     }
 
     @Operation(
-            tags = "Пользователи",
             summary = "Обновить информацию об авторизованном пользователе",
             responses = {
                     @ApiResponse(
@@ -107,7 +107,6 @@ public class UserController {
     }
 
     @Operation(
-            tags = "Пользователи",
             summary = "Обновление пароля",
             responses = {
                     @ApiResponse(
@@ -138,7 +137,6 @@ public class UserController {
     }
 
     @Operation(
-            tags = "Пользователи",
             summary = "Обновить аватар авторизованного пользователя",
             responses = {
                     @ApiResponse(
@@ -153,8 +151,12 @@ public class UserController {
                     )
             }
     )
-    @PatchMapping("/me/image")
-    public ResponseEntity<?> loadUserImage(@RequestPart MultipartFile image) {
+    @RequestMapping(
+            method = RequestMethod.PATCH,
+            value = "/me/image",
+            consumes = { "multipart/form-data" }
+    )
+    public ResponseEntity<?> loadUserImage(@RequestBody MultipartFile image) {
         return ResponseEntity.ok(userService.updateUserImage(image));
     }
 

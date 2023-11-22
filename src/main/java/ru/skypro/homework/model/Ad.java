@@ -32,4 +32,5 @@ public class Ad {
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
+
 }

@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -13,25 +14,39 @@ import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
+import ru.skypro.homework.model.PhotoAd;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.PhotoAdRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 
 @Service
 public class AdServiceImpl implements AdService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final PhotoAdRepository photoAdRepository;
     private final AdRepository adRepository;
+    @Value("${path.to.photos.folder}")
+    private String photoDir;
 
-    public AdServiceImpl(CommentRepository commentRepository, UserRepository userRepository, AdRepository adRepository) {
+    public AdServiceImpl(CommentRepository commentRepository, UserRepository userRepository, PhotoAdRepository photoAdRepository, AdRepository adRepository) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
+        this.photoAdRepository = photoAdRepository;
         this.adRepository = adRepository;
     }
 
@@ -46,9 +61,10 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image) {
-        Ad ad = AdMapper.INSTANCE.createOrUpdateAdDTOToAd(createOrUpdateAdDTO);
-        ad.setImage(image.getName());
+    public AdDTO addAd(Ad ad, MultipartFile image) throws IOException {
+        uploadPhotoAdd(ad,image);
+        ad.setImage(photoDir + "Фото к объявлению "
+                + ad.getTitle() + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
         adRepository.save(ad);
         return AdMapper.INSTANCE.adToAdDTO(ad);
     }
@@ -142,4 +158,53 @@ public class AdServiceImpl implements AdService {
 
         return CommentMapper.INSTANCE.toCommentDTO(commentRepository.save(comment), user);
     }
+
+    public void uploadPhotoAdd(Ad ad, MultipartFile image) throws IOException {
+        Path filePath = Path.of(photoDir, "Фото к объявлению "
+               + ad.getTitle() + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+        Files.createDirectories(filePath.getParent());
+        Files.deleteIfExists(filePath);
+
+        try (InputStream is = image.getInputStream();
+             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
+             BufferedInputStream bis = new BufferedInputStream(is, 1024);
+             BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+        ) {
+            bis.transferTo(bos);
+        }
+        PhotoAd photoAd = findPhotoAd(ad.getId());
+        photoAdRepository.save(photoAd);
+        photoAd.setAd(ad);
+        photoAd.setFilePath(filePath.toString());
+        photoAd.setFileSize(image.getSize());
+        photoAd.setMediaType(image.getContentType());
+        photoAdRepository.save(photoAd);
+    }
+    public PhotoAd findPhotoAd(Long adId) {
+        return photoAdRepository.findPhotoAdByAd_Id(adId).orElse(new PhotoAd());
+    }
+
+    private String getExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+
+    private Optional<Path> findFirst(Ad ad, String photoDirectory) throws IOException {
+        Optional<Path> foundFile;
+        File rootDirectory = new File(photoDirectory);
+        String filePath = "Фото к объявлению с id="
+                + ad.getId();
+        try (Stream<Path> walkStream = Files.walk(rootDirectory.toPath())) {
+            foundFile = walkStream.filter(p -> p.toFile().isFile())
+                    .filter(p -> p.toString().endsWith(filePath))
+                    .findFirst();
+        }
+
+        if (foundFile.isPresent()) {
+            System.out.println(foundFile.get());
+        } else {
+            System.out.println("File not found");
+        }
+        return foundFile;
+    }
+
 }

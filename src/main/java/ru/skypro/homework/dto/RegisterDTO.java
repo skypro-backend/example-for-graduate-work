@@ -28,8 +28,6 @@ public class RegisterDTO {
   @JsonProperty("phone")
   private String phone;
 
-
-
   @JsonProperty("role")
   private Role role;
 

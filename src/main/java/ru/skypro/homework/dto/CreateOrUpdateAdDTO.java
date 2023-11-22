@@ -13,13 +13,13 @@ import java.util.Objects;
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-11-05T13:56:03.406359+03:00[Europe/Moscow]")
 public class CreateOrUpdateAdDTO {
-  @JsonProperty("title")
+  @JsonProperty("Title")
   private String title;
 
-  @JsonProperty("price")
+  @JsonProperty("Price")
   private Integer price;
 
-  @JsonProperty("description")
+  @JsonProperty("Description")
   private String description;
 
   public CreateOrUpdateAdDTO title(String title) {

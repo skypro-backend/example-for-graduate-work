@@ -17,6 +17,11 @@ public class NewPasswordDTO {
   @JsonProperty("newPassword")
   private String newPassword;
 
+  public NewPasswordDTO(String currentPassword, String newPassword) {
+    this.currentPassword = currentPassword;
+    this.newPassword = newPassword;
+  }
+
   public NewPasswordDTO currentPassword(String currentPassword) {
     this.currentPassword = currentPassword;
     return this;

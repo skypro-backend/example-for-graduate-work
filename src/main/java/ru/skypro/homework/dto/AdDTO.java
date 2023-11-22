@@ -2,9 +2,11 @@ package ru.skypro.homework.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Objects;
-
 /**
  * Ad
  */
@@ -24,6 +26,7 @@ public class AdDTO {
 
   @JsonProperty("title")
   private String title;
+
 
   public AdDTO author(Long author) {
     this.author = author;
