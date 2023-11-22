@@ -1,14 +1,10 @@
 package ru.skypro.homework.dto;
-
 import lombok.Data;
-
+import lombok.AllArgsConstructor;
+@AllArgsConstructor
 @Data
-public class Register {
-
-    private String username;
-    private String password;
+public class UpdateUser {
     private String firstName;
     private String lastName;
     private String phone;
-    private Role role;
 }
