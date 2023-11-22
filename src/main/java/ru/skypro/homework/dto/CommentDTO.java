@@ -19,7 +19,7 @@ public class CommentDTO {
     @Size(min = 3, max=20)
     private String authorFirstName;
     @Schema(description = "время создания комментария")
-    private long createdAt;
+    private int createdAt;
     @Schema(description = "id комментария")
     private int pk;
     @Schema(description = "заголовок комментария")
@@ -31,30 +31,4 @@ public class CommentDTO {
     @Size(min = 4, max = 100)
     private String text;
 
-
-
-/*    properties:
-    author:
-    type: integer
-    format: int32
-    description: 'id автора комментария'
-
-    authorImage:
-    type: string
-    description: 'ссылка на аватар автора комментария'
-
-    authorFirstName:
-    type: string
-    description: 'имя создателя комментария'
-    createdAt:
-    type: integer
-    format: int64
-    description: 'дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970'
-    pk:
-    type: integer
-    format: int32
-    description: 'id комментария'
-    text:
-    type: string
-    description: 'текст комментария'*/
 }
