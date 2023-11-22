@@ -3,7 +3,8 @@ package ru.skypro.homework.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.dto.User;
+
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
@@ -40,15 +41,16 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public User setPassword(User user) {
-        logger.info("Method add update invoked!");
-        User userFromDBForUpdatePassword = user.getId();
-        if (userFromDBForUpdatePassword == null) {
-            return null;
-        }
-        userFromDBForUpdatePassword.setPassword(user.getPassword());
-
-        return userRepository.save(userFromDBForUpdatePassword);
-    }
+//    @Override
+//    public User setPassword(User user) {
+//        logger.info("Method add update invoked!");
+//        User userFromDBForUpdatePassword = user.getId();
+//        if (userFromDBForUpdatePassword == null) {
+//            return null;
+//        }
+//        userFromDBForUpdatePassword.setPassword(user.getPassword());
+//
+//        return userRepository.save(userFromDBForUpdatePassword);
+//    }
 }
+

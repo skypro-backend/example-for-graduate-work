@@ -1,6 +1,6 @@
 package ru.skypro.homework.service;
 
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.dto.User;
 
 public interface UserService {
 
@@ -9,5 +9,5 @@ public interface UserService {
     User update(Long id, User user);
 
 
-    User setPassword(User user);
+//    User setPassword(User user);
 }

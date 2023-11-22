@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.util.Objects;
 
+
 @Data
 public class User {
     private Long id = 0L;
