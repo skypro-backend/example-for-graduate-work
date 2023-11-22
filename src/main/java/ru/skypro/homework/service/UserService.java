@@ -77,4 +77,9 @@ public class UserService {
 
         return mapper.map(user);
     }
+
+    public byte[] getAvatar(String id) throws IOException {
+        Path path = Path.of(avatarDir, id);
+        return Files.readAllBytes(path);
+    }
 }
