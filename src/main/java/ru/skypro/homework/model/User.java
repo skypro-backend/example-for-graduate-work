@@ -1,11 +1,9 @@
 package ru.skypro.homework.model;
 
 import lombok.Data;
+import ru.skypro.homework.dto.Role;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity(name = "users")
@@ -19,6 +17,8 @@ public class User {
     private String firstName;
     private String lastName;
     private Integer phone;
-//    private Role role = Role.USER;
-    private String image;
+    private Role role;
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 }
