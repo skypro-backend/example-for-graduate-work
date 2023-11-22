@@ -1,7 +1,6 @@
-package ru.skypro.homework.entity;
+package ru.skypro.homework.model;
 
 import lombok.Data;
-import ru.skypro.homework.dto.Role;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
