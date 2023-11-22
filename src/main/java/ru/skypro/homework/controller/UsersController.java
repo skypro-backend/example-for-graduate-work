@@ -95,7 +95,6 @@ public class UsersController {
     @GetMapping(value = "/avatars/{id}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
     public byte[] getImage(@PathVariable("id") String id) throws IOException {
         log.info("Here is id {}", id);
-        Path path = Path.of("avatars", id);
-        return Files.readAllBytes(path);
+        return userService.getAvatar(id);
     }
 }
