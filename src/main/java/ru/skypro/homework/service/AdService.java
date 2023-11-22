@@ -11,5 +11,5 @@ public interface AdService {
 //    AdsDto getAll ();
 CreateOrUpdateAdDto addAds(CreateOrUpdateAdDto createOrUpdateAdDto, Authentication authentication);
 
-//    AdsDto getAllAds(Authentication authentication);
+    AdsDto getAllAds(Authentication authentication);
 }

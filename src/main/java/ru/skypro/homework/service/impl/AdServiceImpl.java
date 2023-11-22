@@ -33,7 +33,8 @@ public class AdServiceImpl implements AdService {
 //    private final UserRepository userRepository;
     private final UserServiceImpl userServiceImpl;
 //    private final AdMapper adMapper;
-//    private final AdsMapper adsMapper;
+    private final AdsMapper adsMapper;
+//    private final User user;
 
 
     @Override
@@ -43,43 +44,17 @@ public class AdServiceImpl implements AdService {
         ad.setUser(user);
         adRepository.save(ad);
         return CreateOrUpdateAdMapper.INSTANCE.toDto(ad, user);
-//        return createOrUpdateAdDto;
     }
 
-//    @Override
-//    public AdsDto getAllAds(Authentication authentication) {
-//        User user = userServiceImpl.findUserByUsername(authentication);
+    @Override
+    public AdsDto getAllAds(Authentication authentication) {
+        User user = userServiceImpl.findUserByUsername(authentication);
 //        List<Ad> adList = adRepository.findAdByUser(user);
-////        List<Ad> adList = adRepository.findAll();
-//        AdsDto adsDto = new AdsDto();
-//        adsDto.setCount(adList.size());
-//        adsDto.setResults(adsMapper.INSTANCE.toDTO(adList));
-//        return adsDto;
-//    }
+        List<Ad> adList = adRepository.findAll();
+        AdsDto adsDto = new AdsDto();
+        adsDto.setCount(adList.size());
+        adsDto.setResults(adsMapper.INSTANCE.toDto(adList));
+        return adsDto;
+    }
 
 }
-//@Service
-//@AllArgsConstructor
-//public class AdServiceImpl implements AdService {
-
-//
-//    private final AdRepository adRepository;
-//
-//    @Override
-//    public AdsDto getAll() {
-//        List<Ad> getAllAd = adRepository.findAll();
-//        AdsDto newGetAll = new AdsDto();
-//        newGetAll.setCount(getAllAd.size());
-//        newGetAll.setResults(AdMapper.INSTANCE.gto(getAllAd));
-//        return newGetAll;
-//    }
-
-//    @Override
-//    public AdDto getAll() {
-//        AdDto newAdDto = new AdDto();
-//        newAdDto.setAuthor(getAll().getAuthor());
-//
-//        return null;
-//    }
-
-//}

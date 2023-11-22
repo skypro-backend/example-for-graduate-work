@@ -43,10 +43,10 @@ public class AdsController {
             }
     )
     @GetMapping("")
-    public ResponseEntity<AdsDto> getAllAds() {
-        return ResponseEntity.ok().build();
-
-//        return new ResponseEntity <> (adService.getAll(), HttpStatus.OK);
+//    public ResponseEntity<AdsDto> getAllAds() {
+//        return ResponseEntity.ok().build();
+    public ResponseEntity<AdsDto> getAllAds(@RequestBody Authentication authentication) {
+        return ResponseEntity.ok(adService.getAllAds(authentication));
     }
 
     @Operation(
