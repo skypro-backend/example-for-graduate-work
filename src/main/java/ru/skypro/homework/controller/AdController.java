@@ -1,6 +1,10 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Content;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,12 +12,12 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
-import ru.skypro.homework.model.AdEntity;
+import ru.skypro.homework.model.PhotoEntity;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
 
-import javax.persistence.criteria.CriteriaBuilder;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -34,7 +38,7 @@ public class AdController {
     }
 
     @PostMapping
-    public ResponseEntity<Ad> addAd(@RequestParam CreateOrUpdateAd properties, @RequestParam MultipartFile image) {
+    public ResponseEntity<Ad> addAd(@RequestParam CreateOrUpdateAd properties, @RequestParam MultipartFile image) throws IOException {
         Ad ad = adService.addAd(properties, image); // метод в разработке
         return ResponseEntity.ok(ad);
     }
@@ -82,14 +86,28 @@ public class AdController {
         }
     }
 
-    @PatchMapping("/{id}/image")
-    public ResponseEntity updateImage(@PathVariable("id") Integer id,
-                                      @RequestParam MultipartFile image) {
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(
+            responses = {
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Переданный файл слишком большой",
+                            content = @Content(
+                            )
+                    )
+            }
+    )
+    public ResponseEntity<PhotoEntity> updateImage(@PathVariable("id") Integer id,
+                                                   @RequestParam MultipartFile image) throws IOException {
+        if (image.getSize() > 1024 * 1024 * 2) {
+            return ResponseEntity.status(HttpStatus.valueOf(404)).build();
+        }
         if (authService.getLogin() != null) {
-            return ResponseEntity.ok(adService.updateImage(id, image)); // todo продумать, что метод возвращает
+            PhotoEntity photo = adService.updateImage(id, image);
+            return ResponseEntity.ok(photo); // todo продумать, что метод возвращает, как вариант PhotoEntity
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return null; //todo разобраться с ошибками 403 и 404, как и в остальных методах выше, если есть
+        //return null; //todo разобраться с ошибками 403 и 404, как и в остальных методах выше, если есть
     }
 }

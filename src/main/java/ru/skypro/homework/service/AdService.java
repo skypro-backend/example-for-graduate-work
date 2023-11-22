@@ -5,13 +5,15 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
-import ru.skypro.homework.model.AdEntity;
+import ru.skypro.homework.model.PhotoEntity;
+
+import java.io.IOException;
 
 public interface AdService {
 
     Ads getAllAds();
 
-    Ad addAd(CreateOrUpdateAd properties, MultipartFile image);
+    Ad addAd(CreateOrUpdateAd properties, MultipartFile image) throws IOException;
 
     ExtendedAd getAds(Integer id);
 
@@ -21,5 +23,5 @@ public interface AdService {
 
     Ads getAdsMe(String username);
 
-    MultipartFile updateImage(Integer id, MultipartFile image); // todo возвращаемое значение
+    PhotoEntity updateImage(Integer id, MultipartFile image) throws IOException; // todo возвращаемое значение, как вариант
 }
