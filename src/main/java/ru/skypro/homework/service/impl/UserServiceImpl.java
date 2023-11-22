@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      * @throws UsernameNotFoundException пользователь не найден
      * @return {@link UserRepository#findByUserName(String)}
      */
-    private User findUserByUsername(Authentication authentication) {
+    public User findUserByUsername(Authentication authentication) {
         return userRepository.findByUserName(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException(
                         String.format("Пользователь '%s' не найден", authentication.getName())));
