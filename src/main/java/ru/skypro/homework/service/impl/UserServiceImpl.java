@@ -33,11 +33,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO) {
+    public UserDTO updateUser(UpdateUserDTO updateUserDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
+
         UserMapper.INSTANCE.updateUserDTOToUser(updateUserDTO, user);
-        return UserMapper.INSTANCE.userToUpdateUserDTO(userRepository.save(user));
+        return UserMapper.INSTANCE.toUserDTO(userRepository.save(user));
     }
 
     @Override
