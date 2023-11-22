@@ -3,10 +3,13 @@ package ru.skypro.homework.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.UserDto;
 
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,25 +23,35 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User get(Long id) {
+    public UserDto get(Long id) {
         logger.info("Method get was invoked!");
-        return userRepository.findById(id).
+        User userDB = userRepository.findById(id).
                 orElse(null);
+        UserDto userDto = new UserDto();
+        userDto.setId(userDB.getId());
+        userDto.setUsername(userDB.getUsername());
+        userDto.setPassword(userDB.getPassword());
+        userDto.setFirstName(userDB.getFirstName());
+        userDto.setLastName(userDB.getLastName());
+        userDto.setPhone(userDB.getPhone());
+        userDto.setImage(userDB.getImage());
+//        Так же просетать остальные поля.
+        return userDto;
 
     }
 
     @Override
-    public User update(Long id, User user) {
+    public UserDto update(Long id, UserDto userDto) {
         logger.info("Method add update invoked!");
-        User userFromDB = get(id);
-        if (userFromDB == null) {
-            return null;
-        }
-        userFromDB.setFirstName(user.getFirstName());
-        userFromDB.setLastName(user.getLastName());
-        userFromDB.setPhone(user.getPhone());
-        return userRepository.save(userFromDB);
+        Optional<User> user = userRepository.findById(id);
+        user.ifPresent(userDtoFromDB -> {
+            userDtoFromDB.setFirstName(userDto.getFirstName());
+            userDtoFromDB.setLastName(userDto.getLastName());
+            userDtoFromDB.setPhone(userDto.getPhone());
+            userRepository.save(userDtoFromDB);
+        });
 
+        return get(id);
     }
 
 //    @Override

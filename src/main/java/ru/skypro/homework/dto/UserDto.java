@@ -6,7 +6,7 @@ import java.util.Objects;
 
 
 @Data
-public class User {
+public class UserDto {
     private Long id = 0L;
     private String username = "string";
     private String password = "string";
@@ -16,7 +16,7 @@ public class User {
     private Role role = Role.USER;
     private String image = "string";
 
-    public User(Long id, String username, String password, String firstName, String lastName, Integer phone, Role role, String image) {
+    public UserDto(Long id, String username, String password, String firstName, String lastName, Integer phone, Role role, String image) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -27,7 +27,7 @@ public class User {
         this.image = image;
     }
 
-    public User() {}
+    public UserDto() {}
 
     public Long getId() {
         return id;
@@ -97,8 +97,8 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(phone, user.phone) && role == user.role && Objects.equals(image, user.image);
+        UserDto userDto = (UserDto) o;
+        return Objects.equals(id, userDto.id) && Objects.equals(username, userDto.username) && Objects.equals(password, userDto.password) && Objects.equals(firstName, userDto.firstName) && Objects.equals(lastName, userDto.lastName) && Objects.equals(phone, userDto.phone) && role == userDto.role && Objects.equals(image, userDto.image);
     }
 
     @Override

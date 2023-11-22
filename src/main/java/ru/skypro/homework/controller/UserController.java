@@ -7,24 +7,29 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.service.UserService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 public class UserController {
-
+    private final UserService userService;
+    @GetMapping("/users/me/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable String id) {
+        return ResponseEntity.ok(userService.get(Long.valueOf(id)));
+    }
     @GetMapping("/users/me")
-    public ResponseEntity<User> get() {
+    public ResponseEntity<UserDto> get() {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.ok(new User());
+        return ResponseEntity.ok(new UserDto());
     }
 
     @PatchMapping("/users/me")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new User());
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new UserDto());
     }
 
     @PatchMapping("/users/me/image")
@@ -32,7 +37,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
     @PutMapping("/users/set_password")
-    public ResponseEntity<User> updatePassword(@RequestBody String password) {
+    public ResponseEntity<UserDto> updatePassword(@RequestBody String password) {
         return ResponseEntity.ok().build();
     }
 }
