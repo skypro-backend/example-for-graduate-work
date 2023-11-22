@@ -27,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
     public boolean login(String userName, String password) {
         UserDetails userDetails = myUserDetailsService.loadUserByUsername(userName);
         if (!encoder.matches(password, userDetails.getPassword())) {
-            throw new IncorrectPasswordException();
+            throw new IncorrectPasswordException("Incorrect password");
         }
         return true;
     }
