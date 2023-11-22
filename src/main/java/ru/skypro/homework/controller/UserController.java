@@ -1,11 +1,13 @@
 package ru.skypro.homework.controller;
 
-import jakarta.validation.Valid;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UserDTO;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RestController

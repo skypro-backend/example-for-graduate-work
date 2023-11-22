@@ -1,7 +1,9 @@
 package ru.skypro.homework.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+
+import javax.validation.constraints.*;
+
 import lombok.Data;
 
 @Data
@@ -30,7 +32,7 @@ public class ExtendedAdDTO {
     private String image;
     @Schema(description = "номер телефона автора объявления")
     @NotBlank
-    @Pattern(regexp = "\\+7\s?\\(?\\d{3}\\)?\s?\\d{3}-?\\d{2}-?\\d{2}")
+  //  @Pattern(regexp = "\\+7\s?\\(?\\d{3}\\)?\s?\\d{3}-?\\d{2}-?\\d{2}")
     private String phone;
     @Schema(description = "цена объявления")
     @NotNull
