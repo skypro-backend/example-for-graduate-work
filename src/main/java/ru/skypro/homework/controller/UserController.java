@@ -8,8 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.dto.NewPasswordDTO;
+import ru.skypro.homework.dto.UpdateUserDTO;
+import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.UserService;
 
 @CrossOrigin("http://locallhost:3000")
@@ -22,6 +23,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
     @Operation(
             tags = "Пользователи",
             summary = "Получить информацию об авторизованном пользователе",
@@ -31,7 +33,7 @@ public class UserController {
                             description = "Пользователь найден",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = UserDto.class)
+                                    schema = @Schema(implementation = UserDTO.class)
                             )
                     ),
                     @ApiResponse(
@@ -52,12 +54,8 @@ public class UserController {
             }
     )
     @GetMapping("/me")
-    public ResponseEntity<?> getUser() {
-        UserDto user = userService.getCurrentUser();
-        if (null == user) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserDTO> getUser() {
+        return ResponseEntity.ok(userService.getCurrentUser());
     }
 
     @Operation(
@@ -69,7 +67,7 @@ public class UserController {
                             description = "Пользователь обнавлен",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = UserDto.class)
+                                    schema = @Schema(implementation = UserDTO.class)
                             )
                     ),
                     @ApiResponse(
@@ -95,12 +93,12 @@ public class UserController {
             }
     )
     @PatchMapping("/me")
-    public ResponseEntity<?> updateUser(@RequestBody UserDto user) {
-        if (null == user) {
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
+        if (null == updateUserDTO) {
             return ResponseEntity.noContent().build();
         }
 
-        UserDto editedUser = userService.updateUser(user);
+        UpdateUserDTO editedUser = userService.updateUser(updateUserDTO);
         if (null == editedUser) {
             return ResponseEntity.notFound().build();
         }
@@ -135,13 +133,10 @@ public class UserController {
             }
     )
     @PostMapping("/set_password")
-    public ResponseEntity<?> setUserPassword(@RequestBody NewPassword passwordDto) {
-        UserDto editedUser = userService.setUserPassword(passwordDto);
-        if (null == editedUser) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> setUserPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
+        return ResponseEntity.ok(userService.setPassword(newPasswordDTO));
     }
+
     @Operation(
             tags = "Пользователи",
             summary = "Обновить аватар авторизованного пользователя",
@@ -160,11 +155,7 @@ public class UserController {
     )
     @PatchMapping("/me/image")
     public ResponseEntity<?> loadUserImage(@RequestPart MultipartFile image) {
-        UserDto editedUser = userService.loadUserImage(image);
-        if (null == editedUser) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(userService.updateUserImage(image));
     }
 
 }

@@ -1,46 +1,44 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.dto.RegisterDTO;
+import ru.skypro.homework.exception.IncorrectPasswordException;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
-
-    private final UserDetailsManager manager;
+    private final UserRepository userRepository;
+    private final MyUserDetailsService myUserDetailsService;
     private final PasswordEncoder encoder;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
+    public AuthServiceImpl(UserRepository userRepository, MyUserDetailsService myUserDetailsService, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.myUserDetailsService = myUserDetailsService;
         this.encoder = passwordEncoder;
     }
 
     @Override
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
-            return false;
+        UserDetails userDetails = myUserDetailsService.loadUserByUsername(userName);
+        if (!encoder.matches(password, userDetails.getPassword())) {
+            throw new IncorrectPasswordException();
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
+        return true;
     }
 
     @Override
-    public boolean register(Register register) {
-        if (manager.userExists(register.getUsername())) {
+    public boolean register(RegisterDTO register) {
+        if (userRepository.findByEmail(register.getUsername()) != null) {
             return false;
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
+        register.setPassword(encoder.encode(register.getPassword()));
+        userRepository.save(UserMapper.INSTANCE.registerDTOToUser(register));
         return true;
     }
 
