@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,10 +17,19 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Objects;
+
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
+
 @Service
 public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
+    @Value("${path.to.avatars.folder}")
+    private String photoAvatar;
 
     public UserServiceImpl(PasswordEncoder encoder, UserRepository userRepository) {
         this.encoder = encoder;
@@ -66,11 +76,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Void updateUserImage(MultipartFile image) {
+    public String updateUserImage(MultipartFile image) throws IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
-        user.setImage(image.getName());
+        Path filePath = Path.of(photoAvatar, user.getFirstName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+        Files.createDirectories(filePath.getParent());
+        Files.deleteIfExists(filePath);
+        try (InputStream is = image.getInputStream();
+             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
+             BufferedInputStream bis = new BufferedInputStream(is, 1024);
+             BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+        ) {
+            bis.transferTo(bos);
+        }
+        File file = new File(String.valueOf(filePath));
+        user.setImage(String.valueOf(filePath));
         userRepository.save(user);
-        return null;
+        return String.valueOf(filePath);
+    }
+    private String getExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }

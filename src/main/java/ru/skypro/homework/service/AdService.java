@@ -9,7 +9,7 @@ import java.io.IOException;
 public interface AdService {
     AdsDTO getAllAds();
 
-    AdDTO addAd(Ad ad, MultipartFile image) throws IOException;
+    AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image) throws IOException;
 
     ExtendedAdDTO getAdInfo(Long adId);
 

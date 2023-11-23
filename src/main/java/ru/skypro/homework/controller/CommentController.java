@@ -14,7 +14,7 @@ import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.service.AdService;
 
 @RestController
-@CrossOrigin(value = "*")
+/*@CrossOrigin(value = "*")*/
 @Tag(name = "\uD83D\uDE4B Комментарии")
 @RequestMapping("/comments")
 public class CommentController {

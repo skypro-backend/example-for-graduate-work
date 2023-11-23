@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,15 @@ import ru.skypro.homework.dto.RegisterDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.UserService;
+
+import java.io.File;
+import java.io.IOException;
+
 import ru.skypro.homework.utils.MethodLog;
 @Slf4j
 //@CrossOrigin(origins = "<http://localhost:3000")
 @RestController
+@Tag(name = "\uD83D\uDE4B Пользователи")
 @RequestMapping("/users")
 public class UserController {
 
@@ -163,10 +169,9 @@ public class UserController {
                     )
             }
     )
-    @PatchMapping("/me/image")
-    public ResponseEntity<?> loadUserImage(@RequestPart MultipartFile image) {
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> loadUserImage(@RequestPart MultipartFile image) throws IOException{
         log.info("method {}", MethodLog.getMethodName());
-
         return ResponseEntity.ok(userService.updateUserImage(image));
     }
 

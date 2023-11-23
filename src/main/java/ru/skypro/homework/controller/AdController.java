@@ -10,15 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.model.Ad;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 
 @RestController
-@CrossOrigin(value = "*")
+/*@CrossOrigin(value = "*")*/
 @Tag(name = "\uD83D\uDE4B Объявления")
 public class AdController {
     private final AdService adService;
@@ -80,11 +78,10 @@ public class AdController {
     @PostMapping(value = "/ads", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
     MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<AdDTO> addAds(
-            @RequestBody MultipartFile image,
+            @RequestPart (value = "image", required = true) MultipartFile image,
             @RequestPart (value = "createOrUpdateAdDTO", required = true) CreateOrUpdateAdDTO createOrUpdateAdDTO)
             throws IOException {
-        Ad ad = AdMapper.INSTANCE.createOrUpdateAdDTOToAd(createOrUpdateAdDTO);
-        return ResponseEntity.ok(adService.addAd(ad,image));
+        return ResponseEntity.ok(adService.addAd(createOrUpdateAdDTO,image));
     }
     // --------------------------------------------------------------------------------------
 
