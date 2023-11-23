@@ -14,7 +14,7 @@ import ru.skypro.homework.service.AdService;
 
 
 @RestController
-@CrossOrigin(value = "<http://localhost:3000>")
+//@CrossOrigin(origins = "<http://localhost:3000")
 @RequestMapping("/ads")
 public class AdController {
     private final AdService adService;

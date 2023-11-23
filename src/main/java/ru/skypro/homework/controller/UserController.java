@@ -16,7 +16,7 @@ import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.utils.MethodLog;
 @Slf4j
-@CrossOrigin("http://locallhost:3000")
+//@CrossOrigin(origins = "<http://localhost:3000")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -56,6 +56,7 @@ public class UserController {
                     )
             }
     )
+    @CrossOrigin("http://locallhost:3000")
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUser() {
         log.info("method {},", MethodLog.getMethodName());
