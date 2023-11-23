@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
-import ru.skypro.homework.model.Ad;
 
 import java.util.List;
 
@@ -17,5 +16,5 @@ public interface AdService {
     List<AdDto> getAllAds(Authentication authentication);
 
     ExtendedAdDto getAds(int pk);
-//    AdDto removeAd(int pk);
+    void removeAd(int pk);
 }

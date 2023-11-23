@@ -25,7 +25,7 @@ import java.util.List;
 //@RequiredArgsConstructor
 
 public class AdServiceImpl implements AdService {
-    private final AdRepository adRepository;
+    private AdRepository adRepository;
     private final UserRepository userRepository;
     private final UserServiceImpl userServiceImpl;
 //    private final ExtendedAdMapper extendedAdMapper;
@@ -73,11 +73,11 @@ public class AdServiceImpl implements AdService {
 //        return extendedAdMapper.INSTANCE.toDto(ad);
         return ExtendedAdMapper.INSTANCE.toDto(ad, user);
 }
-//@Override
-//    public AdDto removeAd(int pk){
-////        Ad ad = adRepository.findByPk(pk);
-////        return adRepository.deleteById(pk);
+@Override
+    public void removeAd(int pk) {
+//        Ad ad = adRepository.findByPk(pk);
+        adRepository.deleteById(pk);
 //        return adRepository.deleteById(pk);
-//}
+}
 
 }

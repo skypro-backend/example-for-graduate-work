@@ -91,7 +91,7 @@ public class AdsController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAdDto> getAds(int id) {
+    public ResponseEntity<ExtendedAdDto> getAds(@PathVariable int id) {
         return ResponseEntity.ok(adService.getAds(id));
     }
 
@@ -117,7 +117,8 @@ public class AdsController {
             }
     )
     @DeleteMapping ("/remove/{id}")
-    public ResponseEntity<?> removeAd() {
+    public ResponseEntity<AdDto> removeAd(@PathVariable int id) {
+        adService.removeAd(id);
         return ResponseEntity.ok().build();
     }
 
