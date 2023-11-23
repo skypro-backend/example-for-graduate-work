@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.LoginDTO;
 import ru.skypro.homework.dto.RegisterDTO;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.utils.MethodLog;
 
 @Slf4j
-@CrossOrigin(value = "*")
+//@CrossOrigin(origins = "<http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -52,6 +53,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO login) {
+        log.info("method {}, LoginDTO {}", MethodLog.getMethodName(), login);
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
@@ -87,6 +89,7 @@ public class AuthController {
     )
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDTO register) {
+        log.info("method {}, RegisterDTO {}", MethodLog.getMethodName(), register);
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {

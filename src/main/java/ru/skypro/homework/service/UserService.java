@@ -9,7 +9,7 @@ public interface UserService {
 
     UserDTO getCurrentUser();
 
-    UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO);
+    UserDTO updateUser(UpdateUserDTO updateUserDTO);
 
     Void setPassword(NewPasswordDTO newPasswordDTO);
 

@@ -4,19 +4,20 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
+import ru.skypro.homework.dto.RegisterDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.UserService;
-
-@CrossOrigin("*")
+import ru.skypro.homework.utils.MethodLog;
+@Slf4j
+//@CrossOrigin(origins = "<http://localhost:3000")
 @RestController
-@Tag(name = "\uD83D\uDE4B Пользователи")
 @RequestMapping("/users")
 public class UserController {
 
@@ -27,6 +28,7 @@ public class UserController {
     }
 
     @Operation(
+            tags = "Пользователи",
             summary = "Получить информацию об авторизованном пользователе",
             responses = {
                     @ApiResponse(
@@ -54,12 +56,16 @@ public class UserController {
                     )
             }
     )
+    @CrossOrigin("http://locallhost:3000")
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUser() {
+        log.info("method {},", MethodLog.getMethodName());
+
         return ResponseEntity.ok(userService.getCurrentUser());
     }
 
     @Operation(
+            tags = "Пользователи",
             summary = "Обновить информацию об авторизованном пользователе",
             responses = {
                     @ApiResponse(
@@ -93,12 +99,14 @@ public class UserController {
             }
     )
     @PatchMapping("/me")
-    public ResponseEntity<?> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
+        log.info("method {}, UpdateUserDTO {}", MethodLog.getMethodName(), updateUserDTO);
+
         if (null == updateUserDTO) {
             return ResponseEntity.noContent().build();
         }
 
-        UpdateUserDTO editedUser = userService.updateUser(updateUserDTO);
+        UserDTO editedUser = userService.updateUser(updateUserDTO);
         if (null == editedUser) {
             return ResponseEntity.notFound().build();
         }
@@ -107,6 +115,7 @@ public class UserController {
     }
 
     @Operation(
+            tags = "Пользователи",
             summary = "Обновление пароля",
             responses = {
                     @ApiResponse(
@@ -133,10 +142,13 @@ public class UserController {
     )
     @PostMapping("/set_password")
     public ResponseEntity<?> setUserPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
+        log.info("method {}, NewPasswordDTO {}", MethodLog.getMethodName(), newPasswordDTO);
+
         return ResponseEntity.ok(userService.setPassword(newPasswordDTO));
     }
 
     @Operation(
+            tags = "Пользователи",
             summary = "Обновить аватар авторизованного пользователя",
             responses = {
                     @ApiResponse(
@@ -151,12 +163,10 @@ public class UserController {
                     )
             }
     )
-    @RequestMapping(
-            method = RequestMethod.PATCH,
-            value = "/me/image",
-            consumes = { "multipart/form-data" }
-    )
-    public ResponseEntity<?> loadUserImage(@RequestBody MultipartFile image) {
+    @PatchMapping("/me/image")
+    public ResponseEntity<?> loadUserImage(@RequestPart MultipartFile image) {
+        log.info("method {}", MethodLog.getMethodName());
+
         return ResponseEntity.ok(userService.updateUserImage(image));
     }
 

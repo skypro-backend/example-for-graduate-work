@@ -17,11 +17,11 @@ public interface AdMapper {
     @Mapping(target = "pk", source = "ad.id")
     AdDTO adToAdDTO(Ad ad);
 
-    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "author", source = "user")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "image", ignore = true)
-    Ad createOrUpdateAdDTOToAd(CreateOrUpdateAdDTO createOrUpdateAdDTO);
+    Ad createOrUpdateAdDTOToAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, User user);
     @Mapping(target = "pk", source = "ad.id")
     @Mapping(target = "authorFirstName", source = "user.firstName")
     @Mapping(target = "authorLastName", source = "user.lastName")
