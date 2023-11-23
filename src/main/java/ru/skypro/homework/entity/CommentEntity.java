@@ -16,9 +16,9 @@ import javax.persistence.Id;
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int pk;
 
-    private int authorId;
+    private int author;
     private String authorImage;
     private String authorFirstName;
     private long createdAt;

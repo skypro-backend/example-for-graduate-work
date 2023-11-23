@@ -17,9 +17,9 @@ import javax.persistence.Id;
 public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int pk;
 
-    private int authorId;
+    private int author;
     private String image;
     private int price;
     private String title;
