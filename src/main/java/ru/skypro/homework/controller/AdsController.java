@@ -14,9 +14,12 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
+import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.service.AdService;
 
 import javax.validation.Valid;
+
+import static org.hibernate.boot.model.process.spi.MetadataBuildingProcess.build;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -43,10 +46,9 @@ public class AdsController {
             }
     )
     @GetMapping("")
-//    public ResponseEntity<AdsDto> getAllAds() {
-//        return ResponseEntity.ok().build();
-    public ResponseEntity<AdsDto> getAllAds(@RequestBody Authentication authentication) {
-        return ResponseEntity.ok(adService.getAllAds(authentication));
+    public ResponseEntity<AdsDto> getAllAds() {
+        return ResponseEntity.ok().build();
+
     }
 
     @Operation(
@@ -89,8 +91,8 @@ public class AdsController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAds() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ExtendedAdDto> getAds(int id) {
+        return ResponseEntity.ok(adService.getAds(id));
     }
 
     @Operation(

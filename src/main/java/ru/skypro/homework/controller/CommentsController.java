@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.service.AdService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/ads")
 public class CommentsController {
+    private final AdService adService;
 
 
     @Operation(
@@ -57,7 +59,7 @@ public class CommentsController {
             }
     )
     @PostMapping("/{id}/comments")
-    public ResponseEntity<?> addComment() {
+    public ResponseEntity<?> addComment(@PathVariable String id) {
         return ResponseEntity.ok().build();
     }
     @Operation(

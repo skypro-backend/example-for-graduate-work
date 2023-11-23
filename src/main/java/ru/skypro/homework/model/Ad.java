@@ -15,7 +15,7 @@ import java.util.List;
 public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long pk;
+    private int pk;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -26,4 +26,5 @@ public class Ad {
     private int countComment;
     @Transient
     private List<Comment> commentList;
+
 }
