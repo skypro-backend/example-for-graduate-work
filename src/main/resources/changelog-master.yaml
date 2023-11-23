@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      relativeToChangeLogFile: true
+      file: script/ad.sql
