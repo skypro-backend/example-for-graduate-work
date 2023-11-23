@@ -6,8 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.service.AdService;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -24,7 +26,7 @@ public class AdController {
     }
 
     @PostMapping
-    public void createAd(@RequestBody AdDTO adDTO) {
+    public void createAd(@Valid @RequestBody AdDTO adDTO) {
         adService.createAd(adDTO);
 
     }
@@ -38,4 +40,16 @@ public class AdController {
     public AdDTO findAdById(@PathVariable int id) {
         return adService.findAd(id);
            }
+
+    @DeleteMapping("{id}")
+    public  void deleteAd(@PathVariable int id) {
+       adService.deleteAd(id);
+    }
+
+//    @PatchMapping("{id}")
+//    public createOrUpdateAd updateById(@PathVariable int id, @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd) {
+//        return adService.updateAd(id, createOrUpdateAd);
+//    }
+
+
 }

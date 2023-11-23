@@ -2,6 +2,7 @@ package ru.skypro.homework.service;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.repository.AdRepository;
@@ -39,6 +40,16 @@ public class AdService {
         return adRepository.findById(id).
                 map(adMapping::mapToAdDto).orElseThrow();
     }
+
+    public void deleteAd(int id) {
+       adRepository.deleteById(id);   }
+
+//    public CreateOrUpdateAd updateAd(int id, CreateOrUpdateAd createOrUpdateAd) {
+//        Ad updateAd = adRepository.findById(id);
+//        updateAd = adMapping.mapToCreateOrUpdateAd(createOrUpdateAd);
+//       adRepository.save(updateAd);
+//       return adMapping.mapToCreateOrUpdateAdDTO(updateAd);
+//    }
 }
 
 
