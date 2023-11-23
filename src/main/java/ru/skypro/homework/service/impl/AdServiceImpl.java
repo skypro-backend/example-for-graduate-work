@@ -79,5 +79,17 @@ public class AdServiceImpl implements AdService {
         adRepository.deleteById(pk);
 //        return adRepository.deleteById(pk);
 }
+    @Override
+    public CreateOrUpdateAdDto updateAds(CreateOrUpdateAdDto createOrUpdateAdDto, Authentication authentication, int pk) {
+        User user = userServiceImpl.findUserByUsername(authentication);
+        Ad ad = CreateOrUpdateAdMapper.INSTANCE.toModel(createOrUpdateAdDto);
+//        ad.setUser(user);
+        Ad newAd = adRepository.getReferenceById(pk);
+        newAd.setTitle(ad.getTitle());
+        newAd.setPrice(ad.getPrice());
+        newAd.setDescription(ad.getDescription());
+        adRepository.save(newAd);
+        return CreateOrUpdateAdMapper.INSTANCE.toDto(newAd, user);
+    }
 
 }

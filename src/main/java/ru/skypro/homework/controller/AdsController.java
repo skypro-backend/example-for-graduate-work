@@ -65,9 +65,6 @@ public class AdsController {
             }
     )
     @PostMapping("")
-//    public ResponseEntity<?> addAds() {
-//        return ResponseEntity.ok().build();
-//    }
     public ResponseEntity<CreateOrUpdateAdDto> addAd(@RequestBody CreateOrUpdateAdDto createOrUpdateAdDto,
                                                      Authentication authentication) {
         return ResponseEntity.ok(adService.addAds(createOrUpdateAdDto, authentication));
@@ -144,8 +141,10 @@ public class AdsController {
             }
     )
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateAds() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<CreateOrUpdateAdDto> updateAds(@RequestBody CreateOrUpdateAdDto createOrUpdateAdDto,
+                                                         Authentication authentication,
+                                                         @PathVariable int id) {
+        return ResponseEntity.ok(adService.updateAds(createOrUpdateAdDto, authentication, id));
     }
 
     @Operation(
