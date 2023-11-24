@@ -154,6 +154,11 @@ public class AdsService {
 
     }
 
+    public byte[] getImage(String id) throws IOException {
+        Path path = Path.of(imageDir, id);
+        return Files.readAllBytes(path);
+    }
+
     private String getExtension(String fileName) {
         log.debug("Method getExtension is called, argument(s) passed: {}", fileName);
         return fileName.substring(fileName.lastIndexOf(".") + 1);
