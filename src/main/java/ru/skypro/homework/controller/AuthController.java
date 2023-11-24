@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.LoginDTO;
 import ru.skypro.homework.dto.RegisterDTO;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.utils.MethodLog;
 
 @Slf4j
-@CrossOrigin(value = "http://localhost:3000")
+//@CrossOrigin(origins = "<http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -52,6 +53,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO login) {
+        log.warn("POST запрос на аутентификацию пользователя, тело запроса: {}, метод контроллера: {}", login, MethodLog.getMethodName());
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
@@ -86,8 +88,9 @@ public class AuthController {
             }
     )
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDTO register) {
-        if (authService.register(register)) {
+    public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) {
+        log.warn("POST запрос на регистрацию пользователя, тело запроса: {}, метод контроллера: {}", registerDTO, MethodLog.getMethodName());
+        if (authService.register(registerDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
