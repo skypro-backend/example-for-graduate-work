@@ -53,7 +53,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO login) {
-        log.info("method {}, LoginDTO {}", MethodLog.getMethodName(), login);
+        log.warn("POST запрос на аутентификацию пользователя, тело запроса: {}, метод контроллера: {}", login, MethodLog.getMethodName());
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
@@ -88,9 +88,9 @@ public class AuthController {
             }
     )
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDTO register) {
-        log.info("method {}, RegisterDTO {}", MethodLog.getMethodName(), register);
-        if (authService.register(register)) {
+    public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) {
+        log.warn("POST запрос на регистрацию пользователя, тело запроса: {}, метод контроллера: {}", registerDTO, MethodLog.getMethodName());
+        if (authService.register(registerDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

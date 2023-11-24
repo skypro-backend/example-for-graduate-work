@@ -44,7 +44,7 @@ public class AdController {
     )
     @GetMapping
     public ResponseEntity<AdsDTO> getAds() {
-        log.info("method invoked: {}", MethodLog.getMethodName());
+        log.warn("GET запрос на получение всех объявлений, метод контроллера: {}", MethodLog.getMethodName());
         return ResponseEntity.ok(adService.getAllAds());
     }
     // --------------------------------------------------------------------------------------
@@ -82,7 +82,8 @@ public class AdController {
     )
 //    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<AdDTO> addAds(@RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO, @RequestParam MultipartFile image) {
+    public ResponseEntity<AdDTO> addAd(@RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO, @RequestParam MultipartFile image) {
+        log.warn("POST запрос на добавление объявления, тело запроса: {}, метод контроллера: {}", createOrUpdateAdDTO, MethodLog.getMethodName());
         return ResponseEntity.ok(adService.addAd(createOrUpdateAdDTO, image));
     }
     // --------------------------------------------------------------------------------------
@@ -111,6 +112,7 @@ public class AdController {
     )
     @GetMapping("/{adId}")
     public ResponseEntity<ExtendedAdDTO> getAdInfo(@PathVariable long adId) {
+        log.warn("GET запрос на получение объявления с ID {}, метод контроллера: {}", adId, MethodLog.getMethodName());
         return ResponseEntity.ok(adService.getAdInfo(adId));
     }
     // --------------------------------------------------------------------------------------
@@ -141,6 +143,7 @@ public class AdController {
     @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorAd(authentication.name, #adId)")
     @DeleteMapping("{adId}")
     public ResponseEntity<Void> removeAd(@PathVariable Long adId) {
+        log.warn("DELETE запрос на удаление объявления с ID  {}, метод контроллера: {}", adId, MethodLog.getMethodName());
         return ResponseEntity.ok(adService.deleteAd(adId));
     }
     // --------------------------------------------------------------------------------------
@@ -178,6 +181,7 @@ public class AdController {
     @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorAd(authentication.name, #adId)")
     @PatchMapping(value = "/{adId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdDTO> updateAd(@PathVariable Long adId, @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+        log.warn("PATCH запрос на обновление объявления с ID {},тело запроса {},  метод контроллера: {}", adId, createOrUpdateAdDTO, MethodLog.getMethodName());
         return ResponseEntity.ok(adService.patchAd(adId, createOrUpdateAdDTO));
     }
     // --------------------------------------------------------------------------------------
@@ -210,6 +214,7 @@ public class AdController {
     )
     @GetMapping("me")
     public ResponseEntity<AdsDTO> getAdsMe() {
+        log.warn("GET запрос на получение объявлений активного пользователя, метод контроллера: {}", MethodLog.getMethodName());
         return ResponseEntity.ok(adService.getAllAdsByAuthor());
     }
     // --------------------------------------------------------------------------------------
@@ -235,8 +240,8 @@ public class AdController {
     )
     @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorAd(authentication.name, #adId)")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> updateAdImage(@PathVariable Long adId, @RequestPart MultipartFile image){
-
+    public ResponseEntity<String> updateAdImage(@PathVariable Long adId, @RequestPart MultipartFile image) {
+        log.warn("PATCH запрос на обновление картинки объявления с ID {}, метод контроллера: {}", adId, MethodLog.getMethodName());
         return ResponseEntity.ok(adService.patchAdImage(adId, image));
     }
 
@@ -263,6 +268,7 @@ public class AdController {
     )
     @GetMapping("{adId}/comments")
     public ResponseEntity<CommentsDTO> getComments(@PathVariable Long adId) {
+        log.warn("GET запрос на получение комментариев объявления с ID {}, метод контроллера: {}", adId, MethodLog.getMethodName());
         return ResponseEntity.ok(adService.getComments(adId));
     }
     // --------------------------------------------------------------------------------------
@@ -299,6 +305,7 @@ public class AdController {
     )
     @PostMapping(value = "{adId}/comments", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CommentDTO> addComments(@PathVariable Long adId, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+        log.warn("POST запрос на добавление комментария к объявлению с ID {}, тело запроса {}, метод контроллера: {}", adId, createOrUpdateCommentDTO, MethodLog.getMethodName());
         return ResponseEntity.ok(adService.addComment(adId, createOrUpdateCommentDTO));
     }
     // --------------------------------------------------------------------------------------
@@ -334,8 +341,10 @@ public class AdController {
     @DeleteMapping("{adId}/comments/{commentId}")
     @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorComment(authentication.name, #commentId)")
     public ResponseEntity<Void> deleteComment(@PathVariable Long adId, @PathVariable Long commentId) {
+        log.warn("DELETE запрос на удаление комментария с ID {}, у объявления с ID {}, метод контроллера: {}", commentId, adId, MethodLog.getMethodName());
         return ResponseEntity.ok(adService.deleteComment(adId, commentId));
     }
+
     // --------------------------------------------------------------------------------------
     // Обновить комментарий
     @Operation(
@@ -370,6 +379,7 @@ public class AdController {
     @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorComment(authentication.name, #commentId)")
     @PatchMapping("{adId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable Long adId, @PathVariable Long commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+        log.warn("PATCH запрос на обновление комментария с ID {}, у объявления с ID {}, метод контроллера: {}", commentId, adId, MethodLog.getMethodName());
         return ResponseEntity.ok(adService.patchComment(adId, commentId, createOrUpdateCommentDTO));
     }
     // --------------------------------------------------------------------------------------

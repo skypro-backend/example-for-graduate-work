@@ -5,6 +5,8 @@ import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 
+import java.io.IOException;
+
 public interface UserService {
 
     UserDTO getCurrentUser();
