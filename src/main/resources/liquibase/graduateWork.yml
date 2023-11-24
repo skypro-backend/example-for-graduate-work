@@ -1,0 +1,3 @@
+databaseChangeLog:
+  -include:
+    file: Liquibase/scripts/graduateWork.sql
