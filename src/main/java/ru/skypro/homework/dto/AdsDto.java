@@ -10,6 +10,7 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @RequiredArgsConstructor
+@EqualsAndHashCode
 @Schema(description = "список объявлений")
 public class AdsDto {
 
@@ -17,7 +18,6 @@ public class AdsDto {
     private int count;
 
     @Schema(description = "объявления")
-//    private List<Ad> results;
     private List<AdDto> results;
 
 }

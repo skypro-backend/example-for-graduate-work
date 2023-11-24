@@ -3,23 +3,17 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.service.AdService;
 
-import javax.validation.Valid;
-
-import static org.hibernate.boot.model.process.spi.MetadataBuildingProcess.build;
+import java.util.List;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -157,8 +151,8 @@ public class AdsController {
             }
     )
     @GetMapping("/me")
-    public ResponseEntity<?> getAdsMe() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<AdDto>> getAdsMe(Authentication authentication) {
+        return ResponseEntity.ok(adService.getAdsMe(authentication));
     }
     @Operation(
             summary = "Обновление картинки объявления",

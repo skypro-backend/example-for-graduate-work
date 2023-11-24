@@ -17,6 +17,7 @@ public interface AdService {
     List<AdDto> getAllAds(Authentication authentication);
 
     ExtendedAdDto getAds(int pk);
+    List<AdDto> getAdsMe(Authentication authentication);
     void removeAd(int pk);
 
 }

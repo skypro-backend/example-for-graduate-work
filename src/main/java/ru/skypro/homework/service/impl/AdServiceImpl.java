@@ -59,7 +59,8 @@ public class AdServiceImpl implements AdService {
         AdsDto adsDto = new AdsDto();
         //adsDto.setCount(adList.size());
         //adsDto.setResults(adsMapper.INSTANCE.toDto(adList.size(), adList));
-        return AdsMapper.INSTANCE.toDto(adList.size(), adList);
+        adsDto.setResults(AdsMapper.INSTANCE.toDto(adList));
+        return adsDto.getResults();
     }
 
 @Override
@@ -91,5 +92,19 @@ public class AdServiceImpl implements AdService {
         adRepository.save(newAd);
         return CreateOrUpdateAdMapper.INSTANCE.toDto(newAd, user);
     }
+    @Override
+    public List<AdDto> getAdsMe(Authentication authentication) {
+        User user = userServiceImpl.findUserByUsername(authentication);
+//        int userIdAd = user.getId();
+        List<Ad> adMeList = adRepository.findAdByUser(user);
+//        List<Ad> adList= adRepository.findById(3);
+//        int size = adList.size();
+//        return (List<AdDto>) AdsMapper.INSTANCE.toDto(size, adList);
+        AdsDto adsDto = new AdsDto();
+        adsDto.setCount(adMeList.size());
+        adsDto.setResults(AdsMapper.INSTANCE.toDto(adMeList));
+        return adsDto.getResults();
+    }
+
 
 }
