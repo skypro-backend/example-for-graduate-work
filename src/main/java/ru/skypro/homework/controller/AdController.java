@@ -5,14 +5,17 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.utils.MethodLog;
 
-
+@Slf4j
 @RestController
 //@CrossOrigin(origins = "<http://localhost:3000")
 @RequestMapping("/ads")
@@ -41,6 +44,7 @@ public class AdController {
     )
     @GetMapping
     public ResponseEntity<AdsDTO> getAds() {
+        log.info("method invoked: {}", MethodLog.getMethodName());
         return ResponseEntity.ok(adService.getAllAds());
     }
     // --------------------------------------------------------------------------------------
@@ -134,8 +138,9 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorAd(authentication.name, #adId)")
     @DeleteMapping("{adId}")
-    public ResponseEntity<Void> removeAds(@PathVariable Long adId) {
+    public ResponseEntity<Void> removeAd(@PathVariable Long adId) {
         return ResponseEntity.ok(adService.deleteAd(adId));
     }
     // --------------------------------------------------------------------------------------
@@ -170,8 +175,9 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorAd(authentication.name, #adId)")
     @PatchMapping(value = "/{adId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdDTO> updateAds(@PathVariable Long adId, @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+    public ResponseEntity<AdDTO> updateAd(@PathVariable Long adId, @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
         return ResponseEntity.ok(adService.patchAd(adId, createOrUpdateAdDTO));
     }
     // --------------------------------------------------------------------------------------
@@ -227,6 +233,7 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorAd(authentication.name, #adId)")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateAdImage(@PathVariable Long adId, @RequestPart MultipartFile image){
 
@@ -323,8 +330,10 @@ public class AdController {
                     )
             }
     )
+
     @DeleteMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<Void> deleteComments(@PathVariable Long adId, @PathVariable Long commentId) {
+    @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorComment(authentication.name, #commentId)")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long adId, @PathVariable Long commentId) {
         return ResponseEntity.ok(adService.deleteComment(adId, commentId));
     }
     // --------------------------------------------------------------------------------------
@@ -358,8 +367,9 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorComment(authentication.name, #commentId)")
     @PatchMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<CommentDTO> updateComments(@PathVariable Long adId, @PathVariable Long commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long adId, @PathVariable Long commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         return ResponseEntity.ok(adService.patchComment(adId, commentId, createOrUpdateCommentDTO));
     }
     // --------------------------------------------------------------------------------------
