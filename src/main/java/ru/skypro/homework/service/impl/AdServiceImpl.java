@@ -61,7 +61,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image) throws IOException {
+    public Ad addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image) throws IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
         Ad ad = AdMapper.INSTANCE.createOrUpdateAdDTOToAd(createOrUpdateAdDTO, user);
@@ -70,7 +70,7 @@ public class AdServiceImpl implements AdService {
                 + ad.getTitle()
                 + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
         adRepository.save(ad);
-        return AdMapper.INSTANCE.adToAdDTO(ad);
+        return ad;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,18 +13,20 @@ import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exception.IncorrectPasswordException;
 import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
-import ru.skypro.homework.model.PhotoAd;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.utils.MethodLog;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
-
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
+import java.io.IOException;
 
+
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
@@ -38,6 +41,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getCurrentUser() {
+        log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
         return UserMapper.INSTANCE.toUserDTO(user);
@@ -45,6 +50,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(UpdateUserDTO updateUserDTO) {
+        log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
 
@@ -54,6 +61,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Void setPassword(NewPasswordDTO newPasswordDTO) {
+        log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
 

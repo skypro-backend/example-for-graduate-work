@@ -20,6 +20,9 @@ import java.io.File;
 import java.io.IOException;
 
 import ru.skypro.homework.utils.MethodLog;
+
+import java.io.IOException;
+
 @Slf4j
 //@CrossOrigin(origins = "<http://localhost:3000")
 @RestController
@@ -65,7 +68,7 @@ public class UserController {
     @CrossOrigin("http://locallhost:3000")
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUser() {
-        log.info("method {},", MethodLog.getMethodName());
+        log.warn("GET запрос на получение активного пользователя, метод контроллера: {}", MethodLog.getMethodName());
 
         return ResponseEntity.ok(userService.getCurrentUser());
     }
@@ -106,7 +109,7 @@ public class UserController {
     )
     @PatchMapping("/me")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
-        log.info("method {}, UpdateUserDTO {}", MethodLog.getMethodName(), updateUserDTO);
+        log.warn("PATCH запрос на обновление пользователя, тело запроса: {}, метод контроллера: {}", updateUserDTO, MethodLog.getMethodName());
 
         if (null == updateUserDTO) {
             return ResponseEntity.noContent().build();
@@ -148,7 +151,7 @@ public class UserController {
     )
     @PostMapping("/set_password")
     public ResponseEntity<?> setUserPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
-        log.info("method {}, NewPasswordDTO {}", MethodLog.getMethodName(), newPasswordDTO);
+        log.warn("POST запрос на смену пароля, тело запроса: {}, метод контроллера: {}", newPasswordDTO, MethodLog.getMethodName());
 
         return ResponseEntity.ok(userService.setPassword(newPasswordDTO));
     }
@@ -171,7 +174,7 @@ public class UserController {
     )
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> loadUserImage(@RequestPart (value = "image", required = true) MultipartFile image) throws IOException{
-        log.info("method {}", MethodLog.getMethodName());
+        log.warn("PATCH запрос на обновление аватара пользователя, тело запроса: MultipartFile image, метод контроллера: {}", MethodLog.getMethodName());
         return ResponseEntity.ok(userService.updateUserImage(image));
     }
 
