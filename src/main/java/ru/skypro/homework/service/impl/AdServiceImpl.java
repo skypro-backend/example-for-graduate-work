@@ -21,6 +21,7 @@ import ru.skypro.homework.service.AdService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -145,5 +146,14 @@ public class AdServiceImpl implements AdService {
         comment.setText(createOrUpdateCommentDTO.getText());
 
         return CommentMapper.INSTANCE.toCommentDTO(commentRepository.save(comment), user);
+    }
+
+    public boolean isAuthorAd(String username, Long adId) {
+        Optional<Ad> adOptional = adRepository.findById(adId);
+        return adOptional.map(ad -> ad.getAuthor().getEmail().equals(username)).orElse(false);
+    }
+    public boolean isAuthorComment(String username, Long commentId) {
+        Optional<Comment> commentOptional = commentRepository.findById(commentId);
+        return commentOptional.map(comment -> comment.getAuthor().getEmail().equals(username)).orElse(false);
     }
 }
