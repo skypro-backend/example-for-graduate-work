@@ -204,15 +204,4 @@ public class AdsService {
         log.debug("Method getExtension is called, argument(s) passed: {}", fileName);
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
-
-    /**
-     * method to get a stored image
-     * @return byte[]
-     */
-
-    public byte[] getImageFromFS(String id) throws IOException {
-        Path path = Paths.get(imageDir + id);
-        return Files.readAllBytes(path);
-    }
-
 }
