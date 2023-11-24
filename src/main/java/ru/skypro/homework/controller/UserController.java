@@ -170,7 +170,7 @@ public class UserController {
             }
     )
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> loadUserImage(@RequestPart MultipartFile image) throws IOException{
+    public ResponseEntity<String> loadUserImage(@RequestPart (value = "image", required = true) MultipartFile image) throws IOException{
         log.info("method {}", MethodLog.getMethodName());
         return ResponseEntity.ok(userService.updateUserImage(image));
     }
