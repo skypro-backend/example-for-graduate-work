@@ -204,4 +204,5 @@ public class AdsService {
         log.debug("Method getExtension is called, argument(s) passed: {}", fileName);
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
+
 }
