@@ -3,6 +3,7 @@ package ru.skypro.homework.service;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 
@@ -17,7 +18,7 @@ public interface AdService {
     List<AdDto> getAllAds(Authentication authentication);
 
     ExtendedAdDto getAds(int pk);
-    List<AdDto> getAdsMe(Authentication authentication);
+    AdsDto getAdsMe(Authentication authentication);
     void removeAd(int pk);
 
 }

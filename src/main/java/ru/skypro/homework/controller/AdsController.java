@@ -13,8 +13,6 @@ import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.service.AdService;
 
-import java.util.List;
-
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @Tag(name = "Объявления", description = "контроллер для работы с объявлениями")
@@ -151,7 +149,7 @@ public class AdsController {
             }
     )
     @GetMapping("/me")
-    public ResponseEntity<List<AdDto>> getAdsMe(Authentication authentication) {
+    public ResponseEntity<AdsDto> getAdsMe(Authentication authentication) {
         return ResponseEntity.ok(adService.getAdsMe(authentication));
     }
     @Operation(

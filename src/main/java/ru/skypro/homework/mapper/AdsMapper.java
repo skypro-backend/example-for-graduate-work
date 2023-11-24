@@ -21,6 +21,6 @@ public interface AdsMapper {
 //AdsDto toDto(int size, List<Ad> adList);
 
     //    List<AdDto> toDTO(List<Ad> adList);
-    @Mapping(target = "author", source = "user.id")
+    @Mapping(target = "author", source = "user_id")
     List<AdDto> toDto(List<Ad> adMeList);
 }
