@@ -211,7 +211,7 @@ public class AdsService {
      */
 
     public byte[] getImageFromFS(String id) throws IOException {
-        Path path = Paths.get(imageDir + id);
+        Path path = Paths.get(imageDir + "/" + id);
         return Files.readAllBytes(path);
     }
 
