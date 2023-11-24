@@ -28,6 +28,6 @@ public class User {
     private String userName;
     private String password;
     private int countAd;
-//    @Transient
-//    private List<Ad> adList;
+    @Transient
+    private List<Ad> adList;
 }
