@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
@@ -175,7 +176,7 @@ public class UserController {
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> loadUserImage(@RequestPart (value = "image", required = true) MultipartFile image) throws IOException{
         log.warn("PATCH запрос на обновление аватара пользователя, тело запроса: MultipartFile image, метод контроллера: {}", MethodLog.getMethodName());
-        return ResponseEntity.ok(userService.updateUserImage(image));
+        return ResponseEntity.ok(userService.updateUserImage(image, SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
 }

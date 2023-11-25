@@ -13,15 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.utils.MethodLog;
 
@@ -82,23 +78,8 @@ public class AdController {
             @ApiResponse(responseCode = "404",
                     description = "Not Found")})
 
-/*   @PostMapping(consumes = MediaType.APPLICATION_OCTET_STREAM)*/
-   /* @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/ads",
-            produces = { "application/json" },
-            consumes = {"multipart/form-data"}
-    )*/
-    /*public ResponseEntity<AdDTO> addAds(
-            @RequestPart (value = "properties") CreateOrUpdateAdDTO createOrUpdateAdDTO,
-            @RequestPart  MultipartFile image)  throws IOException {
-        log.debug("method {}", MethodLog.getMethodName());
-        return ResponseEntity.ok(adService.addAd(createOrUpdateAdDTO, image));
-    }*/
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/ads", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    //      POST http://localhost:8080/ads/
-    // available only for the authenticated
     public ResponseEntity<AdDTO> addAds(
             @Parameter(description = "JSON for create new ad")
             @RequestPart(value = "properties", required = false) @Validated CreateOrUpdateAdDTO properties,

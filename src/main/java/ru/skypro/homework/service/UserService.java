@@ -17,5 +17,5 @@ public interface UserService {
 
     Void setPassword(NewPasswordDTO newPasswordDTO);
 
-    String updateUserImage(MultipartFile image) throws IOException;
+    String updateUserImage(MultipartFile image, String userName) throws IOException;
 }

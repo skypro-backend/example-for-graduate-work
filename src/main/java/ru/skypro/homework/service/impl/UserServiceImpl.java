@@ -12,7 +12,10 @@ import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exception.IncorrectPasswordException;
 import ru.skypro.homework.exception.UserNotFoundException;
+import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.PhotoAd;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
@@ -91,10 +94,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String updateUserImage(MultipartFile image) throws IOException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(auth.getName());
+    public String updateUserImage(MultipartFile image, String userName) throws IOException {
+        User user = getCurrentUser(userName);
         Path filePath = Path.of(photoAvatar, user.getFirstName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+       user.setImage(String.valueOf(filePath));
+        uploadPhotoAdd(filePath,image);
+        return String.valueOf(filePath);
+    }
+
+    public void uploadPhotoAdd(Path filePath, MultipartFile image) throws IOException {
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
         try (InputStream is = image.getInputStream();
@@ -104,11 +112,9 @@ public class UserServiceImpl implements UserService {
         ) {
             bis.transferTo(bos);
         }
-        File file = new File(String.valueOf(filePath));
-        user.setImage(String.valueOf(filePath));
-        userRepository.save(user);
-        return String.valueOf(filePath);
+
     }
+
     private String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
