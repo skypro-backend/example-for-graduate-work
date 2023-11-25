@@ -48,7 +48,6 @@ public class UserController {
         return userService.updateUser(user);
     }
 
-    //Обновить изображение о пользователе
     @PatchMapping("/me/image")
     @Operation(summary = "Обновление аватара авторизованного пользователе")
     @ApiResponse(responseCode = "200",description = "OK")
@@ -56,5 +55,12 @@ public class UserController {
     void updateUserImage(MultipartFile image) {
 
         userService.updateUserImage(image);
+    }
+
+    @GetMapping("/image/{id}")
+    @Operation(summary = "Получение аватара пользователя")
+    @ApiResponse(responseCode = "200",description = "OK")
+    public byte[] getImage(@PathVariable String id) {
+        return userService.getImage(id);
     }
 }

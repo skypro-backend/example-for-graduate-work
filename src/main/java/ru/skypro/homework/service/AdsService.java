@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.AdsInfoDTO;
 import ru.skypro.homework.dto.CreateAdsDTO;
+import ru.skypro.homework.model.Image;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public interface AdsService {
 
     List<AdsDTO> getUserAds();
 
-    String updateAdsImage(long id, MultipartFile image);
+   void updateAdsImage(long id, MultipartFile image);
 
+    byte[] getImage(String id);
 }

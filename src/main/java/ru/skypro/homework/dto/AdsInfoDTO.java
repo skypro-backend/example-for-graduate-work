@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdsInfoDTO {
-    private long adsId;
+    private long pk;
     private String authorFirstName;
     private String authorLastName;
     private String description;

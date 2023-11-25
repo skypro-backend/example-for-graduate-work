@@ -23,9 +23,9 @@ public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
     @Override
-    public String uploadImage(MultipartFile file) {
+    public Image uploadImage(MultipartFile file) {
         Image image = new Image();
-        image.setId(Long.parseLong(UUID.randomUUID().toString())); // генерируем уникальный идентификатор
+        image.setId((UUID.randomUUID().toString())); // генерируем уникальный идентификатор
         try {
             byte[] bytes = file.getBytes();
             image.setImage(bytes);
@@ -33,12 +33,11 @@ public class ImageServiceImpl implements ImageService {
             e.printStackTrace();
         }
         imageRepository.save(image);
-        return String.valueOf(image.getId());
+        return image;
     }
 
-
     @Override
-    public byte[] getImage(long id) {
+    public byte[] getImage(String id) {
         Image image = imageRepository.findById(id).orElse(null);
 
         return image.getImage();

@@ -14,4 +14,6 @@ public interface UserService {
 
     void updateUserImage(MultipartFile image);
 
+    byte[] getImage(String id);
+
 }

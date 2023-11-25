@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 public class Image {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Column(name = "image_id")
+    private String id;
 
     @Lob
     private byte[] image;

@@ -16,7 +16,7 @@ public class Comment {
     @Column(name = "comment_id")
     private long id;
 
-    private String createdAt = String.valueOf(LocalDateTime.now());
+    private long createdAt = System.currentTimeMillis();
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)

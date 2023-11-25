@@ -22,7 +22,7 @@ public class AdsController {
     private final AdsService adsService;
     private final CommentService commentService;
 
-    @GetMapping("/")
+    @GetMapping
     @Operation(summary = "Получить все объявления")
     @ApiResponse(responseCode = "200", description = "OK")
     public AllAdsDTO getAllAds() {
@@ -31,7 +31,7 @@ public class AdsController {
         return new AllAdsDTO(count, results);
     }
 
-    @PostMapping("/")
+    @PostMapping
     @Operation(summary = "Добавление объявления")
     @ApiResponse(responseCode = "200", description = "Created")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
@@ -91,9 +91,9 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not Found")
-    public String updateAdsImage(@PathVariable long id,
+    public void updateAdsImage(@PathVariable long id,
                                  @RequestPart(name = "image") MultipartFile image) {
-        return adsService.updateAdsImage(id, image);
+        adsService.updateAdsImage(id, image);
     }
 
     @GetMapping("/{id}/comments")
@@ -141,6 +141,14 @@ public class AdsController {
                                 @PathVariable long commentId,
                                 @RequestBody String text) {
         return commentService.updateComment(adsId, commentId, text);
+    }
+
+    @GetMapping("/image/{id}")
+    @Operation(summary = "Получение картинки объявления")
+    @ApiResponse(responseCode = "200",description = "OK")
+    public byte[] getImage(@PathVariable String id) {
+
+        return adsService.getImage(id);
     }
 
 }

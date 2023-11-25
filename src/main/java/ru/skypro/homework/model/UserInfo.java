@@ -2,6 +2,7 @@ package ru.skypro.homework.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ru.skypro.homework.dto.Role;
 
 import java.time.LocalDateTime;
@@ -24,19 +25,15 @@ public class UserInfo {
     private String phone;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private String image;
 
-    @OneToMany(mappedBy = "author",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Ads> ads;
 
-    @OneToMany(mappedBy = "author",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn (name = "image_id")
     private Image imageModel;
 
 }

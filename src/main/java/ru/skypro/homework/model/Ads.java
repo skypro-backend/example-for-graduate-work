@@ -18,21 +18,18 @@ public class Ads {
     private long id;
 
     private String description;
-    private String image;
     private long price;
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "user_id")
-    UserInfo author;
+    private UserInfo author;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ads")
-    List<Comment> comments;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ads")
+    private List<Comment> comments;
 
     @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn (name = "image_id")
     private Image imageModel;
 
-    public String getAdsImage(Ads ads) {
-        return null;
-    }
 }

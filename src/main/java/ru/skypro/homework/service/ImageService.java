@@ -1,11 +1,12 @@
 package ru.skypro.homework.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.model.Image;
 
 public interface ImageService {
 
-    String uploadImage(MultipartFile file);
+    Image uploadImage(MultipartFile file);
 
 
-    byte[] getImage(long id);
+    byte[] getImage(String id);
 }

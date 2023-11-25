@@ -3,11 +3,13 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exception.InvalidPasswordException;
+import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.UserInfo;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.ImageService;
@@ -40,7 +42,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserInfo() {
         UserInfo user = authService.getCurrentUser();
-        return userMapper.userToDto(user);
+        UserDTO userDTO = userMapper.userToDto(user);
+        if (user.getImageModel() != null) {
+            userDTO.setImage("/users/image/" + user.getImageModel().getId());
+        }
+        return userDTO;
     }
 
     @Override
@@ -54,8 +60,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateUserImage(MultipartFile image) {
-        String uploadImage = imageService.uploadImage(image);
+        UserInfo user = authService.getCurrentUser();
+        Image uploadImage = imageService.uploadImage(image);
+        user.setImageModel(uploadImage);
+        userRepository.save(user);
 
+    }
+
+    @Override
+    @Transactional
+    public byte[] getImage(String id) {
+        return imageService.getImage(id);
     }
 }
