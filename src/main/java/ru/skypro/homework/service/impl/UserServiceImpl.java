@@ -47,6 +47,12 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(auth.getName());
         return UserMapper.INSTANCE.toUserDTO(user);
     }
+    @Override
+    public User getCurrentUser(String userName) {
+        log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
+        User user = userRepository.findByEmail(userName);
+        return user;
+    }
 
     @Override
     public UserDTO updateUser(UpdateUserDTO updateUserDTO) {

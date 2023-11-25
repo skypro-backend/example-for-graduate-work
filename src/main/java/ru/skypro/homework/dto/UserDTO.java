@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import ru.skypro.homework.model.Role;
 
+import javax.validation.constraints.Email;
 import java.util.Objects;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Objects;
 public class UserDTO {
   @JsonProperty("id")
   private Long id;
-
+  @Email
   @JsonProperty("email")
   private String email;
 

@@ -19,7 +19,6 @@ public class PhotoAd {
     private String filePath;
     private long fileSize;
     private String mediaType;
-
     @OneToOne
     @JoinColumn(name = "ad_id")
     private Ad ad;

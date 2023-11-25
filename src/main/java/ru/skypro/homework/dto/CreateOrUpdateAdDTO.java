@@ -11,15 +11,15 @@ import java.util.Objects;
 /**
  * CreateOrUpdateAd
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-11-05T13:56:03.406359+03:00[Europe/Moscow]")
+/*@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-11-05T13:56:03.406359+03:00[Europe/Moscow]")*/
 public class CreateOrUpdateAdDTO {
-  @JsonProperty("Title")
+  @JsonProperty("title")
   private String title;
 
-  @JsonProperty("Price")
+  @JsonProperty("price")
   private Integer price;
 
-  @JsonProperty("Description")
+  @JsonProperty("description")
   private String description;
 
   public CreateOrUpdateAdDTO title(String title) {
