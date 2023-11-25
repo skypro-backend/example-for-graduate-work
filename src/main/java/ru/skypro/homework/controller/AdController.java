@@ -8,20 +8,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
-import ru.skypro.homework.service.AddService;
+import ru.skypro.homework.service.AdService;
+
 
 @RestController
-@RequestMapping("/add")
-public class AddController {
-    private final AddService addService;
+@RequestMapping("/ad")
+public class AdController {
+    private AdService adService;
 
-    public AddController(AddService addService) {
-        this.addService = addService;
+    public AdController(AdService addService) {
+        this.adService = adService;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
-        if (addService.login(login.getUsername(), login.getPassword())) {
+        if (adService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -30,7 +31,7 @@ public class AddController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) {
-        if (addService.register(register)) {
+        if (adService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
