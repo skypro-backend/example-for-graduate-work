@@ -5,5 +5,5 @@ import ru.skypro.homework.entity.AdEntity;
 
 @Mapper
 public interface AdMapper {
-    Ad toDTO(AdEntity adEntity)
+    Ad toDTO(AdEntity adEntity);
 }
