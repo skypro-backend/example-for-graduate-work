@@ -11,6 +11,7 @@ lastName VARCHAR(255),
 phone VARCHAR(255),
 role VARCHAR(255),
 image VARCHAR(255),
+adId INT,
 );
 
 CREATE TABLE ads (
@@ -19,6 +20,8 @@ author INT,
 image VARCHAR(255),
 price INT,
 title TEXT,
+description TEXT,
+commentId INT
 );
 
 CREATE TABLE comments (
@@ -27,4 +30,5 @@ author INT,
 authorImage VARCHAR(255),
 authorFirstName VARCHAR(255),
 text TEXT,
+adId INT,
 );

@@ -1,9 +1,11 @@
 package ru.skypro.homework.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import ru.skypro.homework.dto.RoleDTO;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "users")
@@ -20,5 +22,9 @@ public class User {
     private String phone;
     private RoleDTO role;
     private String image;
+
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "user")
+//    private Collection<Ad> ads;
 
 }

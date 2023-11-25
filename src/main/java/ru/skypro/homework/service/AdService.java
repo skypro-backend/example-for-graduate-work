@@ -22,10 +22,9 @@ public class AdService {
         this.adMapping = adMapping;
     }
 
-    public void createAd(AdDTO adDTO) {
-        adRepository.save(adMapping.mapToAd(adDTO));
+    public void createAd(CreateOrUpdateAd createOrUpdateAd) {
+        adRepository.save(adMapping.mapToCreateOrUpdateAd(createOrUpdateAd));
     }
-
 
     public Collection<AdDTO> getAll() {
         List<Ad> adList = (List<Ad>) adRepository.findAll();
@@ -42,14 +41,17 @@ public class AdService {
     }
 
     public void deleteAd(int id) {
-       adRepository.deleteById(id);   }
+        adRepository.deleteById(id);
+    }
 
-//    public CreateOrUpdateAd updateAd(int id, CreateOrUpdateAd createOrUpdateAd) {
-//        Ad updateAd = adRepository.findById(id);
-//        updateAd = adMapping.mapToCreateOrUpdateAd(createOrUpdateAd);
-//       adRepository.save(updateAd);
-//       return adMapping.mapToCreateOrUpdateAdDTO(updateAd);
-//    }
+    public CreateOrUpdateAd updateAd(int id, CreateOrUpdateAd createOrUpdateAd) {
+        Ad updateAd = adRepository.findByPk(id);
+        updateAd.setTitle(createOrUpdateAd.getTitle());
+        updateAd.setPrice(createOrUpdateAd.getPrice());
+        updateAd.setDescription(createOrUpdateAd.getDescription());
+        adRepository.save(updateAd);
+        return adMapping.mapToCreateOrUpdateAdDTO(updateAd);
+    }
 }
 
 

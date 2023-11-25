@@ -26,8 +26,8 @@ public class AdController {
     }
 
     @PostMapping
-    public void createAd(@Valid @RequestBody AdDTO adDTO) {
-        adService.createAd(adDTO);
+    public void createAd(@Valid @RequestBody CreateOrUpdateAd createOrUpdateAd) {
+        adService.createAd(createOrUpdateAd);
 
     }
 
@@ -46,10 +46,10 @@ public class AdController {
        adService.deleteAd(id);
     }
 
-//    @PatchMapping("{id}")
-//    public createOrUpdateAd updateById(@PathVariable int id, @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd) {
-//        return adService.updateAd(id, createOrUpdateAd);
-//    }
+    @PatchMapping("{id}")
+    public CreateOrUpdateAd updateById(@PathVariable int id, @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd) {
+        return adService.updateAd(id, createOrUpdateAd);
+    }
 
 
 }

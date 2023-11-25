@@ -12,11 +12,11 @@ public class AdMapper {
     //из model в dto
     public AdDTO mapToAdDto(Ad ad) {
         AdDTO adDTO = new AdDTO();
-        adDTO.setAuthor(ad.getAuthor());
         adDTO.setImage(ad.getImage());
         adDTO.setPk(ad.getPk());
         adDTO.setPrice(ad.getPrice());
         adDTO.setTitle(ad.getTitle());
+        adDTO.setDescription(ad.getDescription());
         return adDTO;
     }
 
@@ -24,24 +24,26 @@ public class AdMapper {
         CreateOrUpdateAd adDTO = new CreateOrUpdateAd();
         adDTO.setPrice(ad.getPrice());
         adDTO.setTitle(ad.getTitle());
+        adDTO.setDescription(ad.getDescription());
         return adDTO;
     }
 
     //из dto в model
     public Ad mapToAd(AdDTO adDTO) {
         Ad ad = new Ad();
-        ad.setAuthor(adDTO.getAuthor());
         ad.setImage(adDTO.getImage());
         ad.setPk(adDTO.getPk());
         ad.setPrice(adDTO.getPrice());
         ad.setTitle(adDTO.getTitle());
+        ad.setDescription(adDTO.getDescription());
         return ad;
     }
 
-    public Ad mapToCreateOrUpdateAd(CreateOrUpdateAd CreateOrUpdateAd) {
+    public Ad mapToCreateOrUpdateAd(CreateOrUpdateAd createOrUpdateAd) {
         Ad ad = new Ad();
-        ad.setPrice(CreateOrUpdateAd.getPrice());
-        ad.setTitle(CreateOrUpdateAd.getTitle());
+        ad.setPrice(createOrUpdateAd.getPrice());
+        ad.setTitle(createOrUpdateAd.getTitle());
+        ad.setDescription(createOrUpdateAd.getDescription());
         return ad;
     }
 

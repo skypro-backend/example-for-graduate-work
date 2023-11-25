@@ -17,4 +17,8 @@ public class Comment {
     private int createdAt;
     private String text;
 
+    @ManyToOne
+    private Ad ad;
+    @ManyToOne
+    private User user;
 }

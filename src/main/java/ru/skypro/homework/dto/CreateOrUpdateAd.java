@@ -20,7 +20,7 @@ public class CreateOrUpdateAd {
     private int price;
     @Schema(description = "текст объявления")
     @NotBlank
-    @Size(min = 4, max = 25)
+    @Size(min = 4)
     private String description;
 
 }
