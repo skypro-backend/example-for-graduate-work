@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Data
 @Schema(description = "объявление")
 public class AdDTO {
-   @Schema(description = "ссылка на картинку объявления")
+    @Schema(description = "ссылка на картинку объявления")
     @NotBlank
     private String image;
     @Schema(description = "id объявления")

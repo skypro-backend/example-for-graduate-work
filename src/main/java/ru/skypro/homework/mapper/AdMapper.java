@@ -39,7 +39,7 @@ public class AdMapper {
         return ad;
     }
 
-    public Ad mapToCreateOrUpdateAd(CreateOrUpdateAd createOrUpdateAd) {
+    public Ad mapToAdFromCreateOrUpdateAd(CreateOrUpdateAd createOrUpdateAd) {
         Ad ad = new Ad();
         ad.setPrice(createOrUpdateAd.getPrice());
         ad.setTitle(createOrUpdateAd.getTitle());

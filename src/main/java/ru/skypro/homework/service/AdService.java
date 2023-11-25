@@ -23,7 +23,7 @@ public class AdService {
     }
 
     public void createAd(CreateOrUpdateAd createOrUpdateAd) {
-        adRepository.save(adMapping.mapToCreateOrUpdateAd(createOrUpdateAd));
+        adRepository.save(adMapping.mapToAdFromCreateOrUpdateAd(createOrUpdateAd));
     }
 
     public Collection<AdDTO> getAll() {

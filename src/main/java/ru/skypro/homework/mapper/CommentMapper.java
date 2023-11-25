@@ -3,13 +3,14 @@ package ru.skypro.homework.mapper;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.model.Comment;
 
 @Service
 public class CommentMapper {
 
     //из model в dto
-    public CommentDTO mapToCommentDto(Comment comment){
+    public CommentDTO mapToCommentDto(Comment comment) {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setAuthor(comment.getAuthor());
         commentDTO.setAuthorFirstName(comment.getAuthorFirstName());
@@ -20,8 +21,15 @@ public class CommentMapper {
         return commentDTO;
     }
 
+    public CommentDTO mapToCreateOrUpdateComment(Comment comment) {
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setText(comment.getText());
+        return commentDTO;
+    }
+
+
     //из dto в model
-    public Comment mapToComment(CommentDTO commentDTO){
+    public Comment mapToComment(CommentDTO commentDTO) {
         Comment comment = new Comment();
         comment.setAuthor(commentDTO.getAuthor());
         comment.setAuthorFirstName(commentDTO.getAuthorFirstName());
@@ -31,5 +39,12 @@ public class CommentMapper {
         comment.setText(commentDTO.getText());
         return comment;
     }
+
+    public Comment mapToCommentFromCreateOrUpdateComment(CreateOrUpdateComment createOrUpdateComment) {
+        Comment comment = new Comment();
+        comment.setText(createOrUpdateComment.getText());
+        return comment;
+    }
+
 
 }
