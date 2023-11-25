@@ -1,16 +1,24 @@
 package ru.skypro.homework.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CommentDTO {
-    private long id;
+    private Integer id;
     private String authorFirstName;
     private LocalDateTime createdAt;
     private String text;
-    private long adId;
-    private long userId;
-    private long userAvatarId;
+//    private Integer adId;
+    private Integer userId;
+    private Integer userAvatarId;
+
+
+
+
 }

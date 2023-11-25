@@ -1,44 +1,48 @@
 package ru.skypro.homework.mapper;
 
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
-
+@Component
+@RequiredArgsConstructor
 public class CommentMapper {
 
-    private final AdRepository adRepository;
+//    private final AdRepository adRepository;
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
 
-    public ImageMapper(AdRepository adRepository,
-                       UserRepository userRepository,
-                       ImageRepository imageRepository) {
-        this.adRepository = adRepository;
-        this.userRepository = userRepository;
-        this.imageRepository = imageRepository;
-    }
+
+
+
+
     public CommentDTO mapToDTO(Comment comment) {
-        return CommentDTO(
+        return new CommentDTO(
             comment.getId(),
-            comment.getAuthorFirstName(),
+            comment.getUserFirstName(),
             comment.getCreatedAt(),
             comment.getText(),
-            comment.getAd().getId(),
+//            comment.getAd().getAuthor(),
             comment.getUser().getId(),
             comment.getImage().getId()
         );
     }
 
     public Comment mapToEntity(CommentDTO commentDTO) {
-        return Comment(
-                commentDTO.getId(),
+
+
+        return new Comment(
+
                 commentDTO.getAuthorFirstName(),
                 commentDTO.getCreatedAt(),
                 commentDTO.getText(),
-                adRepository.findById(commentDTO.getAdId()),
-                userRepository.findById(commentDTO.getUserId()),
-                imageRepository.findById(commentDTO.getUserAvatarId())
+//                adRepository.getById(commentDTO.getAdId()),
+                userRepository.getById(commentDTO.getUserId()),
+                imageRepository.getById(commentDTO.getUserAvatarId())
         );
+
     }
 }

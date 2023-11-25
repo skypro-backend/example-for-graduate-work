@@ -4,9 +4,9 @@ import ru.skypro.homework.dto.UserDto;
 
 public interface UserService {
 
-    UserDto get(Long id);
+    UserDto get(Integer id);
 
-    UserDto update(Long id, UserDto userDto);
+    UserDto update(Integer id, UserDto userDto);
 
 
 //    User setPassword(User user);

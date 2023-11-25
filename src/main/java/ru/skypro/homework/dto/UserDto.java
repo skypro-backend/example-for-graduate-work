@@ -7,19 +7,17 @@ import java.util.Objects;
 
 @Data
 public class UserDto {
-    private Long id = 0L;
+    private Integer id = 0;
     private String username = "string";
-    private String password = "string";
     private String firstName = "string";
     private String lastName = "string";
     private Integer phone = 0;
     private Role role = Role.USER;
     private String image = "string";
 
-    public UserDto(Long id, String username, String password, String firstName, String lastName, Integer phone, Role role, String image) {
+    public UserDto(Integer id, String username, String firstName, String lastName, Integer phone, Role role, String image) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -29,11 +27,11 @@ public class UserDto {
 
     public UserDto() {}
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -45,13 +43,9 @@ public class UserDto {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+
+
 
     public String getFirstName() {
         return firstName;
@@ -98,12 +92,12 @@ public class UserDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserDto userDto = (UserDto) o;
-        return Objects.equals(id, userDto.id) && Objects.equals(username, userDto.username) && Objects.equals(password, userDto.password) && Objects.equals(firstName, userDto.firstName) && Objects.equals(lastName, userDto.lastName) && Objects.equals(phone, userDto.phone) && role == userDto.role && Objects.equals(image, userDto.image);
+        return Objects.equals(id, userDto.id) && Objects.equals(username, userDto.username) && Objects.equals(firstName, userDto.firstName) && Objects.equals(lastName, userDto.lastName) && Objects.equals(phone, userDto.phone) && role == userDto.role && Objects.equals(image, userDto.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, firstName, lastName, phone, role, image);
+        return Objects.hash(id, username, firstName, lastName, phone, role, image);
     }
 
     @Override
@@ -111,7 +105,6 @@ public class UserDto {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phone=" + phone +

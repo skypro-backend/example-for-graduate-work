@@ -23,25 +23,16 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDto get(Long id) {
+    public UserDto get(Integer id) {
         logger.info("Method get was invoked!");
-        User userDB = userRepository.findById(id).
-                orElse(null);
-        UserDto userDto = new UserDto();
-        userDto.setId(userDB.getId());
-        userDto.setUsername(userDB.getUsername());
-        userDto.setPassword(userDB.getPassword());
-        userDto.setFirstName(userDB.getFirstName());
-        userDto.setLastName(userDB.getLastName());
-        userDto.setPhone(userDB.getPhone());
-        userDto.setImage(userDB.getImage());
-//        Так же просетать остальные поля.
-        return userDto;
+//        return (UserDto) userRepository.findById(id)
+//                .orElse(null);
+        return null;
 
     }
 
     @Override
-    public UserDto update(Long id, UserDto userDto) {
+    public UserDto update(Integer id, UserDto userDto) {
         logger.info("Method add update invoked!");
         Optional<User> user = userRepository.findById(id);
         user.ifPresent(userDtoFromDB -> {

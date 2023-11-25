@@ -23,10 +23,6 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    public CommentController(CommentService commentService) {
-        this.commentService = commentService;
-    }
-
     @GetMapping("/ads/{adId}/comments")
     public ResponseEntity<List<CommentDTO>> getComments(@PathVariable long adId) {
         return null;

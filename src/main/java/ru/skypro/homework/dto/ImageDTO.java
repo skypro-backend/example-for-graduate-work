@@ -1,12 +1,14 @@
 package ru.skypro.homework.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class ImageDTO {
-    private long id;
+    private Integer id;
     private String filePath;
-    private long fileSize;
+    private Integer fileSize;
     private String mediaType;
     private byte[] data;
 }

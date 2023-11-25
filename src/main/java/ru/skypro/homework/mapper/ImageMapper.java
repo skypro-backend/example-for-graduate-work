@@ -17,7 +17,7 @@ public class ImageMapper {
     }
 
     public Image mapToEntity(ImageDTO imageDTO) {
-        return new ImageDTO(
+        return new Image(
                 imageDTO.getId(),
                 imageDTO.getFilePath(),
                 imageDTO.getFileSize(),

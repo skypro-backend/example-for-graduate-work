@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.skypro.homework.model.Image;
 
 @Repository
-public interface ImageRepository extends JpaRepository<Image, Long> {
+public interface ImageRepository extends JpaRepository<Image, Integer> {
 }

@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.service.NewPasswordService;
 import ru.skypro.homework.service.UserService;
 
 @Slf4j
@@ -15,10 +17,11 @@ import ru.skypro.homework.service.UserService;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
+    private final NewPasswordService newPasswordService;
     private final UserService userService;
     @GetMapping("/users/me/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable String id) {
-        return ResponseEntity.ok(userService.get(Long.valueOf(id)));
+        return ResponseEntity.ok(userService.get(Integer.valueOf(id)));
     }
     @GetMapping("/users/me")
     public ResponseEntity<UserDto> get() {
@@ -37,7 +40,8 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
     @PutMapping("/users/set_password")
-    public ResponseEntity<UserDto> updatePassword(@RequestBody String password) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new NewPasswordDto());
     }
 }

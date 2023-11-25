@@ -4,17 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Objects;
+
 
 @Data
 @Entity
-@Table(name = "images")
+@Table(name = "new_password")
 @AllArgsConstructor
-public class Image {
+
+public class NewPassword {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String filePath;
-    private Integer fileSize;
-    private String mediaType;
-    private byte[] data;
+    private String currentPassword;
+    private String newPassword;
+
+
+
+
 }
