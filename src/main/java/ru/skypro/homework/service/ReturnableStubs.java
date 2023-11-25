@@ -3,7 +3,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.projections.Ads;
 import ru.skypro.homework.projections.ExtendedAd;
 
 
@@ -22,10 +22,9 @@ public class ReturnableStubs {
     }
 
 
-    public static AdsDTO getAdsDto() {
-        return new AdsDTO(getListAdDTO().size(), getListAdDTO());
+    public static Ads getAdsDto() {
+        return new Ads(getListAdDTO().size(), getListAdDTO());
     }
-
     public static ExtendedAd getExtendedAdd() {
         AdDTO adDTO = getListAdDTO().get(0);
         return new ExtendedAd(adDTO.getPk(),
