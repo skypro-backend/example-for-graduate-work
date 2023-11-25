@@ -9,4 +9,7 @@ public class Ad {
     private String title;
     private int pk;
     private int price;
+
+    public Ad(int pk, long author, String image, int price, String title, Class<? extends Ad> aClass) {
+    }
 }
