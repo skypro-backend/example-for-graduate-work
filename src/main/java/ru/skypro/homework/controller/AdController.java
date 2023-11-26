@@ -63,8 +63,8 @@ public class AdController {
     // Добавить объявление
 
     @Operation(
-            summary = "addAds",
-            description = "add new ad. returns the same ad",
+            summary = "addAd",
+            description = "Добавление объявления",
             tags = {"Объявления"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",

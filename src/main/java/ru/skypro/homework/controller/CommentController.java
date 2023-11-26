@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
@@ -78,9 +79,10 @@ public class CommentController {
                     )
             }
     )
-    @PostMapping(value = "{adId}/comments", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CommentDTO> addComments(@PathVariable Long adId, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
-        return ResponseEntity.ok(adService.addComment(adId, createOrUpdateCommentDTO));
+    @PostMapping(value = "{id}/comments", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CommentDTO> addComments(@PathVariable Long id,
+                                                  @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+        return ResponseEntity.ok(adService.addComment(id, createOrUpdateCommentDTO));
     }
     // --------------------------------------------------------------------------------------
 
