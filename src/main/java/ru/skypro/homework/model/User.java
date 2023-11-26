@@ -23,8 +23,11 @@ public class User {
     private RoleDTO role;
     private String image;
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "user")
-//    private Collection<Ad> ads;
+    @JsonIgnore
+    @OneToMany(mappedBy = "author")
+    private Collection<Ad> ads;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private Collection<Comment> comments;
 }

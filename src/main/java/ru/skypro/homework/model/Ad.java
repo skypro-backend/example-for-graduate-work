@@ -21,7 +21,7 @@ public class Ad {
     private String description;
 
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "comment")
-//    private Collection<Comment> comments;
+    @JsonIgnore
+    @OneToMany(mappedBy = "ad")
+    private Collection<Comment> comments;
 }

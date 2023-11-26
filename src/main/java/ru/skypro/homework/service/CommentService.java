@@ -58,19 +58,20 @@ public class CommentService {
     }
 
     public void deleteComment(int adId, int commentId) {
-//        List<Comment> commentList = commentRepository.findAllByAd_pk(adId);
-//        for (Comment c : commentList) {
-//            if (c.getPk() == commentId) {
-//                adRepository.deleteById(commentId);
-//            }
-//        }
-        commentRepository.deleteById(commentId);
+        Comment comment = commentRepository.findByPk(commentId);
+        if (comment.getAd().getPk() == adId) {
+            commentRepository.delete(comment);
+        }
     }
 
     public CommentDTO updateComment(int adId, int commentId, CreateOrUpdateComment createOrUpdateComment) {
         Comment updateComment = commentRepository.findByPk(commentId);
-        updateComment.setText(createOrUpdateComment.getText());
-        commentRepository.save(updateComment);
+        if (updateComment.getAd().getPk() == adId) {
+            updateComment.setText(createOrUpdateComment.getText());
+            commentRepository.save(updateComment);
+
+        }
         return commentMapping.mapToCommentDto(updateComment);
     }
 }
+
