@@ -3,18 +3,18 @@ package ru.skypro.homework.dto;
 import java.util.Objects;
 
 public class CommentDto {
-    private Integer authorId;
+    private Long authorId;
     private String authorImage;
     private String authorFirstName;
     private Long createdAt;
     private Integer pkId;
     private String text;
 
-    public int getAuthorId() {
+    public Long getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(int authorId) {
+    public void setAuthorId(Long authorId) {
         this.authorId = authorId;
     }
 
