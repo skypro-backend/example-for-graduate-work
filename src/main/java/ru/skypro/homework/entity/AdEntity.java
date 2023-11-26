@@ -1,16 +1,25 @@
 package ru.skypro.homework.entity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import ru.skypro.homework.dto.*;
 
+import javax.persistence.*;
+
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name="ads")
 public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private UserEntity author;
+    private Integer id; //dto - pkAdId
+    private UserEntity author;//dto - authorId
     private String image;
-    private int price;
+    private Integer price;
     private String title;
     private String description;
 }

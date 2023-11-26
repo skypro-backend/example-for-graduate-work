@@ -1,6 +1,7 @@
 package ru.skypro.homework.mapper;
 
 import org.mapstruct.Mapper;
+import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.entity.AdEntity;
 
 @Mapper
