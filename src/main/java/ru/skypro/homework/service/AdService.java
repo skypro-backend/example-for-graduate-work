@@ -3,10 +3,13 @@ package ru.skypro.homework.service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 
+
+import java.io.IOException;
+
 public interface AdService {
     AdsDTO getAllAds();
 
-    AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image);
+    AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image, String user) throws IOException;
 
     ExtendedAdDTO getAdInfo(Long adId);
 
@@ -16,7 +19,7 @@ public interface AdService {
 
     AdsDTO getAllAdsByAuthor();
 
-    String patchAdImage(Long adId, MultipartFile image);
+    String patchAdImage(Long adId, MultipartFile image) throws IOException;
 
     CommentsDTO getComments(Long adId);
 

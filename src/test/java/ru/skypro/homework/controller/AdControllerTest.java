@@ -84,7 +84,7 @@ class AdControllerTest {
     }
 
     /**
-     * Method under test: {@link AdController#removeAd(Long)}
+     * Method under test: {@link AdController#removeAds(Long)}
      */
     @Test
     void testRemoveAds() {
@@ -93,7 +93,7 @@ class AdControllerTest {
         AdRepository adRepository = mock(AdRepository.class);
         doNothing().when(adRepository).deleteById(Mockito.<Long>any());
         ResponseEntity<Void> actualRemoveAdsResult = (new AdController(
-                new AdServiceImpl(mock(CommentRepository.class), mock(UserRepository.class), adRepository))).removeAd(1L);
+                new AdServiceImpl(mock(CommentRepository.class), mock(UserRepository.class), adRepository))).removeAds(1L);
         verify(adRepository).deleteById(Mockito.<Long>any());
         assertEquals(HttpStatus.OK, actualRemoveAdsResult.getStatusCode());
     }
@@ -114,7 +114,7 @@ class AdControllerTest {
     }
 
     /**
-     * Method under test: {@link AdController#addAd(CreateOrUpdateAdDTO, MultipartFile)}
+     * Method under test: {@link AdController#addAds(CreateOrUpdateAdDTO, MultipartFile)}
      */
     @Test
     void testAddAds() throws Exception {
@@ -142,7 +142,7 @@ class AdControllerTest {
     }
 
     /**
-     * Method under test: {@link AdController#deleteComment(Long, Long)}
+     * Method under test: {@link AdController#deleteComments(Long, Long)}
      */
     @Test
     void testDeleteComments() {
@@ -150,7 +150,7 @@ class AdControllerTest {
         CommentRepository commentRepository = mock(CommentRepository.class);
         doNothing().when(commentRepository).deleteById(Mockito.<Long>any());
         ResponseEntity<Void> actualDeleteCommentsResult = (new AdController(
-                new AdServiceImpl(commentRepository, mock(UserRepository.class), mock(AdRepository.class)))).deleteComment(1L,
+                new AdServiceImpl(commentRepository, mock(UserRepository.class), mock(AdRepository.class)))).deleteComments(1L,
                 1L);
         verify(commentRepository).deleteById(Mockito.<Long>any());
         assertEquals(HttpStatus.OK, actualDeleteCommentsResult.getStatusCode());
@@ -224,7 +224,7 @@ class AdControllerTest {
     }
 
     /**
-     * Method under test: {@link AdController#updateAd(Long, CreateOrUpdateAdDTO)}
+     * Method under test: {@link AdController#updateAds(Long, CreateOrUpdateAdDTO)}
      */
     @Test
     void testUpdateAds() throws Exception {
@@ -251,7 +251,7 @@ class AdControllerTest {
     }
 
     /**
-     * Method under test: {@link AdController#updateComment(Long, Long, CreateOrUpdateCommentDTO)}
+     * Method under test: {@link AdController#updateComments(Long, Long, CreateOrUpdateCommentDTO)}
      */
     @Test
     void testUpdateComments() throws Exception {

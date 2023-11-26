@@ -1,4 +1,4 @@
 package ru.skypro.homework.service;
 
-interface ImageService {
+public interface CommentService {
 }

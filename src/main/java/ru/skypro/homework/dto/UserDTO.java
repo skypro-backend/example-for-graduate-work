@@ -4,16 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import ru.skypro.homework.model.Role;
 
+import javax.validation.constraints.Email;
 import java.util.Objects;
 
 /**
  * User
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-11-05T13:56:03.406359+03:00[Europe/Moscow]")
 public class UserDTO {
   @JsonProperty("id")
   private Long id;
-
+  @Email
   @JsonProperty("email")
   private String email;
 

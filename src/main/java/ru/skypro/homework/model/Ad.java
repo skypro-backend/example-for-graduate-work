@@ -31,5 +31,8 @@ public class Ad {
 
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
     private List<Comment> comments;
+    @OneToOne
+    @JoinColumn(name = "photoAd_id")
+    private PhotoAd photoAd;
 
 }
