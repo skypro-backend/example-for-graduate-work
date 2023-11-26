@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "images")
 @AllArgsConstructor
 public class Image {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -17,4 +18,5 @@ public class Image {
     private Integer fileSize;
     private String mediaType;
     private byte[] data;
+    private String link;
 }

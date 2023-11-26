@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ImageDTO {
+public class Image {
     private Integer id;
     private String filePath;
     private Integer fileSize;
