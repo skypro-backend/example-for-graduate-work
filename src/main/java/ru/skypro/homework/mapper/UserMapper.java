@@ -2,6 +2,7 @@ package ru.skypro.homework.mapper;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.LoginDTO;
+import ru.skypro.homework.dto.RegisterDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.model.User;
 
@@ -40,6 +41,17 @@ public class UserMapper {
         User user = new User();
         user.setUsername(loginDTO.getUsername());
         user.setPassword(loginDTO.getPassword());
+        return user;
+    }
+
+    public User mapToUser(RegisterDTO registerDTO){
+        User user = new User();
+        user.setUsername(registerDTO.getUsername());
+        user.setPassword(registerDTO.getPassword());
+        user.setFirstName(registerDTO.getFirstName());
+        user.setLastName(registerDTO.getLastName());
+        user.setPhone(registerDTO.getPhone());
+        user.setRole(registerDTO.getRole());
         return user;
     }
 

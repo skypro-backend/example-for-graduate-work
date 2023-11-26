@@ -62,12 +62,15 @@ public class CommentService {
         if (comment.getAd().getPk() == adId) {
             commentRepository.delete(comment);
         }
+
     }
 
     public CommentDTO updateComment(int adId, int commentId, CreateOrUpdateComment createOrUpdateComment) {
         Comment updateComment = commentRepository.findByPk(commentId);
         if (updateComment.getAd().getPk() == adId) {
             updateComment.setText(createOrUpdateComment.getText());
+
+
             commentRepository.save(updateComment);
 
         }
