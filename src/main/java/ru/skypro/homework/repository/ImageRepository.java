@@ -6,4 +6,5 @@ import ru.skypro.homework.model.Image;
 
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
+    Image findByLink(String link);
 }

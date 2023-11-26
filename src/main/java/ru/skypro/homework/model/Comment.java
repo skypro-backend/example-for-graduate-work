@@ -9,20 +9,17 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "comments")
 public class Comment {
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
+    @ManyToOne
+    @JoinColumn(name = "author_image_id")
+    private Image authorImage;
+    private String authorFirstName;
+    private LocalDateTime createdAt;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String userFirstName;
-    private LocalDateTime createdAt;
+    private int pk;
     private String text;
-    @ManyToOne
-    @JoinColumn(name = "ad_id")
-    private Ad ad;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-    @ManyToOne
-    @JoinColumn(name = "user_avatar_id")
-    private Image image;
-
 }

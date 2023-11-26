@@ -6,11 +6,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.model.Image;
+import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.service.CommentService;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -28,15 +26,15 @@ public class CommentController {
     }
 
     @GetMapping("/ads/{adId}/comments")
-    public ResponseEntity<List<CommentDTO>> getComments(@PathVariable long adId) {
+    public ResponseEntity<List<Comment>> getComments(@PathVariable long adId) {
         return null;
     }
 
     @PostMapping("/ads/{adId}/comments")
-    public ResponseEntity<CommentDTO> postComment(@PathVariable long adId,
-                                                  @RequestBody CommentDTO comment) {
+    public ResponseEntity<Comment> postComment(@PathVariable long adId,
+                                               @RequestBody Comment comment) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new CommentDTO());
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Comment());
     }
 
     @DeleteMapping("/ads/{adId}/comments/{commentId}")
@@ -46,10 +44,10 @@ public class CommentController {
     }
 
     @PatchMapping("/ads/{adId}/comments/{commentId}")
-    public ResponseEntity<CommentDTO> updateComment(@PathVariable long adId,
-                                                    @PathVariable long commentId,
-                                                    @RequestBody CommentDTO comment) {
+    public ResponseEntity<Comment> updateComment(@PathVariable long adId,
+                                                 @PathVariable long commentId,
+                                                 @RequestBody Comment comment) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new CommentDTO());
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Comment());
     }
 }

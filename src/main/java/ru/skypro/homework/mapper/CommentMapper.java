@@ -1,44 +1,61 @@
 package ru.skypro.homework.mapper;
 
-import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.model.Comment;
+import org.springframework.stereotype.Component;
+import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 
-public class CommentMapper {
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TimeZone;
 
-    private final AdRepository adRepository;
+@Component
+public class CommentMapper {
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
+    private final AdRepository adRepository;
 
-    public ImageMapper(AdRepository adRepository,
+    public CommentMapper(
                        UserRepository userRepository,
                        ImageRepository imageRepository) {
-        this.adRepository = adRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
     }
-    public CommentDTO mapToDTO(Comment comment) {
+    public Comment mapEntityToDTO(ru.skypro.homework.model.Comment comment) {
         return CommentDTO(
-            comment.getId(),
-            comment.getAuthorFirstName(),
-            comment.getCreatedAt(),
-            comment.getText(),
-            comment.getAd().getId(),
-            comment.getUser().getId(),
-            comment.getImage().getId()
+                comment.getUser().getId(),
+                comment.getImage().getLink(),
+                comment.getAuthorFirstName(),
+                comment.getCreatedAt().toEpochMilli(),
+                comment.getPk(),
+                comment.getText()
         );
     }
 
-    public Comment mapToEntity(CommentDTO commentDTO) {
+    public ru.skypro.homework.model.Comment mapDTOToEntity(Comment comment) {
         return Comment(
-                commentDTO.getId(),
-                commentDTO.getAuthorFirstName(),
-                commentDTO.getCreatedAt(),
-                commentDTO.getText(),
-                adRepository.findById(commentDTO.getAdId()),
-                userRepository.findById(commentDTO.getUserId()),
-                imageRepository.findById(commentDTO.getUserAvatarId())
+                userRepository.findById(comment.getAuthor()),
+                imageRepository.findByLink(comment.getAuthorImage()),
+                comment.getAuthorFirstName(),
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(comment.getCreatedAt()),
+                        TimeZone.getDefault().toZoneId()),
+                comment.getPk(),
+                comment.getText()
         );
     }
+
+    public Comments mapCommentsToDTO (Ad ad) {
+        List<Comment> results = new ArrayList<>();
+        for (int i = 0; i < ad.getComments().size(); i++) {
+            results.add(ad.getComments().get(i).mapEntityToDTO);
+        }
+        return Comments(
+                ad.getComments().size(),
+                results
+        )
+    }
+
 }

@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "images")
 public class Image {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -15,4 +16,5 @@ public class Image {
     private long fileSize;
     private String mediaType;
     private byte[] data;
+    private String link;
 }
