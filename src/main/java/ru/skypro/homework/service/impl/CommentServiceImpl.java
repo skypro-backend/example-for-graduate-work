@@ -13,43 +13,42 @@ public class CommentServiceImpl implements CommentService {
 
     private CommentRepository commentRepository;
 
-    public CommentServiceImpl(CommentRepository commentRepository){
-        this.commentRepository=commentRepository;
+    public CommentServiceImpl(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
     }
 
-    public Comment create(Comment comment){
+    public Comment create(Comment comment) {
         return commentRepository.save(comment);
     }
 
     public Comment read(Long id) {
-        Optional<Comment> comment =commentRepository.findById(id);
-        if(comment.isEmpty()){
+        Optional<Comment> comment = commentRepository.findById(id);
+        if (comment.isEmpty()) {
             throw new NoSuchElementException("This comment not found");
         }
         return comment.get();
     }
 
-    public Comment update(Comment comment){
+    public Comment update(Comment comment) {
         Optional<Comment> check = commentRepository.findById(comment.getAuthorId());
-        if(check.isEmpty()){
+        if (check.isEmpty()) {
             throw new NoSuchElementException("This comment not found");
         }
 
         return commentRepository.save(comment);
     }
 
-    public Comment delete(Long id){
+    public Comment delete(Long id) {
         Optional<Comment> comment = commentRepository.findById(id);
-            if(comment.isEmpty()){
-                throw new NoSuchElementException("This comment not found");
-            }
-            commentRepository.deleteById(id);
+        if (comment.isEmpty()) {
+            throw new NoSuchElementException("This comment not found");
+        }
+        commentRepository.deleteById(id);
 
-            Comment deleteComment = comment.get();
+        Comment deleteComment = comment.get();
 
         return deleteComment;
     }
-
 
 
 }
