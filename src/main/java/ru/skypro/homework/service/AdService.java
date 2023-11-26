@@ -19,7 +19,7 @@ public interface AdService {
 
     AdsDTO getAllAdsByAuthor();
 
-    String patchAdImage(Long adId, MultipartFile image);
+    String patchAdImage(Long adId, MultipartFile image) throws IOException;
 
     CommentsDTO getComments(Long adId);
 

@@ -98,11 +98,9 @@ public class AdServiceImpl implements AdService {
     @Override
     public AdDTO patchAd(Long adId, CreateOrUpdateAdDTO createOrUpdateAdDTO) {
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
-
         ad.setTitle(createOrUpdateAdDTO.getTitle());
         ad.setPrice(createOrUpdateAdDTO.getPrice());
         ad.setDescription(createOrUpdateAdDTO.getDescription());
-
         return AdMapper.INSTANCE.adToAdDTO(adRepository.save(ad));
     }
 
@@ -110,7 +108,6 @@ public class AdServiceImpl implements AdService {
     public AdsDTO getAllAdsByAuthor() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
-
         User user = userRepository.findByEmail(name);
         List<AdDTO> result = new ArrayList<>();
         adRepository.findAllByAuthor(user).forEach(u -> result.add(AdMapper.INSTANCE.adToAdDTO(u)));
@@ -121,9 +118,12 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public String patchAdImage(Long adId, MultipartFile image) {
+    public String patchAdImage(Long adId, MultipartFile image) throws IOException {
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
-        ad.setImage(image.getName());
+        Path filePath = Path.of(photoDir, ad.getTitle() + "."
+                + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+        uploadPhotoAdd(filePath, image);
+        ad.setImage(String.valueOf(filePath));
         return adRepository.save(ad).getImage();
     }
 
@@ -146,13 +146,11 @@ public class AdServiceImpl implements AdService {
     public CommentDTO addComment(Long adId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
         User user = ad.getAuthor();
-
         Comment comment = new Comment();
         comment.setAd(ad);
         comment.setAuthor(user);
         comment.setText(createOrUpdateCommentDTO.getText());
         comment.setCreatedAt(System.currentTimeMillis());
-
         return CommentMapper.INSTANCE.toCommentDTO(commentRepository.save(comment), user);
 
     }
@@ -184,6 +182,7 @@ public class AdServiceImpl implements AdService {
         }
 
     }
+
     public PhotoAd findPhotoAd(Long adId) {
         return photoAdRepository.findPhotoAdByAd_Id(adId).orElse(new PhotoAd());
     }

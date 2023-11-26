@@ -236,9 +236,9 @@ public class AdController {
                     )
             }
     )
-    @PatchMapping(value = "/ads/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> updateAdImage(@PathVariable Long adId, @RequestPart MultipartFile image){
-
+    @PatchMapping(value = "/ads/{adId}/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<String> updateAdImage(@PathVariable Long adId, @RequestPart ("image") MultipartFile image) throws IOException {
+        log.warn("PATCH запрос на изменение картирки объявления, метод контроллера: {}", MethodLog.getMethodName());
         return ResponseEntity.ok(adService.patchAdImage(adId, image));
     }
 
