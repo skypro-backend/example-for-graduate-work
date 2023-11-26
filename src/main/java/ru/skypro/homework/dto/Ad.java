@@ -3,10 +3,8 @@ package ru.skypro.homework.dto;
 import lombok.*;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@NoArgsConstructor
 public class Ad {
     private int author;
     private String image;

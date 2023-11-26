@@ -1,6 +1,9 @@
 package ru.skypro.homework.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,10 +14,12 @@ import javax.validation.constraints.Pattern;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int pk;
 
     @Email
     @NotBlank
@@ -27,12 +32,12 @@ public class UserEntity {
     private String lastName;
 
     @NotBlank
-    @Pattern(regexp = "\\d{10}")  // пример: 1234567890 (10 цифр)
+    @Pattern(regexp = "\\d{10}")
     private String phone;
 
     @NotBlank
     @Pattern(regexp = "USER|ADMIN")
-    private String role;
+    private Role role;
 
     private String image;
 
