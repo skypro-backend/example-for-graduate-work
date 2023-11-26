@@ -6,7 +6,7 @@ public interface UserService {
 
     UserDto get(Integer id);
 
-    UserDto update(Integer id, UserDto userDto);
+//    UserDto update(Integer id, UserDto userDto);
 
 
 //    User setPassword(User user);

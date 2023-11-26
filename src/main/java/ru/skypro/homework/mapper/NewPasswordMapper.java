@@ -1,9 +1,9 @@
 package ru.skypro.homework.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.skypro.homework.dto.ImageDTO;
+
 import ru.skypro.homework.dto.NewPasswordDto;
-import ru.skypro.homework.model.Image;
+
 import ru.skypro.homework.model.NewPassword;
 
 @Component

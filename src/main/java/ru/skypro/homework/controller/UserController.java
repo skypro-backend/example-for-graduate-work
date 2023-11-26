@@ -8,8 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
+import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.NewPasswordService;
+import ru.skypro.homework.service.UpdateUserService;
 import ru.skypro.homework.service.UserService;
 
 @Slf4j
@@ -19,6 +21,7 @@ import ru.skypro.homework.service.UserService;
 public class UserController {
     private final NewPasswordService newPasswordService;
     private final UserService userService;
+    private final UpdateUserService updateUserService;
     @GetMapping("/users/me/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable String id) {
         return ResponseEntity.ok(userService.get(Integer.valueOf(id)));
@@ -30,9 +33,9 @@ public class UserController {
     }
 
     @PatchMapping("/users/me")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto updateUserDto) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new UserDto());
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new UpdateUserDto());
     }
 
     @PatchMapping("/users/me/image")

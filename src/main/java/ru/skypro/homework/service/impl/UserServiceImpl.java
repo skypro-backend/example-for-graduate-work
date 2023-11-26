@@ -31,19 +31,19 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public UserDto update(Integer id, UserDto userDto) {
-        logger.info("Method add update invoked!");
-        Optional<User> user = userRepository.findById(id);
-        user.ifPresent(userDtoFromDB -> {
-            userDtoFromDB.setFirstName(userDto.getFirstName());
-            userDtoFromDB.setLastName(userDto.getLastName());
-            userDtoFromDB.setPhone(userDto.getPhone());
-            userRepository.save(userDtoFromDB);
-        });
-
-        return get(id);
-    }
+//    @Override
+//    public UserDto update(Integer id, UserDto userDto) {
+//        logger.info("Method add update invoked!");
+//        Optional<User> user = userRepository.findById(id);
+//        user.ifPresent(userDtoFromDB -> {
+//            userDtoFromDB.setFirstName(userDto.getFirstName());
+//            userDtoFromDB.setLastName(userDto.getLastName());
+//            userDtoFromDB.setPhone(userDto.getPhone());
+//            userRepository.save(userDtoFromDB);
+//        });
+//
+//        return get(id);
+//    }
 
 //    @Override
 //    public User setPassword(User user) {
