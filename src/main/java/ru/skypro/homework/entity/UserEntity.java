@@ -1,8 +1,6 @@
 package ru.skypro.homework.entity;
-
 import lombok.*;
 import ru.skypro.homework.dto.Role;
-
 import javax.persistence.*;
 
 @Getter
@@ -14,6 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user_entity")
 public class UserEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

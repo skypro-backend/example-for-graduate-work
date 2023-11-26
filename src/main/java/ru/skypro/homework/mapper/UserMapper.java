@@ -3,14 +3,13 @@ import org.mapstruct.Mapper;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserEntity;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper
 public class UserMapper {
     public User userEntityToUser(UserEntity userEntity) {
-        if ( userEntity == null ) {
+        if (userEntity == null) {
             throw new NullPointerException("Ошибка маппера при создании User! UserEntity == null!");
         }
         return User.builder()
@@ -23,8 +22,9 @@ public class UserMapper {
                 .image(userEntity.getImage().getFilePath())
                 .build();
     }
+
     public UserEntity UserToAdUserEntity(Register dto) {
-        if ( dto == null ) {
+        if (dto == null) {
             throw new NullPointerException(" Ошибка маппера при создании UserEntity! Register == null! ");
         }
         return UserEntity.builder()
@@ -38,7 +38,7 @@ public class UserMapper {
     }
 
     List<User> adEntityListToAdList(List<UserEntity> userEntityList) {
-        if ( userEntityList == null ) {
+        if (userEntityList == null) {
             throw new NullPointerException("Ошибка маппера при создании List<User>! List<UserEntity> == null!");
         }
         return userEntityList.stream()

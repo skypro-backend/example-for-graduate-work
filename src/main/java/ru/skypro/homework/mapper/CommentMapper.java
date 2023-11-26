@@ -1,8 +1,10 @@
 package ru.skypro.homework.mapper;
+
 import org.mapstruct.Mapper;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.CommentEntity;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,7 +12,7 @@ import java.util.stream.Collectors;
 @Mapper
 public class CommentMapper {
     public Comment commentEntityToComment(CommentEntity commentEntity) {
-        if ( commentEntity == null ) {
+        if (commentEntity == null) {
             throw new NullPointerException("Ошибка маппера при создании Comment! CommentEntity == null!");
         }
         return Comment.builder()
@@ -23,8 +25,9 @@ public class CommentMapper {
                 .adId(commentEntity.getAdId().getPk())
                 .build();
     }
+
     public CommentEntity AdToAdEntity(CreateOrUpdateComment dto) {
-        if ( dto == null ) {
+        if (dto == null) {
             throw new NullPointerException(" Ошибка маппера при создании Comment! CreateOrUpdateComment == null! ");
         }
         return CommentEntity.builder()
@@ -33,7 +36,7 @@ public class CommentMapper {
     }
 
     List<Comment> adEntityListToAdList(List<CommentEntity> commentEntityList) {
-        if ( commentEntityList == null ) {
+        if (commentEntityList == null) {
             throw new NullPointerException("Ошибка маппера при создании List<Comment>! List<CommentEntity> == null!");
         }
         return commentEntityList.stream()

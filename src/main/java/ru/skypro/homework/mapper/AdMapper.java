@@ -9,11 +9,12 @@ import ru.skypro.homework.entity.AdEntity;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Builder
 @Mapper(componentModel = "spring")
 public class AdMapper {
     public Ad AdEntityToAd(AdEntity adEntity) {
-        if ( adEntity == null ) {
+        if (adEntity == null) {
             throw new NullPointerException("Ошибка маппера при создании Ad! AdEntity == null!");
         }
         return Ad.builder()
@@ -24,7 +25,8 @@ public class AdMapper {
                 .image(adEntity.getImageEntity().getFilePath())
                 .build();
     }
-//    public AdEntity AdEntityToCreateOrUpdateAd(CreateOrUpdateAd adEntity) {
+
+    //    public AdEntity AdEntityToCreateOrUpdateAd(CreateOrUpdateAd adEntity) {
 //        if ( adEntity == null ) {
 //            throw new NullPointerException("Ошибка маппера при создании CreateOrUpdateAd! AdEntity == null!");
 //        }
@@ -35,7 +37,7 @@ public class AdMapper {
 //                .build();
 //    }
     public ExtendedAd AdEntityToExtendedAd(AdEntity adEntity) {
-        if ( adEntity == null ) {
+        if (adEntity == null) {
             throw new NullPointerException("Ошибка маппера при создании ExtendedAd! AdEntity == null!");
         }
         return ExtendedAd.builder()
@@ -49,8 +51,9 @@ public class AdMapper {
                 .image(adEntity.getImageEntity().getFilePath())
                 .build();
     }
+
     public AdEntity AdToAdEntity(CreateOrUpdateAd dto) {
-        if ( dto == null ) {
+        if (dto == null) {
             throw new NullPointerException(" Ошибка маппера при создании AdEntity! AdDto == null! ");
         }
         return AdEntity.builder()
@@ -61,13 +64,12 @@ public class AdMapper {
     }
 
     List<Ad> adEntityListToAdList(List<AdEntity> adEntityList) {
-        if ( adEntityList == null ) {
+        if (adEntityList == null) {
             throw new NullPointerException("Ошибка маппера при создании List<Ad>! AList<AdEntity> == null!");
         }
         return adEntityList.stream()
                 .map(this::AdEntityToAd)
                 .collect(Collectors.toList());
     }
-
 
 }
