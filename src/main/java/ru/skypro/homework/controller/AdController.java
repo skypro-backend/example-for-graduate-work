@@ -8,18 +8,25 @@ import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @RestController
 @RequestMapping("/ads")
 public class AdController {
+    private AdDto adsDto = new AdDto(1, "test", 1, 1, "test");
+    private List<AdDto> adDtoList = new ArrayList<>(Collections.singleton(adsDto));
+
 
     @GetMapping
-    public ResponseEntity<AdsDto> getAllAds() {
-        return ResponseEntity.ok(new AdsDto());
+    public AdsDto getAllAds() {
+        return new AdsDto(1,adDtoList);
     }
 
     @PostMapping
-    public ResponseEntity<AdDto> addAd(@RequestBody CreateOrUpdateAdDto createOrUpdateAdDto) {
-        return ResponseEntity.ok(new AdDto());
+    public AdDto addAd(@RequestBody CreateOrUpdateAdDto createOrUpdateAdDto) {
+        return ;
     }
 
     @GetMapping("/{id}")
