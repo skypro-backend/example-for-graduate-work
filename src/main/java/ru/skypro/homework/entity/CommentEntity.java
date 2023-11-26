@@ -31,8 +31,8 @@ public class CommentEntity {
     @JoinColumn(name = "ad_id")
     private AdEntity adId;
 
-    @ManyToOne
-    @Column(name = "author_image")
+    @OneToOne
+    @JoinColumn(name = "image_entity_path")
     private ImageEntity authorImage;
 
     @ManyToOne

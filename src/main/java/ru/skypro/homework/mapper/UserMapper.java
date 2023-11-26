@@ -1,11 +1,12 @@
 package ru.skypro.homework.mapper;
+import lombok.Builder;
 import org.mapstruct.Mapper;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserEntity;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Builder
 @Mapper
 public class UserMapper {
     public User userEntityToUser(UserEntity userEntity) {

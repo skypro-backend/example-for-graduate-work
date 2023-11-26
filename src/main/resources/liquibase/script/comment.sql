@@ -5,7 +5,6 @@ CREATE TABLE comment_entity
 (
     id                       serial PRIMARY KEY,
     price                    integer,
-    author_image             text,
     author_first_name        varchar(255),
     created_at               varchar(255),
     text                     text,

@@ -36,7 +36,7 @@ public class CommentsController {
     }
 
 
-    @PutMapping("/{adId}/comments/{commentId}")
+    @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<Comment> updateComment(@PathVariable Integer adId,
                                                  @PathVariable Integer commentId,
                                                  @RequestBody CreateOrUpdateComment createOrUpdateComment) {

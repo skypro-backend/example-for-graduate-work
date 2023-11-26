@@ -2,6 +2,7 @@ package ru.skypro.homework.entity;
 import lombok.*;
 import ru.skypro.homework.dto.Role;
 import javax.persistence.*;
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -35,11 +36,15 @@ public class UserEntity {
     private Role role;
 
     @OneToOne
-    @JoinColumn(name = "image")
-    private ImageEntity image;
+    @JoinColumn(name = "image_entity_path")
+    private ImageEntity imageEntity;
+
+    @OneToMany(mappedBy = "ad_entity_id")
+    private Collection<AdEntity> adEntity;
 
     @OneToMany(mappedBy = "userEntity")
-    private AdEntity adEntity;
+    private Collection<CommentEntity> commentEntities;
+
 
 
 }

@@ -1,6 +1,7 @@
 package ru.skypro.homework.entity;
 import lombok.*;
 import javax.persistence.*;
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -30,5 +31,8 @@ public class AdEntity {
     @OneToOne
     @JoinColumn(name = "image_entity_path")
     private ImageEntity imageEntity;
+
+    @OneToMany(mappedBy = "adId")
+    private Collection<CommentEntity> commentEntities;
 
 }
