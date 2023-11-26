@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -97,9 +98,9 @@ public class AdController {
                     )
             }
     )
-    public ResponseEntity<PhotoEntity> updateImage(@PathVariable("id") Integer id,
-                                                   @RequestParam MultipartFile image) throws IOException {
-        if (image.getSize() > 1024 * 1024 * 2) {
+    public ResponseEntity<byte[]> updateImage(@PathVariable("id") Integer id,
+                                              @RequestParam MultipartFile image) throws IOException {
+        /*if (image.getSize() > 1024 * 1024 * 2) {
             return ResponseEntity.status(HttpStatus.valueOf(404)).build();
         }
         if (authService.getLogin() != null) {
@@ -108,6 +109,24 @@ public class AdController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        //return null; //todo разобраться с ошибками 403 и 404, как и в остальных методах выше, если есть
+        //return null; //todo разобраться с ошибками 403 и 404, как и в остальных методах выше, если есть*/
+
+        if (authService.getLogin() == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // todo посмотреть как это сделать с Security
+        }
+
+        adService.updateImage(id, image);
+
+        PhotoEntity photo = adService.findPhoto(id);
+        if (photo != null) {
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(photo.getMediaType()));
+            headers.setContentLength(photo.getData().length);
+
+            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(photo.getData());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

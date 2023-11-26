@@ -14,16 +14,18 @@ import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 public class AdServiceImpl implements AdService {
@@ -32,17 +34,21 @@ public class AdServiceImpl implements AdService {
     private final PhotoRepository photoRepository;
     private final AdMapper adMapper;
 
+    private final ImageService imageService;
+
     private final UserService userService;
+    @Value("${path.to.photos.folder}")
     private final String photoDir;
 
     public AdServiceImpl(AdRepository adRepository,
                          PhotoRepository photoRepository,
                          AdMapper adMapper,
-                         UserService userService,
-                         @Value("${path.to.photos.folder}") String photoDir) {
+                         ImageService imageService, UserService userService,
+                         String photoDir) {
         this.adRepository = adRepository;
         this.photoRepository = photoRepository;
         this.adMapper = adMapper;
+        this.imageService = imageService;
         this.userService = userService;
         this.photoDir = photoDir;
     }
@@ -57,38 +63,21 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ad addAd(CreateOrUpdateAd properties, MultipartFile image) throws IOException {
-        // надо подумать как обрабатывать фото
-        // вариант сохранения фото
-        AdEntity adEntity = new AdEntity();
-        adEntity.setTitle(properties.getTitle());
-        adEntity.setPrice(properties.getPrice());
-        adEntity.setDescription(properties.getDescription());
 
-        PhotoEntity photo = new PhotoEntity();
-        Path path = Path.of(photoDir);
-        if (!path.toFile().exists()) {
-            Files.createDirectories(path);
-        }
-        var dotIndex = Objects.requireNonNull(image.getOriginalFilename()).lastIndexOf('.');
-        var ext = image.getOriginalFilename().substring(dotIndex + 1);
-        var photoPath = photoDir + "/" + properties.getTitle() + "." + ext;
-        try (var in = image.getInputStream();
-             var out = new FileOutputStream(photoPath)) {
-            in.transferTo(out);
-        }
-        photo.setFilePath(photoPath);
-        photo.setData(image.getBytes());
-        photo.setFileSize(image.getSize());
-        photo.setMediaType(image.getContentType());
-
-        adEntity.setPhoto(photo);
-        adEntity.setAuthor(userService.getUser());
-
-        photo.setAd(adEntity);
-
-        photoRepository.save(photo);
+        AdEntity adEntity = adMapper.mapToAdEntity(properties, userService.getUser().getUserName());
         adRepository.save(adEntity);
+
+        Path filePath = Path.of(photoDir, adEntity.getId() + "-" + properties.getTitle() + "."
+                + imageService.getExtension(image.getOriginalFilename()));
+
+        imageService.saveFileOnDisk(image, filePath);
+        imageService.updateAdImage(adEntity, image, filePath);
+
+        adEntity.setImage("/" + photoDir + "/" + adEntity.getId());
+        adRepository.save(adEntity);
+
         return adMapper.mapToAdDto(adEntity);
+
     }
 
     @Override
@@ -118,7 +107,6 @@ public class AdServiceImpl implements AdService {
 
         adRepository.save(entity);
         return adMapper.mapToAdDto(entity);
-
     }
 
     @Override
@@ -133,8 +121,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public PhotoEntity updateImage(Integer id, MultipartFile image) throws IOException {
-        Optional<AdEntity> entity = adRepository.findById(id);
+    public void updateImage(Integer id, MultipartFile image) throws IOException {
+        /*Optional<AdEntity> entity = adRepository.findById(id);
         if (entity.isPresent()) {
             PhotoEntity photo = new PhotoEntity();
             Path path = Path.of(photoDir);
@@ -156,7 +144,25 @@ public class AdServiceImpl implements AdService {
             return photoRepository.save(photo);
         } else {
             return null;
-        }
+        }*/
+
+        AdEntity adEntity = adRepository.findById(id).get();
+
+        // todo продумать путь до файла
+        Path filePath = Path.of(photoDir, adEntity.getId() + "."
+                + imageService.getExtension(image.getOriginalFilename()));
+
+        imageService.saveFileOnDisk(image, filePath);
+        imageService.updateAdImage(adEntity, image, filePath);
+
+        adEntity.setImage("/" + photoDir + "/" + adEntity.getId());
+        adRepository.save(adEntity);
+
+    }
+
+    @Override
+    public PhotoEntity findPhoto(Integer id) {
+        return photoRepository.findByAdId(id).get();
     }
 
 }

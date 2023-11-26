@@ -23,5 +23,7 @@ public interface AdService {
 
     Ads getAdsMe(String username);
 
-    PhotoEntity updateImage(Integer id, MultipartFile image) throws IOException; // todo возвращаемое значение, как вариант
+    void updateImage(Integer id, MultipartFile image) throws IOException; // todo возвращаемое значение, как вариант
+
+    PhotoEntity findPhoto(Integer id);
 }

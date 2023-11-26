@@ -34,4 +34,6 @@ public class UserEntity {
     @OneToMany(mappedBy = "author")
     private Collection<CommentEntity> comments;
 
+    private String image;
+
 }

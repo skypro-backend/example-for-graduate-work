@@ -30,4 +30,6 @@ public class AdEntity {
 
     @OneToMany(mappedBy = "ad")
     private Collection<CommentEntity> comments;
+
+    private String image;
 }

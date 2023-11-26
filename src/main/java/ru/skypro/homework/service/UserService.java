@@ -1,9 +1,12 @@
 package ru.skypro.homework.service;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.model.UserEntity;
+
+import java.io.IOException;
 
 public interface UserService {
 
@@ -29,4 +32,6 @@ public interface UserService {
 //    UserEntity updateUser(UpdateUser updateUser, Authentication authentication);
 
     UserEntity checkUserByUsername(String username);
+
+    boolean updateUserImage(MultipartFile image) throws IOException;
 }

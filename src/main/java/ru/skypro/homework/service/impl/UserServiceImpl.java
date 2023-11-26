@@ -1,13 +1,18 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * Сервис хранящий логику для управления данными пользователей.
@@ -16,14 +21,21 @@ import ru.skypro.homework.service.UserService;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-//    private Authentication userAusentication;
+    //    private Authentication userAusentication;
     private final AuthServiceImpl authService;
 
-    public UserServiceImpl(UserRepository userRepository, /*Authentication userAusentication,*/ AuthServiceImpl authService) {
+    private final ImageService imageService;
+
+    @Value("${path.to.avatars.folder}")
+    private final String avatarDir;
+
+    public UserServiceImpl(UserRepository userRepository, /*Authentication userAusentication,*/ AuthServiceImpl authService, ImageService imageService, String avatarDir) {
         this.userRepository = userRepository;
 //        this.userAusentication = userAusentication;
         this.authService = authService;
+        this.imageService = imageService;
 
+        this.avatarDir = avatarDir;
     }
 
     /**
@@ -101,6 +113,23 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public boolean updateUserImage(MultipartFile image) throws IOException {
+
+        UserEntity user = getUser();
+
+        Path filePath = Path.of(avatarDir, user.getId() + "."
+                + imageService.getExtension(image.getOriginalFilename()));
+
+        imageService.saveFileOnDisk(image, filePath);
+        imageService.updateUserImage(user, image, filePath);
+
+        user.setImage("/" + avatarDir + "/" + user.getId());
+        userRepository.save(user);
+
+        return true;
+    }
+
 //    @Override
 //    public UserEntity updateUser(UpdateUser updateUser, Authentication authentication) {
 //        String login = userDetails.getUsername();
@@ -113,5 +142,6 @@ public class UserServiceImpl implements UserService {
 //        userRepository.save(user);
 //        return user;
 //    }
+
 
 }

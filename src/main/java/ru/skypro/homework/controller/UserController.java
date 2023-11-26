@@ -14,6 +14,8 @@ import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -67,15 +69,18 @@ public class UserController {
 //            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 //        }
 //    }
-    @PatchMapping("me/image")
-    public ResponseEntity<Ad> updateUserImage(@RequestParam MultipartFile image) {
+    @PatchMapping("/me/image")
+    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
 
         if (authService.getLogin() != null) {
-            return ResponseEntity.ok(userService.updateUserImage(image));
-        } else if (authService.getLogin() == null) {
+            if (userService.updateUserImage(image)) {
+                return ResponseEntity.ok().build();
+            } else {
+                return null;
+            }
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return null; //todo разобраться с ошибками 403 и 404, как и в остальных методах выше, если есть
     }
 
 }

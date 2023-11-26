@@ -2,21 +2,32 @@ package ru.skypro.homework.mapper;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.model.AdEntity;
+import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.UserRepository;
 
 @Service
 public class AdMapper {
 
+    private final UserRepository userRepository;
+
+    public AdMapper(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     /**
      * Entity -> dto mapping
+     *
      * @param entity AdEntity entity class
      * @return Ad dto class
      */
-    public Ad mapToAdDto(AdEntity entity){
+    public Ad mapToAdDto(AdEntity entity) {
         Ad dto = new Ad();
         dto.setAuthor(entity.getAuthor().getId());
-        dto.setImage(entity.getPhoto().getFilePath()); // надо продумать этот момент
+        dto.setImage(entity.getImage());
         dto.setPk(entity.getId());
         dto.setPrice(entity.getPrice());
         dto.setTitle(entity.getTitle());
@@ -24,7 +35,30 @@ public class AdMapper {
     }
 
     /**
+     * Dto -> entity mapping without image.
+     * Image will be saved separately because it needs a created ad with id.
+     *
+     * @param dto CreateAds dto class
+     * @return AdEntity entity class
+     */
+    public AdEntity mapToAdEntity(CreateOrUpdateAd dto, String username) {
+        UserEntity author = userRepository.findUserEntityByUserName(username);
+        if (author == null) {
+
+            throw new UserNotFoundException("User not found");
+        }
+
+        AdEntity entity = new AdEntity();
+        entity.setTitle(dto.getTitle());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setAuthor(author);
+        return entity;
+    }
+
+    /**
      * AdEntity entity -> ExtendedAd dto mapping
+     *
      * @param entity AdEntity entity class
      * @return ExtendedAd dto class
      */
@@ -35,10 +69,10 @@ public class AdMapper {
         dto.setAuthorLastName(entity.getAuthor().getLastName());
         dto.setDescription(entity.getDescription());
         dto.setEmail(entity.getAuthor().getUserName());
-        dto.setImage(entity.getPhoto().getFilePath()); // надо продумать этот момент
+        dto.setImage(entity.getImage());
         dto.setPhone(entity.getAuthor().getPhone());
         dto.setPrice(entity.getPrice());
-        dto.setTitle(entity.getPhoto().getFilePath()); // надо продумать этот момент
+        dto.setTitle(entity.getTitle());
         return dto;
     }
 }

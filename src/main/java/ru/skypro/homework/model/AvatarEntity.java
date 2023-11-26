@@ -15,12 +15,12 @@ public class AvatarEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private  String filePath;
-    private  long fileSize;
-    private  String mediaType;
+    private String filePath;
+    private long fileSize;
+    private String mediaType;
 
     @Lob
-    private  byte[] data;
+    private byte[] data;
 
     @OneToOne
     private UserEntity user;
