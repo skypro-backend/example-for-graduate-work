@@ -97,9 +97,9 @@ public class UserServiceImpl implements UserService {
     public String updateUserImage(MultipartFile image, String userName) throws IOException {
         User user = getCurrentUser(userName);
         Path filePath = Path.of(photoAvatar, user.getFirstName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
-       user.setImage(String.valueOf(filePath));
         uploadPhotoAdd(filePath,image);
-        return String.valueOf(filePath);
+        user.setImage(String.valueOf(filePath));
+        return userRepository.save(user).getImage();
     }
 
     public void uploadPhotoAdd(Path filePath, MultipartFile image) throws IOException {
