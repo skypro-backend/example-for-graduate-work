@@ -67,7 +67,7 @@ public class AdServiceImpl implements AdService {
         User user = userService.getCurrentUser(userName);
         Ad ad = AdMapper.INSTANCE.createOrUpdateAdDTOToAd(createOrUpdateAdDTO, user);
         ad.setAuthor(user);
-        ad.setId(null);
+        /*ad.setId(null);*/
         Path filePath = Path.of(photoDir, createOrUpdateAdDTO.getTitle() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
         PhotoAd photoAd = new PhotoAd();
         photoAd.setFilePath(filePath.toString());
