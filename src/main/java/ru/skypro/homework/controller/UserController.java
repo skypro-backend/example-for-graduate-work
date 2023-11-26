@@ -2,6 +2,7 @@ package ru.skypro.homework.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.NewPasswordDTO;
@@ -15,8 +16,8 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 public class UserController {
     @PostMapping("/set_password")
-    public ResponseEntity setPassword(@Valid @RequestParam NewPasswordDTO newPassword) {
-        return ResponseEntity.ok(newPassword);
+    public void setPassword(Authentication authentication, @Valid @RequestParam NewPasswordDTO newPassword) {
+        ;
     }
 
     @GetMapping("/me")

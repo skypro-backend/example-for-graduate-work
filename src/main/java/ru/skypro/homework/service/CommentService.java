@@ -42,6 +42,7 @@ public class CommentService {
     public void createComment(int id, CreateOrUpdateComment createOrUpdateComment) {
         Ad ad = adRepository.findByPk(id);
         Comment newComment = new Comment();
+        newComment.setAd(ad);
         newComment.setText(createOrUpdateComment.getText());
         newComment.setCreatedAt((int) Instant.now().toEpochMilli());
         commentRepository.save(newComment);
