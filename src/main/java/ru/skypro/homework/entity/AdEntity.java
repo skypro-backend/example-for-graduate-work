@@ -14,8 +14,8 @@ public class AdEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_author")
-    private Integer pk; // айДи автора обьявления
+    @Column(name = "id")
+    private Integer pk; //
     @Column(name = "description")
     private String description;
     @Column(name = "price")

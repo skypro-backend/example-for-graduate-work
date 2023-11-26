@@ -24,16 +24,16 @@ public class AdMapper {
                 .image(adEntity.getImageEntity().getFilePath())
                 .build();
     }
-    public CreateOrUpdateAd AdEntityToCreateOrUpdateAd(AdEntity adEntity) {
-        if ( adEntity == null ) {
-            throw new NullPointerException("Ошибка маппера при создании CreateOrUpdateAd! AdEntity == null!");
-        }
-        return CreateOrUpdateAd.builder()
-                .price(adEntity.getPrice())
-                .title(adEntity.getTitle())
-                .description(adEntity.getDescription())
-                .build();
-    }
+//    public AdEntity AdEntityToCreateOrUpdateAd(CreateOrUpdateAd adEntity) {
+//        if ( adEntity == null ) {
+//            throw new NullPointerException("Ошибка маппера при создании CreateOrUpdateAd! AdEntity == null!");
+//        }
+//        return AdEntity.builder()
+//                .price(adEntity.getPrice())
+//                .title(adEntity.getTitle())
+//                .description(adEntity.getDescription())
+//                .build();
+//    }
     public ExtendedAd AdEntityToExtendedAd(AdEntity adEntity) {
         if ( adEntity == null ) {
             throw new NullPointerException("Ошибка маппера при создании ExtendedAd! AdEntity == null!");
@@ -68,5 +68,6 @@ public class AdMapper {
                 .map(this::AdEntityToAd)
                 .collect(Collectors.toList());
     }
+
 
 }

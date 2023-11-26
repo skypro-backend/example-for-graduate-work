@@ -17,7 +17,11 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer Id;
+    private Integer id;
+    @Column(name = "username")
+    private String username;
+    @Column(name = "password")
+    private String password;
     @Column(name = "email")
     private String email;
     @Column(name = "first_name")
@@ -27,7 +31,8 @@ public class UserEntity {
     @Column(name = "phone")
     private String phone;
 
-   @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private Role role;
 
     @OneToOne

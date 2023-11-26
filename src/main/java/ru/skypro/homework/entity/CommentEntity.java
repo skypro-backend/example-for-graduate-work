@@ -17,19 +17,23 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer pk;
-    @Column(name = "authorImage")
-    private String authorImage;
-    @Column(name = "authorFirstName")
+
+    @Column(name = "author_first_name")
     private String authorFirstName;
 
-    @Column(name = "createdAt")
+    @Column(name = "created_at")
     private String createdAt;
+
     @Column(name = "text")
     private String text;
 
     @ManyToOne
     @JoinColumn(name = "ad_id")
-    private AdEntity adEntity;
+    private AdEntity adId;
+
+    @ManyToOne
+    @Column(name = "author_image")
+    private ImageEntity authorImage;
 
     @ManyToOne
     @JoinColumn(name = "user_entity_id")

@@ -1,7 +1,10 @@
 package ru.skypro.homework.mapper;
 import org.mapstruct.Mapper;
 import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.CommentEntity;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Mapper
@@ -10,10 +13,32 @@ public class CommentMapper {
         if ( commentEntity == null ) {
             throw new NullPointerException("Ошибка маппера при создании Comment! CommentEntity == null!");
         }
-//        return Comment.builder()
-//                .author(commentEntity.get)
-//                .build();
-        return null;
+        return Comment.builder()
+                .author(commentEntity.getUserEntity().getId())
+                .authorImage(commentEntity.getAuthorImage().getFilePath())
+                .authorFirstName(commentEntity.getAuthorFirstName())
+                .createdAt(commentEntity.getCreatedAt())
+                .pk(commentEntity.getPk())
+                .text(commentEntity.getText())
+                .adId(commentEntity.getAdId().getPk())
+                .build();
+    }
+    public CommentEntity AdToAdEntity(CreateOrUpdateComment dto) {
+        if ( dto == null ) {
+            throw new NullPointerException(" Ошибка маппера при создании Comment! CreateOrUpdateComment == null! ");
+        }
+        return CommentEntity.builder()
+                .text(dto.getText())
+                .build();
+    }
+
+    List<Comment> adEntityListToAdList(List<CommentEntity> commentEntityList) {
+        if ( commentEntityList == null ) {
+            throw new NullPointerException("Ошибка маппера при создании List<Comment>! List<CommentEntity> == null!");
+        }
+        return commentEntityList.stream()
+                .map(this::commentEntityToComment)
+                .collect(Collectors.toList());
     }
 }
 
