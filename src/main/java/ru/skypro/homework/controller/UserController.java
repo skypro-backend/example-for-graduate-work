@@ -12,20 +12,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
-import ru.skypro.homework.dto.RegisterDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.UserService;
 
-import java.io.File;
 import java.io.IOException;
 
 import ru.skypro.homework.utils.MethodLog;
 
-import java.io.IOException;
-
 @Slf4j
-//@CrossOrigin(origins = "<http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @Tag(name = "\uD83D\uDE4B Пользователи")
 @RequestMapping("/users")

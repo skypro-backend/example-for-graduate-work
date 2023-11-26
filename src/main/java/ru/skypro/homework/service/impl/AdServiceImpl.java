@@ -29,8 +29,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
+
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -176,38 +175,15 @@ public class AdServiceImpl implements AdService {
         try (InputStream is = image.getInputStream();
              OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
         ) {
             bis.transferTo(bos);
         }
 
     }
 
-    public PhotoAd findPhotoAd(Long adId) {
-        return photoAdRepository.findPhotoAdByAd_Id(adId).orElse(new PhotoAd());
-    }
-
     private String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
-    }
-
-    private Optional<Path> findFirst(Ad ad, String photoDirectory) throws IOException {
-        Optional<Path> foundFile;
-        File rootDirectory = new File(photoDirectory);
-        String filePath = "Фото к объявлению с id=" +
-                "." + ad.getId();
-        try (Stream<Path> walkStream = Files.walk(rootDirectory.toPath())) {
-            foundFile = walkStream.filter(p -> p.toFile().isFile())
-                    .filter(p -> p.toString().endsWith(filePath))
-                    .findFirst();
-        }
-
-        if (foundFile.isPresent()) {
-            System.out.println(foundFile.get());
-        } else {
-            System.out.println("File not found");
-        }
-        return foundFile;
     }
 
 }

@@ -1,7 +1,5 @@
 package ru.skypro.homework.controller;
 
-import io.swagger.annotations.ApiOperation;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -26,7 +24,6 @@ import java.io.IOException;
 @Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-/*@RequestMapping("/ads")*/
 public class AdController {
     private final AdService adService;
 
@@ -61,7 +58,6 @@ public class AdController {
     // --------------------------------------------------------------------------------------
 
     // Добавить объявление
-
     @Operation(
             summary = "addAd",
             description = "Добавление объявления",
@@ -89,7 +85,6 @@ public class AdController {
         return ResponseEntity.ok(adService.addAd(properties, image, SecurityContextHolder.getContext().getAuthentication().getName()));
     }
     // --------------------------------------------------------------------------------------
-
 
     // Получить информацию об объявлении
 

@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
@@ -15,7 +14,7 @@ import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.service.AdService;
 
 @RestController
-/*@CrossOrigin(value = "*")*/
+@CrossOrigin(origins = "http://localhost:3000")
 @Tag(name = "\uD83D\uDE4B Комментарии")
 @RequestMapping("/comments")
 public class CommentController {

@@ -11,7 +11,6 @@ import java.util.Objects;
 /**
  * Register
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-11-05T13:56:03.406359+03:00[Europe/Moscow]")
 public class RegisterDTO {
   @JsonProperty("username")
   private String username;

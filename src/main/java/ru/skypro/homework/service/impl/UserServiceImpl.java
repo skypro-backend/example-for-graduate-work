@@ -12,15 +12,11 @@ import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exception.IncorrectPasswordException;
 import ru.skypro.homework.exception.UserNotFoundException;
-import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.mapper.UserMapper;
-import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.PhotoAd;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.utils.MethodLog;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -53,8 +49,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getCurrentUser(String userName) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
-        User user = userRepository.findByEmail(userName);
-        return user;
+        return userRepository.findByEmail(userName);
     }
 
     @Override
@@ -108,7 +103,7 @@ public class UserServiceImpl implements UserService {
         try (InputStream is = image.getInputStream();
              OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
         ) {
             bis.transferTo(bos);
         }
