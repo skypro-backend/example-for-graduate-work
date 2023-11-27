@@ -79,11 +79,10 @@ public class AdServiceImpl implements AdService {
         Ad ad = AdMapper.INSTANCE.createOrUpdateAdDTOToAd(createOrUpdateAdDTO, user);
         ad.setAuthor(user);
         /*ad.setId(null);*/
-        Path filePath = null;
-        PhotoAd photoAd = null;
+        Path filePath;
+        PhotoAd photoAd = new PhotoAd();
         try {
             filePath = Path.of(photoDir, createOrUpdateAdDTO.getTitle() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
-            photoAd = new PhotoAd();
             photoAd.setFilePath(filePath.toString());
             photoAd.setFileSize(image.getSize());
             photoAd.setMediaType(image.getContentType());
@@ -92,7 +91,7 @@ public class AdServiceImpl implements AdService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ad.setImage("/"+filePath);
+        ad.setImage("/"+photoDir+"/"+photoAd.getId());
         ad.setPhotoAd(photoAd);
         adRepository.save(ad);
         return AdMapper.INSTANCE.adToAdDTO(ad);
