@@ -15,18 +15,19 @@ import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exception.IncorrectPasswordException;
 import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
-import ru.skypro.homework.model.*;
+import ru.skypro.homework.model.PhotoAd;
+import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.PhotoAdRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.utils.MethodLog;
-
 import java.io.IOException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
+
 
 @Slf4j
 @Service
@@ -54,12 +55,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.INSTANCE.toUserDTO(user);
 
     }
-/*    @Override
-    public User getCurrentUser(String userName) {
-        log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
-        return userRepository.findByEmail(userName);
 
-    }*/
 
     @Override
     public UserDTO updateUser(UpdateUserDTO updateUserDTO) {

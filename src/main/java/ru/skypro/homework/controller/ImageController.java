@@ -20,7 +20,7 @@ public class ImageController {
     public ImageController(ImageService imageService) {
         this.imageService = imageService;
     }
-    @GetMapping(value = "/avatars/{id}",
+    @GetMapping(value = "/image/{id}",
             produces = {MediaType.IMAGE_PNG_VALUE,
                     MediaType.IMAGE_JPEG_VALUE,
                     MediaType.IMAGE_GIF_VALUE, "image/*"})
