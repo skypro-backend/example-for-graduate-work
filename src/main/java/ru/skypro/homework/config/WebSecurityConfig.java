@@ -61,11 +61,13 @@ public class WebSecurityConfig {
         return dataSourceBuilder.build();
     }
 
+/*
     @Bean
     UserDetailsManager jdbcUserDetailsManager() {
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource());
         return users;
     }
+*/
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

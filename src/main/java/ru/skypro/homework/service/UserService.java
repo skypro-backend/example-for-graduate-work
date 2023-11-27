@@ -1,6 +1,7 @@
 package ru.skypro.homework.service;
 
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,13 +13,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public final User post(User model) {
-        if (model != null) {
-            return userRepository.save(model);
-        } else {
-            throw new RuntimeException();
-        }
-    }
+
 
     public boolean userExists(String username) {
         return userRepository.existsUserByUsername(username);
