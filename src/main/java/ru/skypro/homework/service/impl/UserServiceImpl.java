@@ -16,28 +16,17 @@ import ru.skypro.homework.exception.IncorrectPasswordException;
 import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 
-import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
-import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.utils.MethodLog;
 
 import java.io.IOException;
-import java.util.UUID;
-
-import ru.skypro.homework.model.User;
-import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.UserService;
-import ru.skypro.homework.utils.MethodLog;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
-import java.io.IOException;
-
-
 
 @Slf4j
 @Service
