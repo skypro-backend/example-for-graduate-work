@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
 
-    @Value("${path.to.avatars.folder}")
+    @Value("${path.to.images.folder}")
     private String photoAvatar;
 
     public UserServiceImpl(PasswordEncoder encoder, UserRepository userRepository) {
@@ -107,13 +107,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-
     public String updateUserImage(MultipartFile image, String userName) {
           log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         User user = getCurrentUser(userName);
-        Path filePath = Path.of(photoAvatar, user.getFirstName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
-        uploadPhotoAdd(filePath,image);
+        Path filePath = null;
+        try {
+            filePath = Path.of(photoAvatar, user.getFirstName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+            uploadPhotoAdd(filePath,image);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         user.setImage(String.valueOf(filePath));
         return userRepository.save(user).getImage();
     }

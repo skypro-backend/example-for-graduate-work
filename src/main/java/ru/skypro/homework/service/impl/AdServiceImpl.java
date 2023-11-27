@@ -29,18 +29,12 @@ import java.util.List;
 import java.util.Optional;
 
 import ru.skypro.homework.model.PhotoAd;
-import ru.skypro.homework.model.User;
-import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.PhotoAdRepository;
-import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.AdService;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Objects;
 
 
@@ -52,17 +46,14 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 public class AdServiceImpl implements AdService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-
-    private final UserServiceImpl userService;
     private final PhotoAdRepository photoAdRepository;
     private final AdRepository adRepository;
-    @Value("${path.to.photos.folder}")
+    @Value(value = "${path.to.images.folder}")
     private String photoDir;
 
-    public AdServiceImpl(CommentRepository commentRepository, UserRepository userRepository, UserServiceImpl userService, PhotoAdRepository photoAdRepository, AdRepository adRepository) {
+    public AdServiceImpl(CommentRepository commentRepository, UserRepository userRepository, PhotoAdRepository photoAdRepository, AdRepository adRepository) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
-        this.userService = userService;
         this.photoAdRepository = photoAdRepository;
         this.adRepository = adRepository;
     }
@@ -81,20 +72,27 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image, String userName){
+    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image){
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
-        User user = userService.getCurrentUser(userName);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByEmail(auth.getName());
         Ad ad = AdMapper.INSTANCE.createOrUpdateAdDTOToAd(createOrUpdateAdDTO, user);
         ad.setAuthor(user);
         /*ad.setId(null);*/
-        Path filePath = Path.of(photoDir, createOrUpdateAdDTO.getTitle() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
-        PhotoAd photoAd = new PhotoAd();
-        photoAd.setFilePath(filePath.toString());
-        photoAd.setFileSize(image.getSize());
-        photoAd.setMediaType(image.getContentType());
-        photoAd = photoAdRepository.save(photoAd);
-        uploadPhotoAdd(filePath,image);
-        ad.setImage(String.valueOf(filePath));
+        Path filePath = null;
+        PhotoAd photoAd = null;
+        try {
+            filePath = Path.of(photoDir, createOrUpdateAdDTO.getTitle() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+            photoAd = new PhotoAd();
+            photoAd.setFilePath(filePath.toString());
+            photoAd.setFileSize(image.getSize());
+            photoAd.setMediaType(image.getContentType());
+            photoAd = photoAdRepository.save(photoAd);
+            uploadPhotoAdd(filePath,image);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        ad.setImage("/"+filePath);
         ad.setPhotoAd(photoAd);
         adRepository.save(ad);
         return AdMapper.INSTANCE.adToAdDTO(ad);
@@ -152,10 +150,15 @@ public class AdServiceImpl implements AdService {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
-        Path filePath = Path.of(photoDir, ad.getTitle() + "."
-                + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
-        uploadPhotoAdd(filePath, image);
-        ad.setImage(String.valueOf(filePath));
+
+        try {
+            Path filePath = Path.of(photoDir, ad.getTitle() + "."
+                    + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+            uploadPhotoAdd(filePath, image);
+            ad.setImage(String.valueOf(filePath));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return adRepository.save(ad).getImage();
     }

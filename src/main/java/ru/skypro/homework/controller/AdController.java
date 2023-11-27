@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +27,12 @@ import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.utils.MethodLog;
 
+
 @Slf4j
 @RestController
 //@CrossOrigin(origins = "<http://localhost:3000")
 @RequestMapping("/ads")
-=======
-import java.io.IOException;
+
 
 public class AdController {
     private final AdService adService;
@@ -58,7 +57,7 @@ public class AdController {
                     )
             }
     )
-
+    @GetMapping
     public ResponseEntity<AdsDTO> getAds() {
         log.warn("GET запрос на получение всех объявлений, метод контроллера: {}", MethodLog.getMethodName());
         return ResponseEntity.ok(adService.getAllAds());
@@ -84,14 +83,14 @@ public class AdController {
                     description = "Not Found")})
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/ads", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<AdDTO> addAds(
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<AdDTO> addAd(
             @Parameter(description = "JSON for create new ad")
-            @RequestPart(value = "properties", required = false) @Validated CreateOrUpdateAdDTO properties,
+            @RequestPart(value = "properties", required = false) @Validated CreateOrUpdateAdDTO createOrUpdateAdDTO,
             @Parameter(description = "file detail")
-            @RequestPart("image") MultipartFile image) throws IOException {
+            @RequestPart("image") MultipartFile image) {
         log.warn("POST запрос на добавление объявления, тело запроса: {}, метод контроллера: {}", createOrUpdateAdDTO, MethodLog.getMethodName());
-        return ResponseEntity.ok(adService.addAd(properties, image, SecurityContextHolder.getContext().getAuthentication().getName()));
+        return ResponseEntity.ok(adService.addAd(createOrUpdateAdDTO, image));
     }
     // --------------------------------------------------------------------------------------
 

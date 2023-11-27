@@ -21,6 +21,6 @@ public interface UserService {
     Void setPassword(NewPasswordDTO newPasswordDTO);
 
 
-    Void updateUserImage(MultipartFile image);
+    String updateUserImage(MultipartFile image, String userName);
 
 }

@@ -21,17 +21,13 @@ import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.utils.MethodLog;
+import ru.skypro.homework.utils.MethodLog;
 
 import java.io.IOException;
 
 
 @Slf4j
 //@CrossOrigin(origins = "<http://localhost:3000")
-=======
-import ru.skypro.homework.utils.MethodLog;
-
-@Slf4j
-
 @RestController
 @Tag(name = "\uD83D\uDE4B Пользователи")
 @RequestMapping("/users")

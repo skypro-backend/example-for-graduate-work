@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import ru.skypro.homework.model.Role;
 
 
+import javax.validation.constraints.Email;
 import java.util.Objects;
 
 /**
