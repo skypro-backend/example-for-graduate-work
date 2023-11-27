@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         userDto.setFirstName(userDB.getFirstName());
         userDto.setLastName(userDB.getLastName());
         userDto.setPhone(userDB.getPhone());
-        userDto.setImage(userDB.getImage());
+        userDto.setImage(String.valueOf(userDB.getImage()));
 //        Так же просетать остальные поля.
         return userDto;
 
