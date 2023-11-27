@@ -5,10 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 
-/**
- * Ad
- */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-11-05T13:56:03.406359+03:00[Europe/Moscow]")
 public class AdDTO {
   @JsonProperty("author")
   private Long author;
@@ -24,6 +20,7 @@ public class AdDTO {
 
   @JsonProperty("title")
   private String title;
+
 
   public AdDTO author(Long author) {
     this.author = author;

@@ -74,11 +74,11 @@ class UserServiceImplTest {
         // java.lang.NullPointerException: невозможно вызвать «org.springframework.security.core.Authentication.getName()», поскольку «auth» имеет значение null
         // на ru.skypro.homework.service.impl.UserServiceImpl.setPassword(UserServiceImpl.java:46)
 
-        userServiceImpl.setPassword(new NewPasswordDTO());
+//        userServiceImpl.setPassword(new NewPasswordDTO());
     }
 
     /**
-     * Method under test: {@link UserServiceImpl#updateUserImage(MultipartFile)}
+     * Method under test: {@link UserServiceImpl#updateUserImage(MultipartFile, String)}
      */
     @Test
     @Disabled("TODO: Complete this test")
@@ -90,7 +90,7 @@ class UserServiceImplTest {
         // java.lang.NullPointerException: невозможно вызвать «org.springframework.security.core.Authentication.getName()», поскольку «auth» имеет значение null
         // на ru.skypro.homework.service.impl.UserServiceImpl.updateUserImage(UserServiceImpl.java:69)
 
-        userServiceImpl
-                .updateUserImage(new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
+//        userServiceImpl
+//                .updateUserImage(new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
     }
 }

@@ -89,9 +89,7 @@
       <version>1.5.3.Final</version>
       <scope>provided</scope>
     </dependency>
-
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -105,6 +103,27 @@
             </exclude>
           </excludes>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <!-- RELEASE_VERSION -->
+        <version>7.1.0</version>
+        <!-- /RELEASE_VERSION -->
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>
+              <generatorName>java</generatorName>
+              <configOptions>
+                <sourceFolder>src/gen/java/main</sourceFolder>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

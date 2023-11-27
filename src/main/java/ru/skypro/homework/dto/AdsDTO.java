@@ -2,7 +2,9 @@ package ru.skypro.homework.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+
 import ru.skypro.homework.model.Ad;
+
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import java.util.Objects;
 /**
  * Ads
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-11-05T13:56:03.406359+03:00[Europe/Moscow]")
+
 public class AdsDTO {
   @JsonProperty("count")
   private Integer count;
@@ -58,7 +60,9 @@ public class AdsDTO {
    * Get results
    * @return results
   */
-  @ApiModelProperty(value = "")
+
+  @ApiModelProperty
+
 
   @Valid
 

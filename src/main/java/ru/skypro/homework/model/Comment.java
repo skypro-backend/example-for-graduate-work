@@ -3,6 +3,7 @@ package ru.skypro.homework.model;
 import lombok.Data;
 
 import javax.persistence.*;
+
 @Data
 @Entity
 @Table(name = "comments")
