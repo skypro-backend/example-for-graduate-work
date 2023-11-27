@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * CreateOrUpdateComment
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-11-05T13:56:03.406359+03:00[Europe/Moscow]")
+
 public class CreateOrUpdateCommentDTO {
   @JsonProperty("text")
   private String text;

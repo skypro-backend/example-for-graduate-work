@@ -1,6 +1,9 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
+
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
@@ -24,21 +28,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import ru.skypro.homework.model.PhotoAd;
+import ru.skypro.homework.model.User;
+import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.PhotoAdRepository;
+import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.AdService;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
+
+
 @Slf4j
 @Service
 public class AdServiceImpl implements AdService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final AdRepository adRepository;
 
-    public AdServiceImpl(CommentRepository commentRepository, UserRepository userRepository, AdRepository adRepository) {
+    private final UserServiceImpl userService;
+    private final PhotoAdRepository photoAdRepository;
+    private final AdRepository adRepository;
+    @Value("${path.to.photos.folder}")
+    private String photoDir;
+
+    public AdServiceImpl(CommentRepository commentRepository, UserRepository userRepository, UserServiceImpl userService, PhotoAdRepository photoAdRepository, AdRepository adRepository) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
+        this.photoAdRepository = photoAdRepository;
         this.adRepository = adRepository;
     }
 
     @Override
     public AdsDTO getAllAds() {
+
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         AdsDTO adsDTO = new AdsDTO();
@@ -50,23 +81,29 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image) {
+    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image, String userName){
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
-
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(auth.getName());
-
+        User user = userService.getCurrentUser(userName);
         Ad ad = AdMapper.INSTANCE.createOrUpdateAdDTOToAd(createOrUpdateAdDTO, user);
-        ad.setImage(image.getName());
+        ad.setAuthor(user);
+        /*ad.setId(null);*/
+        Path filePath = Path.of(photoDir, createOrUpdateAdDTO.getTitle() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+        PhotoAd photoAd = new PhotoAd();
+        photoAd.setFilePath(filePath.toString());
+        photoAd.setFileSize(image.getSize());
+        photoAd.setMediaType(image.getContentType());
+        photoAd = photoAdRepository.save(photoAd);
+        uploadPhotoAdd(filePath,image);
+        ad.setImage(String.valueOf(filePath));
+        ad.setPhotoAd(photoAd);
         adRepository.save(ad);
         return AdMapper.INSTANCE.adToAdDTO(ad);
     }
 
     @Override
     public ExtendedAdDTO getAdInfo(Long adId) {
-        log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
+        log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
         User user = userRepository.findById(ad.getAuthor().getId()).orElseThrow(UserNotFoundException::new);
         return AdMapper.INSTANCE.toExtendedAdDTO(ad, user);
@@ -74,6 +111,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Void deleteAd(Long adId) {
+
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         adRepository.deleteById(adId);
@@ -82,6 +120,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public AdDTO patchAd(Long adId, CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
@@ -89,17 +128,16 @@ public class AdServiceImpl implements AdService {
         ad.setTitle(createOrUpdateAdDTO.getTitle());
         ad.setPrice(createOrUpdateAdDTO.getPrice());
         ad.setDescription(createOrUpdateAdDTO.getDescription());
-
         return AdMapper.INSTANCE.adToAdDTO(adRepository.save(ad));
     }
 
     @Override
     public AdsDTO getAllAdsByAuthor() {
+
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
-
         User user = userRepository.findByEmail(name);
         List<AdDTO> result = new ArrayList<>();
         adRepository.findAllByAuthor(user).forEach(u -> result.add(AdMapper.INSTANCE.adToAdDTO(u)));
@@ -114,12 +152,17 @@ public class AdServiceImpl implements AdService {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
-        ad.setImage(image.getName());
+        Path filePath = Path.of(photoDir, ad.getTitle() + "."
+                + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+        uploadPhotoAdd(filePath, image);
+        ad.setImage(String.valueOf(filePath));
+
         return adRepository.save(ad).getImage();
     }
 
     @Override
     public CommentsDTO getComments(Long adId) {
+
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
@@ -136,6 +179,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public CommentDTO addComment(Long adId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -154,6 +198,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Void deleteComment(Long adId, Long commentId) {
+
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         commentRepository.deleteById(commentId);
@@ -162,15 +207,18 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public CommentDTO patchComment(Long adId, Long commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
+
         comment.setText(createOrUpdateCommentDTO.getText());
 
         return CommentMapper.INSTANCE.toCommentDTO(commentRepository.save(comment), user);
     }
+
 
     public boolean isAuthorAd(String username, Long adId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
@@ -184,4 +232,22 @@ public class AdServiceImpl implements AdService {
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
         return commentOptional.map(comment -> comment.getAuthor().getEmail().equals(username)).orElse(false);
     }
+
+    public void uploadPhotoAdd(Path filePath, MultipartFile image) throws IOException {
+        Files.createDirectories(filePath.getParent());
+        Files.deleteIfExists(filePath);
+        try (InputStream is = image.getInputStream();
+             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
+             BufferedInputStream bis = new BufferedInputStream(is, 1024);
+             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
+        ) {
+            bis.transferTo(bos);
+        }
+
+    }
+
+    private String getExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+
 }

@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * NewPassword
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-11-05T13:56:03.406359+03:00[Europe/Moscow]")
+
 public class NewPasswordDTO {
   @JsonProperty("currentPassword")
   private String currentPassword;
@@ -17,10 +17,12 @@ public class NewPasswordDTO {
   @JsonProperty("newPassword")
   private String newPassword;
 
-  public NewPasswordDTO currentPassword(String currentPassword) {
+
+  public NewPasswordDTO(String currentPassword, String newPassword) {
     this.currentPassword = currentPassword;
-    return this;
+    this.newPassword = newPassword;
   }
+
 
   /**
    * текущий пароль

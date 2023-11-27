@@ -84,7 +84,9 @@ class AdControllerTest {
     }
 
     /**
+
      * Method under test: {@link AdController#removeAd(Long)}
+
      */
     @Test
     void testRemoveAds() {
@@ -93,7 +95,9 @@ class AdControllerTest {
         AdRepository adRepository = mock(AdRepository.class);
         doNothing().when(adRepository).deleteById(Mockito.<Long>any());
         ResponseEntity<Void> actualRemoveAdsResult = (new AdController(
+
                 new AdServiceImpl(mock(CommentRepository.class), mock(UserRepository.class), adRepository))).removeAd(1L);
+
         verify(adRepository).deleteById(Mockito.<Long>any());
         assertEquals(HttpStatus.OK, actualRemoveAdsResult.getStatusCode());
     }
@@ -114,7 +118,9 @@ class AdControllerTest {
     }
 
     /**
+
      * Method under test: {@link AdController#addAd(CreateOrUpdateAdDTO, MultipartFile)}
+
      */
     @Test
     void testAddAds() throws Exception {
@@ -142,7 +148,9 @@ class AdControllerTest {
     }
 
     /**
+
      * Method under test: {@link AdController#deleteComment(Long, Long)}
+
      */
     @Test
     void testDeleteComments() {
@@ -150,7 +158,9 @@ class AdControllerTest {
         CommentRepository commentRepository = mock(CommentRepository.class);
         doNothing().when(commentRepository).deleteById(Mockito.<Long>any());
         ResponseEntity<Void> actualDeleteCommentsResult = (new AdController(
+
                 new AdServiceImpl(commentRepository, mock(UserRepository.class), mock(AdRepository.class)))).deleteComment(1L,
+
                 1L);
         verify(commentRepository).deleteById(Mockito.<Long>any());
         assertEquals(HttpStatus.OK, actualDeleteCommentsResult.getStatusCode());
@@ -224,10 +234,12 @@ class AdControllerTest {
     }
 
     /**
+
      * Method under test: {@link AdController#updateAd(Long, CreateOrUpdateAdDTO)}
+
      */
     @Test
-    void testUpdateAds() throws Exception {
+    void testUpdateAd() throws Exception {
         when(adService.patchAd(Mockito.<Long>any(), Mockito.<CreateOrUpdateAdDTO>any())).thenReturn(new AdDTO());
 
         CreateOrUpdateAdDTO createOrUpdateAdDTO = new CreateOrUpdateAdDTO();
@@ -251,10 +263,12 @@ class AdControllerTest {
     }
 
     /**
+
      * Method under test: {@link AdController#updateComment(Long, Long, CreateOrUpdateCommentDTO)}
+
      */
     @Test
-    void testUpdateComments() throws Exception {
+    void testUpdateComment() throws Exception {
         when(adService.patchComment(Mockito.<Long>any(), Mockito.<Long>any(), Mockito.<CreateOrUpdateCommentDTO>any()))
                 .thenReturn(new CommentDTO());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/ads/{adId}/comments/{commentId}", 1L,

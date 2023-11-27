@@ -3,10 +3,12 @@ package ru.skypro.homework.service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 
+
 public interface AdService {
     AdsDTO getAllAds();
 
     AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image);
+
 
     ExtendedAdDTO getAdInfo(Long adId);
 
@@ -16,7 +18,9 @@ public interface AdService {
 
     AdsDTO getAllAdsByAuthor();
 
+
     String patchAdImage(Long adId, MultipartFile image);
+
 
     CommentsDTO getComments(Long adId);
 
