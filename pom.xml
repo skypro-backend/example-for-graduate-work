@@ -18,6 +18,7 @@
   <description>Application for managing ads</description>
 
   <properties>
+    <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
     <java.version>11</java.version>
   </properties>
 
@@ -61,6 +62,11 @@
       <artifactId>spring-security-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>1.5.5.Final</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -77,7 +83,54 @@
           </excludes>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>1.5.5.Final</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
 </project>
+<!--<properties>-->
+<!--<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>-->
+<!--</properties>-->
+<!--        ...-->
+<!--<dependencies>-->
+<!--<dependency>-->
+<!--  <groupId>org.mapstruct</groupId>-->
+<!--  <artifactId>mapstruct</artifactId>-->
+<!--  <version>${org.mapstruct.version}</version>-->
+<!--</dependency>-->
+<!--</dependencies>-->
+<!--        ...-->
+<!--<build>-->
+<!--<plugins>-->
+<!--  <plugin>-->
+<!--    <groupId>org.apache.maven.plugins</groupId>-->
+<!--    <artifactId>maven-compiler-plugin</artifactId>-->
+<!--    <version>3.8.1</version>-->
+<!--    <configuration>-->
+<!--      <source>1.8</source> &lt;!&ndash; depending on your project &ndash;&gt;-->
+<!--      <target>1.8</target> &lt;!&ndash; depending on your project &ndash;&gt;-->
+<!--      <annotationProcessorPaths>-->
+<!--        <path>-->
+<!--          <groupId>org.mapstruct</groupId>-->
+<!--          <artifactId>mapstruct-processor</artifactId>-->
+<!--          <version>${org.mapstruct.version}</version>-->
+<!--        </path>-->
+<!--        &lt;!&ndash; other annotation processors &ndash;&gt;-->
+<!--      </annotationProcessorPaths>-->
+<!--    </configuration>-->
+<!--  </plugin>-->
+<!--</plugins>-->
+<!--</build>-->
