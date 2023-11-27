@@ -14,16 +14,12 @@ import java.io.IOException;
 
 @Slf4j
 @RestController
-//@CrossOrigin(origins = "<http://localhost:3000")
-
 public class ImageController {
     private final ImageService imageService;
-
     public ImageController(ImageService imageService) {
         this.imageService = imageService;
     }
-
-    @GetMapping("/image/{id}")
+    @GetMapping("/images/{id}")
     public ResponseEntity<byte[]> getImage(@PathVariable Long id) throws IOException {
         return imageService.getImage(id);
     }

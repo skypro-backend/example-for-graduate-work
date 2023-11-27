@@ -14,13 +14,11 @@ public interface UserService {
 
     UserDTO getCurrentUser();
 
-    User getCurrentUser(String userName);
-
     UserDTO updateUser(UpdateUserDTO updateUserDTO);
 
     Void setPassword(NewPasswordDTO newPasswordDTO);
 
 
-    String updateUserImage(MultipartFile image, String userName);
+    void updateUserImage(MultipartFile image, String userName);
 
 }

@@ -1,5 +1,6 @@
 package ru.skypro.homework.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -33,6 +34,7 @@ public class Ad {
     private List<Comment> comments;
 
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "photo_Ad_id")
     private PhotoAd photoAd;
 

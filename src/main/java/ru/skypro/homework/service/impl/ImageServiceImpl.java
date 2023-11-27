@@ -18,19 +18,14 @@ import java.nio.file.Paths;
 @Service
 public class ImageServiceImpl implements ImageService {
     private final PhotoAdRepository photoAdRepository;
-
     public ImageServiceImpl(PhotoAdRepository photoAdRepository) {
         this.photoAdRepository = photoAdRepository;
     }
-
     @Override
     public ResponseEntity<byte[]> getImage(Long id)throws IOException {
-        PhotoAd photoAd = null;
-
-            photoAd = photoAdRepository.findById(id).orElseThrow(PhotoAdNotFoundException::new);
+        PhotoAd photoAd = photoAdRepository.findById(id).orElseThrow(PhotoAdNotFoundException::new);
         byte[] imageBytes = readImageBytes(photoAd.getFilePath());
         HttpHeaders headers = new HttpHeaders();
-        assert photoAd != null;
         headers.setContentType(MediaType.parseMediaType(photoAd.getMediaType()));
         headers.setContentLength(imageBytes.length);
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(imageBytes);

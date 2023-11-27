@@ -16,27 +16,20 @@ import ru.skypro.homework.exception.IncorrectPasswordException;
 import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 
-import ru.skypro.homework.model.Image;
+import ru.skypro.homework.model.PhotoAd;
 import ru.skypro.homework.model.User;
-import ru.skypro.homework.repository.ImageRepository;
+import ru.skypro.homework.repository.PhotoAdRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.utils.MethodLog;
 
-import java.io.IOException;
-import java.util.UUID;
-
-import ru.skypro.homework.model.User;
-import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.UserService;
-import ru.skypro.homework.utils.MethodLog;
 import java.io.*;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
-import java.io.IOException;
 
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 
 @Slf4j
@@ -44,14 +37,16 @@ import java.io.IOException;
 public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
+    private final PhotoAdRepository photoAdRepository;
 
     @Value("${path.to.images.folder}")
     private String photoAvatar;
 
-    public UserServiceImpl(PasswordEncoder encoder, UserRepository userRepository) {
+    public UserServiceImpl(PasswordEncoder encoder, UserRepository userRepository, PhotoAdRepository photoAdRepository) {
         this.encoder = encoder;
         this.userRepository = userRepository;
 
+        this.photoAdRepository = photoAdRepository;
     }
 
     @Override
@@ -61,12 +56,6 @@ public class UserServiceImpl implements UserService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
         return UserMapper.INSTANCE.toUserDTO(user);
-
-    }
-    @Override
-    public User getCurrentUser(String userName) {
-        log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
-        return userRepository.findByEmail(userName);
 
     }
 
@@ -107,19 +96,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String updateUserImage(MultipartFile image, String userName) {
+    public void updateUserImage(MultipartFile image, String userName) {
           log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
-        User user = getCurrentUser(userName);
-        Path filePath = null;
+        User user = userRepository.findByEmail(userName);
+        Path filePath;
+        PhotoAd photoAd = new PhotoAd();
         try {
-            filePath = Path.of(photoAvatar, user.getFirstName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+            filePath = Path.of(photoAvatar, user.getLastName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+            photoAd.setFilePath(filePath.toString());
+            photoAd.setFileSize(image.getSize());
+            photoAd.setMediaType(image.getContentType());
+            photoAd = photoAdRepository.save(photoAd);
             uploadPhotoAdd(filePath,image);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        user.setImage(String.valueOf(filePath));
-        return userRepository.save(user).getImage();
+        user.setImage("/"+photoAvatar+"/"+photoAd.getId());
+        userRepository.save(user);
+
     }
 
     public void uploadPhotoAdd(Path filePath, MultipartFile image) throws IOException {
@@ -132,7 +127,6 @@ public class UserServiceImpl implements UserService {
         ) {
             bis.transferTo(bos);
         }
-
     }
 
     private String getExtension(String fileName) {
