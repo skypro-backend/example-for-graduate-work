@@ -14,12 +14,14 @@ public class CommentEntity {
     private String authorFirstName;
     @Column(name = "comment_time")
     private Integer createdAt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Integer pk;
     @Column(name = "text")
     private String text;
-    @ManyToOne
-    @JoinColumn(name = "ad_id")
+   // @ManyToOne
+   // @JoinColumn(name = "ad_id")
     private Integer adId;
 
     public CommentEntity(Integer author, String authorImage,

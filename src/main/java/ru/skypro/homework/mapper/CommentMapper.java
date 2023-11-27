@@ -4,7 +4,7 @@ import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.entity.CommentEntity;
 
 public class CommentMapper {
-    public static CommentEntity toComment(Comment comment) {
+    public static CommentEntity toCommentEntity(Comment comment) {
         if(comment == null){
             throw new NullPointerException("Is not available");
         }
@@ -23,7 +23,7 @@ public class CommentMapper {
 
     }
 
-    public static Comment fromCommentEntity(CommentEntity commentEntity){
+    public static Comment toComment(CommentEntity commentEntity){
         if(commentEntity == null){
             throw new NullPointerException("Is not available");
         }
