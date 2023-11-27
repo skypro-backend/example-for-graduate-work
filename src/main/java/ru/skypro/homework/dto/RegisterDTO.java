@@ -11,6 +11,7 @@ import java.util.Objects;
 /**
  * Register
  */
+
 public class RegisterDTO {
   @JsonProperty("username")
   private String username;
@@ -26,6 +27,7 @@ public class RegisterDTO {
 
   @JsonProperty("phone")
   private String phone;
+
 
   @JsonProperty("role")
   private Role role;

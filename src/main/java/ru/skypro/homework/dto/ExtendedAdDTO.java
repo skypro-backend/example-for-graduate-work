@@ -8,6 +8,7 @@ import java.util.Objects;
 /**
  * ExtendedAd
  */
+
 public class ExtendedAdDTO {
   @JsonProperty("pk")
   private Long pk;

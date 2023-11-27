@@ -11,6 +11,7 @@ import java.util.Objects;
 /**
  * Comments
  */
+
 public class CommentsDTO {
   @JsonProperty("count")
   private Integer count;

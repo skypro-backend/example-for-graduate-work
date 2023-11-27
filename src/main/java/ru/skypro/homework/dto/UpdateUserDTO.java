@@ -10,6 +10,7 @@ import java.util.Objects;
 /**
  * UpdateUser
  */
+
 public class UpdateUserDTO {
   @JsonProperty("firstName")
   private String firstName;

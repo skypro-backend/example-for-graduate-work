@@ -9,6 +9,7 @@ import java.util.Objects;
 /**
  * Login
  */
+
 public class LoginDTO {
   @JsonProperty("password")
   private String password;

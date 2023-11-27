@@ -11,6 +11,7 @@ import java.util.Objects;
 /**
  * CreateOrUpdateAd
  */
+
 public class CreateOrUpdateAdDTO {
   @JsonProperty("title")
   private String title;

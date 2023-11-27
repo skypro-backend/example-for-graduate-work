@@ -8,6 +8,7 @@ import java.util.Objects;
 /**
  * Comment
  */
+
 public class CommentDTO {
   @JsonProperty("author")
   private Long author;

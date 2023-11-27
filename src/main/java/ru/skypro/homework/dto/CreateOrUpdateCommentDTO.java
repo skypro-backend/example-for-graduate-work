@@ -10,6 +10,7 @@ import java.util.Objects;
 /**
  * CreateOrUpdateComment
  */
+
 public class CreateOrUpdateCommentDTO {
   @JsonProperty("text")
   private String text;
