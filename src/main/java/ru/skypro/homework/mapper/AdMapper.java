@@ -1,4 +1,4 @@
-package mapper;
+package ru.skypro.homework.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Ad;

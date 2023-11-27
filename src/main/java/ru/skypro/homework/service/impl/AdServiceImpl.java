@@ -2,7 +2,7 @@ package ru.skypro.homework.service.impl;
 
 
 import org.springframework.stereotype.Service;
-import repository.AdRepositiry;
+import ru.skypro.homework.repository.AdRepositiry;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AdService;
@@ -19,11 +19,16 @@ public class AdServiceImpl implements AdService {
         this.adRepositiry = adRepositiry;
     }
 @Override
-    public Ad get(Integer id, boolean add) {
+    public Ad get(Integer id, boolean ad) {
         logger.info("Method get was invoked!");
         Ad adDB = (Ad) AdRepositiry.findByPk(id).
                 orElse(null);
-        Ad ad = new Ad(ad.getPk(), ad.getAuthor(), ad.getImage(), ad.getPrice(), ad.getTitle(), ad.getClass());
+        Ad ad = new Ad(ad.getPk(),
+                ad.getAuthor(),
+                ad.getImage(),
+                ad.getPrice(),
+                ad.getTitle(),
+                ad.getClass());
         ad.setPk(ad.getPk());
         ad.setAuthor(adDB.getAuthor());
         ad.setImage(ad.getImage());
