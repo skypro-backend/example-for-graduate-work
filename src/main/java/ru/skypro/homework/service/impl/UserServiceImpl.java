@@ -15,12 +15,10 @@ import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exception.IncorrectPasswordException;
 import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
-
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.utils.MethodLog;
-
 import java.io.IOException;
 import java.io.*;
 import java.nio.file.Files;
@@ -28,19 +26,22 @@ import java.nio.file.Path;
 import java.util.Objects;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
+
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
+    private final PhotoAdRepository photoAdRepository;
 
     @Value("${path.to.images.folder}")
     private String photoAvatar;
 
-    public UserServiceImpl(PasswordEncoder encoder, UserRepository userRepository) {
+    public UserServiceImpl(PasswordEncoder encoder, UserRepository userRepository, PhotoAdRepository photoAdRepository) {
         this.encoder = encoder;
         this.userRepository = userRepository;
 
+        this.photoAdRepository = photoAdRepository;
     }
 
     @Override
@@ -96,19 +97,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String updateUserImage(MultipartFile image, String userName) {
+    public void updateUserImage(MultipartFile image, String userName) {
           log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
-        User user = getCurrentUser(userName);
-        Path filePath = null;
+        User user = userRepository.findByEmail(userName);
+        Path filePath;
+        PhotoAd photoAd = new PhotoAd();
         try {
-            filePath = Path.of(photoAvatar, user.getFirstName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+            filePath = Path.of(photoAvatar, user.getLastName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+            photoAd.setFilePath(filePath.toString());
+            photoAd.setFileSize(image.getSize());
+            photoAd.setMediaType(image.getContentType());
+            photoAd = photoAdRepository.save(photoAd);
             uploadPhotoAdd(filePath,image);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        user.setImage(String.valueOf(filePath));
-        return userRepository.save(user).getImage();
+        user.setImage("/"+photoAvatar+"/"+photoAd.getId());
+        userRepository.save(user);
+
     }
 
     public void uploadPhotoAdd(Path filePath, MultipartFile image) throws IOException {

@@ -177,9 +177,10 @@ public class UserController {
     )
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> loadUserImage(@RequestPart (value = "image", required = true) MultipartFile image) throws IOException{
+    public ResponseEntity<Void> loadUserImage(@RequestPart (value = "image", required = true) MultipartFile image) throws IOException{
         log.warn("PATCH запрос на обновление аватара пользователя, тело запроса: MultipartFile image, метод контроллера: {}", MethodLog.getMethodName());
-        return ResponseEntity.ok(userService.updateUserImage(image, SecurityContextHolder.getContext().getAuthentication().getName()));
+        userService.updateUserImage(image, SecurityContextHolder.getContext().getAuthentication().getName());
+        return ResponseEntity.ok().build();
 
     }
 

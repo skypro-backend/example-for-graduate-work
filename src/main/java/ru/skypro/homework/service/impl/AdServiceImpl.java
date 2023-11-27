@@ -79,11 +79,10 @@ public class AdServiceImpl implements AdService {
         Ad ad = AdMapper.INSTANCE.createOrUpdateAdDTOToAd(createOrUpdateAdDTO, user);
         ad.setAuthor(user);
         /*ad.setId(null);*/
-        Path filePath = null;
-        PhotoAd photoAd = null;
+        Path filePath;
+        PhotoAd photoAd = new PhotoAd();
         try {
             filePath = Path.of(photoDir, createOrUpdateAdDTO.getTitle() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
-            photoAd = new PhotoAd();
             photoAd.setFilePath(filePath.toString());
             photoAd.setFileSize(image.getSize());
             photoAd.setMediaType(image.getContentType());
@@ -92,10 +91,10 @@ public class AdServiceImpl implements AdService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ad.setImage("/"+filePath);
+//        photoAd.setAd(ad);
+        ad.setImage("/"+photoDir+"/"+photoAd.getId());
         ad.setPhotoAd(photoAd);
-        adRepository.save(ad);
-        return AdMapper.INSTANCE.adToAdDTO(ad);
+        return AdMapper.INSTANCE.adToAdDTO(adRepository.save(ad));
     }
 
     @Override
@@ -109,10 +108,12 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Void deleteAd(Long adId) {
-
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
+        Long photoId = adRepository.findById(adId).orElseThrow(AdNotFoundException::new).getPhotoAd().getId();
         adRepository.deleteById(adId);
+        photoAdRepository.deleteById(photoId);
+        commentRepository.deleteAllByAd_Id(adId);
         return null;
     }
 

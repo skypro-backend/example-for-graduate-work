@@ -29,7 +29,8 @@ public class WebSecurityConfig implements WebMvcConfigurer {
             "/webjars/**",
             "/login",
             "/register",
-            "/ads"
+            "/ads",
+            "/image"
     };
 
     @Bean
