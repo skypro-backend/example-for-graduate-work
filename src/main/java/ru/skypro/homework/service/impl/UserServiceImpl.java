@@ -24,18 +24,14 @@ public class UserServiceImpl implements UserService {
     //    private Authentication userAusentication;
     private final AuthServiceImpl authService;
 
-    private final ImageService imageService;
+    private final ImageServiceImpl imageService;
 
-    @Value("${path.to.avatars.folder}")
-    private final String avatarDir;
 
-    public UserServiceImpl(UserRepository userRepository, /*Authentication userAusentication,*/ AuthServiceImpl authService, ImageService imageService, String avatarDir) {
+    public UserServiceImpl(UserRepository userRepository, /*Authentication userAusentication,*/ AuthServiceImpl authService, ImageServiceImpl imageService) {
         this.userRepository = userRepository;
 //        this.userAusentication = userAusentication;
         this.authService = authService;
         this.imageService = imageService;
-
-        this.avatarDir = avatarDir;
     }
 
     /**
@@ -113,22 +109,6 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public boolean updateUserImage(MultipartFile image) throws IOException {
-
-        UserEntity user = getUser();
-
-        Path filePath = Path.of(avatarDir, user.getId() + "."
-                + imageService.getExtension(image.getOriginalFilename()));
-
-        imageService.saveFileOnDisk(image, filePath);
-        imageService.updateUserImage(user, image, filePath);
-
-        user.setImage("/" + avatarDir + "/" + user.getId());
-        userRepository.save(user);
-
-        return true;
-    }
 
 //    @Override
 //    public UserEntity updateUser(UpdateUser updateUser, Authentication authentication) {

@@ -69,18 +69,18 @@ public class UserController {
 //            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 //        }
 //    }
-    @PatchMapping("/me/image")
-    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
-
-        if (authService.getLogin() != null) {
-            if (userService.updateUserImage(image)) {
-                return ResponseEntity.ok().build();
-            } else {
-                return null;
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-    }
+//    @PatchMapping("/me/image")
+//    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
+//
+//        if (authService.getLogin() != null) {
+//            if (userService.updateUserImage(image)) {
+//                return ResponseEntity.ok().build();
+//            } else {
+//                return null;
+//            }
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//    }
 
 }

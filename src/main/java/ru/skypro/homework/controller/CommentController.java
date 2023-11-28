@@ -41,29 +41,29 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity deleteComment(@PathVariable("adId") Integer adId,
-                                        @PathVariable("commentId") Integer commentId){
-        //todo добавить условие - админ может удалять любые комменты, юзер - только свои.
-        //как сделать: нужно найти в БД юзера по его логину из authService.getLogin()
-        //и проверить его статус: админ или юзер, если админ то удаляем коммент. если нет, то см. далее
-        //Далее нужно найти коммент и проверить кому он принадлежит, если текущему юзеру (он не админ),
-        //то удаляем, если нет, то статус 403.
-        if(authService.getLogin() != null){
-            return ResponseEntity.ok(commentService.deleteComment(adId, commentId));
-        }else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-    }
-    @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable("adId") Integer adId,
-                                        @PathVariable("commentId") Integer commentId,
-                                        @RequestBody CreateOrUpdateComment createOrUpdateComment){
-        //todo добавить условие, только пользователь написавший коммент может его править.
-        if(authService.getLogin() != null){
-            return ResponseEntity.ok(commentService.updateComment(adId, commentId, createOrUpdateComment));
-        }else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-    }
+//    @DeleteMapping("/{adId}/comments/{commentId}")
+//    public ResponseEntity deleteComment(@PathVariable("adId") Integer adId,
+//                                        @PathVariable("commentId") Integer commentId){
+//        //todo добавить условие - админ может удалять любые комменты, юзер - только свои.
+//        //как сделать: нужно найти в БД юзера по его логину из authService.getLogin()
+//        //и проверить его статус: админ или юзер, если админ то удаляем коммент. если нет, то см. далее
+//        //Далее нужно найти коммент и проверить кому он принадлежит, если текущему юзеру (он не админ),
+//        //то удаляем, если нет, то статус 403.
+//        if(authService.getLogin() != null){
+//            return ResponseEntity.ok(commentService.deleteComment(adId, commentId));
+//        }else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//    }
+//    @PatchMapping("/{adId}/comments/{commentId}")
+//    public ResponseEntity<Comment> updateComment(@PathVariable("adId") Integer adId,
+//                                        @PathVariable("commentId") Integer commentId,
+//                                        @RequestBody CreateOrUpdateComment createOrUpdateComment){
+//        //todo добавить условие, только пользователь написавший коммент может его править.
+//        if(authService.getLogin() != null){
+//            return ResponseEntity.ok(commentService.updateComment(adId, commentId, createOrUpdateComment));
+//        }else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//    }
 }
