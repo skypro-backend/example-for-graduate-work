@@ -25,9 +25,9 @@ public class AdDTO {
     @NotBlank
     @Size(min = 4, max = 100)
     private String title;
-    @Schema(description = "описание объявления")
-    @NotBlank
-    @Size(min = 4)
-    private String description;
+//    @Schema(description = "описание объявления")
+//    @NotBlank
+//    @Size(min = 4)
+//    private String description;
 
 }

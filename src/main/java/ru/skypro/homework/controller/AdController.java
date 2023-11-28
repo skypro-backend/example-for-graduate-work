@@ -4,6 +4,7 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,11 +28,9 @@ public class AdController {
         this.adService = adService;
     }
 
-//    @PostMapping
-    @RequestMapping(consumes = {"application/*", "multipart/*"}, method = RequestMethod.POST)
-    public void createAd(@Valid @RequestBody CreateOrUpdateAd createOrUpdateAd, @RequestPart MultipartFile image) {
-
-        adService.createAd(createOrUpdateAd);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdDTO> addAds(Authentication authentication, @RequestPart("properties") CreateOrUpdateAd createOrUpdateAd, @RequestPart("image") MultipartFile image) {
+        return ResponseEntity.ok(adService.createAd(createOrUpdateAd, authentication));
     }
 
     @GetMapping
@@ -42,16 +41,21 @@ public class AdController {
     @GetMapping("{id}")
     public AdDTO findAdById(@PathVariable int id) {
         return adService.findAd(id);
-           }
+    }
 
     @DeleteMapping("{id}")
-    public  void deleteAd(@PathVariable int id) {
-       adService.deleteAd(id);
+    public void deleteAd(@PathVariable int id) {
+        adService.deleteAd(id);
     }
 
     @PatchMapping("{id}")
     public CreateOrUpdateAd updateById(@PathVariable int id, @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd) {
         return adService.updateAd(id, createOrUpdateAd);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<Collection<AdDTO>> getAdsMe(Authentication authentication) {
+        return ResponseEntity.ok(adService.getAdsMe(authentication));
     }
 
 
