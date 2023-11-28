@@ -5,10 +5,8 @@ CREATE TABLE comment_entity
 (
     id                       serial PRIMARY KEY,
     price                    integer,
-    author_first_name        varchar(255),
-    created_at               varchar(255),
+    created_at               TIMESTAMP(3),
     text                     text,
     user_entity_id bigint REFERENCES user_entity (id),
     ad_id bigint REFERENCES ad_entity (id),
-    image_entity_path text REFERENCES image_entity (file_path)
 );

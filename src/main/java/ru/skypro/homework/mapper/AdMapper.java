@@ -1,6 +1,4 @@
 package ru.skypro.homework.mapper;
-
-import lombok.Builder;
 import org.mapstruct.Mapper;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
@@ -10,7 +8,7 @@ import ru.skypro.homework.entity.AdEntity;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Builder
+
 @Mapper(componentModel = "spring")
 public class AdMapper {
     public Ad AdEntityToAd(AdEntity adEntity) {
@@ -26,16 +24,6 @@ public class AdMapper {
                 .build();
     }
 
-    //    public AdEntity AdEntityToCreateOrUpdateAd(CreateOrUpdateAd adEntity) {
-//        if ( adEntity == null ) {
-//            throw new NullPointerException("Ошибка маппера при создании CreateOrUpdateAd! AdEntity == null!");
-//        }
-//        return AdEntity.builder()
-//                .price(adEntity.getPrice())
-//                .title(adEntity.getTitle())
-//                .description(adEntity.getDescription())
-//                .build();
-//    }
     public ExtendedAd AdEntityToExtendedAd(AdEntity adEntity) {
         if (adEntity == null) {
             throw new NullPointerException("Ошибка маппера при создании ExtendedAd! AdEntity == null!");
