@@ -2,25 +2,56 @@ package ru.skypro.homework.service.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.AdsInfoDTO;
 import ru.skypro.homework.dto.CreateAdsDTO;
 import ru.skypro.homework.model.Ads;
 
-@Mapper (componentModel = "spring")
-public interface AdsMapper {
-    @Mapping(source = "id", target = "pk")
-    @Mapping(source = "author.id", target = "author")
-    AdsDTO adsToAdsDto(Ads ads);
+import java.util.List;
 
-    @Mapping(source = "id", target = "pk")
-    @Mapping(source = "author.firstName", target = "authorFirstName")
-    @Mapping(source = "author.lastName", target = "authorLastName")
-    @Mapping(source = "author.email", target = "email")
-    //@Mapping(source = "imageModel", target = "image")
-    @Mapping(source = "author.phone", target = "phone")
-    AdsInfoDTO adsToAdsInfoDto(Ads ads);
+@Component
+public class AdsMapper {
 
-    Ads createAdsDtoToModel(CreateAdsDTO createAdsDTO);
+    public AdsDTO adsToAdsDto(Ads ads) {
+        AdsDTO adsDTO = new AdsDTO();
+        adsDTO.setAuthor(ads.getAuthor().getId());
+        if (ads.getImage() != null) {
+            adsDTO.setImage("/ads/image/" + ads.getImage().getId());
+        }
+        adsDTO.setPk(ads.getPk());
+        adsDTO.setPrice(ads.getPrice());
+        adsDTO.setTitle(ads.getTitle());
+
+        return adsDTO;
+    }
+
+
+    public AdsInfoDTO adsToAdsInfoDto(Ads ads) {
+        AdsInfoDTO adsInfoDTO = new AdsInfoDTO();
+        adsInfoDTO.setPk(ads.getPk());
+        adsInfoDTO.setAuthorFirstName(ads.getAuthor().getFirstName());
+        adsInfoDTO.setAuthorLastName(ads.getAuthor().getLastName());
+        adsInfoDTO.setDescription(ads.getDescription());
+        adsInfoDTO.setEmail(ads.getAuthor().getEmail());
+        if (ads.getImage() != null) {
+            adsInfoDTO.setImage("/ads/image/" + ads.getImage().getId());
+        }
+        adsInfoDTO.setPhone(ads.getAuthor().getPhone());
+        adsInfoDTO.setPrice(ads.getPrice());
+        adsInfoDTO.setTitle(ads.getTitle());
+
+        return adsInfoDTO;
+    }
+
+
+    public Ads createAdsDtoToModel(CreateAdsDTO createAdsDTO) {
+        Ads ads = new Ads();
+        ads.setTitle(createAdsDTO.getTitle());
+        ads.setDescription(createAdsDTO.getDescription());
+        ads.setPrice(createAdsDTO.getPrice());
+
+        return ads;
+    }
 
 }

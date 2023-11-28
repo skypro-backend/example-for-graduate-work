@@ -29,6 +29,7 @@ public class UserServiceImpl implements UserService {
     private final ImageService imageService;
 
     @Override
+    @Transactional
     public void setPassword(NewPasswordDTO newPassword) {
         UserInfo user = authService.getCurrentUser();
         if (!encoder.matches(newPassword.getCurrentPassword(), user.getPassword())) {
@@ -40,16 +41,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDTO getUserInfo() {
         UserInfo user = authService.getCurrentUser();
-        UserDTO userDTO = userMapper.userToDto(user);
-        if (user.getImageModel() != null) {
-            userDTO.setImage("/users/image/" + user.getImageModel().getId());
-        }
-        return userDTO;
+
+        return userMapper.userToDto(user);
     }
 
     @Override
+    @Transactional
     public UpdateUserDTO updateUser(UpdateUserDTO updateUser) {
         UserInfo user = authService.getCurrentUser();
         user.setFirstName(updateUser.getFirstName());
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
     public void updateUserImage(MultipartFile image) {
         UserInfo user = authService.getCurrentUser();
         Image uploadImage = imageService.uploadImage(image);
-        user.setImageModel(uploadImage);
+        user.setImage(uploadImage);
         userRepository.save(user);
 
     }

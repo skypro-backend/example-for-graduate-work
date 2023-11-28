@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.exception.UserNotRegisteredException;
 import ru.skypro.homework.model.UserInfo;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
@@ -57,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public UserInfo getCurrentUser() {
         Authentication authenticationUser = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByEmail(authenticationUser.getName()).orElse(null);
+        return userRepository.findByEmail(authenticationUser.getName()).orElseThrow(UserNotRegisteredException::new);
     }
 
 

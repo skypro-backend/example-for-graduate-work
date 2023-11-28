@@ -1,9 +1,12 @@
 package ru.skypro.homework.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
+import org.hibernate.annotations.Type;
+
+
+import java.util.Objects;
 
 @Entity
 @Data
@@ -16,7 +19,5 @@ public class Image {
     @Lob
     private byte[] image;
 
-    //private String filePath;
-    //private long fileSize;
-    //private String mediaType;
+
 }

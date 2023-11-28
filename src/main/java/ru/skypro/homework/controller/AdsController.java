@@ -26,9 +26,8 @@ public class AdsController {
     @Operation(summary = "Получить все объявления")
     @ApiResponse(responseCode = "200", description = "OK")
     public AllAdsDTO getAllAds() {
-        List<AdsDTO> results = adsService.getAllAds();
-        int count = results.size();
-        return new AllAdsDTO(count, results);
+
+        return adsService.getAllAds();
     }
 
     @PostMapping
@@ -48,7 +47,7 @@ public class AdsController {
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not Found")
-    public AdsInfoDTO getAdsById(@PathVariable long id) {
+    public AdsInfoDTO getAdsById(@PathVariable Integer id) {
 
         return adsService.getAdsById(id);
     }
@@ -59,7 +58,7 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not Found")
-    public void deleteAds (@PathVariable long id) {
+    public void deleteAds (@PathVariable Integer id) {
         adsService.deleteAds(id);
 
     }
@@ -70,7 +69,7 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not Found")
-    public AdsDTO updateAds(@PathVariable long id,
+    public AdsDTO updateAds(@PathVariable Integer id,
                             @RequestBody CreateAdsDTO properties) {
         return adsService.updateAds(id, properties);
     }
@@ -80,9 +79,7 @@ public class AdsController {
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     public AllAdsDTO getUserAds() {
-        List<AdsDTO> results = adsService.getUserAds();
-        int count = results.size();
-        return new AllAdsDTO(count, results);
+        return adsService.getUserAds();
     }
 
     @PatchMapping("/{id}/image")
@@ -91,7 +88,7 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not Found")
-    public void updateAdsImage(@PathVariable long id,
+    public void updateAdsImage(@PathVariable Integer id,
                                  @RequestPart(name = "image") MultipartFile image) {
         adsService.updateAdsImage(id, image);
     }
@@ -101,11 +98,9 @@ public class AdsController {
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not Found")
-    public GetCommentDTO getCommentsByAdsId (@PathVariable long id) {
-        List<CommentDTO> results = commentService.getCommentsByAdsId(id);
-        int count = results.size();
+    public GetCommentDTO getCommentsByAdsId (@PathVariable Integer id) {;
 
-        return new GetCommentDTO(count, results);
+        return commentService.getCommentsByAdsId(id);
     }
 
 
@@ -114,9 +109,9 @@ public class AdsController {
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not Found")
-    public CommentDTO addComment (@PathVariable long id, @RequestBody String text) {
+    public CommentDTO addComment (@PathVariable Integer id, @RequestBody CreateCommentDTO createCommentDTO) {
 
-        return commentService.addComment(id, text);
+        return commentService.addComment(id, createCommentDTO);
     }
 
     //Удаление комментария по его id
@@ -126,7 +121,7 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not Found")
-    public void deleteComment (@PathVariable long adsId, @PathVariable long commentId) {
+    public void deleteComment (@PathVariable Integer adsId, @PathVariable Integer commentId) {
         commentService.deleteComment(adsId, commentId);
 
     }
@@ -137,10 +132,10 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not Found")
-    public CommentDTO updateComment(@PathVariable long adsId,
-                                @PathVariable long commentId,
-                                @RequestBody String text) {
-        return commentService.updateComment(adsId, commentId, text);
+    public CommentDTO updateComment(@PathVariable Integer adsId,
+                                @PathVariable Integer commentId,
+                                @RequestBody CreateCommentDTO createCommentDTO) {
+        return commentService.updateComment(adsId, commentId, createCommentDTO);
     }
 
     @GetMapping("/image/{id}")

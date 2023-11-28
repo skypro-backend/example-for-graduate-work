@@ -16,7 +16,7 @@ public class UserInfo {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private long id;
+    private Integer id;
 
     private String password;
     private String email;
@@ -34,6 +34,6 @@ public class UserInfo {
 
     @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn (name = "image_id")
-    private Image imageModel;
+    private Image image;
 
 }

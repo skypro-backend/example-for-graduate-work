@@ -15,21 +15,21 @@ public class Ads {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "ads_id")
-    private long id;
+    private Integer pk;
 
     private String description;
-    private long price;
+    private Integer price;
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "user_id")
     private UserInfo author;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ads")
+    @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn (name = "image_id")
-    private Image imageModel;
+    private Image image;
 
 }

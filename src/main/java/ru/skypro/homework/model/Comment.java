@@ -14,7 +14,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    private long id;
+    private Integer id;
 
     private long createdAt = System.currentTimeMillis();
     private String text;
@@ -27,8 +27,4 @@ public class Comment {
     @JoinColumn(name = "ads_id")
     Ads ads;
 
-
-    private String getAuthorImage(Comment comment) {
-        return null;
-    }
 }

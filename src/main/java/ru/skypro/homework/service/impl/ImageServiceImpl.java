@@ -18,8 +18,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
-    @Value("${path.to.image.folder}")
-    private String imageDir;
 
     private final ImageRepository imageRepository;
     @Override
@@ -32,7 +30,7 @@ public class ImageServiceImpl implements ImageService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        imageRepository.save(image);
+        imageRepository.saveAndFlush(image);
         return image;
     }
 
