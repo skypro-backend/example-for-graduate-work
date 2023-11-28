@@ -28,7 +28,7 @@ public class AdsServiceImpl implements AdsService  {
     }
 
     @Override
-    public void removeAd(Integer id) {
+    public void removeAd(Integer id ) {
 
     }
 
