@@ -1,15 +1,18 @@
 package ru.skypro.homework.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Ad {
-    private long author;
-    private String image;
-    private String title;
-    private int pk;
-    private int price;
 
-    public Ad(int pk, long author, String image, int price, String title, Class<? extends Ad> aClass) {
-    }
+    private int author = 0;
+    private String image = "string";
+    private int pk = 0;
+    private int price = 0;
+    private String title = "string";
+
 }

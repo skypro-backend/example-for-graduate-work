@@ -7,11 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.service.CommentService;
-
-import java.util.List;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -22,8 +19,9 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("/ads/{adId}/comments")
-    public ResponseEntity<List<Comment>> getComments(@PathVariable long adId) {
-        return null;
+    public ResponseEntity<Comments> getComments(@PathVariable long adId) {
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Comments());
     }
 
     @PostMapping("/ads/{adId}/comments")

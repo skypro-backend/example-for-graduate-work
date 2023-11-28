@@ -1,54 +1,22 @@
 package ru.skypro.homework.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ExtendedAd {
-    private static long author;
-    private static String image;
-    private static String title;
-    private static Class<? extends UpdateAd> aClass;
-    private static int pk;
-    private static int price;
 
-    public ExtendedAd(Object pk, Object author, Object image, Object price, Object title) {
-    }
+    private int pk = 0;
+    private String authorFirstName = "string";
+    private String authorLastName = "string";
+    private String description = "string";
+    private String email = "string";
+    private String image = "string";
+    private String phone = "string";
+    private int price = 0;
+    private String title = "string";
 
-    public static Object getAuthor() {
-        return author;
-    }
-
-    public static Object getImage() {
-        return image;
-    }
-
-    public static Object getPrice() {
-        return price;
-    }
-
-    public static Object getTitle() {
-        return title;
-    }
-
-    public static Object getPk() {
-        return pk;
-    }
-
-    public static void setPk(Object pk) {
-        ExtendedAd.pk = (int) pk;
-    }
-
-    public static void setPrice(Object price) {
-    }
-
-    public static void setAuthor(Object author) {
-    }
-
-    public static void setImage(Object image) {
-    }
-
-    public static void setTitle(Object title) {
-
-    }
 }

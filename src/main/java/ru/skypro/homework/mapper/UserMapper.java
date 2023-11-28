@@ -1,33 +1,36 @@
 package ru.skypro.homework.mapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.dto.User;
+import ru.skypro.homework.repository.ImageRepository;
 
 @Component
+@RequiredArgsConstructor
 public class UserMapper {
 
-    public UserDto mapToDTO(User user) {
-        return new UserDto(
+    private final ImageRepository imageRepository;
+
+    public User mapToDTO(ru.skypro.homework.model.User user) {
+        return new User(
                 user.getId(),
-                user.getUsername(),
+                user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getPhone(),
                 user.getRole(),
-                user.getImage()
+                user.getImage().getLink()
         );
     }
 
-    public User mapToEntity(UserDto userDto) {
-        return new User(
-                userDto.getId(),
-                userDto.getUsername(),
-                userDto.getFirstName(),
-                userDto.getLastName(),
-                userDto.getPhone(),
-                userDto.getRole(),
-                userDto.getImage()
-
+    public ru.skypro.homework.model.User mapToEntity(User userDTO) {
+        return new ru.skypro.homework.model.User(
+                userDTO.getId(),
+                userDTO.getEmail(),
+                userDTO.getFirstName(),
+                userDTO.getLastName(),
+                userDTO.getPhone(),
+                userDTO.getRole(),
+                imageRepository.findByLink(userDTO.getImage())
         );
     }
 

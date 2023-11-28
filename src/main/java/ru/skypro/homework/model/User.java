@@ -12,21 +12,15 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Integer id;
-
-    private String username;
-
+    private int id;
+    private String email;
     private String firstName;
     private String lastName;
-    private Integer phone;
+    private String phone;
     private Role role;
-    @OneToOne
-    @JoinColumn(name = "image_id")
     private Image image;
 
-
-    public User(Integer id, String username, String firstName, String lastName, Integer phone, Role role, String image) {
-    }
 }

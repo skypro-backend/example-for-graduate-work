@@ -4,17 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Objects;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDto {
+public class Login {
 
-    private Integer id;
-    private String username;
-    private String password;
-
-
+    private String username = "stringst";
+    private String password = "string";
 
 }

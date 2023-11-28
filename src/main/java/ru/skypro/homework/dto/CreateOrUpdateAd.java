@@ -4,16 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ads {
+public class CreateOrUpdateAd {
 
-    private int count = 0;
-    private List<Ad> results = List.of(
-            new Ad()
-    );
+    private String title = "string";
+    private int price = 1000000;
+    private String description = "stringst";
 
 }

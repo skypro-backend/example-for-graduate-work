@@ -4,16 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ads {
+public class NewPassword {
 
-    private int count = 0;
-    private List<Ad> results = List.of(
-            new Ad()
-    );
+    private String currentPassword = "stringst";
+    private String newPassword = "stringst";
 
 }

@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Objects;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+public class UpdateUser {
 
-public class NewPasswordDto {
-    private Integer id;
-    private String currentPassword;
-    private String newPassword;
+    private String firstName = "string";
+    private String lastName = "string";
+    private String phone = "+7(300) 0524971";
 
 }
