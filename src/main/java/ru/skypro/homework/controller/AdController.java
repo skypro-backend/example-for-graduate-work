@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.service.AdService;
 
@@ -54,7 +55,7 @@ public class AdController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Collection<AdDTO>> getAdsMe(Authentication authentication) {
+    public ResponseEntity<AdsDTO> getAdsMe(Authentication authentication) {
         return ResponseEntity.ok(adService.getAdsMe(authentication));
     }
 

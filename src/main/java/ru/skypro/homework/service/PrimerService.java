@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
@@ -12,7 +11,11 @@ import ru.skypro.homework.repository.UserRepository;
 @Service
 public class PrimerService implements UserDetailsService {
     @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public PrimerService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

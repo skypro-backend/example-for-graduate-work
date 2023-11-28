@@ -3,6 +3,7 @@ package ru.skypro.homework.service;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.Ad;
@@ -62,14 +63,16 @@ public class AdService {
     }
 
 
-    public Collection<AdDTO>  getAdsMe(Authentication authentication) {
+    public AdsDTO getAdsMe(Authentication authentication) {
         User author = userService.loadUserByUsername(authentication.getName());
         List<Ad> adList = adRepository.findAllByAuthor_username(author.getUsername());
         List<AdDTO> adDTOList = new ArrayList<>(adList.size());
         for (Ad a : adList) {
             adDTOList.add(adMapping.mapToAdDto(a));
         }
-        return adDTOList;
+        AdsDTO dto = new AdsDTO ();
+        dto.setResults(adDTOList);
+        return dto;
     }
 }
 

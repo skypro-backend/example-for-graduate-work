@@ -43,12 +43,7 @@ public class AuthServiceImpl implements AuthService {
             return false;
         }
         primerService.createUser(userMapper.mapToUser(register));
-/*                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());*/
+
         return true;
     }
     public boolean setPassword (String username, NewPasswordDTO newPassword) {
