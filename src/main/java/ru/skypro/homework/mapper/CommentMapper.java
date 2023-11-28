@@ -1,43 +1,48 @@
 package ru.skypro.homework.mapper;
 
+
+import org.mapstruct.Mapper;
 import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.CommentEntity;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+@Mapper
 public class CommentMapper {
-    public static CommentEntity toCommentEntity(Comment comment) {
-        if(comment == null){
-            throw new NullPointerException("Is not available");
+    public Comment commentEntityToComment(CommentEntity commentEntity) {
+        if (commentEntity == null) {
+            throw new NullPointerException("Ошибка маппера при создании Comment! CommentEntity == null!");
         }
-        CommentEntity commentEntity = new CommentEntity();
-
-        commentEntity.setAdId(comment.getAdId());
-        commentEntity.setAuthor(comment.getAuthor());
-        commentEntity.setAuthorFirstName(comment.getAuthorFirstName());
-        commentEntity.setAuthorImage(comment.getAuthorImage());
-        commentEntity.setPk(comment.getPk());
-        commentEntity.setText(comment.getText());
-        commentEntity.setCreatedAt(comment.getCreatedAt());
-
-
-        return commentEntity;
-
+        return Comment.builder()
+                .author(commentEntity.getUserEntity().getId())
+                .authorImage(commentEntity.getUserEntity().getImageEntity().getFilePath())
+                .authorFirstName(commentEntity.getUserEntity().getFirstName())
+                .createdAt(commentEntity.getCreatedAt())
+                .pk(commentEntity.getPk())
+                .text(commentEntity.getText())
+                .adId(commentEntity.getAdId().getPk())
+                .build();
     }
 
-    public static Comment toComment(CommentEntity commentEntity){
-        if(commentEntity == null){
-            throw new NullPointerException("Is not available");
+    public CommentEntity AdToAdEntity(CreateOrUpdateComment dto) {
+        if (dto == null) {
+            throw new NullPointerException(" Ошибка маппера при создании CommentEntity! CreateOrUpdateComment == null! ");
         }
-        Comment comment = new Comment();
+        return CommentEntity.builder()
+                .text(dto.getText())
+                .build();
+    }
 
-        comment.setAdId(commentEntity.getAdId());
-        comment.setAuthor(commentEntity.getAuthor());
-        comment.setAuthorFirstName(commentEntity.getAuthorFirstName());
-        comment.setAuthorImage(commentEntity.getAuthorImage());
-        comment.setPk(commentEntity.getPk());
-        comment.setText(commentEntity.getText());
-        comment.setCreatedAt(commentEntity.getCreatedAt());
-
-
-        return comment;
+    List<Comment> adEntityListToAdList(List<CommentEntity> commentEntityList) {
+        if (commentEntityList == null) {
+            throw new NullPointerException("Ошибка маппера при создании List<Comment>! List<CommentEntity> == null!");
+        }
+        return commentEntityList.stream()
+                .map(this::commentEntityToComment)
+                .collect(Collectors.toList());
     }
 }
+

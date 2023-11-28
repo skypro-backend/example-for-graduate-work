@@ -26,11 +26,12 @@ public class UsersController {
     public ResponseEntity<User> getUser() {
         return new ResponseEntity<>(new User(),HttpStatus.OK);
     }
-    @PutMapping("/me")
+
+    @PatchMapping("/me")
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
         return new ResponseEntity<>(new UpdateUser(), HttpStatus.OK);
     }
-    @PutMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateUserImage( @RequestParam MultipartFile image) {
         return new ResponseEntity<>(HttpStatus.OK);
     }

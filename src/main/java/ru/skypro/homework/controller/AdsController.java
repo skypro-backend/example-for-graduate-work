@@ -40,7 +40,7 @@ public class AdsController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping
+    @PatchMapping
     public ResponseEntity<CreateOrUpdateAd> updateAds(@RequestBody CreateOrUpdateAd updateAd) {
         return new ResponseEntity<>(new CreateOrUpdateAd(), HttpStatus.OK);
     }
@@ -50,7 +50,7 @@ public class AdsController {
         return new ResponseEntity<>(new Ads(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{Id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/{Id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<byte[]> updateImage(@PathVariable Integer Id,
                                               @RequestParam MultipartFile image) throws IOException {
         HttpHeaders headers = new HttpHeaders();
