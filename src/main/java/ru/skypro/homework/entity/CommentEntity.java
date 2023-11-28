@@ -1,27 +1,44 @@
 package ru.skypro.homework.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.time.Instant;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@NoArgsConstructor
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pk;
 
-    private int author;
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
+    private UserEntity author;
+
+    @ManyToOne
+    @JoinColumn(name = "ad_id", nullable = false)
+    private AdEntity ad;
+
+    @NotBlank
     private String authorImage;
+
+    @NotBlank
     private String authorFirstName;
-    private long createdAt;
+
+    @NotNull
+    private Instant createdAt;
+
+
+    @NotBlank
+    @Size(max = 255)
     private String text;
 
 }

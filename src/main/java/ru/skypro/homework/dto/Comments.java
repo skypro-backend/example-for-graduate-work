@@ -6,10 +6,8 @@ import lombok.*;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@NoArgsConstructor
 public class Comments {
     private int count;
     private List<Comment> results;

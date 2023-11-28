@@ -5,10 +5,8 @@ import lombok.*;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@NoArgsConstructor
 public class Ads {
     private int count;
     private List<Ad> results;

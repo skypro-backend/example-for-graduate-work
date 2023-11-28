@@ -1,29 +1,50 @@
 package ru.skypro.homework.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.skypro.homework.dto.Role;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@NoArgsConstructor
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int pk;
 
+    @Email
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String firstName;
+
+    @NotBlank
     private String lastName;
+
+    @NotBlank
+    @Pattern(regexp = "\\d{10}")
     private String phone;
+
+    @NotBlank
+    @Pattern(regexp = "USER|ADMIN")
     private Role role;
+
     private String image;
+
+    @OneToMany(mappedBy = "author")
+    private List<AdEntity> ads;
+
+    @OneToMany(mappedBy = "author")
+    private List<CommentEntity> comments;
 
 }
