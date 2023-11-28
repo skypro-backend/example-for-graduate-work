@@ -12,6 +12,7 @@ import java.util.Objects;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+// commenty
 public class CommentDto {
     private Integer authorId;
     private String authorImage;

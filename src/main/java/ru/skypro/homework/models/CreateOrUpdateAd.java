@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ads {
-    private Integer count;
-    private List<Ads> results;
+public class CreateOrUpdateAd {
+    private String title;
+    private Integer price;
+    private String description;
 }

@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+// vse commenty ot odnogo cheloveka
 public class CommentsDto {
     private Integer count;
     private List<CommentDto> results;

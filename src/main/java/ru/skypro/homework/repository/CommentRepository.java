@@ -5,6 +5,6 @@ import ru.skypro.homework.models.Comment;
 
 import java.util.Optional;
 
-public interface CommentRepository extends JpaRepository<Comment , Long> {
+public interface CommentRepository extends JpaRepository<Comment , Integer> {
 
 }

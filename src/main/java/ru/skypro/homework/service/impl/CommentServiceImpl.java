@@ -1,10 +1,12 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.models.Ad;
 import ru.skypro.homework.models.Comment;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.CommentService;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -13,15 +15,18 @@ public class CommentServiceImpl implements CommentService {
 
     private CommentRepository commentRepository;
 
-    public CommentServiceImpl(CommentRepository commentRepository) {
+    private Ad ad;
+
+    public CommentServiceImpl(CommentRepository commentRepository, Ad ad) {
         this.commentRepository = commentRepository;
+        this.ad=ad;
     }
 
     public Comment create(Comment comment) {
         return commentRepository.save(comment);
     }
 
-    public Comment read(Long id) {
+    public Comment read(Integer id) {
         Optional<Comment> comment = commentRepository.findById(id);
         if (comment.isEmpty()) {
             throw new NoSuchElementException("This comment not found");
@@ -38,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.save(comment);
     }
 
-    public Comment delete(Long id) {
+    public Comment delete(Integer id) {
         Optional<Comment> comment = commentRepository.findById(id);
         if (comment.isEmpty()) {
             throw new NoSuchElementException("This comment not found");
@@ -49,6 +54,7 @@ public class CommentServiceImpl implements CommentService {
 
         return deleteComment;
     }
+
 
 
 }

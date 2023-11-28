@@ -3,16 +3,15 @@ package ru.skypro.homework.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import ru.skypro.homework.dto.RoleDto;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-    private Integer id;
-    private String email;
+public class Register {
+    private String username;
+    private String password;
     private String firstName;
     private String lastName;
     private String phone;
-    private String role;
-    private String image;
+    private RoleDto role;
 }

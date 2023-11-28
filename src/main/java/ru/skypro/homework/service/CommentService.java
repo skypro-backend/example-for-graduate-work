@@ -4,7 +4,7 @@ import ru.skypro.homework.models.Comment;
 
 public interface CommentService {
    Comment create(Comment comment);
-   Comment read(Long id);
+   Comment read(Integer id);
    Comment update(Comment comment);
-   Comment delete(Long id);
+   Comment delete(Integer id);
 }

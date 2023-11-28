@@ -1,4 +1,4 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//
-public class ExtendedAdDto {
+public class ExtendedAd {
     private Integer pk;
     private String authorFirstName;
     private String authorLastName;
@@ -18,5 +17,4 @@ public class ExtendedAdDto {
     private String phone;
     private Integer price;
     private String title;
-
 }
