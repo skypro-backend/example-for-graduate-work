@@ -6,7 +6,7 @@ import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserEntity;
 import java.util.List;
 import java.util.stream.Collectors;
-@Builder
+
 @Mapper
 public class UserMapper {
     public User userEntityToUser(UserEntity userEntity) {
@@ -20,7 +20,7 @@ public class UserMapper {
                 .lastName(userEntity.getLastName())
                 .phone(userEntity.getPhone())
                 .role(userEntity.getRole())
-                .image(userEntity.getImage().getFilePath())
+                .image(userEntity.getImageEntity().getFilePath())
                 .build();
     }
 
@@ -29,7 +29,7 @@ public class UserMapper {
             throw new NullPointerException(" Ошибка маппера при создании UserEntity! Register == null! ");
         }
         return UserEntity.builder()
-                .username(dto.getUsername())
+                .email(dto.getUsername())
                 .password(dto.getPassword())
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())

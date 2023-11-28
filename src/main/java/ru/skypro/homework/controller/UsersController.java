@@ -26,6 +26,7 @@ public class UsersController {
     public ResponseEntity<User> getUser() {
         return new ResponseEntity<>(new User(),HttpStatus.OK);
     }
+
     @PatchMapping("/me")
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
         return new ResponseEntity<>(new UpdateUser(), HttpStatus.OK);
