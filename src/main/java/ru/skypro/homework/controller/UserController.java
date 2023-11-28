@@ -17,23 +17,24 @@ import ru.skypro.homework.service.UserService;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/setPassword")
+    @PostMapping("/set_password")
     public ResponseEntity<Void> setPassword(@RequestBody NewPassword userService) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @GetMapping("/getUser")
+    @GetMapping("/me")
     public ResponseEntity<User> getUser() {
         return new ResponseEntity<>(new User(),HttpStatus.OK);
     }
-    @PutMapping("/updateUser")
+    @PatchMapping("/me")
     public ResponseEntity<UpdateUser> updateUser(@RequestBody  UserService userService) {
         return new ResponseEntity<>(new UpdateUser(), HttpStatus.OK);
     }
-    @PutMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateUserImage( @RequestParam MultipartFile image) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
