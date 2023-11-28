@@ -1,7 +1,5 @@
 package ru.skypro.homework.controller;
 
-import static org.mockito.Mockito.when;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +18,8 @@ import ru.skypro.homework.dto.LoginDTO;
 import ru.skypro.homework.dto.RegisterDTO;
 import ru.skypro.homework.model.Role;
 import ru.skypro.homework.service.AuthService;
+
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {AuthController.class})
 @ExtendWith(SpringExtension.class)
