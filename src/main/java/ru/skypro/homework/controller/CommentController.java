@@ -64,7 +64,8 @@ public class CommentController {
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable("commentId") Integer commentId,
+    public ResponseEntity<Comment> updateComment(@PathVariable("adId") Integer adId,
+                                                 @PathVariable("commentId") Integer commentId,
                                                  @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         //todo добавить условие, только пользователь написавший коммент может его править.
         //Нужен ли adId ?

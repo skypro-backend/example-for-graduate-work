@@ -37,20 +37,19 @@ public class AdServiceImpl implements AdService {
     private final ImageService imageService;
 
     private final UserService userService;
+
     @Value("${path.to.photos.folder}")
-    private final String photoDir;
+    private String photoDir;
 
     public AdServiceImpl(AdRepository adRepository,
                          PhotoRepository photoRepository,
                          AdMapper adMapper,
-                         ImageService imageService, UserService userService,
-                         String photoDir) {
+                         ImageService imageService, UserService userService) {
         this.adRepository = adRepository;
         this.photoRepository = photoRepository;
         this.adMapper = adMapper;
         this.imageService = imageService;
         this.userService = userService;
-        this.photoDir = photoDir;
     }
 
     @Override

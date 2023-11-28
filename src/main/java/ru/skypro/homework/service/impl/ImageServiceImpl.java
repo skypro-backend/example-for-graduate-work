@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.AvatarEntity;
@@ -14,7 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
-
+@Service
 public class ImageServiceImpl implements ImageService {
 
     private final AvatarRepository avatarRepository;

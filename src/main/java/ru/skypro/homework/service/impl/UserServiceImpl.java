@@ -27,15 +27,15 @@ public class UserServiceImpl implements UserService {
     private final ImageService imageService;
 
     @Value("${path.to.avatars.folder}")
-    private final String avatarDir;
+    private String avatarDir;
 
-    public UserServiceImpl(UserRepository userRepository, /*Authentication userAusentication,*/ AuthServiceImpl authService, ImageService imageService, String avatarDir) {
+    public UserServiceImpl(UserRepository userRepository, /*Authentication userAusentication,*/
+                           AuthServiceImpl authService,
+                           ImageService imageService) {
         this.userRepository = userRepository;
 //        this.userAusentication = userAusentication;
         this.authService = authService;
         this.imageService = imageService;
-
-        this.avatarDir = avatarDir;
     }
 
     /**
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
      * сохраняется в БД.</p>
      * <p>Так же нужно изменить данные авторизованного пользователя,
      * используя метод: {@link AuthServiceImpl#getUserDetailsManager()}</p>
-     * <p>Последней строкой, меняем пароль в объекте {@link AuthServiceImpl#userEntity},
+     * <p>Последней строкой, меняем пароль в объекте {@link AuthServiceImpl#//userEntity},
      * который является связью для {@link AuthServiceImpl} и БД</p>
      *
      * @param newPass объект NewPassword, содержащий старый и новый пароли.
