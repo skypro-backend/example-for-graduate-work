@@ -3,12 +3,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.repository.ImageRepository;
+import ru.skypro.homework.repository.UserRepository;
 
 @Component
 @RequiredArgsConstructor
 public class UserMapper {
 
     private final ImageRepository imageRepository;
+    private final UserRepository userRepository;
 
     public User mapToDTO(ru.skypro.homework.model.User user) {
         return new User(
@@ -28,6 +30,7 @@ public class UserMapper {
                 userDTO.getEmail(),
                 userDTO.getFirstName(),
                 userDTO.getLastName(),
+                userRepository.findById(userDTO.getId()).get().getPassword(),
                 userDTO.getPhone(),
                 userDTO.getRole(),
                 imageRepository.findByLink(userDTO.getImage())

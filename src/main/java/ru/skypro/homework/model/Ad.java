@@ -14,7 +14,11 @@ import java.util.List;
 @Table(name = "ads")
 public class Ad {
 
+    @ManyToOne
+    @JoinColumn(name = "author_id")
     private User author;
+    @OneToOne
+    @JoinColumn(name = "image_id")
     private Image image;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

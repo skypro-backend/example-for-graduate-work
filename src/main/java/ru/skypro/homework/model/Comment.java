@@ -17,6 +17,8 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
+    @ManyToOne
+    @JoinColumn(name = "author_image_id")
     private Image authorImage;
     private String authorFirstName;
     private LocalDateTime createdAt;

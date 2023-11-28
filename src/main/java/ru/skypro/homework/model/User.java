@@ -15,12 +15,15 @@ public class User {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private int id;
+    private Integer id;
     private String email;
     private String firstName;
     private String lastName;
+    private String password;
     private String phone;
     private Role role;
+    @OneToOne
+    @JoinColumn(name = "image_id")
     private Image image;
 
 }
