@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
+    //@Override ругается method does not override or implement a method from a supertype
     public boolean updateUserImage(MultipartFile image) throws IOException {
 
         UserEntity user = getUser();
