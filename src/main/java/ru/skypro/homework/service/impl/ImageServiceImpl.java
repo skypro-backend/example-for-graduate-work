@@ -1,3 +1,4 @@
+/*
 package ru.skypro.homework.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,28 +20,32 @@ import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.PhotoAd;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.PhotoAdRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.utils.MethodLog;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Objects;
+
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
+
 @Slf4j
 @Service
 public class ImageServiceImpl implements ImageService {
     private final PhotoAdRepository photoAdRepository;
-    private final AdRepository adRepository;
-    private final UserRepository userRepository;
-    @Value(value = "${path.to.images.folder}")
-    private String photoDir;
 
-    public ImageServiceImpl(PhotoAdRepository photoAdRepository, AdRepository adRepository, UserRepository userRepository) {
+    @Value(value = "${path.to.images.folder}")
+    private String photoAvatar;
+
+    public ImageServiceImpl(PhotoAdRepository photoAdRepository) {
         this.photoAdRepository = photoAdRepository;
-        this.adRepository = adRepository;
-        this.userRepository = userRepository;
+
     }
 
     @Override
@@ -52,34 +57,9 @@ public class ImageServiceImpl implements ImageService {
         headers.setContentLength(imageBytes.length);
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(imageBytes);
     }
-
     private static byte[] readImageBytes(String imagePath) throws IOException {
         Path path = Paths.get(imagePath);
         return Files.readAllBytes(path);
     }
-
-    @Override
-    public AdDTO addPhotoAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image) {
-        log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(auth.getName());
-        Ad ad = AdMapper.INSTANCE.createOrUpdateAdDTOToAd(createOrUpdateAdDTO, user);
-        ad.setAuthor(user);
-        Image imageModel = new Image();
-        try {
-            imageModel.setImage(image.getBytes());
-            imageModel.setAd(ad);
-            imageModel.setAuthor(null);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        ad.setImage("/"+photoDir+"/" + imageModel.getId());
-
-        return AdMapper.INSTANCE.adToAdDTO(adRepository.save(ad));
-    }
-
-
-
-
-
 }
+*/

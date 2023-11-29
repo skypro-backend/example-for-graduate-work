@@ -1,7 +1,9 @@
+/*
 package ru.skypro.homework.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -9,15 +11,10 @@ import javax.persistence.*;
 @Entity
 public class Image {
     @Id
-    private String id;
-    @OneToOne
-    @JsonBackReference
-    @JoinColumn(name = "ad_id")
-    private Ad ad;
-    @OneToOne
-    @JoinColumn(name = "author_id")
-    private User author;
+    @GeneratedValue
+    private Long id;
 
     @Lob
     private byte[] image;
 }
+*/

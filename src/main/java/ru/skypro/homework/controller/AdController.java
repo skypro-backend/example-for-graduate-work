@@ -21,7 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.*;
 import ru.skypro.homework.utils.MethodLog;
 
 
@@ -36,6 +36,7 @@ public class AdController {
 
     public AdController(AdService adService) {
         this.adService = adService;
+
     }
 
     // --------------------------------------------------------------------------------------
@@ -64,8 +65,7 @@ public class AdController {
     // Добавить объявление
 
     @Operation(
-            summary = "addAd",
-            description = "Добавление объявления",
+            summary = "Добавление объявления",
             tags = {"Объявления"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",

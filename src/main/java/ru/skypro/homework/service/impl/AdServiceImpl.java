@@ -20,25 +20,15 @@ import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.PhotoAdRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.PhotoAdService;
 import ru.skypro.homework.utils.MethodLog;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import ru.skypro.homework.model.PhotoAd;
-import ru.skypro.homework.repository.PhotoAdRepository;
-
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import java.util.Objects;
-
-
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 
 @Slf4j
@@ -46,14 +36,16 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 public class AdServiceImpl implements AdService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final PhotoAdService photoAdService;
     private final PhotoAdRepository photoAdRepository;
     private final AdRepository adRepository;
     @Value(value = "${path.to.images.folder}")
-    private String photoDir;
+    private String photoAvatar;
 
-    public AdServiceImpl(CommentRepository commentRepository, UserRepository userRepository, PhotoAdRepository photoAdRepository, AdRepository adRepository) {
+    public AdServiceImpl(CommentRepository commentRepository, UserRepository userRepository, PhotoAdService photoAdService, PhotoAdRepository photoAdRepository, AdRepository adRepository) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
+        this.photoAdService = photoAdService;
         this.photoAdRepository = photoAdRepository;
         this.adRepository = adRepository;
     }
@@ -72,28 +64,16 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image){
+    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
         Ad ad = AdMapper.INSTANCE.createOrUpdateAdDTOToAd(createOrUpdateAdDTO, user);
         ad.setAuthor(user);
-        /*ad.setId(null);*/
-        Path filePath;
-        PhotoAd photoAd = new PhotoAd();
-        try {
-            filePath = Path.of(photoDir, createOrUpdateAdDTO.getTitle() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
-            photoAd.setFilePath(filePath.toString());
-            photoAd.setFileSize(image.getSize());
-            photoAd.setMediaType(image.getContentType());
-            photoAd = photoAdRepository.save(photoAd);
-            uploadPhotoAdd(filePath,image);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        String path = createOrUpdateAdDTO.getTitle();
 //        photoAd.setAd(ad);
-        ad.setImage("/"+photoDir+"/"+photoAd.getId());
-        ad.setPhotoAd(photoAd);
+        ad.setImage("/"+photoAvatar+"/"+ photoAdService.addPhoto(path, image).getId());
+        ad.setPhotoAd(photoAdService.addPhoto(path, image));
         return AdMapper.INSTANCE.adToAdDTO(adRepository.save(ad));
     }
 
@@ -151,21 +131,9 @@ public class AdServiceImpl implements AdService {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
-
-            Path filePath;
-            PhotoAd photoAd = new PhotoAd();
-            try {
-                filePath = Path.of(photoDir, ad.getTitle() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
-                uploadPhotoAdd(filePath, image);
-                photoAd.setFilePath(filePath.toString());
-                photoAd.setFileSize(image.getSize());
-                photoAd.setMediaType(image.getContentType());
-                photoAd = photoAdRepository.save(photoAd);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        ad.setImage("/"+photoDir+"/"+photoAd.getId());
-        ad.setPhotoAd(photoAd);
+        String path = ad.getTitle();
+        ad.setImage("/"+photoAvatar+"/"+photoAdService.addPhoto(path, image).getId());
+        ad.setPhotoAd(photoAdService.addPhoto(path, image));
         return adRepository.save(ad).getImage();
     }
 
@@ -241,22 +209,4 @@ public class AdServiceImpl implements AdService {
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
         return commentOptional.map(comment -> comment.getAuthor().getEmail().equals(username)).orElse(false);
     }
-
-    public void uploadPhotoAdd(Path filePath, MultipartFile image) throws IOException {
-        Files.createDirectories(filePath.getParent());
-        Files.deleteIfExists(filePath);
-        try (InputStream is = image.getInputStream();
-             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
-        ) {
-            bis.transferTo(bos);
-        }
-
-    }
-
-    private String getExtension(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
-    }
-
 }
