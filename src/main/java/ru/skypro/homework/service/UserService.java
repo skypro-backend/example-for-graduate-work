@@ -8,6 +8,7 @@ import ru.skypro.homework.projections.UpdateUser;
 import java.util.Optional;
 
 public interface UserService {
+
     Optional<UserModel> findUser();
 
     UserDTO getUser();
@@ -16,5 +17,4 @@ public interface UserService {
 
     UpdateUser updateUser(UpdateUser updateUser);
 
-    String update(String image);
 }

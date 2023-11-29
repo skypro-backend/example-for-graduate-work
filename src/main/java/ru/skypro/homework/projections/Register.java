@@ -1,5 +1,6 @@
 package ru.skypro.homework.projections;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.skypro.homework.model.Role;
 
@@ -9,7 +10,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
+@AllArgsConstructor
 public class Register {
+
     @NotBlank(message = "Обязательное поле")
     @Size(min = 4, max = 32, message = "Количество символов от 4 до 32")
     private String username;

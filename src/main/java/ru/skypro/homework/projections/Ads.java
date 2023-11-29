@@ -8,9 +8,8 @@ import java.util.List;
 
 @AllArgsConstructor
 @Data
+public class Ads {
+    private int count;
+    private List<AdDTO> results;
 
-    public class Ads {
-        private int count;
-        private List<AdDTO> results;
-
-    }
+}

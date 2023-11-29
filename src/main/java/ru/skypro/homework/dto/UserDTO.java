@@ -8,7 +8,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
+/**
+ * Класс пользователя DTO
+ */
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -35,4 +37,5 @@ public class UserDTO {
     private String phone;
     private String role;
     private String image;
+
 }

@@ -7,7 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-
+/**
+ * Класс для реализации аутентификации пользователя
+ */
 @Getter
 public class AdsUserDetails implements UserDetails {
 
@@ -17,10 +19,8 @@ public class AdsUserDetails implements UserDetails {
         this.user = user;
     }
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
 
@@ -33,7 +33,6 @@ public class AdsUserDetails implements UserDetails {
     public String getUsername() {
         return user.getUserName();
     }
-
 
     @Override
     public boolean isAccountNonExpired() {

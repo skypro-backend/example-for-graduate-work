@@ -5,7 +5,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
-
+/**
+ * Класс сущности объявления
+ */
 @Entity
 @Data
 @NoArgsConstructor
@@ -17,7 +19,7 @@ public class AdModel {
     @Column(name = "ad_id")
     private int pk;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "image_id")
     private ImageModel image;
 
@@ -30,10 +32,11 @@ public class AdModel {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private UserModel userModel;
 
     @OneToMany(mappedBy = "adModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentModel> commentModels;
+
 }

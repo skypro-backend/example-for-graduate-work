@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 @Data
 @NoArgsConstructor
 public class CreateOrUpdateComment {
+
     @NotBlank(message = "Обязательное поле")
     @Size(min = 8, max = 64, message = "Количество символов от 8 до 64")
     private String text;

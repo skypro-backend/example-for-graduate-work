@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 4
-      author: erruvinka
+      author: dmitrii_gienko
       changes:
         - createTable:
             tableName: image

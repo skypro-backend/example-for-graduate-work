@@ -4,7 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
+/**
+ * Класс сущности комментария
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -24,7 +26,7 @@ public class CommentModel {
     @Column(name = "text")
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private UserModel userModel;
 

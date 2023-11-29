@@ -8,7 +8,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-
+/**
+ * Класс комментарий DTO
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -20,7 +22,6 @@ public class CommentDTO {
     @NotBlank(message = "Обязательное поле")
     private int author;
 
-    // - потом удалить @NotBlank(message = "Обязательное поле")
     private String authorImage;
 
     @NotBlank(message = "Обязательное поле")

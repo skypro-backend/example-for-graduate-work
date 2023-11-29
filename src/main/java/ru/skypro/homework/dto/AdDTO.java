@@ -8,7 +8,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
-
+/**
+ * Класс объявлений DTO
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -17,9 +19,7 @@ public class AdDTO {
     @NotBlank(message = "Обязательное поле")
     private int author; //id автора объявления
 
-    // потом раскомментить
-//    @NotBlank
-    private String image;// ссылка на картинку объявления
+    private String image;
 
     @NotBlank(message = "Обязательное поле")
     private int pk;

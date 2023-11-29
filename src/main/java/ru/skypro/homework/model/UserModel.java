@@ -1,19 +1,20 @@
 package ru.skypro.homework.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Класс сущности пользователя
+ */
 @Entity
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +36,7 @@ public class UserModel {
     @Column(name = "phone")
     private String phone;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
     private ImageModel image;
 
@@ -49,4 +50,15 @@ public class UserModel {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<CommentModel> commentModels;
+
+    public UserModel(int id, String userName, String password, String firstName, String lastName, String phone, ImageModel image, Role role) {
+        this.id = id;
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.image = image;
+        this.role = role;
+    }
 }

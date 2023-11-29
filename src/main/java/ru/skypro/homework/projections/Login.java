@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 
 @Data
 public class Login {
+
     @NotBlank(message = "Обязательное поле")
     @Size(min = 8, max = 16, message = "Количество символов от 8 до 16")
     private String username;
