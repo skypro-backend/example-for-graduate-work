@@ -28,9 +28,9 @@ public class AdController {
     @GetMapping("{id}")
     public ExtendedAd getAd(@PathVariable("id") int id) {
         return new ExtendedAd(1, "Serzh",
-                "not",
-                "eeee@gmail.com", "",
-                "+798798", 200, "package");
+                "Serzhikov",
+                "not", "eeee@gmail.com",
+                "","+7(912)666-77-88" , 200,"package");
     }
 
     @DeleteMapping("{id}")
