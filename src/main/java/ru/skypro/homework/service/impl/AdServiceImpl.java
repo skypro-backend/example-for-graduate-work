@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
+
 import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.mapper.CommentMapper;
@@ -100,7 +101,6 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public ExtendedAdDTO getAdInfo(Long adId) {
-
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
         User user = userRepository.findById(ad.getAuthor().getId()).orElseThrow(UserNotFoundException::new);
@@ -110,7 +110,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public Void deleteAd(Long adId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
-
+//        validateAuthorizationAd(adId);
         Long photoId = adRepository.findById(adId).orElseThrow(AdNotFoundException::new).getPhotoAd().getId();
         adRepository.deleteById(adId);
         photoAdRepository.deleteById(photoId);
@@ -120,11 +120,9 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public AdDTO patchAd(Long adId, CreateOrUpdateAdDTO createOrUpdateAdDTO) {
-
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
-
         ad.setTitle(createOrUpdateAdDTO.getTitle());
         ad.setPrice(createOrUpdateAdDTO.getPrice());
         ad.setDescription(createOrUpdateAdDTO.getDescription());
@@ -208,7 +206,6 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Void deleteComment(Long adId, Long commentId) {
-
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         commentRepository.deleteById(commentId);
@@ -217,7 +214,6 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public CommentDTO patchComment(Long adId, Long commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
-
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
@@ -228,7 +224,6 @@ public class AdServiceImpl implements AdService {
 
         return CommentMapper.INSTANCE.toCommentDTO(commentRepository.save(comment), user);
     }
-
 
     public boolean isAuthorAd(String username, Long adId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
