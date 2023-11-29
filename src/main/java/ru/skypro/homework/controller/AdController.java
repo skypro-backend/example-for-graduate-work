@@ -31,9 +31,9 @@ public class AdController {
     }
 
     @GetMapping("/ads/{id}")
-    public ResponseEntity<Ad> getAdById(@PathVariable int id) {
+    public ResponseEntity<ExtendedAd> getAdById(@PathVariable int id) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Ad());
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new ExtendedAd());
     }
 
     @DeleteMapping("/ads/{id}")
