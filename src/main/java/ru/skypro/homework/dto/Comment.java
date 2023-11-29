@@ -30,7 +30,7 @@ public class Comment {
 
     @Schema(description = "дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970 ")
     @NotBlank
-    private LocalDateTime createdAt;
+    private Long createdAt;
 
     @Schema(description = "id комментария ")
     @NotBlank
