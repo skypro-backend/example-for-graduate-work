@@ -24,8 +24,8 @@ public class AdMapper {
 
     }
 
-    public static AdDto fromAd(Ad ad){
-        if(ad == null){
+    public static AdDto fromAd(Ad ad) {
+        if (ad == null) {
             throw new NullPointerException("Tried to map null to AdDto");
         }
 
@@ -39,7 +39,6 @@ public class AdMapper {
 
         return adDto;
     }
-
 
 
 }
