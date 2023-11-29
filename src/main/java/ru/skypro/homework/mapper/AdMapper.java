@@ -14,6 +14,7 @@ public interface AdMapper {
     AdMapper INSTANCE = Mappers.getMapper(AdMapper.class);
     @Mapping(target = "author", source = "ad.author.id")
     @Mapping(target = "pk", source = "ad.id")
+    @Mapping(target = "image", expression = "java(\"/image/\" + ad.getImage().getId())")
     AdDTO adToAdDTO(Ad ad);
 
     @Mapping(target = "author", source = "user")
@@ -24,6 +25,6 @@ public interface AdMapper {
     @Mapping(target = "pk", source = "ad.id")
     @Mapping(target = "authorFirstName", source = "user.firstName")
     @Mapping(target = "authorLastName", source = "user.lastName")
-    @Mapping(target = "image", source = "ad.image")
+    @Mapping(target = "image", expression = "java(\"/image/\" + ad.getImage().getId())")
     ExtendedAdDTO toExtendedAdDTO (Ad ad, User user);
 }

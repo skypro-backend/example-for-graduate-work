@@ -13,7 +13,7 @@ public interface CommentMapper {
 
     @Mapping(target = "author", source = "user.id")
     @Mapping(target = "authorFirstName", source = "user.firstName")
-    @Mapping(target = "authorImage", source = "user.image")
+    @Mapping(target = "authorImage", expression = "java(\"/image/\" + user.getImage().getId())")
     @Mapping(target = "pk", source = "comment.id")
     CommentDTO toCommentDTO (Comment comment, User user);
 

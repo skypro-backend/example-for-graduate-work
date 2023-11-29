@@ -17,12 +17,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class WebSecurityConfig implements WebMvcConfigurer {
 
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                .allowedOrigins("http://localhost:3000")
-//                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE");
-//    }
     // переменная с адресами страниц, которые открываются без аутентификации.
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -32,7 +26,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
             "/login",
             "/register",
             "/ads",
-            "/image/*"
+            "/image/**"
     };
 
     @Bean

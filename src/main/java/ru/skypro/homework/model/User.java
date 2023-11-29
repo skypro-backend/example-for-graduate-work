@@ -1,5 +1,6 @@
 package ru.skypro.homework.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -27,8 +28,6 @@ public class User {
     @Column(nullable = false)
     private String phone;
 
-    private String image;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -39,4 +38,8 @@ public class User {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private  List<Comment> comments;
 
+    @OneToOne
+    @JsonBackReference
+    @JoinColumn(name = "image_id")
+    private Image image;
 }

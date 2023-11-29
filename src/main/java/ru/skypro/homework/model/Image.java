@@ -5,19 +5,14 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
-@Entity
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "images")
-public class Images {
 
+@Entity
+@Data
+@Table(name = "images")
+public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String filePath;
     private long fileSize;
     private String mediaType;
     @Lob

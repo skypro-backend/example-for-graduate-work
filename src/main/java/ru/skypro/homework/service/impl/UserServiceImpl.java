@@ -17,7 +17,7 @@ import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.ImagesService;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.utils.MethodLog;
 
@@ -28,16 +28,13 @@ import ru.skypro.homework.utils.MethodLog;
 public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
-    private final ImagesService photoAdService;
+    private final ImageService imageService;
 
-    @Value("${path.to.images.folder}")
-    private String photoAvatar;
 
-    public UserServiceImpl(PasswordEncoder encoder, UserRepository userRepository, ImagesService photoAdService) {
+    public UserServiceImpl(PasswordEncoder encoder, UserRepository userRepository, ImageService imageService) {
         this.encoder = encoder;
         this.userRepository = userRepository;
-
-        this.photoAdService = photoAdService;
+        this.imageService = imageService;
     }
 
     @Override
@@ -59,6 +56,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(auth.getName());
 
         UserMapper.INSTANCE.updateUserDTOToUser(updateUserDTO, user);
+
         return UserMapper.INSTANCE.toUserDTO(userRepository.save(user));
     }
 
@@ -92,8 +90,8 @@ public class UserServiceImpl implements UserService {
           log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         User user = userRepository.findByEmail(userName);
-        String path = user.getLastName();
-        user.setImage("/"+photoAvatar+"/" + photoAdService.addPhoto(path, image).getId());
+        user.setImage(imageService.addImage(image));
+
         userRepository.save(user);
     }
 }

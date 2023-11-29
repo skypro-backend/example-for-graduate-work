@@ -36,7 +36,7 @@ import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.ImagesRepository;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.impl.AdServiceImpl;
@@ -97,7 +97,7 @@ class AdControllerTest {
         doNothing().when(adRepository).deleteById(Mockito.<Long>any());
         ResponseEntity<Void> actualRemoveAdsResult = (new AdController(
 
-                new AdServiceImpl(mock(CommentRepository.class), mock(UserRepository.class), userService, mock(ImagesRepository.class), adRepository), imageService)).removeAd(1L);
+                new AdServiceImpl(mock(CommentRepository.class), mock(UserRepository.class), userService, mock(ImageRepository.class), adRepository), imageService)).removeAd(1L);
 
         verify(adRepository).deleteById(Mockito.<Long>any());
         assertEquals(HttpStatus.OK, actualRemoveAdsResult.getStatusCode());
@@ -160,7 +160,7 @@ class AdControllerTest {
         doNothing().when(commentRepository).deleteById(Mockito.<Long>any());
         ResponseEntity<Void> actualDeleteCommentsResult = (new AdController(
 
-                new AdServiceImpl(commentRepository, mock(UserRepository.class), userService, mock(ImagesRepository.class), mock(AdRepository.class)), imageService)).deleteComment(1L,
+                new AdServiceImpl(commentRepository, mock(UserRepository.class), userService, mock(ImageRepository.class), mock(AdRepository.class)), imageService)).deleteComment(1L,
 
                 1L);
         verify(commentRepository).deleteById(Mockito.<Long>any());
