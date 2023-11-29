@@ -33,5 +33,5 @@ public interface UserService {
 
     UserEntity checkUserByUsername(String username);
 
-    boolean updateUserImage(MultipartFile image) throws IOException;
+//    boolean updateUserImage(MultipartFile image) throws IOException;
 }
