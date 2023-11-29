@@ -36,6 +36,6 @@ public class Ad {
     @OneToOne
     @JsonBackReference
     @JoinColumn(name = "photo_Ad_id")
-    private PhotoAd photoAd;
+    private Images images;
 
 }

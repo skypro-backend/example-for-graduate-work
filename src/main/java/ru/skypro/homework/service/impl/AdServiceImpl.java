@@ -20,10 +20,10 @@ import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.PhotoAdRepository;
+import ru.skypro.homework.repository.ImagesRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
-import ru.skypro.homework.service.PhotoAdService;
+import ru.skypro.homework.service.ImagesService;
 import ru.skypro.homework.utils.MethodLog;
 
 import java.util.ArrayList;
@@ -36,17 +36,17 @@ import java.util.Optional;
 public class AdServiceImpl implements AdService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final PhotoAdService photoAdService;
-    private final PhotoAdRepository photoAdRepository;
+    private final ImagesService imagesService;
+    private final ImagesRepository imagesRepository;
     private final AdRepository adRepository;
     @Value(value = "${path.to.images.folder}")
     private String photoAvatar;
 
-    public AdServiceImpl(CommentRepository commentRepository, UserRepository userRepository, PhotoAdService photoAdService, PhotoAdRepository photoAdRepository, AdRepository adRepository) {
+    public AdServiceImpl(CommentRepository commentRepository, UserRepository userRepository, ImagesService imagesService, ImagesRepository imagesRepository, AdRepository adRepository) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
-        this.photoAdService = photoAdService;
-        this.photoAdRepository = photoAdRepository;
+        this.imagesService = imagesService;
+        this.imagesRepository = imagesRepository;
         this.adRepository = adRepository;
     }
 
@@ -72,8 +72,8 @@ public class AdServiceImpl implements AdService {
         ad.setAuthor(user);
         String path = createOrUpdateAdDTO.getTitle();
 //        photoAd.setAd(ad);
-        ad.setImage("/"+photoAvatar+"/"+ photoAdService.addPhoto(path, image).getId());
-        ad.setPhotoAd(photoAdService.addPhoto(path, image));
+        ad.setImage("/"+photoAvatar+"/"+ imagesService.addPhoto(path, image).getId());
+        ad.setImages(imagesService.addPhoto(path, image));
         return AdMapper.INSTANCE.adToAdDTO(adRepository.save(ad));
     }
 
@@ -90,9 +90,9 @@ public class AdServiceImpl implements AdService {
     public Void deleteAd(Long adId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
-        Long photoId = adRepository.findById(adId).orElseThrow(AdNotFoundException::new).getPhotoAd().getId();
+        Long photoId = adRepository.findById(adId).orElseThrow(AdNotFoundException::new).getImages().getId();
         adRepository.deleteById(adId);
-        photoAdRepository.deleteById(photoId);
+        imagesRepository.deleteById(photoId);
         commentRepository.deleteAllByAd_Id(adId);
         return null;
     }
@@ -132,8 +132,8 @@ public class AdServiceImpl implements AdService {
 
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
         String path = ad.getTitle();
-        ad.setImage("/"+photoAvatar+"/"+photoAdService.addPhoto(path, image).getId());
-        ad.setPhotoAd(photoAdService.addPhoto(path, image));
+        ad.setImage("/"+photoAvatar+"/"+imagesService.addPhoto(path, image).getId());
+        ad.setImages(imagesService.addPhoto(path, image));
         return adRepository.save(ad).getImage();
     }
 

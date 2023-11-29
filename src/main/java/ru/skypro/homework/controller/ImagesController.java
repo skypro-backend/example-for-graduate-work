@@ -6,16 +6,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import ru.skypro.homework.service.PhotoAdService;
+import ru.skypro.homework.service.ImagesService;
 
 import java.io.IOException;
 
 
 @Slf4j
 @RestController
-public class PhotoAdController {
-    private final PhotoAdService photoAdService;
-    public PhotoAdController(PhotoAdService photoAdService) {
+public class ImagesController {
+    private final ImagesService photoAdService;
+    public ImagesController(ImagesService photoAdService) {
         this.photoAdService = photoAdService;
     }
     @GetMapping(value = "/image/{id}",

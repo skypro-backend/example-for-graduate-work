@@ -11,8 +11,8 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "photo_Ad")
-public class PhotoAd {
+@Table(name = "images")
+public class Images {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

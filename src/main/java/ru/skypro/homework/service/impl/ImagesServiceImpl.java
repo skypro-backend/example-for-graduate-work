@@ -10,9 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.exception.PhotoAdNotFoundException;
-import ru.skypro.homework.model.PhotoAd;
-import ru.skypro.homework.repository.PhotoAdRepository;
-import ru.skypro.homework.service.PhotoAdService;
+import ru.skypro.homework.model.Images;
+import ru.skypro.homework.repository.ImagesRepository;
+import ru.skypro.homework.service.ImagesService;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -24,31 +24,31 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Slf4j
 @Service
 @Data
-public class PhotoAdServiceImpl implements PhotoAdService {
-    private final PhotoAdRepository photoAdRepository;
+public class ImagesServiceImpl implements ImagesService {
+    private final ImagesRepository imagesRepository;
     @Value("${path.to.images.folder}")
     private String photoAvatar;
     @Override
     public ResponseEntity<byte[]> getImage(Long id) throws IOException {
-        PhotoAd photoAd = photoAdRepository.findById(id).orElseThrow(PhotoAdNotFoundException::new);
-        byte[] imageBytes = photoAd.getData();
+        Images images = imagesRepository.findById(id).orElseThrow(PhotoAdNotFoundException::new);
+        byte[] imageBytes = images.getData();
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(photoAd.getMediaType()));
+        headers.setContentType(MediaType.parseMediaType(images.getMediaType()));
         headers.setContentLength(imageBytes.length);
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(imageBytes);
     }
     @Override
-    public PhotoAd addPhoto (String path, MultipartFile image){
+    public Images addPhoto (String path, MultipartFile image){
         Path filePath = Path.of(photoAvatar, path + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
-        PhotoAd photoAd;
+        Images photoAd;
         try {
-            photoAd = new PhotoAd();
+            photoAd = new Images();
             uploadPhotoAdd(filePath,image);
             photoAd.setFilePath(filePath.toString());
             photoAd.setFileSize(image.getSize());
             photoAd.setMediaType(image.getContentType());
             photoAd.setData(image.getBytes());
-            photoAd = photoAdRepository.save(photoAd);
+            photoAd = imagesRepository.save(photoAd);
             /*if (photoAdRepository.findById(photoAd.getId() - 1).isPresent()
                     && Objects.equals(photoAdRepository.findById(photoAd.getId() - 1).get().getFilePath(), filePath.toString())
             ){
