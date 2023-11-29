@@ -74,10 +74,11 @@ public class AdServiceImpl implements AdService {
     @Override
     public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image){
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
+
         Ad ad = AdMapper.INSTANCE.createOrUpdateAdDTOToAd(createOrUpdateAdDTO, user);
-        ad.setAuthor(user);
         /*ad.setId(null);*/
         Path filePath;
         PhotoAd photoAd = new PhotoAd();
@@ -227,8 +228,8 @@ public class AdServiceImpl implements AdService {
     public boolean isAuthorAd(String username, Long adId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
-        Optional<Ad> adOptional = adRepository.findById(adId);
-        return adOptional.map(ad -> ad.getAuthor().getEmail().equals(username)).orElse(false);
+        Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
+        return ad.getAuthor().getEmail().equals(username);
     }
     public boolean isAuthorComment(String username, Long commentId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());

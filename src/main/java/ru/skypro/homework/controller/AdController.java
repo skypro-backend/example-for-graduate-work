@@ -16,9 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +27,7 @@ import ru.skypro.homework.utils.MethodLog;
 
 @Slf4j
 @RestController
-//@CrossOrigin(origins = "<http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/ads")
 
 
@@ -148,7 +145,7 @@ public class AdController {
             }
     )
 
-    @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
     @DeleteMapping("{adId}")
     public ResponseEntity<Void> removeAd(@PathVariable Long adId) {
         log.warn("DELETE запрос на удаление объявления с ID  {}, метод контроллера: {}", adId, MethodLog.getMethodName());
@@ -188,7 +185,7 @@ public class AdController {
             }
     )
 
-    @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
     @PatchMapping(value = "/{adId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdDTO> updateAd(@PathVariable Long adId, @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
         log.warn("PATCH запрос на обновление объявления с ID {},тело запроса {},  метод контроллера: {}", adId, createOrUpdateAdDTO, MethodLog.getMethodName());
@@ -251,7 +248,7 @@ public class AdController {
             }
     )
 
-    @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateAdImage(@PathVariable Long adId, @RequestPart MultipartFile image) {
         log.warn("PATCH запрос на обновление картинки объявления с ID {}, метод контроллера: {}", adId, MethodLog.getMethodName());
@@ -355,7 +352,7 @@ public class AdController {
     )
 
     @DeleteMapping("{adId}/comments/{commentId}")
-    @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorComment(authentication.name, #commentId)")
+    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorComment(authentication.name, #commentId)")
     public ResponseEntity<Void> deleteComment(@PathVariable Long adId, @PathVariable Long commentId) {
         log.warn("DELETE запрос на удаление комментария с ID {}, у объявления с ID {}, метод контроллера: {}", commentId, adId, MethodLog.getMethodName());
         return ResponseEntity.ok(adService.deleteComment(adId, commentId));
@@ -393,7 +390,7 @@ public class AdController {
             }
     )
 
-    @PreAuthorize("hasRole('USER') and @adServiceImpl.isAuthorComment(authentication.name, #commentId)")
+    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorComment(authentication.name, #commentId)")
     @PatchMapping("{adId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable Long adId, @PathVariable Long commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         log.warn("PATCH запрос на обновление комментария с ID {}, у объявления с ID {}, метод контроллера: {}", commentId, adId, MethodLog.getMethodName());
