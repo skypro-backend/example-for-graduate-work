@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
-import ru.skypro.homework.exception.InvalidAuthorizationException;
+
 import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.mapper.CommentMapper;
@@ -110,7 +110,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public Void deleteAd(Long adId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
-        validateAuthorizationAd(adId);
+//        validateAuthorizationAd(adId);
         Long photoId = adRepository.findById(adId).orElseThrow(AdNotFoundException::new).getPhotoAd().getId();
         adRepository.deleteById(adId);
         photoAdRepository.deleteById(photoId);
@@ -121,7 +121,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public AdDTO patchAd(Long adId, CreateOrUpdateAdDTO createOrUpdateAdDTO) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
-        validateAuthorizationAd(adId);
+
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
         ad.setTitle(createOrUpdateAdDTO.getTitle());
         ad.setPrice(createOrUpdateAdDTO.getPrice());
@@ -148,7 +148,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public String patchAdImage(Long adId, MultipartFile image) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
-        validateAuthorizationAd(adId);
+
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
 
             Path filePath;
@@ -207,7 +207,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public Void deleteComment(Long adId, Long commentId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
-        validateAuthorizationComment(commentId);
+
         commentRepository.deleteById(commentId);
         return null;
     }
@@ -215,7 +215,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public CommentDTO patchComment(Long adId, Long commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
-        validateAuthorizationComment(commentId);
+
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
@@ -224,29 +224,14 @@ public class AdServiceImpl implements AdService {
 
         return CommentMapper.INSTANCE.toCommentDTO(commentRepository.save(comment), user);
     }
-    private void validateAuthorizationAd(Long adId){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(auth.getName());
-        if (!(user.getRole().name().equals("ADMIN") || isAuthorAd(auth.getName(), adId))){
-            log.warn("Авторизация не пройдена");
-            throw new InvalidAuthorizationException();
-        }
-    }
-    private void validateAuthorizationComment(Long commentId){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(auth.getName());
-        if (!(user.getRole().name().equals("ADMIN") || isAuthorComment(auth.getName(), commentId))){
-            throw new InvalidAuthorizationException();
-        }
-    }
 
-    private boolean isAuthorAd(String username, Long adId) {
+    public boolean isAuthorAd(String username, Long adId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
         return ad.getAuthor().getEmail().equals(username);
     }
-    private boolean isAuthorComment(String username, Long commentId) {
+    public boolean isAuthorComment(String username, Long commentId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
