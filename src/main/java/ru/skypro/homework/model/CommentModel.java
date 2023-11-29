@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +19,7 @@ public class CommentModel {
     private int pk;
 
     @Column(name = "create_data")
-    private LocalDateTime createAt = LocalDateTime.now();
+    private LocalDateTime createAt;
 
     @Column(name = "text")
     private String text;

@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2 # идентификатор набора изменений
+      author: erruvinka # имя разработчика, который добавил набор изменений
+      changes: # список изменений в этом наборе
+        - createTable: # команда liquibase — создает таблицу
+            tableName: ad # название таблицы
+            columns: # колонки к данной таблице
+              - column: # колонка
+                  name: ad_id # название колонки
+                  type: int # тип
+                  autoIncrement: true # признак автоинкремента колонки
+                  constraints: # ограничения колонки
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: price
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image_id
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - addForeignKeyConstraint:
+                  baseTableName: ad
+                  baseColumnNames: ad_id
+                  referencedTableName: image
+                  referencedColumnNames: image_id
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - addForeignKeyConstraint:
+                  baseTableName: ad
+                  baseColumnNames: ad_id
+                  referencedTableName: users
+                  referencedColumnNames: user_id

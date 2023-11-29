@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1 # идентификатор набора изменений
+      author: erruvinka # имя разработчика, который добавил набор изменений
+      changes: # список изменений в этом наборе
+        - createTable: # команда liquibase — создает таблицу
+            tableName: users # название таблицы
+            columns: # колонки к данной таблице
+              - column: # колонка
+                  name: user_id # название колонки
+                  type: int # тип
+                  autoIncrement: true # признак автоинкремента колонки
+                  constraints: # ограничения колонки
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_name
+                  type: varchar(32)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(16)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(16)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(12)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image_id
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+#                    nullable: false
+              - addForeignKeyConstraint:
+                  baseTableName: users
+                  baseColumnNames: user_id
+                  referencedTableName: image
+                  referencedColumnNames: image_id
+              - column:
+                  name: role
+                  type: int
+                  constraints:
+                    nullable: false

@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class AdExceptionHandler {
-
-    @ExceptionHandler(AdNotFoundException.class)
-    public ResponseEntity<?> handleNotFound(AdNotFoundException e) {
+public class UserExceptionHandler {
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<?> handleNotFound(UserNotFoundException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body("Not found");

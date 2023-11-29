@@ -4,8 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -19,8 +17,9 @@ public class AdModel {
     @Column(name = "ad_id")
     private int pk;
 
-    @Column(name = "ad_image")
-    private String image;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "image_id")
+    private ImageModel image;
 
     @Column(name = "price")
     private int price;
@@ -31,13 +30,10 @@ public class AdModel {
     @Column(name = "description")
     private String description;
 
-
-    @ManyToOne( fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserModel userModel;
 
-    @OneToMany(mappedBy="adModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "adModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentModel> commentModels;
-
-
 }

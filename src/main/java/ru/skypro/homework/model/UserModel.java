@@ -1,12 +1,13 @@
 package ru.skypro.homework.model;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 import javax.persistence.*;
 import java.util.List;
+
 @Entity
 @Table(name = "users")
 @AllArgsConstructor
@@ -16,31 +17,36 @@ import java.util.List;
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id",nullable = false)
+    @Column(name = "user_id", nullable = false)
     private int id;
-    @Column(name = "login",nullable = false)
-    private String login;
-    @Column(name = "password",nullable = false)
+
+    @Column(name = "user_name")
+    private String userName;
+
+    @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "email")
-    private String email;
-    @Column(name = "first_name",nullable = false)
+
+    @Column(name = "first_name", nullable = false)
     private String firstName;
-    @Column(name = "last_name",nullable = false)
+
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+
     @Column(name = "phone")
     private String phone;
-    @Column(name = "image")
-    private String image;
-    @Column(name = "role",nullable = false)
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "image_id")
+    private ImageModel image;
+
+    @Column(name = "role", nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy="userModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AdModel> adModels;
 
     @OneToMany(mappedBy = "userModel",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<CommentModel> commentModels;
-
 }
