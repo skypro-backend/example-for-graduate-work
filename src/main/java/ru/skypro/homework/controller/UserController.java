@@ -27,7 +27,7 @@ import java.io.IOException;
 
 
 @Slf4j
-//@CrossOrigin(origins = "<http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @Tag(name = "\uD83D\uDE4B Пользователи")
 @RequestMapping("/users")
