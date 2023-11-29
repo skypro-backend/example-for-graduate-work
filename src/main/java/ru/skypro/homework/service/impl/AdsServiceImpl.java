@@ -10,6 +10,7 @@ import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.UserInfo;
 import ru.skypro.homework.repository.AdsRepository;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.mapper.AdsMapper;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
+    private final ImageRepository imageRepository;
     private final AdsMapper adsMapper;
     private final AuthServiceImpl authService;
     private final ImageService imageService;
@@ -45,13 +47,13 @@ public class AdsServiceImpl implements AdsService {
         UserInfo user = authService.getCurrentUser();
 
         Image uploadImage = imageService.uploadImage(image);
+        imageRepository.save(uploadImage);
         Ads ads = adsMapper.createAdsDtoToModel(properties);
         ads.setImage(uploadImage);
         ads.setAuthor(user);
         adsRepository.save(ads);
 
         return adsMapper.adsToAdsDto(ads);
-
     }
 
     @Override
