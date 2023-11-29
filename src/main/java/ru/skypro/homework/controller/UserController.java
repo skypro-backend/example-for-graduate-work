@@ -11,7 +11,7 @@ import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.UserService;
 
-@Slf4j
+
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
@@ -61,6 +61,7 @@ public class UserController {
     @Operation(summary = "Получение аватара пользователя")
     @ApiResponse(responseCode = "200",description = "OK")
     public byte[] getImage(@PathVariable String id) {
+
         return userService.getImage(id);
     }
 }

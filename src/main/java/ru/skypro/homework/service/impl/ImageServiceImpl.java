@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.exception.ImageNotFoundException;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
@@ -30,13 +31,13 @@ public class ImageServiceImpl implements ImageService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        imageRepository.saveAndFlush(image);
+        imageRepository.save(image);
         return image;
     }
 
     @Override
     public byte[] getImage(String id) {
-        Image image = imageRepository.findById(id).orElse(null);
+        Image image = imageRepository.findById(id).orElseThrow(ImageNotFoundException::new);
 
         return image.getImage();
     }
