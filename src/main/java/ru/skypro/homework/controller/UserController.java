@@ -20,19 +20,12 @@ import java.io.IOException;
 @RequestMapping("/users")
 public class UserController {
     private UserService userService;
-    private Authentication authentication;
     private AuthServiceImpl authService;
 
     public UserController(UserService userService, AuthServiceImpl authService) {
         this.userService = userService;
         this.authService = authService;
     }
-
-//    public UserController(UserService userService, Authentication authentication, AuthServiceImpl authService) {
-//        this.userService = userService;
-//        this.authentication = authentication;
-//        this.authService = authService;
-//    }
 
     @PostMapping("/set_password") // http://localhost:8080/users/set_password
     public ResponseEntity setPassword(@RequestBody NewPassword newPass) {

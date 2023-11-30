@@ -21,15 +21,12 @@ import java.nio.file.Path;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    //    private Authentication userAusentication;
     private final AuthServiceImpl authService;
-
     private final ImageServiceImpl imageService;
 
 
-    public UserServiceImpl(UserRepository userRepository, /*Authentication userAusentication,*/ AuthServiceImpl authService, ImageServiceImpl imageService) {
+    public UserServiceImpl(UserRepository userRepository, AuthServiceImpl authService, ImageServiceImpl imageService) {
         this.userRepository = userRepository;
-//        this.userAusentication = userAusentication;
         this.authService = authService;
         this.imageService = imageService;
     }
