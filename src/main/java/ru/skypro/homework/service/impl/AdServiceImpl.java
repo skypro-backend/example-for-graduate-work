@@ -144,24 +144,9 @@ public class AdServiceImpl implements AdService {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
-        ad.setImage(imageService.addImage(image));
-
-//            Path filePath;
-//            PhotoAd photoAd = new PhotoAd();
-//            try {
-//                filePath = Path.of(photoDir, ad.getTitle() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
-//                uploadPhotoAdd(filePath, image);
-//                photoAd.setFilePath(filePath.toString());
-//                photoAd.setFileSize(image.getSize());
-//                photoAd.setMediaType(image.getContentType());
-//                photoAd = photoAdRepository.save(photoAd);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        ad.setImage("/"+photoDir+"/"+photoAd.getId());
-//        ad.setPhotoAd(photoAd);
-//        return adRepository.save(ad).getImage();
-        return imageService.getImage(imageService.addImage(image).getId()).getBody();
+        Image imageNew = imageService.addImage(image);
+        ad.setImage(imageNew);
+        return imageService.getImage(imageNew.getId()).getBody();
     }
 
     @Override
