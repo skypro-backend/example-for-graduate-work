@@ -11,6 +11,7 @@ import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/ads")
 public class CommentController {
     private final AuthServiceImpl authService;

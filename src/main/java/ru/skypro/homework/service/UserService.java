@@ -27,8 +27,7 @@ public interface UserService {
      * @param updateUser объект содержащий поля с именем, фамилией и номером телефона.
      * @return объект {@link UserEntity}
      */
-    UserEntity updateUser(UpdateUser updateUser);
-//    UserEntity updateUser(UpdateUser updateUser, Authentication authentication);
+    UserEntity updateUser(UpdateUser updateUser, Authentication authentication);
 
     UserEntity checkUserByUsername(String username);
 

@@ -100,9 +100,9 @@ public class UserServiceImpl implements UserService {
      * @return объект user
      */
     @Override
-    public UserEntity updateUser(UpdateUser updateUser) {
+    public UserEntity updateUser(UpdateUser updateUser, Authentication authentication) {
         //Получаем логин авторизованного пользователя из БД
-        String userName = authService.getLogin().getUsername();
+        String userName = authentication.getName();
         //Находим данные авторизованного пользователя
         UserEntity user = userRepository.findUserEntityByUserName(userName);
         //Меняем данные пользователя на данные из DTO updateUser
