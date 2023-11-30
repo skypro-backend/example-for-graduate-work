@@ -1,17 +1,24 @@
 package ru.skypro.homework.model;
 
-import lombok.Data;
+import lombok.*;
+import org.hibernate.annotations.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
-@Data
+
 @Entity
+@Data
+@Table(name = "images")
 public class Image {
     @Id
-    private String id;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private long fileSize;
+    private String mediaType;
     @Lob
-    private byte[] image;
+    @Type(type = "org.hibernate.type.ImageType")
+    private byte[] data;
+/*    @OneToOne
+    @JoinColumn(name = "ad_id")
+    private Ad ad;*/
 }
