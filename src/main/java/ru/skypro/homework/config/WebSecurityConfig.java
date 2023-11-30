@@ -11,6 +11,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.skypro.homework.dto.Role;
 
+import javax.sql.DataSource;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
