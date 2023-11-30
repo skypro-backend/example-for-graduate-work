@@ -1,19 +1,23 @@
 package ru.skypro.homework.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.entity.CommentEntity;
 
-@Mapper
+import java.util.List;
+
+@Component
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,componentModel = "spring")
 public interface CommentMapper {
 
-    CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
+   CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
-    @Mapping(source = "author.id", target = "author")
+    @Mapping(source = "author.pk", target = "author")
     Comment commentToCommentDTO(CommentEntity commentEntity);
 
-    @Mapping(source = "author", target = "author.id")
-    CommentEntity commentDTOToComment(Comment commentDTO);
+//    @Mapping(source = "author", target = "author.pk")
+//    CommentEntity commentDTOToComment(Comment commentDTO);
+    List<Comment> listCommentToListCommentDTO(List<CommentEntity> commentEntityList);
 }

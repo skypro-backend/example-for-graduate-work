@@ -1,0 +1,45 @@
+-- liquibase formatted sql
+-- changeset margo:1
+
+--CREATE TABLE "user_entity"
+--(
+--  "pk" bigint NOT NULL,
+--  "email" varchar(255) NULL,
+--  "username" varchar(255) NULL,
+--  "first_name" varchar(255) NULL,
+--  "image" varchar(255) NULL,
+--  "last_name" varchar(255) NULL,
+--  "phone" varchar(255) NULL,
+--  "user_roles" varchar(255) NULL,
+--  CONSTRAINT "user_entity_pkey" PRIMARY KEY ("pk")
+--);
+--
+--INSERT INTO user_entity(pk,email,first_name,image,last_name,phone,user_roles)
+--VALUES('1','indfkd@mail.ru','Bob','https://commons.wikimedia.org/wiki/File:Felis_silvestris_silvestris.jpg?uselang=ru','Bobs','+79853900335','USER')
+--
+--CREATE TABLE "comment_entity"
+--(
+--  "pk" bigint NOT NULL,
+--  "author_id" bigint NULL,
+--  "ad_id" bigint NULL,
+--  "authorImage" varchar(255) NULL,
+--  "authorFirstName" varchar(255) NULL,
+--  "createdAt" bigint NULL,
+--  "text" varchar(255) NULL,
+--  CONSTRAINT "comment_entity_pkey" PRIMARY KEY ("pk")
+--);
+
+--
+--INSERT INTO comment_entity(pk,author_id, ad_id, authorImage,authorFirstName,createdAt,text)
+--VALUES('1','3', '4','https://commons.wikimedia.org/wiki/File:Felis_silvestris_silvestris.jpg?uselang=ru','Bob','100000','comment')
+--
+--CREATE TABLE "ad_entity"
+--(
+--  "pk" bigint NOT NULL,
+--  "author_id" bigint NULL,
+--  "image" varchar(255) NULL,
+--  "price" bigint NULL,
+--  "title" varchar(255) NULL,
+--  "description" varchar(255) NULL,
+--  CONSTRAINT "ad_entity_pkey" PRIMARY KEY ("pk")
+--);

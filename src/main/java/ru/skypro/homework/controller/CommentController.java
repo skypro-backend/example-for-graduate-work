@@ -1,42 +1,49 @@
 package ru.skypro.homework.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.service.impl.CommentServiceImpl;
 
 import java.time.Instant;
-import java.util.List;
 
 @RestController
-@RequestMapping("/api/ads")
+@RequestMapping("/ads")
 @CrossOrigin("http://localhost:3000/")
 public class CommentController {
 
+    private final CommentServiceImpl commentService;
 
-    // Получение комментариев объявления
+    public CommentController(CommentServiceImpl commentService) {
+        this.commentService = commentService;
+    }
+
+     //Получение комментариев объявления
     @GetMapping("/{id}/comments")
-    public Comments getCommentsForAd(@PathVariable Long id) {
-
-        return new Comments(1, List.of(new Comment(1, "",
-                "Homer", Instant.now().toEpochMilli(), 1, "TestComment")));
+    public Comments getCommentsForAd(@PathVariable Integer id) {
+        System.out.print("asd");
+        return commentService.getCommentsByAdId(id);
     }
 
     // Добавление комментария к объявлению
     @PostMapping("/{id}/comments")
-    public Comment addCommentToAd(@PathVariable Long id,
-                                  @RequestBody CreateOrUpdateComment commentDetails) {
+    public Comment addCommentToAd(@PathVariable Integer id,
+                                  @RequestBody CreateOrUpdateComment commentDetails,
+                                  @AuthenticationPrincipal UserDetails userDetails) {
 
-        return new Comment(1, "", "Homer", Instant.now().toEpochMilli(), 1, "text");
+        return commentService.addCommentToAd(id, commentDetails, userDetails);
     }
 
     // Удаление комментария
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<String> deleteComment(@PathVariable Long adId,
-                                                @PathVariable Long commentId) {
-        return ResponseEntity.ok().build();
+                                                @PathVariable Integer commentId,
+                                                @AuthenticationPrincipal UserDetails userDetails) {
+        return commentService.deleteComment(adId, commentId, userDetails);
     }
 
     // Обновление комментария

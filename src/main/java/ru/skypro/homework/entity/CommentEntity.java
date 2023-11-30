@@ -14,10 +14,12 @@ import java.time.Instant;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "comment_entity")
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int pk;
+    @Column(name = "pk")
+    private int pk; //id комментария
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
@@ -28,17 +30,21 @@ public class CommentEntity {
     private AdEntity ad;
 
     @NotBlank
+    @Column(name = "author_image")
     private String authorImage;
 
     @NotBlank
+    @Column(name = "author_first_name")
     private String authorFirstName;
 
     @NotNull
-    private Instant createdAt;
+    @Column(name = "created_at")
+    private Long createdAt;
 
 
     @NotBlank
     @Size(max = 255)
+    @Column(name = "text")
     private String text;
 
 }

@@ -6,10 +6,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment {
-    private int author;
+    private int author; // id автора комментария
     private String authorImage;
     private String authorFirstName;
-    private long createdAt;
-    private int pk;
+    private Long createdAt;
+    private int pk; // id комментария
     private String text;
 }

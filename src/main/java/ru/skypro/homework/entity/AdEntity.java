@@ -9,34 +9,40 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "ad_entity")
 public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int pk;
+    @Column(name = "pk")
+    private Integer pk; // id объявления
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
     @NotBlank
-    @Column(nullable = false)
+    @Column(name = "image", nullable = false)
     private String image;
 
-    @Column(nullable = false)
+    @Column(name = "price", nullable = false)
     private int price;
 
     @NotBlank
     @Size(max = 32)
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Size(max = 64)
-    @Column(nullable = true)
+    @Column(name = "description", nullable = true)
     private String description;
+
+    @OneToMany(mappedBy = "ad")
+    private List<CommentEntity> commentEntities;
 
 }
