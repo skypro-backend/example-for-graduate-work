@@ -168,7 +168,7 @@ class AdControllerTest {
     }
 
     /**
-     * Method under test: {@link AdController#addComments(Long, CreateOrUpdateCommentDTO)}
+     * Method under test: {@link AdController#addComment(Long, CreateOrUpdateCommentDTO)}
      */
     @Test
     void testAddComments() throws Exception {

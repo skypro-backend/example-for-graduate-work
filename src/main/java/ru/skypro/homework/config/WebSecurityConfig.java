@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity
 @Configuration
-public class WebSecurityConfig implements WebMvcConfigurer {
+public class WebSecurityConfig {
 
     // переменная с адресами страниц, которые открываются без аутентификации.
     private static final String[] AUTH_WHITELIST = {
