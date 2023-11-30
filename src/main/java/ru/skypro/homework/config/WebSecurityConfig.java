@@ -2,6 +2,7 @@ package ru.skypro.homework.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +15,7 @@ import ru.skypro.homework.dto.Role;
 import javax.sql.DataSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
-
+@EnableMethodSecurity
 @Configuration
 public class WebSecurityConfig {
 
@@ -24,7 +25,9 @@ public class WebSecurityConfig {
             "/v3/api-docs",
             "/webjars/**",
             "/login",
-            "/register"
+            "/register",
+            "/ads",
+            "/image/**"
     };
 
     @Bean
