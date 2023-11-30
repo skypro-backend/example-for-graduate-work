@@ -42,17 +42,10 @@ public class ImageServiceImpl implements ImageService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        imageRepository.save(image);
-
-        logger.info("Изображение сохраненно в базе данных", image);
+        imageRepository.saveAndFlush(image);
         return image;
     }
 
-    /**
-     * Метод для получения изображения из базы данных
-     * @param id
-     * @return byte[]
-     */
     @Override
     public byte[] getImage(String id) {
         Image image = imageRepository.findById(id).orElseThrow(ImageNotFoundException::new);

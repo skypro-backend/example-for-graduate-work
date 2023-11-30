@@ -73,6 +73,7 @@ public class AdsServiceImpl implements AdsService {
 
         logger.info("Объявление сохранено в базу данных", ads);
         return adsMapper.adsToAdsDto(ads);
+
     }
 
     /**
@@ -84,6 +85,7 @@ public class AdsServiceImpl implements AdsService {
     @Transactional
     public AdsInfoDTO getAdsById(Integer id) {
         Ads ads = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
+
         return adsMapper.adsToAdsInfoDto(ads);
     }
 
@@ -118,7 +120,7 @@ public class AdsServiceImpl implements AdsService {
             ads.setPrice(createAdsDTO.getPrice());
             ads.setTitle(createAdsDTO.getTitle());
         }
-        logger.info("Информация об объявлении обновлена", ads);
+
         return adsMapper.adsToAdsDto(ads);
     }
 
@@ -156,7 +158,6 @@ public class AdsServiceImpl implements AdsService {
             ads.setImage(uploadImage);
             adsRepository.save(ads);
         }
-        logger.info("Изображение обновлено");
     }
 
     /**
