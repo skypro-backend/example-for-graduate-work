@@ -66,7 +66,6 @@ public class AuthServiceImpl implements AuthService {
 //        String encodePass = encoder.encode(password);
 
         UserDetails userDetails = myUserDetailService.loadUserByUsername(userName);
-        //todo закодировать пароль методом encode?
         if (!encoder.matches(password, userDetails.getPassword())) {
             throw new WrongPasswordException("Неверный пароль");
         }
