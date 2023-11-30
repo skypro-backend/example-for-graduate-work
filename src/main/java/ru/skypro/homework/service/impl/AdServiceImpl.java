@@ -128,12 +128,9 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public AdsDTO getAllAdsByAuthor() {
-
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName();
-        User user = userRepository.findByEmail(name);
+        User user = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         List<AdDTO> result = new ArrayList<>();
         adRepository.findAllByAuthor(user).forEach(u -> result.add(AdMapper.INSTANCE.adToAdDTO(u)));
         AdsDTO adsDTO = new AdsDTO();
