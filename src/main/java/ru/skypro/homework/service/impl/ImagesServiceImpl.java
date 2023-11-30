@@ -49,12 +49,7 @@ public class ImagesServiceImpl implements ImagesService {
             photoAd.setMediaType(image.getContentType());
             photoAd.setData(image.getBytes());
             photoAd = imagesRepository.save(photoAd);
-            /*if (photoAdRepository.findById(photoAd.getId() - 1).isPresent()
-                    && Objects.equals(photoAdRepository.findById(photoAd.getId() - 1).get().getFilePath(), filePath.toString())
-            ){
 
-                photoAdRepository.deleteById(photoAd.getId() - 1);
-            }*/
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
