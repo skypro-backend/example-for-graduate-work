@@ -21,10 +21,10 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final MyUserDetailService myUserDetailService;
-    /**
-     * создаем пустую сущность userEntity
-     */
-    private UserEntity userEntity;
+//    /**
+//     * создаем пустую сущность userEntity
+//     */
+//    private UserEntity userEntity;
     private Login authorizedUser;
 
     public AuthServiceImpl(UserDetailsManager manager,
@@ -97,9 +97,9 @@ public class AuthServiceImpl implements AuthService {
         return true;
     }
 
-    public UserEntity getUserEntity() {
-        return userEntity;
-    }
+//    public UserEntity getUserEntity() {
+//        return userEntity;
+//    }
 
     public Login getLogin() {
         return authorizedUser;

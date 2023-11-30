@@ -1,21 +1,20 @@
 package ru.skypro.homework.service;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.model.UserEntity;
-
-import java.io.IOException;
 
 public interface UserService {
 
     /**
      * Метод обновляет пароль для пользователя.
-     * @param oldPass старый пароль
-     * @param newPass новый пароль
+     *
+     * @param oldPass        старый пароль
+     * @param newPass        новый пароль
+     * @param authentication
      */
-    void setPassword(NewPassword newPass);
+    void setPassword(NewPassword newPass, Authentication authentication);
 
     /**
      * Метод возвращает информацию об авторизованном пользователе.
