@@ -203,12 +203,12 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public CommentDTO patchComment(Long adId, Long commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
-
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
-        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
         comment.setText(createOrUpdateCommentDTO.getText());
 
@@ -219,31 +219,13 @@ public class AdServiceImpl implements AdService {
     public boolean isAuthorAd(String username, Long adId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
-        Optional<Ad> adOptional = adRepository.findById(adId);
-        return adOptional.map(ad -> ad.getAuthor().getEmail().equals(username)).orElse(false);
+        Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
+        return ad.getAuthor().getEmail().equals(username);
     }
     public boolean isAuthorComment(String username, Long commentId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
-        Optional<Comment> commentOptional = commentRepository.findById(commentId);
-        return commentOptional.map(comment -> comment.getAuthor().getEmail().equals(username)).orElse(false);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        return comment.getAuthor().getEmail().equals(username);
     }
-
-    public void uploadPhotoAdd(Path filePath, MultipartFile image) throws IOException {
-        Files.createDirectories(filePath.getParent());
-        Files.deleteIfExists(filePath);
-        try (InputStream is = image.getInputStream();
-             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
-        ) {
-            bis.transferTo(bos);
-        }
-
-    }
-
-    private String getExtension(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
-    }
-
 }

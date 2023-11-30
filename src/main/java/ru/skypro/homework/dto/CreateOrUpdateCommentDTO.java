@@ -15,10 +15,6 @@ public class CreateOrUpdateCommentDTO {
   @JsonProperty("text")
   private String text;
 
-  public CreateOrUpdateCommentDTO text(String text) {
-    this.text = text;
-    return this;
-  }
 
   /**
    * текст комментария
