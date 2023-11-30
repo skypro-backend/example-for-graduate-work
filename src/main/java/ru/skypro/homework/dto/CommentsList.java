@@ -1,10 +1,14 @@
 package ru.skypro.homework.dto;
 
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 public class CommentsList {
     private int count;
     private List<Comment> result;
+
+    public CommentsList(){}
 
     public CommentsList(int count, List<Comment> result) {
         this.count = count;

@@ -25,12 +25,12 @@ public class CommentController {
                 "Serzh", Instant.now().toEpochMilli(), 1, "text");
     }
 
-    @DeleteMapping("{commentId")
+    @DeleteMapping("{commentId}")
     public ResponseEntity<String> deleteComment(@PathVariable("adId") int adId, @PathVariable("commentId") int commentId) {
         return ResponseEntity.ok("OK");
     }
 
-    @PatchMapping("{commentId")
+    @PatchMapping("{commentId}")
     public Comment updateComment(@PathVariable("adId") int adId, @PathVariable("commentId") int commentId) {
         return new Comment(1, "",
                 "Serzh", Instant.now().toEpochMilli(), 1, "text");
