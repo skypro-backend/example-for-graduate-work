@@ -2,6 +2,7 @@ package ru.skypro.homework.controller;
 
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.service.AdService;
 
 import javax.validation.Valid;
@@ -35,19 +37,23 @@ public class AdController {
     }
 
     @GetMapping
-    public Collection<AdDTO> all() {
-        return adService.getAll();
+    public ResponseEntity<AdsDTO> all() {
+        return ResponseEntity.ok(adService.getAll());
     }
 
     @GetMapping("{id}")
-    public AdDTO findAdById(@PathVariable int id) {
-        return adService.findAd(id);
+    public ResponseEntity<ExtendedAdDTO> findAdById(@PathVariable int id) {
+        return ResponseEntity.ok(adService.findAd(id));
     }
 
     @DeleteMapping("{id}")
-    public void deleteAd(@PathVariable int id) {
-        adService.deleteAd(id);
-    }
+    public ResponseEntity<?> deleteAd(@PathVariable int id, Authentication authentication) {
+        if (adService.deleteAd(id, authentication)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+            }
 
     @PatchMapping("{id}")
     public CreateOrUpdateAd updateById(@PathVariable int id, @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd) {

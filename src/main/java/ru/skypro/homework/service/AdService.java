@@ -5,24 +5,27 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.CommentRepository;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Service
 public class AdService {
 
     private final AdRepository adRepository;
+    private final CommentRepository commentRepository;
     private final AdMapper adMapping;
     private final UserService userService;
 
-    public AdService(AdRepository adRepository, AdMapper adMapping, UserService userService) {
+    public AdService(AdRepository adRepository, CommentRepository commentRepository, AdMapper adMapping, UserService userService) {
         this.adRepository = adRepository;
+        this.commentRepository = commentRepository;
         this.adMapping = adMapping;
         this.userService = userService;
     }
@@ -35,22 +38,37 @@ public class AdService {
         return adMapping.mapToAdDto(newAd);
     }
 
-    public Collection<AdDTO> getAll() {
+    public AdsDTO getAll() {
         List<Ad> adList = (List<Ad>) adRepository.findAll();
         List<AdDTO> adDTOList = new ArrayList<>(adList.size());
         for (Ad a : adList) {
             adDTOList.add(adMapping.mapToAdDto(a));
         }
-        return adDTOList;
+        AdsDTO dto = new AdsDTO ();
+        dto.setCount(adList.size());
+        dto.setResults(adDTOList);
+        return dto;
     }
 
-    public AdDTO findAd(int id) {
+    public ExtendedAdDTO findAd(int id) {
         return adRepository.findById(id).
-                map(adMapping::mapToAdDto).orElseThrow();
+                map(adMapping::mapToExtendedAdDTO).orElseThrow();
     }
 
-    public void deleteAd(int id) {
-        adRepository.deleteById(id);
+    public  boolean deleteAd(int id, Authentication authentication) {
+        User author = userService.loadUserByUsername(authentication.getName());
+        Ad ad = adRepository.findByPk(id);;
+        if (author.equals(ad.getAuthor())
+                //|| author.getRole() == Role.ADMIN
+                ) {
+         //   Image image = ad.getImage();
+            commentRepository.deleteAll(ad.getComments());
+            adRepository.delete(ad);
+           // imageService.deleteImage(image);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public CreateOrUpdateAd updateAd(int id, CreateOrUpdateAd createOrUpdateAd) {
