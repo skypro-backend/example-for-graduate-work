@@ -140,10 +140,11 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public String patchAdImage(Long adId, MultipartFile image) {
+    public byte [] patchAdImage(Long adId, MultipartFile image) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
+        ad.setImage(imageService.addImage(image));
 
 //            Path filePath;
 //            PhotoAd photoAd = new PhotoAd();
@@ -160,7 +161,7 @@ public class AdServiceImpl implements AdService {
 //        ad.setImage("/"+photoDir+"/"+photoAd.getId());
 //        ad.setPhotoAd(photoAd);
 //        return adRepository.save(ad).getImage();
-        return null;
+        return imageService.getImage(imageService.addImage(image).getId()).getBody();
     }
 
     @Override

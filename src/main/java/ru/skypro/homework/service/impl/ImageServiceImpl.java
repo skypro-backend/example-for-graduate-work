@@ -36,11 +36,11 @@ public class ImageServiceImpl implements ImageService {
         Image imageNew = new Image();
         try {
             imageNew.setData(image.getBytes());
+            imageNew.setMediaType(image.getContentType());
+            imageNew.setFileSize(image.getSize());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        imageNew.setMediaType(image.getContentType());
-        imageNew.setFileSize(image.getSize());
         imageRepository.save(imageNew);
         return imageNew;
     }
