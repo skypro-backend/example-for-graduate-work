@@ -17,5 +17,6 @@ public interface AdMapper {
 
     @Mapping(source = "pkAdId", target = "id")
     @Mapping(source = "authorId", target = "author")
+    @Mapping(target = "description", ignore = true)
     AdEntity adDTOToAd(Ad adDTO);
 }
