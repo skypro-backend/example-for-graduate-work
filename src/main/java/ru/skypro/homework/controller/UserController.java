@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
+@Tag(name = "\uD83D\uDE4B Пользователи")
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/users")
 public class UserController {
     private UserService userService;
@@ -53,6 +56,7 @@ public class UserController {
                     )
             }
     )
+
     @PostMapping("/set_password") // http://localhost:8080/users/set_password
     public ResponseEntity setPassword(@RequestBody NewPassword newPass, Authentication authentication) {
         userService.setPassword(newPass, authentication);
