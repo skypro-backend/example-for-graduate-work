@@ -6,6 +6,10 @@ import ru.skypro.homework.dto.GetCommentDTO;
 
 import java.util.List;
 
+/**
+ * Интерфейс, содержащий методы для работы с классом {@link ru.skypro.homework.model.Comment}
+ * @see ru.skypro.homework.service.impl.CommentServiceImpl
+ */
 public interface CommentService {
 
     GetCommentDTO getCommentsByAdsId(Integer id);

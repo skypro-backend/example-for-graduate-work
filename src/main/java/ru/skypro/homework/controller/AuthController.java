@@ -10,8 +10,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.CommentService;
 
+/**
+ * Класс-контроллер для обработки запросов о регистрации и аутентификации пользователя
+ * @see AuthService
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -20,6 +26,11 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * Метод для аутентификации пользователя
+     * @param login
+     * @return ResponseEntity
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
@@ -29,6 +40,11 @@ public class AuthController {
         }
     }
 
+    /**
+     * Метод для регистрации пользователя
+     * @param register
+     * @return ResponseEntity
+     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) {
         if (authService.register(register)) {

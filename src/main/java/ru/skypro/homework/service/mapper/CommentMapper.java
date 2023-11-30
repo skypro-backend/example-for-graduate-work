@@ -1,15 +1,21 @@
 package ru.skypro.homework.service.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
+import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Comment;
-
+/**
+ * Класс, содержащий методы для преобразования класса {@link Comment} в DTO
+ */
 @Component
 public class CommentMapper {
 
-
+    /**
+     * Метод преобразует {@link Comment} в {@link CommentDTO}
+     * @param comment
+     * @return {@link CommentDTO}
+     */
     public CommentDTO commentToCommentDto(Comment comment) {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setAuthor(comment.getAuthor().getId());

@@ -15,6 +15,9 @@ import ru.skypro.homework.dto.Role;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * Класс обеспечивает настройки безопасности доступа
+ */
 @Configuration
 public class WebSecurityConfig {
 

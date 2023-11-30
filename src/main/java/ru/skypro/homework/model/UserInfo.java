@@ -8,7 +8,9 @@ import ru.skypro.homework.dto.Role;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
+/**
+ * Класс описывающий сущность Пользователь
+ */
 @Entity
 @Data
 public class UserInfo {

@@ -6,7 +6,9 @@ import lombok.Data;
 import ru.skypro.homework.dto.CommentDTO;
 
 import java.time.LocalDateTime;
-
+/**
+ * Класс описывающий сущность Комментарий
+ */
 @Entity
 @Data
 public class Comment {

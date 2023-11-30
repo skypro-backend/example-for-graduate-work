@@ -1,5 +1,7 @@
 package ru.skypro.homework.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,12 +17,16 @@ import ru.skypro.homework.service.AuthService;
 
 import java.util.Optional;
 
+/**
+ * Класс-сервис, реализующий интерфейс {@link AuthService}
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
 
     private final UserDetailsService manager;
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
+    Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     public AuthServiceImpl(UserDetailsService manager,
                            UserRepository userRepository,
@@ -30,18 +36,32 @@ public class AuthServiceImpl implements AuthService {
         this.encoder = passwordEncoder;
     }
 
+    /**
+     * Метод для аутентификации пользователя
+     * @param userName
+     * @param password
+     * @return true, если пользователь прошел аутентификацию
+     */
     @Override
+    @Transactional
     public boolean login(String userName, String password) {
         if (userRepository.findByEmail(userName).isEmpty()) {
+            logger.info("Пользователь не зарегистрирован");
             return false;
         }
         UserDetails userDetails = manager.loadUserByUsername(userName);
         return encoder.matches(password, userDetails.getPassword());
     }
 
+    /**
+     * Метод для регистрации пользователя
+     * @param register
+     * @return true, если пользователь прошел регистрацию
+     */
     @Override
     public boolean register(Register register) {
         if (userRepository.findByEmail(register.getUsername()).isPresent()) {
+            logger.info("Пользователь уже зарегистрирован");
             return false;
         }
         UserInfo userInfo  = new UserInfo();
@@ -55,11 +75,14 @@ public class AuthServiceImpl implements AuthService {
 
         return true;
     }
+
+    /**
+     * Метод, возвращающий текущего авторизованного пользователя
+     * @return {@link UserInfo}
+     */
     @Transactional
     public UserInfo getCurrentUser() {
         Authentication authenticationUser = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findByEmail(authenticationUser.getName()).orElseThrow(UserNotRegisteredException::new);
     }
-
-
 }

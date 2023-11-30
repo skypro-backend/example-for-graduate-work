@@ -3,11 +3,20 @@ package ru.skypro.homework.service.mapper;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.UserInfo;
 
+/**
+ * Класс, содержащий методы для преобразования класса {@link UserInfo} в DTO
+ */
 @Component
 public class UserMapper {
 
+    /**
+     * Метод преобразует {@link UserInfo} в {@link UserDTO}
+     * @param userInfo
+     * @return {@link UserDTO}
+     */
     public UserDTO userToDto(UserInfo userInfo) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(userInfo.getId());
@@ -22,6 +31,11 @@ public class UserMapper {
         return userDTO;
     }
 
+    /**
+     * Метод преобразует {@link UserInfo} в {@link UpdateUserDTO}
+     * @param userInfo
+     * @return {@link UpdateUserDTO}
+     */
     public UpdateUserDTO userToUpdateUserDto(UserInfo userInfo) {
         UpdateUserDTO updateUserDTO = new UpdateUserDTO();
         updateUserDTO.setFirstName(userInfo.getFirstName());

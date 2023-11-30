@@ -7,6 +7,9 @@ import ru.skypro.homework.dto.AdsInfoDTO;
 
 import java.util.List;
 
+/**
+ * Класс описывающий сущность Обявление
+ */
 
 @Entity
 @Data

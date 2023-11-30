@@ -1,18 +1,23 @@
 package ru.skypro.homework.service.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.AdsInfoDTO;
 import ru.skypro.homework.dto.CreateAdsDTO;
 import ru.skypro.homework.model.Ads;
 
-import java.util.List;
+/**
+ * Класс, содержащий методы для преобразования класса {@link Ads} в DTO и обратно
+ */
 
 @Component
 public class AdsMapper {
 
+    /**
+     * Метод преобразует {@link Ads} в {@link AdsDTO}
+     * @param ads
+     * @return {@link AdsDTO}
+     */
     public AdsDTO adsToAdsDto(Ads ads) {
         AdsDTO adsDTO = new AdsDTO();
         adsDTO.setAuthor(ads.getAuthor().getId());
@@ -26,7 +31,11 @@ public class AdsMapper {
         return adsDTO;
     }
 
-
+    /**
+     * Метод преобразует {@link Ads} в {@link AdsInfoDTO}
+     * @param ads
+     * @return {@link AdsDTO}
+     */
     public AdsInfoDTO adsToAdsInfoDto(Ads ads) {
         AdsInfoDTO adsInfoDTO = new AdsInfoDTO();
         adsInfoDTO.setPk(ads.getPk());
@@ -44,7 +53,11 @@ public class AdsMapper {
         return adsInfoDTO;
     }
 
-
+    /**
+     * Метод преобразует {@link CreateAdsDTO} в {@link Ads}
+     * @param createAdsDTO
+     * @return {@link Ads}
+     */
     public Ads createAdsDtoToModel(CreateAdsDTO createAdsDTO) {
         Ads ads = new Ads();
         ads.setTitle(createAdsDTO.getTitle());

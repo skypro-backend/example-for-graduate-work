@@ -9,6 +9,10 @@ import ru.skypro.homework.model.Image;
 
 import java.util.List;
 
+/**
+ * Интерфейс, содержащий методы для работы с классом {@link ru.skypro.homework.model.Ads}
+ * @see ru.skypro.homework.service.impl.AdsServiceImpl
+ */
 public interface AdsService {
 
     AllAdsDTO getAllAds();

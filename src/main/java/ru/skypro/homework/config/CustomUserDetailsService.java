@@ -9,12 +9,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.model.UserInfo;
 import ru.skypro.homework.repository.UserRepository;
+
+/**
+ * Класс-сервис, реализующий интерфейс {@link UserDetailsService}
+ */
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    /**
+     * Метод возвращает авторизованного пользователя
+     * @param username
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
