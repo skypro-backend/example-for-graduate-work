@@ -37,6 +37,7 @@ public class AdServiceImpl implements AdService {
     private final ImageService imageService;
 
     private final UserService userService;
+
     @Value("${path.to.photos.folder}")
     private String photoDir;
 

@@ -22,7 +22,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final AuthServiceImpl authService;
+
     private final ImageServiceImpl imageService;
+
+    @Value("${path.to.avatars.folder}")
+    private String avatarDir;
 
 
     public UserServiceImpl(UserRepository userRepository, AuthServiceImpl authService, ImageServiceImpl imageService) {
@@ -41,7 +45,7 @@ public class UserServiceImpl implements UserService {
      * сохраняется в БД.</p>
      * <p>Так же нужно изменить данные авторизованного пользователя,
      * используя метод: {@link AuthServiceImpl#getUserDetailsManager()}</p>
-     * <p>Последней строкой, меняем пароль в объекте {@link AuthServiceImpl#userEntity},
+     * <p>Последней строкой, меняем пароль в объекте {@link AuthServiceImpl#//userEntity},
      * который является связью для {@link AuthServiceImpl} и БД</p>
      *
      * @param newPass объект NewPassword, содержащий старый и новый пароли.
@@ -106,6 +110,22 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    //@Override ругается method does not override or implement a method from a supertype
+    public boolean updateUserImage(MultipartFile image) throws IOException {
+
+        UserEntity user = getUser();
+
+        Path filePath = Path.of(avatarDir, user.getId() + "."
+                + imageService.getExtension(image.getOriginalFilename()));
+
+        imageService.saveFileOnDisk(image, filePath);
+        imageService.updateUserImage(user, image, filePath);
+
+        user.setImage("/" + avatarDir + "/" + user.getId());
+        userRepository.save(user);
+
+        return true;
+    }
 
 //    @Override
 //    public UserEntity updateUser(UpdateUser updateUser, Authentication authentication) {
