@@ -56,6 +56,10 @@ public class AdServiceImpl implements AdService {
         this.adRepository = adRepository;
     }
 
+    /**
+     * Метод для получения всех объявлений в виде DTO моделей
+     * @return возвращает все объявления из БД
+     */
     @Override
     public AdsDTO getAllAds() {
 
@@ -69,6 +73,13 @@ public class AdServiceImpl implements AdService {
         return adsDTO;
     }
 
+    /**
+     * Метод для добавления нового объявления в БД
+     *
+     * @param createOrUpdateAdDTO
+     * @param image
+     * @return
+     */
     @Override
     public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
@@ -78,7 +89,6 @@ public class AdServiceImpl implements AdService {
 
         Ad ad = AdMapper.INSTANCE.createOrUpdateAdDTOToAd(createOrUpdateAdDTO, user);
         ad.setImage(imageService.addImage(image));
-
 
         return AdMapper.INSTANCE.adToAdDTO(adRepository.save(ad));
     }
