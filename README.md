@@ -60,4 +60,4 @@ CRUD-операции для объявлений и комментариев: �
 Возможность для пользователей оставлять комментарии под каждым объявлением.
 Показ и сохранение картинок объявлений, а также аватарок пользователей.
 
-![GitHub](assets/images/Blog-GitHub.jpg)
+[![Project stat](https://github.com/gtMarat/example-for-graduate-work.vercel.app/api/top-langs/?username=gtMarat&theme=blue-green)](https://github.com/gtMarat/example-for-graduate-work)
