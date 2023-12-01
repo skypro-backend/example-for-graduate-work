@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.exception.PhotoAdNotFoundException;
+import ru.skypro.homework.exception.ImageNotFoundException;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.ImageService;
@@ -25,7 +25,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public ResponseEntity<byte[]> getImage(Long id) {
-        Image image = imageRepository.findById(id).orElseThrow(PhotoAdNotFoundException::new);
+        Image image = imageRepository.findById(id).orElseThrow(ImageNotFoundException::new);
         byte[] imageBytes = image.getData();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(image.getMediaType()));

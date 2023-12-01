@@ -13,6 +13,6 @@ public interface UserService {
 
     Void setPassword(NewPasswordDTO newPasswordDTO);
 
-    Void updateUserImage(MultipartFile image, String userName);
+    void updateUserImage(MultipartFile image, String userName);
 
 }

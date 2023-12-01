@@ -85,19 +85,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Void updateUserImage(MultipartFile image, String userName) {
+    public void updateUserImage(MultipartFile image, String userName) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         User user = userRepository.findByEmail(userName);
         if (user.getImage() == null) {
             user.setImage(imageService.addImage(image));
             userRepository.save(user);
-            return null;
+            return;
         }
         Long imageId = user.getImage().getId();
         user.setImage(imageService.addImage(image));
         imageService.deleteImage(imageId);
         userRepository.save(user);
-        return null;
     }
 }
