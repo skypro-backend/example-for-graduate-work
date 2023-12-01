@@ -18,5 +18,4 @@ public class CreateNewDTO {
     @JsonProperty("Description")
     private String description;
 
-
 }

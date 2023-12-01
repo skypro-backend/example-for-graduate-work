@@ -249,7 +249,7 @@ public class AdController {
 
     @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<byte[]> updateAdImage(@PathVariable Long adId, @RequestPart MultipartFile image) {
+    public ResponseEntity<Void> updateAdImage(@PathVariable Long adId, @RequestPart MultipartFile image) {
         log.warn("PATCH запрос на обновление картинки объявления с ID {}, метод контроллера: {}", adId, MethodLog.getMethodName());
         return ResponseEntity.ok(adService.patchAdImage(adId, image));
     }

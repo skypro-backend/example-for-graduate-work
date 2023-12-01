@@ -5,11 +5,6 @@ import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 
-import ru.skypro.homework.model.User;
-
-
-import java.io.IOException;
-
 public interface UserService {
 
     UserDTO getCurrentUser();
@@ -18,7 +13,6 @@ public interface UserService {
 
     Void setPassword(NewPasswordDTO newPasswordDTO);
 
-
-    void updateUserImage(MultipartFile image, String userName);
+    Void updateUserImage(MultipartFile image, String userName);
 
 }
