@@ -10,6 +10,7 @@ import ru.skypro.homework.service.impl.AuthServiceImpl;
 import java.io.IOException;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/avatar")
 public class AvatarController {
     AvatarService avatarService;
