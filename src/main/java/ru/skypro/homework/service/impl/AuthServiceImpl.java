@@ -17,7 +17,7 @@ import ru.skypro.homework.service.AuthService;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
+    /*private final UserDetailsManager manager;*/
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final MyUserDetailService myUserDetailService;
@@ -27,11 +27,11 @@ public class AuthServiceImpl implements AuthService {
 //    private UserEntity userEntity;
     private Login authorizedUser;
 
-    public AuthServiceImpl(UserDetailsManager manager,
+    public AuthServiceImpl(/*UserDetailsManager manager,*/
                            PasswordEncoder passwordEncoder,
                            UserRepository userRepository,
                            MyUserDetailService myUserDetailService) {
-        this.manager = manager;
+        /*this.manager = manager;*/
         this.encoder = passwordEncoder;
         this.userRepository = userRepository;
         this.myUserDetailService = myUserDetailService;
