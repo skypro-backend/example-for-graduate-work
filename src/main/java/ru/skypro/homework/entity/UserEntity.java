@@ -14,7 +14,7 @@ import java.util.List;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @NotBlank
     @Size(min = 2,max = 16)
@@ -30,7 +30,6 @@ public class UserEntity {
 
     @NotBlank
     @Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
-    //@Pattern(regexp = "\\d{10}")
     private String phone;
 
     private String image;
@@ -45,5 +44,4 @@ public class UserEntity {
     @OneToMany(mappedBy = "author")
     private List<CommentEntity> comments;
 }
-
 

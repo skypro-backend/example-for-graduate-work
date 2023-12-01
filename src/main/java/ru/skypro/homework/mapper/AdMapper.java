@@ -10,29 +10,16 @@ import ru.skypro.homework.entity.AdEntity;
 @Mapper
 public interface AdMapper {
 
-//    AdMapper INSTANCE = Mappers.getMapper(AdMapper.class);
-//
-//    @Mapping(target = "author", ignore = true)
-//    @Mapping(target = "image", ignore = true)
-//    AdEntity createOrUpdateAdToAdEntity(CreateOrUpdateAd createOrUpdateAd);
-//
-//    @Mapping(target = "pk", ignore = true)
-//    @Mapping(target = "author", ignore = true)
-//    AdEntity updateAdEntityFromCreateOrUpdateAd(AdEntity existingAdEntity, CreateOrUpdateAd createOrUpdateAd);
-//
-//    @Mapping(target = "title", source = "title")
-//    @Mapping(target = "price", source = "price")
-//    @Mapping(target = "description", source = "description")
-//    Ad createOrUpdateAdFromAdEntity(AdEntity adEntity);
-
     AdMapper INSTANCE = Mappers.getMapper(AdMapper.class);
 
+    @Mapping(source = "author.id", target = "authorId")
     @Mapping(source = "id", target = "pkAdId")
-    @Mapping(source = "author", target = "authorId")
     Ad adToAdDTO(AdEntity adEntity);
 
-    @Mapping(source = "pkAdId", target = "id")
-    @Mapping(source = "authorId", target = "author")
+    @Mapping(target = "id", source = "pkAdId")
+    @Mapping(source = "authorId", target = "author.id")
     @Mapping(target = "description", ignore = true)
+
+    @Mapping(target = "comments", ignore = true)
     AdEntity adDTOToAd(Ad adDTO);
 }

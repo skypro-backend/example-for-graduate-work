@@ -11,15 +11,14 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "ad")
 public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; //dto - pkAdId
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
-    private UserEntity author;//dto - authorId
+    private UserEntity author;
 
     @NotBlank
     @Column(nullable = false)

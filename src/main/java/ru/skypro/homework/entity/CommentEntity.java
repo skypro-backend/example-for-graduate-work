@@ -13,14 +13,17 @@ import java.time.Instant;
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
     @NotNull
-    private Instant createdAt;
+    private String image;
+
+    @NotNull
+    private Instant createdAtInst;
 
     @NotBlank
     @Size(min = 8, max = 64)
@@ -29,10 +32,5 @@ public class CommentEntity {
     @ManyToOne
     @JoinColumn(name = "ad_id", nullable = false)
     private AdEntity ad;
-    //    @NotBlank
-//    private String authorImage;
-//
-//    @NotBlank
-//    private String authorFirstName;
 }
 
