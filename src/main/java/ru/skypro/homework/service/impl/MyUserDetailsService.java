@@ -15,6 +15,16 @@ public class MyUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Этот метод переопределен из интерфейса UserDetailsManager
+     * для настройки процесса аутентификации для Spring Security.
+     * Он извлекает данные пользователя, включая имя пользователя, пароль и роль,
+     * для создания объекта UserDetails.
+     * Метод использует {@link UserRepository#findByEmail(String)}
+     * @param username - логин пользователя
+     * @return - объект UserDetails, содержащий сведения о пользователе
+     * @throws UsernameNotFoundException - исключение
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);

@@ -93,6 +93,12 @@
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-javadoc-plugin -->
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-javadoc-plugin</artifactId>
+      <version>3.6.2</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -109,6 +115,16 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.6.2</version>
+        <configuration>
+          <sourcepath>${project.basedir}/src/main/java</sourcepath>
+          <subpackages>src/main/java/ru/skypro/homework/service/impl</subpackages>
+          <doclet>com.sun.tools.doclets.standard.Standard</doclet>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
         <!-- RELEASE_VERSION -->
@@ -120,7 +136,8 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>
+              <!--suppress UnresolvedMavenProperty -->
+              <inputSpec>${project.basedir}/openapi.yaml</inputSpec>
               <generatorName>java</generatorName>
               <configOptions>
                 <sourceFolder>src/gen/java/main</sourceFolder>

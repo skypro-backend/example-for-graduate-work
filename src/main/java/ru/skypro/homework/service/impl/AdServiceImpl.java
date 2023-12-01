@@ -66,7 +66,9 @@ public class AdServiceImpl implements AdService {
      * Метод использует {@link UserRepository#findByEmail(String)}
      *  {@link ImageService#addImage(MultipartFile)}
      *  {@link JpaRepository#save(Object)}
-     * @param createOrUpdateAdDTO - модель DTO создания объявления;
+     *  {@link AdMapper#createOrUpdateAdDTOToAd(CreateOrUpdateAdDTO, User)}
+     *  {@link AdMapper#adToAdDTO(Ad)}
+     * @param createOrUpdateAdDTO - DTO модель класса {@link CreateOrUpdateAdDTO};
      * @param image - фотография объявления
      * @return возвращает объявление в качестве DTO модели
      */
@@ -87,6 +89,7 @@ public class AdServiceImpl implements AdService {
      * Метод для получения информации об объявлении по id
      * Метод использует {@link AdRepository#findById(Long)}
      *  {@link UserRepository#findById(Long)}
+     *  {@link AdMapper#toExtendedAdDTO(Ad, User)}
      * @param adId - id объявления
      * @return возвращает DTO модель объявления
      */
@@ -124,8 +127,9 @@ public class AdServiceImpl implements AdService {
      * Метод для изменения объявления
      * Метод использует {@link AdRepository#findById(Long)}
      * {@link JpaRepository#save(Object)}
+     * {@link AdMapper#adToAdDTO(Ad)}
      * @param adId - id объявления
-     * @param createOrUpdateAdDTO - DTO модель создания объявления
+     * @param createOrUpdateAdDTO - DTO модель класса {@link CreateOrUpdateAdDTO};
      * @return возвращает DTO модель объявления
      */
     @Override
@@ -186,6 +190,7 @@ public class AdServiceImpl implements AdService {
      * Метод получения списка всех комментариев объявления
      * Метод использует {@link JpaRepository#findById(Object)}
      * {@link CommentRepository#findAllByAd(Ad)}
+     * {@link CommentMapper#toCommentDTO(Comment, User)}
      * @param adId - id объявления
      * @return возвращает DTO модели комментариев
      */
@@ -211,8 +216,9 @@ public class AdServiceImpl implements AdService {
      * Метод использует {@link UserRepository#findByEmail(String)}
      * {@link JpaRepository#findById(Object)}
      * {@link JpaRepository#save(Object)}
+     * {@link CommentMapper#toCommentDTO(Comment, User)}
      * @param adId - id объявления
-     * @param createOrUpdateCommentDTO -DTO модель для создания объявления
+     * @param createOrUpdateCommentDTO - DTO модель класса {@link CreateOrUpdateAdDTO};
      * @return возвращает DTO модель комментария
      */
     @Override
@@ -254,9 +260,10 @@ public class AdServiceImpl implements AdService {
      * Метод использует {@link UserRepository#findByEmail(String)}
      * {@link JpaRepository#findById(Object)}
      * {@link JpaRepository#save(Object)}
+     * {@link CommentMapper#toCommentDTO(Comment, User)}
      * @param adId - id объявления
      * @param commentId - id комментария
-     * @param createOrUpdateCommentDTO - DTO модель для создания комментария
+     * @param createOrUpdateCommentDTO - DTO модель класса {@link CreateOrUpdateAdDTO};
      * @return - возвращает DTO модель комментария
      */
     @Override

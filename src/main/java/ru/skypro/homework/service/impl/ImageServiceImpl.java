@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +24,13 @@ import java.io.IOException;
 public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
 
+    /**
+     * Получение изображения по ID
+     * Метод использует {@link JpaRepository#findById(Object)}
+     * @param id - id изображения
+     * @return ResponseEntity с массивом байтов, представляющим изображение,
+     * и соответствующими заголовками.
+     */
     @Override
     public ResponseEntity<byte[]> getImage(Long id) {
         Image image = imageRepository.findById(id).orElseThrow(ImageNotFoundException::new);
@@ -33,6 +41,12 @@ public class ImageServiceImpl implements ImageService {
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(imageBytes);
     }
 
+    /**
+     * Добавление изображения в репозиторий
+     * Метод использует {@link JpaRepository#save(Object)}
+     * @param image - изображение
+     * @return добавленное изображение
+     */
     @Override
     public Image addImage(MultipartFile image) {
         Image imageNew = new Image();
@@ -46,7 +60,11 @@ public class ImageServiceImpl implements ImageService {
         imageRepository.save(imageNew);
         return imageNew;
     }
-
+    /**
+     * Удаление изображения из репозитория
+     * Метод использует {@link JpaRepository#deleteById(Object)}
+     * @param imageId - id изображения
+     */
     @Override
     public void deleteImage(Long imageId) {
         imageRepository.deleteById(imageId);

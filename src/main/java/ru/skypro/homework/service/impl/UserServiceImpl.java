@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,6 +36,12 @@ public class UserServiceImpl implements UserService {
         this.imageService = imageService;
     }
 
+    /**
+     * Извлекает текущего аутентифицированного пользователя.
+     * Метод использует {@link UserRepository#findByEmail(String)}
+     * {@link UserMapper#toUserDTO(User)}
+     * @return - объект UserDTO, представляющий текущего пользователя.
+     */
     @Override
     public UserDTO getCurrentUser() {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
@@ -45,6 +52,14 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /**
+     * Изменение данных пользователя
+     * Метод использует {@link UserRepository#findByEmail(String)}
+     * {@link UserMapper#updateUserDTOToUser(UpdateUserDTO, User)}
+     * {@link UserMapper#toUserDTO(User)}
+     * @param updateUserDTO - DTO модель класса {@link UpdateUserDTO}
+     * @return - пользователя с измененными данными
+     */
 
     @Override
     public UserDTO updateUser(UpdateUserDTO updateUserDTO) {
@@ -58,6 +73,14 @@ public class UserServiceImpl implements UserService {
         return UserMapper.INSTANCE.toUserDTO(userRepository.save(user));
     }
 
+    /**
+     * Изменение пароля пользователя
+     * метод использует {@link UserRepository#findByEmail(String)}
+     * {@link PasswordEncoder#matches(CharSequence, String)}
+     * {@link PasswordEncoder#encode(CharSequence)}
+     * {@link JpaRepository#save(Object)}
+     * @param newPasswordDTO - новый пароль пользователя
+     */
     @Override
     public Void setPassword(NewPasswordDTO newPasswordDTO) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
@@ -83,6 +106,15 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    /**
+     * Изменение аватарки пользователя
+     * Метод использует {@link UserRepository#findByEmail(String)}
+     * {@link ImageService#addImage(MultipartFile)}
+     * {@link JpaRepository#save(Object)}
+     * {@link ImageService#deleteImage(Long)}
+     * @param image - новая аватарка пользователя
+     * @param userName - логин пользователя
+     */
     @Override
     @Transactional
     public void updateUserImage(MultipartFile image, String userName) {
