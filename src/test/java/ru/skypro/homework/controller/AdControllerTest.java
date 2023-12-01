@@ -1,15 +1,6 @@
 package ru.skypro.homework.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.InputStream;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -19,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.ResultActions;
@@ -27,19 +19,26 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.CommentsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
-import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
-import ru.skypro.homework.dto.ExtendedAdDTO;
+import ru.skypro.homework.dto.*;
+import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.Image;
+import ru.skypro.homework.model.Role;
+import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.impl.AdServiceImpl;
+import ru.skypro.homework.service.impl.ImageServiceImpl;
+
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {AdController.class})
 @ExtendWith(SpringExtension.class)
@@ -51,7 +50,7 @@ class AdControllerTest {
     private AdService adService;
 
     /**
-     * Method under test: {@link AdController#getAdInfo(long)}
+     * Method under test:  {@link AdController#getAdInfo(long)}
      */
     @Test
     void testGetAdInfo() throws Exception {
@@ -69,7 +68,7 @@ class AdControllerTest {
     }
 
     /**
-     * Method under test: {@link AdController#getAdInfo(long)}
+     * Method under test:  {@link AdController#getAdInfo(long)}
      */
     @Test
     void testGetAdInfo2() throws Exception {
@@ -85,26 +84,66 @@ class AdControllerTest {
     }
 
     /**
-
      * Method under test: {@link AdController#removeAd(Long)}
-
      */
     @Test
-    void testRemoveAds() {
+    void testRemoveAd() throws UnsupportedEncodingException {
 
+        CommentRepository commentRepository = mock(CommentRepository.class);
+        doNothing().when(commentRepository).deleteAllByAd_Id(Mockito.<Long>any());
+        ImageRepository imageRepository = mock(ImageRepository.class);
+        doNothing().when(imageRepository).deleteById(Mockito.<Long>any());
+        ImageServiceImpl imageService = new ImageServiceImpl(imageRepository);
 
+        Image image = new Image();
+        image.setData("AXAXAXAX".getBytes("UTF-8"));
+        image.setFileSize(3L);
+        image.setId(1L);
+        image.setMediaType("Media Type");
+
+        User author = new User();
+        author.setAds(new ArrayList<>());
+        author.setComments(new ArrayList<>());
+        author.setEmail("jane.doe@example.org");
+        author.setFirstName("Jane");
+        author.setId(1L);
+        author.setImage(image);
+        author.setLastName("Doe");
+        author.setPassword("iloveyou");
+        author.setPhone("6625550144");
+        author.setRole(Role.USER);
+
+        Image image2 = new Image();
+        image2.setData("AXAXAXAX".getBytes("UTF-8"));
+        image2.setFileSize(3L);
+        image2.setId(1L);
+        image2.setMediaType("Media Type");
+
+        Ad ad = new Ad();
+        ad.setAuthor(author);
+        ad.setComments(new ArrayList<>());
+        ad.setDescription("The characteristics of someone or something");
+        ad.setId(1L);
+        ad.setImage(image2);
+        ad.setPrice(1);
+        ad.setTitle("Dr");
+        Optional<Ad> ofResult = Optional.of(ad);
         AdRepository adRepository = mock(AdRepository.class);
         doNothing().when(adRepository).deleteById(Mockito.<Long>any());
-        ResponseEntity<Void> actualRemoveAdsResult = (new AdController(
-
-                new AdServiceImpl(mock(CommentRepository.class), mock(UserRepository.class), userService, mock(ImageRepository.class), adRepository), imageService)).removeAd(1L);
-
+        when(adRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
+        ResponseEntity<Void> actualRemoveAdResult = (new AdController(
+                new AdServiceImpl(commentRepository, mock(UserRepository.class), imageService, adRepository))).removeAd(1L);
         verify(adRepository).deleteById(Mockito.<Long>any());
-        assertEquals(HttpStatus.OK, actualRemoveAdsResult.getStatusCode());
+        verify(imageRepository).deleteById(Mockito.<Long>any());
+        verify(adRepository).findById(Mockito.<Long>any());
+        verify(commentRepository).deleteAllByAd_Id(Mockito.<Long>any());
+        assertNull(actualRemoveAdResult.getBody());
+        assertEquals(HttpStatus.OK, actualRemoveAdResult.getStatusCode());
+        assertTrue(actualRemoveAdResult.getHeaders().isEmpty());
     }
 
     /**
-     * Method under test: {@link AdController#getComments(Long)}
+     * Method under test:  {@link AdController#getComments(Long)}
      */
     @Test
     void testGetComments() throws Exception {
@@ -119,27 +158,16 @@ class AdControllerTest {
     }
 
     /**
-
-     * Method under test: {@link AdController#addAd(CreateOrUpdateAdDTO, MultipartFile)}
-
+     * Method under test:  {@link AdController#addAd(CreateOrUpdateAdDTO, MultipartFile)}
      */
     @Test
-    void testAddAds() throws Exception {
+    void testAddAd() throws Exception {
         when(adService.getAllAds()).thenReturn(new AdsDTO());
-
-        CreateOrUpdateAdDTO createOrUpdateAdDTO = new CreateOrUpdateAdDTO();
-        createOrUpdateAdDTO.description("The characteristics of someone or something");
-        createOrUpdateAdDTO.price(1);
-        createOrUpdateAdDTO.setDescription("The characteristics of someone or something");
-        createOrUpdateAdDTO.setPrice(1);
-        createOrUpdateAdDTO.setTitle("Dr");
-        createOrUpdateAdDTO.title("Dr");
-        String content = (new ObjectMapper()).writeValueAsString(createOrUpdateAdDTO);
         MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/ads");
-        MockHttpServletRequestBuilder requestBuilder = getResult
-                .param("image", String.valueOf(new MockMultipartFile("Name", (InputStream) null)))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content);
+        MockHttpServletRequestBuilder paramResult = getResult.param("createOrUpdateAdDTO",
+                String.valueOf(new CreateOrUpdateAdDTO()));
+        MockHttpServletRequestBuilder requestBuilder = paramResult.param("image",
+                String.valueOf(new MockMultipartFile("Name", (InputStream) null)));
         MockMvcBuilders.standaloneSetup(adController)
                 .build()
                 .perform(requestBuilder)
@@ -149,35 +177,15 @@ class AdControllerTest {
     }
 
     /**
-
-     * Method under test: {@link AdController#deleteComment(Long, Long)}
-
+     * Method under test:  {@link AdController#addComment(Long, CreateOrUpdateCommentDTO)}
      */
     @Test
-    void testDeleteComments() {
-
-        CommentRepository commentRepository = mock(CommentRepository.class);
-        doNothing().when(commentRepository).deleteById(Mockito.<Long>any());
-        ResponseEntity<Void> actualDeleteCommentsResult = (new AdController(
-
-                new AdServiceImpl(commentRepository, mock(UserRepository.class), userService, mock(ImageRepository.class), mock(AdRepository.class)), imageService)).deleteComment(1L,
-
-                1L);
-        verify(commentRepository).deleteById(Mockito.<Long>any());
-        assertEquals(HttpStatus.OK, actualDeleteCommentsResult.getStatusCode());
-    }
-
-    /**
-     * Method under test: {@link AdController#addComment(Long, CreateOrUpdateCommentDTO)}
-     */
-    @Test
-    void testAddComments() throws Exception {
+    void testAddComment() throws Exception {
         when(adService.addComment(Mockito.<Long>any(), Mockito.<CreateOrUpdateCommentDTO>any()))
                 .thenReturn(new CommentDTO());
 
         CreateOrUpdateCommentDTO createOrUpdateCommentDTO = new CreateOrUpdateCommentDTO();
         createOrUpdateCommentDTO.setText("Text");
-        createOrUpdateCommentDTO.text("Text");
         String content = (new ObjectMapper()).writeValueAsString(createOrUpdateCommentDTO);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/ads/{adId}/comments", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -193,7 +201,17 @@ class AdControllerTest {
     }
 
     /**
-     * Method under test: {@link AdController#getAds()}
+     * Method under test: {@link AdController#deleteComment(Long, Long)}
+     */
+    @Test
+    void testDeleteComment() throws Exception {
+        SecurityMockMvcRequestBuilders.FormLoginRequestBuilder requestBuilder = SecurityMockMvcRequestBuilders.formLogin();
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(adController).build().perform(requestBuilder);
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    /**
+     * Method under test:  {@link AdController#getAds()}
      */
     @Test
     void testGetAds() throws Exception {
@@ -208,7 +226,7 @@ class AdControllerTest {
     }
 
     /**
-     * Method under test: {@link AdController#getAdsMe()}
+     * Method under test:  {@link AdController#getAdsMe()}
      */
     @Test
     void testGetAdsMe() throws Exception {
@@ -223,21 +241,7 @@ class AdControllerTest {
     }
 
     /**
-     * Method under test: {@link AdController#updateAdImage(Long, MultipartFile)}
-     */
-    @Test
-    void testUpdateAdImage() throws Exception {
-        MockHttpServletRequestBuilder patchResult = MockMvcRequestBuilders.patch("/ads/{adId}/image", 1L);
-        MockHttpServletRequestBuilder requestBuilder = patchResult.param("image",
-                String.valueOf(new MockMultipartFile("Name", (InputStream) null)));
-        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(adController).build().perform(requestBuilder);
-        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(415));
-    }
-
-    /**
-
-     * Method under test: {@link AdController#updateAd(Long, CreateOrUpdateAdDTO)}
-
+     * Method under test:  {@link AdController#updateAd(Long, CreateOrUpdateAdDTO)}
      */
     @Test
     void testUpdateAd() throws Exception {
@@ -264,16 +268,32 @@ class AdControllerTest {
     }
 
     /**
+     * Method under test: {@link AdController#updateAdImage(Long, MultipartFile)}
+     */
+    @Test
+    void testUpdateAdImage() throws Exception {
+        MockHttpServletRequestBuilder patchResult = MockMvcRequestBuilders.patch("/ads/{adId}/image", 1L);
+        MockHttpServletRequestBuilder requestBuilder = patchResult.param("image",
+                String.valueOf(new MockMultipartFile("Name", (InputStream) null)));
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(adController).build().perform(requestBuilder);
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(415));
+    }
 
-     * Method under test: {@link AdController#updateComment(Long, Long, CreateOrUpdateCommentDTO)}
-
+    /**
+     * Method under test:  {@link AdController#updateComment(Long, Long, CreateOrUpdateCommentDTO)}
      */
     @Test
     void testUpdateComment() throws Exception {
         when(adService.patchComment(Mockito.<Long>any(), Mockito.<Long>any(), Mockito.<CreateOrUpdateCommentDTO>any()))
                 .thenReturn(new CommentDTO());
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/ads/{adId}/comments/{commentId}", 1L,
-                1L);
+
+        CreateOrUpdateCommentDTO createOrUpdateCommentDTO = new CreateOrUpdateCommentDTO();
+        createOrUpdateCommentDTO.setText("Text");
+        String content = (new ObjectMapper()).writeValueAsString(createOrUpdateCommentDTO);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .patch("/ads/{adId}/comments/{commentId}", 1L, 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
         MockMvcBuilders.standaloneSetup(adController)
                 .build()
                 .perform(requestBuilder)

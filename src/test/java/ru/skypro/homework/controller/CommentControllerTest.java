@@ -1,5 +1,13 @@
 package ru.skypro.homework.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,13 +28,11 @@ import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.PhotoAdRepository;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.impl.AdServiceImpl;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import ru.skypro.homework.service.impl.ImageServiceImpl;
 
 @ContextConfiguration(classes = {CommentController.class})
 @ExtendWith(SpringExtension.class)
@@ -62,7 +68,6 @@ class CommentControllerTest {
 
         CreateOrUpdateCommentDTO createOrUpdateCommentDTO = new CreateOrUpdateCommentDTO();
         createOrUpdateCommentDTO.setText("Text");
-        createOrUpdateCommentDTO.text("Text");
         String content = (new ObjectMapper()).writeValueAsString(createOrUpdateCommentDTO);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/comments/{id}/comments", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -82,11 +87,20 @@ class CommentControllerTest {
      */
     @Test
     void testDeleteComments() {
+        //   Diffblue Cover was unable to write a Spring test,
+        //   so wrote a non-Spring test instead.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   java.lang.NullPointerException: Cannot invoke "org.springframework.test.web.servlet.RequestBuilder.buildRequest(javax.servlet.ServletContext)" because "requestBuilder" is null
+        //   See https://diff.blue/R013 to resolve this issue.
 
         CommentRepository commentRepository = mock(CommentRepository.class);
         doNothing().when(commentRepository).deleteById(Mockito.<Long>any());
+        UserRepository userRepository = mock(UserRepository.class);
         ResponseEntity<Void> actualDeleteCommentsResult = (new CommentController(new AdServiceImpl(commentRepository,
-                mock(UserRepository.class), mock(PhotoAdRepository.class), mock(AdRepository.class)))).deleteComments(1L, 1L);
+                userRepository, new ImageServiceImpl(mock(ImageRepository.class)), mock(AdRepository.class))))
+                .deleteComments(1L, 1L);
         verify(commentRepository).deleteById(Mockito.<Long>any());
         assertNull(actualDeleteCommentsResult.getBody());
         assertEquals(HttpStatus.OK, actualDeleteCommentsResult.getStatusCode());
