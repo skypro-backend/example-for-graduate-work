@@ -20,7 +20,6 @@ import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.utils.MethodLog;
 
-import java.io.IOException;
 
 
 @Slf4j
@@ -174,7 +173,7 @@ public class UserController {
     )
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> loadUserImage(@RequestPart(value = "image", required = true) MultipartFile image) throws IOException {
+    public ResponseEntity<Void> loadUserImage(@RequestPart(value = "image") MultipartFile image){
         log.warn("PATCH запрос на обновление аватара пользователя, тело запроса: MultipartFile image, метод контроллера: {}", MethodLog.getMethodName());
         userService.updateUserImage(image, SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok().build();

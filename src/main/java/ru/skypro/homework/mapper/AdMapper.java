@@ -22,6 +22,7 @@ public interface AdMapper {
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "image", ignore = true)
     Ad createOrUpdateAdDTOToAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, User user);
+
     @Mapping(target = "pk", source = "ad.id")
     @Mapping(target = "authorFirstName", source = "user.firstName")
     @Mapping(target = "authorLastName", source = "user.lastName")
