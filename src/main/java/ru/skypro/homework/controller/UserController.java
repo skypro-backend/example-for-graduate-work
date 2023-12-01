@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
@@ -16,6 +17,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
+import java.io.IOException;
 
 @RestController
 @Tag(name = "\uD83D\uDE4B Пользователи")
@@ -56,7 +59,6 @@ public class UserController {
                     )
             }
     )
-
     @PostMapping("/set_password") // http://localhost:8080/users/set_password
     public ResponseEntity setPassword(@RequestBody NewPassword newPass, Authentication authentication) {
         userService.setPassword(newPass, authentication);
@@ -64,8 +66,8 @@ public class UserController {
     }
 
     @GetMapping("/me") // http://localhost:8080/users/me
-    public ResponseEntity<User> getUser() {
-        UserEntity user = userService.getUser();
+    public ResponseEntity<User> getUser(Authentication authentication) {
+        UserEntity user = userService.getUser(authentication);
         if (user != null) {
             return ResponseEntity.ok(UserMapper.mapFromUserEntityToUser(user));
         } else {
@@ -83,27 +85,17 @@ public class UserController {
         }
     }
 
-    //    @PatchMapping("/me") // http://localhost:8080/users/me
-//    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
-//        UserEntity user = userService.updateUser(updateUser, authentication);
-//        if (user != null) {
-//            return ResponseEntity.ok(UserMapper.mapFromUserEntityToUpdateUser(user));
-//        }else{
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//    }
-//    @PatchMapping("/me/image")
-//    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
-//
-//        if (authService.getLogin() != null) {
-//            if (userService.updateUserImage(image)) {
-//                return ResponseEntity.ok().build();
-//            } else {
-//                return null;
-//            }
-//        } else {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//    }
+    @PatchMapping("/me/image")
+    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image, Authentication authentication) throws IOException {
+        if (authentication.getName() != null) {
+            if (userService.updateUserImage(image, authentication)) {
+                return ResponseEntity.ok().build();
+            } else {
+                return null;
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
 
 }

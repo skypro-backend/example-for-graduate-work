@@ -56,15 +56,6 @@ public class AuthServiceImpl implements AuthService {
     public boolean login(String userName, String password) {
         //Сохраняю логин и пароль в поле ДТО, пока сам не знаю зачем, пригодится.
         this.authorizedUser = new Login(userName, password);
-//        if (!manager.userExists(userName)) {
-//            return false;
-//        }
-//        UserDetails userDetails = manager.loadUserByUsername(userName);
-//        return encoder.matches(password, userDetails.getPassword());
-
-//        UserDetails userDetails = myUserDetailService.loadUserByUsername(userName);
-//        String encodePass = encoder.encode(password);
-
         UserDetails userDetails = myUserDetailService.loadUserByUsername(userName);
         if (!encoder.matches(password, userDetails.getPassword())) {
             throw new WrongPasswordException("Неверный пароль");

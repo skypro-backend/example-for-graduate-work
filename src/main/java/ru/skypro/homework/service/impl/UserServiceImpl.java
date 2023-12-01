@@ -76,27 +76,26 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Метод возвращает информацию о текущем, авторизованном пользователе.
-     * Метод находит в {@link AuthServiceImpl} текущие логин и пароль, и присваивает их в переменные.
-     * Далее метод находит в БД, используя {@link UserRepository}, пользователя с соответствующими
-     * данными и возвращает его.
+     * Метод, используя объект {@link Authentication}, находит в БД {@link UserRepository},
+     * пользователя с соответствующими данными и возвращает его.
      *
      * @return объект userEntity
      */
     @Override
-    public UserEntity getUser() {
-        String userName = authService.getLogin().getUsername();
-        return userRepository.findUserEntityByUserName(userName);
+    public UserEntity getUser(Authentication authentication) {
+        return userRepository.findUserEntityByUserName(authentication.getName());
     }
 
     /**
      * Метод изменяет данные пользователя, а именно имя, фамилию и номер телефона.
-     * <p>В начале метод получает из {@link AuthServiceImpl} логин авторизованного пользователя
+     * <p>В начале метод получает из {@link Authentication} логин авторизованного пользователя
      * и записывает его в переменную.</p>
      * <p>По логину находит данные пользователя в БД и кладет их в сущность user.
      * Сущность user заполняется измененными данными из парамера updateUser.</p>
      * <p>В итоге измененный объект user сохраняется в БД, и он же возвращается из метода.</p>
      *
      * @param updateUser объект содержащий поля с именем, фамилией и номером телефона.
+     * @param authentication
      * @return объект user
      */
     @Override
@@ -114,19 +113,25 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * Метод возвращает объект {@link UserEntity} из базы данных. Поиск выполняется по логину,
+     * подаваемому в метод в качестве параметра.
+     * @param username
+     * @return {@link UserEntity}
+     */
     @Override
     public UserEntity checkUserByUsername(String username) {
         UserEntity user = userRepository.findUserEntityByUserName(username);
         if (user == null) {
-            throw new UserNotFoundException("User not found"); // todo придумать сообщение
+            throw new UserNotFoundException("Пользователя с таким логином в базе данных нет");
         }
         return user;
     }
 
     //@Override ругается method does not override or implement a method from a supertype
-    public boolean updateUserImage(MultipartFile image) throws IOException {
+    public boolean updateUserImage(MultipartFile image, Authentication authentication) throws IOException {
 
-        UserEntity user = getUser();
+        UserEntity user = userRepository.findUserEntityByUserName(authentication.getName());
 
         Path filePath = Path.of(avatarDir, user.getId() + "."
                 + imageService.getExtension(image.getOriginalFilename()));
@@ -139,19 +144,4 @@ public class UserServiceImpl implements UserService {
 
         return true;
     }
-
-//    @Override
-//    public UserEntity updateUser(UpdateUser updateUser, Authentication authentication) {
-//        String login = userDetails.getUsername();
-////        String login = inMemoryUserDetailsManager.updateUser();
-//
-//        UserEntity user = userRepository.findUserEntityByUserName(login);
-//        user.setFirstName(updateUser.getFirstName());
-//        user.setLastName(updateUser.getLastName());
-//        user.setPhone(updateUser.getPhone());
-//        userRepository.save(user);
-//        return user;
-//    }
-
-
 }
