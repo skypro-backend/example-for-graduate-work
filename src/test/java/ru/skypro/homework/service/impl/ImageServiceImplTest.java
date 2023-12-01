@@ -1,17 +1,5 @@
 package ru.skypro.homework.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -24,9 +12,15 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.repository.ImageRepository;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 @ContextConfiguration(classes = {ImageServiceImpl.class})
 @ExtendWith(SpringExtension.class)
-class ImageServiceImplDiffblueTest {
+class ImageServiceImplTest {
     @MockBean
     private ImageRepository imageRepository;
 

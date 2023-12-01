@@ -1,15 +1,5 @@
 package ru.skypro.homework.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +19,13 @@ import ru.skypro.homework.model.Role;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.ImageService;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {UserServiceImpl.class})
 @ExtendWith(SpringExtension.class)
@@ -96,10 +93,6 @@ class UserServiceImplTest {
         userServiceImpl.setPassword(new NewPasswordDTO("iloveyou", "iloveyou"));
     }
 
-    /**
-     * Method under test:
-     * {@link UserServiceImpl#updateUserImage(MultipartFile, String)}
-     */
     @Test
     void testUpdateUserImage() throws IOException {
         Image image = new Image();
@@ -147,13 +140,12 @@ class UserServiceImplTest {
         image3.setMediaType("Media Type");
         when(imageService.addImage(Mockito.<MultipartFile>any())).thenReturn(image3);
         doNothing().when(imageService).deleteImage(Mockito.<Long>any());
-        Void actualUpdateUserImageResult = userServiceImpl.updateUserImage(
+        userServiceImpl.updateUserImage(
                 new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))), "janedoe");
         verify(userRepository).save(Mockito.<User>any());
         verify(userRepository).findByEmail(Mockito.<String>any());
         verify(imageService).addImage(Mockito.<MultipartFile>any());
         verify(imageService).deleteImage(Mockito.<Long>any());
-        assertNull(actualUpdateUserImageResult);
     }
 
     /**
