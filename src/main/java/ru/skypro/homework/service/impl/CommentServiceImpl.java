@@ -17,9 +17,11 @@ import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
 
+import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,15 +39,15 @@ public class CommentServiceImpl implements CommentService {
      * @param id
      * @return
      */
+
     public Comments getCommentsByAdId(Integer id){
-        var test = adRepository.findById(4);
         AdEntity ad = adRepository.findById(id).orElseThrow();
 
         Comments commentsDto = new Comments();
 
         List<CommentEntity> commentEntityList = ad.getCommentEntities();
         List<Comment> commentDtoList = commentMapper.listCommentToListCommentDTO(commentEntityList);
-
+        var test = commentDtoList.size();
         commentsDto.setCount(commentDtoList.size());
         commentsDto.setResults(commentDtoList);
 
@@ -53,9 +55,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     public Comment addCommentToAd(Integer id, CreateOrUpdateComment commentDetails, UserDetails userDetails){
-        AdEntity adEntity = adRepository.findById(id).get();
-        //UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername()).get();
-        UserEntity userEntity = userRepository.findByUsername("BobBob").get();
+        AdEntity adEntity = adRepository.findById(id).orElseThrow();
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
 
         CommentEntity commentEntity = new CommentEntity();
         commentEntity.setAuthor(userEntity);

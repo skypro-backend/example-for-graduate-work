@@ -1,8 +1,6 @@
 package ru.skypro.homework.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
@@ -13,15 +11,17 @@ import javax.validation.constraints.Pattern;
 
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user_entity")
+
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pk")
-    private int pk; // id пользователя
+    private Integer pk; // id пользователя
 
     @Email
     @NotBlank
@@ -46,6 +46,7 @@ public class UserEntity {
 
     @NotBlank
     @Pattern(regexp = "USER|ADMIN")
+    @Column(name = "role", nullable = false)
     private Role role;
 
     @Column(name = "image")
@@ -53,6 +54,7 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "author")
     private List<AdEntity> ads;
+
 
     @OneToMany(mappedBy = "author")
     private List<CommentEntity> comments;

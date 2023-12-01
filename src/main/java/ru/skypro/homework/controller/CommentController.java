@@ -25,7 +25,6 @@ public class CommentController {
      //Получение комментариев объявления
     @GetMapping("/{id}/comments")
     public Comments getCommentsForAd(@PathVariable Integer id) {
-        System.out.print("asd");
         return commentService.getCommentsByAdId(id);
     }
 

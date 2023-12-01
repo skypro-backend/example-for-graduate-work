@@ -15,7 +15,7 @@
 --);
 --
 --INSERT INTO user_entity(pk,email,first_name,image,last_name,phone,user_roles)
---VALUES('1','indfkd@mail.ru','Bob','https://commons.wikimedia.org/wiki/File:Felis_silvestris_silvestris.jpg?uselang=ru','Bobs','+79853900335','USER')
+----VALUES('1','indfkd@mail.ru','Bob','https://commons.wikimedia.org/wiki/File:Felis_silvestris_silvestris.jpg?uselang=ru','Bobs','+79853900335','USER')
 --
 --CREATE TABLE "comment_entity"
 --(
