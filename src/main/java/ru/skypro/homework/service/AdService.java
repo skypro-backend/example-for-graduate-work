@@ -19,7 +19,7 @@ public interface AdService {
     AdsDTO getAllAdsByAuthor();
 
 
-    String patchAdImage(Long adId, MultipartFile image);
+    Void patchAdImage(Long adId, MultipartFile image);
 
 
     CommentsDTO getComments(Long adId);

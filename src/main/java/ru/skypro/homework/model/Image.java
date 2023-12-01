@@ -18,7 +18,5 @@ public class Image {
     @Lob
     @Type(type = "org.hibernate.type.ImageType")
     private byte[] data;
-/*    @OneToOne
-    @JoinColumn(name = "ad_id")
-    private Ad ad;*/
+
 }

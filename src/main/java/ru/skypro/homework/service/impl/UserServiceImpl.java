@@ -2,12 +2,11 @@ package ru.skypro.homework.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
@@ -20,7 +19,6 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.utils.MethodLog;
-
 
 
 @Slf4j
@@ -86,12 +84,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserImage(MultipartFile image, String userName) {
-          log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
+    @Transactional
+    public Void updateUserImage(MultipartFile image, String userName) {
+        log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         User user = userRepository.findByEmail(userName);
+        if (user.getImage() == null) {
+            user.setImage(imageService.addImage(image));
+            userRepository.save(user);
+            return null;
+        }
+        Long imageId = user.getImage().getId();
         user.setImage(imageService.addImage(image));
-
+        imageService.deleteImage(imageId);
         userRepository.save(user);
+        return null;
     }
 }

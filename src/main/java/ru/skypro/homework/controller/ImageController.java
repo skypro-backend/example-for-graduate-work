@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.service.ImageService;
 
-import java.io.IOException;
-
-
 @Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")

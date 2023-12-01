@@ -22,8 +22,9 @@ import java.io.IOException;
 @Data
 public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
+
     @Override
-    public ResponseEntity<byte[]> getImage(Long id){
+    public ResponseEntity<byte[]> getImage(Long id) {
         Image image = imageRepository.findById(id).orElseThrow(PhotoAdNotFoundException::new);
         byte[] imageBytes = image.getData();
         HttpHeaders headers = new HttpHeaders();
@@ -31,17 +32,23 @@ public class ImageServiceImpl implements ImageService {
         headers.setContentLength(imageBytes.length);
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(imageBytes);
     }
+
     @Override
-    public Image addImage(MultipartFile image){
+    public Image addImage(MultipartFile image) {
         Image imageNew = new Image();
         try {
             imageNew.setData(image.getBytes());
+            imageNew.setMediaType(image.getContentType());
+            imageNew.setFileSize(image.getSize());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        imageNew.setMediaType(image.getContentType());
-        imageNew.setFileSize(image.getSize());
         imageRepository.save(imageNew);
         return imageNew;
+    }
+
+    @Override
+    public void deleteImage(Long imageId) {
+        imageRepository.deleteById(imageId);
     }
 }

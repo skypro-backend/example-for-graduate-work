@@ -2,11 +2,10 @@ package ru.skypro.homework.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.AdNotFoundException;
@@ -17,11 +16,9 @@ import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
 
-import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
@@ -29,15 +26,6 @@ import ru.skypro.homework.utils.MethodLog;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
-
 
 @Slf4j
 @Service
@@ -45,14 +33,12 @@ public class AdServiceImpl implements AdService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final ImageService imageService;
-    private final ImageRepository imageRepository;
     private final AdRepository adRepository;
 
-    public AdServiceImpl(CommentRepository commentRepository, UserRepository userRepository, ImageService imageService, ImageRepository imageRepository, AdRepository adRepository) {
+    public AdServiceImpl(CommentRepository commentRepository, UserRepository userRepository, ImageService imageService, AdRepository adRepository) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.imageService = imageService;
-        this.imageRepository = imageRepository;
         this.adRepository = adRepository;
     }
 
@@ -106,9 +92,9 @@ public class AdServiceImpl implements AdService {
     public Void deleteAd(Long adId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
-        Long photoId = adRepository.findById(adId).orElseThrow(AdNotFoundException::new).getImage().getId();
+        Long imageId = adRepository.findById(adId).orElseThrow(AdNotFoundException::new).getImage().getId();
         adRepository.deleteById(adId);
-        imageRepository.deleteById(photoId);
+        imageService.deleteImage(imageId);
         commentRepository.deleteAllByAd_Id(adId);
         return null;
     }
@@ -140,26 +126,15 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public String patchAdImage(Long adId, MultipartFile image) {
+    @Transactional
+    public Void patchAdImage(Long adId, MultipartFile image) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
-
-//            Path filePath;
-//            PhotoAd photoAd = new PhotoAd();
-//            try {
-//                filePath = Path.of(photoDir, ad.getTitle() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
-//                uploadPhotoAdd(filePath, image);
-//                photoAd.setFilePath(filePath.toString());
-//                photoAd.setFileSize(image.getSize());
-//                photoAd.setMediaType(image.getContentType());
-//                photoAd = photoAdRepository.save(photoAd);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        ad.setImage("/"+photoDir+"/"+photoAd.getId());
-//        ad.setPhotoAd(photoAd);
-//        return adRepository.save(ad).getImage();
+        Long imageId = ad.getImage().getId();
+        ad.setImage(imageService.addImage(image));
+        imageService.deleteImage(imageId);
+        adRepository.save(ad);
         return null;
     }
 

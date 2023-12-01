@@ -115,6 +115,7 @@ public class CommentController {
     public ResponseEntity<Void> deleteComments(@PathVariable Long adId, @PathVariable Long commentId) {
         return ResponseEntity.ok(adService.deleteComment(adId, commentId));
     }
+
     // --------------------------------------------------------------------------------------
     // Обновить комментарий
     @Operation(

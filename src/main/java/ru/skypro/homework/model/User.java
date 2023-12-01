@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+
 @Data
 @Entity
 @Table(name = "users")
@@ -36,7 +37,7 @@ public class User {
     private List<Ad> ads;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private  List<Comment> comments;
+    private List<Comment> comments;
 
     @OneToOne
     @JsonBackReference

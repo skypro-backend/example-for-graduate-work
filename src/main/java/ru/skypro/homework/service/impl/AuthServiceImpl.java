@@ -1,6 +1,5 @@
 package ru.skypro.homework.service.impl;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +10,7 @@ import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.utils.MethodLog;
+
 @Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
