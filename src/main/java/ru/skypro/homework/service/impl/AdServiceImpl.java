@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,7 @@ public class AdServiceImpl implements AdService {
 
     /**
      * Метод для получения всех объявлений в виде DTO моделей
+     * Метод использует {@link JpaRepository#findAll()}
      * @return возвращает все объявления из БД
      */
     @Override
@@ -61,10 +63,12 @@ public class AdServiceImpl implements AdService {
 
     /**
      * Метод для добавления нового объявления в БД
-     *
-     * @param createOrUpdateAdDTO
-     * @param image
-     * @return
+     * Метод использует {@link UserRepository#findByEmail(String)}
+     *  {@link ImageService#addImage(MultipartFile)}
+     *  {@link JpaRepository#save(Object)}
+     * @param createOrUpdateAdDTO - модель DTO создания объявления;
+     * @param image - фотография объявления
+     * @return возвращает объявление в качестве DTO модели
      */
     @Override
     public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image) {
@@ -79,6 +83,13 @@ public class AdServiceImpl implements AdService {
         return AdMapper.INSTANCE.adToAdDTO(adRepository.save(ad));
     }
 
+    /**
+     * Метод для получения информации об объявлении по id
+     * Метод использует {@link AdRepository#findById(Long)}
+     *  {@link UserRepository#findById(Long)}
+     * @param adId - id объявления
+     * @return возвращает DTO модель объявления
+     */
     @Override
     public ExtendedAdDTO getAdInfo(Long adId) {
 
@@ -87,6 +98,16 @@ public class AdServiceImpl implements AdService {
         User user = userRepository.findById(ad.getAuthor().getId()).orElseThrow(UserNotFoundException::new);
         return AdMapper.INSTANCE.toExtendedAdDTO(ad, user);
     }
+
+    /**
+     * Метод для удаления объявления по id
+     * Метод использует {@link AdRepository#findById(Long)}
+     * {@link AdRepository#deleteById(Long)}
+     * {@link CommentRepository#deleteAllByAd_Id(Long)}
+     * Метод использует {@link ImageService#deleteImage(Long)}
+     * @param adId - id объявления
+     * @return null
+     */
 
     @Override
     public Void deleteAd(Long adId) {
@@ -99,6 +120,14 @@ public class AdServiceImpl implements AdService {
         return null;
     }
 
+    /**
+     * Метод для изменения объявления
+     * Метод использует {@link AdRepository#findById(Long)}
+     * {@link JpaRepository#save(Object)}
+     * @param adId - id объявления
+     * @param createOrUpdateAdDTO - DTO модель создания объявления
+     * @return возвращает DTO модель объявления
+     */
     @Override
     public AdDTO patchAd(Long adId, CreateOrUpdateAdDTO createOrUpdateAdDTO) {
 
@@ -112,6 +141,12 @@ public class AdServiceImpl implements AdService {
         return AdMapper.INSTANCE.adToAdDTO(adRepository.save(ad));
     }
 
+    /**
+     * Метод получения всех объявлений данного пользователя
+     * Метод использует {@link UserRepository#findByEmail(String)}
+     * {@link AdRepository#findAllByAuthor(User)}
+     * @return возвращает DTO модель объявления пользователя 
+     */
     @Override
     public AdsDTO getAllAdsByAuthor() {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
@@ -125,6 +160,15 @@ public class AdServiceImpl implements AdService {
         return adsDTO;
     }
 
+    /**
+     * Метод изменения фотографии у объявления
+     * Метод использует {@link JpaRepository#findById(Object)}
+     * {@link ImageService#addImage(MultipartFile)}
+     * {@link ImageService#deleteImage(Long)}
+     * {@link JpaRepository#save(Object)}
+     * @param adId - id объявления
+     * @param image - фотография объявления
+     */
     @Override
     @Transactional
     public Void patchAdImage(Long adId, MultipartFile image) {
@@ -138,6 +182,13 @@ public class AdServiceImpl implements AdService {
         return null;
     }
 
+    /**
+     * Метод получения списка всех комментариев объявления
+     * Метод использует {@link JpaRepository#findById(Object)}
+     * {@link CommentRepository#findAllByAd(Ad)}
+     * @param adId - id объявления
+     * @return возвращает DTO модели комментариев
+     */
     @Override
     public CommentsDTO getComments(Long adId) {
 
@@ -155,6 +206,15 @@ public class AdServiceImpl implements AdService {
         return commentsDTO;
     }
 
+    /**
+     * Метод добавления комментария к объявлению
+     * Метод использует {@link UserRepository#findByEmail(String)}
+     * {@link JpaRepository#findById(Object)}
+     * {@link JpaRepository#save(Object)}
+     * @param adId - id объявления
+     * @param createOrUpdateCommentDTO -DTO модель для создания объявления
+     * @return возвращает DTO модель комментария
+     */
     @Override
     public CommentDTO addComment(Long adId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
 
@@ -174,6 +234,12 @@ public class AdServiceImpl implements AdService {
 
     }
 
+    /**
+     * Метод удаляет комментарий
+     * Метод использует {@link JpaRepository#deleteById(Object)}
+     * @param adId - id объявления
+     * @param commentId - id объявления
+     */
     @Override
     public Void deleteComment(Long adId, Long commentId) {
 
@@ -183,6 +249,16 @@ public class AdServiceImpl implements AdService {
         return null;
     }
 
+    /**
+     * Метод для изменения комментария
+     * Метод использует {@link UserRepository#findByEmail(String)}
+     * {@link JpaRepository#findById(Object)}
+     * {@link JpaRepository#save(Object)}
+     * @param adId - id объявления
+     * @param commentId - id комментария
+     * @param createOrUpdateCommentDTO - DTO модель для создания комментария
+     * @return - возвращает DTO модель комментария
+     */
     @Override
     public CommentDTO patchComment(Long adId, Long commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
@@ -197,13 +273,25 @@ public class AdServiceImpl implements AdService {
         return CommentMapper.INSTANCE.toCommentDTO(commentRepository.save(comment), user);
     }
 
-
+    /**
+     * Метод проверяет на авторство объявления
+     * Метод использует {@link JpaRepository#findById(Object)}
+     * @param username - имя пользователя
+     * @param adId - id объявления
+     */
     public boolean isAuthorAd(String username, Long adId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
         return ad.getAuthor().getEmail().equals(username);
     }
+
+    /**
+     * Метод проверяет на авторство комментарий
+     * Метод использует {@link JpaRepository#findById(Object)}
+     * @param username - имя пользователя
+     * @param commentId - id комментария
+     */
     public boolean isAuthorComment(String username, Long commentId) {
         log.info("Использован метод сервиса: {}", MethodLog.getMethodName());
 
