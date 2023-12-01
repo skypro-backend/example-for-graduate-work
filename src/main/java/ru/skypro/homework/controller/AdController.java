@@ -56,8 +56,10 @@ public class AdController {
             }
 
     @PatchMapping("{id}")
-    public CreateOrUpdateAd updateById(@PathVariable int id, @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd) {
-        return adService.updateAd(id, createOrUpdateAd);
+    public ResponseEntity<AdDTO> updateById(@PathVariable int id,
+                                            @RequestBody CreateOrUpdateAd createOrUpdateAd,
+                                            Authentication authentication) {
+        return ResponseEntity.ok(adService.updateAd(id, createOrUpdateAd, authentication));
     }
 
     @GetMapping("/me")

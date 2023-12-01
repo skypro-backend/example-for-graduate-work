@@ -26,7 +26,8 @@ public class User implements UserDetails {
     private String phone;
     //@Enumerated(value = EnumType.STRING)
     private RoleDTO role;
-    private String image;
+    @OneToOne
+       private Image image;
 
     @JsonIgnore
     @OneToMany(mappedBy = "author")

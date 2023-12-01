@@ -15,7 +15,8 @@ public class Ad {
     private int pk;
     @ManyToOne
     private User author;
-    private String image;
+    @OneToOne
+    private Image image;
     private int price;
     private String title;
     private String description;

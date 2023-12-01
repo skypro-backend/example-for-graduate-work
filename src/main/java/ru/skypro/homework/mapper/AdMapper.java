@@ -17,6 +17,7 @@ public class AdMapper {
         adDTO.setPk(ad.getPk());
         adDTO.setPrice(ad.getPrice());
         adDTO.setTitle(ad.getTitle());
+        adDTO.setAuthor(ad.getAuthor());
         //    adDTO.setDescription(ad.getDescription());
         return adDTO;
     }

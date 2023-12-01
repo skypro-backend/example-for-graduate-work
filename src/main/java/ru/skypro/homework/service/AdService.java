@@ -34,6 +34,7 @@ public class AdService {
         User author = userService.loadUserByUsername(authentication.getName());
         Ad newAd = adMapping.mapToAdFromCreateOrUpdateAd(createOrUpdateAd);
         newAd.setAuthor(author);
+        newAd.setImage(null);
         adRepository.save(newAd);
         return adMapping.mapToAdDto(newAd);
     }
@@ -44,7 +45,7 @@ public class AdService {
         for (Ad a : adList) {
             adDTOList.add(adMapping.mapToAdDto(a));
         }
-        AdsDTO dto = new AdsDTO ();
+        AdsDTO dto = new AdsDTO();
         dto.setCount(adList.size());
         dto.setResults(adDTOList);
         return dto;
@@ -55,29 +56,33 @@ public class AdService {
                 map(adMapping::mapToExtendedAdDTO).orElseThrow();
     }
 
-    public  boolean deleteAd(int id, Authentication authentication) {
+    public boolean deleteAd(int id, Authentication authentication) {
         User author = userService.loadUserByUsername(authentication.getName());
-        Ad ad = adRepository.findByPk(id);;
+        Ad ad = adRepository.findByPk(id);
+        ;
         if (author.equals(ad.getAuthor())
-                //|| author.getRole() == Role.ADMIN
-                ) {
-         //   Image image = ad.getImage();
+            //|| author.getRole() == Role.ADMIN
+        ) {
+            //   Image image = ad.getImage();
             commentRepository.deleteAll(ad.getComments());
             adRepository.delete(ad);
-           // imageService.deleteImage(image);
+            // imageService.deleteImage(image);
             return true;
         } else {
             return false;
         }
     }
 
-    public CreateOrUpdateAd updateAd(int id, CreateOrUpdateAd createOrUpdateAd) {
+    public AdDTO updateAd(int id, CreateOrUpdateAd createOrUpdateAd, Authentication authentication) {
+        User author = userService.loadUserByUsername(authentication.getName());
         Ad updateAd = adRepository.findByPk(id);
-        updateAd.setTitle(createOrUpdateAd.getTitle());
-        updateAd.setPrice(createOrUpdateAd.getPrice());
-        updateAd.setDescription(createOrUpdateAd.getDescription());
-        adRepository.save(updateAd);
-        return adMapping.mapToCreateOrUpdateAdDTO(updateAd);
+        if (author.equals(updateAd.getAuthor())) {
+            updateAd.setTitle(createOrUpdateAd.getTitle());
+            updateAd.setPrice(createOrUpdateAd.getPrice());
+            updateAd.setDescription(createOrUpdateAd.getDescription());
+                       adRepository.save(updateAd);
+        }
+        return adMapping.mapToAdDto(updateAd);
     }
 
 
@@ -88,7 +93,7 @@ public class AdService {
         for (Ad a : adList) {
             adDTOList.add(adMapping.mapToAdDto(a));
         }
-        AdsDTO dto = new AdsDTO ();
+        AdsDTO dto = new AdsDTO();
         dto.setResults(adDTOList);
         return dto;
     }

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.*;
 
 import lombok.Data;
+import ru.skypro.homework.model.Image;
 
 @Data
 @Schema(description = "Добавление комментария к объявлению")
@@ -29,7 +30,7 @@ public class ExtendedAdDTO {
     private String email;
     @Schema(description = "ссылка на аватар автора объявления")
     @NotBlank
-    private String image;
+    private Image image;
     @Schema(description = "номер телефона автора объявления")
     @NotBlank
   //  @Pattern(regexp = "\\+7\s?\\(?\\d{3}\\)?\s?\\d{3}-?\\d{2}-?\\d{2}")
