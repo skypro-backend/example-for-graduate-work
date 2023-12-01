@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
@@ -61,9 +62,9 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Ad addAd(CreateOrUpdateAd properties, MultipartFile image) throws IOException {
+    public Ad addAd(CreateOrUpdateAd properties, MultipartFile image, Authentication authentication) throws IOException {
 
-        AdEntity adEntity = adMapper.mapToAdEntity(properties, userService.getUser().getUserName());
+        AdEntity adEntity = adMapper.mapToAdEntity(properties, userService.getUser(authentication).getUserName());
         adRepository.save(adEntity);
 
         Path filePath = Path.of(photoDir, adEntity.getId() + "-" + properties.getTitle() + "."

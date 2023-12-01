@@ -33,3 +33,5 @@ build/
 .vscode/
 
 /src/main/resources/images
+/src/main/resources/info/DB_security_config.txt
+/src/main/resources/info/doker_command_start_frontend_project.txt

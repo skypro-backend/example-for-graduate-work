@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
@@ -40,8 +41,10 @@ public class AdController {
     }
 
     @PostMapping
-    public ResponseEntity<Ad> addAd(@RequestParam CreateOrUpdateAd properties, @RequestParam MultipartFile image) throws IOException {
-        Ad ad = adService.addAd(properties, image); // метод в разработке
+    public ResponseEntity<Ad> addAd(@RequestParam CreateOrUpdateAd properties,
+                                    @RequestParam MultipartFile image,
+                                    Authentication authentication) throws IOException {
+        Ad ad = adService.addAd(properties, image, authentication); // метод в разработке
         return ResponseEntity.ok(ad);
     }
 

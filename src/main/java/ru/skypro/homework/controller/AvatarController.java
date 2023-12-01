@@ -2,6 +2,7 @@ package ru.skypro.homework.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.service.AvatarService;
@@ -23,9 +24,10 @@ public class AvatarController {
 
     @PatchMapping("/{id}/image")
     public ResponseEntity<String> updateAvatar(@PathVariable("id") Integer id,
-                                      @RequestParam MultipartFile image) throws IOException {
+                                               @RequestParam MultipartFile image,
+                                               Authentication authentication) throws IOException {
         if (authService.getLogin() != null) {
-            avatarService.updateAvatar(id, image);
+            avatarService.updateAvatar(id, image, authentication);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
