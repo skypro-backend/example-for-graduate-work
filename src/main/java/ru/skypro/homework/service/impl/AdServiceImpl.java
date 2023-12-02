@@ -4,8 +4,6 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AdService;
 
 import java.util.logging.Logger;

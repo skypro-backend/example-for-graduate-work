@@ -6,7 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.service.CommentService;
 
@@ -25,10 +25,10 @@ public class CommentController {
     }
 
     @PostMapping("/ads/{adId}/comments")
-    public ResponseEntity<Comment> postComment(@PathVariable long adId,
-                                               @RequestBody Comment comment) {
+    public ResponseEntity<CommentDTO> postComment(@PathVariable long adId,
+                                                  @RequestBody CommentDTO comment) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Comment());
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new CommentDTO());
     }
 
     @DeleteMapping("/ads/{adId}/comments/{commentId}")
@@ -38,10 +38,10 @@ public class CommentController {
     }
 
     @PatchMapping("/ads/{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable long adId,
-                                                 @PathVariable long commentId,
-                                                 @RequestBody Comment comment) {
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable long adId,
+                                                    @PathVariable long commentId,
+                                                    @RequestBody CommentDTO comment) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Comment());
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new CommentDTO());
     }
 }

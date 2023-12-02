@@ -12,8 +12,8 @@ import java.util.List;
 public class Comments {
 
     private int count = 0;
-    private List<Comment> results = List.of(
-            new Comment()
+    private List<CommentDTO> results = List.of(
+            new CommentDTO()
     );
 
 }

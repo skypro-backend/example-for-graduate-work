@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ad {
+public class AdDTO {
 
     private int author = 0;
     private String image = "string";

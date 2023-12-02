@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     Comment findByPk(int pk);
+    void deleteByAdPkAndPk(int adId, int commentId);
 }

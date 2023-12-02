@@ -25,9 +25,9 @@ public class AdController {
     }
 
     @PostMapping("/ads")
-    public ResponseEntity<Ad> postAd(@RequestBody Ad ad) {
+    public ResponseEntity<AdDTO> postAd(@RequestBody AdDTO ad) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Ad());
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new AdDTO());
     }
 
     @GetMapping("/ads/{id}")
@@ -42,9 +42,9 @@ public class AdController {
     }
 
     @PatchMapping("/ads/{id}")
-    public ResponseEntity<Ad> editAd(@RequestBody CreateOrUpdateAd ad) {
+    public ResponseEntity<AdDTO> editAd(@RequestBody CreateOrUpdateAd ad) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Ad());
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new AdDTO());
     }
 
     @GetMapping("/ads/me")
@@ -57,7 +57,7 @@ public class AdController {
     public ResponseEntity<String> updateUserImage(@PathVariable int id,
                                                   @RequestBody MultipartFile file) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.ok(new Image().getLink());
+        return ResponseEntity.ok(new ImageDTO().getLink());
     }
 
 }

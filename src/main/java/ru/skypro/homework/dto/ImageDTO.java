@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Image {
+public class ImageDTO {
 
     private int id = 0;
     private String filePath = "string";

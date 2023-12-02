@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CommentService {
     Comment createComment(Comment comment);
-    void deleteComment(long adId, long commentId);
+    void deleteComment(int adPk, int commentId);
     Comment editComment(Comment comment);
     List<Comment> getComments(long adId);
 }

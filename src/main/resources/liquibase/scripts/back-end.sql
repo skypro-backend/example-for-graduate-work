@@ -4,7 +4,7 @@
 create table if not exists users
 (
     id serial not null PRIMARY KEY,
-    email text,
+    username text,
     first_name text,
     last_name text,
     password text,

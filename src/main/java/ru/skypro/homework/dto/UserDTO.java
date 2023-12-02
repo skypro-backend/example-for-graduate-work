@@ -3,7 +3,6 @@ package ru.skypro.homework.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -12,7 +11,7 @@ import javax.persistence.Enumerated;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class UserDTO {
 
     private int id = 0;
     private String email = "string";

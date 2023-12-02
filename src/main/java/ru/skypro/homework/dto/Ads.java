@@ -12,8 +12,8 @@ import java.util.List;
 public class Ads {
 
     private int count = 0;
-    private List<Ad> results = List.of(
-            new Ad()
+    private List<AdDTO> results = List.of(
+            new AdDTO()
     );
 
 }

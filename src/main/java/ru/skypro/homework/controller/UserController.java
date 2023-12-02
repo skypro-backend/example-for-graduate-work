@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Image;
+import ru.skypro.homework.dto.ImageDTO;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.UserService;
 
 @Slf4j
@@ -22,9 +22,9 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/users/me")
-    public ResponseEntity<User> get() {
+    public ResponseEntity<UserDTO> get() {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.ok(new User());
+        return ResponseEntity.ok(new UserDTO());
     }
 
     @PatchMapping("/users/me")
@@ -36,7 +36,7 @@ public class UserController {
     @PatchMapping("/users/me/image")
     public ResponseEntity<String> updateUserImage(@RequestBody MultipartFile file) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.ok(new Image().getLink());
+        return ResponseEntity.ok(new ImageDTO().getLink());
     }
     @PutMapping("/users/set_password")
     public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPasswordDto) {
