@@ -12,14 +12,19 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
+import java.util.logging.Logger;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
+    private Logger LoggerFactory;
     private final BackEndUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+    private final Logger logger = (Logger) LoggerFactory.getLogger(String.valueOf(AuthServiceImpl.class));
 
     @Override
     public boolean login(Login login) {
@@ -27,7 +32,8 @@ public class AuthServiceImpl implements AuthService {
         if (userDetails == null) {
             return false;
         }
-        return passwordEncoder.matches(passwordEncoder.encode(login.getPassword()), userDetails.getPassword());
+        logger.info(String.valueOf(passwordEncoder.matches(login.getPassword(), userDetails.getPassword())));
+        return passwordEncoder.matches(login.getPassword(), userDetails.getPassword());
     }
 
     @Override
