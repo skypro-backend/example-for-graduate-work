@@ -1,10 +1,13 @@
 package ru.skypro.homework.service;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 
 import java.util.ArrayList;
@@ -16,14 +19,20 @@ public class AdService {
 
     private final AdRepository adRepository;
     private final AdMapper adMapping;
+    private final UserService userService;
 
-    public AdService(AdRepository adRepository, AdMapper adMapping) {
+    public AdService(AdRepository adRepository, AdMapper adMapping, UserService userService) {
         this.adRepository = adRepository;
         this.adMapping = adMapping;
+        this.userService = userService;
     }
 
-    public void createAd(CreateOrUpdateAd createOrUpdateAd) {
-        adRepository.save(adMapping.mapToAdFromCreateOrUpdateAd(createOrUpdateAd));
+    public AdDTO createAd(CreateOrUpdateAd createOrUpdateAd, Authentication authentication) {
+        User author = userService.loadUserByUsername(authentication.getName());
+        Ad newAd = adMapping.mapToAdFromCreateOrUpdateAd(createOrUpdateAd);
+        newAd.setAuthor(author);
+        adRepository.save(newAd);
+        return adMapping.mapToAdDto(newAd);
     }
 
     public Collection<AdDTO> getAll() {
@@ -51,6 +60,19 @@ public class AdService {
         updateAd.setDescription(createOrUpdateAd.getDescription());
         adRepository.save(updateAd);
         return adMapping.mapToCreateOrUpdateAdDTO(updateAd);
+    }
+
+
+    public AdsDTO getAdsMe(Authentication authentication) {
+        User author = userService.loadUserByUsername(authentication.getName());
+        List<Ad> adList = adRepository.findAllByAuthor_username(author.getUsername());
+        List<AdDTO> adDTOList = new ArrayList<>(adList.size());
+        for (Ad a : adList) {
+            adDTOList.add(adMapping.mapToAdDto(a));
+        }
+        AdsDTO dto = new AdsDTO ();
+        dto.setResults(adDTOList);
+        return dto;
     }
 }
 

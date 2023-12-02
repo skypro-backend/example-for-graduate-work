@@ -26,7 +26,7 @@ public class CommentController {
 
 
     @PostMapping("{id}/comments")
-    public void createComment(@PathVariable int id, CreateOrUpdateComment createOrUpdateComment) {
+    public void createComment(@PathVariable int id,@Valid @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         commentService.createComment(id, createOrUpdateComment);
     }
 

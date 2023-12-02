@@ -2,11 +2,13 @@ package ru.skypro.homework.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.service.impl.AuthServiceImpl;
 
 import javax.validation.Valid;
 
@@ -15,9 +17,11 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    @Autowired
+    AuthServiceImpl authService;
     @PostMapping("/set_password")
-    public void setPassword(Authentication authentication, @Valid @RequestParam NewPasswordDTO newPassword) {
-        ;
+    public void setPassword(Authentication authentication, @RequestBody NewPasswordDTO newPassword) {
+         authService.setPassword(authentication.getName(), newPassword);
     }
 
     @GetMapping("/me")

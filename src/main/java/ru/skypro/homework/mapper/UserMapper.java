@@ -1,12 +1,19 @@
 package ru.skypro.homework.mapper;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.LoginDTO;
+import ru.skypro.homework.dto.RegisterDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.model.User;
 
+import java.nio.CharBuffer;
+
 @Service
+@RequiredArgsConstructor
 public class UserMapper {
+    private final PasswordEncoder encoder;
     //из model в dto
     public UserDTO mapToUserDto(User user){
         UserDTO userDTO = new UserDTO();
@@ -43,4 +50,15 @@ public class UserMapper {
         return user;
     }
 
+    public User mapToUser(RegisterDTO registerDTO){
+        User user = new User();
+        user.setUsername(registerDTO.getUsername());
+//        user.setPassword(registerDTO.getPassword());
+        user.setPassword(encoder.encode(CharBuffer.wrap(registerDTO.getPassword())));
+        user.setFirstName(registerDTO.getFirstName());
+        user.setLastName(registerDTO.getLastName());
+        user.setPhone(registerDTO.getPhone());
+        user.setRole(registerDTO.getRole());
+        return user;
+    }
 }
