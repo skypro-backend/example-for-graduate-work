@@ -17,18 +17,21 @@ public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(nullable = false)
     private String title;
+    @Column(nullable = false)
     private Integer price;
+    @Column(nullable = false, length = 250)
     private String description;
 
     @OneToOne
     private PhotoEntity photo;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
-    @OneToMany(mappedBy = "ad")
+    @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
     private Collection<CommentEntity> comments;
 
     private String image;

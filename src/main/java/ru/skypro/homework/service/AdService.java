@@ -15,6 +15,7 @@ public interface AdService {
     Ads getAllAds();
 
     Ad addAd(CreateOrUpdateAd properties, MultipartFile image, Authentication authentication) throws IOException;
+    Ad addAd(CreateOrUpdateAd properties, MultipartFile image);
 
     ExtendedAd getAds(Integer id);
 

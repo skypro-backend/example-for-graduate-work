@@ -36,4 +36,20 @@ public class UserEntity {
 
     private String image;
 
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", role=" + role +
+                ", avatar=" + avatar +
+                ", ads=" + ads +
+                ", comments=" + comments +
+                ", image='" + image + '\'' +
+                '}';
+    }
 }
