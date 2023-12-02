@@ -3,10 +3,7 @@ package ru.skypro.homework.service;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.ExtendedAdDTO;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Image;
@@ -67,13 +64,12 @@ public class AdService {
         User author = userService.loadUserByUsername(authentication.getName());
         Ad ad = adRepository.findByPk(id);
         ;
-        if (author.equals(ad.getAuthor())
-            //|| author.getRole() == Role.ADMIN
+        if (author.equals(ad.getAuthor()) || author.getRole() == RoleDTO.ADMIN
         ) {
-               Image image = ad.getImage();
+            Image image = ad.getImage();
             commentRepository.deleteAll(ad.getComments());
             adRepository.delete(ad);
-             imageService.deleteImage(image);
+            imageService.deleteImage(image);
             return true;
         } else {
             return false;
@@ -83,11 +79,11 @@ public class AdService {
     public AdDTO updateAd(int id, CreateOrUpdateAd createOrUpdateAd, Authentication authentication) {
         User author = userService.loadUserByUsername(authentication.getName());
         Ad updateAd = adRepository.findByPk(id);
-        if (author.equals(updateAd.getAuthor())) {
+        if (author.equals(updateAd.getAuthor()) || author.getRole() == RoleDTO.ADMIN) {
             updateAd.setTitle(createOrUpdateAd.getTitle());
             updateAd.setPrice(createOrUpdateAd.getPrice());
             updateAd.setDescription(createOrUpdateAd.getDescription());
-                       adRepository.save(updateAd);
+            adRepository.save(updateAd);
         }
         return adMapping.mapToAdDto(updateAd);
     }
@@ -103,6 +99,15 @@ public class AdService {
         AdsDTO dto = new AdsDTO();
         dto.setResults(adDTOList);
         return dto;
+    }
+
+    public void editAdImage(int id, MultipartFile image, Authentication authentication) throws IOException {
+        User author = userService.loadUserByUsername(authentication.getName());
+        Ad updateAd = adRepository.findByPk(id);
+        Image oldImage = updateAd.getImage();
+        updateAd.setImage(imageService.uploadImage(image));
+        adRepository.save(updateAd);
+        imageService.deleteImage(oldImage);
     }
 }
 

@@ -39,12 +39,15 @@ public class CommentController {
     }
 
     @DeleteMapping("{adId}/comments/{commentId}")
-    public void deleteAd(@PathVariable int adId, @PathVariable int commentId) {
-        commentService.deleteComment(adId, commentId);
+    public void deleteAd(@PathVariable int adId, @PathVariable int commentId, Authentication authentication) {
+        commentService.deleteComment(adId, commentId, authentication);
     }
 
     @PatchMapping("{adId}/comments/{commentId}")
-    public CommentDTO updateById(@PathVariable int adId, @PathVariable int commentId, @Valid @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        return commentService.updateComment(adId, commentId, createOrUpdateComment);
+    public CommentDTO updateById(@PathVariable int adId,
+                                 @PathVariable int commentId,
+                                 @Valid @RequestBody CreateOrUpdateComment createOrUpdateComment,
+                                 Authentication authentication) {
+        return commentService.updateComment(adId, commentId, createOrUpdateComment, authentication);
     }
 }

@@ -62,21 +62,26 @@ public class CommentService {
     }
 
 
-    public void deleteComment(int adId, int commentId) {
+    public void deleteComment(int adId, int commentId, Authentication authentication) {
+        User author = userService.loadUserByUsername(authentication.getName());
         Comment comment = commentRepository.findByPk(commentId);
         if (comment.getAd().getPk() == adId) {
-            commentRepository.delete(comment);
+            if (author.equals(comment.getUser()) || author.getRole() == RoleDTO.ADMIN) {
+                commentRepository.delete(comment);
+            }
         }
 
     }
 
-    public CommentDTO updateComment(int adId, int commentId, CreateOrUpdateComment createOrUpdateComment) {
+    public CommentDTO updateComment(int adId, int commentId, CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
+        User author = userService.loadUserByUsername(authentication.getName());
         Comment updateComment = commentRepository.findByPk(commentId);
         if (updateComment.getAd().getPk() == adId) {
-            updateComment.setText(createOrUpdateComment.getText());
+            if (author.equals(updateComment.getUser()) || author.getRole() == RoleDTO.ADMIN) {
+                updateComment.setText(createOrUpdateComment.getText());
 
-            commentRepository.save(updateComment);
-
+                commentRepository.save(updateComment);
+            }
         }
         return commentMapping.mapToCommentDto(updateComment);
     }

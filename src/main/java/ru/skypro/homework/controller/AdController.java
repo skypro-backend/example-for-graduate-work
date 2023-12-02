@@ -73,12 +73,13 @@ public class AdController {
         return ResponseEntity.ok(adService.getAdsMe(authentication));
     }
 
-//    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image,
-//                                             Authentication authentication) throws IOException {
-//        userService.editUserImage(image, authentication.getName());
-//        return ResponseEntity.ok().build();
-//    }
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateUserImage(@PathVariable int id,
+                                             @RequestParam MultipartFile image,
+                                             Authentication authentication) throws IOException {
+        adService.editAdImage(id, image, authentication);
+        return ResponseEntity.ok().build();
+    }
 
 
 }
