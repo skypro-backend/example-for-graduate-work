@@ -3,8 +3,10 @@ package ru.skypro.homework.controller;
 
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentService;
@@ -26,12 +28,13 @@ public class CommentController {
 
 
     @PostMapping("{id}/comments")
-    public void createComment(@PathVariable int id,@Valid @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        commentService.createComment(id, createOrUpdateComment);
+    public CommentDTO createComment(@PathVariable int id,@Valid @RequestBody CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
+       return commentService.createComment(id, createOrUpdateComment, authentication);
+
     }
 
     @GetMapping("{id}/comments")
-    public Collection<CommentDTO> getComments(@PathVariable int id) {
+    public CommentsDTO getComments(@PathVariable int id) {
         return commentService.findByAd(id);
     }
 

@@ -18,7 +18,7 @@ public class AdDTO {
     private User author;
     @Schema(description = "ссылка на картинку объявления")
     @NotBlank
-    private Image image;
+    private String image;
     @Schema(description = "id объявления")
     private int pk;
     @Schema(description = "цена объявления")
@@ -29,9 +29,4 @@ public class AdDTO {
     @NotBlank
     @Size(min = 4, max = 100)
     private String title;
-//    @Schema(description = "описание объявления")
-//    @NotBlank
-//    @Size(min = 4)
-//    private String description;
-
 }

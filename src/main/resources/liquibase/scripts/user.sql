@@ -27,8 +27,6 @@ commentId INT
 create TABLE comments (
 pk INT primary key,
 author INT,
-authorImage VARCHAR(255),
-authorFirstName VARCHAR(255),
 text TEXT,
 adId INT,
 );
