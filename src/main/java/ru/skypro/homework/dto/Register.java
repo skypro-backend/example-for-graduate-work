@@ -12,6 +12,9 @@ import javax.persistence.Enumerated;
 @NoArgsConstructor
 public class Register {
 
+    public String getTitle;
+    public String getImage;
+    public int getPrice;
     private String username = "string";
     private String password = "stringst";
     private String firstName = "string";

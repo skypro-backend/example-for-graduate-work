@@ -2,10 +2,9 @@ package ru.skypro.homework.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.ExtendedAd;
-import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.ImageRepository;
@@ -22,8 +21,8 @@ public class AdMapper {
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
 
-    public AdDTO mapToDTO(Ad ad){
-        return new AdDTO(
+    public Ad mapToDTO(ru.skypro.homework.model.Ad ad){
+        return new Ad(
                 ad.getAuthor().getId(),
                 ad.getImage().getLink(),
                 ad.getPk(),
@@ -31,7 +30,7 @@ public class AdMapper {
                 ad.getTitle());
     }
 
-    public Ad mapToEntity(AdDTO adDTO) {
+    public ru.skypro.homework.model.Ad mapToEntity(Ad adDTO) {
         return new ru.skypro.homework.model.Ad(
                 userRepository.findById(adDTO.getAuthor()).get(),
                 imageRepository.findByLink(adDTO.getImage()),
@@ -43,13 +42,13 @@ public class AdMapper {
         );
     }
 
-    public ExtendedAd mapToExtended(Ad ad) {
+    public ExtendedAd mapToExtended(ru.skypro.homework.model.Ad ad) {
         return new ExtendedAd(
                 ad.getPk(),
                 ad.getAuthor().getFirstName(),
                 ad.getAuthor().getLastName(),
                 ad.getDescription(),
-                ad.getAuthor().getUsername(),
+                ad.getAuthor().getEmail(),
                 ad.getAuthor().getImage().getLink(),
                 ad.getAuthor().getPhone(),
                 ad.getPrice(),
@@ -74,7 +73,7 @@ public class AdMapper {
     }
 
     public Ads mapToListOfDTO(List<ru.skypro.homework.model.Ad> ads) {
-        List<AdDTO> results = new ArrayList<>();
+        List<Ad> results = new ArrayList<>();
         for (int i = 0; i < ads.size(); i++) {
             results.add(mapToDTO(ads.get(i)));
         }
