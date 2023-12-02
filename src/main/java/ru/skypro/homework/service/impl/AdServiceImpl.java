@@ -1,8 +1,11 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
@@ -18,6 +21,7 @@ import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
+import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,8 +30,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
-
+@Slf4j
 @Service
 public class AdServiceImpl implements AdService {
 
@@ -35,7 +38,7 @@ public class AdServiceImpl implements AdService {
     private final PhotoRepository photoRepository;
     private final AdMapper adMapper;
 
-    private final ImageService imageService;
+    private final ImageServiceImpl imageService;
 
     private final UserService userService;
 
@@ -45,7 +48,7 @@ public class AdServiceImpl implements AdService {
     public AdServiceImpl(AdRepository adRepository,
                          PhotoRepository photoRepository,
                          AdMapper adMapper,
-                         ImageService imageService, UserService userService) {
+                         ImageServiceImpl imageService, UserService userService) {
         this.adRepository = adRepository;
         this.photoRepository = photoRepository;
         this.adMapper = adMapper;
@@ -62,22 +65,54 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Ad addAd(CreateOrUpdateAd properties, MultipartFile image, Authentication authentication) throws IOException {
-
+    public Ad addAd(CreateOrUpdateAd properties,
+                    MultipartFile image,
+                    Authentication authentication) throws IOException {
+        log.info("Запущен метод сервиса: addAd");
+        //Создаем сущность adEntity и мапим в нее полученную с фронта ДТО.
+        //Заполняются 3/7 полей: title, price, description.
         AdEntity adEntity = adMapper.mapToAdEntity(properties, userService.getUser(authentication).getUserName());
-        adRepository.save(adEntity);
-
+        //формируем путь к картинке в папке проекта
         Path filePath = Path.of(photoDir, adEntity.getId() + "-" + properties.getTitle() + "."
                 + imageService.getExtension(image.getOriginalFilename()));
-
-        imageService.saveFileOnDisk(image, filePath);
-        imageService.updateAdImage(adEntity, image, filePath);
-
+        log.info("путь файла в папке проекта: {}", filePath);
+        //мапим MultypartFile в PhotoEntity
+        PhotoEntity photo = new PhotoEntity();
+        photo.setData(image.getBytes());
+        photo.setMediaType(image.getContentType());
+        photo.setFileSize(image.getSize());
+        log.info("сущность photo = {}", photo);
+        //сохраняем картинку в папку проекта
+        log.info("MultipartFile сохранен в папку проекта - {}", imageService.saveFileOnDisk(image, filePath));
+        //Заполняем поле photo в сущности adEntity (заполнено 4/7 полей)
+        adEntity.setPhoto(imageService.updateAdImage(adEntity, image, filePath));
+        //Заполняем поле image (заполнено 5/7 полей) адресом картинки в папке проекта
         adEntity.setImage("/" + photoDir + "/" + adEntity.getId());
-        adRepository.save(adEntity);
+        //заполняем поле author (заполнено 6/7 полей) текущим авторизованным пользователем
+        //незаполненным осталось поле comments - коллекция комментариев
+        adEntity.setAuthor(userService.getUser(authentication));
+        //сохраняем сущность в репозиторий
+        log.info("Сущность adEntity - {}", adRepository.save(adEntity));
+        //мапим сущность adEntity в ДТО Ad и возвращаем его из метода
+        Ad adDTO = adMapper.mapToAdDto(adEntity);
+        log.info("ДТО Ad - {}", adDTO);
+        return adDTO;
+    }
 
-        return adMapper.mapToAdDto(adEntity);
+    @Override
+    public Ad addAd(CreateOrUpdateAd properties, MultipartFile image) {
+        log.info("Использован метод сервиса addAd - ВАРИАНТ2");
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = userService.getUser(auth);
+        log.info("Сущность UserEntity создана");
+        AdEntity adEntity = adMapper.mapToAdEntity(properties, user.getUserName());
+        log.info("Сущность adEntity создана");
+        adEntity.setPhoto(imageService.addPhoto(image));
+        log.info("Добавлено фото в adEntity");
+        Ad adDto = adMapper.mapToAdDto(adRepository.save(adEntity));
+        log.info("ДТО ad создано");
+        return adDto;
     }
 
     @Override
@@ -110,14 +145,19 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
+    @Transactional
     public Ads getAdsMe(String username) {
+        log.info("Запуск метода сервиса getAdsMe");
         UserEntity author = userService.checkUserByUsername(username);
-
-        List<Ad> ads = adRepository.findByAuthor(author).stream()
-                .map(ad -> adMapper.mapToAdDto(ad))
-                .collect(Collectors.toList());
-
-        return new Ads(ads.size(), ads);
+        log.info("объект UserEntity получен из БД");
+        List<Ad> ads = null;
+            ads = adRepository.findByAuthor(author).stream()
+                    .map(ad -> adMapper.mapToAdDto(ad))
+                    .collect(Collectors.toList());
+        log.info("Получен список объявлений пользователя ads");
+        Ads adsDto = new Ads(ads.size(), ads);
+        log.info("Сформирован возвращаемый объект adsDto");
+        return adsDto;
     }
 
     @Override

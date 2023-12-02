@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,7 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
-
+@Slf4j
 @RestController
 @CrossOrigin("http://localhost:3000")
 @RequestMapping("/ads")
@@ -24,6 +25,7 @@ public class CommentController {
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<Comments> getComments(@PathVariable("id") Integer id) {
+        log.info("За запущен метод контроллера: getComments");
         //todo добавить условие???? если role = admin то можно смотреть все комменты, юзер - только свои
         if (authService.getLogin() != null) {
             return ResponseEntity.ok(commentService.getComments(id));
@@ -35,6 +37,7 @@ public class CommentController {
     @PostMapping("/{id}/comments")
     public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id,
                                               @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+        log.info("За запущен метод контроллера: addComment");
         if (authService.getLogin() != null) {
             return ResponseEntity.ok(commentService.addComment(id, createOrUpdateComment, authService.getLogin().getUsername()));
         } else {
@@ -44,6 +47,7 @@ public class CommentController {
 
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable("commentId") Integer commentId) {
+        log.info("За запущен метод контроллера: deleteComment");
         //
         //как сделать: нужно найти в БД юзера по его логину из authService.getLogin()
         //и проверить его статус: админ или юзер, если админ то удаляем коммент. если нет, то см. далее
@@ -68,6 +72,7 @@ public class CommentController {
     public ResponseEntity<Comment> updateComment(@PathVariable("adId") Integer adId,
                                                  @PathVariable("commentId") Integer commentId,
                                                  @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+        log.info("За запущен метод контроллера: updateComment");
         //todo добавить условие, только пользователь написавший коммент может его править.
         //Нужен ли adId ?
         if (authService.getLogin() != null) {

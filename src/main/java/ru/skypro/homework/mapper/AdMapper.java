@@ -45,10 +45,8 @@ public class AdMapper {
     public AdEntity mapToAdEntity(CreateOrUpdateAd dto, String username) {
         UserEntity author = userRepository.findUserEntityByUserName(username);
         if (author == null) {
-
             throw new UserNotFoundException("User not found");
         }
-
         AdEntity entity = new AdEntity();
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
