@@ -18,6 +18,7 @@ import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.service.AdService;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Collection;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -33,9 +34,12 @@ public class AdController {
         this.adService = adService;
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDTO> addAds(Authentication authentication, @RequestPart("properties") CreateOrUpdateAd createOrUpdateAd, @RequestPart("image") MultipartFile image) {
-        return ResponseEntity.ok(adService.createAd(createOrUpdateAd, authentication));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AdDTO> addAds(@RequestPart("image") MultipartFile imageFile,
+                                        Authentication authentication,
+                                        @RequestPart("properties") CreateOrUpdateAd createOrUpdateAd,
+                                        @RequestPart("image") MultipartFile image) throws IOException {
+        return ResponseEntity.ok(adService.createAd(createOrUpdateAd, authentication, imageFile));
     }
 
     @GetMapping
@@ -49,7 +53,7 @@ public class AdController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteAd(@PathVariable int id, Authentication authentication) {
+    public ResponseEntity<?> deleteAd(@PathVariable int id, Authentication authentication) throws IOException {
         if (adService.deleteAd(id, authentication)) {
             return ResponseEntity.ok().build();
         } else {
@@ -68,6 +72,13 @@ public class AdController {
     public ResponseEntity<AdsDTO> getAdsMe(Authentication authentication) {
         return ResponseEntity.ok(adService.getAdsMe(authentication));
     }
+
+//    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image,
+//                                             Authentication authentication) throws IOException {
+//        userService.editUserImage(image, authentication.getName());
+//        return ResponseEntity.ok().build();
+//    }
 
 
 }

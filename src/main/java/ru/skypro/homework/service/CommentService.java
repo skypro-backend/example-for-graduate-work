@@ -22,6 +22,7 @@ public class CommentService {
     private final AdRepository adRepository;
     private final CommentMapper commentMapping;
     private final UserService userService;
+
     public static String getCurrentTimeStamp() {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date now = new Date();
@@ -58,7 +59,7 @@ public class CommentService {
         dto.setCount(commentList.size());
         dto.setResults(commentDTOList);
         return dto;
-            }
+    }
 
 
     public void deleteComment(int adId, int commentId) {
@@ -74,11 +75,12 @@ public class CommentService {
         if (updateComment.getAd().getPk() == adId) {
             updateComment.setText(createOrUpdateComment.getText());
 
-
             commentRepository.save(updateComment);
 
         }
         return commentMapping.mapToCommentDto(updateComment);
     }
+
 }
+
 
