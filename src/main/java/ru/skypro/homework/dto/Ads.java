@@ -3,6 +3,7 @@ package ru.skypro.homework.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.skypro.homework.model.Ad;
 
 import java.util.List;
 
@@ -16,4 +17,7 @@ public class Ads {
             new AdDTO()
     );
 
+    public Object Ads(int size, List<Ad> results) {
+        return null;
+    }
 }

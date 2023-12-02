@@ -26,4 +26,6 @@ public class User {
     @JoinColumn(name = "image_id")
     private Image image;
 
+    public String getEmail() {return null;
+    }
 }

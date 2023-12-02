@@ -2,9 +2,10 @@ package ru.skypro.homework.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.ImageRepository;
@@ -30,10 +31,10 @@ public class AdMapper {
                 ad.getTitle());
     }
 
-    public ru.skypro.homework.model.Ad mapToEntity(Ad adDTO) {
-        return new ru.skypro.homework.model.Ad(
-                userRepository.findById(adDTO.getAuthor()).get(),
-                imageRepository.findByLink(adDTO.getImage()),
+    public Ad mapToEntity(AdDTO adDTO) {
+        return new Ad(
+                userRepository.findById(adDTO.getAuthor().getId()).get(),
+                imageRepository.findByLink(String.valueOf(adDTO.getImage())),
                 adDTO.getPk(),
                 adDTO.getPrice(),
                 adDTO.getTitle(),
