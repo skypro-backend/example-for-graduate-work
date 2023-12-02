@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Login {
+public class UpdateUser {
 
-    private String username = "stringst";
-    private String password = "string";
+    private String firstName = "string";
+    private String lastName = "string";
+    private String phone = "+7(300) 0524971";
 
 }

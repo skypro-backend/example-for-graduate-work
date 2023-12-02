@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Login {
+public class NewPassword {
 
-    private String username = "stringst";
-    private String password = "string";
+    private String currentPassword = "stringst";
+    private String newPassword = "stringst";
 
 }

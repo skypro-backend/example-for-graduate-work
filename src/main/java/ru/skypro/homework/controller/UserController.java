@@ -7,7 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.dto.Image;
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UserService;
 
 @Slf4j
@@ -15,29 +18,30 @@ import ru.skypro.homework.service.UserService;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserService userService;
-    @GetMapping("/users/me/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable String id) {
-        return ResponseEntity.ok(userService.get(Long.valueOf(id)));
-    }
+
     @GetMapping("/users/me")
-    public ResponseEntity<UserDto> get() {
+    public ResponseEntity<User> get() {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.ok(new UserDto());
+        return ResponseEntity.ok(new User());
     }
 
     @PatchMapping("/users/me")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUserDto) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new UserDto());
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new UpdateUser());
     }
 
     @PatchMapping("/users/me/image")
     public ResponseEntity<String> updateUserImage(@RequestBody MultipartFile file) {
-        return ResponseEntity.ok().build();
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.ok(new Image().getLink());
     }
     @PutMapping("/users/set_password")
-    public ResponseEntity<UserDto> updatePassword(@RequestBody String password) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPasswordDto) {
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new NewPassword());
     }
+
 }

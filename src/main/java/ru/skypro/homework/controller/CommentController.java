@@ -6,14 +6,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.model.Image;
+import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.service.CommentService;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -23,20 +18,17 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    public CommentController(CommentService commentService) {
-        this.commentService = commentService;
-    }
-
     @GetMapping("/ads/{adId}/comments")
-    public ResponseEntity<List<CommentDTO>> getComments(@PathVariable long adId) {
-        return null;
+    public ResponseEntity<Comments> getComments(@PathVariable long adId) {
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Comments());
     }
 
     @PostMapping("/ads/{adId}/comments")
-    public ResponseEntity<CommentDTO> postComment(@PathVariable long adId,
-                                                  @RequestBody CommentDTO comment) {
+    public ResponseEntity<Comment> postComment(@PathVariable long adId,
+                                               @RequestBody Comment comment) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new CommentDTO());
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Comment());
     }
 
     @DeleteMapping("/ads/{adId}/comments/{commentId}")
@@ -46,10 +38,10 @@ public class CommentController {
     }
 
     @PatchMapping("/ads/{adId}/comments/{commentId}")
-    public ResponseEntity<CommentDTO> updateComment(@PathVariable long adId,
-                                                    @PathVariable long commentId,
-                                                    @RequestBody CommentDTO comment) {
+    public ResponseEntity<Comment> updateComment(@PathVariable long adId,
+                                                 @PathVariable long commentId,
+                                                 @RequestBody Comment comment) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new CommentDTO());
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Comment());
     }
 }

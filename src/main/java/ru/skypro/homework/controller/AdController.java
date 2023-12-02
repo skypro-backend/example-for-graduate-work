@@ -1,41 +1,64 @@
 package ru.skypro.homework.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.skypro.homework.dto.Login;
-import ru.skypro.homework.dto.Register;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdService;
 
 
+@Slf4j
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequestMapping("/ad")
+@RequiredArgsConstructor
 public class AdController {
     private AdService adService;
 
-    public AdController(AdService addService) {
-        this.adService = adService;
+    @GetMapping("/ads")
+    public ResponseEntity<Ads> getAllAds() {
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Ads());
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Login login) {
-        if (adService.login(login.getUsername(), login.getPassword())) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    @PostMapping("/ads")
+    public ResponseEntity<Ad> postAd(@RequestBody Ad ad) {
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Ad());
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Register register) {
-        if (adService.register(register)) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    @GetMapping("/ads/{id}")
+    public ResponseEntity<ExtendedAd> getAdById(@PathVariable int id) {
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new ExtendedAd());
     }
+
+    @DeleteMapping("/ads/{id}")
+    public ResponseEntity<Void> deleteComment(@PathVariable long id) {
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/ads/{id}")
+    public ResponseEntity<Ad> editAd(@RequestBody CreateOrUpdateAd ad) {
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Ad());
+    }
+
+    @GetMapping("/ads/me")
+    public ResponseEntity<Ads> getAllMyAds() {
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Ads());
+    }
+
+    @PatchMapping("/ads/{id}/image")
+    public ResponseEntity<String> updateUserImage(@PathVariable int id,
+                                                  @RequestBody MultipartFile file) {
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.ok(new Image().getLink());
+    }
+
 }
 

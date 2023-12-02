@@ -5,29 +5,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "comments")
-public class Comment {
+@Table(name = "ads")
+public class Ad {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
-    @ManyToOne
-    @JoinColumn(name = "author_image_id")
-    private Image authorImage;
-    private String authorFirstName;
-    private LocalDateTime createdAt;
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pk;
-    private String text;
-    @ManyToOne
-    @JoinColumn(name = "ad_id")
-    private Ad ad;
+    private int price;
+    private String title;
+    private String description;
+    @OneToMany(mappedBy = "ad")
+    private List<Comment> comments;
 
 }

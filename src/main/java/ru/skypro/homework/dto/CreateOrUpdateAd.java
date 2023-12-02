@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Login {
+public class CreateOrUpdateAd {
 
-    private String username = "stringst";
-    private String password = "string";
+    private String title = "string";
+    private int price = 1000000;
+    private String description = "stringst";
 
 }
