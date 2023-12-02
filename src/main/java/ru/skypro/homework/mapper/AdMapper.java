@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.ImageRepository;
@@ -90,5 +91,12 @@ public class AdMapper {
         }
         return results;
     }
-
+    public Ad mapFromRegister(Register register){
+        Ad ad = new Ad();
+        ad.setPk(register.getRole().ordinal());
+        ad.setTitle(register.getTitle);
+ad.setImage(register.getImage);
+ad.setPrice(register.getPrice);
+return ad;
+    }
 }
