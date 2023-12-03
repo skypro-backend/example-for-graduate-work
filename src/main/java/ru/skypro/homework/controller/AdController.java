@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,37 +42,37 @@ public class AdController {
         return ResponseEntity.ok(adService.getAllAds());
     }
 
-//    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<Ad> addAd(@RequestParam CreateOrUpdateAd properties,
-//                                    @RequestParam MultipartFile image,
-//                                    Authentication authentication) throws IOException {
-//        log.info("За запущен метод контроллера: addAd");
-//        Ad ad = adService.addAd(properties, image, authentication); // метод в разработке
-//        return ResponseEntity.ok(ad);
-//    }
-@Operation(
-        summary = "Добавление объявления",
-        tags = {"Объявления"})
-@ApiResponses(value = {
-        @ApiResponse(responseCode = "201",
-                description = "Created",
-                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                        schema = @Schema(implementation = Ad.class))),
-        @ApiResponse(responseCode = "401",
-                description = "Unauthorized"),
-        @ApiResponse(responseCode = "403",
-                description = "Forbidden"),
-        @ApiResponse(responseCode = "404",
-                description = "Not Found")})
-
-@ResponseStatus(HttpStatus.CREATED)
-@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-public ResponseEntity<Ad> addAd(
-        @RequestPart(value = "properties", required = false) @Validated CreateOrUpdateAd properties,
-        @RequestPart("image") MultipartFile image) {
-    log.warn("POST запрос на добавление объявления, тело запроса: {}, метод контроллера addAd", properties);
-    return ResponseEntity.ok(adService.addAd(properties, image));
-}
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Ad> addAd(@RequestParam CreateOrUpdateAd properties,
+                                    @RequestParam MultipartFile image,
+                                    Authentication authentication) throws IOException {
+        log.info("За запущен метод контроллера: addAd");
+        Ad ad = adService.addAd(properties, image, authentication); // метод в разработке
+        return ResponseEntity.ok(ad);
+    }
+//@Operation(
+//        summary = "Добавление объявления",
+//        tags = {"Объявления"})
+//@ApiResponses(value = {
+//        @ApiResponse(responseCode = "201",
+//                description = "Created",
+//                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+//                        schema = @Schema(implementation = Ad.class))),
+//        @ApiResponse(responseCode = "401",
+//                description = "Unauthorized"),
+//        @ApiResponse(responseCode = "403",
+//                description = "Forbidden"),
+//        @ApiResponse(responseCode = "404",
+//                description = "Not Found")})
+//
+//@ResponseStatus(HttpStatus.CREATED)
+//@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+//public ResponseEntity<Ad> addAd(
+//        @RequestPart(value = "properties", required = false) @Validated CreateOrUpdateAd properties,
+//        @RequestPart("image") MultipartFile image) {
+//    log.warn("POST запрос на добавление объявления, тело запроса: {}, метод контроллера addAd", properties);
+//    return ResponseEntity.ok(adService.addAd(properties, image));
+//}
 
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> getAds(@PathVariable("id") Integer id) {
@@ -85,16 +86,18 @@ public ResponseEntity<Ad> addAd(
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity removeAd(@PathVariable("id") Integer id) {
+    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    public ResponseEntity removeAd(@PathVariable("id") Integer adId) {
         log.info("За запущен метод контроллера: removeAd");
-        return (adService.removeAd(id)) ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() :
+        return (adService.removeAd(adId)) ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Ad> updateAds(@PathVariable("id") Integer id, @RequestBody CreateOrUpdateAd dto) {
+    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    public ResponseEntity<Ad> updateAds(@PathVariable("id") Integer adId, @RequestBody CreateOrUpdateAd dto) {
         log.info("За запущен метод контроллера: updateAds");
-        Ad ad = adService.updateAds(id, dto);
+        Ad ad = adService.updateAds(adId, dto);
         if (ad != null) {
             return ResponseEntity.ok(ad);
         } else {
@@ -115,7 +118,7 @@ public ResponseEntity<Ad> addAd(
         }
     }
 
-    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+
     @Operation(
             responses = {
                     @ApiResponse(
@@ -126,7 +129,9 @@ public ResponseEntity<Ad> addAd(
                     )
             }
     )
-    public ResponseEntity<byte[]> updateImage(@PathVariable("id") Integer id,
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    public ResponseEntity<byte[]> updateImage(@PathVariable("id") Integer adId,
                                               @RequestParam MultipartFile image,
                                               Authentication authentication) throws IOException {
         log.info("За запущен метод контроллера: updateImage");
@@ -145,9 +150,9 @@ public ResponseEntity<Ad> addAd(
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // todo посмотреть как это сделать с Security
         }
 
-        adService.updateImage(id, image);
+        adService.updateImage(adId, image);
 
-        PhotoEntity photo = adService.findPhoto(id);
+        PhotoEntity photo = adService.findPhoto(adId);
         if (photo != null) {
 
             HttpHeaders headers = new HttpHeaders();

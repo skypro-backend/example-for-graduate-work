@@ -3,7 +3,6 @@ package ru.skypro.homework.service.impl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
@@ -13,7 +12,6 @@ import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
-
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -21,17 +19,10 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final MyUserDetailService myUserDetailService;
-//    /**
-//     * создаем пустую сущность userEntity
-//     */
-//    private UserEntity userEntity;
-    private Login authorizedUser;
 
-    public AuthServiceImpl(/*UserDetailsManager manager,*/
-                           PasswordEncoder passwordEncoder,
+    public AuthServiceImpl(PasswordEncoder passwordEncoder,
                            UserRepository userRepository,
                            MyUserDetailService myUserDetailService) {
-        /*this.manager = manager;*/
         this.encoder = passwordEncoder;
         this.userRepository = userRepository;
         this.myUserDetailService = myUserDetailService;
@@ -54,8 +45,6 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public boolean login(String userName, String password) {
-        //Сохраняю логин и пароль в поле ДТО, пока сам не знаю зачем, пригодится.
-        this.authorizedUser = new Login(userName, password);
         UserDetails userDetails = myUserDetailService.loadUserByUsername(userName);
         if (!encoder.matches(password, userDetails.getPassword())) {
             throw new WrongPasswordException("Неверный пароль");
@@ -86,14 +75,6 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
-    }
-
-//    public UserEntity getUserEntity() {
-//        return userEntity;
-//    }
-
-    public Login getLogin() {
-        return authorizedUser;
     }
 
 }

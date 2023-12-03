@@ -3,6 +3,8 @@ package ru.skypro.homework.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
@@ -10,6 +12,7 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
+
 @Slf4j
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -24,10 +27,10 @@ public class CommentController {
     }
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<Comments> getComments(@PathVariable("id") Integer id) {
+    public ResponseEntity<Comments> getComments(@PathVariable("id") Integer id, Authentication authentication) {
         log.info("За запущен метод контроллера: getComments");
         //todo добавить условие???? если role = admin то можно смотреть все комменты, юзер - только свои
-        if (authService.getLogin() != null) {
+        if (authentication.getName() != null) {
             return ResponseEntity.ok(commentService.getComments(id));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -36,26 +39,30 @@ public class CommentController {
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id,
-                                              @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+                                              @RequestBody CreateOrUpdateComment createOrUpdateComment,
+                                              Authentication authentication) {
         log.info("За запущен метод контроллера: addComment");
-        if (authService.getLogin() != null) {
-            return ResponseEntity.ok(commentService.addComment(id, createOrUpdateComment, authService.getLogin().getUsername()));
+        if (authentication.getName() != null) {
+            return ResponseEntity.ok(commentService.addComment(id, createOrUpdateComment, authentication.getName()));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable("commentId") Integer commentId) {
+    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    public ResponseEntity<?> deleteComment(@PathVariable("adId") Integer adId,
+                                           @PathVariable("commentId") Integer commentId,
+                                           Authentication authentication) {
         log.info("За запущен метод контроллера: deleteComment");
         //
         //как сделать: нужно найти в БД юзера по его логину из authService.getLogin()
         //и проверить его статус: админ или юзер, если админ то удаляем коммент. если нет, то см. далее
         //Далее нужно найти коммент и проверить кому он принадлежит, если текущему юзеру (он не админ),
-        //то удаляем, если нет, то статус 403.todo добавить условие - админ может удалять любые комменты, юзер - только свои.
+        //то удаляем, если нет, то статус 403.
         //Нужен ли adId ?
-        if (authService.getLogin() != null) {
-            String result = commentService.deleteComment(commentId, authService.getLogin().getUsername());
+        if (authentication.getName() != null) {
+            String result = commentService.deleteComment(commentId, authentication.getName());
             if (result.equals("forbidden")) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             } else if (result.equals("not found")) {
@@ -69,14 +76,16 @@ public class CommentController {
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
+    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
     public ResponseEntity<Comment> updateComment(@PathVariable("adId") Integer adId,
                                                  @PathVariable("commentId") Integer commentId,
-                                                 @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+                                                 @RequestBody CreateOrUpdateComment createOrUpdateComment,
+                                                 Authentication authentication) {
         log.info("За запущен метод контроллера: updateComment");
         //todo добавить условие, только пользователь написавший коммент может его править.
         //Нужен ли adId ?
-        if (authService.getLogin() != null) {
-            Comment comment = commentService.updateComment(commentId, createOrUpdateComment, authService.getLogin().getUsername());
+        if (authentication.getName() != null) {
+            Comment comment = commentService.updateComment(commentId, createOrUpdateComment, authentication.getName());
             if (comment.getText().equals(createOrUpdateComment.getText())) {
                 return ResponseEntity.ok(comment);
             } else if (comment == null) {

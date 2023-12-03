@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -62,6 +63,7 @@ public class UserController {
             }
     )
     @PostMapping("/set_password") // http://localhost:8080/users/set_password
+    @PreAuthorize("hasRole('USER') or @adServiceImpl.isAuthorAd(authentication.name)")
     public ResponseEntity setPassword(@RequestBody NewPassword newPass, Authentication authentication) {
         log.info("За запущен метод контроллера: setPassword");
         userService.setPassword(newPass, authentication);
@@ -80,6 +82,7 @@ public class UserController {
     }
 
     @PatchMapping("/me") // http://localhost:8080/users/me
+    @PreAuthorize("hasRole('USER') or @adServiceImpl.isAuthorAd(authentication.name)")
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
         log.info("За запущен метод контроллера: updateUser");
         UserEntity user = userService.updateUser(updateUser, authentication);
@@ -107,6 +110,7 @@ public class UserController {
             }
     )
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('USER') or @adServiceImpl.isAuthorAd(authentication.name)")
     public ResponseEntity<Void> updateUserImage(@RequestParam MultipartFile image, Authentication authentication) throws IOException {
         log.info("За запущен метод контроллера: updateUserImage");
         if (authentication.getName() != null && userService.updateUserImage(image, authentication)) {

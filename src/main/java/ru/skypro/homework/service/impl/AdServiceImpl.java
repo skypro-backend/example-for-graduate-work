@@ -76,17 +76,20 @@ public class AdServiceImpl implements AdService {
         Path filePath = Path.of(photoDir, adEntity.getId() + "-" + properties.getTitle() + "."
                 + imageService.getExtension(image.getOriginalFilename()));
         log.info("путь файла в папке проекта: {}", filePath);
+
         //мапим MultypartFile в PhotoEntity
         PhotoEntity photo = new PhotoEntity();
         photo.setData(image.getBytes());
         photo.setMediaType(image.getContentType());
         photo.setFileSize(image.getSize());
         log.info("сущность photo = {}", photo);
+
         //сохраняем картинку в папку проекта
         log.info("MultipartFile сохранен в папку проекта - {}", imageService.saveFileOnDisk(image, filePath));
+
         //Заполняем поле photo в сущности adEntity (заполнено 4/7 полей)
         adEntity.setPhoto(imageService.updateAdImage(adEntity, image, filePath));
-        //Заполняем поле image (заполнено 5/7 полей) адресом картинки в папке проекта
+        //Заполняем поле image (заполнено 5/7 полей) URL куда будет обращаться фронт с добавлением имени картинки
         adEntity.setImage("/" + photoDir + "/" + adEntity.getId());
         //заполняем поле author (заполнено 6/7 полей) текущим авторизованным пользователем
         //незаполненным осталось поле comments - коллекция комментариев

@@ -28,7 +28,7 @@ public class AvatarController {
                                                @RequestParam MultipartFile image,
                                                Authentication authentication) throws IOException {
         log.info("За запущен метод контроллера: updateAvatar");
-        if (authService.getLogin() != null) {
+        if (authentication.getName()!= null) {
             avatarService.updateAvatar(id, image, authentication);
             return ResponseEntity.ok().build();
         } else {
