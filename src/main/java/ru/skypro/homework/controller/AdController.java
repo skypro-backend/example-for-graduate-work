@@ -4,10 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdService;
 
 
@@ -16,7 +20,10 @@ import ru.skypro.homework.service.AdService;
 @RestController
 @RequiredArgsConstructor
 public class AdController {
-    private AdService adService;
+
+    private final AdService adService;
+    private final AdMapper adMapper;
+    private final AdRepository adRepository;
 
     @GetMapping("/ads")
     public ResponseEntity<Ads> getAllAds() {
@@ -24,10 +31,13 @@ public class AdController {
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new Ads());
     }
 
-    @PostMapping("/ads")
-    public ResponseEntity<AdDTO> postAd(@RequestBody AdDTO ad) {
+    @PostMapping(value = "/ads", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdDTO> postAd(@RequestBody CreateOrUpdateAd createOrUpdateAd,
+                                        @RequestBody MultipartFile file) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new AdDTO());
+        Ad ad = adMapper.mapFromCreateOrUpdateAd(createOrUpdateAd);
+        adRepository.save(ad);
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adMapper.mapToDTO(ad));
     }
 
     @GetMapping("/ads/{id}")

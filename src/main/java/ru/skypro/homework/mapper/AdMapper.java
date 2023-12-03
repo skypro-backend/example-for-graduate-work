@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
@@ -13,17 +14,21 @@ import ru.skypro.homework.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Component
 @RequiredArgsConstructor
 public class AdMapper {
 
+    private Logger LoggerFactory;
     private final AdRepository adRepository;
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
 
-    public Ad mapToDTO(ru.skypro.homework.model.Ad ad){
-        return new Ad(
+    private final Logger logger = (Logger) LoggerFactory.getLogger(String.valueOf(AdMapper.class));
+
+    public AdDTO mapToDTO(Ad ad){
+        return new AdDTO(
                 ad.getAuthor().getId(),
                 ad.getImage().getLink(),
                 ad.getPk(),
@@ -33,7 +38,7 @@ public class AdMapper {
 
     public Ad mapToEntity(AdDTO adDTO) {
         return new Ad(
-                userRepository.findById(adDTO.getAuthor().getId()).get(),
+                userRepository.findById(adDTO.getAuthor()).get(),
                 imageRepository.findByLink(String.valueOf(adDTO.getImage())),
                 adDTO.getPk(),
                 adDTO.getPrice(),
@@ -49,7 +54,7 @@ public class AdMapper {
                 ad.getAuthor().getFirstName(),
                 ad.getAuthor().getLastName(),
                 ad.getDescription(),
-                ad.getAuthor().getEmail(),
+                ad.getAuthor().getUsername(),
                 ad.getAuthor().getImage().getLink(),
                 ad.getAuthor().getPhone(),
                 ad.getPrice(),
@@ -61,8 +66,8 @@ public class AdMapper {
         return adRepository.findByPk(extendedAd.getPk()).getAuthor();
     }
 
-    public ru.skypro.homework.model.Ad mapExtendedBackToEntity(ExtendedAd extendedAd) {
-        return new ru.skypro.homework.model.Ad(
+    public Ad mapExtendedBackToEntity(ExtendedAd extendedAd) {
+        return new Ad(
                 adRepository.findByPk(extendedAd.getPk()).getAuthor(),
                 imageRepository.findByLink(extendedAd.getImage()),
                 extendedAd.getPk(),
@@ -73,8 +78,8 @@ public class AdMapper {
         );
     }
 
-    public Ads mapToListOfDTO(List<ru.skypro.homework.model.Ad> ads) {
-        List<Ad> results = new ArrayList<>();
+    public Ads mapToListOfDTO(List<Ad> ads) {
+        List<AdDTO> results = new ArrayList<>();
         for (int i = 0; i < ads.size(); i++) {
             results.add(mapToDTO(ads.get(i)));
         }
@@ -84,12 +89,21 @@ public class AdMapper {
         );
     }
 
-    public List<ru.skypro.homework.model.Ad> mapBackToListOfEntities(Ads ads) {
-        List<ru.skypro.homework.model.Ad> results = new ArrayList<>();
+    public List<Ad> mapBackToListOfEntities(Ads ads) {
+        List<Ad> results = new ArrayList<>();
         for (int i = 0; i < ads.getResults().size(); i++) {
             results.add(mapToEntity(ads.getResults().get(i)));
         }
         return results;
+    }
+
+    public Ad mapFromCreateOrUpdateAd(CreateOrUpdateAd createOrUpdateAd) {
+        logger.info("ДТО регистрации - " + createOrUpdateAd);
+        Ad ad = new Ad();
+        ad.setTitle(createOrUpdateAd.getTitle());
+        ad.setPrice(createOrUpdateAd.getPrice());
+        ad.setDescription(createOrUpdateAd.getDescription());
+        return ad;
     }
 
 }

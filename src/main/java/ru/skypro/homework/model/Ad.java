@@ -29,6 +29,4 @@ public class Ad {
     @OneToMany(mappedBy = "ad")
     private List<Comment> comments;
 
-    public Ad(Integer id, String link, Integer pk, int price, String title) {
-    }
 }

@@ -17,7 +17,4 @@ public class Ads {
             new AdDTO()
     );
 
-    public Object Ads(int size, List<Ad> results) {
-        return null;
-    }
 }
