@@ -1,9 +1,12 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +20,7 @@ import ru.skypro.homework.model.PhotoEntity;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.PhotoRepository;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
@@ -32,23 +36,23 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional
+//@AllArgsConstructor
 public class AdServiceImpl implements AdService {
 
     private final AdRepository adRepository;
     private final PhotoRepository photoRepository;
     private final AdMapper adMapper;
-
     private final ImageServiceImpl imageService;
-
-    private final UserService userService;
-
+    private final UserServiceImpl userService;
     @Value("${path.to.photos.folder}")
     private String photoDir;
 
     public AdServiceImpl(AdRepository adRepository,
                          PhotoRepository photoRepository,
                          AdMapper adMapper,
-                         ImageServiceImpl imageService, UserService userService) {
+                         ImageServiceImpl imageService,
+                         UserServiceImpl userService) {
         this.adRepository = adRepository;
         this.photoRepository = photoRepository;
         this.adMapper = adMapper;
@@ -64,7 +68,7 @@ public class AdServiceImpl implements AdService {
         return new Ads(dtos.size(), dtos);
     }
 
-    @Override
+//    @Override
     public Ad addAd(CreateOrUpdateAd properties,
                     MultipartFile image,
                     Authentication authentication) throws IOException {
@@ -76,24 +80,24 @@ public class AdServiceImpl implements AdService {
         adEntity.setPrice(properties.getPrice());
         adEntity.setDescription(properties.getDescription());
 
+
         //заполняем поля photo и author
         adEntity.setPhoto(adMapper.mapMultipartFileToPhoto(image));
         adEntity.setAuthor(userService.getUser(authentication));
-
         //записываем URL для перехода фронта к методу возврата photo
         adEntity.setImage("/photo/image/" + "{" + adEntity.getPhoto().getId() + "}");
 
         //адрес до директории хранения фото на ПК
-        Path filePath = Path.of(photoDir, adEntity.getId() + "-" + properties.getTitle() + "."
+        Path filePath = Path.of(photoDir, adEntity.getPhoto().getId() +/* "-" + properties.getTitle() + */"."
                 + imageService.getExtension(image.getOriginalFilename()));
 
         //сохранение на ПК
         imageService.saveFileOnDisk(adEntity.getPhoto(), filePath);
+        //сохранение сущности adEntity в БД
+        adRepository.save(adEntity);
         //дублирование фото в БД
         photoRepository.save(adEntity.getPhoto());
 
-        //сохранение сущности adEntity в БД
-        adRepository.save(adEntity);
 
         //возврат ДТО Ad из метода
         return adMapper.mapToAdDto(adEntity);
