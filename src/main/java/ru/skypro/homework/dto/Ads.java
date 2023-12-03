@@ -4,12 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Login {
+public class Ads {
 
-    private String username = "stringst";
-    private String password = "string";
+    private int count = 0;
+    private List<Ad> results = List.of(
+            new Ad()
+    );
 
 }
