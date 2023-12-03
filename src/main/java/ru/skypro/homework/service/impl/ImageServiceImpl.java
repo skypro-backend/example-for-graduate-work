@@ -63,7 +63,7 @@ public class ImageServiceImpl implements ImageService {
         return true;
     }
 
-    public void saveFileOnDisk(PhotoEntity photo, Path filePath) throws IOException {
+    public PhotoEntity saveFileOnDisk(PhotoEntity photo, Path filePath) throws IOException {
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
         try (InputStream is = new ByteArrayInputStream(photo.getData());
@@ -73,6 +73,7 @@ public class ImageServiceImpl implements ImageService {
         ) {
             bis.transferTo(bos);
         }
+        return photo;
     }
 
     public PhotoEntity addPhoto(MultipartFile image) {

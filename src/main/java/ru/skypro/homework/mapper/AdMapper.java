@@ -2,13 +2,17 @@ package ru.skypro.homework.mapper;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.model.AdEntity;
+import ru.skypro.homework.model.PhotoEntity;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
+
+import java.io.IOException;
 
 @Service
 public class AdMapper {
@@ -73,5 +77,19 @@ public class AdMapper {
         dto.setPrice(entity.getPrice());
         dto.setTitle(entity.getTitle());
         return dto;
+    }
+
+    /**
+     * Метод конвертирует {@link MultipartFile} в сущность {@link PhotoEntity}
+     * @param image
+     * @return photo сущность {@link PhotoEntity}
+     * @throws IOException
+     */
+    public PhotoEntity mapMultipartFileToPhoto(MultipartFile image) throws IOException {
+        PhotoEntity photo = new PhotoEntity();
+        photo.setData(image.getBytes());
+        photo.setMediaType(image.getContentType());
+        photo.setFileSize(image.getSize());
+        return photo;
     }
 }
