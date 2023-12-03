@@ -98,6 +98,7 @@ public class AdServiceImpl implements AdService {
         //возврат ДТО Ad из метода
         return adMapper.mapToAdDto(adEntity);
     }
+
 //    @Override
 //    public Ad addAd1(CreateOrUpdateAd properties,
 //                    MultipartFile image,
@@ -135,7 +136,7 @@ public class AdServiceImpl implements AdService {
 //        return adDTO;
 //    }
 
-//    @Override
+
 //    public Ad addAd(CreateOrUpdateAd properties, MultipartFile image) {
 //        log.info("Использован метод сервиса addAd - ВАРИАНТ2");
 //

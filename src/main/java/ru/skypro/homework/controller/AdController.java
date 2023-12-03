@@ -41,38 +41,28 @@ public class AdController {
         log.info("За запущен метод контроллера: getAllAds");
         return ResponseEntity.ok(adService.getAllAds());
     }
-
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Ad> addAd(@RequestParam CreateOrUpdateAd properties,
-                                    @RequestParam MultipartFile image,
+    @Operation(
+        summary = "Добавление объявления",
+        tags = {"Объявления"})
+@ApiResponses(value = {
+        @ApiResponse(responseCode = "201",
+                description = "Created",
+                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                        schema = @Schema(implementation = Ad.class))),
+        @ApiResponse(responseCode = "401",
+                description = "Unauthorized"),
+        @ApiResponse(responseCode = "403",
+                description = "Forbidden"),
+        @ApiResponse(responseCode = "404",
+                description = "Not Found")})
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Ad> addAd(@RequestPart(value = "properties", required = false) CreateOrUpdateAd properties,
+                                    @RequestPart("image") MultipartFile image,
                                     Authentication authentication) throws IOException {
         log.info("За запущен метод контроллера: addAd");
-        Ad ad = adService.addAd(properties, image, authentication); // метод в разработке
-        return ResponseEntity.ok(ad);
+        return ResponseEntity.ok(adService.addAd(properties, image, authentication));
     }
-//@Operation(
-//        summary = "Добавление объявления",
-//        tags = {"Объявления"})
-//@ApiResponses(value = {
-//        @ApiResponse(responseCode = "201",
-//                description = "Created",
-//                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-//                        schema = @Schema(implementation = Ad.class))),
-//        @ApiResponse(responseCode = "401",
-//                description = "Unauthorized"),
-//        @ApiResponse(responseCode = "403",
-//                description = "Forbidden"),
-//        @ApiResponse(responseCode = "404",
-//                description = "Not Found")})
-//
-//@ResponseStatus(HttpStatus.CREATED)
-//@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-//public ResponseEntity<Ad> addAd(
-//        @RequestPart(value = "properties", required = false) @Validated CreateOrUpdateAd properties,
-//        @RequestPart("image") MultipartFile image) {
-//    log.warn("POST запрос на добавление объявления, тело запроса: {}, метод контроллера addAd", properties);
-//    return ResponseEntity.ok(adService.addAd(properties, image));
-//}
 
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> getAds(@PathVariable("id") Integer id) {

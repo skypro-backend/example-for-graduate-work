@@ -1,5 +1,6 @@
 package ru.skypro.homework.mapper;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,18 +11,18 @@ import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.PhotoEntity;
 import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.repository.UserRepository;
 
 import java.io.IOException;
 
 @Service
+@AllArgsConstructor
 public class AdMapper {
 
     private final UserRepository userRepository;
+    private final PhotoRepository photoRepository;
 
-    public AdMapper(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     /**
      * Entity -> dto mapping
@@ -90,6 +91,7 @@ public class AdMapper {
         photo.setData(image.getBytes());
         photo.setMediaType(image.getContentType());
         photo.setFileSize(image.getSize());
+        photoRepository.save(photo);
         return photo;
     }
 }
