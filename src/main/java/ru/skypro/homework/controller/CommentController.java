@@ -31,7 +31,7 @@ public class CommentController {
     // Добавление комментария к объявлению
     @PostMapping("/{id}/comments")
     public Comment addCommentToAd(@PathVariable Integer id,
-                                  @RequestBody CreateOrUpdateComment commentDetails,
+                                  CreateOrUpdateComment commentDetails,
                                   @AuthenticationPrincipal UserDetails userDetails) {
 
         return commentService.addCommentToAd(id, commentDetails, userDetails);
@@ -39,7 +39,7 @@ public class CommentController {
 
     // Удаление комментария
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<String> deleteComment(@PathVariable Long adId,
+    public ResponseEntity<String> deleteComment(@PathVariable Integer adId,
                                                 @PathVariable Integer commentId,
                                                 @AuthenticationPrincipal UserDetails userDetails) {
         return commentService.deleteComment(adId, commentId, userDetails);
@@ -47,10 +47,10 @@ public class CommentController {
 
     // Обновление комментария
     @PatchMapping("/{adId}/comments/{commentId}")
-    public Comment updateComment(@PathVariable Long adId,
-                                 @PathVariable Long commentId,
+    public Comment updateComment(@PathVariable Integer adId,
+                                 @PathVariable Integer commentId,
                                  @RequestBody CreateOrUpdateComment commentDetails) {
 
-        return new Comment(1, "", "Homer", Instant.now().toEpochMilli(), 1, "text");
+        return commentService.updateComment(adId, commentId, commentDetails);
     }
 }

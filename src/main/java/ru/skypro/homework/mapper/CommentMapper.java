@@ -17,7 +17,5 @@ public interface CommentMapper {
     @Mapping(source = "author.pk", target = "author")
     Comment commentToCommentDTO(CommentEntity commentEntity);
 
-//    @Mapping(source = "author", target = "author.pk")
-//    CommentEntity commentDTOToComment(Comment commentDTO);
     List<Comment> listCommentToListCommentDTO(List<CommentEntity> commentEntityList);
 }

@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
@@ -21,6 +23,7 @@ import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -63,20 +66,28 @@ public class CommentServiceImpl implements CommentService {
         commentEntity.setAd(adEntity);
         commentEntity.setCreatedAt(Instant.now().toEpochMilli());
         commentEntity.setText(commentDetails.getText());
+        commentEntity.setAuthorImage(userEntity.getImage());
+        commentEntity.setAuthorFirstName(userEntity.getFirstName());
 
         commentRepository.save(commentEntity);
         return commentMapper.commentToCommentDTO(commentEntity);
     }
+    @Transactional
+    public ResponseEntity<String> deleteComment(Integer adId, Integer commentId, UserDetails userDetails){
+        Optional<CommentEntity> commentEntityOptional = commentRepository.findById(commentId);
 
-    public ResponseEntity<String> deleteComment(Long adId, Integer commentId, UserDetails userDetails){
-        CommentEntity commentEntity = commentRepository.findById(commentId).get();
-
-        if (commentEntity != null){
-           //commentRepository.deleteByPkAndAdEntity_Pk(commentId, adId);
-            commentRepository.deleteByPk(commentId);
-           return new ResponseEntity<>(commentEntity.getText(), HttpStatus.OK);
+        if (commentEntityOptional.isPresent()){
+           commentRepository.deleteByPkAndAd_Pk(commentId, adId);
+           return new ResponseEntity<>("Комментарий удален", HttpStatus.OK);
         } else return new ResponseEntity<>("Комментарий не найден", HttpStatus.BAD_REQUEST);
     }
 
+    public Comment updateComment(Integer adId, Integer commentId, CreateOrUpdateComment commentDetails){
 
+        CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow();
+        commentEntity.setText(commentDetails.getText());
+
+        commentRepository.save(commentEntity);
+        return commentMapper.commentToCommentDTO(commentEntity);
+    }
 }

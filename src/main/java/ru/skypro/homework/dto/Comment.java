@@ -10,6 +10,6 @@ public class Comment {
     private String authorImage;
     private String authorFirstName;
     private Long createdAt;
-    private int pk; // id комментария
+    private Integer pk; // id комментария
     private String text;
 }

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
+import javax.transaction.Transactional;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 

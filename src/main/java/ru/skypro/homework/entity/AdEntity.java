@@ -27,7 +27,7 @@ public class AdEntity {
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
-    @NotBlank
+    //@NotBlank
     @Column(name = "image", nullable = false)
     private String image;
 
@@ -40,7 +40,7 @@ public class AdEntity {
     private String title;
 
     @Size(max = 64)
-    @Column(name = "description", nullable = true)
+    @Column(name = "description", nullable = false)
     private String description;
 
     @OneToMany(mappedBy = "ad")

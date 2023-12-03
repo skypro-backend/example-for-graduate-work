@@ -10,5 +10,5 @@ public interface CommentService {
 
     Comments getCommentsByAdId(Integer id);
     Comment addCommentToAd(Integer id, CreateOrUpdateComment commentDetails, UserDetails userDetails);
-    ResponseEntity<String> deleteComment(Long adId, Integer commentId, UserDetails userDetails);
+    ResponseEntity<String> deleteComment(Integer adId, Integer commentId, UserDetails userDetails);
 }

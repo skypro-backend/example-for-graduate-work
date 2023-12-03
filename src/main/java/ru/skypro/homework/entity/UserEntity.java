@@ -40,7 +40,7 @@ public class UserEntity {
     private String lastName;
 
     @NotBlank
-    @Pattern(regexp = "\\d{10}")
+    @Pattern(regexp = "\\+7\\s?\\(?(\\d{3})\\)?\\s?(\\d{3}-?\\d{2}-?\\d{2})")
     @Column(name = "phone")
     private String phone;
 
@@ -51,6 +51,9 @@ public class UserEntity {
 
     @Column(name = "image")
     private String image;
+
+    @Column(name = "password")
+    private String password;
 
     @OneToMany(mappedBy = "author")
     private List<AdEntity> ads;
