@@ -10,11 +10,15 @@ import ru.skypro.homework.service.PhotoService;
 import java.nio.file.Path;
 
 @Service
-@AllArgsConstructor
 public class PhotoServiceImpl implements PhotoService {
     private final PhotoRepository photoRepository;
     @Value("${path.to.photos.folder}")
     private String photoDir;
+
+    public PhotoServiceImpl(PhotoRepository photoRepository) {
+        this.photoRepository = photoRepository;
+    }
+
     @Override
     public byte[] getPhoto(Authentication authentication, Integer pk) {
         //формируем путь к картинке в папке проекта
