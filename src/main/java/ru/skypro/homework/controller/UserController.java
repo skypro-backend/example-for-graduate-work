@@ -1,6 +1,11 @@
 package ru.skypro.homework.controller;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +32,18 @@ public class UserController {
     AuthServiceImpl authService;
     @Autowired
     UserService userService;
-
+    @Operation(summary = "Обновление пароля", tags = "Пользователи")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "OK",
+                    content = @Content),
+            @ApiResponse(responseCode = "401",
+                    description = "Unauthorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden",
+                    content = @Content)
+    })
     @PostMapping("/set_password")
     public ResponseEntity<?> setPassword(Authentication authentication,
                                          @RequestBody NewPasswordDTO newPassword) {
@@ -37,19 +53,44 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
-
+    @Operation(summary = "Обновление пароля", tags = "Пользователи")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "OK",
+                    content = @Content),
+            @ApiResponse(responseCode = "401",
+                    description = "Unauthorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden",
+                    content = @Content)
+    })
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUser(Authentication authentication) {
         return ResponseEntity.ok(userService.getUserInfo(authentication.getName()));
     }
 
+    @Operation(summary = "Обновить информацию об авторизованном пользователе", tags = "Пользователи")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserDTO.class))}),
+            @ApiResponse(responseCode = "401",
+                    description = "Unauthorized")
+    })
     @PatchMapping("/me")
     public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody UpdateUserDTO updateUserDTO,
                                                     Authentication authentication) {
         return ResponseEntity.ok(userService.updateUser(updateUserDTO, authentication.getName()));
     }
 
-
+    @Operation(summary = "Обновить аватар авторизованного пользователя", tags = "Пользователи")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "OK"),
+            @ApiResponse(responseCode = "401",
+                    description = "Unauthorized")
+    })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image,
                                              Authentication authentication) throws IOException {
