@@ -31,7 +31,7 @@ public class CommentController {
     // Добавление комментария к объявлению
     @PostMapping("/{id}/comments")
     public Comment addCommentToAd(@PathVariable Integer id,
-                                  CreateOrUpdateComment commentDetails,
+                                  @RequestBody CreateOrUpdateComment commentDetails,
                                   @AuthenticationPrincipal UserDetails userDetails) {
 
         return commentService.addCommentToAd(id, commentDetails, userDetails);

@@ -42,7 +42,9 @@ public class AdController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Ad addAd(@RequestPart("properties") MultipartFile image, CreateOrUpdateAd adDetails, @AuthenticationPrincipal UserDetails userDetails) {
+    public Ad addAd(@RequestPart("image") MultipartFile image,
+                    @RequestPart("properties") CreateOrUpdateAd adDetails,
+                    @AuthenticationPrincipal UserDetails userDetails) {
         return adService.addAd(image, adDetails, userDetails);
     }
 
