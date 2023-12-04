@@ -38,16 +38,12 @@ public class CommentController {
         }
     }
 
-    @PostMapping("/{id}/comments")
+    @PostMapping(value = "/{id}/comments")
     public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id,
                                               @RequestBody CreateOrUpdateComment createOrUpdateComment,
                                               Authentication authentication) {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
-        if (authentication.getName() != null) {
-            return ResponseEntity.ok(commentService.addComment(id, createOrUpdateComment, authentication.getName()));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        return ResponseEntity.ok(commentService.addComment(id, createOrUpdateComment, authentication.getName()));
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")

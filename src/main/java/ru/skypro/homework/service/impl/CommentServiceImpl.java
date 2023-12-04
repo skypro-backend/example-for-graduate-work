@@ -11,6 +11,7 @@ import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.CommentEntity;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.UserService;
@@ -24,15 +25,16 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-    private final CommentMapper commentMapper;
-
     private final AdRepository adRepository;
+    private final AvatarRepository avatarRepository;
+    private final CommentMapper commentMapper;
     private final UserService userService;
 
-    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper, AdRepository adRepository, UserService userService) {
+    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper, AdRepository adRepository, AvatarRepository avatarRepository, UserService userService) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.adRepository = adRepository;
+        this.avatarRepository = avatarRepository;
         this.userService = userService;
     }
 
@@ -49,16 +51,34 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment addComment(Integer id, CreateOrUpdateComment createOrUpdateComment, String username) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
-        AdEntity ad = adRepository.findById(id).get();
+
         UserEntity author = userService.checkUserByUsername(username);
+        AdEntity ad = adRepository.findById(id).get();
 
-        CommentEntity comment = new CommentEntity();
-        comment.setAd(ad);
-        comment.setAuthor(author);
-        comment.setCreatedAt(System.currentTimeMillis());
-        comment.setText(createOrUpdateComment.getText());
+        //Создаем сущность comment и заполняем поля
+        CommentEntity commentEntity = new CommentEntity();
+        commentEntity.setAuthor(author);
+        commentEntity.setAd(ad);
+        commentEntity.setText(createOrUpdateComment.getText());
+        commentEntity.setCreatedAt(System.currentTimeMillis());
 
-        return commentMapper.mapToCommentDto(comment);
+        //Сохраняем сущность commentEntity в БД
+        commentRepository.save(commentEntity);
+
+        //Создаем возвращаемую сущность ДТО comment и заполняем поля
+        Comment commentDTO = new Comment();
+        commentDTO.setAuthor(author.getId());
+
+        Integer avatarId = avatarRepository.findById(author.getId()).get().getId();
+        log.info("URL для получение аватара пользователя /avatar/{}", avatarId);
+        commentDTO.setAuthorImage("/avatar/" + avatarId);
+
+        commentDTO.setAuthorFirstName(author.getFirstName());
+        commentDTO.setCreatedAt(commentEntity.getCreatedAt());
+        commentDTO.setPk(commentRepository.findFirstByText(createOrUpdateComment.getText()).getId());
+        commentDTO.setText(commentRepository.findFirstByText(createOrUpdateComment.getText()).getText());
+
+        return commentDTO;
     }
 
     @Override
