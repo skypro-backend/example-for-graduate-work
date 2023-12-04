@@ -72,6 +72,7 @@ public class AdServiceImpl implements AdService {
     public Ad addAd(CreateOrUpdateAd properties,
                     MultipartFile image,
                     Authentication authentication) throws IOException {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         //создаем сущность
         AdEntity adEntity = new AdEntity();
 
@@ -85,11 +86,13 @@ public class AdServiceImpl implements AdService {
         adEntity.setPhoto(adMapper.mapMultipartFileToPhoto(image));
         adEntity.setAuthor(userService.getUser(authentication));
         //записываем URL для перехода фронта к методу возврата photo
-        adEntity.setImage("/photo/image/" + "{" + adEntity.getPhoto().getId() + "}");
+        adEntity.setImage("/photo/image/" + adEntity.getPhoto().getId());
+        log.info("URL для перехода фронта к методу возврата photo: {}", adEntity.getImage());
 
         //адрес до директории хранения фото на ПК
         Path filePath = Path.of(photoDir, adEntity.getPhoto().getId() +/* "-" + properties.getTitle() + */"."
                 + imageService.getExtension(image.getOriginalFilename()));
+        log.info("путь к файлу: {}", filePath);
 
         //сохранение на ПК
         imageService.saveFileOnDisk(adEntity.getPhoto(), filePath);
@@ -158,12 +161,14 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public ExtendedAd getAds(Integer id) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         AdEntity entity = adRepository.findById(id).get();
         return adMapper.mapToExtendedAdDto(entity);
     }
 
     @Override
     public boolean removeAd(Integer id) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         AdEntity ad = adRepository.findById(id).get();
         if (ad != null) {
             adRepository.delete(ad);
@@ -175,6 +180,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ad updateAds(Integer id, CreateOrUpdateAd dto) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         AdEntity entity = adRepository.findById(id).get();
 
         entity.setTitle(dto.getTitle());
@@ -188,7 +194,7 @@ public class AdServiceImpl implements AdService {
     @Override
     @Transactional
     public Ads getAdsMe(String username) {
-        log.info("Запуск метода сервиса getAdsMe");
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         UserEntity author = userService.checkUserByUsername(username);
         log.info("объект UserEntity получен из БД");
         List<Ad> ads = null;
@@ -203,6 +209,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public void updateImage(Integer id, MultipartFile image) throws IOException {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         /*Optional<AdEntity> entity = adRepository.findById(id);
         if (entity.isPresent()) {
             PhotoEntity photo = new PhotoEntity();
@@ -243,7 +250,15 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public PhotoEntity findPhoto(Integer id) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         return photoRepository.findByAdId(id).get();
+    }
+
+    public boolean isAuthorAd(String username, Integer adId) {
+        log.info("Использован метод сервиса: {}", LoggingMethodImpl.getMethodName());
+
+        AdEntity adEntity = adRepository.findById(adId).orElseThrow(RuntimeException::new);
+        return adEntity.getAuthor().getUserName().equals(username);
     }
 
 }

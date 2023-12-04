@@ -13,10 +13,4 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
      * @return объект userEntity
      */
     UserEntity findUserEntityByUserName(String userName);
-
-    /**
-     * Метод для очистки всех данных таблицы пользователей.
-     */
-    @Query(value = "delete from users where id notnull;", nativeQuery = true)
-    void cleanAll();
 }

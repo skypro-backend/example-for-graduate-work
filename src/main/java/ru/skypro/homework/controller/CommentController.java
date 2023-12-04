@@ -12,6 +12,7 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
+import ru.skypro.homework.service.impl.LoggingMethodImpl;
 
 @Slf4j
 @RestController
@@ -28,7 +29,7 @@ public class CommentController {
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<Comments> getComments(@PathVariable("id") Integer id, Authentication authentication) {
-        log.info("За запущен метод контроллера: getComments");
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         //todo добавить условие???? если role = admin то можно смотреть все комменты, юзер - только свои
         if (authentication.getName() != null) {
             return ResponseEntity.ok(commentService.getComments(id));
@@ -41,7 +42,7 @@ public class CommentController {
     public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id,
                                               @RequestBody CreateOrUpdateComment createOrUpdateComment,
                                               Authentication authentication) {
-        log.info("За запущен метод контроллера: addComment");
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         if (authentication.getName() != null) {
             return ResponseEntity.ok(commentService.addComment(id, createOrUpdateComment, authentication.getName()));
         } else {
@@ -54,7 +55,7 @@ public class CommentController {
     public ResponseEntity<?> deleteComment(@PathVariable("adId") Integer adId,
                                            @PathVariable("commentId") Integer commentId,
                                            Authentication authentication) {
-        log.info("За запущен метод контроллера: deleteComment");
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         //
         //как сделать: нужно найти в БД юзера по его логину из authService.getLogin()
         //и проверить его статус: админ или юзер, если админ то удаляем коммент. если нет, то см. далее
@@ -81,7 +82,7 @@ public class CommentController {
                                                  @PathVariable("commentId") Integer commentId,
                                                  @RequestBody CreateOrUpdateComment createOrUpdateComment,
                                                  Authentication authentication) {
-        log.info("За запущен метод контроллера: updateComment");
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         //todo добавить условие, только пользователь написавший коммент может его править.
         //Нужен ли adId ?
         if (authentication.getName() != null) {

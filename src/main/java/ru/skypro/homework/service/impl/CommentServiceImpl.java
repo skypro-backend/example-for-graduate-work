@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
@@ -19,6 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
@@ -36,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comments getComments(Integer id) {
-
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         List<Comment> comments = commentRepository.findByAdId(id).stream()
                 .map(comment -> commentMapper.mapToCommentDto(comment))
                 .collect(Collectors.toList());
@@ -46,6 +48,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment addComment(Integer id, CreateOrUpdateComment createOrUpdateComment, String username) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         AdEntity ad = adRepository.findById(id).get();
         UserEntity author = userService.checkUserByUsername(username);
 
@@ -60,6 +63,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public String deleteComment(Integer commentId, String username) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         Optional<CommentEntity> comment = commentRepository.findById(commentId);
         if (comment.isPresent()) {
             UserEntity author = userService.checkUserByUsername(username);
@@ -80,6 +84,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment updateComment(Integer commentId, CreateOrUpdateComment createOrUpdateComment, String username) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         Optional<CommentEntity> commentOptional = commentRepository.findById(commentId);
         if (commentOptional.isPresent()) {
             CommentEntity comment = commentOptional.get();

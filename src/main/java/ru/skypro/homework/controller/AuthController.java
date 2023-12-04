@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.impl.LoggingMethodImpl;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -22,7 +23,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
-        log.info("За запущен метод контроллера: login");
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
@@ -32,7 +33,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) {
-        log.info("За запущен метод контроллера: register");
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
