@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,21 +10,21 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.exception.PasswordIsNotMatchException;
 import ru.skypro.homework.exception.UserNotFoundException;
+import ru.skypro.homework.model.AvatarEntity;
 import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
-
-import java.io.IOException;
-import java.nio.file.Path;
 
 /**
  * Сервис хранящий логику для управления данными пользователей.
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final AuthServiceImpl authService;
+    private final AvatarRepository avatarRepository;
     private final ImageServiceImpl imageService;
     private final PasswordEncoder encoder;
 
@@ -31,9 +32,9 @@ public class UserServiceImpl implements UserService {
     private String avatarDir;
 
 
-    public UserServiceImpl(UserRepository userRepository, AuthServiceImpl authService, ImageServiceImpl imageService, PasswordEncoder encoder) {
+    public UserServiceImpl(UserRepository userRepository, AvatarRepository avatarRepository, ImageServiceImpl imageService, PasswordEncoder encoder) {
         this.userRepository = userRepository;
-        this.authService = authService;
+        this.avatarRepository = avatarRepository;
         this.imageService = imageService;
         this.encoder = encoder;
     }
@@ -55,6 +56,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void setPassword(NewPassword newPass, Authentication authentication) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         //получаем в переменную старый пароль
         String oldPassword = newPass.getCurrentPassword();
         //получаем в переменную новый пароль и кодируем его
@@ -83,6 +85,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserEntity getUser(Authentication authentication) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         return userRepository.findUserEntityByUserName(authentication.getName());
     }
 
@@ -94,12 +97,13 @@ public class UserServiceImpl implements UserService {
      * Сущность user заполняется измененными данными из парамера updateUser.</p>
      * <p>В итоге измененный объект user сохраняется в БД, и он же возвращается из метода.</p>
      *
-     * @param updateUser объект содержащий поля с именем, фамилией и номером телефона.
+     * @param updateUser     объект содержащий поля с именем, фамилией и номером телефона.
      * @param authentication
      * @return объект user
      */
     @Override
     public UserEntity updateUser(UpdateUser updateUser, Authentication authentication) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         //Получаем логин авторизованного пользователя из БД
         String userName = authentication.getName();
         //Находим данные авторизованного пользователя
@@ -116,11 +120,13 @@ public class UserServiceImpl implements UserService {
     /**
      * Метод возвращает объект {@link UserEntity} из базы данных. Поиск выполняется по логину,
      * подаваемому в метод в качестве параметра.
+     *
      * @param username
      * @return {@link UserEntity}
      */
     @Override
     public UserEntity checkUserByUsername(String username) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         UserEntity user = userRepository.findUserEntityByUserName(username);
         if (user == null) {
             throw new UserNotFoundException("Пользователя с таким логином в базе данных нет");
@@ -128,20 +134,16 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    //@Override ругается method does not override or implement a method from a supertype
-    public boolean updateUserImage(MultipartFile image, Authentication authentication) throws IOException {
-
+    @Override
+    public void updateUserImage(MultipartFile image, Authentication authentication) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
+        //достаем пользователя из БД
         UserEntity user = userRepository.findUserEntityByUserName(authentication.getName());
-
-        Path filePath = Path.of(avatarDir, user.getId() + "."
-                + imageService.getExtension(image.getOriginalFilename()));
-
-        imageService.saveFileOnDisk(image, filePath);
-        imageService.updateUserImage(user, image, filePath);
-
-        user.setImage("/" + avatarDir + "/" + user.getId());
+        //мапим MultipartFile в сущность avatarEntity
+        AvatarEntity avatar = imageService.mapMuptipartFileToAvatar(image);
+        //сохраняем аватар в БД, юзеру устанавливаем новый аватар и сохраняем в БД
+        avatarRepository.save(avatar);
+        user.setAvatar(avatar);
         userRepository.save(user);
-
-        return true;
     }
 }

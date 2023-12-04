@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.service.impl.LoggingMethodImpl;
 import ru.skypro.homework.service.impl.PhotoServiceImpl;
 
 @Slf4j
@@ -16,6 +17,7 @@ public class PhotoController {
 
     @GetMapping("/image/{photoId}")
     public ResponseEntity<byte[]> getPhotoFromBD(@PathVariable Integer photoId){
+        log.info("Запущен метод контроллера {}", LoggingMethodImpl.getMethodName());
         return ResponseEntity.ok(photoService.getPhoto(photoId));
     }
 }

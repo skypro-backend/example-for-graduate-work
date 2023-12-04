@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,6 +14,7 @@ import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 @Service
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     /*private final UserDetailsManager manager;*/
@@ -45,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public boolean login(String userName, String password) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         UserDetails userDetails = myUserDetailService.loadUserByUsername(userName);
         if (!encoder.matches(password, userDetails.getPassword())) {
             throw new WrongPasswordException("Неверный пароль");
@@ -68,6 +71,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public boolean register(Register register) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         UserEntity user = UserMapper.mapFromRegisterToUserEntity(register);
         if (userRepository.findUserEntityByUserName(user.getUserName()) != null) {
             throw new UserAlredyExsistException("Такой пользователь существует");

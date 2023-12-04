@@ -47,5 +47,5 @@ public interface UserService {
      * @return true или false
      * @throws IOException
      */
-    boolean updateUserImage(MultipartFile image, Authentication authentication) throws IOException;
+    void updateUserImage(MultipartFile image, Authentication authentication) throws IOException;
 }

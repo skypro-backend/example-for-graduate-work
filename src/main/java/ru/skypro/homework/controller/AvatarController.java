@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
+import ru.skypro.homework.service.impl.LoggingMethodImpl;
 
 import java.io.IOException;
 @Slf4j
@@ -27,7 +28,7 @@ public class AvatarController {
     public ResponseEntity<String> updateAvatar(@PathVariable("id") Integer id,
                                                @RequestParam MultipartFile image,
                                                Authentication authentication) throws IOException {
-        log.info("За запущен метод контроллера: updateAvatar");
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         if (authentication.getName()!= null) {
             avatarService.updateAvatar(id, image, authentication);
             return ResponseEntity.ok().build();

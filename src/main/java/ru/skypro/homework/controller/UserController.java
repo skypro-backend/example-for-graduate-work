@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import ru.skypro.homework.service.impl.LoggingMethodImpl;
 
 import java.io.IOException;
 @Slf4j
@@ -65,14 +66,14 @@ public class UserController {
     @PostMapping("/set_password") // http://localhost:8080/users/set_password
     @PreAuthorize("hasRole('USER') or @adServiceImpl.isAuthorAd(authentication.name)")
     public ResponseEntity setPassword(@RequestBody NewPassword newPass, Authentication authentication) {
-        log.info("За запущен метод контроллера: setPassword");
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         userService.setPassword(newPass, authentication);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/me") // http://localhost:8080/users/me
     public ResponseEntity<User> getUser(Authentication authentication) {
-        log.info("За запущен метод контроллера: getUser");
+        log.info("Запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         UserEntity user = userService.getUser(authentication);
         if (user != null) {
             return ResponseEntity.ok(UserMapper.mapFromUserEntityToUser(user));
@@ -84,7 +85,7 @@ public class UserController {
     @PatchMapping("/me") // http://localhost:8080/users/me
     @PreAuthorize("hasRole('USER') or @adServiceImpl.isAuthorAd(authentication.name)")
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
-        log.info("За запущен метод контроллера: updateUser");
+        log.info("Запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         UserEntity user = userService.updateUser(updateUser, authentication);
         if (user != null) {
             return ResponseEntity.ok(UserMapper.mapFromUserEntityToUpdateUser(user));
@@ -110,13 +111,11 @@ public class UserController {
             }
     )
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('USER') or @adServiceImpl.isAuthorAd(authentication.name)")
-    public ResponseEntity<Void> updateUserImage(@RequestParam MultipartFile image, Authentication authentication) throws IOException {
-        log.info("За запущен метод контроллера: updateUserImage");
-        if (authentication.getName() != null && userService.updateUserImage(image, authentication)) {
+    public ResponseEntity<Void> updateUserImage(@RequestParam MultipartFile image,
+                                                  Authentication authentication) throws IOException {
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
+            userService.updateUserImage(image, authentication);
             return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
 }

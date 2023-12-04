@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.AdEntity;
@@ -16,6 +17,7 @@ import java.nio.file.Path;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Service
+@Slf4j
 public class ImageServiceImpl implements ImageService {
 
     private final AvatarRepository avatarRepository;
@@ -28,7 +30,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void updateUserImage(UserEntity user, MultipartFile image, Path filePath) {
-
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         AvatarEntity avatar = avatarRepository.findByUser(user).orElseGet(AvatarEntity::new);
         avatar.setFilePath(filePath.toString());
         avatar.setFileSize(image.getSize());
@@ -39,7 +41,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public PhotoEntity updateAdImage(AdEntity ad, MultipartFile image, Path filePath) throws IOException{
-
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         PhotoEntity photo = photoRepository.findByAd(ad).orElseGet(PhotoEntity::new);
         photo.setFilePath(filePath.toString());
         photo.setFileSize(image.getSize());
@@ -51,6 +53,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public boolean saveFileOnDisk(MultipartFile image, Path filePath) throws IOException {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
         try (InputStream is = image.getInputStream();
@@ -64,6 +67,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     public PhotoEntity saveFileOnDisk(PhotoEntity photo, Path filePath) throws IOException {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
         try (InputStream is = new ByteArrayInputStream(photo.getData());
@@ -76,22 +80,21 @@ public class ImageServiceImpl implements ImageService {
         return photo;
     }
 
-    public PhotoEntity addPhoto(MultipartFile image) {
-        PhotoEntity photoNew = new PhotoEntity();
+    public AvatarEntity mapMuptipartFileToAvatar(MultipartFile image) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
+        AvatarEntity avatar = new AvatarEntity();
         try {
-            photoNew.setData(image.getBytes());
-            photoNew.setMediaType(image.getContentType());
-            photoNew.setFileSize(image.getSize());
+            avatar.setData(image.getBytes());
+            avatar.setMediaType(image.getContentType());
+            avatar.setFileSize(image.getSize());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        photoRepository.save(photoNew);
-        return photoNew;
+        return avatar;
     }
-
     @Override
     public String getExtension(String fileName) {
-
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }
