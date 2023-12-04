@@ -144,6 +144,8 @@ public class UserServiceImpl implements UserService {
         //сохраняем аватар в БД, юзеру устанавливаем новый аватар и сохраняем в БД
         avatarRepository.save(avatar);
         user.setAvatar(avatar);
+
         userRepository.save(user);
+
     }
 }

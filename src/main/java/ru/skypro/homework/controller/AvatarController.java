@@ -24,8 +24,8 @@ public class AvatarController {
         this.authService = authService;
     }
 
-    @PatchMapping("/{id}/image")
-    public ResponseEntity<String> updateAvatar(@PathVariable("id") Integer id,
+    @PatchMapping("/avatar/{avatarId}")
+    public ResponseEntity<String> updateAvatar(@PathVariable("avatarId") Integer id,
                                                @RequestParam MultipartFile image,
                                                Authentication authentication) throws IOException {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
