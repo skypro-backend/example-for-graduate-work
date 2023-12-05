@@ -18,6 +18,7 @@ import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
@@ -34,6 +35,7 @@ public class AdController {
     private final AdService adService;
     private final AdMapper adMapper;
     private final AdRepository adRepository;
+    private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final ImageService imageService;
     private final ImageMapper imageMapper;
@@ -70,7 +72,8 @@ public class AdController {
     @Transactional
     @PreAuthorize("hasAuthority('ADMIN') or @adRepository.findByPk(#id).getAuthor().getUsername() == authentication.name")
     @DeleteMapping("/ads/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteAd(@PathVariable Integer id) {
+        commentRepository.deleteAllByAdPk(id);
         adRepository.deleteByPk(id);
         return ResponseEntity.ok().build();
     }
