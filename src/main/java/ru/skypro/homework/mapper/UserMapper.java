@@ -3,6 +3,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.ImageRepository;
@@ -31,7 +32,7 @@ public class UserMapper {
                 user.getLastName(),
                 user.getPhone(),
                 user.getRole(),
-                user.getImage().getLink()
+                "/image/" + user.getImage().getId()
         );
     }
 
@@ -44,7 +45,7 @@ public class UserMapper {
                 userRepository.findById(userDTO.getId()).get().getPassword(),
                 userDTO.getPhone(),
                 userDTO.getRole(),
-                imageRepository.findByLink(userDTO.getImage())
+                userRepository.findById(userDTO.getId()).get().getImage()
         );
     }
 
@@ -57,7 +58,18 @@ public class UserMapper {
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         user.setPhone(registerDTO.getPhone());
         user.setRole(registerDTO.getRole());
+        user.setImage(imageRepository.findById(1).get());
         return user;
+    }
+
+    public void saveFromUpdate(String username, UpdateUser updateUser) {
+        logger.info("Обновленные данные - " + updateUser);
+        User userDB = userRepository.findByUsername(username);
+        userDB.setFirstName(updateUser.getFirstName());
+        userDB.setLastName(updateUser.getLastName());
+        userDB.setPhone(updateUser.getPhone());
+        userDB.setImage(imageRepository.findById(1).get());
+        userRepository.save(userDB);
     }
 
 }

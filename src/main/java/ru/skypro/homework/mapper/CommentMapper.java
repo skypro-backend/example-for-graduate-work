@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.Comments;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
+import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
@@ -30,9 +32,9 @@ public class CommentMapper {
         ZonedDateTime zonedDateTime = ZonedDateTime.of(comment.getCreatedAt(), ZoneId.systemDefault());
         return new CommentDTO(
             comment.getAuthor().getId(),
-            comment.getAuthorImage().getLink(),
+                "/image/" + comment.getAuthorImage().getId(),
             comment.getAuthorFirstName(),
-            zonedDateTime.toEpochSecond(),
+            zonedDateTime.toInstant().toEpochMilli(),
             comment.getPk(),
             comment.getText()
         );
@@ -41,7 +43,7 @@ public class CommentMapper {
     public Comment mapToEntity(CommentDTO commentDTO) {
         return new Comment(
                 userRepository.findById(commentDTO.getAuthor()).get(),
-                imageRepository.findByLink(commentDTO.getAuthorImage()),
+                userRepository.findById(commentDTO.getAuthor()).get().getImage(),
                 commentDTO.getAuthorFirstName(),
                 LocalDateTime.ofInstant(Instant.ofEpochSecond(commentDTO.getCreatedAt()), TimeZone
                         .getDefault().toZoneId()),
@@ -57,6 +59,29 @@ public class CommentMapper {
             results.add(mapToDTO(ad.getComments().get(i)));
         }
         return new Comments(ad.getComments().size(), results);
+    }
+
+    public Comment createFromCreateOrUpdate(CreateOrUpdateComment createOrUpdateComment, User author, Ad ad) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Comment comment = new Comment();
+        comment.setAuthor(author);
+        comment.setAuthorImage(author.getImage());
+        comment.setAuthorFirstName(author.getFirstName());
+        comment.setCreatedAt(localDateTime);
+        comment.setText(createOrUpdateComment.getText());
+        comment.setAd(ad);
+        return commentRepository.save(comment);
+    }
+
+    public Comment updateFromCreateOrUpdate(Comment comment, CreateOrUpdateComment createOrUpdateComment, User author, Ad ad) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        comment.setAuthor(author);
+        comment.setAuthorImage(author.getImage());
+        comment.setAuthorFirstName(author.getFirstName());
+        comment.setCreatedAt(localDateTime);
+        comment.setText(createOrUpdateComment.getText());
+        comment.setAd(ad);
+        return commentRepository.save(comment);
     }
 
     public List<Comment> mapBackToListOfEntities(Comments comments) {

@@ -30,7 +30,7 @@ public class AdMapper {
     public AdDTO mapToDTO(Ad ad){
         return new AdDTO(
                 ad.getAuthor().getId(),
-                ad.getImage().getLink(),
+                "/image/" + ad.getImage().getId(),
                 ad.getPk(),
                 ad.getPrice(),
                 ad.getTitle());
@@ -39,7 +39,7 @@ public class AdMapper {
     public Ad mapToEntity(AdDTO adDTO) {
         return new Ad(
                 userRepository.findById(adDTO.getAuthor()).get(),
-                imageRepository.findByLink(String.valueOf(adDTO.getImage())),
+                adRepository.findByPk(adDTO.getPk()).getImage(),
                 adDTO.getPk(),
                 adDTO.getPrice(),
                 adDTO.getTitle(),
@@ -55,7 +55,7 @@ public class AdMapper {
                 ad.getAuthor().getLastName(),
                 ad.getDescription(),
                 ad.getAuthor().getUsername(),
-                ad.getAuthor().getImage().getLink(),
+                "/image/" + ad.getImage().getId(),
                 ad.getAuthor().getPhone(),
                 ad.getPrice(),
                 ad.getTitle()
@@ -69,7 +69,7 @@ public class AdMapper {
     public Ad mapExtendedBackToEntity(ExtendedAd extendedAd) {
         return new Ad(
                 adRepository.findByPk(extendedAd.getPk()).getAuthor(),
-                imageRepository.findByLink(extendedAd.getImage()),
+                adRepository.findByPk(extendedAd.getPk()).getImage(),
                 extendedAd.getPk(),
                 extendedAd.getPrice(),
                 extendedAd.getTitle(),
@@ -97,9 +97,10 @@ public class AdMapper {
         return results;
     }
 
-    public Ad mapFromCreateOrUpdateAd(CreateOrUpdateAd createOrUpdateAd) {
+    public Ad mapFromCreateOrUpdateAd(CreateOrUpdateAd createOrUpdateAd, User user) {
         logger.info("ДТО регистрации - " + createOrUpdateAd);
         Ad ad = new Ad();
+        ad.setAuthor(user);
         ad.setTitle(createOrUpdateAd.getTitle());
         ad.setPrice(createOrUpdateAd.getPrice());
         ad.setDescription(createOrUpdateAd.getDescription());

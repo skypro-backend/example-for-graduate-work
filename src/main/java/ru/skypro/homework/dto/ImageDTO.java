@@ -9,11 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ImageDTO {
 
-    private int id = 0;
-    private String filePath = "string";
-    private long fileSize = 0L;
-    private String mediaType = "string";
-    private byte[] data = {0, 0, 0};
-    private String link = "string";
+    private String url = "string";
 
 }
