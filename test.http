@@ -1,0 +1,5 @@
+GET localhost:3000/getAd
+###
+GET localhost:3000/1/updateAds
+###
+GET http://localhost:3000/swagger-ui/index.html
