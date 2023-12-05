@@ -15,7 +15,8 @@ public class CommentMapper {
     public Comment mapToCommentDto(CommentEntity entity) {
         Comment dto = new Comment();
         dto.setAuthor(entity.getAuthor().getId());
-        dto.setAuthorImage(entity.getAuthor().getAvatar().getFilePath()); // todo надо продумать этот момент
+//        dto.setAuthorImage(entity.getAuthor().getAvatar().getFilePath());
+        dto.setAuthorImage("avatar/1");// todo пока ставим заглушку
         dto.setAuthorFirstName(entity.getAuthor().getFirstName());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setPk(entity.getId());

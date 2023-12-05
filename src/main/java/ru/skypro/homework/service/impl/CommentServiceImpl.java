@@ -14,6 +14,7 @@ import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.UserService;
 
@@ -28,14 +29,16 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final AdRepository adRepository;
     private final AvatarRepository avatarRepository;
+    private final UserRepository userRepository;
     private final CommentMapper commentMapper;
     private final UserService userService;
 
-    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper, AdRepository adRepository, AvatarRepository avatarRepository, UserService userService) {
+    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper, AdRepository adRepository, AvatarRepository avatarRepository, UserRepository userRepository, UserService userService) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.adRepository = adRepository;
         this.avatarRepository = avatarRepository;
+        this.userRepository = userRepository;
         this.userService = userService;
     }
 
@@ -67,14 +70,18 @@ public class CommentServiceImpl implements CommentService {
 
         //Сохраняем сущность commentEntity в БД
         commentRepository.save(commentEntity);
+        //Заполняем поле с комментариями у пользователя и сохраняем в БД
+        author.getComments().add(commentEntity);
+        userRepository.save(author);
 
         //Создаем возвращаемую сущность ДТО comment и заполняем поля
         Comment commentDTO = new Comment();
         commentDTO.setAuthor(author.getId());
 
-        Integer avatarId = avatarRepository.findById(author.getId()).get().getId();
-        log.info("URL для получение аватара пользователя /avatar/{}", avatarId);
-        commentDTO.setAuthorImage("/avatar/" + avatarId);
+//        Integer avatarId = avatarRepository.findById(author.getId()).get().getId();
+//        log.info("URL для получение аватара пользователя /avatar/{}", avatarId);
+//        commentDTO.setAuthorImage("/avatar/" + avatarId);//todo аватар пока не добавляется...
+        commentDTO.setAuthorImage("/avatar/1");//todo ...поэтому ставим заглушку
 
         commentDTO.setAuthorFirstName(author.getFirstName());
         commentDTO.setCreatedAt(commentEntity.getCreatedAt());
