@@ -1,29 +1,29 @@
 package ru.skypro.homework.mapper;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.ImageDTO;
+import ru.skypro.homework.model.Image;
+import ru.skypro.homework.repository.ImageRepository;
 
 @Component
+@RequiredArgsConstructor
 public class ImageMapper {
-    public ImageDTO mapToDTO(ru.skypro.homework.model.Image image) {
+
+    private final ImageRepository imageRepository;
+
+    public ImageDTO mapToDTO(Image image) {
         return new ImageDTO(
-                image.getId(),
-                image.getFilePath(),
-                image.getFileSize(),
-                image.getMediaType(),
-                image.getData(),
-                image.getLink()
+                "/image/" + image.getId()
         );
     }
 
-    public ru.skypro.homework.model.Image mapToEntity(ImageDTO imageDTO) {
-        return new ru.skypro.homework.model.Image(
-                imageDTO.getId(),
-                imageDTO.getFilePath(),
-                imageDTO.getFileSize(),
-                imageDTO.getMediaType(),
-                imageDTO.getData(),
-                imageDTO.getLink()
+    public Image mapToEntity(ImageDTO imageDTO) {
+        Integer id = Integer.parseInt(String.valueOf(imageDTO.getUrl().charAt(imageDTO.getUrl().length() - 1)));
+        return new Image(
+                id,
+                imageRepository.findById(id).get().getMediaType(),
+                imageRepository.findById(id).get().getData()
         );
     }
 }

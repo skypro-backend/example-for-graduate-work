@@ -18,11 +18,8 @@ create table if not exists users
 create table if not exists images
 (
     id serial not null PRIMARY KEY,
-    file_path text not null,
-    file_size bigint not null,
-    media_type text not null,
-    data bytea not null,
-    link text not null
+    media_type text,
+    data bytea
 );
 
 --changeset backEndAdmin:3

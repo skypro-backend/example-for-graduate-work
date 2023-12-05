@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public interface ImageService {
 
-    void uploadImage(User user, MultipartFile imageFile) throws IOException;
-    void uploadImage(Ad ad, MultipartFile imageFile) throws IOException;
-    Image findImage(int id);
+    Image uploadImage(MultipartFile imageFile) throws IOException;
+
+    Image findImage(Integer id);
 
 }

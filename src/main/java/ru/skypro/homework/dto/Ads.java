@@ -19,7 +19,4 @@ public class Ads {
 
 
 
-    public Object Ads(int size, List<Ad> results) {
-        return null;
-    }
 }

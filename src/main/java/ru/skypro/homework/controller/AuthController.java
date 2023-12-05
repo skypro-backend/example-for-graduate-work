@@ -32,10 +32,8 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register registerDto) {
-        HttpHeaders response = new HttpHeaders();
-        response.setAccessControlAllowOrigin("*");
         if (authService.register(registerDto)) {
-            return ResponseEntity.status(HttpStatus.CREATED).headers(response).build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
