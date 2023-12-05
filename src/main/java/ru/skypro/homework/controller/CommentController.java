@@ -19,7 +19,6 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.CommentService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -27,7 +26,6 @@ import ru.skypro.homework.service.CommentService;
 @RequiredArgsConstructor
 public class CommentController {
 
-    private final CommentService commentService;
     private final AdRepository adRepository;
     private final CommentMapper commentMapper;
     private final CommentRepository commentRepository;

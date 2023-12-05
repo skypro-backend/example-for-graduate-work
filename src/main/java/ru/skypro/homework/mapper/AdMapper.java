@@ -62,22 +62,6 @@ public class AdMapper {
         );
     }
 
-    public User mapExtendedBackToAuthor(ExtendedAd extendedAd) {
-        return adRepository.findByPk(extendedAd.getPk()).getAuthor();
-    }
-
-    public Ad mapExtendedBackToEntity(ExtendedAd extendedAd) {
-        return new Ad(
-                adRepository.findByPk(extendedAd.getPk()).getAuthor(),
-                adRepository.findByPk(extendedAd.getPk()).getImage(),
-                extendedAd.getPk(),
-                extendedAd.getPrice(),
-                extendedAd.getTitle(),
-                extendedAd.getDescription(),
-                adRepository.findByPk(extendedAd.getPk()).getComments()
-        );
-    }
-
     public Ads mapToListOfDTO(List<Ad> ads) {
         List<AdDTO> results = new ArrayList<>();
         for (int i = 0; i < ads.size(); i++) {
@@ -87,14 +71,6 @@ public class AdMapper {
             ads.size(),
             results
         );
-    }
-
-    public List<Ad> mapBackToListOfEntities(Ads ads) {
-        List<Ad> results = new ArrayList<>();
-        for (int i = 0; i < ads.getResults().size(); i++) {
-            results.add(mapToEntity(ads.getResults().get(i)));
-        }
-        return results;
     }
 
     public Ad createFromCreateOrUpdateAd(CreateOrUpdateAd createOrUpdateAd, User user) {
