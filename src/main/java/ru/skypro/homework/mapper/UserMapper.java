@@ -1,29 +1,32 @@
 package ru.skypro.homework.mapper;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.impl.AdServiceImpl;
-
-import java.util.logging.Logger;
+import ru.skypro.homework.service.impl.UserServiceImpl;
 
 @Component
 @RequiredArgsConstructor
 public class UserMapper {
 
-    private Logger LoggerFactory;
+//    private Logger LoggerFactory;
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private final Logger logger = (Logger) LoggerFactory.getLogger(String.valueOf(UserMapper.class));
+    private final Logger logger = LoggerFactory.getLogger(UserMapper.class);
 
 
     public UserDTO mapToDTO(User user) {
+        logger.info("Method add mapToDTO invoked!");
+
         return new UserDTO(
                 user.getId(),
                 user.getUsername(),
@@ -36,6 +39,7 @@ public class UserMapper {
     }
 
     public User mapToEntity(UserDTO userDTO) {
+        logger.info("Method add mapToEntity invoked!");
         return new ru.skypro.homework.model.User(
                 userDTO.getId(),
                 userDTO.getEmail(),
@@ -59,5 +63,14 @@ public class UserMapper {
         user.setRole(registerDTO.getRole());
         return user;
     }
+
+    public NewPassword mapToNewPassword(User user) {
+        logger.info("Method add mapToNewPassword invoked!");
+        NewPassword newPassword = new NewPassword();
+        newPassword.setCurrentPassword(user.getPassword());
+        return newPassword;
+    }
+
+
 
 }

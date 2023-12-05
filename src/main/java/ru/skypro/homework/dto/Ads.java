@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.skypro.homework.model.Ad;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,9 +14,10 @@ import java.util.List;
 public class Ads {
 
     private int count = 0;
-    private List<AdDTO> results = List.of(
-            new AdDTO()
-    );
+
+    private List<AdDTO> results = new ArrayList<>();
+
+
 
     public Object Ads(int size, List<Ad> results) {
         return null;

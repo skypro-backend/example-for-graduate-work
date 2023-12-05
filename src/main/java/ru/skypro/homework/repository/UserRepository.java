@@ -11,5 +11,6 @@ import ru.skypro.homework.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     User findByUsername(String username);
+
     void deleteByUsername(String username);
 }

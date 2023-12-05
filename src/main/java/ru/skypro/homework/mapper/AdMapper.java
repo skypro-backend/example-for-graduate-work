@@ -22,8 +22,8 @@ public class AdMapper {
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
 
-    public Ad mapToDTO(ru.skypro.homework.model.Ad ad){
-        return new Ad(
+    public AdDTO mapToDTO(ru.skypro.homework.model.Ad ad){
+        return new AdDTO(
                 ad.getAuthor().getId(),
                 ad.getImage().getLink(),
                 ad.getPk(),
@@ -33,7 +33,7 @@ public class AdMapper {
 
     public Ad mapToEntity(AdDTO adDTO) {
         return new Ad(
-                userRepository.findById(adDTO.getAuthor().getId()).get(),
+                userRepository.findById(adDTO.getAuthor()).get(),
                 imageRepository.findByLink(String.valueOf(adDTO.getImage())),
                 adDTO.getPk(),
                 adDTO.getPrice(),
@@ -74,7 +74,7 @@ public class AdMapper {
     }
 
     public Ads mapToListOfDTO(List<ru.skypro.homework.model.Ad> ads) {
-        List<Ad> results = new ArrayList<>();
+        List<AdDTO> results = new ArrayList<>();
         for (int i = 0; i < ads.size(); i++) {
             results.add(mapToDTO(ads.get(i)));
         }

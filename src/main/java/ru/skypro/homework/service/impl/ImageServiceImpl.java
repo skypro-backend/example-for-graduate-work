@@ -26,7 +26,6 @@ public class ImageServiceImpl implements ImageService {
     private String imagesDir;
     private final Logger logger = LoggerFactory.getLogger(ImageServiceImpl.class);
     private final ImageRepository imageRepository;
-
     private String getExtensions(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }

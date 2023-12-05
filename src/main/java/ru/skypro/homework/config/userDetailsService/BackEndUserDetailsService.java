@@ -23,6 +23,7 @@ public class BackEndUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        logger.info("Method loadUserByUsername invoked!");
         User user = userRepository.findByUsername(username);
 
         if (user == null) {
