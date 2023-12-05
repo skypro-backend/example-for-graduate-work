@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ImageDTO;
@@ -30,8 +29,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
     private final UserMapper userMapper;
+    private final UserService userService;
     private final UserRepository userRepository;
     private final ImageService imageService;
     private final ImageMapper imageMapper;
@@ -60,13 +59,20 @@ public class UserController {
         user.setImage(imageToDB);
         userRepository.save(user);
         ImageDTO imageDTO = imageMapper.mapToDTO(imageToDB);
-        HttpHeaders headers = new HttpHeaders();
         return ResponseEntity.ok(imageDTO.getUrl());
     }
-    @PutMapping("/users/set_password")
-    public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPasswordDto) {
+
+    @PostMapping("/users/set_password")
+    public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPassword,
+                                                   Authentication authentication) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new NewPassword());
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        if (userService.setPassword(user, newPassword)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
 }

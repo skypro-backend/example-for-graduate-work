@@ -97,7 +97,7 @@ public class AdMapper {
         return results;
     }
 
-    public Ad mapFromCreateOrUpdateAd(CreateOrUpdateAd createOrUpdateAd, User user) {
+    public Ad createFromCreateOrUpdateAd(CreateOrUpdateAd createOrUpdateAd, User user) {
         logger.info("ДТО регистрации - " + createOrUpdateAd);
         Ad ad = new Ad();
         ad.setAuthor(user);

@@ -1,8 +1,6 @@
 package ru.skypro.homework.config.userDetailsService;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,7 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.impl.UserServiceImpl;
 
 import java.util.List;
 
@@ -18,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BackEndUserDetailsService implements UserDetailsService {
 
-    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
 
     @Override

@@ -8,10 +8,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.mapper.ImageMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
@@ -19,10 +21,8 @@ import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
-import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 
 @Slf4j
@@ -36,6 +36,7 @@ public class AdController {
     private final AdRepository adRepository;
     private final UserRepository userRepository;
     private final ImageService imageService;
+    private final ImageMapper imageMapper;
 
     @GetMapping("/ads")
     public ResponseEntity<Ads> getAllAds() {
@@ -51,7 +52,7 @@ public class AdController {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
         Image imageToDB = imageService.uploadImage(image);
-        if (adService.createOrUpdateAd(properties, user, imageToDB)) {
+        if (adService.createAd(properties, user, imageToDB)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -59,21 +60,30 @@ public class AdController {
     }
 
     @GetMapping("/ads/{id}")
-    public ExtendedAd getAdById(@PathVariable int id) {
+    public ResponseEntity<ExtendedAd> getAdById(@PathVariable int id) {
+        HttpHeaders headers = new HttpHeaders();
         Ad ad = adRepository.findByPk(id);
         ExtendedAd extendedAd = adMapper.mapToExtended(ad);
-        return extendedAd;
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(extendedAd);
     }
 
+    @Transactional
+    @PreAuthorize("hasAuthority('ADMIN') or @adRepository.findByPk(#id).getAuthor().getUsername() == authentication.name")
     @DeleteMapping("/ads/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable long id) {
+    public ResponseEntity<Void> deleteComment(@PathVariable Integer id) {
+        adRepository.deleteByPk(id);
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or @adRepository.findByPk(#id).getAuthor().getUsername() == authentication.name")
     @PatchMapping("/ads/{id}")
-    public ResponseEntity<AdDTO> editAd(@RequestBody CreateOrUpdateAd ad) {
+    public ResponseEntity<AdDTO> editAd(@PathVariable Integer id,
+                                        @RequestBody CreateOrUpdateAd createOrUpdateAd) {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new AdDTO());
+        Ad ad = adRepository.findByPk(id);
+        ad = adService.updateAd(ad, createOrUpdateAd);
+        AdDTO adDTO = adMapper.mapToDTO(ad);
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adDTO);
     }
 
     @GetMapping("/ads/me")
@@ -84,10 +94,16 @@ public class AdController {
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adMapper.mapToListOfDTO(adRepository.findAllByAuthorId(authorId)));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or @adRepository.findByPk(#id).getAuthor().getUsername() == authentication.name")
     @PatchMapping("/ads/{id}/image")
-    public ResponseEntity<String> updateAdImage(@PathVariable int id,
-                                                  @RequestBody MultipartFile file) {
+    public ResponseEntity<String> updateAdImage(@PathVariable Integer id,
+                                                @RequestPart("image") MultipartFile image) throws IOException{
         HttpHeaders headers = new HttpHeaders();
+        Ad ad = adRepository.findByPk(id);
+        Image imageToDB = imageService.uploadImage(image);
+        ad.setImage(imageToDB);
+        adRepository.save(ad);
+        ImageDTO imageDTO = imageMapper.mapToDTO(imageToDB);
         return ResponseEntity.ok(new ImageDTO().getUrl());
     }
 

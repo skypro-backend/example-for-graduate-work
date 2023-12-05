@@ -73,14 +73,10 @@ public class CommentMapper {
         return commentRepository.save(comment);
     }
 
-    public Comment updateFromCreateOrUpdate(Comment comment, CreateOrUpdateComment createOrUpdateComment, User author, Ad ad) {
+    public Comment updateFromCreateOrUpdate(Comment comment, CreateOrUpdateComment createOrUpdateComment) {
         LocalDateTime localDateTime = LocalDateTime.now();
-        comment.setAuthor(author);
-        comment.setAuthorImage(author.getImage());
-        comment.setAuthorFirstName(author.getFirstName());
         comment.setCreatedAt(localDateTime);
         comment.setText(createOrUpdateComment.getText());
-        comment.setAd(ad);
         return commentRepository.save(comment);
     }
 

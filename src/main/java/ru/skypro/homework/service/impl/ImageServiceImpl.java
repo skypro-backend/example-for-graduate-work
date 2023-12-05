@@ -25,6 +25,7 @@ public class ImageServiceImpl implements ImageService {
     @PostConstruct
     private void uploadDefaultAvatar() throws IOException{
         if(imageRepository.findAll().isEmpty()) {
+            logger.info("Загружаем аватар по-умолчанию");
             Image image = new Image();
             image.setMediaType(Files.probeContentType(defaultAvatar.toPath()));
             image.setData(Files.readAllBytes(defaultAvatar.toPath()));
@@ -34,6 +35,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image uploadImage(MultipartFile imageFile) throws IOException {
+        logger.info("Загружаем изображение");
         Image image = new Image();
         image.setMediaType(imageFile.getContentType());
         image.setData(imageFile.getBytes());
@@ -43,7 +45,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image findImage(Integer id) {
-        logger.info("Ищем изображение по его id - {}");
+        logger.info("Ищем изображение по его id - " + id);
         return imageRepository.findById(id).get();
     }
 
