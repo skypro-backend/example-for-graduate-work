@@ -73,25 +73,14 @@ public class CommentController {
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
-    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    @PreAuthorize(value = "hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
     public ResponseEntity<Comment> updateComment(@PathVariable("adId") Integer adId,
                                                  @PathVariable("commentId") Integer commentId,
                                                  @RequestBody CreateOrUpdateComment createOrUpdateComment,
                                                  Authentication authentication) {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
-        //todo добавить условие, только пользователь написавший коммент может его править.
-        //Нужен ли adId ?
-        if (authentication.getName() != null) {
-            Comment comment = commentService.updateComment(commentId, createOrUpdateComment, authentication.getName());
-            if (comment.getText().equals(createOrUpdateComment.getText())) {
-                return ResponseEntity.ok(comment);
-            } else if (comment == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        Comment comment = commentService.updateComment(commentId, createOrUpdateComment, authentication.getName());
+        return ResponseEntity.ok(comment);//todo не редактируется время коммента. когда оставляешь новый коммент,
+        // todo то должно обновляться и время
     }
 }
