@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
@@ -38,6 +39,7 @@ public class CommentServiceImpl implements CommentService {
         this.userService = userService;
     }
 
+    @Transactional
     @Override
     public Comments getComments(Integer id) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
@@ -48,6 +50,7 @@ public class CommentServiceImpl implements CommentService {
         return new Comments(comments.size(), comments);
     }
 
+    @Transactional
     @Override
     public Comment addComment(Integer id, CreateOrUpdateComment createOrUpdateComment, String username) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
@@ -102,6 +105,7 @@ public class CommentServiceImpl implements CommentService {
         return "not found"; //'404' Comment not found
     }
 
+    @Transactional
     @Override
     public Comment updateComment(Integer commentId, CreateOrUpdateComment createOrUpdateComment, String username) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());

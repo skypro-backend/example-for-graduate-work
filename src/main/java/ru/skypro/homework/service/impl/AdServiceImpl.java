@@ -98,11 +98,6 @@ public class AdServiceImpl implements AdService {
         imageService.saveFileOnDisk(adEntity.getPhoto(), filePath);
         //сохранение сущности adEntity в БД
         adRepository.save(adEntity);
-        //после сохранения сущности ad в БД, достаю ее обратно, т.к. только в БД ей присваивается id,
-        //а нам нужен как раз adId
-        adEntity = adRepository.findByAuthor(authentication.getName());
-        //теперь можно установить
-        adEntity.getPhoto().setAd(adEntity);
         //дублирование фото в БД
         photoRepository.save(adEntity.getPhoto());
 
