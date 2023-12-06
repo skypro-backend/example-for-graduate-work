@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface AdRepository extends JpaRepository<Ad, Integer> {
-    Ad findByPk(Integer id);
+    Ad findByPk(Integer pk);
     List<Ad> findAllByAuthorId(int i);
+    void deleteByPk(int pk);
 }

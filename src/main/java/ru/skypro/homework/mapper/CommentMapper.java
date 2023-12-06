@@ -24,8 +24,6 @@ import java.util.TimeZone;
 @RequiredArgsConstructor
 public class CommentMapper {
 
-    private final UserRepository userRepository;
-    private final ImageRepository imageRepository;
     private final CommentRepository commentRepository;
 
     public CommentDTO mapToDTO(Comment comment) {
@@ -37,19 +35,6 @@ public class CommentMapper {
             zonedDateTime.toInstant().toEpochMilli(),
             comment.getPk(),
             comment.getText()
-        );
-    }
-
-    public Comment mapToEntity(CommentDTO commentDTO) {
-        return new Comment(
-                userRepository.findById(commentDTO.getAuthor()).get(),
-                userRepository.findById(commentDTO.getAuthor()).get().getImage(),
-                commentDTO.getAuthorFirstName(),
-                LocalDateTime.ofInstant(Instant.ofEpochSecond(commentDTO.getCreatedAt()), TimeZone
-                        .getDefault().toZoneId()),
-                commentDTO.getPk(),
-                commentDTO.getText(),
-                commentRepository.findByPk(commentDTO.getPk()).getAd()
         );
     }
 
@@ -73,23 +58,11 @@ public class CommentMapper {
         return commentRepository.save(comment);
     }
 
-    public Comment updateFromCreateOrUpdate(Comment comment, CreateOrUpdateComment createOrUpdateComment, User author, Ad ad) {
+    public Comment updateFromCreateOrUpdate(Comment comment, CreateOrUpdateComment createOrUpdateComment) {
         LocalDateTime localDateTime = LocalDateTime.now();
-        comment.setAuthor(author);
-        comment.setAuthorImage(author.getImage());
-        comment.setAuthorFirstName(author.getFirstName());
         comment.setCreatedAt(localDateTime);
         comment.setText(createOrUpdateComment.getText());
-        comment.setAd(ad);
         return commentRepository.save(comment);
-    }
-
-    public List<Comment> mapBackToListOfEntities(Comments comments) {
-        List<Comment> results = new ArrayList<>();
-        for (int i = 0; i < comments.getResults().size(); i++) {
-            results.add(mapToEntity(comments.getResults().get(i)));
-        }
-        return results;
     }
 
 }

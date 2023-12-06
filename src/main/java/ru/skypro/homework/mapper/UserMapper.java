@@ -36,19 +36,6 @@ public class UserMapper {
         );
     }
 
-    public User mapToEntity(UserDTO userDTO) {
-        return new ru.skypro.homework.model.User(
-                userDTO.getId(),
-                userDTO.getEmail(),
-                userDTO.getFirstName(),
-                userDTO.getLastName(),
-                userRepository.findById(userDTO.getId()).get().getPassword(),
-                userDTO.getPhone(),
-                userDTO.getRole(),
-                userRepository.findById(userDTO.getId()).get().getImage()
-        );
-    }
-
     public User mapFromRegister(Register registerDTO) {
         logger.info("ДТО регистрации - " + registerDTO);
         User user = new User();

@@ -2,9 +2,6 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
@@ -23,9 +19,6 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.CommentService;
-
-import java.util.List;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -33,7 +26,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentController {
 
-    private final CommentService commentService;
     private final AdRepository adRepository;
     private final CommentMapper commentMapper;
     private final CommentRepository commentRepository;
@@ -59,8 +51,8 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(commentDTO);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN') or @commentRepository.findByPk(#commentId).getAuthor().getUsername() == authentication.name")
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN') or @commentRepository.findByPk(#commentId).getAuthor().getUsername() == authentication.name")
     @DeleteMapping("/ads/{adId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Integer adId,
                                               @PathVariable Integer commentId) {
@@ -68,16 +60,14 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or @commentRepository.findByPk(#commentId).getAuthor().getUsername() == authentication.name")
     @PatchMapping("/ads/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable Integer adId,
                                                     @PathVariable Integer commentId,
-                                                    @RequestBody CreateOrUpdateComment createOrUpdateComment,
-                                                    Authentication authentication) {
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
+                                                    @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         Ad ad = adRepository.findByPk(adId);
         Comment comment = commentRepository.findByPk(commentId);
-        comment = commentMapper.updateFromCreateOrUpdate(comment, createOrUpdateComment, user, ad);
+        comment = commentMapper.updateFromCreateOrUpdate(comment, createOrUpdateComment);
         CommentDTO commentDTO = commentMapper.mapToDTO(comment);
         HttpHeaders headers = new HttpHeaders();
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(commentDTO);
