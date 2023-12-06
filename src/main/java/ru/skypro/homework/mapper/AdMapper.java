@@ -11,7 +11,9 @@ import ru.skypro.homework.model.Image;
 @Service
 public class AdMapper {
 
-    //из model в dto
+    /**
+     * Маппинг списка объявлений в список объектов DTO.
+     */
     public AdDTO mapToAdDto(Ad ad) {
         AdDTO adDTO = new AdDTO();
         adDTO.setPk(ad.getPk());
@@ -25,14 +27,6 @@ public class AdMapper {
             adDTO.setImage(null);
         }
 
-        return adDTO;
-    }
-
-    public CreateOrUpdateAd mapToCreateOrUpdateAdDTO(Ad ad) {
-        CreateOrUpdateAd adDTO = new CreateOrUpdateAd();
-        adDTO.setPrice(ad.getPrice());
-        adDTO.setTitle(ad.getTitle());
-        adDTO.setDescription(ad.getDescription());
         return adDTO;
     }
 
@@ -55,17 +49,9 @@ public class AdMapper {
         return extendedAdDTO;
     }
 
-    //из dto в model
-//    public Ad mapToAd(AdDTO adDTO) {
-//        Ad ad = new Ad();
-//        ad.setImage(adDTO.getImage());
-//        ad.setPk(adDTO.getPk());
-//        ad.setPrice(adDTO.getPrice());
-//        ad.setTitle(adDTO.getTitle());
-//        //     ad.setDescription(adDTO.getDescription());
-//        return ad;
-//    }
-
+    /**
+     * Маппинг списка объявлений из списка объектов DTO.
+     */
     public Ad mapToAdFromCreateOrUpdateAd(CreateOrUpdateAd createOrUpdateAd) {
         Ad ad = new Ad();
         ad.setPrice(createOrUpdateAd.getPrice());

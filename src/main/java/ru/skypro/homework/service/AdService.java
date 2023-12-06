@@ -32,6 +32,9 @@ public class AdService {
         this.imageService = imageService;
     }
 
+    /**
+     * Создание нового объявления.
+     */
     public AdDTO createAd(CreateOrUpdateAd createOrUpdateAd,
                           Authentication authentication,
                           MultipartFile imageFile) throws IOException {
@@ -43,8 +46,11 @@ public class AdService {
         return adMapping.mapToAdDto(newAd);
     }
 
+    /**
+     * Получение всех объявлений.
+     */
     public AdsDTO getAll() {
-        List<Ad> adList = (List<Ad>) adRepository.findAll();
+        List<Ad> adList = adRepository.findAll();
         List<AdDTO> adDTOList = new ArrayList<>(adList.size());
         for (Ad a : adList) {
             adDTOList.add(adMapping.mapToAdDto(a));
@@ -55,11 +61,17 @@ public class AdService {
         return dto;
     }
 
+    /**
+     * Получение информации об объявлении.
+     */
     public ExtendedAdDTO findAd(int id) {
         return adRepository.findById(id).
                 map(adMapping::mapToExtendedAdDTO).orElseThrow();
     }
 
+    /**
+     * Удаление объявления.
+     */
     public boolean deleteAd(int id, Authentication authentication) throws IOException {
         User author = userService.loadUserByUsername(authentication.getName());
         Ad ad = adRepository.findByPk(id);
@@ -76,6 +88,9 @@ public class AdService {
         }
     }
 
+    /**
+     * Обновление информации об объявлении.
+     */
     public AdDTO updateAd(int id, CreateOrUpdateAd createOrUpdateAd, Authentication authentication) {
         User author = userService.loadUserByUsername(authentication.getName());
         Ad updateAd = adRepository.findByPk(id);
@@ -88,7 +103,9 @@ public class AdService {
         return adMapping.mapToAdDto(updateAd);
     }
 
-
+    /**
+     * Получение объявлений авторизованного пользователя.
+     */
     public AdsDTO getAdsMe(Authentication authentication) {
         User author = userService.loadUserByUsername(authentication.getName());
         List<Ad> adList = adRepository.findAllByAuthor_username(author.getUsername());
@@ -101,6 +118,9 @@ public class AdService {
         return dto;
     }
 
+    /**
+     * Обновление картинки объявления.
+     */
     public void editAdImage(int id, MultipartFile image, Authentication authentication) throws IOException {
         User author = userService.loadUserByUsername(authentication.getName());
         Ad updateAd = adRepository.findByPk(id);

@@ -18,10 +18,10 @@ public class CommentDTO {
     private String authorImage;
     @Schema(description = "имя создателя комментария")
     @NotNull
-    @Size(min = 3, max = 20)
+    @Size(min = 1, max = 20)
     private String authorFirstName;
     @Schema(description = "время создания комментария")
-    private int createdAt;
+    private long createdAt;
     @Schema(description = "id комментария")
     private int pk;
     @Schema(description = "текст комментария")

@@ -5,9 +5,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,9 +19,8 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.service.AdService;
 
-import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Collection;
+
 
 @CrossOrigin(value = "http://localhost:3000")
 @Slf4j
@@ -93,7 +89,7 @@ public class AdController {
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-            }
+    }
 
     @Operation(summary = "Обновить информацию об объявлении", tags = "Объявления")
     @ApiResponses(value = {
@@ -138,6 +134,4 @@ public class AdController {
         adService.editAdImage(id, image, authentication);
         return ResponseEntity.ok().build();
     }
-
-
 }

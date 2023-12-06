@@ -20,7 +20,6 @@ import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
 
-import javax.validation.Valid;
 import java.io.IOException;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -32,6 +31,7 @@ public class UserController {
     AuthServiceImpl authService;
     @Autowired
     UserService userService;
+
     @Operation(summary = "Обновление пароля", tags = "Пользователи")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -53,7 +53,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
-    @Operation(summary = "Обновление пароля", tags = "Пользователи")
+
+    @Operation(summary = "Получить информацию об авторизованном пользователе\"я", tags = "Пользователи")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "OK",

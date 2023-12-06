@@ -2,8 +2,6 @@ package ru.skypro.homework.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import net.bytebuddy.implementation.bind.annotation.Empty;
-import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
 
 import javax.validation.constraints.NotBlank;
@@ -27,6 +25,6 @@ public class AdDTO {
     private int price;
     @Schema(description = "заголовок объявления")
     @NotBlank
-    @Size(min = 4, max = 100)
+    @Size(min = 4, max = 32)
     private String title;
 }

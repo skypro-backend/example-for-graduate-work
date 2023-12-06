@@ -10,25 +10,24 @@ firstName VARCHAR(255),
 lastName VARCHAR(255),
 phone VARCHAR(255),
 role VARCHAR(255),
-image VARCHAR(255),
-adId INT,
+imageId INT REFERENCES image (id),
 );
 
 create TABLE ads (
 pk INT primary key,
-author INT,
-image VARCHAR(255),
+authorId INT REFERENCES users (id),
+imageId INT REFERENCES image (id),
 price INT,
 title TEXT,
 description TEXT,
-commentId INT
 );
 
 create TABLE comments (
 pk INT primary key,
-author INT,
+createdAt BIGINT,
 text TEXT,
-adId INT,
+adId INT REFERENCES ads (id),
+authorId INT REFERENCES users (id),
 );
 
 create TABLE image (

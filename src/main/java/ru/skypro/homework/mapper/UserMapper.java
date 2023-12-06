@@ -17,7 +17,9 @@ import java.nio.CharBuffer;
 public class UserMapper {
     private final PasswordEncoder encoder;
 
-    //из model в dto
+    /**
+     * Маппинг пользователя в объект DTO.
+     */
     public UserDTO mapToUserDto(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
@@ -35,13 +37,6 @@ public class UserMapper {
         return userDTO;
     }
 
-    public LoginDTO mapToLoginDto(User user) {
-        LoginDTO loginDTO = new LoginDTO();
-        loginDTO.setUsername(user.getUsername());
-        loginDTO.setPassword(user.getPassword());
-        return loginDTO;
-    }
-
     public UpdateUserDTO mapToUpdateUserDTO(User user) {
         UpdateUserDTO updateUserDTO = new UpdateUserDTO();
         updateUserDTO.setFirstName(user.getFirstName());
@@ -50,30 +45,13 @@ public class UserMapper {
         return updateUserDTO;
     }
 
-    //из dto в model
-//    public User mapToUser(UserDTO userDTO) {
-//        User user = new User();
-//        user.setId(userDTO.getId());
-//        user.setEmail(userDTO.getEmail());
-//        user.setPhone(userDTO.getPhone());
-//        user.setImage(userDTO.getImage());
-//        user.setLastName(userDTO.getLastName());
-//        user.setRole(userDTO.getRole());
-//        user.setUsername(userDTO.getEmail());
-//        return user;
-//    }
-
-    public User mapToUserLogin(LoginDTO loginDTO) {
-        User user = new User();
-        user.setUsername(loginDTO.getUsername());
-        user.setPassword(loginDTO.getPassword());
-        return user;
-    }
+    /**
+     * Маппинг пользователя из объекта DTO.
+     */
 
     public User mapToUser(RegisterDTO registerDTO) {
         User user = new User();
         user.setUsername(registerDTO.getUsername());
-//        user.setPassword(registerDTO.getPassword());
         user.setPassword(encoder.encode(CharBuffer.wrap(registerDTO.getPassword())));
         user.setFirstName(registerDTO.getFirstName());
         user.setLastName(registerDTO.getLastName());

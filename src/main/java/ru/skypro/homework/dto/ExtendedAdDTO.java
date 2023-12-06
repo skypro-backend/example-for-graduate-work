@@ -22,7 +22,7 @@ public class ExtendedAdDTO {
     private String lastName;
     @Schema(description = "текст объявления")
     @NotBlank
-    @Size(min = 4, max = 25)
+    @Size(min = 4, max = 100)
     private String description;
     @Schema(description = "адрес электронной почты автора объявления")
     @NotBlank
@@ -33,7 +33,7 @@ public class ExtendedAdDTO {
     private String image;
     @Schema(description = "номер телефона автора объявления")
     @NotBlank
-  //  @Pattern(regexp = "\\+7\s?\\(?\\d{3}\\)?\s?\\d{3}-?\\d{2}-?\\d{2}")
+    @Pattern(regexp = "\\+7\s?\\(?\\d{3}\\)?\s?\\d{3}-?\\d{2}-?\\d{2}")
     private String phone;
     @Schema(description = "цена объявления")
     @NotNull
@@ -41,6 +41,6 @@ public class ExtendedAdDTO {
     private int price;
     @Schema(description = "заголовок объявления")
     @NotBlank
-    @Size(min = 4, max = 25)
+    @Size(min = 4, max = 32)
     private String title;
 }

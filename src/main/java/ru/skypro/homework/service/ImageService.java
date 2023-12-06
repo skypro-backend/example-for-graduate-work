@@ -20,6 +20,9 @@ public class ImageService {
         this.imageRepository = imageRepository;
     }
 
+    /**
+     * Добавление картинки.
+     */
     public Image uploadImage(MultipartFile imageFile) throws IOException {
 
         Image image = new Image();
@@ -34,7 +37,9 @@ public class ImageService {
 
         return imageRepository.save(image);
     }
-
+    /**
+     * Удаление картинки.
+     */
 
     public void deleteImage(Image image) throws IOException {
 

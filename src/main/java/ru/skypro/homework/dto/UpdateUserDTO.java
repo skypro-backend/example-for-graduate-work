@@ -1,9 +1,11 @@
 package ru.skypro.homework.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import lombok.Data;
 
 @Data
@@ -19,6 +21,6 @@ public class UpdateUserDTO {
     private String lastName;
     @Schema(description = "номер телефона")
     @NotBlank
-  //  @Pattern(regexp = "\\+7\s?\\(?\\d{3}\\)?\s?\\d{3}-?\\d{2}-?\\d{2}")
+    @Pattern(regexp = "\\+7\s?\\(?\\d{3}\\)?\s?\\d{3}-?\\d{2}-?\\d{2}")
     private String phone;
 }

@@ -6,18 +6,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentService;
 
 import javax.validation.Valid;
-import java.util.Collection;
 
 @CrossOrigin(value = "http://localhost:3000")
 @Slf4j
@@ -40,8 +37,8 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content})
     })
     @PostMapping("{id}/comments")
-    public CommentDTO createComment(@PathVariable int id,@Valid @RequestBody CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
-       return commentService.createComment(id, createOrUpdateComment, authentication);
+    public CommentDTO createComment(@PathVariable int id, @Valid @RequestBody CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
+        return commentService.createComment(id, createOrUpdateComment, authentication);
 
     }
 

@@ -10,7 +10,9 @@ import ru.skypro.homework.model.Image;
 @Service
 public class CommentMapper {
 
-    //из model в dto
+    /**
+     * Маппинг списка комментариев в список объектов DTO.
+     */
     public CommentDTO mapToCommentDto(Comment comment) {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setAuthor(comment.getUser().getId());
@@ -21,37 +23,9 @@ public class CommentMapper {
         } else {
             commentDTO.setAuthorImage(null);
         }
-
         commentDTO.setCreatedAt(comment.getCreatedAt());
         commentDTO.setPk(comment.getPk());
         commentDTO.setText(comment.getText());
         return commentDTO;
     }
-
-    public CommentDTO mapToCreateOrUpdateComment(Comment comment) {
-        CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setText(comment.getText());
-        return commentDTO;
-    }
-
-
-    //из dto в model
-//    public Comment mapToComment(CommentDTO commentDTO) {
-//        Comment comment = new Comment();
-//        comment.setAuthor(commentDTO.getAuthor());
-//        comment.setAuthorFirstName(commentDTO.getAuthorFirstName());
-//        comment.setAuthorImage(commentDTO.getAuthorImage());
-//        comment.setCreatedAt(commentDTO.getCreatedAt());
-//        comment.setPk(commentDTO.getPk());
-//        comment.setText(commentDTO.getText());
-//        return comment;
-//    }
-
-    public Comment mapToCommentFromCreateOrUpdateComment(CreateOrUpdateComment createOrUpdateComment) {
-        Comment comment = new Comment();
-        comment.setText(createOrUpdateComment.getText());
-        return comment;
-    }
-
-
 }
