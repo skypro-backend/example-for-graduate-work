@@ -86,8 +86,9 @@ public class AdServiceImpl implements AdService {
         adEntity.setPhoto(adMapper.mapMultipartFileToPhoto(image));
         adEntity.setAuthor(userService.getUser(authentication));
         //записываем URL для перехода фронта к методу возврата photo
-        adEntity.setImage("/photo/image/" + adEntity.getPhoto().getId());
-        log.info("URL для перехода фронта к методу возврата photo: {}", adEntity.getImage());
+        String urlToPhoto = "/photo/image/" + adEntity.getPhoto().getId();
+        adEntity.setImage(urlToPhoto);
+        log.info("URL для перехода фронта к методу возврата photo: {}", urlToPhoto);
 
         //адрес до директории хранения фото на ПК
         Path filePath = Path.of(photoDir, adEntity.getPhoto().getId() +/* "-" + properties.getTitle() + */"."
@@ -96,10 +97,9 @@ public class AdServiceImpl implements AdService {
 
         //сохранение на ПК
         imageService.saveFileOnDisk(adEntity.getPhoto(), filePath);
+
         //сохранение сущности adEntity в БД
         adRepository.save(adEntity);
-        //дублирование фото в БД
-        photoRepository.save(adEntity.getPhoto());
 
         //возврат ДТО Ad из метода
         return adMapper.mapToAdDto(adEntity);
@@ -233,17 +233,17 @@ public class AdServiceImpl implements AdService {
             return null;
         }*/
 
-        AdEntity adEntity = adRepository.findById(id).get();
+//        AdEntity adEntity = adRepository.findById(id).get();
 
         // todo продумать путь до файла
-        Path filePath = Path.of(photoDir, adEntity.getId() + "."
+        Path filePath = Path.of(photoDir, id + "."
                 + imageService.getExtension(image.getOriginalFilename()));
 
         imageService.saveFileOnDisk(image, filePath);
-        imageService.updateAdImage(adEntity, image, filePath);
+        imageService.updateAdImage(id, image, filePath);
 
-        adEntity.setImage("/" + photoDir + "/" + adEntity.getId());
-        adRepository.save(adEntity);
+//        adEntity.setImage("/" + photoDir + "/" + adEntity.getId());
+//        adRepository.save(adEntity);
 
     }
 

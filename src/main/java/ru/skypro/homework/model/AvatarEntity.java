@@ -1,5 +1,6 @@
 package ru.skypro.homework.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class AvatarEntity {
     private byte[] data;
 
     @OneToOne
+    @JsonIgnore
     private UserEntity user;
 
 }

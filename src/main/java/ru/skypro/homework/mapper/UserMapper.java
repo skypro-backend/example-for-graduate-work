@@ -39,7 +39,8 @@ public class UserMapper {
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setPhone(entity.getPhone());
-//        dto.setImage(entity.getAvatar().getFilePath()); // вот это момент на подумать
+        dto.setImage(entity.getImage());
+
         return dto;
     }
 

@@ -1,5 +1,6 @@
 package ru.skypro.homework.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.Role;
@@ -26,6 +27,7 @@ public class UserEntity {
     private Role role;
 
     @OneToOne
+    @JsonBackReference
     private AvatarEntity avatar;
 
     @OneToMany(mappedBy = "author")

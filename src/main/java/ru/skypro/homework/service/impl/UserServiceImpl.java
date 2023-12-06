@@ -5,16 +5,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.exception.PasswordIsNotMatchException;
 import ru.skypro.homework.exception.UserNotFoundException;
+import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.AvatarEntity;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.UUID;
 
 /**
  * Сервис хранящий логику для управления данными пользователей.
@@ -83,6 +89,7 @@ public class UserServiceImpl implements UserService {
      *
      * @return объект userEntity
      */
+    @Transactional
     @Override
     public UserEntity getUser(Authentication authentication) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
@@ -101,6 +108,7 @@ public class UserServiceImpl implements UserService {
      * @param authentication
      * @return объект user
      */
+    @Transactional
     @Override
     public UserEntity updateUser(UpdateUser updateUser, Authentication authentication) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
@@ -134,18 +142,27 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Transactional
     @Override
-    public void updateUserImage(MultipartFile image, Authentication authentication) {
+    public void updateUserImage(MultipartFile image, Authentication authentication) throws IOException {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         //достаем пользователя из БД
         UserEntity user = userRepository.findUserEntityByUserName(authentication.getName());
-        //мапим MultipartFile в сущность avatarEntity
-        AvatarEntity avatar = imageService.mapMuptipartFileToAvatar(image);
-        //сохраняем аватар в БД, юзеру устанавливаем новый аватар и сохраняем в БД
-        avatarRepository.save(avatar);
-        user.setAvatar(avatar);
+        //заполняем поля photo и author
+        user.setAvatar(imageService.mapMuptipartFileToAvatar(image));
+        //записываем URL для перехода фронта к методу возврата avatara
+        String urlToAvatar = "/photo/image/" + user.getAvatar().getId();
+        user.setImage(urlToAvatar);
+        log.info("URL для перехода фронта к методу возврата photo: {}", urlToAvatar);
 
+        //адрес до директории хранения аватара на ПК
+        Path filePath = Path.of(avatarDir, user.getAvatar().getId() +/* "-" + properties.getTitle() + */"."
+                + imageService.getExtension(image.getOriginalFilename()));
+        log.info("путь к файлу: {}", filePath);
+
+        //сохранение на ПК
+        imageService.saveFileOnDisk(image, filePath);
+        //сохранение сущности user в БД
         userRepository.save(user);
-
     }
 }

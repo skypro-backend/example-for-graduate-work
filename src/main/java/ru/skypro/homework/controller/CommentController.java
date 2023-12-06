@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.CommentService;
-import ru.skypro.homework.service.impl.AuthServiceImpl;
+import ru.skypro.homework.service.impl.AdServiceImpl;
 import ru.skypro.homework.service.impl.LoggingMethodImpl;
 
 @Slf4j
@@ -19,18 +21,19 @@ import ru.skypro.homework.service.impl.LoggingMethodImpl;
 @CrossOrigin("http://localhost:3000")
 @RequestMapping("/ads")
 public class CommentController {
-    private final AuthServiceImpl authService;
+    private final UserRepository userRepository;
     private final CommentService commentService;
+    private final AdServiceImpl adService;
 
-    public CommentController(AuthServiceImpl authService, CommentService commentService) {
-        this.authService = authService;
+    public CommentController(UserRepository userRepository, CommentService commentService, AdServiceImpl adService) {
+        this.userRepository = userRepository;
         this.commentService = commentService;
+        this.adService = adService;
     }
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<Comments> getComments(@PathVariable("id") Integer id, Authentication authentication) {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
-        //todo добавить условие???? если role = admin то можно смотреть все комменты, юзер - только свои
         if (authentication.getName() != null) {
             return ResponseEntity.ok(commentService.getComments(id));
         } else {
@@ -52,12 +55,6 @@ public class CommentController {
                                            @PathVariable("commentId") Integer commentId,
                                            Authentication authentication) {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
-        //
-        //как сделать: нужно найти в БД юзера по его логину из authService.getLogin()
-        //и проверить его статус: админ или юзер, если админ то удаляем коммент. если нет, то см. далее
-        //Далее нужно найти коммент и проверить кому он принадлежит, если текущему юзеру (он не админ),
-        //то удаляем, если нет, то статус 403.
-        //Нужен ли adId ?
         if (authentication.getName() != null) {
             String result = commentService.deleteComment(commentId, authentication.getName());
             if (result.equals("forbidden")) {
@@ -73,14 +70,20 @@ public class CommentController {
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
-    @PreAuthorize(value = "hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
     public ResponseEntity<Comment> updateComment(@PathVariable("adId") Integer adId,
                                                  @PathVariable("commentId") Integer commentId,
                                                  @RequestBody CreateOrUpdateComment createOrUpdateComment,
                                                  Authentication authentication) {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
+        log.info("adId: {}", adId);
+        log.info("commentId: {}", commentId);
+        var userRole = authentication.getAuthorities();
+        log.info(" роль пользователя - {}", userRole);
+        if(userRole.equals(1) || adService.isAuthorAd(authentication.getName(), adId)){
         Comment comment = commentService.updateComment(commentId, createOrUpdateComment, authentication.getName());
-        return ResponseEntity.ok(comment);//todo не редактируется время коммента. когда оставляешь новый коммент,
-        // todo то должно обновляться и время
+        return ResponseEntity.ok(comment);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

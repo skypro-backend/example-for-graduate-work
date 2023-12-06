@@ -17,7 +17,6 @@ import ru.skypro.homework.service.AuthService;
 @Slf4j
 public class AuthServiceImpl implements AuthService {
 
-    /*private final UserDetailsManager manager;*/
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final MyUserDetailService myUserDetailService;

@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 @Service
@@ -18,6 +19,7 @@ public class MyUserDetailService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     @Override//вызываем в методе логин
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());

@@ -1,28 +1,23 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
-import ru.skypro.homework.model.PhotoEntity;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.impl.LoggingMethodImpl;
 
@@ -121,37 +116,13 @@ public class AdController {
     )
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
-    public ResponseEntity<byte[]> updateImage(@PathVariable("id") Integer adId,
-                                              @RequestParam MultipartFile image,
-                                              Authentication authentication) throws IOException {
+    public ResponseEntity<Void> updateImage(@PathVariable("id") Integer adId,
+                                      @RequestPart MultipartFile image,
+                                      Authentication authentication) throws IOException {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
-        /*if (image.getSize() > 1024 * 1024 * 2) {
-            return ResponseEntity.status(HttpStatus.valueOf(404)).build();
-        }
-        if (authService.getLogin() != null) {
-            PhotoEntity photo = adService.updateImage(id, image);
-            return ResponseEntity.ok(photo); // todo продумать, что метод контроллера возвращает, как вариант PhotoEntity
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        //return null; //todo разобраться с ошибками 403 и 404, как и в остальных метод контроллераах выше, если есть*/
-
-        if ( authentication.getName() == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // todo посмотреть как это сделать с Security
-        }
-
+        log.info("adId = {}", adId);
         adService.updateImage(adId, image);
+        return ResponseEntity.ok().build();
 
-        PhotoEntity photo = adService.findPhoto(adId);
-        if (photo != null) {
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.parseMediaType(photo.getMediaType()));
-            headers.setContentLength(photo.getData().length);
-
-            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(photo.getData());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 }
