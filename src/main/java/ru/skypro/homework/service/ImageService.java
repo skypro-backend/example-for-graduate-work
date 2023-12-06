@@ -11,7 +11,7 @@ import java.nio.file.Path;
 public interface ImageService {
 
     void updateUserImage(UserEntity user, MultipartFile image, Path filePath);
-    PhotoEntity updateAdImage(AdEntity ad, MultipartFile image, Path filePath) throws IOException;
+    PhotoEntity updateAdImage(Integer id, MultipartFile image, Path filePath) throws IOException;
 
     boolean saveFileOnDisk(MultipartFile image, Path filePath) throws IOException;
 

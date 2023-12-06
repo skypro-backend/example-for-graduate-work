@@ -1,12 +1,15 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.AvatarEntity;
 import ru.skypro.homework.model.PhotoEntity;
 import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.service.ImageService;
@@ -22,11 +25,44 @@ public class ImageServiceImpl implements ImageService {
 
     private final AvatarRepository avatarRepository;
     private final PhotoRepository photoRepository;
+    private final AdRepository adRepository;
+    private final AdMapper adMapper;
 
-    public ImageServiceImpl(AvatarRepository avatarRepository, PhotoRepository photoRepository) {
+    @Value("${path.to.photos.folder}")
+    private String photoDir;
+
+
+    public ImageServiceImpl(AvatarRepository avatarRepository, PhotoRepository photoRepository, AdRepository adRepository, AdMapper adMapper) {
         this.avatarRepository = avatarRepository;
         this.photoRepository = photoRepository;
+        this.adRepository = adRepository;
+        this.adMapper = adMapper;
     }
+    @Override
+    public PhotoEntity updateAdImage(Integer id, MultipartFile image, Path filePath) throws IOException{
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
+        AdEntity adEntity = adRepository.findById(id).orElseThrow(RuntimeException::new);
+        PhotoEntity photo = adMapper.mapMultipartFileToPhoto(image);
+        log.info("новое phtotId = {}", photo.getId());
+        adEntity.setPhoto(photo);
+
+        String urlToPhoto = "/photo/image/" + adEntity.getPhoto().getId();
+        adEntity.setImage(urlToPhoto);
+        log.info("URL для перехода фронта к методу возврата photo: {}", urlToPhoto);
+
+        //адрес до директории хранения фото на ПК
+        filePath = Path.of(photoDir, adEntity.getPhoto().getId() +/* "-" + properties.getTitle() + */"."
+                + this.getExtension(image.getOriginalFilename()));
+        log.info("путь к файлу: {}", filePath);
+
+        //сохранение на ПК
+        this.saveFileOnDisk(adEntity.getPhoto(), filePath);
+
+        //сохранение сущности adEntity в БД
+        adRepository.save(adEntity);
+        return photo;
+    }
+
 
     @Override
     public void updateUserImage(UserEntity user, MultipartFile image, Path filePath) {
@@ -35,20 +71,7 @@ public class ImageServiceImpl implements ImageService {
         avatar.setFilePath(filePath.toString());
         avatar.setFileSize(image.getSize());
         avatar.setMediaType(image.getContentType());
-        avatar.setUser(user);
         avatarRepository.save(avatar);
-    }
-
-    @Override
-    public PhotoEntity updateAdImage(AdEntity ad, MultipartFile image, Path filePath) throws IOException{
-        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
-        PhotoEntity photo = photoRepository.findByAd(ad).orElseGet(PhotoEntity::new);
-        photo.setFilePath(filePath.toString());
-        photo.setFileSize(image.getSize());
-        photo.setMediaType(image.getContentType());
-        photo.setData(image.getBytes());
-        photo.setAd(ad);
-        return photoRepository.save(photo);
     }
 
     @Override
@@ -90,6 +113,7 @@ public class ImageServiceImpl implements ImageService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        avatarRepository.save(avatar);
         return avatar;
     }
     @Override

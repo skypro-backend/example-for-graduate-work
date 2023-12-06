@@ -1,11 +1,10 @@
 package ru.skypro.homework.service.impl;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.model.PhotoEntity;
+import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.service.PhotoService;
 import java.nio.file.Path;
@@ -14,11 +13,13 @@ import java.nio.file.Path;
 @Slf4j
 public class PhotoServiceImpl implements PhotoService {
     private final PhotoRepository photoRepository;
+    private final AvatarRepository avatarRepository;
     @Value("${path.to.photos.folder}")
     private String photoDir;
 
-    public PhotoServiceImpl(PhotoRepository photoRepository) {
+    public PhotoServiceImpl(PhotoRepository photoRepository, AvatarRepository avatarRepository) {
         this.photoRepository = photoRepository;
+        this.avatarRepository = avatarRepository;
     }
 
     @Override
@@ -32,7 +33,10 @@ public class PhotoServiceImpl implements PhotoService {
 
     public byte[] getPhoto(Integer photoId){
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
-        return photoRepository.findById(photoId).get().getData();
+        log.info("photiId: {}", photoId);
+        //todo объединить таблицы фото и аватар, обе строки рабочие.
+//        return photoRepository.findById(photoId).orElseThrow(RuntimeException::new).getData();
+        return avatarRepository.findById(photoId).orElseThrow(RuntimeException::new).getData();
     }
 
 }

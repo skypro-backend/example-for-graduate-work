@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import ru.skypro.homework.service.impl.LoggingMethodImpl;
 
+import java.awt.*;
 import java.io.IOException;
 @Slf4j
 @RestController
@@ -64,7 +65,6 @@ public class UserController {
             }
     )
     @PostMapping("/set_password") // http://localhost:8080/users/set_password
-    @PreAuthorize("hasRole('USER') or @adServiceImpl.isAuthorAd(authentication.name)")
     public ResponseEntity setPassword(@RequestBody NewPassword newPass, Authentication authentication) {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         userService.setPassword(newPass, authentication);
@@ -83,7 +83,6 @@ public class UserController {
     }
 
     @PatchMapping("/me") // http://localhost:8080/users/me
-    @PreAuthorize("hasRole('USER') or @adServiceImpl.isAuthorAd(authentication.name)")
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
         log.info("Запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         UserEntity user = userService.updateUser(updateUser, authentication);
