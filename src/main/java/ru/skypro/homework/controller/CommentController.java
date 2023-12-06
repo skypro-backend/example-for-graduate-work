@@ -50,7 +50,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
-    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    @PreAuthorize(value = "hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.getName(), #adId)")
     public ResponseEntity<?> deleteComment(@PathVariable("adId") Integer adId,
                                            @PathVariable("commentId") Integer commentId,
                                            Authentication authentication) {
@@ -70,7 +70,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    @PreAuthorize(value = "hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.getName(), #adId)")
     public ResponseEntity<Comment> updateComment(@PathVariable("adId") Integer adId,
                                                  @PathVariable("commentId") Integer commentId,
                                                  @RequestBody CreateOrUpdateComment createOrUpdateComment,
@@ -79,8 +79,10 @@ public class CommentController {
         log.info("adId: {}", adId);
         log.info("commentId: {}", commentId);
         var userRole = authentication.getAuthorities();
-        log.info(" роль пользователя - {}", userRole);
-        if(userRole.equals(1) || adService.isAuthorAd(authentication.getName(), adId)){
+        log.info("роль пользователя - {}", userRole);
+        log.info("совпадает с БД - {}", userRepository.findUserEntityByUserName(authentication.getName()).getRole());
+        log.info("isAuthorAd({})", adService.isAuthorAd(authentication.getName(), adId));
+        if(authentication.getName() != null){
         Comment comment = commentService.updateComment(commentId, createOrUpdateComment, authentication.getName());
         return ResponseEntity.ok(comment);
         }

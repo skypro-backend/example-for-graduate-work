@@ -71,7 +71,7 @@ public class AdController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    @PreAuthorize(value = "hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.getName(), #adId)")
     public ResponseEntity removeAd(@PathVariable("id") Integer adId) {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         return (adService.removeAd(adId)) ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() :
@@ -79,7 +79,7 @@ public class AdController {
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    @PreAuthorize(value = "hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.getName(), #adId)")
     public ResponseEntity<Ad> updateAds(@PathVariable("id") Integer adId, @RequestBody CreateOrUpdateAd dto) {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         Ad ad = adService.updateAds(adId, dto);
@@ -115,7 +115,7 @@ public class AdController {
             }
     )
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.name, #adId)")
+    @PreAuthorize(value = "hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.getName(), #adId)")
     public ResponseEntity<Void> updateImage(@PathVariable("id") Integer adId,
                                       @RequestPart MultipartFile image,
                                       Authentication authentication) throws IOException {
