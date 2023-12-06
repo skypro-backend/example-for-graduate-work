@@ -15,6 +15,13 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
+
+    /**
+     * Password update by username & newPassword
+     * <br>
+     * Repository method is used {@link UserRepository#findByUsername(String)}
+     *
+     */
     @Override
     public boolean setPassword(User user, NewPassword newPassword) {
         if(passwordEncoder.matches(newPassword.getCurrentPassword(), user.getPassword())) {
@@ -25,5 +32,4 @@ public class UserServiceImpl implements UserService {
         } else
             return false;
     }
-
 }

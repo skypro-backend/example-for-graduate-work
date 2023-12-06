@@ -15,7 +15,18 @@ public class ImageController {
 
     private final ImageService imageService;
 
-    @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
+    /**
+     * Getting String URL of image in DB & definition of image formats
+     * <br>
+     * Using MediaType class {@link MediaType}
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/image/{id}", produces = {
+            MediaType.IMAGE_PNG_VALUE,
+            MediaType.IMAGE_JPEG_VALUE,
+            MediaType.IMAGE_GIF_VALUE,
+            "image/*"})
     public byte[] getImage(@PathVariable Integer id) {
         Image image = imageService.findImage(id);
         return image.getData();

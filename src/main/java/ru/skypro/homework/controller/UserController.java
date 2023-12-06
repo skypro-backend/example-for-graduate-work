@@ -35,6 +35,16 @@ public class UserController {
     private final ImageService imageService;
     private final ImageMapper imageMapper;
 
+
+    /**
+     * Getting information about an authorized user
+     * <br>
+     * Using Authentication get method {@link Authentication#getName()}
+     * <br>
+     * Using UserRepository method {@link UserRepository#findByUsername(String)}
+     * @param authentication
+     * @return
+     */
     @GetMapping("/users/me")
     public ResponseEntity<UserDTO> get(Authentication authentication) {
         String username = authentication.getName();
@@ -42,6 +52,16 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
+    /**
+     * Updating Authorized User Information
+     * <br>
+     * Using Authentication get method {@link Authentication#getName()}
+     * <br>
+     * Using UserMapper method for saving information about user {@link UserMapper#saveFromUpdate(String, UpdateUser)}
+     * @param updateUserDto
+     * @param authentication
+     * @return
+     */
     @PatchMapping("/users/me")
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUserDto, Authentication authentication) {
         String username = authentication.getName();
@@ -50,6 +70,20 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(updateUserDto);
     }
 
+    /**
+     * Updating an authorized user's avatar
+     * <br>
+     * Using {@link Authentication#getName()}
+     * {@link UserRepository#findByUsername(String)}
+     * {@link ImageService#uploadImage(MultipartFile)}
+     * {@link User#setImage(Image)}
+     * {@link UserRepository#save(Object)}
+     * {@link ImageMapper#mapToDTO(Image)}
+     * @param image
+     * @param authentication
+     * @return
+     * @throws IOException
+     */
     @PatchMapping(value = "/users/me/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<String> updateUserImage(@RequestPart("image") MultipartFile image,
                                                   Authentication authentication) throws IOException {
@@ -62,6 +96,13 @@ public class UserController {
         return ResponseEntity.ok(imageDTO.getUrl());
     }
 
+    /**
+     * Password update
+     * using UserService method {@link UserService#setPassword(User, NewPassword)}
+     * @param newPassword
+     * @param authentication
+     * @return
+     */
     @PostMapping("/users/set_password")
     public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPassword,
                                                    Authentication authentication) {

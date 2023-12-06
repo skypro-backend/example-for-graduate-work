@@ -40,12 +40,30 @@ public class AdController {
     private final ImageService imageService;
     private final ImageMapper imageMapper;
 
+    /**
+     * Getting all advertisements
+     * @return
+     */
     @GetMapping("/ads")
     public ResponseEntity<Ads> getAllAds() {
         HttpHeaders headers = new HttpHeaders();
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adMapper.mapToListOfDTO(adRepository.findAll()));
     }
 
+    /**
+     * Adding advertisement
+     * <br>
+     * Using for adding ad {@link AdService#createAd(CreateOrUpdateAd, User, Image)}
+     * <br>
+     * Using {@link Authentication#getName()}
+     * {@link UserRepository#findByUsername(String)}
+     * {@link ImageService#uploadImage(MultipartFile)}
+     * @param properties
+     * @param image
+     * @param authentication
+     * @return
+     * @throws IOException
+     */
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping(value = "/ads", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE } )
     public ResponseEntity<?> postAd(@RequestPart(value = "properties", required = true) CreateOrUpdateAd properties,
@@ -61,6 +79,12 @@ public class AdController {
         }
     }
 
+    /**
+     * Getting information about ad by id
+     * Using AdRepository method for finding ad by pk(id) {@link AdRepository#findByPk(Integer)}
+     * @param id
+     * @return
+     */
     @GetMapping("/ads/{id}")
     public ResponseEntity<ExtendedAd> getAdById(@PathVariable int id) {
         HttpHeaders headers = new HttpHeaders();
@@ -69,6 +93,12 @@ public class AdController {
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(extendedAd);
     }
 
+    /**
+     * Removing ad by ADMIN by id
+     * using {@link CommentRepository#deleteAllByAdPk(Integer)} {@link AdRepository#deleteByPk(int)}
+     * @param id
+     * @return
+     */
     @Transactional
     @PreAuthorize("hasAuthority('ADMIN') or @adRepository.findByPk(#id).getAuthor().getUsername() == authentication.name")
     @DeleteMapping("/ads/{id}")
@@ -78,6 +108,16 @@ public class AdController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Update ad information by ADMIN by id
+     * <br>
+     * Using {@link AdRepository#findByPk(Integer)}
+     * {@link AdService#updateAd(Ad, CreateOrUpdateAd)}
+     * {@link AdMapper#mapToDTO(Ad)}
+     * @param id
+     * @param createOrUpdateAd
+     * @return
+     */
     @PreAuthorize("hasAuthority('ADMIN') or @adRepository.findByPk(#id).getAuthor().getUsername() == authentication.name")
     @PatchMapping("/ads/{id}")
     public ResponseEntity<AdDTO> editAd(@PathVariable Integer id,
@@ -89,6 +129,13 @@ public class AdController {
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adDTO);
     }
 
+    /**
+     * Getting advertisements from an authorized user
+     * using {@link Authentication#getName()}
+     * {@link UserRepository#findByUsername(String)}
+     * @param authentication
+     * @return
+     */
     @GetMapping("/ads/me")
     public ResponseEntity<Ads> getAllMyAds(Authentication authentication) {
         String username = authentication.getName();
@@ -97,6 +144,18 @@ public class AdController {
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adMapper.mapToListOfDTO(adRepository.findAllByAuthorId(authorId)));
     }
 
+    /**
+     * Update ad image by pk(id)
+     * <br>
+     * Using {@link AdRepository#findByPk(Integer)}
+     * {@link ImageService#uploadImage(MultipartFile)}
+     * {@link Ad#setImage(Image)}
+     * {@link AdRepository#save(Object)}
+     * @param id
+     * @param image
+     * @return
+     * @throws IOException
+     */
     @PreAuthorize("hasAuthority('ADMIN') or @adRepository.findByPk(#id).getAuthor().getUsername() == authentication.name")
     @PatchMapping("/ads/{id}/image")
     public ResponseEntity<String> updateAdImage(@PathVariable Integer id,

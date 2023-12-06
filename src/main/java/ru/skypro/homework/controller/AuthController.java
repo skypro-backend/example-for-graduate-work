@@ -21,6 +21,13 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * User authorization
+     * <br>
+     * Using {@link AuthService#login(Login)}
+     * @param loginDto
+     * @return
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login loginDto) {
         if (authService.login(loginDto)) {
@@ -30,6 +37,13 @@ public class AuthController {
         }
     }
 
+    /**
+     * User registration
+     * <br>
+     * Using {@link AuthService#register(Register)} for registration user
+     * @param registerDto
+     * @return
+     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register registerDto) {
         if (authService.register(registerDto)) {

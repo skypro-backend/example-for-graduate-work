@@ -26,6 +26,15 @@ public class AuthServiceImpl implements AuthService {
 
     private final Logger logger = (Logger) LoggerFactory.getLogger(String.valueOf(AuthServiceImpl.class));
 
+    /**
+     * User authorization
+     * using userDetails method {@link BackEndUserDetailsService#loadUserByUsername(String)}
+     * <br>
+     * Password comparison for authorization using PasswordEncoder method {@link PasswordEncoder#matches(CharSequence, String)}
+     *
+     * @param login
+     * @return
+     */
     @Override
     public boolean login(Login login) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(login.getUsername());
@@ -36,6 +45,13 @@ public class AuthServiceImpl implements AuthService {
         return passwordEncoder.matches(login.getPassword(), userDetails.getPassword());
     }
 
+    /**
+     * User registration
+     * <br>
+     * Using repository method {@link org.springframework.data.jpa.repository.JpaRepository#save(Object)}
+     * @param registerDto
+     * @return
+     */
     @Override
     public boolean register(Register registerDto) {
         if (userDetailsService.loadUserByUsername(registerDto.getUsername()) != null) {
