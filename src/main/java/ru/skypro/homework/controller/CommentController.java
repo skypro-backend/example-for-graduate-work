@@ -1,10 +1,17 @@
 package ru.skypro.homework.controller;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentService;
@@ -24,24 +31,58 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-
+    @Operation(summary = "Добавить комментарий к объявлению", tags = "Комментарии")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDTO.class)
+                    )}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content})
+    })
     @PostMapping("{id}/comments")
-    public void createComment(@PathVariable int id,@Valid @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        commentService.createComment(id, createOrUpdateComment);
+    public CommentDTO createComment(@PathVariable int id,@Valid @RequestBody CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
+       return commentService.createComment(id, createOrUpdateComment, authentication);
+
     }
 
+    @Operation(summary = "Получить комментарии объявления", tags = "Комментарии")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentsDTO.class)
+                    )}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content})
+    })
     @GetMapping("{id}/comments")
-    public Collection<CommentDTO> getComments(@PathVariable int id) {
+    public CommentsDTO getComments(@PathVariable int id) {
         return commentService.findByAd(id);
     }
 
+    @Operation(summary = "Удалить комментарий", tags = "Комментарии")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {@Content}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content}),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = {@Content})
+    })
     @DeleteMapping("{adId}/comments/{commentId}")
-    public void deleteAd(@PathVariable int adId, @PathVariable int commentId) {
-        commentService.deleteComment(adId, commentId);
+    public void deleteAd(@PathVariable int adId, @PathVariable int commentId, Authentication authentication) {
+        commentService.deleteComment(adId, commentId, authentication);
     }
 
+    @Operation(summary = "Обновить комментарий", tags = "Комментарии")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CommentDTO.class)
+                    )}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content}),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = {@Content})
+    })
     @PatchMapping("{adId}/comments/{commentId}")
-    public CommentDTO updateById(@PathVariable int adId, @PathVariable int commentId, @Valid @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        return commentService.updateComment(adId, commentId, createOrUpdateComment);
+    public CommentDTO updateById(@PathVariable int adId,
+                                 @PathVariable int commentId,
+                                 @Valid @RequestBody CreateOrUpdateComment createOrUpdateComment,
+                                 Authentication authentication) {
+        return commentService.updateComment(adId, commentId, createOrUpdateComment, authentication);
     }
 }

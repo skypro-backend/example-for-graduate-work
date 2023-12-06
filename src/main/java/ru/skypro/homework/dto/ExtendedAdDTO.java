@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.*;
 
 import lombok.Data;
+import ru.skypro.homework.model.Image;
 
 @Data
 @Schema(description = "Добавление комментария к объявлению")

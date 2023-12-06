@@ -2,64 +2,90 @@ package ru.skypro.homework.service;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.CommentRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Service
 public class AdService {
 
     private final AdRepository adRepository;
+    private final CommentRepository commentRepository;
     private final AdMapper adMapping;
     private final UserService userService;
+    private final ImageService imageService;
 
-    public AdService(AdRepository adRepository, AdMapper adMapping, UserService userService) {
+    public AdService(AdRepository adRepository, CommentRepository commentRepository, AdMapper adMapping, UserService userService, ImageService imageService) {
         this.adRepository = adRepository;
+        this.commentRepository = commentRepository;
         this.adMapping = adMapping;
         this.userService = userService;
+        this.imageService = imageService;
     }
 
-    public AdDTO createAd(CreateOrUpdateAd createOrUpdateAd, Authentication authentication) {
+    public AdDTO createAd(CreateOrUpdateAd createOrUpdateAd,
+                          Authentication authentication,
+                          MultipartFile imageFile) throws IOException {
         User author = userService.loadUserByUsername(authentication.getName());
         Ad newAd = adMapping.mapToAdFromCreateOrUpdateAd(createOrUpdateAd);
         newAd.setAuthor(author);
+        newAd.setImage(imageService.uploadImage(imageFile));
         adRepository.save(newAd);
         return adMapping.mapToAdDto(newAd);
     }
 
-    public Collection<AdDTO> getAll() {
+    public AdsDTO getAll() {
         List<Ad> adList = (List<Ad>) adRepository.findAll();
         List<AdDTO> adDTOList = new ArrayList<>(adList.size());
         for (Ad a : adList) {
             adDTOList.add(adMapping.mapToAdDto(a));
         }
-        return adDTOList;
+        AdsDTO dto = new AdsDTO();
+        dto.setCount(adList.size());
+        dto.setResults(adDTOList);
+        return dto;
     }
 
-    public AdDTO findAd(int id) {
+    public ExtendedAdDTO findAd(int id) {
         return adRepository.findById(id).
-                map(adMapping::mapToAdDto).orElseThrow();
+                map(adMapping::mapToExtendedAdDTO).orElseThrow();
     }
 
-    public void deleteAd(int id) {
-        adRepository.deleteById(id);
+    public boolean deleteAd(int id, Authentication authentication) throws IOException {
+        User author = userService.loadUserByUsername(authentication.getName());
+        Ad ad = adRepository.findByPk(id);
+        ;
+        if (author.equals(ad.getAuthor()) || author.getRole() == RoleDTO.ADMIN
+        ) {
+            Image image = ad.getImage();
+            commentRepository.deleteAll(ad.getComments());
+            adRepository.delete(ad);
+            imageService.deleteImage(image);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public CreateOrUpdateAd updateAd(int id, CreateOrUpdateAd createOrUpdateAd) {
+    public AdDTO updateAd(int id, CreateOrUpdateAd createOrUpdateAd, Authentication authentication) {
+        User author = userService.loadUserByUsername(authentication.getName());
         Ad updateAd = adRepository.findByPk(id);
-        updateAd.setTitle(createOrUpdateAd.getTitle());
-        updateAd.setPrice(createOrUpdateAd.getPrice());
-        updateAd.setDescription(createOrUpdateAd.getDescription());
-        adRepository.save(updateAd);
-        return adMapping.mapToCreateOrUpdateAdDTO(updateAd);
+        if (author.equals(updateAd.getAuthor()) || author.getRole() == RoleDTO.ADMIN) {
+            updateAd.setTitle(createOrUpdateAd.getTitle());
+            updateAd.setPrice(createOrUpdateAd.getPrice());
+            updateAd.setDescription(createOrUpdateAd.getDescription());
+            adRepository.save(updateAd);
+        }
+        return adMapping.mapToAdDto(updateAd);
     }
 
 
@@ -70,9 +96,18 @@ public class AdService {
         for (Ad a : adList) {
             adDTOList.add(adMapping.mapToAdDto(a));
         }
-        AdsDTO dto = new AdsDTO ();
+        AdsDTO dto = new AdsDTO();
         dto.setResults(adDTOList);
         return dto;
+    }
+
+    public void editAdImage(int id, MultipartFile image, Authentication authentication) throws IOException {
+        User author = userService.loadUserByUsername(authentication.getName());
+        Ad updateAd = adRepository.findByPk(id);
+        Image oldImage = updateAd.getImage();
+        updateAd.setImage(imageService.uploadImage(image));
+        adRepository.save(updateAd);
+        imageService.deleteImage(oldImage);
     }
 }
 

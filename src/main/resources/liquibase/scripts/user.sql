@@ -1,7 +1,7 @@
 -- liquibase formatted sql
 -- changeset Mariya:1
 
-CREATE TABLE users (
+create TABLE users (
 id INT primary key,
 username VARCHAR(255),
 password VARCHAR(255),
@@ -14,7 +14,7 @@ image VARCHAR(255),
 adId INT,
 );
 
-CREATE TABLE ads (
+create TABLE ads (
 pk INT primary key,
 author INT,
 image VARCHAR(255),
@@ -24,11 +24,16 @@ description TEXT,
 commentId INT
 );
 
-CREATE TABLE comments (
+create TABLE comments (
 pk INT primary key,
 author INT,
-authorImage VARCHAR(255),
-authorFirstName VARCHAR(255),
 text TEXT,
 adId INT,
+);
+
+create TABLE image (
+id INT primary key
+filePath TEXT,
+fileSize BIGINT,
+mediaType TEXT,
 );
