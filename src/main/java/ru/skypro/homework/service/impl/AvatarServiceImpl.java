@@ -6,7 +6,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.AvatarEntity;
-import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.UserService;
 

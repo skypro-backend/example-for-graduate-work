@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.service.PhotoService;
 import java.nio.file.Path;

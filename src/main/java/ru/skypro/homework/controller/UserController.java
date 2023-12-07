@@ -31,11 +31,9 @@ import java.io.IOException;
 @RequestMapping("/users")
 public class UserController {
     private UserService userService;
-    private AuthServiceImpl authService;
 
-    public UserController(UserService userService, AuthServiceImpl authService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.authService = authService;
     }
 
     @Operation(

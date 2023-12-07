@@ -12,7 +12,6 @@ import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.CommentEntity;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;

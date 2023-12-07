@@ -68,7 +68,7 @@ public class AdServiceImpl implements AdService {
         return new Ads(dtos.size(), dtos);
     }
 
-//    @Override
+    @Override
     public Ad addAd(CreateOrUpdateAd properties,
                     MultipartFile image,
                     Authentication authentication) throws IOException {
@@ -76,24 +76,30 @@ public class AdServiceImpl implements AdService {
         //создаем сущность
         AdEntity adEntity = new AdEntity();
 
-        //заполняем поля title, price и description
+        //заполняем поля title, price и description, которые берутся из properties
         adEntity.setTitle(properties.getTitle());
         adEntity.setPrice(properties.getPrice());
         adEntity.setDescription(properties.getDescription());
 
+        //заполняем поля photo
+        PhotoEntity photoOfAd = adMapper.mapMultipartFileToPhoto(image);
+        photoRepository.save(photoOfAd);
+        adEntity.setPhoto(photoOfAd);
 
-        //заполняем поля photo и author
-        adEntity.setPhoto(adMapper.mapMultipartFileToPhoto(image));
+        //заполняем поле author
         adEntity.setAuthor(userService.getUser(authentication));
+
         //записываем URL для перехода фронта к методу возврата photo
         String urlToPhoto = "/photo/image/" + adEntity.getPhoto().getId();
         adEntity.setImage(urlToPhoto);
         log.info("URL для перехода фронта к методу возврата photo: {}", urlToPhoto);
 
         //адрес до директории хранения фото на ПК
-        Path filePath = Path.of(photoDir, adEntity.getPhoto().getId() +/* "-" + properties.getTitle() + */"."
+        Path filePath = Path.of(photoDir, adEntity.getPhoto().getId() + "."
                 + imageService.getExtension(image.getOriginalFilename()));
-        log.info("путь к файлу: {}", filePath);
+        log.info("путь к файлу картинки объявления на ПК: {}", filePath);
+        //добавляем в сущность картинки путь где она храниться на ПК
+        adEntity.getPhoto().setFilePath(filePath.toString());
 
         //сохранение на ПК
         imageService.saveFileOnDisk(adEntity.getPhoto(), filePath);
@@ -105,59 +111,6 @@ public class AdServiceImpl implements AdService {
         return adMapper.mapToAdDto(adEntity);
     }
 
-//    @Override
-//    public Ad addAd1(CreateOrUpdateAd properties,
-//                    MultipartFile image,
-//                    Authentication authentication) throws IOException {
-//        log.info("Запущен метод сервиса: addAd");
-//        //Создаем сущность adEntity и мапим в нее полученную с фронта ДТО.
-//        //Заполняются 3/7 полей: title, price, description.
-//        AdEntity adEntity = adMapper.mapToAdEntity(properties, userService.getUser(authentication).getUserName());
-//        //формируем путь к картинке в папке проекта
-//        Path filePath = Path.of(photoDir, adEntity.getId() + "-" + properties.getTitle() + "."
-//                + imageService.getExtension(image.getOriginalFilename()));
-//        log.info("путь файла в папке проекта: {}", filePath);
-//
-//        //мапим MultypartFile в PhotoEntity
-//        PhotoEntity photo = new PhotoEntity();
-//        photo.setData(image.getBytes());
-//        photo.setMediaType(image.getContentType());
-//        photo.setFileSize(image.getSize());
-//        log.info("сущность photo = {}", photo);
-//        //сохраняем картинку в папку проекта
-//        log.info("MultipartFile сохранен в папку проекта - {}", imageService.saveFileOnDisk(photo, filePath));
-//
-//        //Заполняем поле photo в сущности adEntity (заполнено 4/7 полей)
-//        adEntity.setPhoto(imageService.updateAdImage(adEntity, image, filePath));
-//        //Заполняем поле image (заполнено 5/7 полей) URL куда будет обращаться фронт с добавлением имени картинки
-//        adEntity.setImage("/" + photoDir + "/" + adEntity.getId());
-//        //заполняем поле author (заполнено 6/7 полей) текущим авторизованным пользователем
-//        //незаполненным осталось поле comments - коллекция комментариев
-//        adEntity.setAuthor(userService.getUser(authentication));
-//        //сохраняем сущность в репозиторий
-//        log.info("Сущность adEntity - {}", adRepository.save(adEntity));
-//        //мапим сущность adEntity в ДТО Ad и возвращаем его из метода
-//        Ad adDTO = adMapper.mapToAdDto(adEntity);
-//        log.info("ДТО Ad - {}", adDTO);
-//        return adDTO;
-//    }
-
-
-//    public Ad addAd(CreateOrUpdateAd properties, MultipartFile image) {
-//        log.info("Использован метод сервиса addAd - ВАРИАНТ2");
-//
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        UserEntity user = userService.getUser(auth);
-//        log.info("Сущность UserEntity создана");
-//        AdEntity adEntity = adMapper.mapToAdEntity(properties, user.getUserName());
-//        log.info("Сущность adEntity создана");
-//        adEntity.setPhoto(imageService.addPhoto(image));
-//        log.info("Добавлено фото в adEntity");
-//        Ad adDto = adMapper.mapToAdDto(adRepository.save(adEntity));
-//        log.info("ДТО ad создано");
-//        return adDto;
-//    }
-
     @Override
     public ExtendedAd getAds(Integer id) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
@@ -165,6 +118,7 @@ public class AdServiceImpl implements AdService {
         return adMapper.mapToExtendedAdDto(entity);
     }
 
+    @Transactional
     @Override
     public boolean removeAd(Integer id) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
@@ -177,6 +131,7 @@ public class AdServiceImpl implements AdService {
         }
     }
 
+    @Transactional
     @Override
     public Ad updateAds(Integer id, CreateOrUpdateAd dto) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
@@ -197,57 +152,54 @@ public class AdServiceImpl implements AdService {
         UserEntity author = userService.checkUserByUsername(username);
         log.info("объект UserEntity получен из БД");
         List<Ad> ads = null;
-            ads = adRepository.findByAuthor(author).stream()
-                    .map(ad -> adMapper.mapToAdDto(ad))
-                    .collect(Collectors.toList());
+        ads = adRepository.findByAuthor(author).stream()
+                .map(ad -> adMapper.mapToAdDto(ad))
+                .collect(Collectors.toList());
         log.info("Получен список объявлений пользователя ads");
         Ads adsDto = new Ads(ads.size(), ads);
         log.info("Сформирован возвращаемый объект adsDto");
         return adsDto;
     }
 
+    @Transactional
     @Override
     public void updateImage(Integer id, MultipartFile image) throws IOException {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
-        /*Optional<AdEntity> entity = adRepository.findById(id);
-        if (entity.isPresent()) {
-            PhotoEntity photo = new PhotoEntity();
-            Path path = Path.of(photoDir);
-            if (!path.toFile().exists()) {
-                Files.createDirectories(path);
-            }
-            var dotIndex = Objects.requireNonNull(image.getOriginalFilename()).lastIndexOf('.');
-            var ext = image.getOriginalFilename().substring(dotIndex + 1);
-            var photoPath = photoDir + "/" + entity.get().getTitle() + "." + ext;
-            try (var in = image.getInputStream();
-                 var out = new FileOutputStream(photoPath)) {
-                in.transferTo(out);
-            }
-            photo.setFilePath(photoPath);
-            photo.setData(image.getBytes());
-            photo.setFileSize(image.getSize());
-            photo.setMediaType(image.getContentType());
-            photo.setAd(entity.get());
-            return photoRepository.save(photo);
-        } else {
-            return null;
-        }*/
+        //достаем объявление из БД
+        AdEntity adEntity = adRepository.findById(id).orElseThrow(RuntimeException::new);
 
-//        AdEntity adEntity = adRepository.findById(id).get();
+//        //если у объявления есть картинка, то находим ее и удаляем
+//        if (adEntity.getPhoto() != null) {
+//            photoRepository.delete(adEntity.getPhoto());
+//        }
+//
+//        //заполняем поля photo и сохраняем фото в БД
+//        PhotoEntity adPhoto = adMapper.mapMultipartFileToPhoto(image);
+//        adEntity.setPhoto(adPhoto);
+//        photoRepository.save(adPhoto);
+//
+//        //записываем URL для перехода фронта к методу возврата фото объявления
+//        String urlToAvatar = "/photo/image/" + adEntity.getPhoto().getId();
+//        adEntity.setImage(urlToAvatar);
+//        log.info("URL для перехода фронта к методу возврата photo объявления: {}", urlToAvatar);
+//
+//        //адрес до директории хранения фото на ПК
+//        Path filePath = Path.of(photoDir, adEntity.getPhoto().getId() + "."
+//                + imageService.getExtension(image.getOriginalFilename()));
+//        log.info("путь к файлу для хранения фото на ПК: {}", filePath);
+//
+//        //добавляем в сущность фото путь где оно хранится на ПК
+//        adEntity.getPhoto().setFilePath(filePath.toString());
+//
+//        //сохранение на ПК
+//        imageService.saveFileOnDisk(image, filePath);
 
-        // todo продумать путь до файла
-        Path filePath = Path.of(photoDir, id + "."
-                + imageService.getExtension(image.getOriginalFilename()));
-
-        imageService.saveFileOnDisk(image, filePath);
-        imageService.updateAdImage(id, image, filePath);
-
-//        adEntity.setImage("/" + photoDir + "/" + adEntity.getId());
-//        adRepository.save(adEntity);
-
+        adEntity = (AdEntity) imageService.updateEntitiesPhoto(image, adEntity);
+       log.info("adEntity = {}", adEntity.toString());
+        //сохранение сущности user в БД
+        adRepository.save(adEntity);
     }
 
-    @Override
     public PhotoEntity findPhoto(Integer id) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         return photoRepository.findByAdId(id).get();

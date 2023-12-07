@@ -15,7 +15,6 @@ public interface AdService {
     Ads getAllAds();
 
     Ad addAd(CreateOrUpdateAd properties, MultipartFile image, Authentication authentication) throws IOException;
-//    Ad addAd(CreateOrUpdateAd properties, MultipartFile image);
 
     ExtendedAd getAds(Integer id);
 
@@ -25,7 +24,5 @@ public interface AdService {
 
     Ads getAdsMe(String username);
 
-    void updateImage(Integer id, MultipartFile image) throws IOException; // todo возвращаемое значение, как вариант
-
-    PhotoEntity findPhoto(Integer id);
+    void updateImage(Integer id, MultipartFile image) throws IOException;
 }
