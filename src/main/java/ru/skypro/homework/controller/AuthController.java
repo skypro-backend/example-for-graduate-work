@@ -17,14 +17,11 @@ import javax.transaction.Transactional;
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
-
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
+//    @Transactional
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {

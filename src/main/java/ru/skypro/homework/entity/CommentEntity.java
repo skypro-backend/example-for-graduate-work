@@ -7,7 +7,7 @@ import java.time.Instant;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = "pk")
+@EqualsAndHashCode(exclude = "id")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +17,7 @@ public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long pk;
+    private Integer id;
 
     @Column(name = "created_at")
     private Instant createdAt;
@@ -33,43 +33,4 @@ public class CommentEntity {
     @JoinColumn(name = "user_entity_id")
     private UserEntity userEntity;
 
-    public Long getPk() {
-        return pk;
-    }
-
-    public void setPk(Long pk) {
-        this.pk = pk;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public AdEntity getAdId() {
-        return adId;
-    }
-
-    public void setAdId(AdEntity adId) {
-        this.adId = adId;
-    }
-
-    public UserEntity getUserEntity() {
-        return userEntity;
-    }
-
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
-    }
 }
