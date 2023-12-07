@@ -46,8 +46,7 @@ public class AdController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdDTO> addAds(@RequestPart("image") MultipartFile imageFile,
                                         Authentication authentication,
-                                        @RequestPart("properties") CreateOrUpdateAd createOrUpdateAd,
-                                        @RequestPart("image") MultipartFile image) throws IOException {
+                                        @RequestPart("properties") CreateOrUpdateAd createOrUpdateAd) throws IOException {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(adService.createAd(createOrUpdateAd, authentication, imageFile));
