@@ -6,5 +6,6 @@ import ru.skypro.homework.dto.Role;
 @Data
 public class ModelEntity {
     private PhotoEntity photo;
-    private String image;
+    private String filePath; //путь на ПК
+    private String image; //URL для контроллера
 }

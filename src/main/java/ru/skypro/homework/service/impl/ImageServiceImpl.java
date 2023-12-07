@@ -13,6 +13,7 @@ import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.service.ImageService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,19 +23,15 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Service
 @Slf4j
 public class ImageServiceImpl implements ImageService {
-    private final AdRepository adRepository;
     private final PhotoRepository photoRepository;
-    private final AdMapper adMapper;
     private final UserMapper userMapper;
 
     @Value("${path.to.photos.folder}")
     private String photoDir;
 
 
-    public ImageServiceImpl(AdRepository adRepository, PhotoRepository photoRepository, AdMapper adMapper, UserMapper userMapper, ImageServiceImpl imageService) {
-        this.adRepository = adRepository;
+    public ImageServiceImpl(PhotoRepository photoRepository, UserMapper userMapper) {
         this.photoRepository = photoRepository;
-        this.adMapper = adMapper;
         this.userMapper = userMapper;
     }
 
@@ -82,6 +79,9 @@ public class ImageServiceImpl implements ImageService {
         entity.setImage(urlToAvatar);
         log.info("URL для перехода фронта к методу возврата аватара: {}", urlToAvatar);
 
+        //добавляем в сущность URL
+        entity.setImage(urlToAvatar);
+
         //адрес до директории хранения фото на ПК
         Path filePath = Path.of(photoDir, entity.getPhoto().getId() + "."
                 + this.getExtension(image.getOriginalFilename()));
@@ -89,6 +89,9 @@ public class ImageServiceImpl implements ImageService {
 
         //добавляем в сущность фото путь где оно хранится на ПК
         entity.getPhoto().setFilePath(filePath.toString());
+
+        //добавляем в сущность путь на ПК
+        entity.setFilePath(filePath.toString());
 
         //сохранение на ПК
         this.saveFileOnDisk(image, filePath);
@@ -126,6 +129,19 @@ public class ImageServiceImpl implements ImageService {
     }
 ///////////////////////////////////////
 
+    public byte[] getPhotoFromDisk(PhotoEntity photo, HttpServletResponse response){
+        Path path1 = Path.of(photo.getFilePath());
+        try(InputStream is = Files.newInputStream(path1);
+            OutputStream os = response.getOutputStream()) {
+            response.setStatus(200);
+            response.setContentType(photo.getMediaType());
+            response.setContentLength((int) photo.getFileSize());
+            is.transferTo(os);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return response.
+    }
     @Override
     public String getExtension(String fileName) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());

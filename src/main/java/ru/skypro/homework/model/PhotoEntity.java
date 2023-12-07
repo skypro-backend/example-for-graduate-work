@@ -22,6 +22,6 @@ public class PhotoEntity {
     @Lob
     private byte[] data;
 
-    @OneToOne
-    private AdEntity ad;
+//    @OneToOne
+//    private AdEntity ad;
 }

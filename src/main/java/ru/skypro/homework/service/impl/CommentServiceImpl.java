@@ -27,16 +27,18 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final AdRepository adRepository;
-    private final AvatarRepository avatarRepository;
     private final UserRepository userRepository;
     private final CommentMapper commentMapper;
     private final UserService userService;
 
-    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper, AdRepository adRepository, AvatarRepository avatarRepository, UserRepository userRepository, UserService userService) {
+    public CommentServiceImpl(CommentRepository commentRepository,
+                              CommentMapper commentMapper,
+                              AdRepository adRepository,
+                              UserRepository userRepository,
+                              UserService userService) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.adRepository = adRepository;
-        this.avatarRepository = avatarRepository;
         this.userRepository = userRepository;
         this.userService = userService;
     }
@@ -58,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
 
         UserEntity author = userService.checkUserByUsername(username);
-        AdEntity ad = adRepository.findById(id).get();
+        AdEntity ad = adRepository.findById(id).orElse(null);
 
         //Создаем сущность comment и заполняем поля
         CommentEntity commentEntity = new CommentEntity();

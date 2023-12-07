@@ -81,28 +81,33 @@ public class AdServiceImpl implements AdService {
         adEntity.setPrice(properties.getPrice());
         adEntity.setDescription(properties.getDescription());
 
-        //заполняем поля photo
-        PhotoEntity photoOfAd = adMapper.mapMultipartFileToPhoto(image);
-        photoRepository.save(photoOfAd);
-        adEntity.setPhoto(photoOfAd);
-
         //заполняем поле author
         adEntity.setAuthor(userService.getUser(authentication));
 
-        //записываем URL для перехода фронта к методу возврата photo
-        String urlToPhoto = "/photo/image/" + adEntity.getPhoto().getId();
-        adEntity.setImage(urlToPhoto);
-        log.info("URL для перехода фронта к методу возврата photo: {}", urlToPhoto);
+//        //заполняем поля photo
+//        PhotoEntity photoOfAd = adMapper.mapMultipartFileToPhoto(image);
+//        photoRepository.save(photoOfAd);
+//        adEntity.setPhoto(photoOfAd);
+//
+//
+//        //записываем URL для перехода фронта к методу возврата photo
+//        String urlToPhoto = "/photo/image/" + adEntity.getPhoto().getId();
+//        adEntity.setImage(urlToPhoto);
+//        log.info("URL для перехода фронта к методу возврата photo: {}", urlToPhoto);
+//
+//        //адрес до директории хранения фото на ПК
+//        Path filePath = Path.of(photoDir, adEntity.getPhoto().getId() + "."
+//                + imageService.getExtension(image.getOriginalFilename()));
+//        log.info("путь к файлу картинки объявления на ПК: {}", filePath);
+//        //добавляем в сущность картинки путь где она храниться на ПК
+//        adEntity.getPhoto().setFilePath(filePath.toString());
+//
+//        //сохранение на ПК
+//        imageService.saveFileOnDisk(adEntity.getPhoto(), filePath);
 
-        //адрес до директории хранения фото на ПК
-        Path filePath = Path.of(photoDir, adEntity.getPhoto().getId() + "."
-                + imageService.getExtension(image.getOriginalFilename()));
-        log.info("путь к файлу картинки объявления на ПК: {}", filePath);
-        //добавляем в сущность картинки путь где она храниться на ПК
-        adEntity.getPhoto().setFilePath(filePath.toString());
-
-        //сохранение на ПК
-        imageService.saveFileOnDisk(adEntity.getPhoto(), filePath);
+        ///добавление фото в сущность, формирование URL и путей файлов на ПК
+        adEntity = (AdEntity) imageService.updateEntitiesPhoto(image, adEntity);
+        log.info("Сущность adEntity сформированная в {}", LoggingMethodImpl.getMethodName());
 
         //сохранение сущности adEntity в БД
         adRepository.save(adEntity);
