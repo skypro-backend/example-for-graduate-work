@@ -18,7 +18,7 @@ public interface AdService {
 
     ExtendedAd getFullAd(Integer id);
 
-    Ad updateAd(Integer id, CreateOrUpdateAd adDetails);
+    Ad updateAd(Integer id, CreateOrUpdateAd adDetails, UserDetails userDetails);
 
-    ResponseEntity<String> removeAd(Integer id);
+    ResponseEntity<String> removeAd(Integer id, UserDetails userDetails);
 }

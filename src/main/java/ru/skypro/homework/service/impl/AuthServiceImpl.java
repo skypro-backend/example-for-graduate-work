@@ -2,47 +2,56 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
-import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService {
-
-    private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
+    private final UserRepository userRepository;
+
+    public AuthServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.encoder = passwordEncoder;
+        this.userRepository = userRepository;
     }
 
     @Override
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
+        Optional<UserEntity> userEntityOptional = userRepository.findByUsername(userName);
+        if (userEntityOptional.isEmpty()) {
             return false;
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(password);
+        return encoder.matches(password,userEntityOptional.get().getPassword());
     }
 
     @Override
     public boolean register(Register register) {
-        if (manager.userExists(register.getUsername())) {
+        Optional<UserEntity> userEntityOptional = userRepository.findByUsername(register.getUsername());
+        if (userEntityOptional.isPresent()) {
             return false;
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(register.getPassword());
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(register.getUsername());
+        userEntity.setFirstName(register.getFirstName());
+        userEntity.setLastName(register.getLastName());
+        userEntity.setPhone(register.getPhone());
+        userEntity.setPassword(encryptedPassword);
+        userEntity.setRole(register.getRole());
+
+        userRepository.save(userEntity);
+
         return true;
     }
 

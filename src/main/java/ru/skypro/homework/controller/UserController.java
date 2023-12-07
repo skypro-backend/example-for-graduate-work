@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUser> updateUser(UpdateUser updateUser,
+    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser,
                                                  @AuthenticationPrincipal UserDetails userDetails) {
         return userService.updateUser(updateUser, userDetails);
     }

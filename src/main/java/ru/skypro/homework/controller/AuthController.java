@@ -3,13 +3,19 @@ package ru.skypro.homework.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.skypro.homework.config.CustomUserDetailsService;
 import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
+
+import javax.naming.AuthenticationException;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -17,9 +23,14 @@ import ru.skypro.homework.service.AuthService;
 public class AuthController {
 
     private final AuthService authService;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthController(AuthService authService) {
+    private final CustomUserDetailsService customUserDetailsService;
+
+    public AuthController(AuthService authService, AuthenticationManager authenticationManager, CustomUserDetailsService customUserDetailsService) {
         this.authService = authService;
+        this.authenticationManager = authenticationManager;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
 

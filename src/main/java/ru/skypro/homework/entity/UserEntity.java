@@ -1,9 +1,13 @@
 package ru.skypro.homework.entity;
 
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -45,7 +49,7 @@ public class UserEntity {
     private String phone;
 
     @NotBlank
-    @Pattern(regexp = "USER|ADMIN")
+    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
 
@@ -57,7 +61,6 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "author")
     private List<AdEntity> ads;
-
 
     @OneToMany(mappedBy = "author")
     private List<CommentEntity> comments;
