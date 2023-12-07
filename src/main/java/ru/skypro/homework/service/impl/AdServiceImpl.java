@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,7 @@ import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.PhotoEntity;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
@@ -60,6 +62,12 @@ public class AdServiceImpl implements AdService {
         this.userService = userService;
     }
 
+    /**
+     * Метод возвращает список всех объявлений в виде DTO {@link Ad}.
+     *
+     * @return возвращает все объявления из БД
+     */
+
     @Override
     public Ads getAllAds() {
         List<Ad> dtos = adRepository.findAll().stream()
@@ -67,6 +75,14 @@ public class AdServiceImpl implements AdService {
                 .collect(Collectors.toList());
         return new Ads(dtos.size(), dtos);
     }
+
+    /**
+     * Метод добавляет новое объявление в БД
+     *
+     * @param properties - DTO модель класса {@link CreateOrUpdateAd};
+     * @param image      - фотография объявления
+     * @return возвращает объявление в качестве DTO модели
+     */
 
     @Override
     public Ad addAd(CreateOrUpdateAd properties,
@@ -104,8 +120,20 @@ public class AdServiceImpl implements AdService {
 //
 //        //сохранение на ПК
 //        imageService.saveFileOnDisk(adEntity.getPhoto(), filePath);
-
+        /* todo Стас, привет. Вот что я заметил: в этом методе мы создаем новую AdEntity.
+            Поэтому проверка в imageService.updateEntitiesPhoto на то, что у Entity есть фото не нужно.
+            Ведь мы её только что создали, поэтому у неё точно фото не будет.
+        */
         ///добавление фото в сущность, формирование URL и путей файлов на ПК
+        /* todo мне кажется, вот тут ошибка.
+            Смысл метода addAd: создаем новую AdEntity и заполняем её поля.
+            В этом методе мы заполняем поля из dto, потом передаем в updateEntitiesPhoto,
+            в котором сохраняем картинку и добавляем оставшиеся поля в AdEntity. Поэтому можно сохранять AdEntity
+            в updateEntitiesPhoto и возвращать dto.
+            Вместо последних строчек кода:
+            Ad ad = imageService.updateEntitiesPhoto(image, adEntity);
+            return ad;
+        */
         adEntity = (AdEntity) imageService.updateEntitiesPhoto(image, adEntity);
         log.info("Сущность adEntity сформированная в {}", LoggingMethodImpl.getMethodName());
 
@@ -116,6 +144,13 @@ public class AdServiceImpl implements AdService {
         return adMapper.mapToAdDto(adEntity);
     }
 
+
+    /**
+     * Метод получает информацию об объявлении по id
+     *
+     * @param id - id объявления
+     * @return возвращает DTO модель объявления
+     */
     @Override
     public ExtendedAd getAds(Integer id) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
@@ -123,6 +158,12 @@ public class AdServiceImpl implements AdService {
         return adMapper.mapToExtendedAdDto(entity);
     }
 
+    /**
+     * Метод удаляет объявление по id
+     *
+     * @param id - id объявления
+     * @return boolean
+     */
     @Transactional
     @Override
     public boolean removeAd(Integer id) {
@@ -136,6 +177,13 @@ public class AdServiceImpl implements AdService {
         }
     }
 
+    /**
+     * Метод изменяет объявление
+     *
+     * @param id  - id объявления
+     * @param dto - DTO модель класса {@link CreateOrUpdateAd};
+     * @return возвращает DTO модель объявления
+     */
     @Transactional
     @Override
     public Ad updateAds(Integer id, CreateOrUpdateAd dto) {
@@ -150,6 +198,12 @@ public class AdServiceImpl implements AdService {
         return adMapper.mapToAdDto(entity);
     }
 
+    /**
+     * Метод получает все объявления данного пользователя
+     *
+     * @param username - логин пользователя
+     * @return возвращает DTO - список моделей объявления пользователя
+     */
     @Override
     @Transactional
     public Ads getAdsMe(String username) {
@@ -200,7 +254,7 @@ public class AdServiceImpl implements AdService {
 //        imageService.saveFileOnDisk(image, filePath);
 
         adEntity = (AdEntity) imageService.updateEntitiesPhoto(image, adEntity);
-       log.info("adEntity = {}", adEntity.toString());
+        log.info("adEntity = {}", adEntity.toString());
         //сохранение сущности user в БД
         adRepository.save(adEntity);
     }

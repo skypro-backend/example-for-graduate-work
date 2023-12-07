@@ -29,28 +29,48 @@ import java.io.IOException;
 @CrossOrigin("http://localhost:3000")
 @RequestMapping("/ads")
 public class AdController {
+
     private final AdService adService;
 
+    @Operation(
+            tags = "Объявления",
+            summary = "Получение всех объявлений",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Ads.class)
+                            )
+                    )
+            }
+    )
     @GetMapping
     public ResponseEntity<Ads> getAllAds() {
         log.info("За запущен метод контроллера: getAllAds");
         return ResponseEntity.ok(adService.getAllAds());
     }
+
     @Operation(
-        summary = "Добавление объявления",
-        tags = {"Объявления"})
-@ApiResponses(value = {
-        @ApiResponse(responseCode = "201",
-                description = "Created",
-                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                        schema = @Schema(implementation = Ad.class))),
-        @ApiResponse(responseCode = "401",
-                description = "Unauthorized"),
-        @ApiResponse(responseCode = "403",
-                description = "Forbidden"),
-        @ApiResponse(responseCode = "404",
-                description = "Not Found")})
-    @ResponseStatus(HttpStatus.CREATED)
+            tags = "Объявления",
+            summary = "Добавление объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Created",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Ad.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized",
+                            content = @Content()
+                    )
+            }
+    )
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Ad> addAd(@RequestPart(value = "properties", required = false) CreateOrUpdateAd properties,
                                     @RequestPart("image") MultipartFile image,
@@ -59,6 +79,27 @@ public class AdController {
         return ResponseEntity.ok(adService.addAd(properties, image, authentication));
     }
 
+    @Operation(
+            tags = "Объявления",
+            summary = "Получить информацию об объявлении",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "No content",
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized",
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found",
+                            content = @Content()
+                    )
+            }
+    )
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> getAds(@PathVariable("id") Integer id) {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
@@ -70,6 +111,32 @@ public class AdController {
         }
     }
 
+    @Operation(
+            tags = "Объявления",
+            summary = "Удаление объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "No Content",
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized",
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Forbidden",
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found",
+                            content = @Content()
+                    )
+            }
+    )
     @DeleteMapping("/{id}")
     @PreAuthorize(value = "hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.getName(), #adId)")
     public ResponseEntity removeAd(@PathVariable("id") Integer adId) {
@@ -78,6 +145,35 @@ public class AdController {
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+    @Operation(
+            tags = "Объявления",
+            summary = "Обновление информации об объявлении",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Ad.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized",
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Forbidden",
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found",
+                            content = @Content()
+                    )
+            }
+    )
     @PatchMapping("/{id}")
     @PreAuthorize(value = "hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.getName(), #adId)")
     public ResponseEntity<Ad> updateAds(@PathVariable("id") Integer adId, @RequestBody CreateOrUpdateAd dto) {
@@ -91,6 +187,25 @@ public class AdController {
         }
     }
 
+    @Operation(
+            tags = "Объявления",
+            summary = "Получение объявлений авторизованного пользователя",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Ads.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized",
+                            content = @Content()
+                    )
+            }
+    )
     @GetMapping("/me")
     public ResponseEntity<Ads> getAdsMe(Authentication authentication) {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
@@ -105,20 +220,39 @@ public class AdController {
 
 
     @Operation(
+            tags = "Объявления",
+            summary = "Обновление картинки объявления",
             responses = {
                     @ApiResponse(
-                            responseCode = "404",
-                            description = "Переданный файл слишком большой",
+                            responseCode = "200",
+                            description = "OK",
                             content = @Content(
+                                    mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE,
+                                    schema = @Schema(implementation = String[].class)
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized",
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Forbidden",
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found",
+                            content = @Content()
                     )
             }
     )
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize(value = "hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.getName(), #adId)")
     public ResponseEntity<Void> updateImage(@PathVariable("id") Integer adId,
-                                      @RequestPart MultipartFile image,
-                                      Authentication authentication) throws IOException {
+                                            @RequestPart MultipartFile image,
+                                            Authentication authentication) throws IOException {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         log.info("adId = {}", adId);
         adService.updateImage(adId, image);

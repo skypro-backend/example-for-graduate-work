@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.Comment;
@@ -43,6 +44,12 @@ public class CommentServiceImpl implements CommentService {
         this.userService = userService;
     }
 
+    /**
+     * Метод получает список всех комментариев объявления
+     *
+     * @param id - id объявления
+     * @return возвращает DTO - список моделей комментариев
+     */
     @Transactional
     @Override
     public Comments getComments(Integer id) {
@@ -54,6 +61,14 @@ public class CommentServiceImpl implements CommentService {
         return new Comments(comments.size(), comments);
     }
 
+    /**
+     * Метод добавляет комментарий к объявлению
+     *
+     * @param id                    - id объявления
+     * @param createOrUpdateComment - DTO модель класса {@link CreateOrUpdateComment}
+     * @param username              - логин пользователя
+     * @return DTO модель комментария
+     */
     @Transactional
     @Override
     public Comment addComment(Integer id, CreateOrUpdateComment createOrUpdateComment, String username) {
@@ -92,6 +107,13 @@ public class CommentServiceImpl implements CommentService {
         return commentDTO;
     }
 
+    /**
+     * Метод удаляет комментарий
+     *
+     * @param commentId - id комментария
+     * @param username  - логин пользователя
+     * @return строку с результатом выполнения метода
+     */
     @Override
     public String deleteComment(Integer commentId, String username) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
@@ -113,6 +135,14 @@ public class CommentServiceImpl implements CommentService {
         return "not found"; //'404' Comment not found
     }
 
+    /**
+     * Метод обновляет комментарий
+     *
+     * @param commentId             - id комментария
+     * @param createOrUpdateComment - DTO модель класса {@link CreateOrUpdateComment}
+     * @param username              - логин пользователя
+     * @return строку с результатом выполнения метода
+     */
     @Transactional
     @Override
     public Comment updateComment(Integer commentId, CreateOrUpdateComment createOrUpdateComment, String username) {

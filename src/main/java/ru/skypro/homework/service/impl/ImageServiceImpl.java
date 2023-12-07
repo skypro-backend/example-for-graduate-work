@@ -70,13 +70,13 @@ public class ImageServiceImpl implements ImageService {
         }
 
         //заполняем поля photo и сохраняем фото в БД
+        // todo можно сделать photoMapper и перенести этот метод туда, чтоб не путаться
         PhotoEntity photoEntity = userMapper.mapMuptipartFileToPhoto(image);
         entity.setPhoto(photoEntity);
         photoRepository.save(photoEntity);
 
         //записываем URL для перехода фронта к методу возврата аватара
         String urlToAvatar = "/photo/image/" + entity.getPhoto().getId();
-        entity.setImage(urlToAvatar);
         log.info("URL для перехода фронта к методу возврата аватара: {}", urlToAvatar);
 
         //добавляем в сущность URL
@@ -88,6 +88,7 @@ public class ImageServiceImpl implements ImageService {
         log.info("путь к файлу для хранения фото на ПК: {}", filePath);
 
         //добавляем в сущность фото путь где оно хранится на ПК
+        // todo мне кажется лучше напрямую photoEntity.setFilePath(filePath.toString()), а не через entity.getPhoto()
         entity.getPhoto().setFilePath(filePath.toString());
 
         //добавляем в сущность путь на ПК
@@ -99,6 +100,15 @@ public class ImageServiceImpl implements ImageService {
         return entity;
     }
 
+
+    /**
+     * Метод сохраняет изображение на диск
+     *
+     * @param image    - изображение
+     * @param filePath - путь, куда будет сохранено изображение
+     * @return boolean
+     * @throws IOException
+     */
     @Override
     public boolean saveFileOnDisk(MultipartFile image, Path filePath) throws IOException {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
@@ -133,6 +143,13 @@ public class ImageServiceImpl implements ImageService {
         Path path1 = Path.of(photo.getFilePath());
         return Files.readAllBytes(path1);
     }
+
+    /**
+     * Метод получает расширение изображения
+     *
+     * @param fileName - полное название изображения
+     * @return расширение изображения
+     */
     @Override
     public String getExtension(String fileName) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
