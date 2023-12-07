@@ -60,21 +60,6 @@ public class UserControllerTest {
 
 
 
-//    @BeforeEach
-//    void setUp() {
-//        User user = new User();
-//        user.setId(222);
-//        user.setUsername("username");
-//        user.setPassword("password");
-//        user.setEmail("email@mail.ru");
-//        user.setFirstName("firstName");
-//        user.setLastName("lastName");
-//        user.setPhone("+79101234455");
-//        user.setRole(RoleDTO.USER);
-//
-//        Image image = new Image();
-//        image.setId(444);
-//    }
 
     @Test
     @WithMockUser(username = "authName")
@@ -94,6 +79,7 @@ public class UserControllerTest {
 
         when(primerService.userExists("authName")).thenReturn(true);
         when(primerService.loadUserByUsername("authName")).thenReturn(user);
+        when(primerService.findUser("authName")).thenReturn(user);
         when(userRepository.findByUsername(eq("authName"))).thenReturn(user);
         when(userRepository.save(any(User.class))).thenAnswer(input -> input.getArgument(0));
 

@@ -12,10 +12,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -32,6 +34,7 @@ import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
@@ -64,13 +67,10 @@ public class AdControllerTest {
     private ImageRepository imageRepository;
     @SpyBean
     private AdDTO adDTO;
-    @Autowired
     private Ad ad;
-    @Autowired
-    CreateOrUpdateComment createOrUpdateComment;
+    private CreateOrUpdateComment createOrUpdateComment;
     @InjectMocks
     AdController adController;
-    @Autowired
     private Authentication auth;
     @SpyBean
     private User user;
@@ -80,34 +80,38 @@ public class AdControllerTest {
     AdService adService;
 
 
-
     final int pk = 123;
     final User author = new User();
-//    final Image image = new Image();
     final int price = 10000;
-    final String title = "title";
+    final String title = "test";
     final String description = "description";
     Ad ads = prepareAd();
     JSONObject adObject = prepareAdObject();
 
 
     @Test
+    @WithMockUser("test")
     public void addAdsTest() throws Exception {
         when(adRepository.save(any(Ad.class))).thenReturn(ads);
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/ads") //send
-                        .content(adObject.toString())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()) //receive
+        JSONObject createOrUpdateAd = new JSONObject();
+        createOrUpdateAd.put("title", "test");
+        createOrUpdateAd.put("price", 10000);
+        createOrUpdateAd.put("description", "description");
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("image", new byte[]{1,2,3,4});
+        var mockPart = new MockPart("properties", createOrUpdateAd.toString().getBytes(StandardCharsets.UTF_8));
+        mockPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(multipart("/ads")
+                        .file(mockMultipartFile)
+                        .part(mockPart)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.pk").value(pk))
                 .andExpect(jsonPath("$.author").value(author))
                 .andExpect(jsonPath("$.image").value(image))
                 .andExpect(jsonPath("$.price").value(price))
                 .andExpect(jsonPath("$.title").value(title))
                 .andExpect(jsonPath("$.description").value(description));
-
     }
 
     @Test
@@ -117,6 +121,11 @@ public class AdControllerTest {
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.count").isNumber())
                 .andExpect(jsonPath("$.results").isArray());
+    }
+
+    @Test
+    void findAdByIdTest()throws Exception {
+
     }
 
 
