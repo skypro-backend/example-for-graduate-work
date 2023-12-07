@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewPassword {
+
     private String currentPassword;
     private String newPassword;
+
 }

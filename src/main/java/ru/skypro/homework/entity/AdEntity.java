@@ -5,7 +5,7 @@ import java.util.Collection;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = "pk")
+@EqualsAndHashCode(exclude = "id")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,7 +16,7 @@ public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer pk; //
+    private Integer id; //
     @Column(name = "description")
     private String description;
     @Column(name = "price")
@@ -27,11 +27,9 @@ public class AdEntity {
     @ManyToOne
     @JoinColumn(name = "user_entity_id")
     private UserEntity userEntity;
-
     @OneToOne
     @JoinColumn(name = "image_entity_path")
     private ImageEntity imageEntity;
-
     @OneToMany(mappedBy = "adId")
     private Collection<CommentEntity> commentEntities;
 

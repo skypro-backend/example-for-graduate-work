@@ -7,7 +7,7 @@ import java.time.Instant;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = "pk")
+@EqualsAndHashCode(exclude = "id")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +17,7 @@ public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer pk;
+    private Integer id;
 
     @Column(name = "created_at")
     private Instant createdAt;

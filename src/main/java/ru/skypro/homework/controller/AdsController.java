@@ -1,59 +1,61 @@
 package ru.skypro.homework.controller;
-
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-
+import ru.skypro.homework.service.impl.AdsServiceImpl;
 import java.io.IOException;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @RequestMapping("/ads")
 public class AdsController {
 
-//    private final AdsService adsService;
+    private final AdsServiceImpl adsService;
+
+    public AdsController(AdsServiceImpl adsService) {
+        this.adsService = adsService;
+    }
+
     @GetMapping
     public ResponseEntity<Ads> getAllAds() {
-        return new ResponseEntity<>(new Ads(), HttpStatus.OK);
+        return new ResponseEntity<>(adsService.getAllAds(), HttpStatus.OK);
     }
-
     @PostMapping
-    public ResponseEntity<Ad> addAd(@RequestPart("properties") CreateOrUpdateAd properties, @RequestPart("image") MultipartFile image) { 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new Ad());
-    }
+    public ResponseEntity<Ad> addAd(@RequestPart("properties") CreateOrUpdateAd properties, @RequestPart("image") MultipartFile image) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(adsService.addAd(properties, image));
 
+    }
     @GetMapping(value = "/{Id}")
-    public ResponseEntity<ExtendedAd> getAds (@PathVariable Integer Id) {
-        return new ResponseEntity<>(new ExtendedAd(), HttpStatus.OK);
+    public ResponseEntity<ExtendedAd> getAds (@PathVariable Integer id) {
+        return new ResponseEntity<>(adsService.getAds(id), HttpStatus.OK);
     }
-
     @DeleteMapping(value = "/{Id}")
-    public ResponseEntity<Void> removeAd(@PathVariable Integer Id) {
+    public ResponseEntity<Void> removeAd(@PathVariable Integer id) {
+        adsService.removeAd(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    @PatchMapping
-    public ResponseEntity<CreateOrUpdateAd> updateAds(@RequestBody CreateOrUpdateAd updateAd) {
-        return new ResponseEntity<>(new CreateOrUpdateAd(), HttpStatus.OK);
+    @PatchMapping(value = "/{Id}")
+    public ResponseEntity<CreateOrUpdateAd> updateAds(@PathVariable Integer id,
+                                                      @RequestBody CreateOrUpdateAd updateAd)
+    {
+        return new ResponseEntity<>(adsService.updateAd(id,updateAd), HttpStatus.OK);
     }
-
     @GetMapping(value = "/me")
     public ResponseEntity<Ads> getAdsMe() {
-        return new ResponseEntity<>(new Ads(), HttpStatus.OK);
+
+        return new ResponseEntity<>(adsService.getAdsMe(), HttpStatus.OK);
     }
 
     @PatchMapping(value = "/{Id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<byte[]> updateImage(@PathVariable Integer Id,
+    public ResponseEntity<String> updateImage(@PathVariable Integer id,
                                               @RequestParam MultipartFile image) throws IOException {
-        HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.ok().headers(headers).body(image.getBytes());
+        return ResponseEntity.ok().body(adsService.updateImage(id,image));
     }
+
 }

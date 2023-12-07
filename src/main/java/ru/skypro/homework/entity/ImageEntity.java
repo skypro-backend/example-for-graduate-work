@@ -23,5 +23,7 @@ public class ImageEntity {
     private long fileSize;
     @Column(name = "media_type")
     private String mediaType;
+    @Column(name = "data")
+    private byte[] data;
 
 }
