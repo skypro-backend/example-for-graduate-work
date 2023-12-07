@@ -9,7 +9,7 @@ CREATE TABLE "user_entity"
   "first_name" varchar(255) NULL,
   "last_name" varchar(255) NULL,
   "phone" varchar(255) NULL,
-  "role" bigint NULL,
+  "role" varchar(255) NULL,
   "image" varchar(255) NULL,
   "password" varchar(255) NULL,
   CONSTRAINT "user_entity_pkey" PRIMARY KEY ("pk")
@@ -37,7 +37,3 @@ CREATE TABLE "ad_entity"
   "description" varchar(255) NULL,
   CONSTRAINT "ad_entity_pkey" PRIMARY KEY ("pk")
 );
-
--- changeset margo:2
-INSERT INTO user_entity(pk,email,username,first_name,last_name,phone,role,image,password)
-VALUES(1,'indfkd@mail.ru', 'user@gmail.com', 'Ryan','Brown','+79853900335',0,NULL,'password')

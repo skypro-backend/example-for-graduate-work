@@ -3,16 +3,16 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exception.ForbiddenException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
@@ -21,9 +21,7 @@ import ru.skypro.homework.service.CommentService;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -39,25 +37,25 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * Получить все комментарии к объявлению по номеру (id) объявления
+     *
      * @param id
      * @return
      */
 
-    public Comments getCommentsByAdId(Integer id){
+    public Comments getCommentsByAdId(Integer id) {
         AdEntity ad = adRepository.findById(id).orElseThrow();
 
         Comments commentsDto = new Comments();
 
         List<CommentEntity> commentEntityList = ad.getCommentEntities();
         List<Comment> commentDtoList = commentMapper.listCommentToListCommentDTO(commentEntityList);
-        var test = commentDtoList.size();
         commentsDto.setCount(commentDtoList.size());
         commentsDto.setResults(commentDtoList);
 
         return commentsDto;
     }
 
-    public Comment addCommentToAd(Integer id, CreateOrUpdateComment commentDetails, UserDetails userDetails){
+    public Comment addCommentToAd(Integer id, CreateOrUpdateComment commentDetails, UserDetails userDetails) {
         AdEntity adEntity = adRepository.findById(id).orElseThrow();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
 
@@ -72,22 +70,31 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(commentEntity);
         return commentMapper.commentToCommentDTO(commentEntity);
     }
-    @Transactional
-    public ResponseEntity<String> deleteComment(Integer adId, Integer commentId, UserDetails userDetails){
-        Optional<CommentEntity> commentEntityOptional = commentRepository.findById(commentId);
 
-        if (commentEntityOptional.isPresent()){
-           commentRepository.deleteByPkAndAd_Pk(commentId, adId);
-           return new ResponseEntity<>("Комментарий удален", HttpStatus.OK);
-        } else return new ResponseEntity<>("Комментарий не найден", HttpStatus.BAD_REQUEST);
+    @Transactional
+    public boolean deleteComment(Integer adId, Integer commentId, UserDetails userDetails) {
+        Optional<CommentEntity> commentEntityOptional = commentRepository.findById(commentId);
+        if (commentEntityOptional.isPresent()) {
+            if (checkAccess(userDetails, commentEntityOptional.get())) {
+                commentRepository.deleteByPkAndAd_Pk(commentId, adId);
+                return true;
+            } else throw new ForbiddenException();
+        } else return false;
     }
 
-    public Comment updateComment(Integer adId, Integer commentId, CreateOrUpdateComment commentDetails){
+    public Comment updateComment(Integer adId, Integer commentId, CreateOrUpdateComment commentDetails, UserDetails userDetails) {
 
         CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow();
-        commentEntity.setText(commentDetails.getText());
+        if (checkAccess(userDetails, commentEntity)) {
+            commentEntity.setText(commentDetails.getText());
 
-        commentRepository.save(commentEntity);
-        return commentMapper.commentToCommentDTO(commentEntity);
+            commentRepository.save(commentEntity);
+            return commentMapper.commentToCommentDTO(commentEntity);
+        } else throw new ForbiddenException();
+    }
+
+    private boolean checkAccess(UserDetails userDetails, CommentEntity commentEntity) {
+        return userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))
+                || userDetails.getUsername().equals(commentEntity.getAuthor().getUsername());
     }
 }

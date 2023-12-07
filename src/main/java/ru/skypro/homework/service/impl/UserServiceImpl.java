@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
@@ -29,14 +31,12 @@ public class UserServiceImpl implements UserService {
         if(userEntityOptional.isPresent()) {
             UserEntity userEntityUpdatedPassword = userMapper.newPasswordDTOToUserEntity(newPassword);
             UserEntity userEntity = userEntityOptional.get();
-            userEntity.setPassword(userEntityUpdatedPassword.getPassword());
+            userEntity.setPassword(new BCryptPasswordEncoder().encode(userEntityUpdatedPassword.getPassword()));
             userRepository.save(userEntity);
             return new ResponseEntity<>("Пароль изменен", HttpStatus.OK);
         } else return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
     }
 
-
-    //?????????????????????????
     public ResponseEntity<User> getUser(UserDetails userDetails) {
         Optional<UserEntity> userEntityOptional = userRepository.findByUsername(userDetails.getUsername());
         if (userEntityOptional.isPresent()) {

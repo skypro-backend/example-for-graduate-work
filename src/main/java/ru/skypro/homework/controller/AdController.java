@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -41,14 +42,14 @@ public class AdController {
         return adService.getAdsByCurrentUser(userDetails);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Ad addAd(@RequestPart("image") MultipartFile image,
-                    @RequestPart("properties") CreateOrUpdateAd adDetails,
-                    @AuthenticationPrincipal UserDetails userDetails) {
+    public Ad addAd(@RequestPart("image") MultipartFile image, @RequestPart("properties") CreateOrUpdateAd adDetails, @AuthenticationPrincipal UserDetails userDetails) {
         return adService.addAd(image, adDetails, userDetails);
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ExtendedAd getFullAd(@PathVariable Integer id) {
 
@@ -56,19 +57,24 @@ public class AdController {
     }
 
     // Обновление информации об объявлении
-    @PatchMapping("/{id}")
-    public Ad updateAd(@PathVariable Integer id, @RequestBody CreateOrUpdateAd adDetails) {
 
-        return adService.updateAd(id, adDetails);
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{id}")
+    public Ad updateAd(@PathVariable Integer id,
+                       @RequestBody CreateOrUpdateAd adDetails,
+                       @AuthenticationPrincipal UserDetails userDetails) {
+
+        return adService.updateAd(id, adDetails, userDetails);
     }
 
 
     // Удаление объявления
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> removeAd(@PathVariable Integer id) {
+    public ResponseEntity<String> removeAd(@PathVariable Integer id,
+                                           @AuthenticationPrincipal UserDetails userDetails) {
 
-        return adService.removeAd(id);
-
+        return adService.removeAd(id, userDetails);
     }
 
 
