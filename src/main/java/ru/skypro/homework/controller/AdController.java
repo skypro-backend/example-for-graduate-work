@@ -48,7 +48,9 @@ public class AdController {
                                         Authentication authentication,
                                         @RequestPart("properties") CreateOrUpdateAd createOrUpdateAd,
                                         @RequestPart("image") MultipartFile image) throws IOException {
-        return ResponseEntity.ok(adService.createAd(createOrUpdateAd, authentication, imageFile));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(adService.createAd(createOrUpdateAd, authentication, imageFile));
     }
 
     @Operation(summary = "Получить все объявления", tags = "Объявления")
@@ -85,7 +87,7 @@ public class AdController {
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteAd(@PathVariable int id, Authentication authentication) throws IOException {
         if (adService.deleteAd(id, authentication)) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }

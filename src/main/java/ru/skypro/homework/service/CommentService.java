@@ -10,6 +10,7 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class CommentService {
         this.commentMapping = commentMapping;
         this.userService = userService;
     }
+
     /**
      * Добавление комментария к объявлению.
      */
@@ -43,6 +45,7 @@ public class CommentService {
         commentRepository.save(newComment);
         return commentMapping.mapToCommentDto(newComment);
     }
+
     /**
      * Получение комментариев объявления.
      */
@@ -57,24 +60,27 @@ public class CommentService {
         dto.setResults(commentDTOList);
         return dto;
     }
+
     /**
      * Удаление комментария.
      */
 
-    public void deleteComment(int adId, int commentId, Authentication authentication) {
+    public boolean deleteComment(int adId, int commentId, Authentication authentication) throws IOException {
         User author = userService.loadUserByUsername(authentication.getName());
-        Comment comment = commentRepository.findByPk(commentId);
-        if (comment.getAd().getPk() == adId) {
-            if (author.equals(comment.getUser()) || author.getRole() == RoleDTO.ADMIN) {
-                commentRepository.delete(comment);
-            }
+        Comment comment = commentRepository.findByAdPkAndPk(adId, commentId);
+        if (author.equals(comment.getUser()) || author.getRole() == RoleDTO.ADMIN) {
+            commentRepository.delete(comment);
+            return true;
+        } else {
+            return false;
         }
-
     }
+
     /**
      * Обновление комментария.
      */
-    public CommentDTO updateComment(int adId, int commentId, CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
+    public CommentDTO updateComment(int adId, int commentId, CreateOrUpdateComment
+            createOrUpdateComment, Authentication authentication) {
         User author = userService.loadUserByUsername(authentication.getName());
         Comment updateComment = commentRepository.findByPk(commentId);
         if (updateComment.getAd().getPk() == adId) {
