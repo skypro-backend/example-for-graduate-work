@@ -18,8 +18,6 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-//    @Column(name = "username")
-//    private String username;
     @Column(name = "password")
     private String password;
     @Column(name = "email")
@@ -39,7 +37,7 @@ public class UserEntity {
     @JoinColumn(name = "image_entity_path")
     private ImageEntity imageEntity;
 
-    @OneToMany(mappedBy = "ad_entity_id")
+    @OneToMany(mappedBy = "userEntity")
     private Collection<AdEntity> adEntity;
 
     @OneToMany(mappedBy = "userEntity")

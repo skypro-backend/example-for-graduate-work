@@ -21,13 +21,13 @@ public class CommentMapper {
                 .authorImage(commentEntity.getUserEntity().getImageEntity().getFilePath())
                 .authorFirstName(commentEntity.getUserEntity().getFirstName())
                 .createdAt(commentEntity.getCreatedAt())
-                .pk(commentEntity.getPk())
+                .pk(commentEntity.getId())
                 .text(commentEntity.getText())
-                .adId(commentEntity.getAdId().getPk())
+                .adId(commentEntity.getAdId().getId())
                 .build();
     }
 
-    public CommentEntity AdToAdEntity(CreateOrUpdateComment dto) {
+    public CommentEntity commentToCommentEntity(CreateOrUpdateComment dto) {
         if (dto == null) {
             throw new NullPointerException(" Ошибка маппера при создании CommentEntity! CreateOrUpdateComment == null! ");
         }
@@ -36,7 +36,7 @@ public class CommentMapper {
                 .build();
     }
 
-    List<Comment> adEntityListToAdList(List<CommentEntity> commentEntityList) {
+    public List<Comment> commentEntityListToCommentList(List<CommentEntity> commentEntityList) {
         if (commentEntityList == null) {
             throw new NullPointerException("Ошибка маппера при создании List<Comment>! List<CommentEntity> == null!");
         }

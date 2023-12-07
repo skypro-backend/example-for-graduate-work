@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.service.impl.CommentServiceImpl;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -16,22 +17,29 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 @RequestMapping("/ads")
 public class CommentsController {
 
+    CommentServiceImpl commentServiceImpl;
+
+    public CommentsController(CommentServiceImpl commentServiceImpl) {
+        this.commentServiceImpl = commentServiceImpl;
+    }
+
     @GetMapping("/{id}/comments")
     public ResponseEntity<Comments> getComments(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.OK).body(new Comments());
+        return ResponseEntity.status(HttpStatus.OK).body(commentServiceImpl.getComments(id));
     }
 
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<Comment> addComment(@PathVariable Integer id,
                                               @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        return ResponseEntity.status(HttpStatus.OK).body(new Comment());
+        return ResponseEntity.status(HttpStatus.OK).body(commentServiceImpl.addComment(id, createOrUpdateComment));
     }
 
 
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Integer adId,
                                               @PathVariable Integer commentId) {
+        commentServiceImpl.deleteComment(adId, commentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -40,7 +48,7 @@ public class CommentsController {
     public ResponseEntity<Comment> updateComment(@PathVariable Integer adId,
                                                  @PathVariable Integer commentId,
                                                  @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        return new ResponseEntity<>(new Comment(),HttpStatus.OK);
+        return new ResponseEntity<>(commentServiceImpl.updateComment(adId,commentId,createOrUpdateComment),HttpStatus.OK);
     }
 
 }

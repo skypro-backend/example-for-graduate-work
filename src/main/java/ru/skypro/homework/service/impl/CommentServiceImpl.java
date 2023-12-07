@@ -1,51 +1,31 @@
 package ru.skypro.homework.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PathVariable;
+import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.Comments;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
-import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.entity.ImageEntity;
+import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exceptions.BlankFieldException;
+import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.mapper.CommentMapper;
+import ru.skypro.homework.repository.AdEntityRepository;
+import ru.skypro.homework.repository.CommentEntityRepository;
+import ru.skypro.homework.repository.UserEntityRepository;
 import ru.skypro.homework.service.CommentService;
 
+import javax.persistence.EntityNotFoundException;
+import java.nio.file.Path;
+import java.time.Instant;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public class CommentServiceImpl implements CommentService {
-
-    private final CommentRepository commentRepository;
-
-    public CommentServiceImpl(CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
-    }
-
-    @Override
-    public CommentEntity create(CommentEntity comment) {
-        if(commentRepository.findById(comment.getPk()).isPresent()){
-            throw new RuntimeException("Comment exists");
-        }
-        return commentRepository.save(comment) ;
-    }
-
-    @Override
-    public CommentEntity read(long id) {
-        Optional<CommentEntity> comment = commentRepository.findById(id);
-        if(comment.isEmpty()){
-            throw new RuntimeException("Comment not found");
-        }
-        return comment.get();
-    }
-
-    @Override
-    public CommentEntity update(CommentEntity comment) {
-        if(commentRepository.findById(comment.getPk()).isEmpty()){
-            throw new RuntimeException("Comment not found");
-        }
-        return commentRepository.save(comment);
-    }
-
-    @Override
-    public CommentEntity delete(long id) {
-        Optional<CommentEntity> comment = commentRepository.findById(id);
-        if (comment.isEmpty()) {
-            throw new RuntimeException("Comment not found");
-        }
-        commentRepository.deleteById(id);
-        return comment.get();
-    }
 }

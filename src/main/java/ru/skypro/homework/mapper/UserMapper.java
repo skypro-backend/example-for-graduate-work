@@ -38,7 +38,7 @@ public class UserMapper {
                 .build();
     }
 
-    List<User> adEntityListToAdList(List<UserEntity> userEntityList) {
+    public List<User> adEntityListToAdList(List<UserEntity> userEntityList) {
         if (userEntityList == null) {
             throw new NullPointerException("Ошибка маппера при создании List<User>! List<UserEntity> == null!");
         }

@@ -16,7 +16,7 @@ public class AdMapper {
             throw new NullPointerException("Ошибка маппера при создании Ad! AdEntity == null!");
         }
         return Ad.builder()
-                .pk(adEntity.getPk())
+                .pk(adEntity.getId())
                 .author(adEntity.getUserEntity().getId())
                 .price(adEntity.getPrice())
                 .title(adEntity.getTitle())
@@ -29,11 +29,12 @@ public class AdMapper {
             throw new NullPointerException("Ошибка маппера при создании ExtendedAd! AdEntity == null!");
         }
         return ExtendedAd.builder()
-                .pk(adEntity.getPk())
+                .pk(adEntity.getId())
                 .authorFirstName(adEntity.getUserEntity().getFirstName())
                 .authorFirstName(adEntity.getUserEntity().getLastName())
                 .description(adEntity.getDescription())
                 .email(adEntity.getUserEntity().getEmail())
+                .phone(adEntity.getUserEntity().getPhone())
                 .price(adEntity.getPrice())
                 .title(adEntity.getTitle())
                 .image(adEntity.getImageEntity().getFilePath())
@@ -51,7 +52,7 @@ public class AdMapper {
                 .build();
     }
 
-    List<Ad> adEntityListToAdList(List<AdEntity> adEntityList) {
+    public List<Ad> adEntityListToAdList(List<AdEntity> adEntityList) {
         if (adEntityList == null) {
             throw new NullPointerException("Ошибка маппера при создании List<Ad>! AList<AdEntity> == null!");
         }
