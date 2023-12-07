@@ -16,6 +16,6 @@ public interface ImageService {
 //    PhotoEntity updateAdImage(Integer id, MultipartFile image, Path filePath) throws IOException;
     ModelEntity updateEntitiesPhoto(MultipartFile image, ModelEntity entity) throws IOException;
     boolean saveFileOnDisk(MultipartFile image, Path filePath) throws IOException;
-    byte[] getPhotoFromDisk(PhotoEntity photo, HttpServletResponse response);
+    byte[] getPhotoFromDisk(PhotoEntity photo) throws IOException;
     String getExtension(String fileName);
 }

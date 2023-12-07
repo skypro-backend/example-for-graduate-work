@@ -9,6 +9,7 @@ import ru.skypro.homework.service.impl.LoggingMethodImpl;
 import ru.skypro.homework.service.impl.PhotoServiceImpl;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -20,9 +21,8 @@ public class PhotoController {
 
 
     @GetMapping("/image/{photoId}")
-    public ResponseEntity<byte[]> getPhotoFromBD(@PathVariable Integer photoId,
-                                                 HttpServletResponse response){
+    public ResponseEntity<byte[]> getPhotoFromBD(@PathVariable Integer photoId) throws IOException {
         log.info("Запущен метод контроллера {}", LoggingMethodImpl.getMethodName());
-        return ResponseEntity.ok(photoService.getPhoto(photoId, response));
+        return ResponseEntity.ok(photoService.getPhoto(photoId));
     }
 }

@@ -129,18 +129,9 @@ public class ImageServiceImpl implements ImageService {
     }
 ///////////////////////////////////////
 
-    public byte[] getPhotoFromDisk(PhotoEntity photo, HttpServletResponse response){
+    public byte[] getPhotoFromDisk(PhotoEntity photo) throws IOException {
         Path path1 = Path.of(photo.getFilePath());
-        try(InputStream is = Files.newInputStream(path1);
-            OutputStream os = response.getOutputStream()) {
-            response.setStatus(200);
-            response.setContentType(photo.getMediaType());
-            response.setContentLength((int) photo.getFileSize());
-            is.transferTo(os);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return response.
+        return Files.readAllBytes(path1);
     }
     @Override
     public String getExtension(String fileName) {

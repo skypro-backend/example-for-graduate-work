@@ -205,10 +205,10 @@ public class AdServiceImpl implements AdService {
         adRepository.save(adEntity);
     }
 
-    public PhotoEntity findPhoto(Integer id) {
-        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
-        return photoRepository.findByAdId(id).get();
-    }
+//    public PhotoEntity findPhoto(Integer id) {
+//        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
+//        return photoRepository.findByAdId(id).get();
+//    }
 
     public boolean isAuthorAd(String username, Integer adId) {
         log.info("Использован метод сервиса: {}", LoggingMethodImpl.getMethodName());

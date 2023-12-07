@@ -9,6 +9,7 @@ import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.service.PhotoService;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Service
 @Slf4j
@@ -23,17 +24,17 @@ public class PhotoServiceImpl implements PhotoService {
         this.imageService = imageService;
     }
 
-    public byte[] getPhoto(Integer photoId, HttpServletResponse response) {
+    public byte[] getPhoto(Integer photoId) throws IOException {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         log.info("photoId: {}", photoId);
 
         PhotoEntity photo = photoRepository.findById(photoId).orElseThrow(RuntimeException::new);
         //Если картинка запрошенная с ПК не получена по какой-то причине, достаем ее из БД
-        if (imageService.getPhotoFromDisk(photo, response) == null) {
+        if (imageService.getPhotoFromDisk(photo) == null) {
             return photoRepository.findById(photoId).orElseThrow(PhotoOnPcIsAbsentException::new).getData();
         }
         //Если предыдущее условие не выполнилось и с картинкой все в порядке, то достаем ее с ПК
-        return imageService.getPhotoFromDisk(photo, response);
+        return imageService.getPhotoFromDisk(photo);
     }
 
 }
