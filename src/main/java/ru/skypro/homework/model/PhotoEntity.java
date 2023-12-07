@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "photos")
 public class PhotoEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String filePath;
     private long fileSize;
