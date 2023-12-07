@@ -5,9 +5,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,9 +19,8 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.service.AdService;
 
-import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Collection;
+
 
 @CrossOrigin(value = "http://localhost:3000")
 @Slf4j
@@ -50,9 +46,10 @@ public class AdController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdDTO> addAds(@RequestPart("image") MultipartFile imageFile,
                                         Authentication authentication,
-                                        @RequestPart("properties") CreateOrUpdateAd createOrUpdateAd,
-                                        @RequestPart("image") MultipartFile image) throws IOException {
-        return ResponseEntity.ok(adService.createAd(createOrUpdateAd, authentication, imageFile));
+                                        @RequestPart("properties") CreateOrUpdateAd createOrUpdateAd) throws IOException {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(adService.createAd(createOrUpdateAd, authentication, imageFile));
     }
 
     @Operation(summary = "Получить все объявления", tags = "Объявления")
@@ -89,11 +86,11 @@ public class AdController {
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteAd(@PathVariable int id, Authentication authentication) throws IOException {
         if (adService.deleteAd(id, authentication)) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-            }
+    }
 
     @Operation(summary = "Обновить информацию об объявлении", tags = "Объявления")
     @ApiResponses(value = {
@@ -138,6 +135,4 @@ public class AdController {
         adService.editAdImage(id, image, authentication);
         return ResponseEntity.ok().build();
     }
-
-
 }

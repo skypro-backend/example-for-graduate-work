@@ -27,16 +27,22 @@ public class UserService {
     public boolean userExists(String username) {
         return userRepository.existsUserByUsername(username);
     }
-
+    /**
+     * Поиск пользователя по логину.
+     */
     public User loadUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-
+    /**
+     * Получение информации об авторизованном пользователе.
+     */
     public UserDTO getUserInfo(String username) {
 
         return userMapping.mapToUserDto(userRepository.findByUsername(username));
     }
-
+    /**
+     * Обновление информации об авторизованном пользователе.
+     */
     public UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO, String name) {
         User updateUser = userRepository.findByUsername(name);
         updateUser.setLastName(updateUserDTO.getLastName());
@@ -45,7 +51,9 @@ public class UserService {
         userRepository.save(updateUser);
         return userMapping.mapToUpdateUserDTO(updateUser);
     }
-
+    /**
+     * Обновление аватара авторизованного пользователя.
+     */
     public void editUserImage(MultipartFile imageFile, String username) throws IOException {
         User updateUser = userRepository.findByUsername(username);
         Image oldImage = updateUser.getImage();

@@ -6,18 +6,18 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentService;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.io.IOException;
 
 @CrossOrigin(value = "http://localhost:3000")
 @Slf4j
@@ -40,8 +40,8 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content})
     })
     @PostMapping("{id}/comments")
-    public CommentDTO createComment(@PathVariable int id,@Valid @RequestBody CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
-       return commentService.createComment(id, createOrUpdateComment, authentication);
+    public ResponseEntity<CommentDTO> createComment(@PathVariable int id, @Valid @RequestBody CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
+        return ResponseEntity.ok(commentService.createComment(id, createOrUpdateComment, authentication));
 
     }
 
@@ -54,8 +54,8 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content})
     })
     @GetMapping("{id}/comments")
-    public CommentsDTO getComments(@PathVariable int id) {
-        return commentService.findByAd(id);
+    public ResponseEntity<CommentsDTO> getComments(@PathVariable int id) {
+        return ResponseEntity.ok(commentService.findByAd(id));
     }
 
     @Operation(summary = "Удалить комментарий", tags = "Комментарии")
@@ -65,9 +65,15 @@ public class CommentController {
             @ApiResponse(responseCode = "403", description = "Forbidden", content = {@Content})
     })
     @DeleteMapping("{adId}/comments/{commentId}")
-    public void deleteAd(@PathVariable int adId, @PathVariable int commentId, Authentication authentication) {
-        commentService.deleteComment(adId, commentId, authentication);
+    public ResponseEntity<?> deleteComment(@PathVariable int adId,
+                                           @PathVariable int commentId,
+                                           Authentication authentication) throws IOException {
+        if (commentService.deleteComment(adId, commentId, authentication)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
+
 
     @Operation(summary = "Обновить комментарий", tags = "Комментарии")
     @ApiResponses(value = {
@@ -79,10 +85,10 @@ public class CommentController {
             @ApiResponse(responseCode = "403", description = "Forbidden", content = {@Content})
     })
     @PatchMapping("{adId}/comments/{commentId}")
-    public CommentDTO updateById(@PathVariable int adId,
+    public ResponseEntity<CommentDTO> updateById(@PathVariable int adId,
                                  @PathVariable int commentId,
                                  @Valid @RequestBody CreateOrUpdateComment createOrUpdateComment,
                                  Authentication authentication) {
-        return commentService.updateComment(adId, commentId, createOrUpdateComment, authentication);
+        return ResponseEntity.ok(commentService.updateComment(adId, commentId, createOrUpdateComment, authentication));
     }
 }

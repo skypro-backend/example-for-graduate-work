@@ -23,6 +23,7 @@ import ru.skypro.homework.service.AuthService;
 public class AuthController {
 
     private final AuthService authService;
+
     @Operation(summary = "Авторизация пользователя", tags = "Авторизация")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {@Content}),

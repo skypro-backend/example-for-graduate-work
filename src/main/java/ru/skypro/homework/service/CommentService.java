@@ -10,6 +10,7 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -23,13 +24,6 @@ public class CommentService {
     private final CommentMapper commentMapping;
     private final UserService userService;
 
-    public static String getCurrentTimeStamp() {
-        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        Date now = new Date();
-        String strDate = sdfDate.format(now);
-        return strDate;
-    }
-
     public CommentService(CommentRepository commentRepository, AdRepository adRepository, CommentMapper commentMapping, UserService userService) {
         this.commentRepository = commentRepository;
         this.adRepository = adRepository;
@@ -37,18 +31,24 @@ public class CommentService {
         this.userService = userService;
     }
 
+    /**
+     * Добавление комментария к объявлению.
+     */
     public CommentDTO createComment(int id, CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
         Ad ad = adRepository.findByPk(id);
         User author = userService.loadUserByUsername(authentication.getName());
         Comment newComment = new Comment();
         newComment.setAd(ad);
         newComment.setText(createOrUpdateComment.getText());
-        newComment.setCreatedAt((int) Instant.now().toEpochMilli());
+        newComment.setCreatedAt(Instant.now().toEpochMilli());
         newComment.setUser(author);
         commentRepository.save(newComment);
         return commentMapping.mapToCommentDto(newComment);
     }
 
+    /**
+     * Получение комментариев объявления.
+     */
     public CommentsDTO findByAd(int id) {
         List<Comment> commentList = commentRepository.findAllByAd_pk(id);
         List<CommentDTO> commentDTOList = new ArrayList<>(commentList.size());
@@ -61,25 +61,32 @@ public class CommentService {
         return dto;
     }
 
+    /**
+     * Удаление комментария.
+     */
 
-    public void deleteComment(int adId, int commentId, Authentication authentication) {
+    public boolean deleteComment(int adId, int commentId, Authentication authentication) throws IOException {
         User author = userService.loadUserByUsername(authentication.getName());
-        Comment comment = commentRepository.findByPk(commentId);
-        if (comment.getAd().getPk() == adId) {
-            if (author.equals(comment.getUser()) || author.getRole() == RoleDTO.ADMIN) {
-                commentRepository.delete(comment);
-            }
+        Comment comment = commentRepository.findByAdPkAndPk(adId, commentId);
+        if (author.equals(comment.getUser()) || author.getRole() == RoleDTO.ADMIN) {
+            commentRepository.delete(comment);
+            return true;
+        } else {
+            return false;
         }
-
     }
 
-    public CommentDTO updateComment(int adId, int commentId, CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
+    /**
+     * Обновление комментария.
+     */
+    public CommentDTO updateComment(int adId, int commentId, CreateOrUpdateComment
+            createOrUpdateComment, Authentication authentication) {
         User author = userService.loadUserByUsername(authentication.getName());
         Comment updateComment = commentRepository.findByPk(commentId);
         if (updateComment.getAd().getPk() == adId) {
             if (author.equals(updateComment.getUser()) || author.getRole() == RoleDTO.ADMIN) {
                 updateComment.setText(createOrUpdateComment.getText());
-
+                updateComment.setCreatedAt(Instant.now().toEpochMilli());
                 commentRepository.save(updateComment);
             }
         }
