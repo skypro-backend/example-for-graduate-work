@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Login {
-
-    private String username;
-    private String password;
+public class CreateAdsDTO {
+    private String title;
+    private Integer price;
+    private String description;
 }
