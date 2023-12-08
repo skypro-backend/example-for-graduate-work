@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.User;
+
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -17,7 +17,7 @@ public class UserController {
     /**
      * User must be logged in to change password
      *
-     * @return
+     * @return IDK what for now
      */
     @PostMapping("/set_password")
     public ResponseEntity<?> updatePassword(@RequestBody NewPassword newPassword) {
