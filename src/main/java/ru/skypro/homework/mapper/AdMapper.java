@@ -91,7 +91,6 @@ public class AdMapper {
         photo.setData(image.getBytes());
         photo.setMediaType(image.getContentType());
         photo.setFileSize(image.getSize());
-        photoRepository.save(photo);
         return photo;
     }
 }

@@ -24,6 +24,7 @@ import ru.skypro.homework.service.impl.LoggingMethodImpl;
 
 import java.awt.*;
 import java.io.IOException;
+
 @Slf4j
 @RestController
 @Tag(name = "\uD83D\uDE4B Пользователи")
@@ -31,11 +32,9 @@ import java.io.IOException;
 @RequestMapping("/users")
 public class UserController {
     private UserService userService;
-    private AuthServiceImpl authService;
 
-    public UserController(UserService userService, AuthServiceImpl authService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.authService = authService;
     }
 
     @Operation(
@@ -71,6 +70,25 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(
+            tags = "Пользователи",
+            summary = "Получение информации об авторизованном пользователе",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Пользователь найден",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = User.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Пользователь не авторизован (unauthorized)",
+                            content = @Content()
+                    )
+            }
+    )
     @GetMapping("/me") // http://localhost:8080/users/me
     public ResponseEntity<User> getUser(Authentication authentication) {
         log.info("Запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
@@ -82,6 +100,25 @@ public class UserController {
         }
     }
 
+    @Operation(
+            tags = "Пользователи",
+            summary = "Обновление информации об авторизованном пользователе",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Пользователь найден",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = UpdateUser.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Пользователь не авторизован (unauthorized)",
+                            content = @Content()
+                    )
+            }
+    )
     @PatchMapping("/me") // http://localhost:8080/users/me
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
         log.info("Запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
@@ -95,7 +132,7 @@ public class UserController {
 
     @Operation(
             tags = "Пользователи",
-            summary = "Обновить аватар авторизованного пользователя",
+            summary = "Обновление аватара авторизованного пользователя",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -103,18 +140,18 @@ public class UserController {
                             content = @Content()
                     ),
                     @ApiResponse(
-                            responseCode = "404",
-                            description = "Пользователь не найден (not found)",
+                            responseCode = "401",
+                            description = "Пользователь не авторизован (unauthorized)",
                             content = @Content()
                     )
             }
     )
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateUserImage(@RequestParam MultipartFile image,
-                                                  Authentication authentication) throws IOException {
+                                                Authentication authentication) throws IOException {
         log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
-            userService.updateUserImage(image, authentication);
-            return ResponseEntity.ok().build();
+        userService.updateUserImage(image, authentication);
+        return ResponseEntity.ok().build();
     }
 
 }

@@ -6,6 +6,7 @@ import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.util.Collection;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity extends ModelEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -28,7 +29,7 @@ public class UserEntity {
 
     @OneToOne
     @JsonBackReference
-    private AvatarEntity avatar;
+    private PhotoEntity photo;
 
     @OneToMany(mappedBy = "author")
     private Collection<AdEntity> ads;
@@ -36,7 +37,11 @@ public class UserEntity {
     @OneToMany(mappedBy = "author")
     private Collection<CommentEntity> comments;
 
-    private String image;
+    /**
+     * поле куда записывается URL для доступа к методу возврата аватарки
+     */
+    private String image; //URL для контроллера
+    private String filePath; //путь на ПК
 
     @Override
     public String toString() {
@@ -48,7 +53,7 @@ public class UserEntity {
                 ", lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", role=" + role +
-                ", avatar=" + avatar +
+                ", photo=" + photo +
                 ", ads=" + ads +
                 ", comments=" + comments +
                 ", image='" + image + '\'' +

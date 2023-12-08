@@ -12,8 +12,8 @@ import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.CommentEntity;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.UserService;
@@ -28,20 +28,31 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final AdRepository adRepository;
-    private final AvatarRepository avatarRepository;
     private final UserRepository userRepository;
+    private final PhotoRepository photoRepository;
     private final CommentMapper commentMapper;
     private final UserService userService;
 
-    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper, AdRepository adRepository, AvatarRepository avatarRepository, UserRepository userRepository, UserService userService) {
+    public CommentServiceImpl(CommentRepository commentRepository,
+                              CommentMapper commentMapper,
+                              AdRepository adRepository,
+                              UserRepository userRepository,
+                              PhotoRepository photoRepository,
+                              UserService userService) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.adRepository = adRepository;
-        this.avatarRepository = avatarRepository;
         this.userRepository = userRepository;
+        this.photoRepository = photoRepository;
         this.userService = userService;
     }
 
+    /**
+     * Метод получает список всех комментариев объявления
+     *
+     * @param id - id объявления
+     * @return возвращает DTO - список моделей комментариев
+     */
     @Transactional
     @Override
     public Comments getComments(Integer id) {
@@ -53,13 +64,21 @@ public class CommentServiceImpl implements CommentService {
         return new Comments(comments.size(), comments);
     }
 
+    /**
+     * Метод добавляет комментарий к объявлению
+     *
+     * @param id                    - id объявления
+     * @param createOrUpdateComment - DTO модель класса {@link CreateOrUpdateComment}
+     * @param username              - логин пользователя
+     * @return DTO модель комментария
+     */
     @Transactional
     @Override
     public Comment addComment(Integer id, CreateOrUpdateComment createOrUpdateComment, String username) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
 
-        UserEntity author = userService.checkUserByUsername(username);
-        AdEntity ad = adRepository.findById(id).get();
+        UserEntity author = userService.checkUserByUsername(username);//todo заменить метод на getUser
+        AdEntity ad = adRepository.findById(id).orElse(null);
 
         //Создаем сущность comment и заполняем поля
         CommentEntity commentEntity = new CommentEntity();
@@ -70,6 +89,7 @@ public class CommentServiceImpl implements CommentService {
 
         //Сохраняем сущность commentEntity в БД
         commentRepository.save(commentEntity);
+
         //Заполняем поле с комментариями у пользователя и сохраняем в БД
         author.getComments().add(commentEntity);
         userRepository.save(author);
@@ -78,10 +98,12 @@ public class CommentServiceImpl implements CommentService {
         Comment commentDTO = new Comment();
         commentDTO.setAuthor(author.getId());
 
-//        Integer avatarId = avatarRepository.findById(author.getId()).get().getId();
-//        log.info("URL для получение аватара пользователя /avatar/{}", avatarId);
-//        commentDTO.setAuthorImage("/avatar/" + avatarId);//todo аватар пока не добавляется...
-        commentDTO.setAuthorImage("/avatar/1");//todo ...поэтому ставим заглушку
+//        Integer avatarId = photoRepository.findById(author.getId()).get().getId();
+//        String avatarURL = author.getImage();
+        Integer avatarId = author.getPhoto().getId();
+        log.info("id автора комментария - {}", author.getId());
+        log.info("URL для получения аватара автора комментария: /photo/image/{}", avatarId);
+        commentDTO.setAuthorImage("/photo/image/" + avatarId);//todo аватар пока не добавляется...
 
         commentDTO.setAuthorFirstName(author.getFirstName());
         commentDTO.setCreatedAt(commentEntity.getCreatedAt());
@@ -91,6 +113,13 @@ public class CommentServiceImpl implements CommentService {
         return commentDTO;
     }
 
+    /**
+     * Метод удаляет комментарий
+     *
+     * @param commentId - id комментария
+     * @param username  - логин пользователя
+     * @return строку с результатом выполнения метода
+     */
     @Override
     public String deleteComment(Integer commentId, String username) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
@@ -112,6 +141,14 @@ public class CommentServiceImpl implements CommentService {
         return "not found"; //'404' Comment not found
     }
 
+    /**
+     * Метод обновляет комментарий
+     *
+     * @param commentId             - id комментария
+     * @param createOrUpdateComment - DTO модель класса {@link CreateOrUpdateComment}
+     * @param username              - логин пользователя
+     * @return строку с результатом выполнения метода
+     */
     @Transactional
     @Override
     public Comment updateComment(Integer commentId, CreateOrUpdateComment createOrUpdateComment, String username) {

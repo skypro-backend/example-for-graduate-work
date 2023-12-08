@@ -5,75 +5,112 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.AdEntity;
-import ru.skypro.homework.model.AvatarEntity;
+import ru.skypro.homework.model.ModelEntity;
 import ru.skypro.homework.model.PhotoEntity;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.service.ImageService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
+
 @Service
 @Slf4j
 public class ImageServiceImpl implements ImageService {
-
-    private final AvatarRepository avatarRepository;
     private final PhotoRepository photoRepository;
-    private final AdRepository adRepository;
-    private final AdMapper adMapper;
+    private final UserMapper userMapper;
 
     @Value("${path.to.photos.folder}")
     private String photoDir;
 
 
-    public ImageServiceImpl(AvatarRepository avatarRepository, PhotoRepository photoRepository, AdRepository adRepository, AdMapper adMapper) {
-        this.avatarRepository = avatarRepository;
+    public ImageServiceImpl(PhotoRepository photoRepository, UserMapper userMapper) {
         this.photoRepository = photoRepository;
-        this.adRepository = adRepository;
-        this.adMapper = adMapper;
+        this.userMapper = userMapper;
     }
-    @Override
-    public PhotoEntity updateAdImage(Integer id, MultipartFile image, Path filePath) throws IOException{
-        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
-        AdEntity adEntity = adRepository.findById(id).orElseThrow(RuntimeException::new);
-        PhotoEntity photo = adMapper.mapMultipartFileToPhoto(image);
-        log.info("новое phtotId = {}", photo.getId());
-        adEntity.setPhoto(photo);
 
-        String urlToPhoto = "/photo/image/" + adEntity.getPhoto().getId();
-        adEntity.setImage(urlToPhoto);
-        log.info("URL для перехода фронта к методу возврата photo: {}", urlToPhoto);
+    ///////////////////////перенести в AdService
+//    @Override
+//    public PhotoEntity updateAdImage(Integer id, MultipartFile image, Path filePath) throws IOException {
+//        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
+//        AdEntity adEntity = adRepository.findById(id).orElseThrow(RuntimeException::new);
+//        PhotoEntity photo = adMapper.mapMultipartFileToPhoto(image);
+//        photoRepository.save(photo);
+//        log.info("новое phtotId = {}", photo.getId());
+//        adEntity.setPhoto(photo);
+//
+//        String urlToPhoto = "/photo/image/" + adEntity.getPhoto().getId();
+//        adEntity.setImage(urlToPhoto);
+//        log.info("URL для перехода фронта к методу возврата photo: {}", urlToPhoto);
+//
+//        //адрес до директории хранения фото на ПК
+//        filePath = Path.of(photoDir, adEntity.getPhoto().getId() +/* "-" + properties.getTitle() + */"."
+//                + this.getExtension(image.getOriginalFilename()));
+//        log.info("путь к файлу: {}", filePath);
+//
+//        //сохранение на ПК
+//        this.saveFileOnDisk(adEntity.getPhoto(), filePath);
+//
+//        //сохранение сущности adEntity в БД
+//        adRepository.save(adEntity);
+//        return photo;
+//    }
+
+    @Override
+    public ModelEntity updateEntitiesPhoto(MultipartFile image, ModelEntity entity) throws IOException {
+        //если у сущности уже есть картинка, то нужно ее удалить
+        if (entity.getPhoto() != null) {
+            photoRepository.delete(entity.getPhoto());
+        }
+
+        //заполняем поля photo и сохраняем фото в БД
+        // todo можно сделать photoMapper и перенести этот метод туда, чтоб не путаться
+                PhotoEntity photoEntity = userMapper.mapMuptipartFileToPhoto(image);
+        log.info("Создана сущность photoEntity - {}", photoEntity != null);
+        entity.setPhoto(photoEntity);
+        photoRepository.save(photoEntity);
+
+        //записываем URL для перехода фронта к методу возврата аватара
+        String urlToAvatar = "/photo/image/" + entity.getPhoto().getId();
+        log.info("URL для перехода фронта к методу возврата аватара: {}", urlToAvatar);
+
+        //добавляем в сущность URL
+        entity.setImage(urlToAvatar);
 
         //адрес до директории хранения фото на ПК
-        filePath = Path.of(photoDir, adEntity.getPhoto().getId() +/* "-" + properties.getTitle() + */"."
+        Path filePath = Path.of(photoDir, entity.getPhoto().getId() + "."
                 + this.getExtension(image.getOriginalFilename()));
-        log.info("путь к файлу: {}", filePath);
+        log.info("путь к файлу для хранения фото на ПК: {}", filePath);
+
+        //добавляем в сущность фото путь где оно хранится на ПК
+        // todo мне кажется лучше напрямую photoEntity.setFilePath(filePath.toString()), а не через entity.getPhoto()
+        entity.getPhoto().setFilePath(filePath.toString());
+
+        //добавляем в сущность путь на ПК
+        entity.setFilePath(filePath.toString());
 
         //сохранение на ПК
-        this.saveFileOnDisk(adEntity.getPhoto(), filePath);
+        this.saveFileOnDisk(image, filePath);
 
-        //сохранение сущности adEntity в БД
-        adRepository.save(adEntity);
-        return photo;
+        return entity;
     }
 
 
-    @Override
-    public void updateUserImage(UserEntity user, MultipartFile image, Path filePath) {
-        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
-        AvatarEntity avatar = avatarRepository.findByUser(user).orElseGet(AvatarEntity::new);
-        avatar.setFilePath(filePath.toString());
-        avatar.setFileSize(image.getSize());
-        avatar.setMediaType(image.getContentType());
-        avatarRepository.save(avatar);
-    }
-
+    /**
+     * Метод сохраняет изображение на диск
+     *
+     * @param image    - изображение
+     * @param filePath - путь, куда будет сохранено изображение
+     * @return boolean
+     * @throws IOException
+     */
     @Override
     public boolean saveFileOnDisk(MultipartFile image, Path filePath) throws IOException {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
@@ -102,20 +139,26 @@ public class ImageServiceImpl implements ImageService {
         }
         return photo;
     }
+///////////////////////////////////////
 
-    public AvatarEntity mapMuptipartFileToAvatar(MultipartFile image) {
-        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
-        AvatarEntity avatar = new AvatarEntity();
+    public byte[] getPhotoFromDisk(PhotoEntity photo) {
+        Path path1 = Path.of(photo.getFilePath());
         try {
-            avatar.setData(image.getBytes());
-            avatar.setMediaType(image.getContentType());
-            avatar.setFileSize(image.getSize());
+            return Files.readAllBytes(path1);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new NoSuchFieldException("Искомый файл аватара или фото объявления, отсутствует на ПК\n" +
+                    "Поиск файла перенаправлен в БД");
+        } finally {
+            return null;
         }
-        avatarRepository.save(avatar);
-        return avatar;
     }
+
+    /**
+     * Метод получает расширение изображения
+     *
+     * @param fileName - полное название изображения
+     * @return расширение изображения
+     */
     @Override
     public String getExtension(String fileName) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());

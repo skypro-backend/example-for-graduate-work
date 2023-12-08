@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.service.impl.LoggingMethodImpl;
 import ru.skypro.homework.service.impl.PhotoServiceImpl;
 
+import java.io.IOException;
+
 @Slf4j
 @RestController
 @RequestMapping("/photo")
@@ -15,8 +17,9 @@ import ru.skypro.homework.service.impl.PhotoServiceImpl;
 public class PhotoController {
     private final PhotoServiceImpl photoService;
 
+
     @GetMapping("/image/{photoId}")
-    public ResponseEntity<byte[]> getPhotoFromBD(@PathVariable Integer photoId){
+    public ResponseEntity<byte[]> getPhotoFromSource(@PathVariable Integer photoId) throws IOException {
         log.info("Запущен метод контроллера {}", LoggingMethodImpl.getMethodName());
         return ResponseEntity.ok(photoService.getPhoto(photoId));
     }

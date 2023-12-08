@@ -13,7 +13,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ads")
-public class AdEntity {
+public class AdEntity extends ModelEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -34,5 +34,6 @@ public class AdEntity {
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
     private Collection<CommentEntity> comments;
 
-    private String image;
+    private String image; //URL для контроллера
+    private String filePath; //путь на ПК
 }

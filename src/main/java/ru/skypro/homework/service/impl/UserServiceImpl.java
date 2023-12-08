@@ -11,16 +11,16 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.exception.PasswordIsNotMatchException;
 import ru.skypro.homework.exception.UserNotFoundException;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.AdEntity;
-import ru.skypro.homework.model.AvatarEntity;
+import ru.skypro.homework.model.PhotoEntity;
 import ru.skypro.homework.model.UserEntity;
-import ru.skypro.homework.repository.AvatarRepository;
+import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.UUID;
 
 /**
  * Сервис хранящий логику для управления данными пользователей.
@@ -30,17 +30,19 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final AvatarRepository avatarRepository;
+    private final PhotoRepository photoRepository;
+    private final UserMapper userMapper;
     private final ImageServiceImpl imageService;
     private final PasswordEncoder encoder;
 
-    @Value("${path.to.avatars.folder}")
-    private String avatarDir;
+    @Value("${path.to.photos.folder}")
+    private String photoDir;
 
 
-    public UserServiceImpl(UserRepository userRepository, AvatarRepository avatarRepository, ImageServiceImpl imageService, PasswordEncoder encoder) {
+    public UserServiceImpl(UserRepository userRepository, PhotoRepository photoRepository, UserMapper userMapper, ImageServiceImpl imageService, PasswordEncoder encoder) {
         this.userRepository = userRepository;
-        this.avatarRepository = avatarRepository;
+        this.photoRepository = photoRepository;
+        this.userMapper = userMapper;
         this.imageService = imageService;
         this.encoder = encoder;
     }
@@ -91,7 +93,7 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     @Override
-    public UserEntity getUser(Authentication authentication) {
+    public UserEntity getUser(Authentication authentication) { //todo объединить этот метод с методом checkUserByUserName()
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         return userRepository.findUserEntityByUserName(authentication.getName());
     }
@@ -133,7 +135,7 @@ public class UserServiceImpl implements UserService {
      * @return {@link UserEntity}
      */
     @Override
-    public UserEntity checkUserByUsername(String username) {
+    public UserEntity checkUserByUsername(String username) { //todo объединить этот метод с методом getUser()
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         UserEntity user = userRepository.findUserEntityByUserName(username);
         if (user == null) {
@@ -147,22 +149,37 @@ public class UserServiceImpl implements UserService {
     public void updateUserImage(MultipartFile image, Authentication authentication) throws IOException {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         //достаем пользователя из БД
-        UserEntity user = userRepository.findUserEntityByUserName(authentication.getName());
-        //заполняем поля photo и author
-        user.setAvatar(imageService.mapMuptipartFileToAvatar(image));
-        //записываем URL для перехода фронта к методу возврата avatara
-        String urlToAvatar = "/photo/image/" + user.getAvatar().getId();
-        user.setImage(urlToAvatar);
-        log.info("URL для перехода фронта к методу возврата photo: {}", urlToAvatar);
+        UserEntity userEntity = userRepository.findUserEntityByUserName(authentication.getName());
 
-        //адрес до директории хранения аватара на ПК
-        Path filePath = Path.of(avatarDir, user.getAvatar().getId() +/* "-" + properties.getTitle() + */"."
-                + imageService.getExtension(image.getOriginalFilename()));
-        log.info("путь к файлу: {}", filePath);
+//        //если у пользователя есть аватар, то находим его и удаляем
+//        if (user.getPhoto() != null) {
+//            photoRepository.delete(user.getPhoto());
+//        }
+//
+//        //заполняем поля photo и сохраняем аватар в БД
+//        PhotoEntity userAvatar = userMapper.mapMuptipartFileToPhoto(image);
+//        user.setPhoto(userAvatar);
+//        photoRepository.save(userAvatar);
+//
+//        //записываем URL для перехода фронта к методу возврата аватара
+//        String urlToAvatar = "/photo/image/" + user.getPhoto().getId();
+//        user.setImage(urlToAvatar);
+//        log.info("URL для перехода фронта к методу возврата аватара: {}", urlToAvatar);
+//
+//        //адрес до директории хранения аватара на ПК
+//        Path filePath = Path.of(photoDir, user.getPhoto().getId() + "."
+//                + imageService.getExtension(image.getOriginalFilename()));
+//        log.info("путь к файлу для хранения фото на ПК: {}", filePath);
+//
+//        //добавляем в сущность аватарки путь где она хранится на ПК
+//        user.getPhoto().setFilePath(filePath.toString());
+//
+//        //сохранение на ПК
+//        imageService.saveFileOnDisk(image, filePath);
 
-        //сохранение на ПК
-        imageService.saveFileOnDisk(image, filePath);
+        userEntity = (UserEntity) imageService.updateEntitiesPhoto(image, userEntity);
+        log.info("userEntity создано - {}", userEntity != null);
         //сохранение сущности user в БД
-        userRepository.save(user);
+        userRepository.save(userEntity);
     }
 }
