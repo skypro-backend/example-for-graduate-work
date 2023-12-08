@@ -9,6 +9,7 @@ import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.ModelEntity;
 import ru.skypro.homework.model.PhotoEntity;
+import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.service.ImageService;
@@ -71,7 +72,8 @@ public class ImageServiceImpl implements ImageService {
 
         //заполняем поля photo и сохраняем фото в БД
         // todo можно сделать photoMapper и перенести этот метод туда, чтоб не путаться
-        PhotoEntity photoEntity = userMapper.mapMuptipartFileToPhoto(image);
+                PhotoEntity photoEntity = userMapper.mapMuptipartFileToPhoto(image);
+        log.info("Создана сущность photoEntity - {}", photoEntity != null);
         entity.setPhoto(photoEntity);
         photoRepository.save(photoEntity);
 
@@ -139,9 +141,16 @@ public class ImageServiceImpl implements ImageService {
     }
 ///////////////////////////////////////
 
-    public byte[] getPhotoFromDisk(PhotoEntity photo) throws IOException {
+    public byte[] getPhotoFromDisk(PhotoEntity photo) {
         Path path1 = Path.of(photo.getFilePath());
-        return Files.readAllBytes(path1);
+        try {
+            return Files.readAllBytes(path1);
+        } catch (IOException e) {
+            throw new NoSuchFieldException("Искомый файл аватара или фото объявления, отсутствует на ПК\n" +
+                    "Поиск файла перенаправлен в БД");
+        } finally {
+            return null;
+        }
     }
 
     /**

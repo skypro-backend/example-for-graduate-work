@@ -40,7 +40,8 @@ public class UserEntity extends ModelEntity{
     /**
      * поле куда записывается URL для доступа к методу возврата аватарки
      */
-    private String image;
+    private String image; //URL для контроллера
+    private String filePath; //путь на ПК
 
     @Override
     public String toString() {

@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     @Override
-    public UserEntity getUser(Authentication authentication) {
+    public UserEntity getUser(Authentication authentication) { //todo объединить этот метод с методом checkUserByUserName()
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         return userRepository.findUserEntityByUserName(authentication.getName());
     }
@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
      * @return {@link UserEntity}
      */
     @Override
-    public UserEntity checkUserByUsername(String username) {
+    public UserEntity checkUserByUsername(String username) { //todo объединить этот метод с методом getUser()
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         UserEntity user = userRepository.findUserEntityByUserName(username);
         if (user == null) {
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
 //        imageService.saveFileOnDisk(image, filePath);
 
         userEntity = (UserEntity) imageService.updateEntitiesPhoto(image, userEntity);
-        log.info("adEntity = {}", userEntity.toString());
+        log.info("userEntity создано - {}", userEntity != null);
         //сохранение сущности user в БД
         userRepository.save(userEntity);
     }
