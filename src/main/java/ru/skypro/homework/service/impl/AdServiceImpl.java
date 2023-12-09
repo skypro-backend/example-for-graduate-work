@@ -98,7 +98,7 @@ public class AdServiceImpl implements AdService {
         adEntity.setDescription(properties.getDescription());
 
         //заполняем поле author
-        adEntity.setAuthor(userService.getUser(authentication));
+        adEntity.setAuthor(userService.getUser(authentication.getName()));
 
 //        //заполняем поля photo
 //        PhotoEntity photoOfAd = adMapper.mapMultipartFileToPhoto(image);
@@ -213,7 +213,7 @@ public class AdServiceImpl implements AdService {
     @Transactional
     public Ads getAdsMe(String username) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
-        UserEntity author = userService.checkUserByUsername(username);
+        UserEntity author = userService.getUser(username);
         log.info("объект UserEntity получен из БД");
         List<Ad> ads = null;
         ads = adRepository.findByAuthor(author).stream()
