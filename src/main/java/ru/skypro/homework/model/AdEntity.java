@@ -34,6 +34,5 @@ public class AdEntity extends ModelEntity{
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
     private Collection<CommentEntity> comments;
 
-    private String image; //URL для контроллера
     private String filePath; //путь на ПК
 }

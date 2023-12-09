@@ -99,46 +99,7 @@ public class AdServiceImpl implements AdService {
 
         //заполняем поле author
         adEntity.setAuthor(userService.getUser(authentication.getName()));
-
-//        //заполняем поля photo
-//        PhotoEntity photoOfAd = adMapper.mapMultipartFileToPhoto(image);
-//        photoRepository.save(photoOfAd);
-//        adEntity.setPhoto(photoOfAd);
-//
-//
-//        //записываем URL для перехода фронта к методу возврата photo
-//        String urlToPhoto = "/photo/image/" + adEntity.getPhoto().getId();
-//        adEntity.setImage(urlToPhoto);
-//        log.info("URL для перехода фронта к методу возврата photo: {}", urlToPhoto);
-//
-//        //адрес до директории хранения фото на ПК
-//        Path filePath = Path.of(photoDir, adEntity.getPhoto().getId() + "."
-//                + imageService.getExtension(image.getOriginalFilename()));
-//        log.info("путь к файлу картинки объявления на ПК: {}", filePath);
-//        //добавляем в сущность картинки путь где она храниться на ПК
-//        adEntity.getPhoto().setFilePath(filePath.toString());
-//
-//        //сохранение на ПК
-//        imageService.saveFileOnDisk(adEntity.getPhoto(), filePath);
-        /* todo Стас, привет. Вот что я заметил: в этом методе мы создаем новую AdEntity.
-            Поэтому проверка в imageService.updateEntitiesPhoto на то, что у Entity есть фото не нужно.
-            Ведь мы её только что создали, поэтому у неё точно фото не будет.
-            ///////// Здесь ты прав, но метод updateEntitiesPhoto используется еще и в других сервисах где
-            надо update фото не создать и вот для таких методом эта проверка нужна.//
-        */
-        ///добавление фото в сущность, формирование URL и путей файлов на ПК
-        /* todo мне кажется, вот тут ошибка.
-            Смысл метода addAd: создаем новую AdEntity и заполняем её поля.
-            В этом методе мы заполняем поля из dto, потом передаем в updateEntitiesPhoto,
-            в котором сохраняем картинку и добавляем оставшиеся поля в AdEntity. Поэтому можно сохранять AdEntity
-            в updateEntitiesPhoto и возвращать dto.
-            Вместо последних строчек кода:
-            Ad ad = imageService.updateEntitiesPhoto(image, adEntity);
-            return ad;
-            ///////////так сделать не получится, потому что из updateEntitiesPhoto будет возвращаться не всегда
-            adEntity а и userEntity. поэтому я и не возвращаю ДТО, а возвращаю сущность общую(родительску) для обеих
-            сущностей user и ad.
-        */
+        //заполняем поля
         adEntity = (AdEntity) imageService.updateEntitiesPhoto(image, adEntity);
         log.info("Сущность adEntity сформированная в {}", LoggingMethodImpl.getMethodName());
 

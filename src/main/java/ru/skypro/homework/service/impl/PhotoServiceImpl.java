@@ -17,8 +17,6 @@ import java.io.IOException;
 public class PhotoServiceImpl implements PhotoService {
     private final PhotoRepository photoRepository;
     private final ImageServiceImpl imageService;
-    @Value("${path.to.photos.folder}")
-    private String photoDir;
 
     public PhotoServiceImpl(PhotoRepository photoRepository, ImageServiceImpl imageService) {
         this.photoRepository = photoRepository;
