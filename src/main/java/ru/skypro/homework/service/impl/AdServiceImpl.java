@@ -171,11 +171,20 @@ public class AdServiceImpl implements AdService {
      */
     @Transactional
     @Override
-    public boolean removeAd(Integer id) {
+    public boolean removeAd(Integer id) throws IOException {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         AdEntity ad = adRepository.findById(id).get();
         if (ad != null) {
+            //удаление объявления из БД
             adRepository.delete(ad);
+            //удаление фото из БД
+            photoRepository.delete(ad.getPhoto());
+            //получение пути из сущности объявления
+            String filePath = ad.getFilePath();
+            //создание пути к файлу
+            Path path = Path.of(filePath);
+            //удаление файла с ПК
+            Files.delete(path);
             return true;
         } else {
             return false;
@@ -231,43 +240,12 @@ public class AdServiceImpl implements AdService {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         //достаем объявление из БД
         AdEntity adEntity = adRepository.findById(id).orElseThrow(RuntimeException::new);
-
-//        //если у объявления есть картинка, то находим ее и удаляем
-//        if (adEntity.getPhoto() != null) {
-//            photoRepository.delete(adEntity.getPhoto());
-//        }
-//
-//        //заполняем поля photo и сохраняем фото в БД
-//        PhotoEntity adPhoto = adMapper.mapMultipartFileToPhoto(image);
-//        adEntity.setPhoto(adPhoto);
-//        photoRepository.save(adPhoto);
-//
-//        //записываем URL для перехода фронта к методу возврата фото объявления
-//        String urlToAvatar = "/photo/image/" + adEntity.getPhoto().getId();
-//        adEntity.setImage(urlToAvatar);
-//        log.info("URL для перехода фронта к методу возврата photo объявления: {}", urlToAvatar);
-//
-//        //адрес до директории хранения фото на ПК
-//        Path filePath = Path.of(photoDir, adEntity.getPhoto().getId() + "."
-//                + imageService.getExtension(image.getOriginalFilename()));
-//        log.info("путь к файлу для хранения фото на ПК: {}", filePath);
-//
-//        //добавляем в сущность фото путь где оно хранится на ПК
-//        adEntity.getPhoto().setFilePath(filePath.toString());
-//
-//        //сохранение на ПК
-//        imageService.saveFileOnDisk(image, filePath);
-
+        //заполняю поля и получаю сущность в переменную
         adEntity = (AdEntity) imageService.updateEntitiesPhoto(image, adEntity);
         log.info("adEntity cоздано - {}", adEntity != null);
         //сохранение сущности user в БД
         adRepository.save(adEntity);
     }
-
-//    public PhotoEntity findPhoto(Integer id) {
-//        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
-//        return photoRepository.findByAdId(id).get();
-//    }
 
     public boolean isAuthorAd(String username, Integer adId) {
         log.info("Использован метод сервиса: {}", LoggingMethodImpl.getMethodName());

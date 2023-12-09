@@ -136,37 +136,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserImage(MultipartFile image, Authentication authentication) throws IOException {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
+
         //достаем пользователя из БД
         UserEntity userEntity = userRepository.findUserEntityByUserName(authentication.getName());
 
-//        //если у пользователя есть аватар, то находим его и удаляем
-//        if (user.getPhoto() != null) {
-//            photoRepository.delete(user.getPhoto());
-//        }
-//
-//        //заполняем поля photo и сохраняем аватар в БД
-//        PhotoEntity userAvatar = userMapper.mapMuptipartFileToPhoto(image);
-//        user.setPhoto(userAvatar);
-//        photoRepository.save(userAvatar);
-//
-//        //записываем URL для перехода фронта к методу возврата аватара
-//        String urlToAvatar = "/photo/image/" + user.getPhoto().getId();
-//        user.setImage(urlToAvatar);
-//        log.info("URL для перехода фронта к методу возврата аватара: {}", urlToAvatar);
-//
-//        //адрес до директории хранения аватара на ПК
-//        Path filePath = Path.of(photoDir, user.getPhoto().getId() + "."
-//                + imageService.getExtension(image.getOriginalFilename()));
-//        log.info("путь к файлу для хранения фото на ПК: {}", filePath);
-//
-//        //добавляем в сущность аватарки путь где она хранится на ПК
-//        user.getPhoto().setFilePath(filePath.toString());
-//
-//        //сохранение на ПК
-//        imageService.saveFileOnDisk(image, filePath);
-
+        //заполняем поля и возвращаем
         userEntity = (UserEntity) imageService.updateEntitiesPhoto(image, userEntity);
         log.info("userEntity создано - {}", userEntity != null);
+
         //сохранение сущности user в БД
         userRepository.save(userEntity);
     }
