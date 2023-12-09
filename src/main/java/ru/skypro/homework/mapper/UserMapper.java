@@ -33,6 +33,7 @@ public class UserMapper {
         entity.setPhone(dto.getPhone());
         entity.setRole(dto.getRole());
         return entity;
+
     }
 
     /**
