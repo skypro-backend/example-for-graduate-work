@@ -1,86 +1,121 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.exception.PasswordIsNotMatchException;
 import ru.skypro.homework.exception.UserNotFoundException;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.AdEntity;
+import ru.skypro.homework.model.PhotoEntity;
 import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * Сервис хранящий логику для управления данными пользователей.
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-//    private Authentication userAusentication;
-    private final AuthServiceImpl authService;
+    private final PhotoRepository photoRepository;
+    private final UserMapper userMapper;
+    private final ImageServiceImpl imageService;
+    private final PasswordEncoder encoder;
 
-    public UserServiceImpl(UserRepository userRepository, /*Authentication userAusentication,*/ AuthServiceImpl authService) {
+    @Value("${path.to.photos.folder}")
+    private String photoDir;
+
+
+    public UserServiceImpl(UserRepository userRepository, PhotoRepository photoRepository, UserMapper userMapper, ImageServiceImpl imageService, PasswordEncoder encoder) {
         this.userRepository = userRepository;
-//        this.userAusentication = userAusentication;
-        this.authService = authService;
-
+        this.photoRepository = photoRepository;
+        this.userMapper = userMapper;
+        this.imageService = imageService;
+        this.encoder = encoder;
     }
 
     /**
      * Метод обновляет пароль текущего, авторизованного пользователя.
-     * <p>Метод получает объект newPass, который содержит два поля со старым и новым паролями.</p>
-     * Далее метод ищет пользователя с соответствующим паролем в репозитории и сохраняет его
-     * в переменную userEntity.
-     * <p>Далее, используя сеттер, в переменную, содержащую пользователя,
+     * <p>Метод получает объект newPass, который содержит два поля со старым и новым паролями.
+     * А так же объект {@link Authentication} из которого можно получить логин
+     * авторизованного пользователя.</p>
+     * Далее метод ищет пользователя с соответствующим логином в репозитории и сохраняет его
+     * в переменную userEntity. Логин получаем из объекта {@link Authentication}.
+     * <p>Далее, метод делает проверку на совпадение старого пароля, введенного пользователем,
+     * и пароля сохраненного в БД. Если пароли совпали, от используя сеттер, в переменную, содержащую пользователя,
      * сохраняется новый пароль. Переменная (объект userEntity) с новым, измененным паролем
      * сохраняется в БД.</p>
-     * <p>Так же нужно изменить данные авторизованного пользователя,
-     * используя метод: {@link AuthServiceImpl#getUserDetailsManager()}</p>
-     * <p>Последней строкой, меняем пароль в объекте {@link AuthServiceImpl#userEntity},
-     * который является связью для {@link AuthServiceImpl} и БД</p>
      *
-     * @param newPass объект NewPassword, содержащий старый и новый пароли.
+     * @param newPass        объект {@link NewPassword}, содержащий старый и новый пароли.
+     * @param authentication содержит логин авторизованного пользователя.
      */
     @Override
-    public void setPassword(NewPassword newPass) {
+    public void setPassword(NewPassword newPass, Authentication authentication) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
+        //получаем в переменную старый пароль
         String oldPassword = newPass.getCurrentPassword();
-        String newPassword = newPass.getNewPassword();
-        UserEntity userEntity = userRepository.findUserEntityByPassword(oldPassword);
-        userEntity.setPassword(newPassword);
+        //получаем в переменную новый пароль и кодируем его
+        String encodeNewPassword = encoder.encode(newPass.getNewPassword());
+        //Находим в БД сущность авторизованного пользователя используя логин из authentication
+        //проверка на null не нужна, т.к. тот факт, что пользователь авторизовался,
+        //говорит о том, что он есть в БД
+        UserEntity userEntity = userRepository.findUserEntityByUserName(authentication.getName());
+        //проверяем совпадают ли старый пароль, введенный пользователем, и пароль сохраненный в БД
+        if (!encoder.matches(oldPassword, userEntity.getPassword())) {
+            throw new PasswordIsNotMatchException("Пароли не совпадают");
+        } else {
+            //пароли совпадают, а значит устанавливаем новый пароль в соответствующее поле сущности
+            userEntity.setPassword(encodeNewPassword);
+        }
+        //сохраняем сущность в БД
         userRepository.save(userEntity);
-        //меняем пароль авторизованного пользователя в AuthService
-        authService.getUserEntity().setPassword(newPassword);
     }
 
     /**
      * Метод возвращает информацию о текущем, авторизованном пользователе.
-     * Метод находит в {@link AuthServiceImpl} текущие логин и пароль, и присваивает их в переменные.
-     * Далее метод находит в БД, используя {@link UserRepository}, пользователя с соответствующими
-     * данными и возвращает его.
+     * Метод, используя объект {@link Authentication}, находит в БД {@link UserRepository},
+     * пользователя с соответствующими данными и возвращает его.
      *
      * @return объект userEntity
      */
+    @Transactional
     @Override
-    public UserEntity getUser() {
-        String userName = authService.getLogin().getUsername();
-        return userRepository.findUserEntityByUserName(userName);
+    public UserEntity getUser(Authentication authentication) { //todo объединить этот метод с методом checkUserByUserName()
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
+        return userRepository.findUserEntityByUserName(authentication.getName());
     }
 
     /**
      * Метод изменяет данные пользователя, а именно имя, фамилию и номер телефона.
-     * <p>В начале метод получает из {@link AuthServiceImpl} логин авторизованного пользователя
+     * <p>В начале метод получает из {@link Authentication} логин авторизованного пользователя
      * и записывает его в переменную.</p>
      * <p>По логину находит данные пользователя в БД и кладет их в сущность user.
      * Сущность user заполняется измененными данными из парамера updateUser.</p>
      * <p>В итоге измененный объект user сохраняется в БД, и он же возвращается из метода.</p>
      *
-     * @param updateUser объект содержащий поля с именем, фамилией и номером телефона.
+     * @param updateUser     объект содержащий поля с именем, фамилией и номером телефона.
+     * @param authentication
      * @return объект user
      */
+    @Transactional
     @Override
-    public UserEntity updateUser(UpdateUser updateUser) {
+    public UserEntity updateUser(UpdateUser updateUser, Authentication authentication) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         //Получаем логин авторизованного пользователя из БД
-        String userName = authService.getLogin().getUsername();
+        String userName = authentication.getName();
         //Находим данные авторизованного пользователя
         UserEntity user = userRepository.findUserEntityByUserName(userName);
         //Меняем данные пользователя на данные из DTO updateUser
@@ -92,26 +127,59 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * Метод возвращает объект {@link UserEntity} из базы данных. Поиск выполняется по логину,
+     * подаваемому в метод в качестве параметра.
+     *
+     * @param username
+     * @return {@link UserEntity}
+     */
     @Override
-    public UserEntity checkUserByUsername(String username) {
+    public UserEntity checkUserByUsername(String username) { //todo объединить этот метод с методом getUser()
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         UserEntity user = userRepository.findUserEntityByUserName(username);
         if (user == null) {
-            throw new UserNotFoundException("User not found"); // todo придумать сообщение
+            throw new UserNotFoundException("Пользователя с таким логином в базе данных нет");
         }
         return user;
     }
 
-//    @Override
-//    public UserEntity updateUser(UpdateUser updateUser, Authentication authentication) {
-//        String login = userDetails.getUsername();
-////        String login = inMemoryUserDetailsManager.updateUser();
-//
-//        UserEntity user = userRepository.findUserEntityByUserName(login);
-//        user.setFirstName(updateUser.getFirstName());
-//        user.setLastName(updateUser.getLastName());
-//        user.setPhone(updateUser.getPhone());
-//        userRepository.save(user);
-//        return user;
-//    }
+    @Transactional
+    @Override
+    public void updateUserImage(MultipartFile image, Authentication authentication) throws IOException {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
+        //достаем пользователя из БД
+        UserEntity userEntity = userRepository.findUserEntityByUserName(authentication.getName());
 
+//        //если у пользователя есть аватар, то находим его и удаляем
+//        if (user.getPhoto() != null) {
+//            photoRepository.delete(user.getPhoto());
+//        }
+//
+//        //заполняем поля photo и сохраняем аватар в БД
+//        PhotoEntity userAvatar = userMapper.mapMuptipartFileToPhoto(image);
+//        user.setPhoto(userAvatar);
+//        photoRepository.save(userAvatar);
+//
+//        //записываем URL для перехода фронта к методу возврата аватара
+//        String urlToAvatar = "/photo/image/" + user.getPhoto().getId();
+//        user.setImage(urlToAvatar);
+//        log.info("URL для перехода фронта к методу возврата аватара: {}", urlToAvatar);
+//
+//        //адрес до директории хранения аватара на ПК
+//        Path filePath = Path.of(photoDir, user.getPhoto().getId() + "."
+//                + imageService.getExtension(image.getOriginalFilename()));
+//        log.info("путь к файлу для хранения фото на ПК: {}", filePath);
+//
+//        //добавляем в сущность аватарки путь где она хранится на ПК
+//        user.getPhoto().setFilePath(filePath.toString());
+//
+//        //сохранение на ПК
+//        imageService.saveFileOnDisk(image, filePath);
+
+        userEntity = (UserEntity) imageService.updateEntitiesPhoto(image, userEntity);
+        log.info("userEntity создано - {}", userEntity != null);
+        //сохранение сущности user в БД
+        userRepository.save(userEntity);
+    }
 }

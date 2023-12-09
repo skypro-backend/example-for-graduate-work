@@ -7,6 +7,7 @@ import ru.skypro.homework.model.CommentEntity;
 @Service
 public class CommentMapper {
 
+
     /**
      * Entity -> dto mapping
      * @param entity input entity class
@@ -15,7 +16,8 @@ public class CommentMapper {
     public Comment mapToCommentDto(CommentEntity entity) {
         Comment dto = new Comment();
         dto.setAuthor(entity.getAuthor().getId());
-        dto.setAuthorImage(entity.getAuthor().getAvatar().getFilePath()); // todo надо продумать этот момент
+//        dto.setAuthorImage(entity.getAuthor().getPhoto().getFilePath());
+        dto.setAuthorImage(entity.getAuthor().getPhoto().getFilePath());
         dto.setAuthorFirstName(entity.getAuthor().getFirstName());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setPk(entity.getId());

@@ -10,4 +10,8 @@ public interface CommentService {
     Comments getComments(Integer id);
 
     Comment addComment(Integer id, CreateOrUpdateComment createOrUpdateComment, String username);
+
+    String deleteComment(Integer commentId, String username);
+
+    Comment updateComment(Integer commentId, CreateOrUpdateComment createOrUpdateComment, String username);
 }

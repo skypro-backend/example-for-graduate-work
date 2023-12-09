@@ -12,4 +12,6 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<CommentEntity, Integer> {
     @Query(value = "select * from comments where ad_id = :ad_id", nativeQuery = true)
     List<CommentEntity> findByAdId(@Param("ad_id") Integer adId);
+
+    CommentEntity findFirstByText(String text);
 }
