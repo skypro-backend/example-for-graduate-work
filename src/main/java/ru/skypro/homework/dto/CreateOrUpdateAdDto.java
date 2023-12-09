@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @Schema(description = "Создание или обновление объявления")
-public class CreateOrUpdateAd {
+public class CreateOrUpdateAdDto {
 
 
     @Schema(description = "заголовок объявления")

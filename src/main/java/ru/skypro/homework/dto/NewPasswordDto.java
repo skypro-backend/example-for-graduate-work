@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Schema(description = "Смена пароля пользователя")
-public class NewPassword {
+public class NewPasswordDto {
 
     @Schema(description = "Текущий пароль пользователя")
     @NotBlank

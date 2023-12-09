@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @Schema(description = "Обновить пользователя")
-public class UpdateUser {
+public class UpdateUserDto {
 
 
     @Schema(description = "Имя пользователя")

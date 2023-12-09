@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Schema(description = "Пользователь")
-public class User {
+public class UserDto {
 
     @Schema(description = "id пользователя ")
     @NotBlank
@@ -31,7 +31,7 @@ public class User {
 
     @Schema(description = "роль пользователя")
     @NotBlank
-    private Role role;
+    private RoleDto role;
 
     @Schema(description = "ссылка на аватар пользователя ")
     @NotBlank

@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 
 
 @Data
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 @Schema(description = "Комментарии ")
-public class Comment {
+public class CommentDto {
 
     @Schema(description = "id автора комментария ")
     @NotBlank

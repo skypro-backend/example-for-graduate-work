@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Schema(description = "Расширение объявления")
-public class ExtendAd {
+public class ExtendedAdDto {
 
     @Schema(description = "id объявления")
     @NotBlank

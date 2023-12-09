@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Schema(description = "Авторизация пользователя")
-public class Login {
+public class LoginDto {
 
     @Schema(description = "Имя пользователя")
     @NotBlank

@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @Schema(description = "Регистрация пользователя")
-public class Register {
+public class RegisterDto {
 
     @Schema(description = "логин")
     @Size(min = 4,max = 32)
@@ -35,5 +35,5 @@ public class Register {
     private String phone;
 
     @Schema(description = "роль пользователя")
-    private Role role;
+    private RoleDto role;
 }

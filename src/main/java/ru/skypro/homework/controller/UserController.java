@@ -8,9 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.NewPasswordDto;
+import ru.skypro.homework.dto.UpdateUserDto;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.UserService;
 
 @Slf4j
@@ -23,19 +23,23 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPassword userService) {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPassword) {
+        if (userService.setPassword(newPassword)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
     @GetMapping("/me")
-    public ResponseEntity<User> getUser() {
-        return new ResponseEntity<>(new User(),HttpStatus.OK);
+    public ResponseEntity<UserDto> getUser() {
+        return ResponseEntity.ok(userService.getUser());
     }
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUser> updateUser(@RequestBody  UserService userService) {
-        return new ResponseEntity<>(new UpdateUser(), HttpStatus.OK);
+    public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto updateUser) {
+        return ResponseEntity.ok(userService.updateUser(updateUser));
     }
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateUserImage( @RequestParam MultipartFile image) {
-        return new ResponseEntity<>(HttpStatus.OK);
+        userService.updateUserImage(image);
+        return ResponseEntity.ok().build();
     }
 }

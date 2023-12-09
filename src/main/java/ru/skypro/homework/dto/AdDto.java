@@ -6,13 +6,8 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 
 @Data
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
 @Schema(description = "Объявление ")
-public class Ad {
+public class AdDto {
 
 
     @Schema(description = "id автора объявления ")

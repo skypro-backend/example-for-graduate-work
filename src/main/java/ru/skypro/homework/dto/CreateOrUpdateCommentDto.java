@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @Schema(description = "Создание или обновление комментарий")
-public class CreateOrUpdateComment {
+public class CreateOrUpdateCommentDto {
 
 
     @Schema(description = "Текст комментария")
