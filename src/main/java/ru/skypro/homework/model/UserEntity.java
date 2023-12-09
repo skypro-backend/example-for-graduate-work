@@ -37,10 +37,6 @@ public class UserEntity extends ModelEntity{
     @OneToMany(mappedBy = "author")
     private Collection<CommentEntity> comments;
 
-    /**
-     * поле куда записывается URL для доступа к методу возврата аватарки
-     */
-    private String image; //URL для контроллера
     private String filePath; //путь на ПК
 
     @Override
@@ -56,7 +52,6 @@ public class UserEntity extends ModelEntity{
                 ", photo=" + photo +
                 ", ads=" + ads +
                 ", comments=" + comments +
-                ", image='" + image + '\'' +
                 '}';
     }
 }
