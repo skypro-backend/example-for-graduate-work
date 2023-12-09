@@ -4,17 +4,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 @Schema(description = "Смена пароля пользователя")
-public class NewPassword {
+public class NewPasswordDto {
 
     @Schema(description = "Текущий пароль пользователя")
     @NotBlank
-    private String  currentPassword;
+    @Size(min = 8, max = 16)
+    private String currentPassword;
+
     @Schema(description = "Новый пароль пользователя")
     @NotBlank
-    private String  newPassword;
-
-
+    @Size(min = 8, max = 16)
+    private String newPassword;
 }

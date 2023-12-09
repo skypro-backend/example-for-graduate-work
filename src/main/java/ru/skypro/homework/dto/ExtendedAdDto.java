@@ -5,10 +5,9 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
-
 @Data
 @Schema(description = "Расширение объявления")
-public class ExtendAd {
+public class ExtendedAdDto {
 
     @Schema(description = "id объявления")
     @NotBlank
@@ -42,9 +41,7 @@ public class ExtendAd {
     @NotBlank
     private Integer price;
 
-    @Schema(description = "заголовок объявления")
+    @Schema(description = "цена объявления")
     @NotBlank
     private String title;
-
-
 }

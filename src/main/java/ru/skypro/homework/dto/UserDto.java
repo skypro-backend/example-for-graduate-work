@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Schema(description = "Пользователь")
-public class User {
+public class UserDto {
 
     @Schema(description = "id пользователя ")
     @NotBlank
@@ -20,7 +20,6 @@ public class User {
     @Schema(description = "имя пользователя ")
     @NotBlank
     private String firstName;
-
     @Schema(description = "фамилия пользователя ")
     @NotBlank
     private String lastName;
@@ -36,6 +35,4 @@ public class User {
     @Schema(description = "ссылка на аватар пользователя ")
     @NotBlank
     private String image;
-
-
 }

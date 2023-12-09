@@ -1,19 +1,13 @@
 package ru.skypro.homework.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.Data;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
 
 @Data
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
 @Schema(description = "Объявление ")
-public class Ad {
-
+public class AdDto {
 
     @Schema(description = "id автора объявления ")
     @NotBlank
@@ -34,6 +28,4 @@ public class Ad {
     @Schema(description = "заголовок объявления ")
     @NotBlank
     private String title;
-
-
 }

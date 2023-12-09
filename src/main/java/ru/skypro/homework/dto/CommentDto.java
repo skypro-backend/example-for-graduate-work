@@ -1,20 +1,20 @@
 package ru.skypro.homework.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
-
 
 @Data
-@Getter
-@Setter
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-@ToString
+@AllArgsConstructor
+
 @Schema(description = "Комментарии ")
-public class Comment {
+public class CommentDto {
 
     @Schema(description = "id автора комментария ")
     @NotBlank
@@ -39,6 +39,4 @@ public class Comment {
     @Schema(description = "текст комментария ")
     @NotBlank
     private String text;
-
-
 }

@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 @Schema(description = "Регистрация пользователя")
 public class Register {
 
+
     @Schema(description = "логин")
     @Size(min = 4,max = 32)
     @NotBlank(message ="Введите логин")
@@ -25,10 +26,12 @@ public class Register {
     @NotBlank(message ="Заполните имя пользователя")
     private String firstName;
 
+
     @Schema(description = "фамилия пользователя")
     @Size(min = 2,max = 16)
     @NotBlank(message ="Заполните фамилию пользователя")
     private String lastName;
+
 
     @Schema(description = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
     @NotBlank(message ="Заполните номер телефона")

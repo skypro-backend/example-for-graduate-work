@@ -1,13 +1,21 @@
 package ru.skypro.homework.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data
-public class Ads {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+
+
+public class AdsDto {
 
     @Schema(description = "общее количество объявлений")
     @NotBlank
@@ -15,6 +23,10 @@ public class Ads {
 
     @Schema(description = "#/components/schemas/Ad")
     @NotBlank
-    private List<Ad> results;
+    private List<AdDto> results;
 
+    public AdsDto(List<AdDto> results) {
+        this.results = results;
+        this.count = results.size();
+    }
 }
