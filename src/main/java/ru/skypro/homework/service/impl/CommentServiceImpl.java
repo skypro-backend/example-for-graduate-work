@@ -31,14 +31,14 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
     private final PhotoRepository photoRepository;
     private final CommentMapper commentMapper;
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     public CommentServiceImpl(CommentRepository commentRepository,
                               CommentMapper commentMapper,
                               AdRepository adRepository,
                               UserRepository userRepository,
                               PhotoRepository photoRepository,
-                              UserService userService) {
+                              UserServiceImpl userService) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.adRepository = adRepository;
@@ -77,7 +77,7 @@ public class CommentServiceImpl implements CommentService {
     public Comment addComment(Integer id, CreateOrUpdateComment createOrUpdateComment, String username) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
 
-        UserEntity author = userService.checkUserByUsername(username);//todo заменить метод на getUser
+        UserEntity author = userService.getUser(username);//todo заменить метод на getUser
         AdEntity ad = adRepository.findById(id).orElse(null);
 
         //Создаем сущность comment и заполняем поля
@@ -125,7 +125,7 @@ public class CommentServiceImpl implements CommentService {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         Optional<CommentEntity> comment = commentRepository.findById(commentId);
         if (comment.isPresent()) {
-            UserEntity author = userService.checkUserByUsername(username);
+            UserEntity author = userService.getUser(username);
             if (author.getRole().equals(Role.ADMIN)) {
                 commentRepository.delete(comment.get());
                 return "комментарий удален";
@@ -156,7 +156,7 @@ public class CommentServiceImpl implements CommentService {
         Optional<CommentEntity> commentOptional = commentRepository.findById(commentId);
         if (commentOptional.isPresent()) {
             CommentEntity comment = commentOptional.get();
-            UserEntity author = userService.checkUserByUsername(username);
+            UserEntity author = userService.getUser(username);
             if (author.getComments().contains(comment)) {
                 comment.setText(createOrUpdateComment.getText());
                 commentRepository.save(comment);

@@ -86,16 +86,21 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Метод возвращает информацию о текущем, авторизованном пользователе.
-     * Метод, используя объект {@link Authentication}, находит в БД {@link UserRepository},
-     * пользователя с соответствующими данными и возвращает его.
-     *
+     * Метод, используя объект {@link Authentication#getName()} как параметр userName,
+     * находит в БД {@link UserRepository}, пользователя с соответствующими данными и возвращает его.
+     * @param username
      * @return объект userEntity
      */
+
     @Transactional
     @Override
-    public UserEntity getUser(Authentication authentication) { //todo объединить этот метод с методом checkUserByUserName()
+    public UserEntity getUser(String username) {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
-        return userRepository.findUserEntityByUserName(authentication.getName());
+        UserEntity user = userRepository.findUserEntityByUserName(username);
+        if (user == null) {
+            throw new UserNotFoundException("Пользователя с таким логином в базе данных нет");
+        }
+        return user;
     }
 
     /**
@@ -124,23 +129,6 @@ public class UserServiceImpl implements UserService {
         user.setPhone(updateUser.getPhone());
         //сохраняем измененные данные в БД
         userRepository.save(user);
-        return user;
-    }
-
-    /**
-     * Метод возвращает объект {@link UserEntity} из базы данных. Поиск выполняется по логину,
-     * подаваемому в метод в качестве параметра.
-     *
-     * @param username
-     * @return {@link UserEntity}
-     */
-    @Override
-    public UserEntity checkUserByUsername(String username) { //todo объединить этот метод с методом getUser()
-        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
-        UserEntity user = userRepository.findUserEntityByUserName(username);
-        if (user == null) {
-            throw new UserNotFoundException("Пользователя с таким логином в базе данных нет");
-        }
         return user;
     }
 
