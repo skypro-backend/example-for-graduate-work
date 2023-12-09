@@ -185,7 +185,6 @@ public class CommentController {
         log.info("commentId: {}", commentId);
         var userRole = authentication.getAuthorities();
         log.info("роль пользователя - {}", userRole);
-        log.info("совпадает с БД - {}", userRepository.findUserEntityByUserName(authentication.getName()).getRole());
         log.info("isAuthorAd({})", adService.isAuthorAd(authentication.getName(), adId));
         if (authentication.getName() != null) {
             Comment comment = commentService.updateComment(commentId, createOrUpdateComment, authentication.getName());

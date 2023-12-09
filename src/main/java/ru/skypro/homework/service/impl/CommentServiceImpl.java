@@ -13,10 +13,8 @@ import ru.skypro.homework.model.CommentEntity;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
-import ru.skypro.homework.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +27,6 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final AdRepository adRepository;
     private final UserRepository userRepository;
-    private final PhotoRepository photoRepository;
     private final CommentMapper commentMapper;
     private final UserServiceImpl userService;
 
@@ -37,13 +34,11 @@ public class CommentServiceImpl implements CommentService {
                               CommentMapper commentMapper,
                               AdRepository adRepository,
                               UserRepository userRepository,
-                              PhotoRepository photoRepository,
                               UserServiceImpl userService) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.adRepository = adRepository;
         this.userRepository = userRepository;
-        this.photoRepository = photoRepository;
         this.userService = userService;
     }
 
@@ -98,8 +93,6 @@ public class CommentServiceImpl implements CommentService {
         Comment commentDTO = new Comment();
         commentDTO.setAuthor(author.getId());
 
-//        Integer avatarId = photoRepository.findById(author.getId()).get().getId();
-//        String avatarURL = author.getImage();
         Integer avatarId = author.getPhoto().getId();
         log.info("id автора комментария - {}", author.getId());
         log.info("URL для получения аватара автора комментария: /photo/image/{}", avatarId);
