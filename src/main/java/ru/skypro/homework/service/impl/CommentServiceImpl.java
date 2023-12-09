@@ -103,7 +103,7 @@ public class CommentServiceImpl implements CommentService {
         Integer avatarId = author.getPhoto().getId();
         log.info("id автора комментария - {}", author.getId());
         log.info("URL для получения аватара автора комментария: /photo/image/{}", avatarId);
-        commentDTO.setAuthorImage("/photo/image/" + avatarId);//todo аватар пока не добавляется...
+        commentDTO.setAuthorImage("/photo/image/" + avatarId);
 
         commentDTO.setAuthorFirstName(author.getFirstName());
         commentDTO.setCreatedAt(commentEntity.getCreatedAt());
