@@ -5,7 +5,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.AdsChange;
 import ru.skypro.homework.dto.Advertisement;
+import ru.skypro.homework.dto.AdvertisementExt;
 
 import java.util.Collection;
 /**
@@ -50,8 +52,8 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Advertisement> getInfoAds(@PathVariable Long id){
-        //Запрос в сервис на получение обьявления по id
+    public ResponseEntity<AdvertisementExt> getInfoAds(@PathVariable Long id){
+        //Запрос в сервис на получение расширеного обьявления по id
         //если null возвращаем 404
         //если не авторизован 401
         return ResponseEntity.status(200).build();
@@ -85,7 +87,7 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @PatchMapping("/{id}")
-    public ResponseEntity<Advertisement> pathAds(@PathVariable Long id, Advertisement ads){
+    public ResponseEntity<Advertisement> pathAds(@PathVariable Long id, AdsChange ads){
         //Запрос в сервис на изменение обьявление с возвращением изменяемого обьекта
         //если null возвращаем 404
         //если не авторизован 401
