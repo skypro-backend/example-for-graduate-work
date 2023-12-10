@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class CommentController {
     }
 
     @PostMapping("{id}/comments")
-    public ResponseEntity<Void> createComments(@PathVariable Long id, @RequestBody CreateOrUpdateComment text) {
+    public ResponseEntity<Void> createComments(@PathVariable Long id, @RequestBody CreateOrUpdateCommentDTO text) {
         if (text == null) {
             return ResponseEntity.notFound().build();
         }
@@ -39,7 +40,7 @@ public class CommentController {
     }
 
     @PatchMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Long adId, @PathVariable Long commentId, @RequestBody CreateOrUpdateComment text) {
+    public ResponseEntity<Comment> updateComment(@PathVariable Long adId, @PathVariable Long commentId, @RequestBody CreateOrUpdateCommentDTO text) {
         if (text == null) {
             return ResponseEntity.notFound().build();
         }
