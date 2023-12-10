@@ -13,17 +13,18 @@ import ru.skypro.homework.dto.Comment;
 
 import javax.validation.Valid;
 import java.util.Collection;
+
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
 @RequiredArgsConstructor
 public class CommentController {
 
-   /* method that will return list
-   of comments to the specified ad*/
+    /* method that will return list
+    of comments to the specified ad*/
     @Operation(
-            summary = "Getting all comments ot the advertisement.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody (
+            summary = "Getting all comments to the advertisement.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Method gets the list of comments to the advertisement."
             ),
             responses = {
@@ -46,7 +47,7 @@ public class CommentController {
             tags = "Comments"
     )
     @GetMapping("/{id}/comments")
-    public ResponseEntity<Collection<?>>  getComments(@Valid @Parameter(description = "Ad id")@PathVariable Integer id){
+    public ResponseEntity<Collection<?>> getComments(@Valid @Parameter(description = "Ad id") @PathVariable Integer id) {
         return ResponseEntity.status(200).build();
     }
 
@@ -54,7 +55,7 @@ public class CommentController {
            comment to the specified ad*/
     @Operation(
             summary = "Adding new comment to advertisement.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody (
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Method adds a new comment to the advertisement."
             ),
             responses = {
@@ -77,8 +78,8 @@ public class CommentController {
             tags = "Comments"
     )
     @PostMapping("/{id}/comments")
-    public ResponseEntity<?> addComment(@Valid @RequestBody Comment comment,@Parameter(description = "Ad id") @PathVariable Integer id){
-        if(comment != null){
+    public ResponseEntity<?> addComment(@Valid @RequestBody Comment comment, @Parameter(description = "Ad id") @PathVariable Integer id) {
+        if (comment != null) {
             return ResponseEntity.status(200).build();
         }
         return new ResponseEntity<>("There is no such ad with specified id " + id, HttpStatus.NOT_FOUND);
@@ -88,7 +89,7 @@ public class CommentController {
            comment to the specified ad*/
     @Operation(
             summary = "Deleting comment to advertisement.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody (
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Method deletes the comment to the advertisement."
             ),
             responses = {
@@ -115,7 +116,7 @@ public class CommentController {
             tags = "Comments"
     )
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteComment(@Parameter(description = "Ad id") @PathVariable Integer adId, @Parameter(description = "Comment id") @PathVariable Integer commentId){
+    public ResponseEntity<?> deleteComment(@Parameter(description = "Ad id") @PathVariable Integer adId, @Parameter(description = "Comment id") @PathVariable Integer commentId) {
         return ResponseEntity.status(200).build();
     }
 
@@ -123,7 +124,7 @@ public class CommentController {
            comment to the specified ad*/
     @Operation(
             summary = "Updating comment to advertisement.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody (
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Method updates the comment to the advertisement."
             ),
             responses = {
@@ -150,7 +151,7 @@ public class CommentController {
             tags = "Comments"
     )
     @PutMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> updateComment(@Parameter(description = "Ad id") @PathVariable Integer adId, @Parameter(description = "Comment id") @PathVariable Integer commentId){
+    public ResponseEntity<?> updateComment(@Parameter(description = "Ad id") @PathVariable Integer adId, @Parameter(description = "Comment id") @PathVariable Integer commentId) {
         return ResponseEntity.status(200).build();
     }
 }
