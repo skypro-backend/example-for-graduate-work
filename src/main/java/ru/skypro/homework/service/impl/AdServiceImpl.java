@@ -15,6 +15,7 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.exception.NoSuchAdInBDException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.PhotoEntity;
@@ -199,11 +200,17 @@ public class AdServiceImpl implements AdService {
     @Override
     public void updateImage(Integer id, MultipartFile image) throws IOException {
         log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
+
         //достаем объявление из БД
-        AdEntity adEntity = adRepository.findById(id).orElseThrow(RuntimeException::new);
+        AdEntity adEntity = adRepository.findById(id).orElseThrow(NoSuchAdInBDException::new);
+
+        //удаляем старое фото с ПК
+        Files.delete(Path.of(adEntity.getFilePath()));
+
         //заполняю поля и получаю сущность в переменную
         adEntity = (AdEntity) imageService.updateEntitiesPhoto(image, adEntity);
         log.info("adEntity cоздано - {}", adEntity != null);
+
         //сохранение сущности user в БД
         adRepository.save(adEntity);
     }
