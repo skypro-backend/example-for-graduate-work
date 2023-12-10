@@ -1,0 +1,30 @@
+version: '3'
+services:
+  psql_bd:
+    image: postgres:15.3
+    container_name: db_online_store
+    environment:
+      POSTGRES_DB: store
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+    ports:
+      - '5435:5432'
+    restart: unless-stopped
+
+  back:
+    build: ./
+    container_name: back_online_store
+    ports:
+      - '8080:8080'
+    depends_on:
+      - psql_bd
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+  front:
+    image: ghcr.io/bizinmitya/front-react-avito:v1.20
+    container_name: front_online_store
+    ports:
+      - '3000:3000'
+    depends_on:
+      - back
