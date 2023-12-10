@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 
 import java.util.List;
 
@@ -37,17 +38,17 @@ public class AdController {
         return ResponseEntity.ok();
     }
     @PostMapping()
-    public ResponseEntity<Void> addAd(@RequestBody Ad ad) {
+    public ResponseEntity<Void> addAd(@RequestBody CreateOrUpdateAdDTO ad, @RequestBody byte[] img) {
         if (ad == null) {
             return ResponseEntity.notFound().build();
         }
-        adServise.add(ad);
+        adServise.add(ad, img);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping()
-    public ResponseEntity<Void> updateAd(@RequestBody Ad ad) {
-        Ad foundAd = adService.find(ad);
+    @PatchMapping("{id}")
+    public ResponseEntity<Void> updateAd(@PathVariable Long id, @RequestBody CreateOrUpdateAdDTO ad) {
+        Ad foundAd = adService.findById(id);
         if (foundAd == null) {
             return ResponseEntity.notFound().build();
         }
@@ -57,7 +58,7 @@ public class AdController {
 
     @PatchMapping("{id}/image")
     public ResponseEntity<Void> updateImageAd(@PathVariable Long id, @RequestBody byte[] img) {
-        Ad foundAd = adService.find(ad);
+        Ad foundAd = adService.findById(id);
         if (foundAd == null) {
             return ResponseEntity.notFound().build();
         }
