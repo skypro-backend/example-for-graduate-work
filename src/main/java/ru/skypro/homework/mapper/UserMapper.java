@@ -20,6 +20,7 @@ import java.io.IOException;
 @Service
 public class UserMapper {
 
+
     /**
      * {@link Register} -> {@link UserEntity}
      * @param dto {@link Register}
@@ -49,7 +50,9 @@ public class UserMapper {
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setPhone(entity.getPhone());
-        dto.setImage(Constants.URL_PHOTO_CONSTANT + entity.getPhoto().getId());
+        if (entity.getPhoto() != null) {
+            dto.setImage(Constants.URL_PHOTO_CONSTANT + entity.getPhoto().getId());
+        }
         return dto;
     }
 
