@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -78,11 +79,8 @@ public class CommentController {
             tags = "Comments"
     )
     @PostMapping("/{id}/comments")
-    public ResponseEntity<?> addComment(@Valid @RequestBody Comment comment, @Parameter(description = "Ad id") @PathVariable Integer id) {
-        if (comment != null) {
+    public ResponseEntity<?> addComment(@Valid @RequestBody CreateOrUpdateComment createOrUpdateComment, @Parameter(description = "Ad id") @PathVariable Integer id) {
             return ResponseEntity.status(200).build();
-        }
-        return new ResponseEntity<>("There is no such ad with specified id " + id, HttpStatus.NOT_FOUND);
     }
 
     /* method that will delete
@@ -151,7 +149,7 @@ public class CommentController {
             tags = "Comments"
     )
     @PutMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> updateComment(@Parameter(description = "Ad id") @PathVariable Integer adId, @Parameter(description = "Comment id") @PathVariable Integer commentId) {
+    public ResponseEntity<?> updateComment(@Parameter(description = "Ad id") @PathVariable Integer adId, @Parameter(description = "Comment id") @PathVariable Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         return ResponseEntity.status(200).build();
     }
 }
