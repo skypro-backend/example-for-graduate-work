@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class ExtendedAd {
+public class ExtendedAdDTO {
     private UUID id;
     private String authorFirstName;
     private String authorLastName;
