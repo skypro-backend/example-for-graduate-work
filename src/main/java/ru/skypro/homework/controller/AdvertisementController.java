@@ -38,7 +38,7 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "401", description = "Неавторизованный доступ")
     })
     @PostMapping
-    public ResponseEntity<Ad> postAds(Ad properties, String image){
+    public ResponseEntity<Ad> postAds(CreateOrUpdateAd properties, String image){
         //делаем запрос в сервис на создание нового обьявления
         //так же нужна проверка авторизации, если не авторизован возваращаем 401
         return ResponseEntity.status(201).build();
