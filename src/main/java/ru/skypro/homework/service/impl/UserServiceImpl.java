@@ -20,6 +20,7 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -139,6 +140,9 @@ public class UserServiceImpl implements UserService {
 
         //достаем пользователя из БД
         UserEntity userEntity = userRepository.findUserEntityByUserName(authentication.getName());
+
+        //удаляем старый аватар с ПК
+        Files.delete(Path.of(userEntity.getFilePath()));
 
         //заполняем поля и возвращаем
         userEntity = (UserEntity) imageService.updateEntitiesPhoto(image, userEntity);

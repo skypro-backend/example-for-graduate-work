@@ -1,5 +1,6 @@
 package ru.skypro.homework.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import ru.skypro.homework.dto.Comment;
 
@@ -28,6 +29,7 @@ public class AdEntity extends ModelEntity{
     private PhotoEntity photo;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
@@ -35,4 +37,18 @@ public class AdEntity extends ModelEntity{
     private Collection<CommentEntity> comments;
 
     private String filePath; //путь на ПК
+
+    @Override
+    public String toString() {
+        return "AdEntity{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                ", photo=" + (photo != null) +
+                ", author=" + author +
+                ", comments=" + comments +
+                ", filePath='" + filePath + '\'' +
+                '}';
+    }
 }

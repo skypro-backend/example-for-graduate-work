@@ -49,7 +49,7 @@ public class UserEntity extends ModelEntity{
                 ", lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", role=" + role +
-                ", photo=" + photo +
+                ", photo=" + (photo != null)  +
                 ", ads=" + ads +
                 ", comments=" + comments +
                 '}';
