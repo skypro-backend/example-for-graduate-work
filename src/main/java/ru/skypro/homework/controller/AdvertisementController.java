@@ -5,9 +5,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.AdsChange;
-import ru.skypro.homework.dto.Advertisement;
-import ru.skypro.homework.dto.AdvertisementExt;
+import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.ExtendedAd;
 
 import java.util.Collection;
 /**
@@ -24,9 +25,9 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "200", description = "Коллекция объявлений успешно получена"),
     })
     @GetMapping
-    public ResponseEntity<Collection<Advertisement>> getCollectionAds(){
-        //Collection<Advertisement> result = запрос в сервис...;
-        return ResponseEntity.status(200).build(); //через .ok возвращаем нашу колекцию
+    public ResponseEntity<Ads> getCollectionAds(){
+        //запрос в сервис...;
+        return ResponseEntity.status(200).build(); //через .ok возвращаем
     }
     /**
      * Создание нового объявления.
@@ -37,7 +38,7 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "401", description = "Неавторизованный доступ")
     })
     @PostMapping
-    public ResponseEntity<Advertisement> postAds(Advertisement properties, String image){
+    public ResponseEntity<Ad> postAds(Ad properties, String image){
         //делаем запрос в сервис на создание нового обьявления
         //так же нужна проверка авторизации, если не авторизован возваращаем 401
         return ResponseEntity.status(201).build();
@@ -52,7 +53,7 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<AdvertisementExt> getInfoAds(@PathVariable Long id){
+    public ResponseEntity<ExtendedAd> getInfoAds(@PathVariable Long id){
         //Запрос в сервис на получение расширеного обьявления по id
         //если null возвращаем 404
         //если не авторизован 401
@@ -87,7 +88,7 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @PatchMapping("/{id}")
-    public ResponseEntity<Advertisement> pathAds(@PathVariable Long id, AdsChange ads){
+    public ResponseEntity<Ad> pathAds(@PathVariable Long id, CreateOrUpdateAd ads){
         //Запрос в сервис на изменение обьявление с возвращением изменяемого обьекта
         //если null возвращаем 404
         //если не авторизован 401
@@ -103,7 +104,7 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "401", description = "Неавторизованный доступ")
     })
     @GetMapping("/me")
-    public ResponseEntity<Collection<Advertisement>> getListAdsUser(){
+    public ResponseEntity<Ads> getListAdsUser(){
         //Запрос в сервис для получения всех обьявелний по id автора
         //если не авторизован 401
         return ResponseEntity.status(200).build(); //Возвращаем через .ok

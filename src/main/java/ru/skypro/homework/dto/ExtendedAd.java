@@ -6,7 +6,7 @@ import lombok.Data;
  * @author Michail Z. (GH: HeimTN)
  */
 @Data
-public class AdvertisementExt {
+public class ExtendedAd {
     private int pk;
     private String authorFirstName;
     private String authorLastName;
