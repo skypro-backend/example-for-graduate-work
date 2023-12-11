@@ -55,7 +55,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-//    private User convertToUser(UserDto userDto) {
-//        return modelMapper.map(userDto, User.class);
-//    }
+    private User convertToUser(UserDto userDto) {
+        return modelMapper.map(userDto, User.class);
+    }
 }
