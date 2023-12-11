@@ -8,9 +8,6 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
-import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.ImageRepository;
-import ru.skypro.homework.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;

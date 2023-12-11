@@ -8,7 +8,6 @@ import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import java.util.logging.Logger;
 

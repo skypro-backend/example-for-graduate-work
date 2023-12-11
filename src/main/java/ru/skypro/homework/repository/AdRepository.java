@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import ru.skypro.homework.model.Ad;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface AdRepository extends JpaRepository<Ad, Integer> {

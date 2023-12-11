@@ -9,16 +9,12 @@ import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.ImageRepository;
-import ru.skypro.homework.repository.UserRepository;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 @Component
 @RequiredArgsConstructor

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.ImageDTO;
 import ru.skypro.homework.model.Image;
-import ru.skypro.homework.repository.ImageRepository;
 
 @Component
 @RequiredArgsConstructor
