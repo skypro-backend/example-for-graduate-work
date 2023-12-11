@@ -19,9 +19,9 @@ public class BackEndUserDetailsService implements UserDetailsService {
 
 
     /**
-     * Loading user by username {@link UserRepository#findByUsername(String)}
+     * Loading user by username using {@link UserRepository#findByUsername(String)}
      * @param username
-     * @return
+     * @return UserDetails
      * @throws UsernameNotFoundException
      */
     @Override

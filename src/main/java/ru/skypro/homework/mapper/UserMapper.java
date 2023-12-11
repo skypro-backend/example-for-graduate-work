@@ -22,7 +22,11 @@ public class UserMapper {
 
     private final Logger logger = (Logger) LoggerFactory.getLogger(String.valueOf(UserMapper.class));
 
-
+    /**
+     * Map entity to DTO
+     * @param user
+     * @return UserDTO
+     */
     public UserDTO mapToDTO(User user) {
         return new UserDTO(
                 user.getId(),
@@ -35,6 +39,11 @@ public class UserMapper {
         );
     }
 
+    /**
+     * Map DTO to entity
+     * @param registerDTO
+     * @return User
+     */
     public User mapFromRegister(Register registerDTO) {
         logger.info("ДТО регистрации - " + registerDTO);
         User user = new User();
@@ -48,6 +57,11 @@ public class UserMapper {
         return user;
     }
 
+    /**
+     * Update entity from DTO
+     * @param username
+     * @param updateUser
+     */
     public void saveFromUpdate(String username, UpdateUser updateUser) {
         logger.info("Обновленные данные - " + updateUser);
         User userDB = userRepository.findByUsername(username);

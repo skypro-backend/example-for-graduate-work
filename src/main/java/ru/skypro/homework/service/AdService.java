@@ -7,7 +7,7 @@ import ru.skypro.homework.model.User;
 
 public interface AdService {
 
-    boolean createAd(CreateOrUpdateAd createOrUpdateAd, User user, Image image);
+    Ad createAd(CreateOrUpdateAd createOrUpdateAd, User user, Image image);
     Ad updateAd(Ad ad, CreateOrUpdateAd createOrUpdateAd);
 
 }

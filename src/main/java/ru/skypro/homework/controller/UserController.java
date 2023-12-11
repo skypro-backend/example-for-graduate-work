@@ -39,11 +39,10 @@ public class UserController {
     /**
      * Getting information about an authorized user
      * <br>
-     * Using Authentication get method {@link Authentication#getName()}
-     * <br>
-     * Using UserRepository method {@link UserRepository#findByUsername(String)}
+     * Using {@link Authentication#getName()},
+     * {@link UserRepository#findByUsername(String)}
      * @param authentication
-     * @return
+     * @return UserDTO
      */
     @GetMapping("/users/me")
     public ResponseEntity<UserDTO> get(Authentication authentication) {
@@ -53,14 +52,12 @@ public class UserController {
     }
 
     /**
-     * Updating Authorized User Information
+     * Updating authorized user information
      * <br>
-     * Using Authentication get method {@link Authentication#getName()}
-     * <br>
-     * Using UserMapper method for saving information about user {@link UserMapper#saveFromUpdate(String, UpdateUser)}
+     * Using {@link Authentication#getName()}, {@link UserMapper#saveFromUpdate(String, UpdateUser)}
      * @param updateUserDto
      * @param authentication
-     * @return
+     * @return UpdateUser
      */
     @PatchMapping("/users/me")
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUserDto, Authentication authentication) {
@@ -73,15 +70,15 @@ public class UserController {
     /**
      * Updating an authorized user's avatar
      * <br>
-     * Using {@link Authentication#getName()}
-     * {@link UserRepository#findByUsername(String)}
-     * {@link ImageService#uploadImage(MultipartFile)}
-     * {@link User#setImage(Image)}
-     * {@link UserRepository#save(Object)}
+     * Using {@link Authentication#getName()},
+     * {@link UserRepository#findByUsername(String)},
+     * {@link ImageService#uploadImage(MultipartFile)},
+     * {@link User#setImage(Image)},
+     * {@link UserRepository#save(Object)},
      * {@link ImageMapper#mapToDTO(Image)}
      * @param image
      * @param authentication
-     * @return
+     * @return String
      * @throws IOException
      */
     @PatchMapping(value = "/users/me/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -98,10 +95,10 @@ public class UserController {
 
     /**
      * Password update
-     * using UserService method {@link UserService#setPassword(User, NewPassword)}
+     * using {@link UserService#setPassword(User, NewPassword)}
      * @param newPassword
      * @param authentication
-     * @return
+     * @return NewPassword
      */
     @PostMapping("/users/set_password")
     public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPassword,

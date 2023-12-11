@@ -21,6 +21,11 @@ public class AdMapper {
 
     private final Logger logger = (Logger) LoggerFactory.getLogger(String.valueOf(AdMapper.class));
 
+    /**
+     * Mapping entity to DTO
+     * @param ad
+     * @return AdDTO
+     */
     public AdDTO mapToDTO(Ad ad){
         return new AdDTO(
                 ad.getAuthor().getId(),
@@ -30,7 +35,12 @@ public class AdMapper {
                 ad.getTitle());
     }
 
-    public ExtendedAd mapToExtended(ru.skypro.homework.model.Ad ad) {
+    /**
+     * Mapping entity to extended version of DTO
+     * @param ad
+     * @return
+     */
+    public ExtendedAd mapToExtended(Ad ad) {
         return new ExtendedAd(
                 ad.getPk(),
                 ad.getAuthor().getFirstName(),
@@ -44,6 +54,11 @@ public class AdMapper {
         );
     }
 
+    /**
+     * Mapping list of ads to "Ads" DTO
+     * @param ads
+     * @return
+     */
     public Ads mapToListOfDTO(List<Ad> ads) {
         List<AdDTO> results = new ArrayList<>();
         for (int i = 0; i < ads.size(); i++) {
@@ -55,6 +70,12 @@ public class AdMapper {
         );
     }
 
+    /**
+     * Creating entity from DTO
+     * @param createOrUpdateAd
+     * @param user
+     * @return
+     */
     public Ad createFromCreateOrUpdateAd(CreateOrUpdateAd createOrUpdateAd, User user) {
         logger.info("ДТО регистрации - " + createOrUpdateAd);
         Ad ad = new Ad();

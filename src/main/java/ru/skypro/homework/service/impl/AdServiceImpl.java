@@ -25,28 +25,25 @@ public class AdServiceImpl implements AdService {
     /**
      * Adding an ad
      * <br>
-     * Creating ad by AdMapper method  {@link AdMapper#createFromCreateOrUpdateAd(CreateOrUpdateAd, User)}
+     * Creating ad using {@link AdMapper#createFromCreateOrUpdateAd(CreateOrUpdateAd, User)}
      * <br>
      * Saving ad in DB by repository method {@link org.springframework.data.jpa.repository.JpaRepository#save(Object)}
      * @param createOrUpdateAd
      * @param user
      * @param image
-     * @return
+     * @return Ad
      */
     @Override
-    public boolean createAd(CreateOrUpdateAd createOrUpdateAd, User user, Image image) {
+    public Ad createAd(CreateOrUpdateAd createOrUpdateAd, User user, Image image) {
         logger.info("Обьявление - " + createOrUpdateAd + ", пользователь - " + user);
         Ad ad = adMapper.createFromCreateOrUpdateAd(createOrUpdateAd, user);
         ad.setImage(image);
         logger.info("Создание обьявления");
-        adRepository.save(ad);
-        return true;
+        return adRepository.save(ad);
     }
 
     /**
      * Updating ad
-     * <br>
-     * Updating ad by AdMapper method  {@link AdMapper#createFromCreateOrUpdateAd(CreateOrUpdateAd, User)}
      * <br>
      * Saving ad in DB by repository method {@link org.springframework.data.jpa.repository.JpaRepository#save(Object)}
      * <br>
@@ -54,7 +51,7 @@ public class AdServiceImpl implements AdService {
      *
      * @param ad
      * @param createOrUpdateAd
-     * @return
+     * @return Ad
      */
     @Override
     public Ad updateAd(Ad ad, CreateOrUpdateAd createOrUpdateAd) {

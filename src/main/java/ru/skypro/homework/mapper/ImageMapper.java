@@ -9,6 +9,11 @@ import ru.skypro.homework.model.Image;
 @RequiredArgsConstructor
 public class ImageMapper {
 
+    /**
+     * Mapping entity to DTO
+     * @param image
+     * @return ImageDTO
+     */
     public ImageDTO mapToDTO(Image image) {
         return new ImageDTO(
                 "/image/" + image.getId()

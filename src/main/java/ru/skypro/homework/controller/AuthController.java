@@ -39,7 +39,7 @@ public class AuthController {
     /**
      * User registration
      * <br>
-     * Using {@link AuthService#register(Register)} for registration user
+     * Using {@link AuthService#register(Register)}
      * @param registerDto
      * @return
      */

@@ -28,12 +28,12 @@ public class AuthServiceImpl implements AuthService {
 
     /**
      * User authorization
-     * using userDetails method {@link BackEndUserDetailsService#loadUserByUsername(String)}
+     * using {@link BackEndUserDetailsService#loadUserByUsername(String)}
      * <br>
-     * Password comparison for authorization using PasswordEncoder method {@link PasswordEncoder#matches(CharSequence, String)}
+     * Password comparison for authorization using {@link PasswordEncoder#matches(CharSequence, String)}
      *
      * @param login
-     * @return
+     * @return boolean
      */
     @Override
     public boolean login(Login login) {
@@ -48,9 +48,9 @@ public class AuthServiceImpl implements AuthService {
     /**
      * User registration
      * <br>
-     * Using repository method {@link org.springframework.data.jpa.repository.JpaRepository#save(Object)}
+     * Using {@link org.springframework.data.jpa.repository.JpaRepository#save(Object)}
      * @param registerDto
-     * @return
+     * @return boolean
      */
     @Override
     public boolean register(Register registerDto) {

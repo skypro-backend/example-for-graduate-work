@@ -34,9 +34,10 @@ public class CommentController {
     /**
      * Getting ad comments by adId
      * <br>
-     * Using AdRepository for getting comments by pk(adId) {@link AdRepository#findByPk(Integer)}
+     * Using {@link AdRepository#findByPk(Integer)},
+     * {@link  CommentMapper#mapToListOfDTO(Ad)}
      * @param adId
-     * @return
+     * @return Comments
      */
     @GetMapping("/ads/{adId}/comments")
     public Comments getComments(@PathVariable Integer adId) {
@@ -48,15 +49,15 @@ public class CommentController {
     /**
      * Adding a comment to ad by adId
      * <br>
-     * Using {@link Authentication#getName()}
-     * {@link UserRepository#findByUsername(String)}
-     * {@link AdRepository#findByPk(Integer)}
-     * {@link CommentMapper#createFromCreateOrUpdate(CreateOrUpdateComment, User, Ad)}
+     * Using {@link Authentication#getName()},
+     * {@link UserRepository#findByUsername(String)},
+     * {@link AdRepository#findByPk(Integer)},
+     * {@link CommentMapper#createFromCreateOrUpdate(CreateOrUpdateComment, User, Ad)},
      * {@link CommentMapper#mapToDTO(Comment)}
      * @param adId
      * @param createOrUpdateComment
      * @param authentication
-     * @return
+     * @return CommentDTO
      */
     @PostMapping("/ads/{adId}/comments")
     public ResponseEntity<CommentDTO> postComment(@PathVariable Integer adId,
@@ -74,7 +75,7 @@ public class CommentController {
     /**
      * Deleting a comment by adId & commentId
      * <br>
-     * Using CommentRepository for getting comment to delete ad {@link CommentRepository#deleteAllByAdPk(Integer)}
+     * Using {@link CommentRepository#deleteAllByAdPk(Integer)}
      * @param adId
      * @param commentId
      * @return
@@ -91,14 +92,14 @@ public class CommentController {
     /**
      * Comment update by adId & commentId
      * <br>
-     * Using {@link AdRepository#findByPk(Integer)}
-     * {@link CommentRepository#findByPk(Integer)}
-     * {@link CommentMapper#updateFromCreateOrUpdate(Comment, CreateOrUpdateComment)}
+     * Using {@link AdRepository#findByPk(Integer)},
+     * {@link CommentRepository#findByPk(Integer)},
+     * {@link CommentMapper#updateFromCreateOrUpdate(Comment, CreateOrUpdateComment)},
      * {@link CommentMapper#mapToDTO(Comment)}
      * @param adId
      * @param commentId
      * @param createOrUpdateComment
-     * @return
+     * @return CommentDTO
      */
     @PreAuthorize("hasAuthority('ADMIN') or @commentRepository.findByPk(#commentId).getAuthor().getUsername() == authentication.name")
     @PatchMapping("/ads/{adId}/comments/{commentId}")

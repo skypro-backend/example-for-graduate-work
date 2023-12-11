@@ -22,6 +22,11 @@ public class CommentMapper {
 
     private final CommentRepository commentRepository;
 
+    /**
+     * Mapping entity to DTO
+     * @param comment
+     * @return CommentDTO
+     */
     public CommentDTO mapToDTO(Comment comment) {
         ZonedDateTime zonedDateTime = ZonedDateTime.of(comment.getCreatedAt(), ZoneId.systemDefault());
         return new CommentDTO(
@@ -34,6 +39,11 @@ public class CommentMapper {
         );
     }
 
+    /**
+     * Map list of comments to "Comments" DTO
+     * @param ad
+     * @return Comments
+     */
     public Comments mapToListOfDTO(Ad ad) {
         List<CommentDTO> results = new ArrayList<>();
         for (int i = 0; i < ad.getComments().size(); i++) {
@@ -42,6 +52,13 @@ public class CommentMapper {
         return new Comments(ad.getComments().size(), results);
     }
 
+    /**
+     * Creating entity from DTO
+     * @param createOrUpdateComment
+     * @param author
+     * @param ad
+     * @return Comment
+     */
     public Comment createFromCreateOrUpdate(CreateOrUpdateComment createOrUpdateComment, User author, Ad ad) {
         LocalDateTime localDateTime = LocalDateTime.now();
         Comment comment = new Comment();
@@ -54,6 +71,12 @@ public class CommentMapper {
         return commentRepository.save(comment);
     }
 
+    /**
+     * Update entity from DTO
+     * @param comment
+     * @param createOrUpdateComment
+     * @return
+     */
     public Comment updateFromCreateOrUpdate(Comment comment, CreateOrUpdateComment createOrUpdateComment) {
         LocalDateTime localDateTime = LocalDateTime.now();
         comment.setCreatedAt(localDateTime);

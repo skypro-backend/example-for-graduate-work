@@ -42,7 +42,7 @@ public class AdController {
 
     /**
      * Getting all advertisements
-     * @return
+     * @return Ads
      */
     @GetMapping("/ads")
     public ResponseEntity<Ads> getAllAds() {
@@ -61,29 +61,27 @@ public class AdController {
      * @param properties
      * @param image
      * @param authentication
-     * @return
+     * @return AdDTO
      * @throws IOException
      */
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping(value = "/ads", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE } )
-    public ResponseEntity<?> postAd(@RequestPart(value = "properties", required = true) CreateOrUpdateAd properties,
+    public ResponseEntity<AdDTO> postAd(@RequestPart(value = "properties", required = true) CreateOrUpdateAd properties,
                                     @RequestPart("image") MultipartFile image,
                                     Authentication authentication) throws IOException {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
         Image imageToDB = imageService.uploadImage(image);
-        if (adService.createAd(properties, user, imageToDB)) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        Ad ad = adService.createAd(properties, user, imageToDB);
+        AdDTO adDTO = adMapper.mapToDTO(ad);
+        return ResponseEntity.status(HttpStatus.CREATED).body(adDTO);
     }
 
     /**
      * Getting information about ad by id
      * Using AdRepository method for finding ad by pk(id) {@link AdRepository#findByPk(Integer)}
      * @param id
-     * @return
+     * @return ExtendedAd
      */
     @GetMapping("/ads/{id}")
     public ResponseEntity<ExtendedAd> getAdById(@PathVariable int id) {
@@ -94,7 +92,7 @@ public class AdController {
     }
 
     /**
-     * Removing ad by ADMIN by id
+     * Removing ad with ADMIN authority or with authority of user with username matching author's by id
      * using {@link CommentRepository#deleteAllByAdPk(Integer)} {@link AdRepository#deleteByPk(int)}
      * @param id
      * @return
@@ -109,14 +107,14 @@ public class AdController {
     }
 
     /**
-     * Update ad information by ADMIN by id
+     * Update ad information with ADMIN authority or with authority of user with username matching author's by id
      * <br>
-     * Using {@link AdRepository#findByPk(Integer)}
-     * {@link AdService#updateAd(Ad, CreateOrUpdateAd)}
+     * Using {@link AdRepository#findByPk(Integer)},
+     * {@link AdService#updateAd(Ad, CreateOrUpdateAd)},
      * {@link AdMapper#mapToDTO(Ad)}
      * @param id
      * @param createOrUpdateAd
-     * @return
+     * @return AdDTO
      */
     @PreAuthorize("hasAuthority('ADMIN') or @adRepository.findByPk(#id).getAuthor().getUsername() == authentication.name")
     @PatchMapping("/ads/{id}")
@@ -131,10 +129,10 @@ public class AdController {
 
     /**
      * Getting advertisements from an authorized user
-     * using {@link Authentication#getName()}
+     * using {@link Authentication#getName()},
      * {@link UserRepository#findByUsername(String)}
      * @param authentication
-     * @return
+     * @return Ads
      */
     @GetMapping("/ads/me")
     public ResponseEntity<Ads> getAllMyAds(Authentication authentication) {
@@ -145,15 +143,15 @@ public class AdController {
     }
 
     /**
-     * Update ad image by pk(id)
+     * Update ad image by its pk
      * <br>
-     * Using {@link AdRepository#findByPk(Integer)}
-     * {@link ImageService#uploadImage(MultipartFile)}
-     * {@link Ad#setImage(Image)}
-     * {@link AdRepository#save(Object)}
+     * Using {@link AdRepository#findByPk(Integer)},
+     * {@link ImageService#uploadImage(MultipartFile)},
+     * {@link Ad#setImage(Image)},
+     * {@link AdRepository#save(Object)},
      * @param id
      * @param image
-     * @return
+     * @return String
      * @throws IOException
      */
     @PreAuthorize("hasAuthority('ADMIN') or @adRepository.findByPk(#id).getAuthor().getUsername() == authentication.name")

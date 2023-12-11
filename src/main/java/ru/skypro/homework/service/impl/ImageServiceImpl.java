@@ -23,15 +23,9 @@ public class ImageServiceImpl implements ImageService {
     private final File defaultAvatar = new File("images/default_avatar.png");
 
     /**
-     * Loading a default avatar
+     * Uploading the default avatar
      * <br>
-     * Using the repository method to check for null {@link JpaRepository#findAll()}
-     * <br>
-     * Using the repository method to save avatar in DB {@link JpaRepository#save(Object)}
-     * <br>
-     * Using setter for setting media type of image {@link Image#setMediaType(String)}
-     * <br>
-     * Using setter for setting image to DB {@link Image#setData(byte[])}
+     * Using {@link JpaRepository#findAll()}, {@link JpaRepository#save(Object)}, {@link Image#setMediaType(String)}, {@link Image#setData(byte[])}
      */
     @PostConstruct
     private void uploadDefaultAvatar() throws IOException{
@@ -45,13 +39,11 @@ public class ImageServiceImpl implements ImageService {
     }
 
     /**
-     * Loading image
+     * Uploading image
      *<br>
-     * Using the repository method to save avatar in DB {@link JpaRepository#save(Object)}
-     * <br>
-     * Using setter for setting media type of image {@link Image#setMediaType(String)}
-     *  <br>
-     * Using setter for setting image to DB {@link Image#setData(byte[])}
+     * Using {@link Image#setMediaType(String)}, {@link Image#setData(byte[])}, {@link JpaRepository#save(Object)}
+     * @param imageFile
+     * @return Image
      */
     @Override
     public Image uploadImage(MultipartFile imageFile) throws IOException {
@@ -65,9 +57,9 @@ public class ImageServiceImpl implements ImageService {
 
     /**
      * Searching image by id in DB
-     * Using repository method {@link ImageRepository#findById(Object)}
+     * using {@link ImageRepository#findById(Object)}
      * @param id
-     * @return
+     * @return Image
      */
     @Override
     public Image findImage(Integer id) {

@@ -17,10 +17,11 @@ public class UserServiceImpl implements UserService {
 
 
     /**
-     * Password update by username & newPassword
-     * <br>
-     * Repository method is used {@link UserRepository#findByUsername(String)}
-     *
+     * Password update
+     * Method used {@link UserRepository#findByUsername(String)}
+     * @param user
+     * @param newPassword
+     * @return boolean
      */
     @Override
     public boolean setPassword(User user, NewPassword newPassword) {
