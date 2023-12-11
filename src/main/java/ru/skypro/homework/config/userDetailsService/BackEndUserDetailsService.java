@@ -17,8 +17,16 @@ public class BackEndUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+
+    /**
+     * Loading user by username {@link UserRepository#findByUsername(String)}
+     * @param username
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         User user = userRepository.findByUsername(username);
 
         if (user == null) {

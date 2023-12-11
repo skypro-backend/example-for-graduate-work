@@ -22,6 +22,17 @@ public class AdServiceImpl implements AdService {
     private final AdMapper adMapper;
     private final Logger logger = (Logger) LoggerFactory.getLogger(String.valueOf(AdServiceImpl.class));
 
+    /**
+     * Adding an ad
+     * <br>
+     * Creating ad by AdMapper method  {@link AdMapper#createFromCreateOrUpdateAd(CreateOrUpdateAd, User)}
+     * <br>
+     * Saving ad in DB by repository method {@link org.springframework.data.jpa.repository.JpaRepository#save(Object)}
+     * @param createOrUpdateAd
+     * @param user
+     * @param image
+     * @return
+     */
     @Override
     public boolean createAd(CreateOrUpdateAd createOrUpdateAd, User user, Image image) {
         logger.info("Обьявление - " + createOrUpdateAd + ", пользователь - " + user);
@@ -32,6 +43,19 @@ public class AdServiceImpl implements AdService {
         return true;
     }
 
+    /**
+     * Updating ad
+     * <br>
+     * Updating ad by AdMapper method  {@link AdMapper#createFromCreateOrUpdateAd(CreateOrUpdateAd, User)}
+     * <br>
+     * Saving ad in DB by repository method {@link org.springframework.data.jpa.repository.JpaRepository#save(Object)}
+     * <br>
+     * Using setters and getters from dto CreateOrUpdateAd {@link CreateOrUpdateAd}
+     *
+     * @param ad
+     * @param createOrUpdateAd
+     * @return
+     */
     @Override
     public Ad updateAd(Ad ad, CreateOrUpdateAd createOrUpdateAd) {
         ad.setTitle(createOrUpdateAd.getTitle());
