@@ -34,7 +34,9 @@ public class AdMapper {
     public Ad mapToAdDto(AdEntity entity) {
         Ad dto = new Ad();
         dto.setAuthor(entity.getAuthor().getId());
-        dto.setImage(Constants.URL_PHOTO_CONSTANT + entity.getPhoto().getId());
+        if (entity.getPhoto() != null) {
+            dto.setImage(Constants.URL_PHOTO_CONSTANT + entity.getPhoto().getId());
+        }
         dto.setPk(entity.getId());
         dto.setPrice(entity.getPrice());
         dto.setTitle(entity.getTitle());

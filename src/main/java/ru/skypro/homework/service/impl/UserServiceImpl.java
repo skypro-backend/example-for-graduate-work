@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final ImageServiceImpl imageService;
     private final PasswordEncoder encoder;
+    private boolean imageIsUpdatingFlag = false;
 
     @Value("${path.to.photos.folder}")
     private String photoDir;
@@ -142,7 +143,9 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findUserEntityByUserName(authentication.getName());
 
         //удаляем старый аватар с ПК
-        Files.delete(Path.of(userEntity.getFilePath()));
+        if (userEntity.getFilePath() != null) {
+            Files.delete(Path.of(userEntity.getFilePath()));
+        }
 
         //заполняем поля и возвращаем
         userEntity = (UserEntity) imageService.updateEntitiesPhoto(image, userEntity);
@@ -150,5 +153,17 @@ public class UserServiceImpl implements UserService {
 
         //сохранение сущности user в БД
         userRepository.save(userEntity);
+
+        //понимаем флаг
+        setImageIsUpdatingFlag(true);
+    }
+
+    public boolean getImageUpdatingFlag(){
+        log.info("флажок получен - {}", imageIsUpdatingFlag);
+        return imageIsUpdatingFlag;
+    }
+    public void setImageIsUpdatingFlag(boolean imageIsUpdatingFlag){
+        this.imageIsUpdatingFlag = imageIsUpdatingFlag;
+        log.info("флажок установлен- {}", imageIsUpdatingFlag);
     }
 }
