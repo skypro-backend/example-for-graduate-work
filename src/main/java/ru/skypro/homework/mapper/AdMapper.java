@@ -21,9 +21,6 @@ import java.util.logging.Logger;
 public class AdMapper {
 
     private Logger LoggerFactory;
-    private final AdRepository adRepository;
-    private final UserRepository userRepository;
-    private final ImageRepository imageRepository;
 
     private final Logger logger = (Logger) LoggerFactory.getLogger(String.valueOf(AdMapper.class));
 
@@ -34,18 +31,6 @@ public class AdMapper {
                 ad.getPk(),
                 ad.getPrice(),
                 ad.getTitle());
-    }
-
-    public Ad mapToEntity(AdDTO adDTO) {
-        return new Ad(
-                userRepository.findById(adDTO.getAuthor()).get(),
-                adRepository.findByPk(adDTO.getPk()).getImage(),
-                adDTO.getPk(),
-                adDTO.getPrice(),
-                adDTO.getTitle(),
-                adRepository.findByPk(adDTO.getPk()).getDescription(),
-                adRepository.findByPk(adDTO.getPk()).getComments()
-        );
     }
 
     public ExtendedAd mapToExtended(ru.skypro.homework.model.Ad ad) {

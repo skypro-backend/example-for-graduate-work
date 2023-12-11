@@ -10,7 +10,6 @@ import java.io.IOException;
 public interface ImageService {
 
     Image uploadImage(MultipartFile imageFile) throws IOException;
-
     Image findImage(Integer id);
 
 }
