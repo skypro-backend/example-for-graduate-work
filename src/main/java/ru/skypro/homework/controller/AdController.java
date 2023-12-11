@@ -33,8 +33,8 @@ public class AdController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Ad> getAdByMe() {
-
+    public ResponseEntity<List<Ad>> getAdByMe() {
+        adService.getAdByAuthUser();
         return ResponseEntity.ok();
     }
     @PostMapping()
