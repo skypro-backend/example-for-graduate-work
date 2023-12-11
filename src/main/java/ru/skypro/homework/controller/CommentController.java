@@ -27,7 +27,7 @@ public class CommentController {
         if (text == null) {
             return ResponseEntity.notFound().build();
         }
-        commentService.createComment(id, text);
+        return commentService.createComment(id, text);
     }
 
     @DeleteMapping("{adId}/comments/{commentId}")
@@ -36,7 +36,7 @@ public class CommentController {
         if (comment == null) {
             return ResponseEntity.notFound().build();
         }
-        commentService.deleteComment(adId, commentId);
+        return commentService.deleteComment(adId, commentId);
     }
 
     @PatchMapping("{adId}/comments/{commentId}")
@@ -44,6 +44,6 @@ public class CommentController {
         if (text == null) {
             return ResponseEntity.notFound().build();
         }
-        commentService.updateComment(adId, commentId, text);
+        return commentService.updateComment(adId, commentId, text);
     }
 }

@@ -3,9 +3,11 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.ImageDTO;
+import ru.skypro.homework.dto.NewPasswordDTO;
+import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
 
 @Slf4j
@@ -18,7 +20,7 @@ public class UserController {
     private final ModelMapper modelMapper;
 
     @PostMapping("/set_password")
-    public ResponseEntity<?> setPassword(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
 //        if (user.getPassword == null) {
 //            return ResponseEntity.notFound().build();
 //        }
@@ -36,7 +38,7 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<?> updateMyProfile(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> updateMyProfile(@RequestBody UpdateUserDTO updateUserDTO) {
 //        if (user == null) {
 //            return ResponseEntity.notFound().build();
 //        }
@@ -47,7 +49,7 @@ public class UserController {
     }
 
     @PatchMapping("/me/image")
-    public ResponseEntity<?> updateMyAvatar(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> updateMyAvatar(@RequestBody ImageDTO imageDTO) {
 //        if (user.getImage == null) {
 //            return ResponseEntity.notFound().build();
 //        }
@@ -55,7 +57,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    private User convertToUser(UserDto userDto) {
-        return modelMapper.map(userDto, User.class);
-    }
+//    private User convertToUser(UserDto userDto) {
+//        return modelMapper.map(userDto, User.class);
+//    }
 }
