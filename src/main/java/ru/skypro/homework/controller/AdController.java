@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
+import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.service.AdService;
 
 import java.util.List;
 
@@ -34,8 +36,8 @@ public class AdController {
 
     @GetMapping("/me")
     public ResponseEntity<List<Ad>> getAdByMe() {
-        adService.getAdByAuthUser();
-        return ResponseEntity.ok();
+        List<Ad> ads = adService.getAdByAuthUser();
+        return ResponseEntity.ok(ads);
     }
     @PostMapping()
     public ResponseEntity<Void> addAd(@RequestBody CreateOrUpdateAdDTO ad, @RequestBody byte[] img) {
@@ -52,7 +54,7 @@ public class AdController {
         if (foundAd == null) {
             return ResponseEntity.notFound().build();
         }
-        Ad correctedAd = adService.updateAd(ad);
+        adService.updateAd(ad);
         return ResponseEntity.ok().build();
     }
 
@@ -62,7 +64,7 @@ public class AdController {
         if (foundAd == null) {
             return ResponseEntity.notFound().build();
         }
-        Ad correctedAd = adService.updateImage(img);
+        adService.updateImage(img);
         return ResponseEntity.ok().build();
     }
     @DeleteMapping("{id}")
