@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class CreateOrUpdateAdDTO {
     private String title;
-    private int price;
+    private Integer price;
     private String description;
 }
