@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.service.CommentService;
 
+import javax.xml.stream.events.Comment;
 import java.util.List;
 
 @RestController
@@ -40,7 +42,9 @@ public class CommentController {
     }
 
     @PatchMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Long adId, @PathVariable Long commentId, @RequestBody CreateOrUpdateCommentDTO text) {
+    public ResponseEntity<Comment> updateComment(@PathVariable Long adId,
+                                                 @PathVariable Long commentId,
+                                                 @RequestBody CreateOrUpdateCommentDTO text) {
         if (text == null) {
             return ResponseEntity.notFound().build();
         }
