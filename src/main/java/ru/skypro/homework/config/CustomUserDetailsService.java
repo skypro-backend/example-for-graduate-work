@@ -15,7 +15,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        UserEntity userEntity = userRepository.findByUsername(username).orElseThrow();
+        UserEntity userEntity = userRepository.findByEmail(username).orElseThrow();
 
         return new CustomUserDetails(username, userEntity.getPassword(), userEntity.getRole());
     }

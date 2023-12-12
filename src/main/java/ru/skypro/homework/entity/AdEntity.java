@@ -21,15 +21,14 @@ public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pk")
-    private Integer pk; // id объявления
+    private int pk; // id объявления
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
-    //@NotBlank
-    @Column(name = "image", nullable = false)
-    private String image;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ImageEntity imageEntity;
 
     @Column(name = "price", nullable = false)
     private int price;

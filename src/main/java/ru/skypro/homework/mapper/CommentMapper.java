@@ -14,7 +14,13 @@ public interface CommentMapper {
 
    CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
+    @Named("idToUrl")
+    static String idToUrl(int id) {
+        return "/image/" + id;
+    }
+
     @Mapping(source = "author.pk", target = "author")
+    @Mapping(source = "authorImage.id", target = "authorImage", qualifiedByName = "idToUrl")
     Comment commentToCommentDTO(CommentEntity commentEntity);
 
     List<Comment> listCommentToListCommentDTO(List<CommentEntity> commentEntityList);

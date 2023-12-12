@@ -20,7 +20,7 @@ public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pk")
-    private Integer pk; //id комментария
+    private int pk; //id комментария
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
@@ -30,9 +30,8 @@ public class CommentEntity {
     @JoinColumn(name = "ad_id", nullable = false)
     private AdEntity ad;
 
-    @NotBlank
-    @Column(name = "author_image")
-    private String authorImage;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ImageEntity authorImage;
 
     @NotBlank
     @Column(name = "author_first_name")

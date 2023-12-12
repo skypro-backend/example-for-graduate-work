@@ -1,22 +1,22 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,35 +24,34 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ImageService imageService;
 
-
-    public ResponseEntity<String> setPassword(NewPassword newPassword, UserDetails userDetails) {
-        Optional<UserEntity> userEntityOptional = userRepository.findByUsername(userDetails.getUsername());
-        if(userEntityOptional.isPresent()) {
-            UserEntity userEntityUpdatedPassword = userMapper.newPasswordDTOToUserEntity(newPassword);
-            UserEntity userEntity = userEntityOptional.get();
-            userEntity.setPassword(new BCryptPasswordEncoder().encode(userEntityUpdatedPassword.getPassword()));
-            userRepository.save(userEntity);
-            return new ResponseEntity<>("Пароль изменен", HttpStatus.OK);
-        } else return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
+    public void setPassword(NewPassword newPassword, UserDetails userDetails) {
+        UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        userEntity.setPassword(new BCryptPasswordEncoder().encode(newPassword.getNewPassword()));
+        userRepository.save(userEntity);
     }
 
-    public ResponseEntity<User> getUser(UserDetails userDetails) {
-        Optional<UserEntity> userEntityOptional = userRepository.findByUsername(userDetails.getUsername());
-        if (userEntityOptional.isPresent()) {
-            return new ResponseEntity<>(userMapper.userToUserDTO(userEntityOptional.get()), HttpStatus.OK);
-        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public User getUser(UserDetails userDetails) {
+        UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        return userMapper.userToUserDTO(userEntity);
     }
 
-    public ResponseEntity<UpdateUser> updateUser(UpdateUser updateUser, UserDetails userDetails) {
-        Optional<UserEntity> userEntityOptional = userRepository.findByUsername(userDetails.getUsername());
-        if (userEntityOptional.isPresent()) {
-            UserEntity userEntity = userEntityOptional.get();
-            userEntity.setFirstName(updateUser.getFirstName());
-            userEntity.setLastName(updateUser.getLastName());
-            userEntity.setPhone(updateUser.getPhone());
-            userRepository.save(userEntity);
-            return new ResponseEntity<>(updateUser, HttpStatus.OK);
-        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public UpdateUser updateUser(UpdateUser updateUser, UserDetails userDetails) {
+        UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        userEntity.setFirstName(updateUser.getFirstName());
+        userEntity.setLastName(updateUser.getLastName());
+        userEntity.setPhone(updateUser.getPhone());
+        userRepository.save(userEntity);
+        return updateUser;
+    }
+
+    public void updateImage(MultipartFile image, UserDetails userDetails) throws IOException {
+        UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        ImageEntity imageEntity = imageService.uploadUserImage(image);
+
+        userEntity.setImageEntity(imageEntity);
+
+        userRepository.save(userEntity);
     }
 }
