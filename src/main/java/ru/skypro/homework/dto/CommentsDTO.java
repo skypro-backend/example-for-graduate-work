@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class CommentsDTO {
-    Integer count;
-    List<Comment> results;
+    private Integer count;
+    private List<Comment> results;
 }
