@@ -12,3 +12,15 @@ CREATE TABLE users
 
     CONSTRAINT user_pk PRIMARY KEY (id)
 );
+
+CREATE TABLE role
+(
+    role_id    BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
+    role       TEXT
+);
+
+CREATE TABLE avatar
+(
+    avatar_id  BIGSERIAL NOT NULL,
+    data       bytea
+);
