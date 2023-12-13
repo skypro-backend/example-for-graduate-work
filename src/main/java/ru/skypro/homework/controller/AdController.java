@@ -35,8 +35,8 @@ public class AdController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Ad> getAdByMe() {
-        Ad ads = adService.getAdByAuthUser();
+    public ResponseEntity<List<Ad>> getAdByMe() {
+        List<Ad> ads = adService.getAdByAuthUser();
         return ResponseEntity.ok(ads);
     }
     @PostMapping()

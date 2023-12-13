@@ -22,7 +22,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Ad getAdByAuthUser() {
+    public List<Ad> getAdByAuthUser() {
         return null;
     }
 

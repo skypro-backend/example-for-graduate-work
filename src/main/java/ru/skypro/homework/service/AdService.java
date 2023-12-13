@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface AdService {
     List<Ad> findAll();
     Ad findById(Long id);
-    Ad getAdByAuthUser();
+    List<Ad> getAdByAuthUser();
     void addAd(CreateOrUpdateAdDTO ad, byte[] img);
     void updateAd(CreateOrUpdateAdDTO ad);
     void updateImage(byte[] img);
