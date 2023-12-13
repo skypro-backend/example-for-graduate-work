@@ -42,18 +42,19 @@ public class AdController {
 
     /**
      * Getting all advertisements
+     * using {@link AdService#findAllAds()}
      * @return Ads
      */
     @GetMapping("/ads")
     public ResponseEntity<Ads> getAllAds() {
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adMapper.mapToListOfDTO(adRepository.findAll()));
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adService.findAllAds());
     }
 
     /**
      * Adding advertisement
      * <br>
-     * Using for adding ad {@link AdService#createAd(CreateOrUpdateAd, User, Image)}
+     * Using for adding ad {@link AdService#createAd(CreateOrUpdateAd, Authentication, MultipartFile)}
      * <br>
      * Using {@link Authentication#getName()}
      * {@link UserRepository#findByUsername(String)}
@@ -69,12 +70,7 @@ public class AdController {
     public ResponseEntity<AdDTO> postAd(@RequestPart(value = "properties", required = true) CreateOrUpdateAd properties,
                                     @RequestPart("image") MultipartFile image,
                                     Authentication authentication) throws IOException {
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
-        Image imageToDB = imageService.uploadImage(image);
-        Ad ad = adService.createAd(properties, user, imageToDB);
-        AdDTO adDTO = adMapper.mapToDTO(ad);
-        return ResponseEntity.status(HttpStatus.CREATED).body(adDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(adService.createAd(properties, authentication, image));
     }
 
     /**

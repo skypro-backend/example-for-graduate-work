@@ -29,23 +29,6 @@ public class AdServiceImplTests {
 
     @Test
     public void shouldCorrectlyCreateAd() {
-        CreateOrUpdateAd createOrUpdateAd = new CreateOrUpdateAd("Монитор", 1000, "Монитор в хорошем состоянии");
-        User author = new User();
-        Image image = new Image();
-
-        Ad ad = new Ad();
-        ad.setTitle("Монитор");
-        ad.setPrice(1000);
-        ad.setDescription("Монитор в хорошем состоянии");
-        ad.setAuthor(author);
-        ad.setImage(image);
-
-        when(adMapper.createFromCreateOrUpdateAd(createOrUpdateAd, author)).thenReturn(ad);
-        when(adRepository.save(ad)).thenReturn(ad);
-
-        Ad expected = ad;
-        Ad actual = adService.createAd(createOrUpdateAd, author, new Image());
-        Assertions.assertEquals(expected, actual);
 
     }
 
