@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class NewPasswordDTO {
-    String currentPassword;
-    String newPassword;
+    private String currentPassword;
+    private String newPassword;
 }
