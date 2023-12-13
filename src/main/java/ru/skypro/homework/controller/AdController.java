@@ -7,8 +7,7 @@ import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.service.AdService;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/ads")
@@ -17,8 +16,8 @@ public class AdController {
     private final AdService adService;
 
     @GetMapping()
-    public ResponseEntity<Collection<Ad>> getAllAds() {
-        Collection<Ad> ads = adService.findAll();
+    public ResponseEntity<List<Ad>> getAllAds() {
+        List<Ad> ads = adService.findAll();
         if (ads.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -26,9 +25,9 @@ public class AdController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Optional<Ad>> getById(@PathVariable Long id) {
-        Optional<Ad> foundAd = adService.findById(id);
-        if (foundAd.isEmpty()) {
+    public ResponseEntity<Ad> getById(@PathVariable Long id) {
+        Ad foundAd = adService.findById(id);
+        if (foundAd == null) {
             return ResponseEntity.notFound().build();
         }
 
@@ -36,8 +35,8 @@ public class AdController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Optional<Ad>> getAdByMe() {
-        Optional<Ad> ads = adService.getAdByAuthUser();
+    public ResponseEntity<Ad> getAdByMe() {
+        Ad ads = adService.getAdByAuthUser();
         return ResponseEntity.ok(ads);
     }
     @PostMapping()
@@ -51,8 +50,8 @@ public class AdController {
 
     @PatchMapping("{id}")
     public ResponseEntity<Void> updateAd(@PathVariable Long id, @RequestBody CreateOrUpdateAdDTO ad) {
-        Optional<Ad> foundAd = adService.findById(id);
-        if (foundAd.isEmpty()) {
+        Ad foundAd = adService.findById(id);
+        if (foundAd == null) {
             return ResponseEntity.notFound().build();
         }
         adService.updateAd(ad);
@@ -61,8 +60,8 @@ public class AdController {
 
     @PatchMapping("{id}/image")
     public ResponseEntity<Void> updateImageAd(@PathVariable Long id, @RequestBody byte[] img) {
-        Optional<Ad> foundAd = adService.findById(id);
-        if (foundAd.isEmpty()) {
+        Ad foundAd = adService.findById(id);
+        if (foundAd == null) {
             return ResponseEntity.notFound().build();
         }
         adService.updateImage(img);
@@ -70,8 +69,8 @@ public class AdController {
     }
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteReportById(@PathVariable Long id) {
-        Optional<Ad> ad = adService.findById(id);
-        if (ad.isEmpty()) {
+        Ad ad = adService.findById(id);
+        if (ad == null) {
             return ResponseEntity.notFound().build();
         }
         adService.deleteAd(ad);

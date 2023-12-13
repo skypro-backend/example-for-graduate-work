@@ -6,23 +6,24 @@ import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.service.AdService;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class AdServiceImpl implements AdService {
     @Override
-    public Collection<Ad> findAll() {
+    public List<Ad> findAll() {
         return null;
     }
 
     @Override
-    public Optional<Ad> findById(Long id) {
-        return Optional.empty();
+    public Ad findById(Long id) {
+        return null;
     }
 
     @Override
-    public Optional<Ad> getAdByAuthUser() {
-        return Optional.empty();
+    public Ad getAdByAuthUser() {
+        return null;
     }
 
     @Override
@@ -39,7 +40,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void deleteAd(Optional<Ad> ad) {
+    public void deleteAd(Ad ad) {
 
     }
 }
