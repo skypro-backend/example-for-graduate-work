@@ -31,7 +31,7 @@ public class CommentMapper {
         ZonedDateTime zonedDateTime = ZonedDateTime.of(comment.getCreatedAt(), ZoneId.systemDefault());
         return new CommentDTO(
             comment.getAuthor().getId(),
-                "/image/" + comment.getAuthorImage().getId(),
+                "/image/" + comment.getAuthor().getImage().getId(),
             comment.getAuthorFirstName(),
             zonedDateTime.toInstant().toEpochMilli(),
             comment.getPk(),

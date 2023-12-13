@@ -12,16 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.mapper.AdMapper;
-import ru.skypro.homework.mapper.ImageMapper;
-import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.Image;
-import ru.skypro.homework.model.User;
-import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
-import ru.skypro.homework.service.ImageService;
 
 import java.io.IOException;
 
@@ -33,12 +24,6 @@ import java.io.IOException;
 public class AdController {
 
     private final AdService adService;
-    private final AdMapper adMapper;
-    private final AdRepository adRepository;
-    private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
-    private final ImageService imageService;
-    private final ImageMapper imageMapper;
 
     /**
      * Getting all advertisements
@@ -52,18 +37,13 @@ public class AdController {
     }
 
     /**
-     * Adding advertisement
+     * Adding advertisement using
+     * {@link AdService#createAd(CreateOrUpdateAd, Authentication, MultipartFile)}
      * <br>
-     * Using for adding ad {@link AdService#createAd(CreateOrUpdateAd, Authentication, MultipartFile)}
-     * <br>
-     * Using {@link Authentication#getName()}
-     * {@link UserRepository#findByUsername(String)}
-     * {@link ImageService#uploadImage(MultipartFile)}
      * @param properties
      * @param image
      * @param authentication
      * @return AdDTO
-     * @throws IOException
      */
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping(value = "/ads", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE } )
@@ -75,21 +55,19 @@ public class AdController {
 
     /**
      * Getting information about ad by id
-     * Using AdRepository method for finding ad by pk(id) {@link AdRepository#findByPk(Integer)}
+     * using {@link AdService#getAd(int)}
      * @param id
      * @return ExtendedAd
      */
     @GetMapping("/ads/{id}")
     public ResponseEntity<ExtendedAd> getAdById(@PathVariable int id) {
         HttpHeaders headers = new HttpHeaders();
-        Ad ad = adRepository.findByPk(id);
-        ExtendedAd extendedAd = adMapper.mapToExtended(ad);
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(extendedAd);
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adService.getAd(id));
     }
 
     /**
      * Removing ad with ADMIN authority or with authority of user with username matching author's by id
-     * using {@link CommentRepository#deleteAllByAdPk(Integer)} {@link AdRepository#deleteByPk(int)}
+     * using {@link AdService#deleteAd(int)}
      * @param id
      * @return
      */
@@ -97,54 +75,42 @@ public class AdController {
     @PreAuthorize("hasAuthority('ADMIN') or @adRepository.findByPk(#id).getAuthor().getUsername() == authentication.name")
     @DeleteMapping("/ads/{id}")
     public ResponseEntity<Void> deleteAd(@PathVariable Integer id) {
-        commentRepository.deleteAllByAdPk(id);
-        adRepository.deleteByPk(id);
+        adService.deleteAd(id);
         return ResponseEntity.ok().build();
     }
 
     /**
      * Update ad information with ADMIN authority or with authority of user with username matching author's by id
      * <br>
-     * Using {@link AdRepository#findByPk(Integer)},
-     * {@link AdService#updateAd(Ad, CreateOrUpdateAd)},
-     * {@link AdMapper#mapToDTO(Ad)}
+     * {@link AdService#updateAd(int, CreateOrUpdateAd)},
      * @param id
      * @param createOrUpdateAd
      * @return AdDTO
      */
     @PreAuthorize("hasAuthority('ADMIN') or @adRepository.findByPk(#id).getAuthor().getUsername() == authentication.name")
     @PatchMapping("/ads/{id}")
-    public ResponseEntity<AdDTO> editAd(@PathVariable Integer id,
+    public ResponseEntity<AdDTO> editAd(@PathVariable int id,
                                         @RequestBody CreateOrUpdateAd createOrUpdateAd) {
         HttpHeaders headers = new HttpHeaders();
-        Ad ad = adRepository.findByPk(id);
-        ad = adService.updateAd(ad, createOrUpdateAd);
-        AdDTO adDTO = adMapper.mapToDTO(ad);
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adDTO);
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adService.updateAd(id, createOrUpdateAd));
     }
 
     /**
      * Getting advertisements from an authorized user
-     * using {@link Authentication#getName()},
-     * {@link UserRepository#findByUsername(String)}
+     * using {@link AdService#findAllUserAds(Authentication)}
      * @param authentication
      * @return Ads
      */
     @GetMapping("/ads/me")
     public ResponseEntity<Ads> getAllMyAds(Authentication authentication) {
-        String username = authentication.getName();
-        Integer authorId = userRepository.findByUsername(username).getId();
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adMapper.mapToListOfDTO(adRepository.findAllByAuthorId(authorId)));
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(adService.findAllUserAds(authentication));
     }
 
     /**
      * Update ad image by its pk
      * <br>
-     * Using {@link AdRepository#findByPk(Integer)},
-     * {@link ImageService#uploadImage(MultipartFile)},
-     * {@link Ad#setImage(Image)},
-     * {@link AdRepository#save(Object)},
+     * Using {@link AdService#editAdImage(int, MultipartFile)}
      * @param id
      * @param image
      * @return String
@@ -152,15 +118,10 @@ public class AdController {
      */
     @PreAuthorize("hasAuthority('ADMIN') or @adRepository.findByPk(#id).getAuthor().getUsername() == authentication.name")
     @PatchMapping("/ads/{id}/image")
-    public ResponseEntity<String> updateAdImage(@PathVariable Integer id,
+    public ResponseEntity<String> updateAdImage(@PathVariable int id,
                                                 @RequestPart("image") MultipartFile image) throws IOException{
         HttpHeaders headers = new HttpHeaders();
-        Ad ad = adRepository.findByPk(id);
-        Image imageToDB = imageService.uploadImage(image);
-        ad.setImage(imageToDB);
-        adRepository.save(ad);
-        ImageDTO imageDTO = imageMapper.mapToDTO(imageToDB);
-        return ResponseEntity.ok(new ImageDTO().getUrl());
+        return ResponseEntity.ok(adService.editAdImage(id, image));
     }
 
 }

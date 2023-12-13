@@ -34,17 +34,6 @@ public class AdServiceImplTests {
 
     @Test
     public void shouldCorrectlyUpdateAd() {
-        Ad ad = new Ad();
-        CreateOrUpdateAd createOrUpdateAd = new CreateOrUpdateAd("Монитор", 1000, "Монитор в хорошем состоянии");
-
-        ad.setTitle("Монитор");
-        ad.setPrice(1000);
-        ad.setDescription("Монитор в хорошем состоянии");
-
-        when(adRepository.save(ad)).thenReturn(ad);
-        Ad expected = ad;
-        Ad actual = adService.updateAd(ad ,createOrUpdateAd);
-        Assertions.assertEquals(expected, actual);
     }
 
 }

@@ -29,53 +29,39 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserMapper userMapper;
     private final UserService userService;
-    private final UserRepository userRepository;
-    private final ImageService imageService;
-    private final ImageMapper imageMapper;
-
 
     /**
      * Getting information about an authorized user
      * <br>
-     * Using {@link Authentication#getName()},
-     * {@link UserRepository#findByUsername(String)}
+     * Using {@link UserService#findUser(Authentication)}
      * @param authentication
      * @return UserDTO
      */
     @GetMapping("/users/me")
-    public ResponseEntity<UserDTO> get(Authentication authentication) {
-        String username = authentication.getName();
-        UserDTO userDTO = userMapper.mapToDTO(userRepository.findByUsername(username));
-        return ResponseEntity.ok(userDTO);
+    public ResponseEntity<UserDTO> getUser(Authentication authentication) {
+        return ResponseEntity.ok(userService.findUser(authentication));
     }
 
     /**
      * Updating authorized user information
      * <br>
-     * Using {@link Authentication#getName()}, {@link UserMapper#saveFromUpdate(String, UpdateUser)}
+     * Using {@link UserService#editUser(UpdateUser, Authentication)}
      * @param updateUserDto
      * @param authentication
      * @return UpdateUser
      */
     @PatchMapping("/users/me")
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUserDto, Authentication authentication) {
-        String username = authentication.getName();
         HttpHeaders headers = new HttpHeaders();
-        userMapper.saveFromUpdate(username, updateUserDto);
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(updateUserDto);
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(userService.editUser(updateUserDto, authentication));
     }
 
     /**
      * Updating an authorized user's avatar
      * <br>
      * Using {@link Authentication#getName()},
-     * {@link UserRepository#findByUsername(String)},
-     * {@link ImageService#uploadImage(MultipartFile)},
-     * {@link User#setImage(Image)},
-     * {@link UserRepository#save(Object)},
-     * {@link ImageMapper#mapToDTO(Image)}
+     * {@link UserService#editUserImage(MultipartFile, Authentication)}
      * @param image
      * @param authentication
      * @return String
@@ -84,18 +70,13 @@ public class UserController {
     @PatchMapping(value = "/users/me/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<String> updateUserImage(@RequestPart("image") MultipartFile image,
                                                   Authentication authentication) throws IOException {
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
-        Image imageToDB = imageService.uploadImage(image);
-        user.setImage(imageToDB);
-        userRepository.save(user);
-        ImageDTO imageDTO = imageMapper.mapToDTO(imageToDB);
-        return ResponseEntity.ok(imageDTO.getUrl());
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(userService.editUserImage(image, authentication));
     }
 
     /**
      * Password update
-     * using {@link UserService#setPassword(User, NewPassword)}
+     * using {@link UserService#setPassword(NewPassword, Authentication)}
      * @param newPassword
      * @param authentication
      * @return NewPassword
@@ -104,9 +85,7 @@ public class UserController {
     public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPassword,
                                                    Authentication authentication) {
         HttpHeaders headers = new HttpHeaders();
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
-        if (userService.setPassword(user, newPassword)) {
+        if (userService.setPassword(newPassword, authentication)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

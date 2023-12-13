@@ -19,6 +19,8 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.CommentService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -26,56 +28,50 @@ import ru.skypro.homework.repository.UserRepository;
 @RequiredArgsConstructor
 public class CommentController {
 
-    private final AdRepository adRepository;
-    private final CommentMapper commentMapper;
-    private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
+    private final CommentService commentService;
 
     /**
      * Getting ad comments by adId
      * <br>
-     * Using {@link AdRepository#findByPk(Integer)},
-     * {@link  CommentMapper#mapToListOfDTO(Ad)}
+     * Using {@link CommentService#findAdComments(int)}
      * @param adId
      * @return Comments
      */
     @GetMapping("/ads/{adId}/comments")
-    public Comments getComments(@PathVariable Integer adId) {
-        Ad ad = adRepository.findByPk(adId);
-        Comments commentsDTO = commentMapper.mapToListOfDTO(ad);
-        return commentsDTO;
+    public ResponseEntity<Comments> getComments(@PathVariable int adId) {
+        HttpHeaders headers = new HttpHeaders();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .headers(headers)
+                .body(commentService.findAdComments(adId));
     }
 
     /**
      * Adding a comment to ad by adId
      * <br>
-     * Using {@link Authentication#getName()},
-     * {@link UserRepository#findByUsername(String)},
-     * {@link AdRepository#findByPk(Integer)},
-     * {@link CommentMapper#createFromCreateOrUpdate(CreateOrUpdateComment, User, Ad)},
-     * {@link CommentMapper#mapToDTO(Comment)}
+     * Using {@link CommentService#createComment(int, CreateOrUpdateComment, Authentication)} 
      * @param adId
      * @param createOrUpdateComment
      * @param authentication
      * @return CommentDTO
      */
     @PostMapping("/ads/{adId}/comments")
-    public ResponseEntity<CommentDTO> postComment(@PathVariable Integer adId,
+    public ResponseEntity<CommentDTO> postComment(@PathVariable int adId,
                                                   @RequestBody CreateOrUpdateComment createOrUpdateComment,
                                                   Authentication authentication) {
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
-        Ad ad = adRepository.findByPk(adId);
-        Comment comment = commentMapper.createFromCreateOrUpdate(createOrUpdateComment, user, ad);
-        CommentDTO commentDTO = commentMapper.mapToDTO(comment);
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(commentDTO);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .headers(headers)
+                .body(commentService.createComment(adId,
+                        createOrUpdateComment,
+                        authentication));
     }
 
     /**
      * Deleting a comment by adId & commentId
      * <br>
-     * Using {@link CommentRepository#deleteAllByAdPk(Integer)}
+     * Using {@link CommentService#deleteComment(int, int)}
      * @param adId
      * @param commentId
      * @return
@@ -83,19 +79,16 @@ public class CommentController {
     @Transactional
     @PreAuthorize("hasAuthority('ADMIN') or @commentRepository.findByPk(#commentId).getAuthor().getUsername() == authentication.name")
     @DeleteMapping("/ads/{adId}/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Integer adId,
-                                              @PathVariable Integer commentId) {
-        commentRepository.deleteByAdPkAndPk(adId, commentId);
+    public ResponseEntity<Void> deleteComment(@PathVariable int adId,
+                                              @PathVariable int commentId) {
+        commentService.deleteComment(adId, commentId);
         return ResponseEntity.ok().build();
     }
 
     /**
      * Comment update by adId & commentId
      * <br>
-     * Using {@link AdRepository#findByPk(Integer)},
-     * {@link CommentRepository#findByPk(Integer)},
-     * {@link CommentMapper#updateFromCreateOrUpdate(Comment, CreateOrUpdateComment)},
-     * {@link CommentMapper#mapToDTO(Comment)}
+     * Using {@link CommentService#editComment(int, int, CreateOrUpdateComment)}
      * @param adId
      * @param commentId
      * @param createOrUpdateComment
@@ -103,15 +96,11 @@ public class CommentController {
      */
     @PreAuthorize("hasAuthority('ADMIN') or @commentRepository.findByPk(#commentId).getAuthor().getUsername() == authentication.name")
     @PatchMapping("/ads/{adId}/comments/{commentId}")
-    public ResponseEntity<CommentDTO> updateComment(@PathVariable Integer adId,
-                                                    @PathVariable Integer commentId,
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId,
+                                                    @PathVariable int commentId,
                                                     @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        Ad ad = adRepository.findByPk(adId);
-        Comment comment = commentRepository.findByPk(commentId);
-        comment = commentMapper.updateFromCreateOrUpdate(comment, createOrUpdateComment);
-        CommentDTO commentDTO = commentMapper.mapToDTO(comment);
         HttpHeaders headers = new HttpHeaders();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(commentDTO);
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(commentService.editComment(adId, commentId, createOrUpdateComment));
     }
 
 }
