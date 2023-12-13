@@ -23,5 +23,5 @@ public interface AdService {
 
     void removeAd(int id, UserDetails userDetails);
 
-    void updateImage(int id, MultipartFile image) throws IOException;
+    void updateImage(int id, MultipartFile image, UserDetails userDetails) throws IOException;
 }

@@ -9,9 +9,7 @@ public interface ImageService {
 
     byte[] getImage(Integer id) throws IOException;
 
-    ImageEntity uploadAdImage(MultipartFile file) throws IOException;
-
-    ImageEntity uploadUserImage(MultipartFile file) throws IOException;
+    ImageEntity uploadImage(MultipartFile file);
 
 }
 

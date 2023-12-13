@@ -10,24 +10,25 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
-
+//TODO: cascades, null-notnull fields, types of fields in tables, size
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "ad_entity")
 public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pk")
-    private int pk; // id объявления
+    private int pk;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private ImageEntity imageEntity;
 
     @Column(name = "price", nullable = false)

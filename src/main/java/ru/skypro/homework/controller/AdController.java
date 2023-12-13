@@ -14,34 +14,49 @@ import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import java.io.IOException;
 
-
 @RestController
 @RequestMapping("/ads")
 @CrossOrigin("http://localhost:3000/")
 public class AdController {
     private final AdServiceImpl adService;
-
     public AdController(AdServiceImpl adService) {
         this.adService = adService;
     }
 
+    /**
+     * The method is used to get ads of all users
+     * @return
+     */
     @GetMapping
     public Ads getAllAds() {
         return adService.getAllAds();
     }
 
-    // Получение объявлений авторизованного пользователя
+    /**
+     * The method is used to get all ads of an authorized user
+     * @param userDetails
+     * @return
+     */
     @GetMapping("/me")
     public Ads getAdsByCurrentUser(@Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) {
         return adService.getAdsByCurrentUser(userDetails);
     }
 
+    /**
+     * The method is used to add an ad by an authorized user
+     * @param image
+     * @param adDetails
+     * @param userDetails
+     * @return
+     * @throws IOException
+     */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Ad addAd(@RequestPart("image") MultipartFile image,
                     @RequestPart("properties") CreateOrUpdateAd adDetails,
                     @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         return adService.addAd(image, adDetails, userDetails);
     }
+
 
 
     @GetMapping("/{id}")
@@ -68,8 +83,9 @@ public class AdController {
     // Обновление картинки объявления
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void updateImage(@PathVariable int id,
-                            @RequestParam("image") MultipartFile image) throws IOException {
-        adService.updateImage(id, image);
+                            @RequestParam("image") MultipartFile image,
+                            @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+        adService.updateImage(id, image, userDetails);
     }
 }
 

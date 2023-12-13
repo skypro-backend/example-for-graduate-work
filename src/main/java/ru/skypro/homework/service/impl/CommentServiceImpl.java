@@ -20,7 +20,7 @@ import ru.skypro.homework.service.CommentService;
 import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.List;
-
+//TODO: add exceptions
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
@@ -36,37 +36,39 @@ public class CommentServiceImpl implements CommentService {
      * @param id номер объявления
      * @return CommentsDTO
      */
-
+    @Override
     public Comments getCommentsByAdId(int id) {
-        AdEntity ad = adRepository.findById(id).orElseThrow();
+        List<CommentEntity> commentEntityList = commentRepository.findByAd_pk(id);
+        List<Comment> commentDtoList = commentMapper.listCommentToListCommentDTO(commentEntityList);
 
         Comments commentsDto = new Comments();
 
-        List<CommentEntity> commentEntityList = ad.getCommentEntities();
-        List<Comment> commentDtoList = commentMapper.listCommentToListCommentDTO(commentEntityList);
         commentsDto.setCount(commentDtoList.size());
         commentsDto.setResults(commentDtoList);
 
         return commentsDto;
     }
 
+    @Override
     public Comment addCommentToAd(int id, CreateOrUpdateComment commentDetails, UserDetails userDetails) {
         AdEntity adEntity = adRepository.findById(id).orElseThrow();
         UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
 
-        CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setAuthor(userEntity);
-        commentEntity.setAd(adEntity);
-        commentEntity.setCreatedAt(Instant.now().toEpochMilli());
-        commentEntity.setText(commentDetails.getText());
-        commentEntity.setAuthorImage(userEntity.getImageEntity());
-        commentEntity.setAuthorFirstName(userEntity.getFirstName());
+        CommentEntity commentEntity = CommentEntity.builder().
+                author(userEntity).
+                ad(adEntity).
+                createdAt(Instant.now().toEpochMilli()).
+                text(commentDetails.getText()).
+                authorImage(userEntity.getImageEntity()).
+                authorFirstName(userEntity.getFirstName()).build();
 
         commentRepository.save(commentEntity);
 
         return commentMapper.commentToCommentDTO(commentEntity);
     }
 
+    //TODO: think how to delete with adId, check transactional
+    @Override
     @Transactional
     public void deleteComment(int adId, int commentId, UserDetails userDetails) {
         CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow();
@@ -75,6 +77,7 @@ public class CommentServiceImpl implements CommentService {
         } else throw new ForbiddenException();
     }
 
+    @Override
     public Comment updateComment(int adId, int commentId, CreateOrUpdateComment commentDetails, UserDetails userDetails) {
         CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow();
         if (checkAccess(userDetails, commentEntity)) {

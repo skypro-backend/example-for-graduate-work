@@ -22,7 +22,7 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pk")
-    private int pk; // id пользователя
+    private int pk;
 
     @Email
     @NotBlank

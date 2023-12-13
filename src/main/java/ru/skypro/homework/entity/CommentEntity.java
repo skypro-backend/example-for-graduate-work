@@ -15,12 +15,13 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "comment_entity")
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pk")
-    private int pk; //id комментария
+    private int pk;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
@@ -30,7 +31,7 @@ public class CommentEntity {
     @JoinColumn(name = "ad_id", nullable = false)
     private AdEntity ad;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private ImageEntity authorImage;
 
     @NotBlank

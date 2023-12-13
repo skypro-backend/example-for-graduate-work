@@ -15,7 +15,9 @@ public class ImageController {
 
     private final ImageServiceImpl imageService;
 
-    @GetMapping(value = "/{id}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    @GetMapping(value = "/{id}", produces = {MediaType.IMAGE_PNG_VALUE,
+                                             MediaType.IMAGE_JPEG_VALUE,
+                                             MediaType.IMAGE_GIF_VALUE})
     public byte[] getImage(@PathVariable Integer id) throws IOException {
 
         return imageService.getImage(id);

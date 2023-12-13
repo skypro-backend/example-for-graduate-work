@@ -15,17 +15,12 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 public class ImageServiceImpl implements ImageService {
-    @Value("${uploading.image.ad.path}")
-    private final String imageAdPath;
-
-    @Value("${uploading.image.user.path}")
-    private final String imageUserPath;
-
+    @Value("${uploading.image.path}")
+    private final String imagePath;
     private final ImageRepository imageRepository;
 
-    public ImageServiceImpl( @Value("${uploading.image.ad.path}") String imageAdPath, @Value("${uploading.image.user.path}") String imageUserPath, ImageRepository imageRepository) {
-        this.imageAdPath = imageAdPath;
-        this.imageUserPath = imageUserPath;
+    public ImageServiceImpl(@Value("${uploading.image.path}") String imagePath, ImageRepository imageRepository) {
+        this.imagePath = imagePath;
         this.imageRepository = imageRepository;
     }
 
@@ -34,42 +29,25 @@ public class ImageServiceImpl implements ImageService {
         ImageEntity imageEntity = imageRepository.findById(id).orElseThrow();
         Path imagePath = Path.of(imageEntity.getFilePath());
         return Files.readAllBytes(imagePath);
-
     }
 
     @Override
-    public ImageEntity uploadAdImage(MultipartFile file) throws IOException {
+    public ImageEntity uploadImage(MultipartFile file) {
+// TODO: unique file name, save in DB only filename, resize image?, why copy
+        Path filePath = Path.of(imagePath + file.getOriginalFilename());
 
-        Path filePath = Path.of(imageAdPath + file.getOriginalFilename());
-        storeImage(filePath, file);
-
-        return ImageEntity.builder().
-                filePath(filePath.toString()).build();
-    }
-
-    @Override
-    public ImageEntity uploadUserImage(MultipartFile file) throws IOException {
-
-        Path filePath = Path.of(imageUserPath + file.getOriginalFilename());
-
-        storeImage(filePath, file);
-
-        return ImageEntity.builder().
-                filePath(filePath.toString()).build();
-    }
-
-    private void storeImage(Path filePath, MultipartFile file){
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file.");
             }
             try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, filePath,
-                        StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new StorageException("Failed to store file.");
         }
+
+        return ImageEntity.builder().
+                filePath(filePath.toString()).build();
     }
 }

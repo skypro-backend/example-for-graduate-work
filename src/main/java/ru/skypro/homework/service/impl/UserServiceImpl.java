@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.mapper.UserMapper;
@@ -18,6 +20,7 @@ import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
 
+//TODO: security for pics
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -25,18 +28,18 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final ImageService imageService;
-
+    @Override
     public void setPassword(NewPassword newPassword, UserDetails userDetails) {
         UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         userEntity.setPassword(new BCryptPasswordEncoder().encode(newPassword.getNewPassword()));
         userRepository.save(userEntity);
     }
-
+    @Override
     public User getUser(UserDetails userDetails) {
         UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         return userMapper.userToUserDTO(userEntity);
     }
-
+    @Override
     public UpdateUser updateUser(UpdateUser updateUser, UserDetails userDetails) {
         UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         userEntity.setFirstName(updateUser.getFirstName());
@@ -45,10 +48,10 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userEntity);
         return updateUser;
     }
-
+    @Override
     public void updateImage(MultipartFile image, UserDetails userDetails) throws IOException {
         UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        ImageEntity imageEntity = imageService.uploadUserImage(image);
+        ImageEntity imageEntity = imageService.uploadImage(image);
 
         userEntity.setImageEntity(imageEntity);
 
