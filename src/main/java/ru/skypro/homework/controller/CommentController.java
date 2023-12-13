@@ -12,14 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.mapper.CommentMapper;
-import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.model.User;
-import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.CommentService;
 
 @Slf4j

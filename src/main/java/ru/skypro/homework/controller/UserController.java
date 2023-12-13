@@ -9,16 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.ImageDTO;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDTO;
-import ru.skypro.homework.mapper.ImageMapper;
-import ru.skypro.homework.mapper.UserMapper;
-import ru.skypro.homework.model.Image;
-import ru.skypro.homework.model.User;
-import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;

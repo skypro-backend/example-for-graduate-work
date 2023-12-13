@@ -7,9 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.mapper.CommentMapper;
-import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.Image;
 import ru.skypro.homework.service.ImageService;
 
 @Slf4j
