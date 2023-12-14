@@ -1,7 +1,7 @@
 package ru.skypro.homework.dto;
 
 import lombok.Data;
-import org.springframework.core.io.Resource;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * ImageBody -- DTO for photos of items
@@ -9,5 +9,5 @@ import org.springframework.core.io.Resource;
 
 @Data
 public class ImageBody {
-    private Resource image;
+    private MultipartFile image;
 }
