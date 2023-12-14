@@ -77,7 +77,7 @@ public class AdMapper {
      * @return
      */
     public Ad createFromCreateOrUpdateAd(CreateOrUpdateAd createOrUpdateAd, User user) {
-        logger.info("ДТО регистрации - " + createOrUpdateAd);
+        logger.info("ДТО создания - " + createOrUpdateAd);
         Ad ad = new Ad();
         ad.setAuthor(user);
         ad.setTitle(createOrUpdateAd.getTitle());
