@@ -26,10 +26,6 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    // Оно надо или нет? решить вместе!!!
-    @Column(name = "user_name")
-    private String userName;
-
     @Column(name = "password")
     private String password;
 
@@ -42,12 +38,11 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
-//    @OneToMany
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//    @OneToOne
-    @Column(name = "image_id")
-    private String image;
+    @OneToOne
+    @JoinColumn(name = "avatar_id")
+    private Avatar image;
 }

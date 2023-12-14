@@ -37,9 +37,9 @@ public class Ad {
      * Внешний ключ: ссылка на фото из таблицы 'Avatar'
      * @see Avatar
      */
-//    @OneToOne
-    @Column(name = "image_id")
-    private String image;
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Avatar image;
 
     /**
      * Цена объявления

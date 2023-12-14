@@ -15,7 +15,7 @@ public class Comment {
      * ID комментария
      */
     @Id
-//    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private int pk;
 
@@ -24,16 +24,16 @@ public class Comment {
      * @see User
      */
 //    @ManyToOne
-    @Column(name = "author_id")
+    @JoinColumn(name = "author_id")
     private int author;
 
     /**
      * Внешний ключ: ссылка на аватар автора из таблицы 'Avatar'
      * @see Avatar
      */
-//    @OneToOne
-    @Column(name = "image_str")
-    private String authorImage;
+    @OneToOne
+    @JoinColumn(name = "image_str")
+    private Avatar authorImage;
 
     /**
      * Имя автора комментария
