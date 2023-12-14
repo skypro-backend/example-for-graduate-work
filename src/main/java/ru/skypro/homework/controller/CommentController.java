@@ -148,7 +148,7 @@ public class CommentController {
             },
             tags = "Comments"
     )
-    @PutMapping("/{adId}/comments/{commentId}")
+    @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> updateComment(@Parameter(description = "Ad id") @PathVariable Integer adId, @Parameter(description = "Comment id") @PathVariable Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         return ResponseEntity.status(200).build();
     }
