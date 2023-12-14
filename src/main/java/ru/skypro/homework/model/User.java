@@ -17,11 +17,16 @@ public class User {
 
     @Id
     @Column(name = "user_id")
-    private Long user_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    /**
+     * Email - он же login
+     */
     @Column(name = "email")
     private String email;
 
+    // Оно надо или нет? решить вместе!!!
     @Column(name = "user_name")
     private String userName;
 
@@ -37,10 +42,12 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
-    @OneToMany
-    @JoinColumn(name = "role_id")
+//    @OneToMany
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-
+//    @OneToOne
+    @Column(name = "image_id")
+    private String image;
 }
