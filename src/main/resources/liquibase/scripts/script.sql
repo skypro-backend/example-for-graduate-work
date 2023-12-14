@@ -26,3 +26,8 @@ create TABLE comments (
 -- changeSet annabelousova:2
 ALTER TABLE comments
     RENAME COLUMN createdat TO created_at;
+
+-- changeSet michailzaretskiy:3
+ALTER TABLE ads ADD COLUMN author_id INTEGER REFERENCES users(id);
+ALTER TABLE ads ADD COLUMN comments_id INTEGER REFERENCES comments(id);
+ALTER TABLE ads ADD COLUMN description TEXT;
