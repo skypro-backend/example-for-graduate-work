@@ -66,7 +66,7 @@ public class AdServiceImpl implements AdService {
                           MultipartFile multipartFile) throws IOException {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
-        logger.info("Обьявление - " + createOrUpdateAd + ", пользователь - " + user);
+        logger.info("Обьявление - " + createOrUpdateAd);
         Image imageToDB = imageService.uploadImage(multipartFile);
         Ad ad = adMapper.createFromCreateOrUpdateAd(createOrUpdateAd, user);
         ad.setImage(imageToDB);
