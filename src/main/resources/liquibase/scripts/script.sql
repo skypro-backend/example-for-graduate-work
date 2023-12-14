@@ -22,3 +22,7 @@ create TABLE comments (
     createdAt BIGSERIAL,
     text TEXT
 );
+
+-- changeSet annabelousova:2
+ALTER TABLE comments
+    RENAME COLUMN createdat TO created_at;
