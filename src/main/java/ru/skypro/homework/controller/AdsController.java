@@ -37,4 +37,5 @@ public class AdsController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 }
