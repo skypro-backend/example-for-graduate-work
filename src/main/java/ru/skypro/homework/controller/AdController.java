@@ -44,7 +44,7 @@ public class AdController {
         if (ad == null) {
             return ResponseEntity.notFound().build();
         }
-        adServise.add(ad, img);
+        adService.addAd(ad, img);
         return ResponseEntity.ok().build();
     }
 
@@ -73,7 +73,7 @@ public class AdController {
         if (ad == null) {
             return ResponseEntity.notFound().build();
         }
-        adService.delete(ad);
+        adService.deleteAd(ad);
         return ResponseEntity.ok().build();
     }
 
