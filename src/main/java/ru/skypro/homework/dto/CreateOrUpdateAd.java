@@ -2,6 +2,11 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+
+/**
+ * CreateOrUpdateAd
+ */
+
 @Data
 public class CreateOrUpdateAd {
     private String title;
@@ -9,4 +14,5 @@ public class CreateOrUpdateAd {
     private Integer price;
 
     private String description;
+
 }
