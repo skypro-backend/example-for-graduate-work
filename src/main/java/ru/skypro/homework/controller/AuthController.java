@@ -11,16 +11,21 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.impl.AuthServiceImpl;
 
 @Slf4j
-@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(value = "http://localhost:8080")
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+    private AuthService authService;
 
-    @PostMapping("/login")
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
+       @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
@@ -37,4 +42,5 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-}
+
+    }
