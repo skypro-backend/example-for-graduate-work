@@ -2,7 +2,6 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
-
 /**
  * DTO for advertisement entity
  */
@@ -17,6 +16,5 @@ public class Ad {
     private Integer price;
 
     private String title;
-
 
 }

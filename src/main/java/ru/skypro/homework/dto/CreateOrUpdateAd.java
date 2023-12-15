@@ -2,6 +2,7 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+
 /**
  * CreateOrUpdateAd
  */
