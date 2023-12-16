@@ -10,13 +10,13 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "comments")
-public class Comment {
+public class CommentEntity {
     @Id
-    int id;
-    long createdAt;
-    String text;
+    private int id;
+    private long createdAt;
+    private String text;
     @ManyToOne
-    User author;
+    private UserEntity author;
     @ManyToOne
-    Ad ad;
+    private AdEntity ad;
 }

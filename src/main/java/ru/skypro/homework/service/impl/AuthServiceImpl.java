@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
     private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
+
 
     public AuthServiceImpl(UserDetailsManager manager,
                            PasswordEncoder passwordEncoder) {
