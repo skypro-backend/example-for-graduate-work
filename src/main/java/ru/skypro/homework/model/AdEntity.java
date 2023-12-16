@@ -16,8 +16,9 @@ public class AdEntity {
     private int price;
     private String title;
 
+    @JoinColumn(name = "author_id")
     @ManyToOne
     private UserEntity author;
-    @OneToMany
+    @OneToMany(mappedBy = "author")
     private Collection<CommentEntity> comments;
 }

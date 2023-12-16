@@ -26,7 +26,7 @@ public class UserEntity {
     private String phone;
     Role role;
     private String password;
-    @OneToMany
+    @OneToMany(mappedBy = "author")
     private Collection<AdEntity> ads;
 
 

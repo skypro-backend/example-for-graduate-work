@@ -6,8 +6,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
-public class
-UpdateUser {
+public class UpdateUser {
 
     @Size(min = 3, max = 10)
     private String firstName;
