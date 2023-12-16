@@ -13,7 +13,7 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
-public class СommentsController {
+public class CommentsController {
     /**
      *GET /ads/{id}/comments <h2>Получение комментариев объявления</h2>
      * @param id Comment identifier
