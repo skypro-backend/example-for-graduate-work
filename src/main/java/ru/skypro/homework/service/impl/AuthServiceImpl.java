@@ -20,6 +20,7 @@ public class AuthServiceImpl implements AuthService {
         this.encoder = passwordEncoder;
     }
 
+
     @Override
     public boolean login(String userName, String password) {
         if (!manager.userExists(userName)) {
