@@ -19,6 +19,6 @@ public class AdEntity {
     @JoinColumn(name = "author_id")
     @ManyToOne
     private UserEntity author;
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "ad")
     private Collection<CommentEntity> comments;
 }
