@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,13 +10,14 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.exception.NotAllowedPasswordException;
 import ru.skypro.homework.service.NewPasswordService;
 
+@RequiredArgsConstructor
 @RestController
 public class NewPasswordController {
     private final NewPasswordService newPasswordService;
 
-    public NewPasswordController(NewPasswordService newPasswordService) {
+    /*public NewPasswordController(NewPasswordService newPasswordService) {
         this.newPasswordService = newPasswordService;
-    }
+    }*/
 
     @PostMapping("/set_password")
     public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword) {
