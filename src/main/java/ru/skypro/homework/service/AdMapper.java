@@ -12,7 +12,31 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.AdEntity;
 
 import java.util.Collection;
-
+/**
+ * Интерфейс {@code AdMapper} предоставляет методы для преобразования между сущностями
+ * рекламных объявлений ({@link AdEntity}) и их представлением в виде Data Transfer Objects (DTO).
+ * Обеспечивает удобную конвертацию данных между слоями приложения.
+ *
+ * <p>Использует библиотеку MapStruct для автоматической генерации кода преобразования.
+ * Экземпляр маппера доступен через статическое поле {@code INSTANCE}.</p>
+ *
+ * <p>Методы маппера:</p>
+ * <ul>
+ *     <li>{@code adToDto} - преобразует объект {@link AdEntity} в объект {@link Ad}.</li>
+ *     <li>{@code adToDtoList} - преобразует коллекцию объектов {@link AdEntity} в объект {@link Ads}.</li>
+ *     <li>{@code DtoToAd} - преобразует объект {@link CreateOrUpdateAd} в объект {@link AdEntity}.</li>
+ *     <li>{@code adToExtDto} - преобразует объект {@link AdEntity} в объект {@link ExtendedAd},
+ *     включая расширенные данные об авторе.</li>
+ * </ul>
+ *
+ * <p>Каждый метод аннотирован с использованием библиотеки MapStruct, где указаны маппинги
+ * между полями источника и цели преобразования.</p>
+ *
+ * <p>Этот маппер предоставляет централизованный механизм преобразования данных между слоями
+ * приложения, обеспечивая чистоту и структурированность кода.</p>
+ *
+ * @author Michail Z. (GH: HeimTN)
+ */
 @Mapper
 @Component
 public interface AdMapper {

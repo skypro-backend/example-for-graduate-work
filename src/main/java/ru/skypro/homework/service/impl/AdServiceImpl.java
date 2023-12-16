@@ -9,7 +9,36 @@ import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.repo.AdRepository;
 import ru.skypro.homework.service.AdMapper;
 import ru.skypro.homework.service.AdService;
-
+/**
+ * Класс {@code AdServiceImpl} предоставляет реализацию интерфейса {@link AdService},
+ * предоставляя функциональность для управления рекламными объявлениями в системе.
+ *
+ * <p>Инъекции зависимостей:
+ * <ul>
+ *     <li>{@code repository} - репозиторий для взаимодействия с данными рекламных объявлений.</li>
+ *     <li>{@code mapper} - маппер для преобразования между сущностями и DTO рекламных объявлений.</li>
+ * </ul>
+ *
+ * <p>Методы сервиса:</p>
+ * <ul>
+ *     <li>{@code getAllAds} - возвращает все рекламные объявления в виде объекта {@link Ads}.</li>
+ *     <li>{@code createAd} - создает новое рекламное объявление на основе данных из объекта
+ *     {@link CreateOrUpdateAd}, изображения и идентификатора пользователя. Возвращает созданное объявление.</li>
+ *     <li>{@code getExtAd} - возвращает расширенную информацию о рекламном объявлении по его идентификатору.</li>
+ *     <li>{@code deleteAd} - удаляет рекламное объявление по его идентификатору. Возвращает удаленное объявление.</li>
+ *     <li>{@code pathAd} - обновляет рекламное объявление с использованием данных из объекта {@link CreateOrUpdateAd}
+ *     по его идентификатору. Возвращает обновленное объявление.</li>
+ *     <li>{@code getAllAdsForUser} - возвращает все рекламные объявления для указанного пользователя
+ *     в виде объекта {@link Ads}.</li>
+ *     <li>{@code pathImageAd} - обновляет изображение рекламного объявления по его идентификатору.
+ *     Возвращает путь к обновленному изображению.</li>
+ * </ul>
+ *
+ * <p>Этот класс является компонентом Spring с аннотацией {@link org.springframework.stereotype.Service},
+ * предоставляющим бизнес-логику для управления рекламными объявлениями в системе.</p>
+ *
+ * @author Michail Z. (GH: HeimTN)
+ */
 @Service
 public class AdServiceImpl implements AdService {
     private final AdRepository repository;
