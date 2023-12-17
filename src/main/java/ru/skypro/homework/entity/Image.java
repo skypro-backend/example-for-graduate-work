@@ -22,8 +22,8 @@ public class Image {
     @Column(name = "image_id")
     private Integer id;
 
-    @Column(name = "image")
     @Lob
+    @Column(name = "image")
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] bytes;
 
