@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Entity
 @Data
 @Table(name = "users")
-public class User {
+public class UserEntity {
     @Id
     int id;
     String image;
@@ -20,8 +20,11 @@ public class User {
     String firstName;
     @Column(name = "last_name")
     String lastName;
+    @Column(name = "phone")
     String phone;
+    @Column(name = "role")
     Role role;
+    @Column(name = "password")
     String password;
     //Collection<Ad> ads;
 }

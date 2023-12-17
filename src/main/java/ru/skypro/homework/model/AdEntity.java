@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @Table(name = "ads")
-public class Ad {
+public class AdEntity {
     @Id
     int id;
     String image;
@@ -16,6 +16,6 @@ public class Ad {
     String title;
 
     @ManyToOne
-    User author;
+    UserEntity author;
     //Collection<Comment> comments;
 }
