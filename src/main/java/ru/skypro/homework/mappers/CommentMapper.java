@@ -18,4 +18,8 @@ public class CommentMapper {
     public CommentsDTO convertToCommentsDTO(Comment comment) {
     return modelMapper.map(comment, CommentsDTO.class);
 }
+
+    public CommentDTO convertToCommentDTO(Comment comment) {
+        return modelMapper.map(comment, CommentsDTO.class);
+    }
 }

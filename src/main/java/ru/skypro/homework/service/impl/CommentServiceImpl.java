@@ -3,9 +3,10 @@ package ru.skypro.homework.service.impl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.service.CommentService;
 
-import javax.xml.stream.events.Comment;
+
 import java.util.List;
 
 @Service
@@ -32,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ResponseEntity<Comment> updateComment(Long adId, Long commentId, CreateOrUpdateCommentDTO text) {
+    public Comment updateComment(Long adId, Long commentId, CreateOrUpdateCommentDTO text) {
         return null;
     }
 }
