@@ -1,13 +1,10 @@
 package ru.skypro.homework.mapper;
-
-import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.model.CommentEntity;
 
 import java.util.List;
