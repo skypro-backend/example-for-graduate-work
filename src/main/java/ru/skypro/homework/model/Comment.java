@@ -23,7 +23,7 @@ public class Comment {
      * Внешний ключ: ID автора из таблицы 'users'
      * @see User
      */
-//    @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "author_id")
     private int author;
 

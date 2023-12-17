@@ -3,12 +3,14 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.ImageDTO;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.mappers.UserMapper;
 
 @Slf4j
 @RestController
@@ -16,48 +18,40 @@ import ru.skypro.homework.dto.UserDto;
 @RequestMapping("/users")
 public class UserController {
 
-//    private final UserService userService;
-    private final ModelMapper modelMapper;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
     @PostMapping("/set_password")
-    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
-//        if (user.getPassword == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        userService.add(user.setPassword);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<HttpStatus> setPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
+        if (newPasswordDTO.getCurrentPassword() == null) {
+            return ResponseEntity.notFound().build();
+        }
+//        userService.setPassword(userMapper.convertToUser(new newPasswordDTO));
+//        return ResponseEntity.ok().build();
+        return null;
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> getMyProfile(@RequestBody UserDto userDto) {
-//        User curantUser = userService.findById(id = this.id);
-//        if (curantUser == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-        return ResponseEntity.ok(userDto);
+    public UserDto getMyProfile(@PathVariable("id") Long id) {
+        return userMapper.converToUserDto(userService.findById(id));
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<?> updateMyProfile(@RequestBody UpdateUserDTO updateUserDTO) {
-//        if (user == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        user.setFirstName();
-//        user.setLastName();
-//        user.setPhone();
+    public ResponseEntity<HttpStatus> updateMyProfile(@RequestBody UpdateUserDTO updateUserDTO) {
+        if (updateUserDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+//        userService.updateMyProfile(userMapper.convertToUpdateUser(new UpdateUserDTO);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/me/image")
-    public ResponseEntity<?> updateMyAvatar(@RequestBody ImageDTO imageDTO) {
-//        if (user.getImage == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        user.setImage();
+    public ResponseEntity<HttpStatus> updateMyImage(@RequestBody ImageDTO imageDTO) {
+        if (imageDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+//        userService.setImage();
         return ResponseEntity.ok().build();
     }
 
-//    private User convertToUser(UserDto userDto) {
-//        return modelMapper.map(userDto, User.class);
-//    }
 }
