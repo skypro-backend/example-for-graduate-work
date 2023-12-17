@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.ExtendedAd;
 
 import java.util.List;
 
@@ -42,12 +44,21 @@ public class Advertisements {
         return new ResponseEntity<>(ad, HttpStatus.OK);
     }
 
+    /*
+     *
+     */
+
     /**
-     * GET /ads/{id} Получение информации об объявлении
+     * GET /ads/{id} <h2>Получение информации об объявлении</h2>
+     * @param id advertisement identifier
+     * @return Code	Description<br>
+     * 200	OK ExtendedAd{...}Jump to definition<br>
+     * 401	Unauthorized<br>
+     * 404	Not found
      */
     @GetMapping("/ads/{id}")
-    public ResponseEntity<Ad> getAds(@PathVariable long id) {
-        return new ResponseEntity<>(new Ad(), HttpStatus.OK);
+    public ResponseEntity<ExtendedAd> getAds(@PathVariable long id) {
+        return new ResponseEntity<>(new ExtendedAd(), HttpStatus.OK);
     }
 
     /**
@@ -118,10 +129,10 @@ public class Advertisements {
      * @return updated picture
      */
     @PatchMapping("/ads/{id}/image")
-    public ResponseEntity<List<byte[]>> updateImage(@Parameter(name = "id", description = "user identifier")
+    public ResponseEntity<CreateOrUpdateAd> updateImage(@Parameter(name = "id", description = "user identifier")
                                                     @PathVariable(name = "id") long id,
-                                                    @RequestBody MultipartFile image) {
-        return new ResponseEntity<List<byte[]>>(HttpStatus.OK);
+                                                        @RequestBody MultipartFile image) {
+        return new ResponseEntity<>(new CreateOrUpdateAd(), HttpStatus.OK);
     }
 
 
