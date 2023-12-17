@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.skypro.homework.dto.Role;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The User class represents a user entity in the database. It stores information about a user,
@@ -26,6 +28,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
+//    @Column(name = "user_name")
+//    private String userName;
+
     @Column(name = "password")
     private String password;
 
@@ -43,6 +48,13 @@ public class User {
     private Role role;
 
     @OneToOne
-    @JoinColumn(name = "avatar_id")
-    private Avatar image;
+    @JoinColumn(name = "image_id")
+    private Image image;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ad> AdList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private List<Comment> commentsList = new ArrayList<>();
+
 }
