@@ -1,14 +1,9 @@
 package ru.skypro.homework.entity;
 
 import lombok.*;
-import org.hibernate.proxy.HibernateProxy;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.Instant;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -20,8 +15,16 @@ import java.util.Objects;
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pk")
     private int pk;
+
+    @Column(name = "author_first_name", nullable = false, length = 16)
+    private String authorFirstName;
+
+    @Column(name = "created_at", nullable = false)
+    private Instant createdAt;
+
+    @Column(nullable = false, length = 64)
+    private String text;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
@@ -30,22 +33,5 @@ public class CommentEntity {
     @ManyToOne
     @JoinColumn(name = "ad_id", nullable = false)
     private AdEntity ad;
-
-    @OneToOne
-    private ImageEntity authorImage;
-
-    @NotBlank
-    @Column(name = "author_first_name")
-    private String authorFirstName;
-
-    @NotNull
-    @Column(name = "created_at")
-    private Long createdAt;
-
-
-    @NotBlank
-    @Size(max = 255)
-    @Column(name = "text")
-    private String text;
 
 }

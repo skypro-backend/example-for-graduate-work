@@ -10,4 +10,9 @@ import java.util.List;
 public class Ads {
     private int count;
     private List<Ad> results;
+
+    public Ads(List<Ad> results) {
+        this.results = results;
+        this.count = results.size();
+    }
 }

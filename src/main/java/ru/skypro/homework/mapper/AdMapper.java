@@ -27,8 +27,6 @@ public interface AdMapper {
 
     AdEntity createOrUpdateAdDTOToAd(CreateOrUpdateAd createOrUpdateAd);
 
-    List<Ad> listAdEntityToListAdDTO(List<AdEntity> adEntities);
-
     @Mapping(source = "author.firstName", target = "authorFirstName")
     @Mapping(source = "author.lastName", target = "authorLastName")
     @Mapping(source = "author.email", target = "email")

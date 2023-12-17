@@ -1,12 +1,12 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exception.UsernameIsNotFoundException;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
@@ -20,7 +20,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean login(String userName, String password) {
-        UserEntity userEntity = userRepository.findByEmail(userName).orElseThrow();
+        UserEntity userEntity = userRepository.findByEmail(userName).orElseThrow(()->new UsernameIsNotFoundException("Username is not found"));
         return encoder.matches(password, userEntity.getPassword());
     }
 

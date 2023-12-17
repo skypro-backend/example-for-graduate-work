@@ -10,7 +10,10 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exception.AdIsNotFoundException;
+import ru.skypro.homework.exception.CommentIsNotFoundException;
 import ru.skypro.homework.exception.ForbiddenException;
+import ru.skypro.homework.exception.UsernameIsNotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
@@ -19,12 +22,11 @@ import ru.skypro.homework.service.CommentService;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
-import java.util.List;
-//TODO: add exceptions
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
-
     private final AdRepository adRepository;
     private final CommentMapper commentMapper;
     private final UserRepository userRepository;
@@ -38,57 +40,47 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public Comments getCommentsByAdId(int id) {
-        List<CommentEntity> commentEntityList = commentRepository.findByAd_pk(id);
-        List<Comment> commentDtoList = commentMapper.listCommentToListCommentDTO(commentEntityList);
-
-        Comments commentsDto = new Comments();
-
-        commentsDto.setCount(commentDtoList.size());
-        commentsDto.setResults(commentDtoList);
-
-        return commentsDto;
+        return new Comments(commentRepository.findByAd_pk(id).stream().map(commentMapper::commentToCommentDTO).collect(Collectors.toList()));
     }
 
     @Override
     public Comment addCommentToAd(int id, CreateOrUpdateComment commentDetails, UserDetails userDetails) {
-        AdEntity adEntity = adRepository.findById(id).orElseThrow();
-        UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new AdIsNotFoundException("Ad is not found"));
+        UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(()-> new UsernameIsNotFoundException("Username is not found"));
 
-        CommentEntity commentEntity = CommentEntity.builder().
-                author(userEntity).
-                ad(adEntity).
-                createdAt(Instant.now().toEpochMilli()).
-                text(commentDetails.getText()).
-                authorImage(userEntity.getImageEntity()).
-                authorFirstName(userEntity.getFirstName()).build();
+        CommentEntity commentEntity = CommentEntity.builder()
+                .author(userEntity)
+                .ad(adEntity)
+                .createdAt(Instant.now())
+                .text(commentDetails.getText())
+                .authorFirstName(userEntity.getFirstName()).build();
 
         commentRepository.save(commentEntity);
 
         return commentMapper.commentToCommentDTO(commentEntity);
     }
 
-    //TODO: think how to delete with adId, check transactional
     @Override
     @Transactional
     public void deleteComment(int adId, int commentId, UserDetails userDetails) {
-        CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow();
-        if (checkAccess(userDetails, commentEntity)) {
-            commentRepository.deleteByPkAndAd_Pk(commentId, adId);
-        } else throw new ForbiddenException();
+        CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow(() -> new CommentIsNotFoundException("Comment is not found"));
+        checkAccess(userDetails, commentEntity);
+        commentRepository.deleteByPkAndAd_Pk(commentId, adId);
     }
 
     @Override
     public Comment updateComment(int adId, int commentId, CreateOrUpdateComment commentDetails, UserDetails userDetails) {
-        CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow();
-        if (checkAccess(userDetails, commentEntity)) {
-            commentEntity.setText(commentDetails.getText());
-            commentRepository.save(commentEntity);
-            return commentMapper.commentToCommentDTO(commentEntity);
-        } else throw new ForbiddenException();
+        CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow(() -> new CommentIsNotFoundException("Comment is not found"));
+        checkAccess(userDetails, commentEntity);
+        commentEntity.setText(commentDetails.getText());
+        commentRepository.save(commentEntity);
+        return commentMapper.commentToCommentDTO(commentEntity);
     }
 
-    private boolean checkAccess(UserDetails userDetails, CommentEntity commentEntity) {
-        return userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))
-                || userDetails.getUsername().equals(commentEntity.getAuthor().getEmail());
+    private void checkAccess(UserDetails userDetails, CommentEntity commentEntity) {
+        if (!userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))
+                && !userDetails.getUsername().equals(commentEntity.getAuthor().getEmail())) {
+            throw new ForbiddenException();
+        }
     }
 }

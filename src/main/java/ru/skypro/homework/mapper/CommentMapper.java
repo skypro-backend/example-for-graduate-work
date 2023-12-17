@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.entity.CommentEntity;
 
+import java.time.Instant;
 import java.util.List;
 
 @Component
@@ -19,9 +20,13 @@ public interface CommentMapper {
         return "/image/" + id;
     }
 
-    @Mapping(source = "author.pk", target = "author")
-    @Mapping(source = "authorImage.id", target = "authorImage", qualifiedByName = "idToUrl")
-    Comment commentToCommentDTO(CommentEntity commentEntity);
+    @Named("instantToLong")
+    static long instantToLong(Instant createdAt){
+        return createdAt.getEpochSecond();
+    }
 
-    List<Comment> listCommentToListCommentDTO(List<CommentEntity> commentEntityList);
+    @Mapping(source = "author.pk", target = "author")
+    @Mapping(source = "author.imageEntity.id", target = "authorImage", qualifiedByName = "idToUrl")
+    @Mapping(source = "createdAt", target = "createdAt", qualifiedByName = "instantToLong")
+    Comment commentToCommentDTO(CommentEntity commentEntity);
 }

@@ -11,17 +11,11 @@ import java.io.IOException;
 
 public interface AdService {
 
-    Ad addAd(MultipartFile image, CreateOrUpdateAd adDetails, UserDetails userDetails) throws IOException;
-
+    Ad addAd(MultipartFile image, CreateOrUpdateAd adDetails, UserDetails userDetails);
     Ads getAllAds();
-
     Ads getAdsByCurrentUser(UserDetails userDetails);
-
     ExtendedAd getFullAd(int id);
-
     Ad updateAd(int id, CreateOrUpdateAd adDetails, UserDetails userDetails);
-
     void removeAd(int id, UserDetails userDetails);
-
-    void updateImage(int id, MultipartFile image, UserDetails userDetails) throws IOException;
+    void updateImage(int id, MultipartFile image, UserDetails userDetails);
 }

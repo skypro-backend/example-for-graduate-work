@@ -6,9 +6,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Ad {
-    private int author; //id автора
+    private int author;
     private String image;
-    private int pk; //id объявления
+    private int pk;
     private int price;
     private String title;
 }

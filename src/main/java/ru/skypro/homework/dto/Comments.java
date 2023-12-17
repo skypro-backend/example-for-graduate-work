@@ -11,4 +11,9 @@ import java.util.List;
 public class Comments {
     private int count;
     private List<Comment> results;
+
+    public Comments(List<Comment> results) {
+        this.results = results;
+        this.count = results.size();
+    }
 }

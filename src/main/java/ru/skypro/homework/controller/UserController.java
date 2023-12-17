@@ -20,11 +20,9 @@ import java.io.IOException;
 public class UserController {
 
     private final UserServiceImpl userService;
-    private final ImageServiceImpl imageService;
 
-    public UserController(UserServiceImpl userService, ImageServiceImpl imageService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
-        this.imageService = imageService;
     }
 
     @PostMapping("/set_password")
@@ -46,7 +44,7 @@ public class UserController {
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void updateImage(@RequestParam("image") MultipartFile image,
-                            @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+                            @AuthenticationPrincipal UserDetails userDetails) {
         userService.updateImage(image, userDetails);
     }
 }

@@ -1,16 +1,10 @@
 package ru.skypro.homework.entity;
 
-import com.sun.istack.NotNull;
 import lombok.*;
-import org.hibernate.proxy.HibernateProxy;
-
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.Objects;
-//TODO: cascades, null-notnull fields, types of fields in tables, size
+
 @Entity
 @Getter
 @Setter
@@ -21,29 +15,26 @@ import java.util.Objects;
 public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pk")
     private int pk;
+
+    @Column(nullable = false)
+    private int price;
+
+    @Column(nullable = false, length = 32)
+    private String title;
+
+    @Column(nullable = false, length = 64)
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "image_entity_id", nullable = false)
     private ImageEntity imageEntity;
 
-    @Column(name = "price", nullable = false)
-    private int price;
-
-    @NotBlank
-    @Size(max = 32)
-    @Column(name = "title", nullable = false)
-    private String title;
-
-    @Size(max = 64)
-    @Column(name = "description", nullable = false)
-    private String description;
-
-    @OneToMany(mappedBy = "ad")
+    @OneToMany(mappedBy = "ad", cascade = CascadeType.REMOVE)
     private List<CommentEntity> commentEntities;
 
 }

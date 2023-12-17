@@ -3,15 +3,22 @@ package ru.skypro.homework.service.impl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.ImageEntity;
+import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exception.DeleteImageException;
+import ru.skypro.homework.exception.GetImageException;
+import ru.skypro.homework.exception.ImageIsNotFoundException;
 import ru.skypro.homework.exception.StorageException;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.ImageService;
 
+import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 public class ImageServiceImpl implements ImageService {
@@ -24,18 +31,47 @@ public class ImageServiceImpl implements ImageService {
         this.imageRepository = imageRepository;
     }
 
+    @Transactional
     @Override
-    public byte[] getImage(Integer id) throws IOException {
-        ImageEntity imageEntity = imageRepository.findById(id).orElseThrow();
-        Path imagePath = Path.of(imageEntity.getFilePath());
-        return Files.readAllBytes(imagePath);
+    public byte[] getImage(Integer id) {
+        ImageEntity imageEntity = imageRepository.findById(id).orElseThrow(() -> new ImageIsNotFoundException("Image is not found"));
+        try {
+            Path imagePath = Path.of(imageEntity.getFilePath());
+            return Files.readAllBytes(imagePath);
+        } catch (IOException e) {
+            throw new GetImageException("Failed to get a file.");
+        }
+    }
+
+    public void deleteImage(AdEntity adEntity) {
+        ImageEntity imageEntity = adEntity.getImageEntity();
+        try {
+            if (imageEntity != null) {
+                Path iPath = Path.of(imageEntity.getFilePath());
+                imageRepository.deleteById(imageEntity.getId());
+                Files.delete(iPath);
+            }
+        } catch (IOException e) {
+            throw new DeleteImageException("Failed to delete file.");
+        }
+    }
+
+    public void deleteImage(UserEntity userEntity) {
+        ImageEntity imageEntity = userEntity.getImageEntity();
+        try {
+            if (imageEntity != null) {
+                Path iPath = Path.of(imageEntity.getFilePath());
+                imageRepository.deleteById(imageEntity.getId());
+                Files.delete(iPath);
+            }
+        } catch (IOException e) {
+            throw new DeleteImageException("Failed to delete file.");
+        }
     }
 
     @Override
     public ImageEntity uploadImage(MultipartFile file) {
-// TODO: unique file name, save in DB only filename, resize image?, why copy
-        Path filePath = Path.of(imagePath + file.getOriginalFilename());
-
+        Path filePath = Path.of(imagePath + UUID.randomUUID() + "." + file.getOriginalFilename().split("\\.")[1]);
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file.");
@@ -46,7 +82,6 @@ public class ImageServiceImpl implements ImageService {
         } catch (IOException e) {
             throw new StorageException("Failed to store file.");
         }
-
         return ImageEntity.builder().
                 filePath(filePath.toString()).build();
     }

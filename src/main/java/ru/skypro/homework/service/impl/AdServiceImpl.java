@@ -16,15 +16,10 @@ import ru.skypro.homework.exception.AdIsNotFoundException;
 import ru.skypro.homework.exception.ForbiddenException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,8 +28,6 @@ public class AdServiceImpl implements AdService {
     private final AdMapper adMapper;
     private final AdRepository adRepository;
     private final ImageServiceImpl imageService;
-    private final ImageRepository imageRepository;
-    private final CommentRepository commentRepository;
 
     @Override
     public Ad addAd(MultipartFile image, CreateOrUpdateAd adDetails, UserDetails userDetails) {
@@ -45,90 +38,66 @@ public class AdServiceImpl implements AdService {
 
         adEntity.setAuthor(userEntity);
         adEntity.setImageEntity(imageEntity);
+        adRepository.save(adEntity);
+        return adMapper.adToAdDTO(adEntity);
+    }
 
-        imageRepository.save(imageEntity);
+    @Override
+    public Ads getAllAds() {
+        return new Ads(adRepository.findAll().stream()
+                .map(adMapper::adToAdDTO)
+                .collect(Collectors.toList()));
+    }
+
+    @Override
+    public Ads getAdsByCurrentUser(UserDetails userDetails) {
+        return new Ads(adRepository.findAdsByEmail(userDetails.getUsername()).stream()
+                .map(adMapper::adToAdDTO)
+                .collect(Collectors.toList()));
+    }
+
+    @Override
+    public ExtendedAd getFullAd(int id) {
+        AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new AdIsNotFoundException("Ad is not found"));
+        return adMapper.adEntityToExtendedAdDTO(adEntity);
+    }
+
+    @Override
+    public Ad updateAd(int id, CreateOrUpdateAd adDetails, UserDetails userDetails) {
+        AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new AdIsNotFoundException("Ad is not found"));
+        checkAccess(userDetails, adEntity);
+        adEntity.setTitle(adDetails.getTitle());
+        adEntity.setPrice(adDetails.getPrice());
+        adEntity.setDescription(adDetails.getDescription());
+
         adRepository.save(adEntity);
 
         return adMapper.adToAdDTO(adEntity);
     }
 
     @Override
-    public Ads getAllAds() {
-        List<AdEntity> adEntities = adRepository.findAll();
-        List<Ad> listAds = adMapper.listAdEntityToListAdDTO(adEntities);
-        Ads ads = new Ads();
-        ads.setCount(listAds.size());
-        ads.setResults(listAds);
-
-        return ads;
-    }
-
-    @Override
-    public Ads getAdsByCurrentUser(UserDetails userDetails) {
-        List<AdEntity> adEntities = adRepository.findAdsByAuthor_id(userDetails.getUsername());
-        List<Ad> listAds = adMapper.listAdEntityToListAdDTO(adEntities);
-        Ads ads = new Ads();
-        ads.setCount(listAds.size());
-        ads.setResults(listAds);
-
-        return ads;
-    }
-
-    @Override
-    public ExtendedAd getFullAd(int id) {
-        Optional<AdEntity> adEntity = adRepository.findById(id);
-        if (adEntity.isPresent()) {
-            return adMapper.adEntityToExtendedAdDTO(adEntity.get());
-        } else throw new AdIsNotFoundException("Ad is not found");
-    }
-
-    @Override
-    public Ad updateAd(int id, CreateOrUpdateAd adDetails, UserDetails userDetails) {
-        Optional<AdEntity> adEntityOptional = adRepository.findById(id);
-        if (adEntityOptional.isPresent()) {
-            AdEntity adEntity = adEntityOptional.get();
-            if (checkAccess(userDetails, adEntity)) {
-                adEntity.setTitle(adDetails.getTitle());
-                adEntity.setPrice(adDetails.getPrice());
-                adEntity.setDescription(adDetails.getDescription());
-
-                adRepository.save(adEntity);
-
-                return adMapper.adToAdDTO(adEntity);
-
-            } else throw new ForbiddenException();
-        } else throw new AdIsNotFoundException("Ad is not found");
-    }
-//TODO: delete comments first, deleteById doesn't work, каскадное удаление
-    @Override
     public void removeAd(int id, UserDetails userDetails) {
-        Optional<AdEntity> adEntityOptional = adRepository.findById(id);
-        if (adEntityOptional.isPresent()) {
-            if (checkAccess(userDetails, adEntityOptional.get())) {
-                adRepository.deleteById(id);
-            } else throw new ForbiddenException();
-        } else throw new AdIsNotFoundException("Ad is not found");
+        AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new AdIsNotFoundException("Ad is not found"));
+        checkAccess(userDetails, adEntity);
+        adRepository.deleteById(id);
     }
 
     @Override
     public void updateImage(int id, MultipartFile image, UserDetails userDetails) {
-        Optional<AdEntity> adEntityOptional = adRepository.findById(id);
-        if (adEntityOptional.isPresent()) {
-            AdEntity adEntity = adEntityOptional.get();
-            if (checkAccess(userDetails, adEntity)) {
-                ImageEntity imageEntity = imageService.uploadImage(image);
+        AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new AdIsNotFoundException("Ad is not found"));
+        checkAccess(userDetails, adEntity);
+        ImageEntity imageEntity = imageService.uploadImage(image);
+        imageService.deleteImage(adEntity);
+        adEntity.setImageEntity(imageEntity);
 
-                adEntity.setImageEntity(imageEntity);
-
-                adRepository.save(adEntity);
-            } else throw new ForbiddenException();
-        } else throw new AdIsNotFoundException("Ad is not found");
+        adRepository.save(adEntity);
+    }
+    private void checkAccess(UserDetails userDetails, AdEntity adEntity) {
+        if (!userDetails.getUsername().equals(adEntity.getAuthor().getEmail())
+                && !userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            throw new ForbiddenException();
+        }
     }
 
-
-    private boolean checkAccess(UserDetails userDetails, AdEntity adEntity) {
-        return userDetails.getUsername().equals(adEntity.getAuthor().getEmail())
-                || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
-    }
 }
 

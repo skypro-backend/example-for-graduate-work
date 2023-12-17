@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import java.io.IOException;
-
 @RestController
 @RequestMapping("/ads")
 @CrossOrigin("http://localhost:3000/")
@@ -48,12 +47,11 @@ public class AdController {
      * @param adDetails
      * @param userDetails
      * @return
-     * @throws IOException
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Ad addAd(@RequestPart("image") MultipartFile image,
                     @RequestPart("properties") CreateOrUpdateAd adDetails,
-                    @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+                    @AuthenticationPrincipal UserDetails userDetails) {
         return adService.addAd(image, adDetails, userDetails);
     }
 
@@ -84,7 +82,7 @@ public class AdController {
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void updateImage(@PathVariable int id,
                             @RequestParam("image") MultipartFile image,
-                            @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+                            @AuthenticationPrincipal UserDetails userDetails) {
         adService.updateImage(id, image, userDetails);
     }
 }
