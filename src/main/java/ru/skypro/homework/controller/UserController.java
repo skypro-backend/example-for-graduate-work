@@ -26,7 +26,7 @@ public class UserController {
         if (newPasswordDTO.getCurrentPassword() == null) {
             return ResponseEntity.notFound().build();
         }
-//        userService.setNewPassword();
+//        userService.setPassword(userMapper.convertToUser(new newPasswordDTO));
 //        return ResponseEntity.ok().build();
         return null;
     }
@@ -41,7 +41,7 @@ public class UserController {
         if (updateUserDTO == null) {
             return ResponseEntity.notFound().build();
         }
-//        userService.updateMyProfile();
+//        userService.updateMyProfile(userMapper.convertToUpdateUser(new UpdateUserDTO);
         return ResponseEntity.ok().build();
     }
 
