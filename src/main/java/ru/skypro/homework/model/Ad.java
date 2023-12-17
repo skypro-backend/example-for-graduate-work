@@ -59,18 +59,6 @@ public class Ad {
      * Внешний ключ: комментарии к объявлению из таблицы 'comments'
      * @see Comment
      */
-//    @OneToMany
-//    @Column(name = "comment_id")
-//    private int comment;
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
-
-//    public Ad(int pk, User author, String title, String description, Image image, int price) {
-//        this.pk = pk;
-//        this.author = author;
-//        this.title = title;
-////        this.description = description;
-//        this.image = image;
-//        this.price = price;
-//    }
 }
