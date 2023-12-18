@@ -22,7 +22,7 @@ public interface CommentMapper {
 
     @Named("instantToLong")
     static long instantToLong(Instant createdAt){
-        return createdAt.getEpochSecond();
+        return createdAt.toEpochMilli();
     }
 
     @Mapping(source = "author.pk", target = "author")
