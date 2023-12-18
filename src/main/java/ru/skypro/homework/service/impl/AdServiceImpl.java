@@ -7,6 +7,7 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.repo.AdRepository;
+import ru.skypro.homework.repo.UserRepo;
 import ru.skypro.homework.service.AdMapper;
 import ru.skypro.homework.service.AdService;
 /**
@@ -42,13 +43,13 @@ import ru.skypro.homework.service.AdService;
 @Service
 public class AdServiceImpl implements AdService {
     private final AdRepository repository;
-    //private final UserRepository userRepository;
+    private final UserRepo userRepository;
     private final AdMapper mapper;
 
-    public AdServiceImpl(AdRepository repository, AdMapper mapper){
+    public AdServiceImpl(AdRepository repository, AdMapper mapper, UserRepo userRepository){
         this.repository = repository;
         this.mapper = mapper;
-       // this.userRepository = userRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -64,7 +65,7 @@ public class AdServiceImpl implements AdService {
         result.setTitle(ad.getTitle());
         result.setPrice(ad.getPrice());
         result.setImage(image);
-       // result.setAuthor(userRepository.findById(userId));
+        result.setAuthor(userRepository.findById(userId).orElse(null));
         return mapper.adToDto(repository.save(result));
     }
 
@@ -101,7 +102,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ads getAllAdsForUser(Integer userId) {
-        return null; //mapper.adToDtoList(repository.findAdEntitiesByAuthor(userRepository.findById(userId)));
+        return mapper.adToDtoList(repository.findAdEntitiesByAuthor(userRepository.findById(userId).orElse(null)));
     }
 
     @Override

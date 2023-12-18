@@ -39,8 +39,8 @@ public class AdEntity {
     private String description;
     @ManyToOne
     @JoinColumn(name = "author_id")
-    private User author;
+    private UserEntity author;
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
     @JoinColumn(name = "comments_id")
-    private Collection<Comment> comments;
+    private Collection<CommentEntity> comments;
 }

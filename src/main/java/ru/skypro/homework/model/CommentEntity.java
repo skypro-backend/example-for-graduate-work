@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Table(name = "comments")
 public class CommentEntity {
     @Id
+    @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private Long createdAt;
