@@ -1,5 +1,10 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -10,8 +15,8 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.validation.Valid;
+
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -20,57 +25,51 @@ import java.util.regex.Pattern;
 @RequestMapping("/users")
 public class UserController {
 
-    private static final String PHONE_PATTERN = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}";
-    private static Pattern pattern;
-    private static Matcher matcher;
 
-
-    /**
-     * User must be logged in to change password
-     *
-     * @return response code without body.
-     */
+    @Operation(summary = "Обновление пароля", description = "Метод ничего не возвращает. Принимает пароль в виде DTO и обновляет его у пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Пароль обновлен"),
+            @ApiResponse(responseCode = "401", description = "Пользователь не авторизован"),
+            @ApiResponse(responseCode = "400", description = "Пользователь отправил пароли в неверном формате"),
+            @ApiResponse(responseCode = "403", description = "Доступ для пользователя запрещен"),
+    })
     @PostMapping("/set_password")
-    public ResponseEntity<?> updatePassword(@RequestBody NewPassword newPassword) {
-        if (newPassword.getNewPassword().length() < 8 || newPassword.getNewPassword().length() > 16) {
-            return ResponseEntity.status(403).build();
-        }
-        return ResponseEntity.ok(newPassword);
+    public ResponseEntity<?> updatePassword(@RequestBody @Valid NewPassword newPassword) {
+        return ResponseEntity.ok().build();
     }
 
-    /**
-     * @return User which You are currently logged in
-     */
+    @Operation(summary = "Получение экземпляра пользователя", description = "Вовзращает DTO интерпретацию текущего пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ответ получен",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = User.class))),
+            @ApiResponse(responseCode = "401", description = "Пользователь не авторизован",
+                    content = @Content(mediaType = MediaType.ALL_VALUE)),
+    })
     @GetMapping("/me")
+
     public ResponseEntity<User> getMe() {
-        return ResponseEntity.ok(new User()); //placeholder user
+        return ResponseEntity.ok().build(); //Return USER here
     }
 
-    /**
-     * Checks if updateUser's values are acceptable.
-     * @param updateUser - User Update DTO
-     * @return status 200 with updateUser as a body if values are correct.
-     */
-
+    @Operation(summary = "Обновление данных пользователя", description = "Возвращает DTO c обновленными данными и обновляет их у пользователя.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Данные обновлены. Возвращен обьект с новыми данными.",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = UpdateUser.class))),
+            @ApiResponse(responseCode = "401", description = "Пользователь не авторизован"),
+            @ApiResponse(responseCode = "400", description = "Пользователь отправил пароли в неверном формате"),
+    })
     @PatchMapping("/me")
-    public ResponseEntity<?> updateUserInfo(@RequestBody UpdateUser updateUser) {
-        if (updateUser.getFirstName().length() < 3 || updateUser.getFirstName().length() > 10) {
-            return ResponseEntity.status(403).build();
-        }
-
-        if (updateUser.getLastName().length() < 3 || updateUser.getLastName().length() > 10) {
-            return ResponseEntity.status(403).build();
-        }
-
-        pattern = Pattern.compile(PHONE_PATTERN);
-        matcher = pattern.matcher(updateUser.getPhone());
-
-        if (!matcher.matches()) {
-            return ResponseEntity.status(403).build();
-        }
+    public ResponseEntity<?> updateUserInfo(@RequestBody @Valid UpdateUser updateUser) {
         return ResponseEntity.ok(updateUser);
     }
 
+    @Operation(summary = "Изменение аватара пользователя", description = "Ничего не возвращает. Получает мультипарт файл с изображением и обновляет его у пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Изображение загружено."),
+            @ApiResponse(responseCode = "401", description = "Пользователь не авторизован"),
+    })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updatePhoto(MultipartFile image) {
         return ResponseEntity.ok().build();
