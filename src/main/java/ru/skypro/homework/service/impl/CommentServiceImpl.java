@@ -40,13 +40,17 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public Comments getCommentsByAdId(int id) {
-        return new Comments(commentRepository.findByAd_pk(id).stream().map(commentMapper::commentToCommentDTO).collect(Collectors.toList()));
+        if (adRepository.existsById(id)) {
+            return new Comments(commentRepository.findByAd_pk(id).stream()
+                    .map(commentMapper::commentToCommentDTO)
+                    .collect(Collectors.toList()));
+        } else throw new AdIsNotFoundException("Ad is not found");
     }
 
     @Override
     public Comment addCommentToAd(int id, CreateOrUpdateComment commentDetails, UserDetails userDetails) {
         AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new AdIsNotFoundException("Ad is not found"));
-        UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(()-> new UsernameIsNotFoundException("Username is not found"));
+        UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
 
         CommentEntity commentEntity = CommentEntity.builder()
                 .author(userEntity)

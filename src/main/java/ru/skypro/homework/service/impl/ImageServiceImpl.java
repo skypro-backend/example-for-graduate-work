@@ -71,7 +71,10 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public ImageEntity uploadImage(MultipartFile file) {
-        Path filePath = Path.of(imagePath + UUID.randomUUID() + "." + file.getOriginalFilename().split("\\.")[1]);
+        Path filePath = null;
+        if (file.getOriginalFilename() != null) {
+            filePath = Path.of(imagePath + UUID.randomUUID() + "." + file.getOriginalFilename().split("\\.")[1]);
+        }
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file.");

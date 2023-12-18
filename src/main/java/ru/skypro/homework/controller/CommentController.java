@@ -1,5 +1,8 @@
 package ru.skypro.homework.controller;
 
+import liquibase.pro.packaged.R;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -17,35 +20,35 @@ public class CommentController {
     public CommentController(CommentServiceImpl commentService) {
         this.commentService = commentService;
     }
-
     //Получение комментариев объявления
     @GetMapping("/{id}/comments")
-    public Comments getCommentsForAd(@PathVariable int id) {
-        return commentService.getCommentsByAdId(id);
+    public ResponseEntity<Comments> getCommentsForAd(@PathVariable int id) {
+        return new ResponseEntity<>(commentService.getCommentsByAdId(id), HttpStatus.OK);
     }
 
     // Добавление комментария к объявлению
     @PostMapping("/{id}/comments")
-    public Comment addCommentToAd(@PathVariable int id,
+    public ResponseEntity<Comment> addCommentToAd(@PathVariable int id,
                                   @RequestBody CreateOrUpdateComment commentDetails,
                                   @AuthenticationPrincipal UserDetails userDetails) {
-        return commentService.addCommentToAd(id, commentDetails, userDetails);
+        return new ResponseEntity<>(commentService.addCommentToAd(id, commentDetails, userDetails), HttpStatus.OK);
     }
 
     // Удаление комментария
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public void deleteComment(@PathVariable int adId,
+    public ResponseEntity<?> deleteComment(@PathVariable int adId,
                               @PathVariable int commentId,
                               @AuthenticationPrincipal UserDetails userDetails) {
         commentService.deleteComment(adId, commentId, userDetails);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // Обновление комментария
     @PatchMapping("/{adId}/comments/{commentId}")
-    public Comment updateComment(@PathVariable int adId,
+    public ResponseEntity<Comment> updateComment(@PathVariable int adId,
                                  @PathVariable int commentId,
                                  @RequestBody CreateOrUpdateComment commentDetails,
                                  @AuthenticationPrincipal UserDetails userDetails) {
-        return commentService.updateComment(adId, commentId, commentDetails, userDetails);
+        return new ResponseEntity<>(commentService.updateComment(adId, commentId, commentDetails, userDetails), HttpStatus.OK);
     }
 }

@@ -1,7 +1,9 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +39,8 @@ public class AdController {
      * @return
      */
     @GetMapping("/me")
-    public Ads getAdsByCurrentUser(@Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) {
-        return adService.getAdsByCurrentUser(userDetails);
+    public ResponseEntity<Ads> getAdsByCurrentUser(@Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) {
+        return new ResponseEntity<>(adService.getAdsByCurrentUser(userDetails), HttpStatus.OK);
     }
 
     /**
@@ -49,41 +51,43 @@ public class AdController {
      * @return
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Ad addAd(@RequestPart("image") MultipartFile image,
+    public ResponseEntity<Ad> addAd(@RequestPart("image") MultipartFile image,
                     @RequestPart("properties") CreateOrUpdateAd adDetails,
                     @AuthenticationPrincipal UserDetails userDetails) {
-        return adService.addAd(image, adDetails, userDetails);
+        return new ResponseEntity<>(adService.addAd(image, adDetails, userDetails),HttpStatus.CREATED);
     }
 
 
 
     @GetMapping("/{id}")
-    public ExtendedAd getFullAd(@PathVariable int id) {
-        return adService.getFullAd(id);
+    public ResponseEntity<ExtendedAd> getFullAd(@PathVariable int id) {
+        return new ResponseEntity<>(adService.getFullAd(id), HttpStatus.OK);
     }
 
     // Обновление информации об объявлении
     @PatchMapping("/{id}")
-    public Ad updateAd(@PathVariable int id,
+    public ResponseEntity<Ad> updateAd(@PathVariable int id,
                        @RequestBody CreateOrUpdateAd adDetails,
                        @AuthenticationPrincipal UserDetails userDetails) {
-        return adService.updateAd(id, adDetails, userDetails);
+        return new ResponseEntity<>(adService.updateAd(id, adDetails, userDetails), HttpStatus.OK);
     }
 
 
     // Удаление объявления
     @DeleteMapping("/{id}")
-    public void removeAd(@PathVariable int id,
+    public ResponseEntity<?> removeAd(@PathVariable int id,
                          @AuthenticationPrincipal UserDetails userDetails) {
         adService.removeAd(id, userDetails);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     // Обновление картинки объявления
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void updateImage(@PathVariable int id,
+    public ResponseEntity<?> updateImage(@PathVariable int id,
                             @RequestParam("image") MultipartFile image,
                             @AuthenticationPrincipal UserDetails userDetails) {
         adService.updateImage(id, image, userDetails);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 
