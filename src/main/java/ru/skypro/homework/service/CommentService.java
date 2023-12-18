@@ -2,8 +2,9 @@ package ru.skypro.homework.service;
 
 import org.springframework.http.ResponseEntity;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.model.Comment;
 
-import javax.xml.stream.events.Comment;
+
 import java.util.List;
 
 public interface CommentService {

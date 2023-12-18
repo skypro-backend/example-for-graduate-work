@@ -26,7 +26,7 @@ public class CommentController {
     @GetMapping("{id}/comments")
     public ResponseEntity<List<CommentsDTO>> getCommentById(@PathVariable Long id) {
         List<CommentsDTO> foundComments = commentService.getAllByCommentById(id).stream().map(commentMapper
-                .convertToCommentsDTO()).collect(Collectors.toList());
+                .convertToCommentsDTO(Long id)).collect(Collectors.toList());
         if (foundComments == null) {
             return ResponseEntity.notFound().build();
         }
@@ -35,7 +35,7 @@ public class CommentController {
 
     @PostMapping("{id}/comments")
     public ResponseEntity<Void> createComments(@PathVariable Long id, @RequestBody CreateOrUpdateCommentDTO text) {
-        if (text == null) {
+        if (text == null || id == null) {
             return ResponseEntity.notFound().build();
         }
         return commentService.createComment(commentMapper.convertToComment(new CommentDTO()));

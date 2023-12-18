@@ -20,6 +20,6 @@ public class CommentMapper {
 }
 
     public CommentDTO convertToCommentDTO(Comment comment) {
-        return modelMapper.map(comment, CommentsDTO.class);
+        return modelMapper.map(comment, CommentDTO.class);
     }
 }
