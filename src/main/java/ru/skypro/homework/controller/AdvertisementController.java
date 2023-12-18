@@ -3,20 +3,37 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.service.AdService;
 
-import java.util.Collection;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * @author Michail Z. (GH: HeimTN)
  */
 @RestController
 @RequestMapping("/ads")
 public class AdvertisementController {
+    private AdService adService;
+    public AdvertisementController(AdService adService){
+        this.adService = adService;
+    }
+
+
     /**
      * Получение коллекции объявлений.
      */
@@ -26,8 +43,8 @@ public class AdvertisementController {
     })
     @GetMapping
     public ResponseEntity<Ads> getCollectionAds(){
-        //запрос в сервис...;
-        return ResponseEntity.status(200).build(); //через .ok возвращаем
+        Ads result = adService.getAllAds();
+        return ResponseEntity.ok(result);
     }
     /**
      * Создание нового объявления.
@@ -39,8 +56,8 @@ public class AdvertisementController {
     })
     @PostMapping
     public ResponseEntity<Ad> postAds(CreateOrUpdateAd properties, String image){
-        //делаем запрос в сервис на создание нового обьявления
         //так же нужна проверка авторизации, если не авторизован возваращаем 401
+       // Ad result = adService.createAd(properties, image, userId);
         return ResponseEntity.status(201).build();
     }
     /**
@@ -53,11 +70,13 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAd> getInfoAds(@PathVariable Long id){
-        //Запрос в сервис на получение расширеного обьявления по id
-        //если null возвращаем 404
+    public ResponseEntity<ExtendedAd> getInfoAds(@PathVariable Integer id){
         //если не авторизован 401
-        return ResponseEntity.status(200).build();
+        ExtendedAd result = adService.getExtAd(id);
+        if(result == null){
+            return ResponseEntity.status(404).build();
+        }
+        return ResponseEntity.ok(result);
     }
     /**
      * Удаление объявления по его идентификатору.
@@ -70,11 +89,13 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteAds(@PathVariable Long id){
-        //Запрос в сервис на удаление с возвращением удаленного обьекта
-        //если null возвращаем 404
+    public ResponseEntity deleteAds(@PathVariable Integer id){
         //если не авторизован 401
         //если нет доступа(видимо если не админ) 403
+        Ad result = adService.deleteAd(id);
+        if(result == null){
+            return ResponseEntity.status(404).build();
+        }
         return ResponseEntity.status(204).build();
     }
     /**
@@ -88,12 +109,14 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @PatchMapping("/{id}")
-    public ResponseEntity<Ad> pathAds(@PathVariable Long id, CreateOrUpdateAd ads){
-        //Запрос в сервис на изменение обьявление с возвращением изменяемого обьекта
-        //если null возвращаем 404
+    public ResponseEntity<Ad> pathAds(@PathVariable Integer id, CreateOrUpdateAd ads){
         //если не авторизован 401
         //если нет доступа(видимо если не админ) 403
-        return ResponseEntity.status(200).build(); //возвращаем через .ok
+        Ad result = adService.pathAd(ads, id);
+        if(result == null){
+            return ResponseEntity.status(404).build();
+        }
+        return ResponseEntity.ok(result);
     }
     /**
      * Получение списка всех объявлений пользователя.
@@ -105,8 +128,8 @@ public class AdvertisementController {
     })
     @GetMapping("/me")
     public ResponseEntity<Ads> getListAdsUser(){
-        //Запрос в сервис для получения всех обьявелний по id автора
         //если не авторизован 401
+       // Ads result = adService.getAllAdsForUser(userId);
         return ResponseEntity.status(200).build(); //Возвращаем через .ok
     }
     /**
@@ -120,11 +143,25 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @PatchMapping("/{id}/image")
-    public ResponseEntity pathImageAds(@PathVariable Long id, String image){
-        //Запрос в сервис на изменение изображения обьявления с возвращением изменяемого обьекта
-        //если null возвращаем 404
+    public ResponseEntity<byte[]> pathImageAds(@PathVariable Integer id, String image) throws IOException {
         //если не авторизован 401
         //если нет доступа(видимо если не админ) 403
-        return ResponseEntity.status(200).build(); //тут должны должны открывать поток, пока не понимаю как
+        String result = adService.pathImageAd(id, image);
+        if(result == null){
+            ResponseEntity.status(404).build();
+        }
+
+        File imageFile = new File(image);
+        InputStream imageStream = new FileInputStream(imageFile);
+        byte[] imageBytes = new byte[(int) imageFile.length()];
+        imageStream.read(imageBytes);
+
+        Path path = Paths.get(image);
+        String mimeType = Files.probeContentType(path);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(mimeType));
+        headers.setContentLength(imageBytes.length);
+        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
 }
