@@ -1,21 +1,27 @@
 package ru.skypro.homework.model;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "comments")
 public class CommentEntity {
     @Id
-    private int id;
-    private long createdAt;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    private Long createdAt;
+    @Getter
     private String text;
+    @ManyToOne
     @JoinColumn(name = "author_id")
-    @ManyToOne
     private UserEntity author;
-    @JoinColumn(name = "ad_id")
     @ManyToOne
+    @JoinColumn(name = "ad_id")
     private AdEntity ad;
 }

@@ -37,3 +37,8 @@ ALTER TABLE users
 -- changeSet vasyanpupkin:2
 CREATE INDEX users_login_index
     ON users (login)
+
+
+-- changeSet annabelousova:4
+ALTER TABLE comments ADD COLUMN author_id INTEGER REFERENCES users(id);
+ALTER TABLE comments ADD COLUMN ad_id INTEGER REFERENCES ads(id);
