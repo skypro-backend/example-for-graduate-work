@@ -25,9 +25,6 @@ public class UserServiceImpl implements UserService {
     private final ImageService imageService;
     @Override
     public void setPassword(NewPassword newPassword, UserDetails userDetails) {
-        if (!newPassword.getCurrentPassword().equals(userDetails.getPassword())){
-           throw new ForbiddenException();
-        }
         UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         userEntity.setPassword(new BCryptPasswordEncoder().encode(newPassword.getNewPassword()));
         userRepository.save(userEntity);
