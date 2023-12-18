@@ -1,30 +1,33 @@
 package ru.skypro.homework.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.skypro.homework.dto.Role;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "users")
 public class UserEntity {
     @Id
-    int id;
-    String image;
-    String email;
+    private int id;
+    private String login;
+    private String image;
+    private String email;
     @Column(name = "first_name")
-    String firstName;
+    private String firstName;
     @Column(name = "last_name")
-    String lastName;
-    @Column(name = "phone")
-    String phone;
-    @Column(name = "role")
+    private String lastName;
+    private String phone;
     Role role;
-    @Column(name = "password")
-    String password;
-    //Collection<Ad> ads;
+    private String password;
+    @OneToMany(mappedBy = "author")
+    private Collection<AdEntity> ads;
+
+
 }
