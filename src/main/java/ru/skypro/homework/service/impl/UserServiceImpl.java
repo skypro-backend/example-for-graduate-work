@@ -21,18 +21,18 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService,UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final ImageService imageService;
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findUserByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
     }
-
     @Override
     public UserDTO getUserInfo() {
         Optional<User> currentUser = findAuthUser();
