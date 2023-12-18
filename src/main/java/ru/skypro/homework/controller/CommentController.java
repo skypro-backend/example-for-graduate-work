@@ -26,7 +26,7 @@ public class CommentController {
     @GetMapping("{id}/comments")
     public ResponseEntity<List<CommentsDTO>> getCommentById(@PathVariable Long id) {
         List<CommentsDTO> foundComments = commentService.getAllByCommentById(id).stream().map(commentMapper
-                .convertToCommentsDTO(Long id)).collect(Collectors.toList());
+                .convertToCommentsDTO(comment)).collect(Collectors.toList());
         if (foundComments == null) {
             return ResponseEntity.notFound().build();
         }
@@ -43,7 +43,7 @@ public class CommentController {
 
     @DeleteMapping("{adId}/comments/{commentId}")
     public ResponseEntity<Comment> deleteComments(@PathVariable Long adId, @PathVariable Long commentId) {
-        Comment comment = (Comment) commentService.findById(commentId);
+        Comment comment = commentService.findById(commentId);
         if (comment == null) {
             return ResponseEntity.notFound().build();
         }
@@ -57,6 +57,6 @@ public class CommentController {
         if (text == null) {
             return ResponseEntity.notFound().build();
         }
-        return commentService.updateComment(commentMapper.convertToComment());
+        return commentService.updateComment(commentMapper.convertToComment(CreateOrUpdateCommentDTO text));
     }
 }
