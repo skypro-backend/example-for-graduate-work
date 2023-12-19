@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 
-@Entity
+//@Entity
 @Data
 public class AdEntity {
     private Integer author;
