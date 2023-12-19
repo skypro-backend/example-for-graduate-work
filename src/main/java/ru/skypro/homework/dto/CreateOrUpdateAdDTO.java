@@ -1,9 +1,12 @@
 package ru.skypro.homework.dto;
 
-import javax.persistence.Entity;
+import lombok.Data;
 
-public class CreateOrUpdateAd {
 
+
+@Data
+public class CreateOrUpdateAdDTO {
+    
     private String title;
 
     private Integer price;

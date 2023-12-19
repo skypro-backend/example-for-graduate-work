@@ -1,3 +1,9 @@
 databaseChangeLog:
   - include:
-      file: liquibase/scripts/index-practice.sql
+      file: liquibase/scripts/ad.sql
+  - include:
+      file: liquibase/scripts/comment.sql
+  - include:
+      file: liquibase/scripts/image.sql
+  - include:
+      file: liquibase/scripts/user.sql

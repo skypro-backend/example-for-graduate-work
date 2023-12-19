@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
+import javax.validation.constraints.NotNull;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -21,7 +23,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean login(String userName, String password) {
+    public boolean login(@NotNull String userName, @NotNull String password) {
         if (!manager.userExists(userName)) {
             return false;
         }
