@@ -9,12 +9,12 @@ import ru.skypro.homework.service.CommentService;
 public class CommentServiceImpl implements CommentService {
 
     @Override
-    public Comments getComments(int adId) {
+    public CommentsDto getComments(int adId) {
         return null;
     }
 
     @Override
-    public Comment addComment(int adId, CreateOrUpdateComment commentDto) {
+    public CommentDto addComment(int adId, CreateOrUpdateCommentDto commentDto) {
         return null;
     }
 
@@ -23,7 +23,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment updateComment(int adId, int commentId, CreateOrUpdateComment commentDto) {
+    public CommentDto updateComment(int adId, int commentId, CreateOrUpdateCommentDto commentDto) {
         return null;
     }
 }

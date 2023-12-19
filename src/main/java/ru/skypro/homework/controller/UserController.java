@@ -6,18 +6,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.Register;
-
+import ru.skypro.homework.dto.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UserService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,7 +30,7 @@ public class UserController {
 
 
     @PostMapping("/set_password")
-    public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
+    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDto newPassword) {
         try {
             userService.updatePassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());
             return ResponseEntity.ok().body("Password updated successfully");
@@ -45,15 +40,15 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> getUser() {
-        User user = userService.getUserDetails();
+    public ResponseEntity<UserDto> getUser() {
+        UserDto user = userService.getUserDetails();
         return ResponseEntity.ok(user);
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
+    public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto updateUser) {
         try {
-            UpdateUser updatedUser = userService.updateUser(updateUser);
+            UpdateUserDto updatedUser = userService.updateUser(updateUser);
             return ResponseEntity.ok(updatedUser);
         } catch (Exception e) {
             return ResponseEntity.status(401).build();
@@ -61,7 +56,7 @@ public class UserController {
     }
 
     @PatchMapping("/me/image")
-    public ResponseEntity<String> updateUserImage(@RequestParam("image") MultipartFile image) throws IOException, IOException {
+    public ResponseEntity<String> updateUserImage(@RequestBody MultipartFile image) throws IOException, IOException {
         byte[] imageBytes = image.getBytes();
         userService.updateUserImage(imageBytes);
         return ResponseEntity.ok("User image updated successfully");

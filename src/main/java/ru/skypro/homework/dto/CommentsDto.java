@@ -3,14 +3,13 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Objects;
 
 @Data
-public class Comments {
+public class CommentsDto {
     private int count;
-    private List<Comment> results;
+    private List<CommentDto> results;
 
-    public Comments(int count, List<Comment> results) {
+    public CommentsDto(int count, List<CommentDto> results) {
         this.count = count;
         this.results = results;
     }
