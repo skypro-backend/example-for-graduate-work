@@ -2,10 +2,8 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
-import java.util.Objects;
-
 @Data
-public class NewPassword {
+public class NewPasswordDto {
     private String currentPassword;
     private String newPassword;
 }

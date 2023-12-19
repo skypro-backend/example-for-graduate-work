@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Comment;
-import ru.skypro.homework.dto.Comments;
-import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.CommentService;
 
 @Slf4j
@@ -20,9 +18,9 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping
-    public ResponseEntity<Comments> getComments(@PathVariable int adId) {
+    public ResponseEntity<CommentsDto> getComments (@PathVariable int adId) {
         try {
-            Comments comments = commentService.getComments(adId);
+            CommentsDto comments = commentService.getComments(adId);
             return ResponseEntity.ok(comments);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -30,9 +28,9 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<Comment> addComment(@PathVariable int adId, @RequestBody CreateOrUpdateComment commentDto) {
+    public ResponseEntity<CommentDto> addComment(@PathVariable int adId, @RequestBody CreateOrUpdateCommentDto commentDto) {
         try {
-            Comment comment = commentService.addComment(adId, commentDto);
+            CommentDto comment = commentService.addComment(adId, commentDto);
             return ResponseEntity.ok(comment);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -50,9 +48,9 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable int adId, @PathVariable int commentId, @RequestBody CreateOrUpdateComment commentDto) {
+    public ResponseEntity<CommentDto> updateComment(@PathVariable int adId, @PathVariable int commentId, @RequestBody CreateOrUpdateCommentDto commentDto) {
         try {
-            Comment updatedComment = commentService.updateComment(adId, commentId, commentDto);
+            CommentDto updatedComment = commentService.updateComment(adId, commentId, commentDto);
             return ResponseEntity.ok(updatedComment);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

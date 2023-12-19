@@ -1,30 +1,38 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdService;
+
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class AdServiceImpl implements AdService {
+
     @Override
-    public ExtendedAd getAdById(int id) {
+    public Collection<AdDto> getAll() {
         return null;
     }
-
+    @Override
+    public AdDto addAd(CreateOrUpdateAdDto adDto) {
+        return null;
+    }
+    @Override
+    public ExtendedAdDto getAdById(int id) {
+        return null;
+    }
     @Override
     public void deleteAd(int id) {
     }
 
     @Override
-    public Ad updateAd(int id, CreateOrUpdateAd adDto) {
+    public AdDto updateAd(int id, CreateOrUpdateAdDto adDto) {
         return null;
     }
 
     @Override
-    public Ads getAdsForCurrentUser() {
+    public AdsDto getAdsForCurrentUser() {
         return null;
     }
 

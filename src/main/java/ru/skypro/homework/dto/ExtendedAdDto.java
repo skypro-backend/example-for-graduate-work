@@ -2,10 +2,8 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
-import java.util.Objects;
-
 @Data
-public class ExtendedAd {
+public class ExtendedAdDto {
     private Integer pk;
     private String authorFirstName;
     private String authorLastName;

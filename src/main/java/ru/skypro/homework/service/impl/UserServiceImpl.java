@@ -1,8 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.User;
-import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.UserService;
 import java.io.IOException;
 
@@ -10,12 +9,12 @@ import java.io.IOException;
 public class UserServiceImpl implements UserService {
 
     @Override
-    public User getUserDetails() {
+    public UserDto getUserDetails() {
         return null;
     }
 
     @Override
-    public UpdateUser updateUser(UpdateUser updateUserInfo) throws Exception {
+    public UpdateUserDto updateUser(UpdateUserDto updateUserInfo) throws Exception {
         return null;
     }
 

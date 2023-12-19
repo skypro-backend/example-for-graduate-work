@@ -2,10 +2,8 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
-import java.util.Objects;
-
 @Data
-public class CreateOrUpdateAd {
+public class CreateOrUpdateAdDto {
     private String title;
     private Integer price;
     private String description;
