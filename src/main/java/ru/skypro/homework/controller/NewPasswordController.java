@@ -11,11 +11,11 @@ import ru.skypro.homework.service.NewPasswordService;
 
 @RestController
 public class NewPasswordController {
-    private final NewPasswordService newPasswordService;
+    private  NewPasswordService newPasswordService;
 
-    public NewPasswordController(NewPasswordService newPasswordService) {
+    /*public NewPasswordController(NewPasswordService newPasswordService) {
         this.newPasswordService = newPasswordService;
-    }
+    }*/
 
     @PostMapping("/set_password")
     public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword) {

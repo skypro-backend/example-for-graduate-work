@@ -1,10 +1,10 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.entity;
 
 import lombok.Data;
-
+import ru.skypro.homework.dto.Role;
 @Data
-public class User {
-    private Integer id;
+public class UserEntity {
+    private Integer pk;
     private String name;
     private String surname;
     private int age;
@@ -15,8 +15,5 @@ public class User {
     private String idImage;
     private int userBirthday;
 
-    public Integer getId() {
-        return id;
-    }
-}
 
+}

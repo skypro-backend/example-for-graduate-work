@@ -1,9 +1,12 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.entity;
 
 import lombok.Data;
 
+import javax.persistence.Entity;
+
+//@Entity
 @Data
-public class Ad {
+public class AdEntity {
     private Integer author;
 
     private String image;
@@ -13,7 +16,4 @@ public class Ad {
     private Integer price;
 
     private String title;
-    public Integer getPk() {
-        return pk;
-    }
 }
