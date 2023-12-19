@@ -7,10 +7,11 @@ import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.mappers.CommentMapper;
+import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.service.CommentService;
 
-import javax.xml.stream.events.Comment;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/ads")
@@ -21,14 +22,11 @@ public class CommentController {
 
     private final CommentMapper commentMapper;
 
-    @GetMapping()
-    public List<CommentsDTO> getAllComments() {
-        return commentService.findAll().stream().map(commentMapper.convertToCommentsDTO);
-    }
 
     @GetMapping("{id}/comments")
-    public ResponseEntity<List<CommentDTO>> getCommentById(@PathVariable Long id) {
-        List<Comment> foundComments = commentService.getAllByCommentById(id);
+    public ResponseEntity<List<CommentsDTO>> getCommentById(@PathVariable Long id) {
+        List<CommentsDTO> foundComments = commentService.getAllByCommentById(id).stream().map(commentMapper
+                .convertToCommentsDTO(comment)).collect(Collectors.toList());
         if (foundComments == null) {
             return ResponseEntity.notFound().build();
         }
@@ -37,10 +35,10 @@ public class CommentController {
 
     @PostMapping("{id}/comments")
     public ResponseEntity<Void> createComments(@PathVariable Long id, @RequestBody CreateOrUpdateCommentDTO text) {
-        if (text == null) {
+        if (text == null || id == null) {
             return ResponseEntity.notFound().build();
         }
-        return commentService.save(commentMapper.convertToComment(new CommentDTO()));
+        return commentService.createComment(commentMapper.convertToComment(new CommentDTO()));
     }
 
     @DeleteMapping("{adId}/comments/{commentId}")
@@ -53,12 +51,12 @@ public class CommentController {
     }
 
     @PatchMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Long adId,
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long adId,
                                                  @PathVariable Long commentId,
                                                  @RequestBody CreateOrUpdateCommentDTO text) {
         if (text == null) {
             return ResponseEntity.notFound().build();
         }
-        return commentService.updateComment(adId, commentId, text);
+        return commentService.updateComment(commentMapper.convertToComment(CreateOrUpdateCommentDTO));
     }
 }

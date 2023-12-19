@@ -2,8 +2,6 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.ImageDTO;
@@ -22,7 +20,7 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping("/set_password")
-    public ResponseEntity<HttpStatus> setPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
+    public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
         if (newPasswordDTO.getCurrentPassword() == null) {
             return ResponseEntity.notFound().build();
         }
@@ -37,7 +35,7 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<HttpStatus> updateMyProfile(@RequestBody UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<?> updateMyProfile(@RequestBody UpdateUserDTO updateUserDTO) {
         if (updateUserDTO == null) {
             return ResponseEntity.notFound().build();
         }
@@ -46,7 +44,7 @@ public class UserController {
     }
 
     @PatchMapping("/me/image")
-    public ResponseEntity<HttpStatus> updateMyImage(@RequestBody ImageDTO imageDTO) {
+    public ResponseEntity<Void> updateMyImage(@RequestBody ImageDTO imageDTO) {
         if (imageDTO == null) {
             return ResponseEntity.notFound().build();
         }
