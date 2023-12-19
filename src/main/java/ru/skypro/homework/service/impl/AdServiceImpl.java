@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class AdServiceImpl implements AdService {
 
     private final UserService userService;
@@ -30,12 +32,14 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public AdsDTO getAllAds() {
+        log.info("Fetching all ads");
         Collection<AdDTO> allAds = adMapper.mapAdListToAdDTOList(adRepository.findAll());
         return new AdsDTO(allAds);
     }
 
     @Override
     public AdDTO createAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile image) {
+        log.info("Creating a new ad");
         Ad newAd = adMapper.mapCreateOrUpdateAdDTOtoAd(createOrUpdateAdDTO);
         newAd.setAuthor(userService.findAuthUser().orElseThrow());
         Image newImage = imageService.createImage(image);
@@ -46,21 +50,25 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public ExtendedAdDTO getFullAd(Integer id) {
+        log.info("Fetching full details for ad with ID: {}", id);
         Ad ad = adRepository.findById(id).orElseThrow();
         return adMapper.mapAdToExtendedAdDTO(ad);
     }
 
     @Override
     public boolean removeAd(Integer id) {
+        log.info("Removing ad with ID: {}", id);
         if (checkAccess(id)) {
             adRepository.deleteById(id);
             return true;
         }
+        log.warn("Failed to remove ad with ID: {}. Access denied.", id);
         throw new AdNotFoundException();
     }
 
     @Override
     public AdDTO updateAd(Integer id, CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+        log.info("Updating ad with ID: {}", id);
         Ad ad = adRepository.findById(id).orElseThrow();
         if (checkAccess(id)) {
             ad.setTitle(createOrUpdateAdDTO.getTitle());
@@ -69,11 +77,13 @@ public class AdServiceImpl implements AdService {
             adRepository.save(ad);
             return adMapper.mapAdToAdDTO(ad);
         }
+        log.warn("Failed to update ad with ID: {}. Access denied.", id);
         throw new AdNotFoundException();
     }
 
     @Override
     public AdsDTO getAllUserAd() {
+        log.info("Fetching ads for the authenticated user");
         User user = userService.findAuthUser().orElseThrow();
         Collection<Ad> allAds = adRepository.findAll();
         Collection<Ad> adsByUser = allAds.stream()
@@ -84,6 +94,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public void updateImageAd(Integer id, MultipartFile image) {
+        log.info("Updating image for ad with ID: {}", id);
         Ad ad = adRepository.findById(id).orElseThrow();
         Image newImage = imageService.updateImage(image, ad.getImage());
         ad.setImage(newImage);
@@ -92,6 +103,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public boolean checkAccess(Integer id) {
+        log.info("Checking access for ad with ID: {}", id);
         Role role = Role.ADMIN;
         Ad ad = adRepository.findById(id).orElseThrow();
         User user = userService.findAuthUser().orElseThrow();

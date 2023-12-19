@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService,UserDetailsService {
 
     private final UserRepository userRepository;
@@ -30,11 +32,13 @@ public class UserServiceImpl implements UserService,UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("Loading user by username: {}", username);
         return userRepository.findUserByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
     }
     @Override
     public UserDTO getUserInfo() {
+        log.info("Getting user info");
         Optional<User> currentUser = findAuthUser();
         UserDTO currentUserDTO = new UserDTO();
         if (currentUser.isPresent()) {
@@ -45,6 +49,7 @@ public class UserServiceImpl implements UserService,UserDetailsService {
 
     @Override
     public UserDTO updateInfoUser(UserDTO userDTO) {
+        log.info("Updating user info");
         Optional<User> currentUser = findAuthUser();
         User user = new User();
         if (currentUser.isPresent()) {
@@ -66,6 +71,7 @@ public class UserServiceImpl implements UserService,UserDetailsService {
 
     @Override
     public void updateUserImage(MultipartFile image) {
+        log.info("Finding authenticated user");
         User user = findAuthUser().orElseThrow();
         Image oldImage = user.getImage();
         if (oldImage == null) {

@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
@@ -30,6 +32,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDTO addComment(Integer adId, CreateOrUpdateCommentDTO comment) {
+        log.info("Adding comment for ad with ID: {}", adId);
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
         Comment newComment = new Comment();
         newComment.setAuthor(userService.findAuthUser().orElseThrow());
@@ -42,6 +45,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDTO updateComment(Integer adId, Integer commentId, CreateOrUpdateCommentDTO commentDTO) {
+        log.info("Updating comment with ID: {} for ad with ID: {}", commentId, adId);
         Comment updateComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
         if (!adId.equals(updateComment.getAd().getId())) {
@@ -50,6 +54,7 @@ public class CommentServiceImpl implements CommentService {
         try {
             adService.checkAccess(adId);
         } catch (ForbiddenAccessException ex) {
+            log.error("Access denied for updating comment", ex);
             throw new ForbiddenAccessException("Access denied for updating comment");
         }
         updateComment.setText(commentDTO.getText());
@@ -59,6 +64,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment(Integer adId, Integer commentId) {
+        log.info("Deleting comment with ID: {} for ad with ID: {}", commentId, adId);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
         if (!adId.equals(comment.getAd().getId())) {
@@ -67,6 +73,7 @@ public class CommentServiceImpl implements CommentService {
         try {
             adService.checkAccess(adId);
         } catch (ForbiddenAccessException ex) {
+            log.error("Access denied for deleting comment", ex);
             throw new ForbiddenAccessException("Access denied for deleting comment");
         }
         commentRepository.delete(comment);
@@ -74,6 +81,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentsDTO getComments(Integer adId) {
+        log.info("Getting comments for ad with ID: {}", adId);
         List<CommentDTO> comments = commentRepository.getCommentsByAdId(adId)
                 .stream()
                 .map(commentMapper::mapCommentToCommentDTO)
