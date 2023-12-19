@@ -24,6 +24,15 @@ public class AdController {
     public ResponseEntity <Collection<AdDto>> getAll() {
         return ResponseEntity.ok(adService.getAll());
     }
+    @PostMapping
+    public ResponseEntity<AdDto> addAd(@RequestBody CreateOrUpdateAdDto adDto) {
+        try {
+            AdDto ad = adService.addAd(adDto);
+            return ResponseEntity.ok(ad);
+        } catch (Exception e) {
+            return ResponseEntity.status(404).build();
+        }
+    }
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAdDto> getAdById(@PathVariable int id) {
         try {

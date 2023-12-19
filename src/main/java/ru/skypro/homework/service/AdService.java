@@ -6,7 +6,8 @@ import ru.skypro.homework.dto.*;
 import java.util.Collection;
 
 public interface AdService {
- Collection<AdDto> getAll();
+    Collection<AdDto> getAll();
+    AdDto addAd(CreateOrUpdateAdDto adDto) throws Exception;
     ExtendedAdDto getAdById(int id) throws Exception;
     void deleteAd(int id) throws Exception;
     AdDto updateAd(int id, CreateOrUpdateAdDto adDto) throws Exception;
