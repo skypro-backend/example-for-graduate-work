@@ -2,12 +2,14 @@ package ru.skypro.homework.mappers;
 
 import lombok.Data;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.ImageDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.model.User;
 
 @Data
+@Component
 public class UserMapper {
 
     private final ModelMapper modelMapper;

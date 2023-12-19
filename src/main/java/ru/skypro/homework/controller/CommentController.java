@@ -57,6 +57,6 @@ public class CommentController {
         if (text == null) {
             return ResponseEntity.notFound().build();
         }
-        return commentService.updateComment(commentMapper.convertToComment(CreateOrUpdateCommentDTO text));
+        return commentService.updateComment(commentMapper.convertToComment(CreateOrUpdateCommentDTO));
     }
 }

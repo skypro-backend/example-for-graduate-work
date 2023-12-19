@@ -18,7 +18,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ResponseEntity<Void> createComment(Long id, CreateOrUpdateCommentDTO text) {
+    public Comment createComment(CreateOrUpdateCommentDTO text) {
         return null;
     }
 
@@ -28,8 +28,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ResponseEntity<Comment> deleteComment(Long adId, Long commentId) {
-        return null;
+    public void deleteComment(Long adId, Long commentId) {
+
     }
 
     @Override

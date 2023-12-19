@@ -2,6 +2,7 @@ package ru.skypro.homework.mappers;
 
 import lombok.Data;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
@@ -9,6 +10,7 @@ import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.model.Ad;
 
 @Data
+@Component
 public class AdMapper {
 
     private final ModelMapper modelMapper;
