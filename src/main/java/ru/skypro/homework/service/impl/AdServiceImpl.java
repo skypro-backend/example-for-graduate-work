@@ -13,7 +13,7 @@ public class AdServiceImpl implements AdService {
     private  AdRepository adRepository;
     @Override
     public Collection<AdDto> getAll() {
-        return AdRepository.findAll();
+        return adRepository.findAll();
     }
     @Override
     public ExtendedAdDto getAdById(int id) {

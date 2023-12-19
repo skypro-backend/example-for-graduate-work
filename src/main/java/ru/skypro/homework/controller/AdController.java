@@ -22,7 +22,7 @@ public class AdController {
 
     @GetMapping
     public ResponseEntity <Collection<AdDto>> getAll() {
-        return AdService.getAll();
+        return ResponseEntity.ok(adService.getAll());
     }
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAdDto> getAdById(@PathVariable int id) {
