@@ -17,8 +17,7 @@ import java.util.Collection;
  * рекламных объявлений ({@link AdEntity}) и их представлением в виде Data Transfer Objects (DTO).
  * Обеспечивает удобную конвертацию данных между слоями приложения.
  *
- * <p>Использует библиотеку MapStruct для автоматической генерации кода преобразования.
- * Экземпляр маппера доступен через статическое поле {@code INSTANCE}.</p>
+ * <p>Использует библиотеку MapStruct для автоматической генерации кода преобразования.</p>
  *
  * <p>Методы маппера:</p>
  * <ul>
@@ -37,10 +36,8 @@ import java.util.Collection;
  *
  * @author Michail Z. (GH: HeimTN)
  */
-@Mapper
-@Component
+@Mapper(componentModel = "spring")
 public interface AdMapper {
-    AdMapper INSTANCE = Mappers.getMapper(AdMapper.class);
 
     @Mappings({
             @Mapping(source = "id", target = "pk"),
@@ -53,7 +50,7 @@ public interface AdMapper {
     })
     Ads adToDtoList(Collection<AdEntity> ads);
 
-    AdEntity DtoToAd(CreateOrUpdateAd createOrUpdateAd);
+    AdEntity dtoToAd(CreateOrUpdateAd createOrUpdateAd);
 
     @Mappings({
             @Mapping(source = "id", target = "pk"),

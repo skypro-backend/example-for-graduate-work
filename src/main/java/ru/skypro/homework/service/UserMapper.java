@@ -5,7 +5,7 @@ import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.model.UserEntity;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);

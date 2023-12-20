@@ -60,10 +60,8 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ad createAd(CreateOrUpdateAd ad, String image, Integer userId) {
-        AdEntity result = new AdEntity();
-        result.setDescription(ad.getDescription());
-        result.setTitle(ad.getTitle());
-        result.setPrice(ad.getPrice());
+        AdEntity result;
+        result = mapper.dtoToAd(ad);
         result.setImage(image);
         result.setAuthor(userRepository.findById(userId).orElse(null));
         return mapper.adToDto(repository.save(result));
