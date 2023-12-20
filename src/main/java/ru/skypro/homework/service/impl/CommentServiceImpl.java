@@ -1,8 +1,10 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
@@ -26,7 +28,8 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
+@Service
+//@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
     private final Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
@@ -42,10 +45,10 @@ public class CommentServiceImpl implements CommentService {
                               CommentEntityRepository commentEntityRepository,
                               CommentMapper commentMapper,
                               UserEntityRepository userEntityRepository) {
-        this.commentEntityRepository = commentEntityRepository;
-        this.commentMapper = commentMapper;
         this.adEntityRepository = adEntityRepository;
         this.imageDir = imageDir;
+        this.commentEntityRepository = commentEntityRepository;
+        this.commentMapper = commentMapper;
         this.userEntityRepository = userEntityRepository;
     }
 
@@ -54,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
         List<CommentEntity> commentEntities = commentEntityRepository.findAll();
 
         if (commentEntities.isEmpty()) {
-            throw new EntityNotFoundException("Cообщения отсутствуют!");
+            return null;
         }
         List<Comment> comments = commentMapper.commentEntityListToCommentList(commentEntities);
 

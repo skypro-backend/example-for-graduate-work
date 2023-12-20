@@ -9,6 +9,6 @@ public interface AdsService {
     void removeAd(Integer adId);
     CreateOrUpdateAd updateAd(Integer adId, CreateOrUpdateAd properties);
     Ads getAdsMe();
-    String updateImage(Integer adId, MultipartFile image);
+    void updateImage(Integer adId, MultipartFile image);
 
 }

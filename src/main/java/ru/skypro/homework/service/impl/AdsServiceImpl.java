@@ -1,4 +1,5 @@
 package ru.skypro.homework.service.impl;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import ru.skypro.homework.exceptions.MissingImageException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdEntityRepository;
 import ru.skypro.homework.service.AdsService;
+
 import javax.persistence.EntityNotFoundException;
 import java.nio.file.Path;
 import java.util.List;
@@ -35,11 +37,12 @@ public class AdsServiceImpl implements AdsService {
         this.imageDir = imageDir;
 //        this.imageEntity = imageEntity;
     }
+
     public Ads getAllAds() {
 
         List<AdEntity> adEntityList = adEntityRepository.findAll();
         if (adEntityList.isEmpty()) {
-            throw new EntityNotFoundException("Список обьявлений пуст!");
+            return null;
         }
 
         List<Ad> adList = adMapper.adEntityListToAdList(adEntityList);
@@ -49,18 +52,18 @@ public class AdsServiceImpl implements AdsService {
                 .count(adList.size())
                 .build();
     }
-    public Ad addAd (CreateOrUpdateAd properties, MultipartFile image) {
+
+    public Ad addAd(CreateOrUpdateAd properties, MultipartFile image) {
 
         if (properties.getTitle() == null || properties.getPrice() == null
-            || properties.getDescription() == null || image.isEmpty())
-        {
+                || properties.getDescription() == null || image.isEmpty()) {
             throw new BlankFieldException("Пустые поля при сохранении обьекта CreateOrUpdateAd " +
                     "или отсуствует фото сообщения!");
         }
-       AdEntity adEntity = adMapper.AdToAdEntity(properties);
+        AdEntity adEntity = adMapper.AdToAdEntity(properties);
 
 // туДу поменять строки внутри комментариев на метод по обработке фото
-       Path filePath = Path.of(imageDir, adEntity.getTitle() + ".images");
+        Path filePath = Path.of(imageDir, adEntity.getTitle() + ".images");
         ImageEntity imageEntity = ImageEntity.builder()
                 .filePath(filePath.toString())
                 .mediaType(image.getContentType())
@@ -71,16 +74,17 @@ public class AdsServiceImpl implements AdsService {
         adEntityRepository.save(adEntity);
         return adMapper.AdEntityToAd(adEntity);
     }
+
     public ExtendedAd getAds(Integer adId) {
+
         ExtendedAd extendedAd = adMapper
                 .AdEntityToExtendedAd(adEntityRepository.findById(adId).get());
         if (extendedAd.getPk() == null) {
             throw new EntityNotFoundException("Объявление в указанным id не найдено");
         }
-        extendedAd.setEmail("user@gmail.com");
-        extendedAd.setPhone("+79995553333");
         return extendedAd;
     }
+
     public void removeAd(Integer adId) {
         logger.info("Был вызван метод removeAd с данными id = " + adId);
 
@@ -102,9 +106,9 @@ public class AdsServiceImpl implements AdsService {
         AdEntity adEntity = adEntityRepository.findById(adId)// откуда взять ай ди если в параметрах его нет
                 .orElseThrow(() -> new IllegalArgumentException("Обьявление с указанным " + adId + " отсуствует!"));
 
-        if ( properties.getTitle() == null && properties.getPrice() == null
-                && properties.getDescription() == null ) {
-            throw new BlankFieldException("Пустые поля при обновлении содержания обьявления" );
+        if (properties.getTitle() == null && properties.getPrice() == null
+                && properties.getDescription() == null) {
+            throw new BlankFieldException("Пустые поля при обновлении содержания обьявления");
         } else if (properties.getTitle() != null) {
             adEntity.setTitle(properties.getTitle());
         } else if (properties.getPrice() != null) {
@@ -133,15 +137,14 @@ public class AdsServiceImpl implements AdsService {
                 .build();
     }
 
-    public String updateImage(Integer adId, MultipartFile image) {
+    public void updateImage(Integer adId, MultipartFile image) {
 
-        logger.info("Был вызван метод updateImage для обьявления с adId" + adId );
+        logger.info("Был вызван метод updateImage для обьявления с adId" + adId);
         AdEntity adEntity = adEntityRepository.findById(adId)
                 .orElseThrow(() -> new IllegalArgumentException("Обьявление с указанным " + adId + " отсуствует!"));
 
-        if (!image.getContentType().equals("image/jpeg") || !image.getContentType().equals("image/png"))
-        {
-            throw new MissingImageException("Некорректный формат изображения обьявления!" );
+        if (!image.getContentType().equals("image/jpeg") || !image.getContentType().equals("image/png")) {
+            throw new MissingImageException("Некорректный формат изображения обьявления!");
         }
 
         // туДу поменять строки внутри комментариев на метод по обработке фото
@@ -154,9 +157,8 @@ public class AdsServiceImpl implements AdsService {
         adEntity.setImageEntity(imageEntity);
         //
         logger.info("Метод updateImage вернул адрес обновленного фото: " + imageEntity.getFilePath());
-        return imageEntity.getFilePath();
-    }
 
+    }
 
 
 }

@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
@@ -22,6 +23,7 @@ import javax.persistence.EntityNotFoundException;
 import java.nio.file.Path;
 import java.util.Optional;
 
+@Service
 public class UsersServiceImpl implements UsersService {
 
     private final Logger logger = LoggerFactory.getLogger(UsersServiceImpl.class);

@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
@@ -8,7 +9,7 @@ import ru.skypro.homework.repository.ImageEntityRepository;
 import ru.skypro.homework.repository.UserEntityRepository;
 import ru.skypro.homework.service.ImageService;
 
-
+@Service
 public class ImageServiceImpl implements ImageService {
     private AdEntity adEntity;
     private UserEntity userEntity;
