@@ -3,10 +3,13 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
@@ -27,12 +30,15 @@ import java.nio.file.Paths;
  */
 @RestController
 @RequestMapping("/ads")
+@RequiredArgsConstructor
 public class AdvertisementController {
     private AdService adService;
-    public AdvertisementController(AdService adService){
-        this.adService = adService;
-    }
+    private Authentication authentication;
 
+    public AdvertisementController(AdService adService, Authentication authentication) {
+        this.adService = adService;
+        this.authentication = authentication;
+    }
 
     /**
      * Получение коллекции объявлений.
@@ -55,10 +61,10 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "401", description = "Неавторизованный доступ")
     })
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<Ad> postAds(CreateOrUpdateAd properties, String image){
-        //так же нужна проверка авторизации, если не авторизован возваращаем 401
-       // Ad result = adService.createAd(properties, image, userId);
-        return ResponseEntity.status(201).build();
+        Ad result = adService.createAd(properties, image, authentication.getName());
+        return ResponseEntity.status(201).body(result);
     }
     /**
      * Получение информации об объявлении по его идентификатору.
@@ -70,8 +76,8 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<ExtendedAd> getInfoAds(@PathVariable Integer id){
-        //если не авторизован 401
         ExtendedAd result = adService.getExtAd(id);
         if(result == null){
             return ResponseEntity.status(404).build();
@@ -89,9 +95,11 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity deleteAds(@PathVariable Integer id){
-        //если не авторизован 401
-        //если нет доступа(видимо если не админ) 403
+        if(!adService.fastCheckAuthor(authentication.getName(), id)){ // + нужен чек на админа
+            return ResponseEntity.status(403).build();
+        }
         Ad result = adService.deleteAd(id);
         if(result == null){
             return ResponseEntity.status(404).build();
@@ -109,9 +117,11 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<Ad> pathAds(@PathVariable Integer id, CreateOrUpdateAd ads){
-        //если не авторизован 401
-        //если нет доступа(видимо если не админ) 403
+        if(!adService.fastCheckAuthor(authentication.getName(), id)){ // + нужен чек на админа
+            return ResponseEntity.status(403).build();
+        }
         Ad result = adService.pathAd(ads, id);
         if(result == null){
             return ResponseEntity.status(404).build();
@@ -127,10 +137,10 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "401", description = "Неавторизованный доступ")
     })
     @GetMapping("/me")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<Ads> getListAdsUser(){
-        //если не авторизован 401
-       // Ads result = adService.getAllAdsForUser(userId);
-        return ResponseEntity.status(200).build(); //Возвращаем через .ok
+        Ads result = adService.getAllAdsForUser(authentication.getName());
+        return ResponseEntity.ok(result); //Возвращаем через .ok
     }
     /**
      * Изменение изображения объявления по его идентификатору.
@@ -143,9 +153,11 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @PatchMapping("/{id}/image")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<byte[]> pathImageAds(@PathVariable Integer id, String image) throws IOException {
-        //если не авторизован 401
-        //если нет доступа(видимо если не админ) 403
+        if(!adService.fastCheckAuthor(authentication.getName(), id)){ // + нужен чек на админа
+            return ResponseEntity.status(403).build();
+        }
         String result = adService.pathImageAd(id, image);
         if(result == null){
             ResponseEntity.status(404).build();

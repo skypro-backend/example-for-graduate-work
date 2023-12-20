@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
@@ -10,6 +11,8 @@ import ru.skypro.homework.repo.AdRepository;
 import ru.skypro.homework.repo.UserRepo;
 import ru.skypro.homework.service.AdMapper;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.util.exceptions.NotFoundException;
+
 /**
  * Класс {@code AdServiceImpl} предоставляет реализацию интерфейса {@link AdService},
  * предоставляя функциональность для управления рекламными объявлениями в системе.
@@ -59,11 +62,11 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Ad createAd(CreateOrUpdateAd ad, String image, Integer userId) {
+    public Ad createAd(CreateOrUpdateAd ad, String image, String userName) {
         AdEntity result;
         result = mapper.dtoToAd(ad);
         result.setImage(image);
-        result.setAuthor(userRepository.findById(userId).orElse(null));
+        result.setAuthor(userRepository.findByLogin(userName));
         return mapper.adToDto(repository.save(result));
     }
 
@@ -99,8 +102,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Ads getAllAdsForUser(Integer userId) {
-        return mapper.adToDtoList(repository.findAdEntitiesByAuthor(userRepository.findById(userId).orElse(null)));
+    public Ads getAllAdsForUser(String userName) {
+        return mapper.adToDtoList(repository.findAdEntitiesByAuthor(userRepository.findByLogin(userName)));
     }
 
     @Override
@@ -112,5 +115,9 @@ public class AdServiceImpl implements AdService {
         result.setImage(image);
         repository.save(result);
         return result.getImage();
+    }
+    @Override
+    public boolean fastCheckAuthor(String userName, Integer id){
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Обьяевление с данным ID " + id + " не найдено")).getAuthor().getLogin().equals(userName);
     }
 }
