@@ -1,42 +1,21 @@
 package ru.skypro.homework.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.Hibernate;
+import lombok.*;
 import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.Objects;
+
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "image")
+@Data
+@Table(name = "images")
 public class Image {
     @Id
-    @Column(name = "image_id")
-    private Integer id;
-
-    @Column(name = "image")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Long fileSize;
+    private String mediaType;
     @Lob
-    @Type(type = "org.hibernate.type.BinaryType")
-    private byte[] bytes;
+    @Type(type = "org.hibernate.type.ImageType")
+    private byte[] data;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Image image = (Image) o;
-        return id != null && Objects.equals(id, image.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }
