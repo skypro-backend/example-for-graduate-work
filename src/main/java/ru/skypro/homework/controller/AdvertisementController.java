@@ -11,10 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.*;
+import ru.skypro.homework.repo.UserRepo;
 import ru.skypro.homework.service.AdService;
 
 import java.io.File;
@@ -34,10 +32,12 @@ import java.nio.file.Paths;
 public class AdvertisementController {
     private AdService adService;
     private Authentication authentication;
+    private UserRepo userRepo;
 
-    public AdvertisementController(AdService adService, Authentication authentication) {
+    public AdvertisementController(AdService adService, Authentication authentication, UserRepo repo) {
         this.adService = adService;
         this.authentication = authentication;
+        this.userRepo = repo;
     }
 
     /**

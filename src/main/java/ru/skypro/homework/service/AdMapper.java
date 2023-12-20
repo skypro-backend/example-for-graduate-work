@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -12,6 +13,9 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.AdEntity;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Интерфейс {@code AdMapper} предоставляет методы для преобразования между сущностями
  * рекламных объявлений ({@link AdEntity}) и их представлением в виде Data Transfer Objects (DTO).
@@ -41,15 +45,17 @@ public interface AdMapper {
 
     @Mappings({
             @Mapping(source = "id", target = "pk"),
-            @Mapping(source = "author_id", target = "author")
+            @Mapping(target = "author", expression = "java(ad.getAuthor().getId())")
     })
     Ad adToDto(AdEntity ad);
-    @Mappings({
-            @Mapping(target = "count", expression = "java(ads.size())"),
-            @Mapping(target = "results", source = "ads")
-    })
-    Ads adToDtoList(Collection<AdEntity> ads);
 
+    default Ads adToDtoList(Collection<AdEntity> ads){
+        List<Ad> adList = ads.stream().map(this::adToDto).collect(Collectors.toList());
+        Ads result = new Ads();
+        result.setResults(adList);
+        result.setCount(adList.size());
+        return result;
+    };
     AdEntity dtoToAd(CreateOrUpdateAd createOrUpdateAd);
 
     @Mappings({

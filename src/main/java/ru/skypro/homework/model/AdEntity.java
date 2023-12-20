@@ -41,6 +41,5 @@ public class AdEntity {
     @JoinColumn(name = "author_id")
     private UserEntity author;
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
-    @JoinColumn(name = "comments_id")
     private Collection<CommentEntity> comments;
 }
