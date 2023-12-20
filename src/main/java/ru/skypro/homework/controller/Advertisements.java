@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
-import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.AdsDto;
 
 import java.util.List;
 
@@ -26,8 +26,8 @@ public class Advertisements {
      * @return Ads
      */
     @GetMapping("/ads")
-    public ResponseEntity<Ads> getAllAds() {
-        return ResponseEntity.ok(new Ads());
+    public ResponseEntity<AdsDto> getAllAds() {
+        return ResponseEntity.ok(new AdsDto());
     }
 
     /**
@@ -102,9 +102,9 @@ public class Advertisements {
      */
 
     @GetMapping("/ads/me")
-    public ResponseEntity<Ads> getAdsMe(@Parameter(name = "id", description = "user identifier")
+    public ResponseEntity<AdsDto> getAdsMe(@Parameter(name = "id", description = "user identifier")
                                         @PathVariable long id) {
-        return new ResponseEntity<>(new Ads(), HttpStatus.OK);
+        return new ResponseEntity<>(new AdsDto(), HttpStatus.OK);
     }
 
 

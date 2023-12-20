@@ -1,4 +1,4 @@
-package ru.skypro.homework.entity;
+package ru.skypro.homework.mapping;
 
 import lombok.Data;
 import ru.skypro.homework.dto.Role;

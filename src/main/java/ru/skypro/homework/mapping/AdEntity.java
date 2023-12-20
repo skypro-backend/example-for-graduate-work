@@ -1,8 +1,6 @@
-package ru.skypro.homework.entity;
+package ru.skypro.homework.mapping;
 
 import lombok.Data;
-
-import javax.persistence.Entity;
 
 //@Entity
 @Data

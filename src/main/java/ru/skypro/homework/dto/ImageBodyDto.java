@@ -8,6 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
  */
 
 @Data
-public class ImageBody {
+public class ImageBodyDto {
     private MultipartFile image;
 }
