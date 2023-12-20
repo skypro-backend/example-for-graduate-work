@@ -1,13 +1,12 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.Ads;
 
 import java.util.List;
@@ -15,7 +14,8 @@ import java.util.List;
 /**
  * <h2>Advertisements controller to manage ads</h2>
  */
-
+@Slf4j
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 public class Advertisements {
 
@@ -36,7 +36,7 @@ public class Advertisements {
      * @return Ad
      */
     @PostMapping("/ads")
-    public ResponseEntity<Ad> addAd(@RequestBody Ad ad) {
+    public ResponseEntity<AdDto> addAd(@RequestBody AdDto ad) {
         return new ResponseEntity<>(ad, HttpStatus.OK);
     }
 
@@ -44,8 +44,8 @@ public class Advertisements {
      * GET /ads/{id} Получение информации об объявлении
      */
     @GetMapping("/ads/{id}")
-    public ResponseEntity<Ad> getAds(@PathVariable long id) {
-        return new ResponseEntity<>(new Ad(), HttpStatus.OK);
+    public ResponseEntity<AdDto> getAds(@PathVariable long id) {
+        return new ResponseEntity<>(new AdDto(), HttpStatus.OK);
     }
 
     /**
@@ -88,9 +88,9 @@ public class Advertisements {
      * description: Not found
      */
     @PatchMapping("/ads/{id}")
-    ResponseEntity<Ad> updateAds(@Parameter(name = "id", description = "advertisement identifier")
+    ResponseEntity<AdDto> updateAds(@Parameter(name = "id", description = "advertisement identifier")
                                  @PathVariable long id) {
-        return new ResponseEntity<>(new Ad(), HttpStatus.OK);
+        return new ResponseEntity<>(new AdDto(), HttpStatus.OK);
     }
 
 

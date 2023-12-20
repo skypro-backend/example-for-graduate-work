@@ -1,28 +1,31 @@
 package ru.skypro.homework.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Avatar;
 import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Override
-    public User saveUser(User user) {
+    public UserDto saveUser(UserDto user) {
         return null;
     }
 
     @Override
-    public User deleteUser(User user) {
+    public UserDto deleteUser(UserDto user) {
         return null;
     }
 
     @Override
-    public User getInfoUser() {
+    public UserDto getInfoUser() {
         return null;
     }
 

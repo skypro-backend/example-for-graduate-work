@@ -7,5 +7,5 @@ import java.util.List;
 public class Ads {
     private Integer count;
 
-    private List<Ad> results;
+    private List<AdDto> results;
 }

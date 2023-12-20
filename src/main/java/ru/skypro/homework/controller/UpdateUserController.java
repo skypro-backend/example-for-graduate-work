@@ -2,14 +2,12 @@ package ru.skypro.homework.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.service.UserService;
 
 @Slf4j
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("http://localhost:8080/updateUser")
 public class UpdateUserController {

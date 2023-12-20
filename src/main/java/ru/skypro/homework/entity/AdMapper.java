@@ -2,10 +2,10 @@ package ru.skypro.homework.entity;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.AdDto;
 
 @Mapper
 public interface AdMapper {
     AdMapper INSTANCE = Mappers.getMapper(AdMapper.class);
-    AdEntity adToAdEntity(Ad ad);
+    AdEntity adToAdEntity(AdDto ad);
 }
