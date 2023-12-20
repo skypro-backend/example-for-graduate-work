@@ -11,8 +11,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
-    CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
-
     @Mapping(source = "id", target = "pk")
     Comment commentEntityToDTO(CommentEntity commentEntity);
 
