@@ -15,9 +15,8 @@ public class AdServiceImpl implements AdService {
         return null;
     }
     @Override
-    public AdDto addAd(CreateOrUpdateAdDto adDto) {
-        return null;
-    }
+    public boolean addAd(CreateOrUpdateAdDto adDto) {
+        return true;  }
     @Override
     public ExtendedAdDto getAdById(int id) {
         return null;

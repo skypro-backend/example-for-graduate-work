@@ -2,6 +2,7 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,14 +26,16 @@ public class AdController {
         return ResponseEntity.ok(adService.getAll());
     }
     @PostMapping
-    public ResponseEntity<AdDto> addAd(@RequestBody CreateOrUpdateAdDto adDto) {
-        try {
-            AdDto ad = adService.addAd(adDto);
-            return ResponseEntity.ok(ad);
-        } catch (Exception e) {
-            return ResponseEntity.status(404).build();
+    public ResponseEntity<?> addAd(@RequestBody CreateOrUpdateAdDto adDto) {
+
+            if (adService.addAd(adDto)) {
+                return ResponseEntity.status(HttpStatus.CREATED).build();
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
         }
-    }
+           // return new ResponseEntity<>(adService.addAd(adDto), HttpStatus.CREATED);
+
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAdDto> getAdById(@PathVariable int id) {
         try {
