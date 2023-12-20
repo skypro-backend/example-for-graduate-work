@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public interface AdService {
     Collection<AdDto> getAll();
-    AdDto addAd(CreateOrUpdateAdDto adDto) throws Exception;
+    boolean addAd(CreateOrUpdateAdDto adDto);
     ExtendedAdDto getAdById(int id) throws Exception;
     void deleteAd(int id) throws Exception;
     AdDto updateAd(int id, CreateOrUpdateAdDto adDto) throws Exception;
