@@ -7,11 +7,11 @@ public class CommentDTO {
     private Integer author;             //id автора комментария
     private String authorImage;     //ссылка на аватар автора комментария
     private String authorFirstName; //имя создателя комментария
-    private Integer createdAt;          //дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
+    private Long createdAt;          //дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
     private Integer pk;                 //id комментария
     private String text;            //текст комментария
 
-    public CommentDTO(Integer author, String authorImage, String authorFirstName, Integer createdAt, Integer pk, String text) {
+    public CommentDTO(Integer author, String authorImage, String authorFirstName, Long createdAt, Integer pk, String text) {
         this.author = author;
         this.authorImage = authorImage;
         this.authorFirstName = authorFirstName;
@@ -44,11 +44,11 @@ public class CommentDTO {
         this.authorFirstName = authorFirstName;
     }
 
-    public Integer getCreatedAt() {
+    public Long getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Integer createdAt) {
+    public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
     }
 

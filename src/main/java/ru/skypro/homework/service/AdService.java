@@ -19,7 +19,7 @@ public interface AdService {
     AdsDTO getAllAdsByAuthor();
 
 
-    Void patchAdImage(Long adId, MultipartFile image);
+    Void patchAdImage(Integer adId, MultipartFile image);
 
 
 

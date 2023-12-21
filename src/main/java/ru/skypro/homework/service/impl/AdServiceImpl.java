@@ -39,7 +39,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Void patchAdImage(Long adId, MultipartFile image) {
+    public Void patchAdImage(Integer adId, MultipartFile image) {
         return null;
     }
 }

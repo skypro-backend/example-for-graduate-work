@@ -9,5 +9,5 @@ public interface ImageService {
 
     Image addImage(MultipartFile image);
 
-    void deleteImage(Long imageId);
+    void deleteImage(Integer imageId);
 }

@@ -17,7 +17,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void deleteImage(Long imageId) {
+    public void deleteImage(Integer imageId) {
 
     }
 }
