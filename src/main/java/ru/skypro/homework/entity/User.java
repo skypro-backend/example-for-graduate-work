@@ -2,11 +2,7 @@ package ru.skypro.homework.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import ru.skypro.homework.role.Role;
 
 import javax.persistence.*;
 import java.util.*;

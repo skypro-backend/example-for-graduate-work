@@ -1,7 +1,7 @@
 package ru.skypro.homework.dto;
 
 
-import ru.skypro.homework.entity.Role;
+import ru.skypro.homework.role.Role;
 
 import java.util.Objects;
 

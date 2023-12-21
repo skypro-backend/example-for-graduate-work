@@ -1,4 +1,4 @@
-package ru.skypro.homework.entity;
+package ru.skypro.homework.role;
 
 
 public enum Role {

@@ -1,10 +1,8 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterDTO;
 import ru.skypro.homework.exception.InvalidPasswordException;
@@ -18,12 +16,12 @@ import ru.skypro.homework.service.AuthService;
 public class AuthServiceImpl implements AuthService {
 
     private final CustomUserDetailsService manager;
-    private final PasswordEncoder encoder;
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public AuthServiceImpl(CustomUserDetailsService manager, PasswordEncoder encoder, UserRepository userRepository) {
+    public AuthServiceImpl(CustomUserDetailsService manager, PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.manager = manager;
-        this.encoder = encoder;
+        this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
     }
 
@@ -32,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
     public boolean login(String userName, String password) {
         log.info("Attempting login for user: {}", userName);
         UserDetails userDetails = manager.loadUserByUsername(userName);  // Загрузка информации о пользователе по его имени пользователя
-        if (!encoder.matches(password, userDetails.getPassword())) {    // Проверка соответствия введенного пароля хэшированному паролю пользователя
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {    // Проверка соответствия введенного пароля хэшированному паролю пользователя
             throw new InvalidPasswordException("Invalid password");   // В случае несоответствия, выбрасывается исключение InvalidPasswordException
         }
         return true;                                                  // Возврат true в случае успешной аутентификации
@@ -45,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.findByEmail(register.getUsername()) != null) {     // Проверка, существует ли пользователь с указанным email
             return false;                                                    // Возвращение false, если пользователь с таким email уже существует
         }
-        register.setPassword(encoder.encode(register.getPassword()));         // Хэширование пароля перед сохранением в базе данных
+        register.setPassword(passwordEncoder.encode(register.getPassword()));         // Хэширование пароля перед сохранением в базе данных
         userRepository.save(UserMapper.INSTANCE.registerDTOToUser(register));  // Сохранение нового пользователя в базе данных
         return true;                                                           // Возвращение true в случае успешной регистрации
     }
