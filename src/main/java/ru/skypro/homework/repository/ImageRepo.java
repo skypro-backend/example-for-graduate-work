@@ -6,4 +6,6 @@ import ru.skypro.homework.model.Image;
 
 @Repository
 public interface ImageRepo extends JpaRepository<Image, Integer> {
+
+
 }

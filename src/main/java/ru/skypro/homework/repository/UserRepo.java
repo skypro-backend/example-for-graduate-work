@@ -6,4 +6,8 @@ import ru.skypro.homework.model.User;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
+
+    public User findById(Long id);
+
+
 }
