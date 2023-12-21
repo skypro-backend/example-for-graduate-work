@@ -11,6 +11,7 @@ import ru.skypro.homework.exception.NotAllowedPasswordException;
 import ru.skypro.homework.service.NewPasswordService;
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
+
 @RestController
 public class NewPasswordController {
     private  NewPasswordService newPasswordService;

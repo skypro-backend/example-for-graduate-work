@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
+
 @RestController
 public class Advertisements {
 
@@ -28,6 +30,7 @@ public class Advertisements {
     @GetMapping("/ads")
     public ResponseEntity<AdsDto> getAllAds() {
         return ResponseEntity.ok(new AdsDto());
+
     }
 
     /**
@@ -36,6 +39,7 @@ public class Advertisements {
      * @return Ad
      */
     @PostMapping("/ads")
+
     public ResponseEntity<AdDto> addAd(@RequestBody AdDto ad) {
         return new ResponseEntity<>(ad, HttpStatus.OK);
     }
@@ -88,9 +92,11 @@ public class Advertisements {
      * description: Not found
      */
     @PatchMapping("/ads/{id}")
+
     ResponseEntity<AdDto> updateAds(@Parameter(name = "id", description = "advertisement identifier")
                                  @PathVariable long id) {
         return new ResponseEntity<>(new AdDto(), HttpStatus.OK);
+
     }
 
 
@@ -102,9 +108,10 @@ public class Advertisements {
      */
 
     @GetMapping("/ads/me")
-    public ResponseEntity<AdsDto> getAdsMe(@Parameter(name = "id", description = "user identifier")
+     public ResponseEntity<AdsDto> getAdsMe(@Parameter(name = "id", description = "user identifier")
                                         @PathVariable long id) {
         return new ResponseEntity<>(new AdsDto(), HttpStatus.OK);
+
     }
 
 
@@ -116,10 +123,12 @@ public class Advertisements {
      * @return updated picture
      */
     @PatchMapping("/ads/{id}/image")
+
     public ResponseEntity<List<byte[]>> updateImage(@Parameter(name = "id", description = "user identifier")
                                                     @PathVariable(name = "id") long id,
                                                     @RequestBody MultipartFile image) {
         return new ResponseEntity<List<byte[]>>(HttpStatus.OK);
+
     }
 
 

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
@@ -25,6 +26,7 @@ public class CommentsController {
         return new ResponseEntity<CommentsDto>(new CommentsDto(), HttpStatus.OK);
     }
 
+
     /**
      * POST /ads/{id}/comments <h2>Добавление комментария к объявлению</h2>
      * @param id Advertisement identifier
@@ -38,6 +40,7 @@ public class CommentsController {
     public ResponseEntity<CommentDto> addComment(@PathVariable(name = "id") long id,
                                                  @RequestBody CreateOrUpdateCommentDto comment){
         return new ResponseEntity<CommentDto>(new CommentDto(), HttpStatus.OK);
+
     }
 
     /**
@@ -54,8 +57,10 @@ public class CommentsController {
      *           description: Not found <br>
      */
     @DeleteMapping("/ads/{adId}/comments/{commentId}")
-    public ResponseEntity<HttpStatus> deleteComment(@PathVariable(name = "adId") long adId,
-                                                    @PathVariable(name = "commentId") long commentId){
+    public ResponseEntity<HttpStatus> deleteComment(
+            @PathVariable(name = "adId") long adId,
+            @PathVariable(name = "commentId") long commentId){
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

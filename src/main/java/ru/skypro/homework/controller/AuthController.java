@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.LoginDto;
+
 import ru.skypro.homework.service.AuthService;
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -18,9 +19,11 @@ public class AuthController {
 
     private  AuthService authService;
 
+
     //public AuthController(AuthService authService) {
     //    this.authService = authService;
     // }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto login) {
@@ -31,6 +34,7 @@ public class AuthController {
         }
     }
 
+
  //   @PostMapping("/register")
    // public ResponseEntity<?> register(@RequestBody Register register) {
    //     if (authService.register(register)) {
@@ -39,4 +43,5 @@ public class AuthController {
       //      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
      //   }
    // }
+
 }
