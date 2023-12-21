@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.Image;
 
 public interface ImageService {
-    ResponseEntity<byte[]> getImage(Long id);
+    ResponseEntity<byte[]> getImage(Integer id);
 
     Image addImage(MultipartFile image);
 

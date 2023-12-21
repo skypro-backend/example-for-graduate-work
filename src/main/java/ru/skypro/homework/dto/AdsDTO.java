@@ -1,7 +1,9 @@
 package ru.skypro.homework.dto;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -9,20 +11,22 @@ public class AdsDTO {
 
     private Integer count;             //общее количество объявлений
 
-    private Collection<AdDTO> results;
+    private List<AdDTO> results;
 
-    public AdsDTO(Collection<AdDTO> results) { //!!
-        this.count = results.size();
-        this.results = results;
-    }
-
-    public AdsDTO(Integer count) {
+    public AdsDTO count(Integer count) {
         this.count = count;
+        return this;
     }
-
-    public AdsDTO(Integer count, Collection<AdDTO> results) {
-        this.count = count;
+    public AdsDTO results(List<AdDTO> results) {
         this.results = results;
+        return this;
+    }
+    public AdsDTO addResultsItem(AdDTO resultsItem) {
+        if (this.results == null) {
+            this.results = new ArrayList<>();
+        }
+        this.results.add(resultsItem);
+        return this;
     }
 
     public Integer getCount() {
@@ -33,11 +37,11 @@ public class AdsDTO {
         this.count = count;
     }
 
-    public Collection<AdDTO> getResults() {
+    public List<AdDTO> getResults() {
         return results;
     }
 
-    public void setResults(Collection<AdDTO> results) {
+    public void setResults(List<AdDTO> results) {
         this.results = results;
     }
 

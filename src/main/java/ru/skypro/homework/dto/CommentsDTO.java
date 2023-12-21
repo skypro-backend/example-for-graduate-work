@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,9 +10,21 @@ public class CommentsDTO {
     private Integer count;
     private List<CommentDTO> results;
 
-    public CommentsDTO(Integer count, List<CommentDTO> results) {
+
+    public CommentsDTO count(Integer count) {
         this.count = count;
+        return this;
+    }
+    public CommentsDTO results(List<CommentDTO> results) {
         this.results = results;
+        return this;
+    }
+    public CommentsDTO addResultsItem(CommentDTO resultsItem) {
+        if (this.results == null) {
+            this.results = new ArrayList<>();
+        }
+        this.results.add(resultsItem);
+        return this;
     }
 
     public Integer getCount() {
