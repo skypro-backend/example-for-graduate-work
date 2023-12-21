@@ -1,8 +1,9 @@
-package ru.skypro.homework.service;
+package ru.skypro.homework.service.impl;
 
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.service.CommentService;
 
 public class CommentServiceImpl implements CommentService {
     @Override
