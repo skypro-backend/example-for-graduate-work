@@ -1,6 +1,7 @@
 package ru.skypro.homework.mapping;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.UserDto;
 
@@ -8,6 +9,6 @@ import ru.skypro.homework.dto.UserDto;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-//    @Mapping(source = "id ", target = "pk ")
+    @Mapping(source = "id ", target = "pk ")
     UserEntity userToUserEntity(UserDto user);
 }
