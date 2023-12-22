@@ -25,12 +25,6 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "age")
-    private int age;
-
-    @Column(name = "gender")
-    private String gender;
-
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role userRole;
@@ -38,24 +32,19 @@ public class User {
     @Column(name = "avatar")
     private String idImage;
 
-    @Column(name = "user_birthday")
-    private int userBirthday;
 
     public User(Long id, String name,
                 String surname, String phoneNumber,
-                String email, int age,
-                String gender, Role userRole,
-                String idImage, int userBirthday) {
+                String email, Role userRole,
+                String idImage) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.age = age;
-        this.gender = gender;
         this.userRole = userRole;
         this.idImage = idImage;
-        this.userBirthday = userBirthday;
+
     }
     /*
 

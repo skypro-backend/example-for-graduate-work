@@ -5,15 +5,13 @@ import lombok.Data;
 @Data
 public class UserDto {
     private Integer id;
-    private String name;
-    private String surname;
-    private int age;
+    private String firstName;
+    private String lastName;
     private String email;
-    private String gender;
-    private String phoneNumber;
+    private String phone;
     private Role userRole;
-    private String idImage;
-    private int userBirthday;
+    private String image;
+
 
 }
 

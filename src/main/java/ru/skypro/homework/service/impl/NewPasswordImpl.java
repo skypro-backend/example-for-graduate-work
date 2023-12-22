@@ -10,7 +10,7 @@ import ru.skypro.homework.service.NewPasswordService;
 public class NewPasswordImpl implements NewPasswordService {
     private final Logger logger = LoggerFactory.getLogger(NewPasswordImpl.class);
     @Override
-    public void setPassword(String currentPassword, String confirmPhoneNumber, String newPassword) {
+    public void setPassword(String currentPassword,  String newPassword) {
 
     }
 }

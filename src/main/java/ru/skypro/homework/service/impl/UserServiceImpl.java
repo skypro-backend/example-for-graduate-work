@@ -16,11 +16,13 @@ public class UserServiceImpl implements UserService {
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Override
     public UserDto saveUser(UserDto user) {
+        logger.info("saving user");
         return null;
     }
 
     @Override
     public UserDto deleteUser(UserDto user) {
+        logger.info("deleting user");
         return null;
     }
 
