@@ -24,4 +24,8 @@ public class Ad {
 
     private String title;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private User author;
+
 }

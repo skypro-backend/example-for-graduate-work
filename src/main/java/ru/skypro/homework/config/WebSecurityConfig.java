@@ -28,35 +28,6 @@ public class WebSecurityConfig {
     };
 
     @Bean
-    public JdbcUserDetailsManager userDetailsService(DataSource dataSource, PasswordEncoder passwordEncoder) {
-        UserDetails user =
-                User.builder()
-                        .username("user@gmail.com")
-                        .password("password")
-                        .passwordEncoder(passwordEncoder::encode)
-                        .roles(Role.USER.name())
-                        .build();
-        UserDetails admin =
-                User.builder()
-                        .username("admin@gmail.com")
-                        .password("admin")
-                        .passwordEncoder(passwordEncoder::encode)
-                        .roles(Role.ADMIN.name())
-                        .build();
-        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-        if (jdbcUserDetailsManager.userExists(user.getUsername())){
-            jdbcUserDetailsManager.deleteUser(user.getUsername());
-        }
-        if (jdbcUserDetailsManager.userExists(admin.getUsername())){
-            jdbcUserDetailsManager.deleteUser(admin.getUsername());
-        }
-        jdbcUserDetailsManager.createUser(user);
-        jdbcUserDetailsManager.createUser(admin);
-
-        return jdbcUserDetailsManager;
-    }
-
-    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()
                 .disable()

@@ -84,9 +84,9 @@ public class AdsController {
             )
 
     })
-    @DeleteMapping("/{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "Получение информации об объявлении", description = "getAds", tags = {"Объявления"})
-    public ResponseEntity<ExtendedAdDTO> getAd(@PathVariable long id) {
+    public ResponseEntity<ExtendedAdDTO> getAd(@PathVariable Long id) {
         return ResponseEntity.ok(new ExtendedAdDTO());
     }
 

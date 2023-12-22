@@ -21,8 +21,6 @@ import ru.skypro.homework.dto.UserDTO;
 @RequiredArgsConstructor
 public class UsersController {
 
-    private final UserDetailsManager userDetailsService;
-
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
