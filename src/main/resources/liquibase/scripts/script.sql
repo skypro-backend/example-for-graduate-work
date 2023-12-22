@@ -50,3 +50,6 @@ ALTER TABLE comments ADD COLUMN ad_id INTEGER REFERENCES ads(id);
 
 -- changeSet michailzaretskiy:5
 ALTER TABLE users ADD COLUMN enabled BOOLEAN;
+
+-- changeSet michailzaretskiy:6
+ALTER TABLE users DROP COLUMN email;
