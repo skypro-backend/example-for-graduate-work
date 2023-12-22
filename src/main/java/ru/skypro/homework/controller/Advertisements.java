@@ -1,16 +1,14 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
-import lombok.RequiredArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.AdsDto;
 
 import java.util.List;
 
@@ -19,7 +17,7 @@ import java.util.List;
  */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
-@RequiredArgsConstructor
+
 @RestController
 public class Advertisements {
 
@@ -30,8 +28,9 @@ public class Advertisements {
      * @return Ads
      */
     @GetMapping("/ads")
-    public ResponseEntity<Ads> getAllAds() {
-        return ResponseEntity.ok(new Ads());
+    public ResponseEntity<AdsDto> getAllAds() {
+        return ResponseEntity.ok(new AdsDto());
+
     }
 
     /**
@@ -40,25 +39,17 @@ public class Advertisements {
      * @return Ad
      */
     @PostMapping("/ads")
-    public ResponseEntity<Ad> addAd(@RequestBody Ad ad) {
+
+    public ResponseEntity<AdDto> addAd(@RequestBody AdDto ad) {
         return new ResponseEntity<>(ad, HttpStatus.OK);
     }
 
-    /*
-     *
-     */
-
     /**
-     * GET /ads/{id} <h2>Получение информации об объявлении</h2>
-     * @param id advertisement identifier
-     * @return Code	Description<br>
-     * 200	OK ExtendedAd{...}Jump to definition<br>
-     * 401	Unauthorized<br>
-     * 404	Not found
+     * GET /ads/{id} Получение информации об объявлении
      */
     @GetMapping("/ads/{id}")
-    public ResponseEntity<ExtendedAd> getAds(@PathVariable long id) {
-        return new ResponseEntity<>(new ExtendedAd(), HttpStatus.OK);
+    public ResponseEntity<AdDto> getAds(@PathVariable long id) {
+        return new ResponseEntity<>(new AdDto(), HttpStatus.OK);
     }
 
     /**
@@ -101,9 +92,11 @@ public class Advertisements {
      * description: Not found
      */
     @PatchMapping("/ads/{id}")
-    ResponseEntity<Ad> updateAds(@Parameter(name = "id", description = "advertisement identifier")
+
+    ResponseEntity<AdDto> updateAds(@Parameter(name = "id", description = "advertisement identifier")
                                  @PathVariable long id) {
-        return new ResponseEntity<>(new Ad(), HttpStatus.OK);
+        return new ResponseEntity<>(new AdDto(), HttpStatus.OK);
+
     }
 
 
@@ -115,9 +108,10 @@ public class Advertisements {
      */
 
     @GetMapping("/ads/me")
-    public ResponseEntity<Ads> getAdsMe(@Parameter(name = "id", description = "user identifier")
+     public ResponseEntity<AdsDto> getAdsMe(@Parameter(name = "id", description = "user identifier")
                                         @PathVariable long id) {
-        return new ResponseEntity<>(new Ads(), HttpStatus.OK);
+        return new ResponseEntity<>(new AdsDto(), HttpStatus.OK);
+
     }
 
 
@@ -129,10 +123,12 @@ public class Advertisements {
      * @return updated picture
      */
     @PatchMapping("/ads/{id}/image")
-    public ResponseEntity<CreateOrUpdateAd> updateImage(@Parameter(name = "id", description = "user identifier")
+
+    public ResponseEntity<List<byte[]>> updateImage(@Parameter(name = "id", description = "user identifier")
                                                     @PathVariable(name = "id") long id,
-                                                        @RequestBody MultipartFile image) {
-        return new ResponseEntity<>(new CreateOrUpdateAd(), HttpStatus.OK);
+                                                    @RequestBody MultipartFile image) {
+        return new ResponseEntity<List<byte[]>>(HttpStatus.OK);
+
     }
 
 

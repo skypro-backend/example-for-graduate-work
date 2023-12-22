@@ -59,7 +59,7 @@
       <artifactId>spring-security-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui -->
+
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-ui</artifactId>
@@ -75,6 +75,7 @@
       <artifactId>mapstruct</artifactId>
       <version>${org.mapstruct.version}</version>
     </dependency>
+
   </dependencies>
 
   <build>
@@ -91,6 +92,7 @@
           </excludes>
         </configuration>
       </plugin>
+
       <!-- -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
