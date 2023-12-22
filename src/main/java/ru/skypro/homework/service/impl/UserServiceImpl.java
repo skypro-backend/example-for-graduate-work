@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(newPasswordDTO.getCurrentPassword(), user.getPassword())) {   // Проверка на совпадение паролей
             throw new InvalidPasswordException("Passwords cannot be the same");
         }
+        String hashedPassword = passwordEncoder.encode(newPasswordDTO.getNewPassword());
         user.setPassword(passwordEncoder.encode(newPasswordDTO.getCurrentPassword()));           //Хэширует пароль и присваивает его пользователю
         userRepository.save(user);                                                              //Сохраняет пользователя
         return null;
