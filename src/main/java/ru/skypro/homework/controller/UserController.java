@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
 
@@ -24,6 +25,8 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
+
+    UserService userService;
 
 
     @Operation(summary = "Обновление пароля", description = "Метод ничего не возвращает. Принимает пароль в виде DTO и обновляет его у пользователя")
@@ -47,9 +50,8 @@ public class UserController {
                     content = @Content(mediaType = MediaType.ALL_VALUE)),
     })
     @GetMapping("/me")
-
     public ResponseEntity<User> getMe() {
-        return ResponseEntity.ok().build(); //Return USER here
+        return ResponseEntity.ok(userService.getMeDTO());
     }
 
     @Operation(summary = "Обновление данных пользователя", description = "Возвращает DTO c обновленными данными и обновляет их у пользователя.")
