@@ -1,5 +1,8 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,7 +23,22 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Пользователь авторизован"
+
+
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized"
+
+            )
+
+    })
     @PostMapping("/login")
+    @Operation(summary = "Авторизация пользователя",description = "login", tags = "Пользователи")
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
@@ -29,7 +47,22 @@ public class AuthController {
         }
     }
 
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Пользователь зарегестрирован"
+
+
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request"
+
+            )
+
+    })
     @PostMapping("/register")
+    @Operation(summary = "Регистрация пользователя",description = "register", tags = "Пользователи")
     public ResponseEntity<?> register(@RequestBody Register register) {
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
