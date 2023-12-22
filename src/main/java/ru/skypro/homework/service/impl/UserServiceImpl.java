@@ -54,18 +54,26 @@ public class UserServiceImpl implements UserService {
     //  Метод изменения пароля у пользователя
     @Override
     public Void setPassword(NewPasswordDTO newPasswordDTO) {
-        log.info("Password change completed");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();   // Получение информации об аутентификации из контекста безопасности
-        User user = userRepository.findByEmail(authentication.getName());                         // Поиск пользователя в репозитории по email (имени пользователя)
-        if (user == null) {                                                                        // Проверка, что пользователь существует
+        log.info("Change password");
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByEmail(auth.getName());
+
+        if (user == null) {
+            // Обработка случая, если пользователя не существует
             throw new UserNotFoundException("User not found");
         }
-        if (!passwordEncoder.matches(newPasswordDTO.getCurrentPassword(), user.getPassword())) {   // Проверка на совпадение паролей
-            throw new InvalidPasswordException("Passwords cannot be the same");
+
+        // Проверка, что старый пароль совпадает
+        if (!passwordEncoder.matches(newPasswordDTO.getCurrentPassword(), user.getPassword())) {
+            // Обработка случая, если старый пароль не совпадает
+            throw new InvalidPasswordException("Incorrect old password");
         }
+
+        // Обновление пароля
         String hashedPassword = passwordEncoder.encode(newPasswordDTO.getNewPassword());
-        user.setPassword(passwordEncoder.encode(newPasswordDTO.getCurrentPassword()));           //Хэширует пароль и присваивает его пользователю
-        userRepository.save(user);                                                              //Сохраняет пользователя
+        user.setPassword(hashedPassword);
+        userRepository.save(user);
         return null;
     }
 
