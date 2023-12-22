@@ -5,9 +5,6 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public interface ImageService {
 

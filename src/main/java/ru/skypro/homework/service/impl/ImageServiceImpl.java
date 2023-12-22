@@ -6,10 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
-import ru.skypro.homework.exception.DeleteImageException;
-import ru.skypro.homework.exception.GetImageException;
-import ru.skypro.homework.exception.ImageIsNotFoundException;
-import ru.skypro.homework.exception.StorageException;
+import ru.skypro.homework.exception.*;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.ImageService;
 
@@ -20,6 +17,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+/**
+ * Service for receiving, deleting and uploading an image
+ */
 @Service
 public class ImageServiceImpl implements ImageService {
     @Value("${uploading.image.path}")
@@ -31,6 +31,11 @@ public class ImageServiceImpl implements ImageService {
         this.imageRepository = imageRepository;
     }
 
+    /**
+     * Gets binary code of an image
+     * @param id of an image
+     * @return binary code of an image
+     */
     @Transactional
     @Override
     public byte[] getImage(Integer id) {
@@ -43,6 +48,10 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
+    /**
+     * Deletes an image
+     * @param adEntity contains ad id, price, title, description, UserEntity, ImageEntity and a list of CommentEntities
+     */
     public void deleteImage(AdEntity adEntity) {
         ImageEntity imageEntity = adEntity.getImageEntity();
         try {
@@ -56,6 +65,10 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
+    /**
+     * Deletes an image
+     * @param userEntity contains user id, email, firstname, lastname, phone, password, role, ImageEntity, a list of AdEntities and a list of CommentEntities
+     */
     public void deleteImage(UserEntity userEntity) {
         ImageEntity imageEntity = userEntity.getImageEntity();
         try {
@@ -69,12 +82,17 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
+    /**
+     * Uploads an image to a database
+     * @param file is an image
+     * @return ImageEntity contains image id and file path
+     */
     @Override
     public ImageEntity uploadImage(MultipartFile file) {
-        Path filePath = null;
+        Path filePath;
         if (file.getOriginalFilename() != null) {
             filePath = Path.of(imagePath + UUID.randomUUID() + "." + file.getOriginalFilename().split("\\.")[1]);
-        }
+        } else throw new FilePathIsNullException("File Path is null");
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file.");

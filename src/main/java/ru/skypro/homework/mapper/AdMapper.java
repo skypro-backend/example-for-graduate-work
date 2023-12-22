@@ -1,21 +1,15 @@
 package ru.skypro.homework.mapper;
 
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.AdEntity;
 
-import java.util.List;
-
 @Component
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,componentModel = "spring")
 public interface AdMapper {
-
-    AdMapper INSTANCE = Mappers.getMapper(AdMapper.class);
-
     @Named("idToUrl")
     static String idToUrl(int id) {
         return "/image/" + id;

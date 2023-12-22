@@ -17,9 +17,6 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pk;
 
-    @Column(name = "author_first_name", nullable = false, length = 16)
-    private String authorFirstName;
-
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
