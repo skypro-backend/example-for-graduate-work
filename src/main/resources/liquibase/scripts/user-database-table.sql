@@ -1,8 +1,14 @@
 -- liquibase formatted sql
 
--- changeset antonov333:1
+-- changeset antonov333:2
     CREATE table users(
-    id       BIGSERIAL PRIMARY KEY,
-
-
-    )
+    id  BIGSERIAL PRIMARY KEY,
+        name TEXT,
+        surname TEXT,
+        phone_number TEXT,
+        email TEXT,
+        age int,
+        gender TEXT,
+        role TEXT,
+        avatar TEXT,
+        user_birthday int );

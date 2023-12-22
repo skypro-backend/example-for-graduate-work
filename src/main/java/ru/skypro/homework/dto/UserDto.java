@@ -15,8 +15,5 @@ public class UserDto {
     private String idImage;
     private int userBirthday;
 
-    public Integer getId() {
-        return id;
-    }
 }
 

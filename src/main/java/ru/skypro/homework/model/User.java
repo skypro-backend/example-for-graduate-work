@@ -19,7 +19,7 @@ public class User {
     @Column(name = "surname")
     private String surname;
 
-    @Column(name = "phonenumber")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     @Column(name = "email")
@@ -28,19 +28,20 @@ public class User {
     @Column(name = "age")
     private int age;
 
-    @Column(name = "Gender")
+    @Column(name = "gender")
     private String gender;
 
-    @Column(name = "User_Role")
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
     private Role userRole;
 
-    @Column(name = "Avatar")
+    @Column(name = "avatar")
     private String idImage;
 
-    @Column(name = "User_Birthday")
+    @Column(name = "user_birthday")
     private int userBirthday;
 
-    /*public User(Long id, String name,
+    public User(Long id, String name,
                 String surname, String phoneNumber,
                 String email, int age,
                 String gender, Role userRole,
@@ -56,6 +57,7 @@ public class User {
         this.idImage = idImage;
         this.userBirthday = userBirthday;
     }
+    /*
 
     public Long getId() {
         return id;

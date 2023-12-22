@@ -1,3 +1,7 @@
 databaseChangeLog:
   - include:
       file: liquibase/scripts/database-setup.sql
+  - include:
+      file: liquibase/scripts/user-database-table.sql
+  - include:
+      file: liquibase/scripts/ads-database-table2.sql
