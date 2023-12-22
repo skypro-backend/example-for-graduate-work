@@ -5,6 +5,8 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 
+import java.io.IOException;
+
 
 public interface UserService {
 
@@ -14,5 +16,5 @@ public interface UserService {
 
     UpdateUser updUsr(UpdateUser updateUser);
 
-    void updPhoto(MultipartFile photo);
+    void updPhoto(MultipartFile photo) throws IOException;
 }
