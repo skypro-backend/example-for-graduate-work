@@ -53,3 +53,11 @@ ALTER TABLE users ADD COLUMN enabled BOOLEAN;
 
 -- changeSet michailzaretskiy:6
 ALTER TABLE users DROP COLUMN email;
+-- changeSet michailzaretskiy:7
+ALTER TABLE users DROP COLUMN enabled;
+-- changeSet michailzaretskiy:8
+CREATE TYPE user_role AS ENUM('USER','ADMIN');
+ALTER TABLE users RENAME COLUMN role TO old_role;
+ALTER TABLE users ADD COLUMN role user_role;
+-- changeSet michailzaretskiy:9
+ALTER TABLE users DROP COLUMN old_role;

@@ -1,25 +1,23 @@
 package ru.skypro.homework.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.repo.UserRepo;
+import ru.skypro.homework.util.CustomUserDetailsService;
 
-import javax.sql.DataSource;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableWebSecurity
 public class WebSecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
@@ -30,59 +28,36 @@ public class WebSecurityConfig {
             "/login",
             "/register"
     };
+    private final UserRepo userRepo;
 
-    @Autowired
-    private DataSourceProperties dataSourceProperties;
-
-    @Bean
-    public DataSource dataSource(){
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(dataSourceProperties.getDriverClassName());
-        dataSource.setUrl(dataSourceProperties.getUrl());
-        dataSource.setUsername(dataSourceProperties.getUsername());
-        dataSource.setPassword(dataSourceProperties.getPassword());
-        return dataSource;
+    public WebSecurityConfig(UserRepo userRepo){
+        this.userRepo = userRepo;
     }
 
     @Bean
-    public JdbcUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource());
-        userDetailsManager.setUsersByUsernameQuery(
-                "SELECT login, password, enabled FROM users WHERE login = ?");
-        userDetailsManager.setAuthoritiesByUsernameQuery(
-                "SELECT login, role FROM users WHERE login = ?");
-        userDetailsManager.setCreateUserSql(
-                "INSERT INTO users (login, password, enabled) VALUES (?, ?, ?)");
-        userDetailsManager.setCreateAuthoritySql(
-                "INSERT INTO users (login, role) VALUES (?, ?)");
-        userDetailsManager.setDeleteUserSql(
-                "DELETE FROM users WHERE login = ?");
-        userDetailsManager.setDeleteUserAuthoritiesSql(
-                "DELETE FROM users WHERE login = ?");
-        return userDetailsManager;
+    public CustomUserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+        return new CustomUserDetailsService(userRepo, passwordEncoder);
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
-                .authorizeHttpRequests(
-                        authorization ->
-                                authorization
-                                        .mvcMatchers(AUTH_WHITELIST).permitAll()
-                                        .mvcMatchers("/ads/**").hasAnyRole(Role.USER.name(),Role.ADMIN.name())
-                                        .mvcMatchers("users/set_password").authenticated()
-                                        .mvcMatchers("/users/**").hasRole(Role.USER.name()))
-                .cors()
-                .and()
-                .httpBasic(withDefaults());
-        http.formLogin().loginPage("/login").permitAll();
-        return http.build();
+        return http.authorizeHttpRequests(httpRequest -> httpRequest
+                        .mvcMatchers(HttpMethod.GET, "/ads").permitAll()
+                        .mvcMatchers("/ads/**").authenticated()
+                        .mvcMatchers("/users/**").authenticated()
+                        .mvcMatchers(AUTH_WHITELIST).permitAll()
+                )
+                .build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public Authentication authentication(){
+        return SecurityContextHolder.getContext().getAuthentication();
     }
 
 }

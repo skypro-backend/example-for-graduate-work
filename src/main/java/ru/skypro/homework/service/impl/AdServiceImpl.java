@@ -1,6 +1,12 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreFilter;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
@@ -12,6 +18,8 @@ import ru.skypro.homework.repo.UserRepo;
 import ru.skypro.homework.service.AdMapper;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.util.exceptions.NotFoundException;
+
+import java.util.Collection;
 
 /**
  * Класс {@code AdServiceImpl} предоставляет реализацию интерфейса {@link AdService},
@@ -58,18 +66,24 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ads getAllAds() {
-        return mapper.adToDtoList(repository.findAll());
+        Collection<AdEntity> result = repository.findAll();
+        if(result.isEmpty()){
+            throw new NotFoundException("Обьявления не найдены");
+        }
+        return mapper.adToDtoList(result);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Override
-    public Ad createAd(CreateOrUpdateAd ad, String image, String userName) {
+    public Ad createAd(CreateOrUpdateAd ad, String image,String username) {
         AdEntity result;
         result = mapper.dtoToAd(ad);
         result.setImage(image);
-        result.setAuthor(userRepository.findByLogin(userName));
+        result.setAuthor(userRepository.findByLogin(username));
         return mapper.adToDto(repository.save(result));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Override
     public ExtendedAd getExtAd(Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
@@ -79,6 +93,7 @@ public class AdServiceImpl implements AdService {
         return mapper.adToExtDto(result);
     }
 
+    @PostAuthorize("returnObject.author == principal.username or hasAuthority('ADMIN')")
     @Override
     public Ad deleteAd(Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
@@ -89,6 +104,7 @@ public class AdServiceImpl implements AdService {
         return mapper.adToDto(result);
     }
 
+    @PostAuthorize("returnObject.author == principal.username or hasAuthority('ADMIN')")
     @Override
     public Ad pathAd(CreateOrUpdateAd ad, Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
@@ -101,11 +117,13 @@ public class AdServiceImpl implements AdService {
         return mapper.adToDto(repository.save(result));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Override
-    public Ads getAllAdsForUser(String userName) {
-        return mapper.adToDtoList(repository.findAdEntitiesByAuthor(userRepository.findByLogin(userName)));
+    public Ads getAllAdsForUser(String username) {
+        return mapper.adToDtoList(repository.findAdEntitiesByAuthor(userRepository.findByLogin(username)));
     }
 
+    @PostAuthorize("hasAuthority('ADMIN')") //тут надо будет подправить, доступ нужен еще и автору
     @Override
     public String pathImageAd(Integer id, String image) {
         AdEntity result = repository.findById(id).orElse(null);
@@ -115,9 +133,5 @@ public class AdServiceImpl implements AdService {
         result.setImage(image);
         repository.save(result);
         return result.getImage();
-    }
-    @Override
-    public boolean fastCheckAuthor(String userName, Integer id){
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Обьяевление с данным ID " + id + " не найдено")).getAuthor().getLogin().equals(userName);
     }
 }

@@ -43,11 +43,20 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface AdMapper {
 
-    @Mappings({
-            @Mapping(source = "id", target = "pk"),
-            @Mapping(target = "author", expression = "java(ad.getAuthor().getId())")
-    })
-    Ad adToDto(AdEntity ad);
+//    @Mappings({
+//            @Mapping(source = "id", target = "pk"),
+//            @Mapping(target = "author", expression = "java(ad.getAuthor() != null ? ad.getAuthor().getId() : null)")
+//    })
+//    Ad adToDto(AdEntity ad);
+    default Ad adToDto(AdEntity ad){
+        Ad result = new Ad();
+        result.setPk(ad.getId());
+        result.setTitle(ad.getTitle());
+        result.setAuthor(ad.getAuthor().getId());
+        result.setPrice(ad.getPrice());
+        result.setImage(ad.getImage());
+        return result;
+    }
 
     default Ads adToDtoList(Collection<AdEntity> ads){
         List<Ad> adList = ads.stream().map(this::adToDto).collect(Collectors.toList());
@@ -62,7 +71,7 @@ public interface AdMapper {
             @Mapping(source = "id", target = "pk"),
             @Mapping(target = "authorFirstName", expression = "java(ad.getAuthor().getFirstName())"),
             @Mapping(target = "authorLastName", expression = "java(ad.getAuthor().getLastName())"),
-            @Mapping(target = "email", expression = "java(ad.getAuthor().getEmail())"),
+            @Mapping(target = "email", expression = "java(ad.getAuthor().getLogin())"),
             @Mapping(target = "phone", expression = "java(ad.getAuthor().getPhone())")
     })
     ExtendedAd adToExtDto(AdEntity ad);
