@@ -1,21 +1,28 @@
 package ru.skypro.homework.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "ads")
+@Data
 public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Integer pk;
+
     @Column(name = "Author")
     private Integer author;
+
     @Column(name = "URL")
     private String image;
+
     @Column(name = "Price")
     private Integer price;
+
     @Column(name = "Title")
     private String title;
 
@@ -27,7 +34,7 @@ public class Ad {
         this.title = title;
     }
 
-    public Integer getPk() {
+    /*public Integer getPk() {
         return pk;
     }
 
@@ -89,5 +96,5 @@ public class Ad {
                 ", price=" + price +
                 ", title='" + title + '\'' +
                 '}';
-    }
+    }*/
 }

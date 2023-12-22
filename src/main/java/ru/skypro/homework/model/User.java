@@ -1,5 +1,6 @@
 package ru.skypro.homework.model;
 
+import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
@@ -7,23 +8,25 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users")
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Users_Id")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "Name")
+    @Column(name = "name")
     private String name;
-    @Column(name = "Surname")
+    @Column(name = "surname")
     private String surname;
 
-    @Column(name = "PhoneNumber")
+    @Column(name = "phonenumber")
     private String phoneNumber;
 
-    @Column(name = "Email")
+    @Column(name = "email")
     private String email;
-    @Column(name = "Age")
+
+    @Column(name = "age")
     private int age;
 
     @Column(name = "Gender")
@@ -34,10 +37,11 @@ public class User {
 
     @Column(name = "Avatar")
     private String idImage;
+
     @Column(name = "User_Birthday")
     private int userBirthday;
 
-    public User(Long id, String name,
+    /*public User(Long id, String name,
                 String surname, String phoneNumber,
                 String email, int age,
                 String gender, Role userRole,
@@ -161,5 +165,5 @@ public class User {
                 ", idImage='" + idImage + '\'' +
                 ", userBirthday=" + userBirthday +
                 '}';
-    }
+    }*/
 }
