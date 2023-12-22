@@ -5,9 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Comment;
-import ru.skypro.homework.dto.Comments;
-import ru.skypro.homework.dto.CreateOrUpdateComment;
+
+import ru.skypro.homework.dto.CommentDto;
+import ru.skypro.homework.dto.CommentsDto;
+import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -21,9 +22,10 @@ public class CommentsController {
      */
 
     @GetMapping("/ads/{id}/comments")
-  public ResponseEntity<Comments> getComments(@PathVariable(name = "id") long id){
-      return new ResponseEntity<Comments>(new Comments(), HttpStatus.OK);
-  }
+    public ResponseEntity<CommentsDto> getComments(@PathVariable(name = "id") long id){
+        return new ResponseEntity<CommentsDto>(new CommentsDto(), HttpStatus.OK);
+    }
+
 
     /**
      * POST /ads/{id}/comments <h2>Добавление комментария к объявлению</h2>
@@ -35,9 +37,10 @@ public class CommentsController {
      */
 
     @PostMapping("/ads/{id}/comments")
-    public ResponseEntity<Comment> addComment(@PathVariable(name = "id") long id,
-                                              @RequestBody CreateOrUpdateComment comment){
-        return new ResponseEntity<Comment>(new Comment(), HttpStatus.OK);
+    public ResponseEntity<CommentDto> addComment(@PathVariable(name = "id") long id,
+                                                 @RequestBody CreateOrUpdateCommentDto comment){
+        return new ResponseEntity<CommentDto>(new CommentDto(), HttpStatus.OK);
+
     }
 
     /**
@@ -54,8 +57,10 @@ public class CommentsController {
      *           description: Not found <br>
      */
     @DeleteMapping("/ads/{adId}/comments/{commentId}")
-    public ResponseEntity<HttpStatus> deleteComment(@PathVariable(name = "adId") long adId,
-                                                 @PathVariable(name = "commentId") long commentId){
+    public ResponseEntity<HttpStatus> deleteComment(
+            @PathVariable(name = "adId") long adId,
+            @PathVariable(name = "commentId") long commentId){
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -92,11 +97,11 @@ public class CommentsController {
      *           description: Not found
      */
     @PatchMapping("/ads/{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> updateComment(
+    public ResponseEntity<CommentDto> updateComment(
             @PathVariable(name = "adId") long adId,
             @PathVariable(name = "commentId") long commentId,
-            @RequestBody CreateOrUpdateComment comment) {
-        return new ResponseEntity<>(new Comment(), HttpStatus.OK);
+            @RequestBody CreateOrUpdateCommentDto comment) {
+        return new ResponseEntity<>(new CommentDto(), HttpStatus.OK);
     }
-
 }
+

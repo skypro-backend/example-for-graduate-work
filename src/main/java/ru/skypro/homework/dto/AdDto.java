@@ -6,7 +6,7 @@ import lombok.Data;
  * DTO for advertisement entity
  */
 @Data
-public class Ad {
+public class AdDto {
     private Integer author;
 
     private String image;
@@ -21,3 +21,4 @@ public class Ad {
         return pk;
     }
 }
+

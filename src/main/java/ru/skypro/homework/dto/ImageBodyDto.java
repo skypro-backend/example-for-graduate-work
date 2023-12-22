@@ -3,7 +3,11 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * ImageBody -- DTO for photos of items
+ */
+
 @Data
-public class Avatar {
-    private MultipartFile avatar;
+public class ImageBodyDto {
+    private MultipartFile image;
 }
