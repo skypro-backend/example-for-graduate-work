@@ -7,8 +7,6 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 
-import java.io.IOException;
-
 public interface AdService {
 
     Ad addAd(MultipartFile image, CreateOrUpdateAd adDetails, UserDetails userDetails);

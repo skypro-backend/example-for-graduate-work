@@ -11,6 +11,9 @@ import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
 
+/**
+ * Controller for processing user registration and authentication requests
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -22,6 +25,11 @@ public class AuthController {
         this.authService = authService;
     }
 
+    /**
+     * Checks user authentication
+     * @param login is Login DTO consisting of username and password
+     * @return Http status
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
@@ -31,6 +39,11 @@ public class AuthController {
         }
     }
 
+    /**
+     * Checks user registration
+     * @param register is Register DTO consisting of username, password, firstName, lastName, phone and role
+     * @return Http status
+     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) {
         if (authService.register(register)) {

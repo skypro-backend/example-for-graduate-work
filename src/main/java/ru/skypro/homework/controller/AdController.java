@@ -14,7 +14,9 @@ import ru.skypro.homework.dto.ExtendedAd;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.service.impl.AdServiceImpl;
 
-import java.io.IOException;
+/**
+ * Controller for handling ad requests
+ */
 @RestController
 @RequestMapping("/ads")
 @CrossOrigin("http://localhost:3000/")
@@ -25,8 +27,8 @@ public class AdController {
     }
 
     /**
-     * The method is used to get ads of all users
-     * @return
+     * Gets ads of all users
+     * @return Ads DTO consisting of a list of ads and the size of the list
      */
     @GetMapping
     public Ads getAllAds() {
@@ -34,9 +36,9 @@ public class AdController {
     }
 
     /**
-     * The method is used to get all ads of an authorized user
-     * @param userDetails
-     * @return
+     * Gets all ads of an authorized user
+     * @param userDetails contains details such as the user's username, password, authorities (roles), and additional attributes
+     * @return ResponseEntity<Ads> consisting of Ads DTO(a list of ads and the size of the list) and Http status
      */
     @GetMapping("/me")
     public ResponseEntity<Ads> getAdsByCurrentUser(@Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) {
@@ -44,11 +46,11 @@ public class AdController {
     }
 
     /**
-     * The method is used to add an ad by an authorized user
-     * @param image
-     * @param adDetails
-     * @param userDetails
-     * @return
+     * Adds an ad by an authorized user
+     * @param image contains image URL
+     * @param adDetails is CreateOrUpdateAd DTO consisting of title, price and description of an ad
+     * @param userDetails contains details such as the user's username, password, authorities (roles), and additional attributes
+     * @return ResponseEntity<Ad> consisting of Ad DTO(author id, image url, ad id, price, title) and Http status
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Ad> addAd(@RequestPart("image") MultipartFile image,
@@ -57,14 +59,23 @@ public class AdController {
         return new ResponseEntity<>(adService.addAd(image, adDetails, userDetails),HttpStatus.CREATED);
     }
 
-
-
+    /**
+     * Gets full info about ad by id
+     * @param id of an ad
+     * @return ResponseEntity<ExtendedAd> consisting of ExtendedAd DTO(ad id, author firstname, author lastname, description, email, image, phone, price, title) and Http status
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> getFullAd(@PathVariable int id) {
         return new ResponseEntity<>(adService.getFullAd(id), HttpStatus.OK);
     }
 
-    // Обновление информации об объявлении
+    /**
+     * Updates ad info
+     * @param id of an ad
+     * @param adDetails is CreateOrUpdateAd DTO consisting of title, price and description of an ad
+     * @param userDetails contains details such as the user's username, password, authorities (roles), and additional attributes
+     * @return ResponseEntity<Ad> consisting of Ad DTO(author id, image url, ad id, price, title) and Http status
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<Ad> updateAd(@PathVariable int id,
                        @RequestBody CreateOrUpdateAd adDetails,
@@ -72,8 +83,12 @@ public class AdController {
         return new ResponseEntity<>(adService.updateAd(id, adDetails, userDetails), HttpStatus.OK);
     }
 
-
-    // Удаление объявления
+    /**
+     * Removes an ad
+     * @param id of an ad
+     * @param userDetails contains details such as the user's username, password, authorities (roles), and additional attributes
+     * @return Http status
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removeAd(@PathVariable int id,
                          @AuthenticationPrincipal UserDetails userDetails) {
@@ -81,7 +96,13 @@ public class AdController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Обновление картинки объявления
+    /**
+     * Updates ad image
+     * @param id of an ad
+     * @param image contains image URL
+     * @param userDetails contains details such as the user's username, password, authorities (roles), and additional attributes
+     * @return Http status
+     */
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateImage(@PathVariable int id,
                             @RequestParam("image") MultipartFile image,
