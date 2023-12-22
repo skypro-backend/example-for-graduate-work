@@ -7,6 +7,9 @@ public class CreateOrUpdateCommentDTO {
 
     private String text; //текст комментария
 
+    public CreateOrUpdateCommentDTO() {
+    }
+
     public CreateOrUpdateCommentDTO(String text) {
         this.text = text;
     }

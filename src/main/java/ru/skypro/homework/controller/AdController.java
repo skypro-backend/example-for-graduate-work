@@ -52,9 +52,9 @@ public class AdController {
     }
 
     //Обновление информации в объявлении
-    @PatchMapping("/{id}")
-    public ResponseEntity<AdDTO> updateAd(@PathVariable Integer id, @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
-        return ResponseEntity.ok(adService.patchAd(id, createOrUpdateAdDTO));
+    @PatchMapping("/{adId}")
+    public ResponseEntity<AdDTO> updateAd(@PathVariable Integer adId, @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+        return ResponseEntity.ok(adService.patchAd(adId, createOrUpdateAdDTO));
     }
 
     //Получение объявления авторизованного пользователя
