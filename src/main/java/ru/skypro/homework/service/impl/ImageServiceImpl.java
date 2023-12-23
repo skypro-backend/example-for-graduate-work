@@ -14,21 +14,21 @@ public class ImageServiceImpl implements ImageService {
     private AdEntity adEntity;
     private UserEntity userEntity;
     private ImageEntity imageEntity;
-    private final String imageDir;
+//    private final String imageDir;
     private UserEntityRepository userEntityRepository;
     private AdEntityRepository adEntityRepository;
     private ImageEntityRepository imageEntityRepository;
 
-    public ImageServiceImpl(AdEntity adEntity, UserEntity userEntity, ImageEntity imageEntity
-            , @Value("${path.to.images.folder}") String imageDir, UserEntityRepository userEntityRepository
-            , AdEntityRepository adEntityRepository) {
-        this.adEntity = adEntity;
-        this.userEntity = userEntity;
-        this.imageEntity = imageEntity;
-        this.imageDir = imageDir;
-        this.userEntityRepository = userEntityRepository;
-        this.adEntityRepository = adEntityRepository;
-    }
+//    public ImageServiceImpl(AdEntity adEntity, UserEntity userEntity, ImageEntity imageEntity
+//            , @Value("${path.to.images.folder}") String imageDir, UserEntityRepository userEntityRepository
+//            , AdEntityRepository adEntityRepository) {
+//        this.adEntity = adEntity;
+//        this.userEntity = userEntity;
+//        this.imageEntity = imageEntity;
+//        this.imageDir = imageDir;
+//        this.userEntityRepository = userEntityRepository;
+//        this.adEntityRepository = adEntityRepository;
+//    }
 
 //    private final Logger logger = LoggerFactory.getLogger(ImageServiceImpl.class);
 

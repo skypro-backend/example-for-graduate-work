@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface UserEntityRepository extends JpaRepository<UserEntity,Long > {
     Optional<UserEntity> findByPassword(String currentPassword);
-    Optional<UserEntity> findByEmail(String email);
+    Optional <UserEntity> findByUsername(String username);
     Optional <UserEntity> findByImageEntity_filePath(String filePath);
     Optional <UserEntity> findById(Integer id);
 }

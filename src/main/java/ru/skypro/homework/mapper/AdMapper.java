@@ -1,5 +1,6 @@
 package ru.skypro.homework.mapper;
 import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 
 
 @Mapper(componentModel = "spring")
+@Component
 public class AdMapper {
     public Ad AdEntityToAd(AdEntity adEntity) {
         if (adEntity == null) {
@@ -33,7 +35,7 @@ public class AdMapper {
                 .authorFirstName(adEntity.getUserEntity().getFirstName())
                 .authorFirstName(adEntity.getUserEntity().getLastName())
                 .description(adEntity.getDescription())
-                .email(adEntity.getUserEntity().getEmail())
+                .email(adEntity.getUserEntity().getUsername())
                 .phone(adEntity.getUserEntity().getPhone())
                 .price(adEntity.getPrice())
                 .title(adEntity.getTitle())

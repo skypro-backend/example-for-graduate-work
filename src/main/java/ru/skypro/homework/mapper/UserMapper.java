@@ -1,6 +1,7 @@
 package ru.skypro.homework.mapper;
 import lombok.Builder;
 import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserEntity;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper
+@Component
 public class UserMapper {
     public User userEntityToUser(UserEntity userEntity) {
         if (userEntity == null) {
@@ -15,7 +17,7 @@ public class UserMapper {
         }
         return User.builder()
                 .id(userEntity.getId())
-                .email(userEntity.getEmail())
+                .email(userEntity.getUsername())
                 .firstName(userEntity.getFirstName())
                 .lastName(userEntity.getLastName())
                 .phone(userEntity.getPhone())
@@ -29,7 +31,7 @@ public class UserMapper {
             throw new NullPointerException(" Ошибка маппера при создании UserEntity! Register == null! ");
         }
         return UserEntity.builder()
-                .email(dto.getUsername())
+                .username(dto.getUsername())
                 .password(dto.getPassword())
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
