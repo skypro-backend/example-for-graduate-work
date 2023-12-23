@@ -18,13 +18,12 @@ public class UserEntity {
     private int id;
     private String login;
     private String image;
-    private String email;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
     private String phone;
-    Role role;
+    private Role role;
     private String password;
     @OneToMany(mappedBy = "author")
     private Collection<AdEntity> ads;
