@@ -8,7 +8,6 @@ import ru.skypro.homework.dto.CustomUserDetails;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.repository.UserEntityRepository;
 
-import javax.persistence.EntityNotFoundException;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
