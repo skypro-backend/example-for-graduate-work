@@ -1,9 +1,14 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.CustomUserDetails;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
@@ -17,79 +22,69 @@ import ru.skypro.homework.repository.AdEntityRepository;
 import ru.skypro.homework.repository.CommentEntityRepository;
 import ru.skypro.homework.repository.UserEntityRepository;
 import ru.skypro.homework.service.UsersService;
+import ru.skypro.homework.service.helper.AuthenticationCheck;
 
 import javax.persistence.EntityNotFoundException;
 import java.nio.file.Path;
 import java.util.Optional;
 
+@Service
+@RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
 
     private final Logger logger = LoggerFactory.getLogger(UsersServiceImpl.class);
+    private final AuthenticationCheck authenticationCheck;
+    private final UserMapper userMapper;
+    private final UserEntityRepository userEntityRepository;
 
-    private UserMapper userMapper;
-    private final String imageDir;
-    private UserEntityRepository userEntityRepository;
-
-    public UsersServiceImpl(UserMapper userMapper
-            , @Value("${path.to.images.folder}") String imageDir
-            , UserEntityRepository userEntityRepository) {
-        this.userMapper = userMapper;
-        this.imageDir = imageDir;
-        this.userEntityRepository = userEntityRepository;
-    }
-
-    //    @Value("${path.to.images.folder}") String imageDir
     @Override
-    public void setPassword(NewPassword newPassword) {
-        Optional<UserEntity> userEntity = userEntityRepository.findByPassword(newPassword.getCurrentPassword());
-        if (newPassword.getCurrentPassword().equals(userEntity.get().getPassword())) {
-            userEntity.get().setPassword(newPassword.getNewPassword());
-            userEntityRepository.save(userEntity.get());
-        } else {
-            throw new PasswordNotFoundException("Введенный Вами пароль не найден!");
-        }
+    public void setPassword(NewPassword newPassword, CustomUserDetails userDetails) {
+
+        UserEntity userEntity = userEntityRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(()-> new UsernameNotFoundException("Username not found"));
+
+            userEntity.setPassword(new BCryptPasswordEncoder().encode(newPassword.getNewPassword()));
+            userEntityRepository.save(userEntity);
     }
     @Override
-    public User getUser() {
+    public User getUser(CustomUserDetails userDetails) {
 
-        // туДу - откуда получать информацию о айди пользователя?
-        UserEntity userEntity = userEntityRepository.findById(1).get();
-        if (userEntity.getId() == null ) {
-            throw new EntityNotFoundException("Пользователь не найден");
-        }
+        UserEntity userEntity = userEntityRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(()-> new UsernameNotFoundException("Username not found"));
         return userMapper.userEntityToUser(userEntity);
     }
 
     @Override
-    public UpdateUser updateUser(UpdateUser updateUser) {
-        // туДу - откуда получать информацию о айди пользователя?
-        UserEntity userEntity = userEntityRepository.findById(1).get();
-                Optional < UpdateUser > updateUserOptional = Optional.ofNullable(updateUser);
-        if (updateUserOptional.isEmpty()) {
-            throw new EntityNotFoundException("Информация о пользователе отсутствует!");
-        }
-        userEntity.setFirstName(updateUser.getFirstName());
-        userEntity.setLastName(updateUser.getFirstName());
-        userEntity.setPhone(updateUser.getPhone());
+    public UpdateUser updateUser(UpdateUser updateUser, CustomUserDetails userDetails) {
 
+        UserEntity userEntity = userEntityRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(()-> new UsernameNotFoundException("Username not found"));
+
+        if ((Optional.ofNullable(updateUser)).isEmpty()) {
+            throw new EntityNotFoundException("There is no information for updating");
+        } else if (updateUser.getFirstName() != null) {
+            userEntity.setFirstName(updateUser.getFirstName());
+        } else if (updateUser.getFirstName() != null) {
+            userEntity.setLastName(updateUser.getFirstName());
+        } else if (updateUser.getPhone() != null) {
+            userEntity.setPhone(updateUser.getPhone());
+        }
         userEntityRepository.save(userEntity);
         return updateUser;
     }
 
     @Override
-    public void updateUserImage(MultipartFile image) {
-        UserEntity userEntity = userEntityRepository.findById(1).get();
-        if (!image.getContentType().equals("image/jpeg") || !image.getContentType().equals("image/png")) {
+    public void updateUserImage(MultipartFile image, CustomUserDetails userDetails) {
+
+        UserEntity userEntity = userEntityRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(()-> new UsernameNotFoundException("Username not found "));
+
+        if (!image.getContentType().equals("image/jpeg") && !image.getContentType().equals("image/png") && !image.getContentType().equals("image/gif")) {
             throw new MissingImageException("Некорректный формат изображения пользователя!" );
         }
         // туДу заменить методом обработки фото
-        Path filePath = Path.of(imageDir, userEntity.getPhone() + ".images");
-        ImageEntity imageEntity = ImageEntity.builder()
-                .filePath(filePath.toString())
-                .mediaType(image.getContentType())
-                .fileSize(image.getSize())
-                .build();
+
         //
-        userEntity.setImageEntity(imageEntity);
+        userEntity.setImageEntity(null);
     }
 }

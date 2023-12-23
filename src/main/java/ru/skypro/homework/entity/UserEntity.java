@@ -3,6 +3,7 @@ import lombok.*;
 import ru.skypro.homework.dto.Role;
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,19 +19,14 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "password")
     private String password;
-    @Column(name = "email")
-    private String email;
+    private String username;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    @Column(name = "phone")
     private String phone;
-
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
     private Role role;
 
     @OneToOne
@@ -41,7 +37,7 @@ public class UserEntity {
     private Collection<AdEntity> adEntity;
 
     @OneToMany(mappedBy = "userEntity")
-    private Collection<CommentEntity> commentEntities;
+    private List<CommentEntity> commentEntities;
 
 
 }
