@@ -115,6 +115,7 @@ public class AdServiceImpl implements AdService {
     public void removeAd(int id, UserDetails userDetails) {
         AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new AdIsNotFoundException("Ad is not found"));
         checkAccess(userDetails, adEntity);
+        imageService.deleteImageFromPath(adEntity);
         adRepository.deleteById(id);
     }
 

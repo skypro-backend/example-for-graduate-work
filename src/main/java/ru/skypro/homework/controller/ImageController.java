@@ -17,7 +17,7 @@ public class ImageController {
     private final ImageServiceImpl imageService;
 
     /**
-     * Get an image URL
+     * Gets binary code of an image
      * @param id of an image
      * @return binary code of an image
      */

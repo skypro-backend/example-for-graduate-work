@@ -49,7 +49,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     /**
-     * Deletes an image
+     * Deletes an image from file path and database
      * @param adEntity contains ad id, price, title, description, UserEntity, ImageEntity and a list of CommentEntities
      */
     public void deleteImage(AdEntity adEntity) {
@@ -66,7 +66,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     /**
-     * Deletes an image
+     * Deletes an image from file path and database
      * @param userEntity contains user id, email, firstname, lastname, phone, password, role, ImageEntity, a list of AdEntities and a list of CommentEntities
      */
     public void deleteImage(UserEntity userEntity) {
@@ -75,6 +75,22 @@ public class ImageServiceImpl implements ImageService {
             if (imageEntity != null) {
                 Path iPath = Path.of(imageEntity.getFilePath());
                 imageRepository.deleteById(imageEntity.getId());
+                Files.delete(iPath);
+            }
+        } catch (IOException e) {
+            throw new DeleteImageException("Failed to delete file.");
+        }
+    }
+
+    /**
+     * Deletes an image from file path
+     * @param adEntity contains ad id, price, title, description, UserEntity, ImageEntity and a list of CommentEntities
+     */
+    public void deleteImageFromPath(AdEntity adEntity) {
+        ImageEntity imageEntity = adEntity.getImageEntity();
+        try {
+            if (imageEntity != null) {
+                Path iPath = Path.of(imageEntity.getFilePath());
                 Files.delete(iPath);
             }
         } catch (IOException e) {
