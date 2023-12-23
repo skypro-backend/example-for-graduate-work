@@ -16,4 +16,10 @@ public class AdEntity {
     private Integer price;
 
     private String title;
+
+    public Integer getAuthor() {
+        return author;
+    }
+
+
 }

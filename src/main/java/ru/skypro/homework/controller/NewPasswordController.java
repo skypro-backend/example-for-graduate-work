@@ -26,7 +26,6 @@ public class NewPasswordController {
             throw new NotAllowedPasswordException("Пароль не соответсвует требованиям");
         } else {
             newPasswordService.setPassword(newPassword.getCurrentPassword(),
-                    newPassword.getConfirmPhoneNumber(),
                     newPassword.getNewPassword());
             return ResponseEntity.ok().build();
         }
