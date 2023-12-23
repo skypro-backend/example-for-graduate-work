@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
@@ -38,6 +40,8 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Доступ для пользователя запрещен"),
     })
     @PostMapping("/set_password")
+    @PreAuthorize("isAuthenticated()")
+    @PostAuthorize("returnObject.author == principal.username or hasAuthority('ADMIN')")  //Попробуем и так и так
     public ResponseEntity<?> updatePassword(@RequestBody @Valid NewPassword newPassword) {
         userService.updPass(newPassword);
         return ResponseEntity.ok().build();
@@ -54,6 +58,7 @@ public class UserController {
                     content = @Content(mediaType = MediaType.ALL_VALUE)),
     })
     @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<User> getMe() {
         return ResponseEntity.ok(userService.getMeDTO());
     }
@@ -67,6 +72,8 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Пользователь отправил пароли в неверном формате"),
     })
     @PatchMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    @PostAuthorize("returnObject.body.author == authentication.name or hasAuthority('ADMIN')")
     public ResponseEntity<?> updateUserInfo(@RequestBody @Valid UpdateUser updateUser) {
         userService.updUsr(updateUser);
         return ResponseEntity.ok(updateUser);
@@ -78,6 +85,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "Пользователь не авторизован"),
     })
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updatePhoto(MultipartFile image) throws IOException {
         userService.updPhoto(image);
         return ResponseEntity.ok().build();

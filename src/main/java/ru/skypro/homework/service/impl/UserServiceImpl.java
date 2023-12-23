@@ -1,9 +1,12 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
@@ -20,7 +23,8 @@ import java.nio.file.Path;
 
 import static com.datical.liquibase.ext.init.InitProjectUtil.getExtension;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
-
+@Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     UserRepo userRepo;
@@ -33,6 +37,7 @@ public class UserServiceImpl implements UserService {
 
 
     public UserEntity getMe() {
+
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepo.findByLogin(user.getUsername());
     }
@@ -46,7 +51,7 @@ public class UserServiceImpl implements UserService {
     public void updPass(NewPassword newPassword) {
         userDetailsManager.changePassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());  //Я так понимаю, JDBC менеджер сам сохраняет
     }
-
+    @PreAuthorize("isAuthenticated()")
     @Override
     public UpdateUser updUsr(UpdateUser updateUser) {
         int id = getMe().getId();
