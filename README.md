@@ -19,7 +19,7 @@
     docker-compose up --build
     ```
 
-3. Ваша платформа будет доступна по адресу [http://localhost:8080](http://localhost:8080).
+3. Ваша платформа будет доступна по адресу [http://localhost:3000](http://localhost:8080)..
 
 ## Функциональность
 
