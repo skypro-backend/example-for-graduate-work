@@ -8,15 +8,22 @@ import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.model.CommentEntity;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
-    @Mapping(source = "id", target = "pk")
+    @Mappings({
+            @Mapping(source = "id", target = "pk"),
+            @Mapping(target = "author", expression = "java(commentEntity.getAuthor().getId())")
+    })
+
     Comment commentEntityToDTO(CommentEntity commentEntity);
 
-    @Mappings({
-            @Mapping(target = "count", expression = "java(commentsList.size()"),
-            @Mapping(source = "commentsList", target = "results")
-    })
-    Comments commentToDTOCommentList(List<CommentEntity> commentsList);
+    default Comments commentToDTOCommentList(List<CommentEntity> commentsList){
+        List<Comment> comList = commentsList.stream().map(this::commentEntityToDTO).collect(Collectors.toList());
+        Comments result = new Comments();
+        result.setResults(comList);
+        result.setCount(comList.size());
+        return result;
+    };
 }
