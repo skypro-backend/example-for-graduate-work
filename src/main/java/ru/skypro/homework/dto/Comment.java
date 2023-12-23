@@ -11,7 +11,7 @@ public class Comment {
     
     private String authorFirstName ;
     
-    private Long createdAt ;
+    private Integer createdAt ;
     
     private Integer pk ;
     

@@ -9,10 +9,10 @@ import ru.skypro.homework.entity.AdMapper;
 public class AdTest {
 
     @Test
-    public void test1() {
+   public void test1() {
         AdDto ad = new AdDto();
         ad.setAuthor(1111);
         AdEntity adEntity = AdMapper.INSTANCE.adToAdEntity(ad);
         System.out.println("adEntity.getAuthor() = " + adEntity.getAuthor());
-    }
+   }
 }

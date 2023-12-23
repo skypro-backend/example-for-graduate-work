@@ -17,8 +17,5 @@ public class AdDto {
 
     private String title;
 
-    public Integer getPk() {
-        return pk;
-    }
 }
 
