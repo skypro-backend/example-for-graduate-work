@@ -12,7 +12,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer pk;
+    private long pk;
     @OneToOne
     @JoinColumn(name = "user_id")
     User user;
