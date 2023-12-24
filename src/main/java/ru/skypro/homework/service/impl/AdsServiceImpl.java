@@ -95,7 +95,7 @@ public class AdsServiceImpl implements AdsService {
         logger.info("The ad with the specified id = " +  adId +  " was returned" );
         return extendedAd;
     }
-
+    @Override
     public void removeAd(Integer adId, CustomUserDetails userDetails) {
         logger.info("The removeAd method was called with id =" + adId);
 

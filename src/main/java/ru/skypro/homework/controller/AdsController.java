@@ -28,8 +28,10 @@ public class AdsController {
     public ResponseEntity<Ads> getAllAds() {
         return new ResponseEntity<>(adsService.getAllAds(), HttpStatus.OK);
     }
-    @PostMapping
-    public ResponseEntity<Ad> addAd(@RequestPart("properties") CreateOrUpdateAd properties, @RequestPart("image") MultipartFile image, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Ad> addAd(@RequestPart("properties") CreateOrUpdateAd properties
+            ,@RequestPart("image") MultipartFile image
+            ,@AuthenticationPrincipal CustomUserDetails userDetails) throws IOException{
         return new ResponseEntity<>(adsService.addAd(properties,image, userDetails),HttpStatus.CREATED);
 
     }
