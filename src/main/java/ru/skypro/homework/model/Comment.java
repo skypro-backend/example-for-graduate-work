@@ -13,18 +13,21 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long pk;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    User user;
+
+    @Column(name = "user_id")
+    long userId;
+
     @Column(name = "created_at")
     private Integer createdAt;
+
     @Column(name = "text")
     @Size(min = 8, max = 64)
     private String text;
 
-    public Comment(Integer pk, User user, Integer createdAt, String text) {
+
+    public Comment(Integer pk, long userId, Integer createdAt, String text) {
         this.pk = pk;
-        this.user = user;
+        this.userId = userId;
         this.createdAt = createdAt;
         this.text = text;
     }
