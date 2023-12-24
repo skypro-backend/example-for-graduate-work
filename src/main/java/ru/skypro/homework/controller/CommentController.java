@@ -4,13 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.service.CommentService;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -18,8 +18,13 @@ import java.util.Collection;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
-@RequiredArgsConstructor
 public class CommentController {
+    private final CommentService commentService;
+
+    public CommentController(CommentService commentService) {
+        this.commentService = commentService;
+    }
+
 
     /* method that will return list
     of comments to the specified ad*/
@@ -48,8 +53,9 @@ public class CommentController {
             tags = "Comments"
     )
     @GetMapping("/{id}/comments")
-    public ResponseEntity<Collection<?>> getComments(@Valid @Parameter(description = "Ad id") @PathVariable Integer id) {
-        return ResponseEntity.status(200).build();
+    public ResponseEntity<Comments> getComments(@Valid @Parameter(description = "Ad id") @PathVariable Integer id) {
+        Comments comments = commentService.getComments(id);
+        return ResponseEntity.ok(comments);
     }
 
     /* method that will add new
@@ -79,8 +85,9 @@ public class CommentController {
             tags = "Comments"
     )
     @PostMapping("/{id}/comments")
-    public ResponseEntity<?> addComment(@Valid @RequestBody CreateOrUpdateComment createOrUpdateComment, @Parameter(description = "Ad id") @PathVariable Integer id) {
-            return ResponseEntity.status(200).build();
+    public ResponseEntity<Comment> addComment(@Valid @RequestBody CreateOrUpdateComment createOrUpdateComment, @Parameter(description = "Ad id") @PathVariable Integer id) {
+        Comment comment = commentService.createComment(createOrUpdateComment, id);
+        return ResponseEntity.status(200).body(comment);
     }
 
     /* method that will delete
@@ -115,6 +122,7 @@ public class CommentController {
     )
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@Parameter(description = "Ad id") @PathVariable Integer adId, @Parameter(description = "Comment id") @PathVariable Integer commentId) {
+        commentService.deleteComment(adId, commentId);
         return ResponseEntity.status(200).build();
     }
 
@@ -149,7 +157,8 @@ public class CommentController {
             tags = "Comments"
     )
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> updateComment(@Parameter(description = "Ad id") @PathVariable Integer adId, @Parameter(description = "Comment id") @PathVariable Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        return ResponseEntity.status(200).build();
+    public ResponseEntity<Comment> updateComment(@Parameter(description = "Ad id") @PathVariable Integer adId, @Parameter(description = "Comment id") @PathVariable Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+        Comment comment = commentService.updateComment(adId,commentId,createOrUpdateComment);
+        return ResponseEntity.status(200).body(comment);
     }
 }

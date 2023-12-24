@@ -10,6 +10,7 @@ import ru.skypro.homework.repo.AdRepository;
 import ru.skypro.homework.repo.UserRepo;
 import ru.skypro.homework.service.AdMapper;
 import ru.skypro.homework.service.AdService;
+
 /**
  * Класс {@code AdServiceImpl} предоставляет реализацию интерфейса {@link AdService},
  * предоставляя функциональность для управления рекламными объявлениями в системе.
@@ -46,7 +47,7 @@ public class AdServiceImpl implements AdService {
     private final UserRepo userRepository;
     private final AdMapper mapper;
 
-    public AdServiceImpl(AdRepository repository, AdMapper mapper, UserRepo userRepository){
+    public AdServiceImpl(AdRepository repository, AdMapper mapper, UserRepo userRepository) {
         this.repository = repository;
         this.mapper = mapper;
         this.userRepository = userRepository;
@@ -55,7 +56,8 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ads getAllAds() {
-        return mapper.adToDtoList(repository.findAll());
+        return null;
+//        return mapper.adToDtoList(repository.findAll());
     }
 
     @Override
@@ -66,13 +68,14 @@ public class AdServiceImpl implements AdService {
         result.setPrice(ad.getPrice());
         result.setImage(image);
         result.setAuthor(userRepository.findById(userId).orElse(null));
-        return mapper.adToDto(repository.save(result));
+//        return mapper.adToDto(repository.save(result));
+        return null;
     }
 
     @Override
     public ExtendedAd getExtAd(Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
-        if(result == null){
+        if (result == null) {
             return null;
         }
         return mapper.adToExtDto(result);
@@ -81,34 +84,37 @@ public class AdServiceImpl implements AdService {
     @Override
     public Ad deleteAd(Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
-        if(result == null){
+        if (result == null) {
             return null;
         }
         repository.deleteById(id);
-        return mapper.adToDto(result);
+//        return mapper.adToDto(result);
+        return null;
     }
 
     @Override
     public Ad pathAd(CreateOrUpdateAd ad, Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
-        if(result == null){
+        if (result == null) {
             return null;
         }
         result.setDescription(ad.getDescription());
         result.setTitle(ad.getTitle());
         result.setPrice(ad.getPrice());
-        return mapper.adToDto(repository.save(result));
+//        return mapper.adToDto(repository.save(result));
+        return null;
     }
 
     @Override
     public Ads getAllAdsForUser(Integer userId) {
-        return mapper.adToDtoList(repository.findAdEntitiesByAuthor(userRepository.findById(userId).orElse(null)));
+//        return mapper.adToDtoList(repository.findAdEntitiesByAuthor(userRepository.findById(userId).orElse(null)));
+        return null;
     }
 
     @Override
     public String pathImageAd(Integer id, String image) {
         AdEntity result = repository.findById(id).orElse(null);
-        if(result == null){
+        if (result == null) {
             return null;
         }
         result.setImage(image);
