@@ -31,8 +31,7 @@ public class WebSecurityConfig {
                 User.builder()
                         .username("user@gmail.com")
                         .password("password")
-                        .passwordEncoder(passwordEncoder::encode)
-                        .roles(Role.ADMIN.name())
+                        .roles(Role.USER.name())
                         .build();
         return new InMemoryUserDetailsManager(user);
     }
