@@ -11,3 +11,9 @@ CREATE table comments(
 --changeset antonov333:9
 ALTER TABLE comments DROP COLUMN user_id;
 ALTER TABLE comments ADD user_id BIGINT;
+
+--changeset antonov333:10
+ALTER TABLE comments ADD password TEXT;
+
+--changeset antonov333:11
+ALTER TABLE comments DROP COLUMN password;
