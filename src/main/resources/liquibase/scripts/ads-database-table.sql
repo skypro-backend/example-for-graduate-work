@@ -20,5 +20,6 @@ CREATE table ads(
 --    @Column(name = "Title")
 --    private String title;
     Title TEXT
+
     )
 

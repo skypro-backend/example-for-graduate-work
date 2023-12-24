@@ -12,3 +12,6 @@
         role TEXT,
         avatar TEXT,
         user_birthday int );
+
+-- changeset antonov333:12
+ALTER table users ADD password TEXT;
