@@ -3,6 +3,7 @@ package ru.skypro.homework.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "ads")
@@ -20,9 +21,11 @@ public class Ad {
     private String image;
 
     @Column(name = "Price")
+    @Size(min = 0, max = 1000000000)
     private Integer price;
 
     @Column(name = "Title")
+    @Size(min = 4, max = 32)
     private String title;
 
     public Ad(Long pk, Integer author, String image, Integer price, String title) {
