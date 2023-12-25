@@ -61,3 +61,13 @@ ALTER TABLE users RENAME COLUMN role TO old_role;
 ALTER TABLE users ADD COLUMN role user_role;
 -- changeSet michailzaretskiy:9
 ALTER TABLE users DROP COLUMN old_role;
+-- changeSet michailzaretskiy:10
+ALTER TABLE users RENAME COLUMN role TO old_role;
+ALTER TABLE users ADD COLUMN role VARCHAR(10);
+-- changeSet michailzaretskiy:11
+ALTER TABLE users ALTER COLUMN phone DROP NOT NULL;
+ALTER TABLE users ALTER COLUMN last_name DROP NOT NULL;
+ALTER TABLE users ALTER COLUMN first_name DROP NOT NULL;
+-- changeSet michailzaretskiy:12
+ALTER TABLE users DROP COLUMN old_role;
+Drop TYPE user_role;

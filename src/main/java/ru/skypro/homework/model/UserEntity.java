@@ -15,7 +15,8 @@ import java.util.Collection;
 @Table(name = "users")
 public class UserEntity {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     private String login;
     private String image;
     @Column(name = "first_name")

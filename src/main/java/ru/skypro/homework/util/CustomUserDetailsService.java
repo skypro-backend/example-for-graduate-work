@@ -44,6 +44,7 @@ public class CustomUserDetailsService implements UserDetailsManager {
     @Override
     public void createUser(UserDetails user) {
         UserEntity result = new UserEntity();
+        result.setId(null);
         result.setLogin(user.getUsername());
         result.setPassword(user.getPassword());
         if(user.getAuthorities().stream().anyMatch(a->a.getAuthority().equals(Role.ADMIN.name()))){
@@ -68,6 +69,7 @@ public class CustomUserDetailsService implements UserDetailsManager {
         }else {
             updated.setRole(Role.USER);
         }
+        userRepo.deleteById(updated.getId());
         userRepo.save(updated);
     }
 
@@ -91,6 +93,7 @@ public class CustomUserDetailsService implements UserDetailsManager {
             throw new InCorrectPasswordException("Пароль введен неверно");
         }
         update.setPassword(passwordEncoder.encode(newPassword));
+        userRepo.deleteById(update.getId());
         userRepo.save(update);
     }
 
