@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface CommentRepository extends JpaRepository<CommentEntity, Integer> {
     List<CommentEntity> findAllByAdId(Integer adId);
-    void deleteByAdIdAndCommentId(Integer adId, Integer commentId);
-    CommentEntity findByAdIdAndCommentId(Integer adId, Integer commentId);
+    void deleteByAdIdAndId(Integer adId, Integer Id);
+    CommentEntity findByAdIdAndId(Integer adId, Integer Id);
 }
+

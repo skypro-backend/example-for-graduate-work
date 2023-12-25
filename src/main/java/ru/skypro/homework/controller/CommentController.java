@@ -11,6 +11,7 @@ import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentService;
+import ru.skypro.homework.service.impl.CommentServiceImpl;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -21,7 +22,7 @@ import java.util.Collection;
 public class CommentController {
     private final CommentService commentService;
 
-    public CommentController(CommentService commentService) {
+    public CommentController(CommentServiceImpl commentService) {
         this.commentService = commentService;
     }
 

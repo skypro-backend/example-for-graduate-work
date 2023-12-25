@@ -25,14 +25,12 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final AdRepository adRepository;
     private final CommentMapper commentMapper;
-    private final CommentService commentService;
     private final UserRepo userRepo;
 
-    public CommentServiceImpl(CommentRepository commentRepository, AdRepository adRepository, CommentMapper commentMapper, CommentService commentService, UserRepo userRepo) {
+    public CommentServiceImpl(CommentRepository commentRepository, AdRepository adRepository, CommentMapper commentMapper, UserRepo userRepo) {
         this.commentRepository = commentRepository;
         this.adRepository = adRepository;
         this.commentMapper = commentMapper;
-        this.commentService = commentService;
         this.userRepo = userRepo;
     }
 
@@ -59,14 +57,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment(Integer adId, Integer commentId) {
-        commentRepository.deleteByAdIdAndCommentId(adId,commentId);
+        commentRepository.deleteByAdIdAndId(adId,commentId);
     }
 
     @Override
     public Comment updateComment(Integer adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment) {
         LocalDateTime now = LocalDateTime.now();
         long milliseconds = now.toInstant(ZoneOffset.UTC).toEpochMilli();
-        CommentEntity commentEntity = commentRepository.findByAdIdAndCommentId(adId,commentId);
+        CommentEntity commentEntity = commentRepository.findByAdIdAndId(adId,commentId);
         commentEntity.setCreatedAt(milliseconds);
         commentEntity.setText(createOrUpdateComment.getText());
         commentRepository.save(commentEntity);
