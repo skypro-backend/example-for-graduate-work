@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto;
 
 import lombok.Data;
+import ru.skypro.homework.model.Ad;
 
 @Data
 public class AdDto {
@@ -18,4 +19,7 @@ public class AdDto {
         this.title = title;
     }
 
+    public AdDto(Ad ad) {
+
+    }
 }

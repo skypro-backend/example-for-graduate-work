@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto;
 
 import lombok.Data;
+import ru.skypro.homework.model.Comment;
 
 @Data
 public class CommentDto {
@@ -11,4 +12,7 @@ public class CommentDto {
     private Integer pk;
     private String text;
 
+    public CommentDto(Comment comment) {
+
+    }
 }

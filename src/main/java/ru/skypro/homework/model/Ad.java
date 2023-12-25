@@ -1,12 +1,13 @@
 package ru.skypro.homework.model;
 
 import lombok.Data;
+import ru.skypro.homework.dto.AdDto;
 
 import javax.persistence.*;
 
-//@Data
-//@Entity
-//@Table(name = "ad")
+/*@Data
+@Entity
+@Table(name = "ad")*/
 public class Ad {
   //  @Id
  //   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +23,13 @@ public class Ad {
 //    @Column
     private String description;
 
+ /*   public Ad(AdDto adDto) {
 
-    /*
+    }*/
+
+    public Ad(AdDto adDto) {
+    }
+/*
     ===================
     Скорее всего будет эта модель
     ===================

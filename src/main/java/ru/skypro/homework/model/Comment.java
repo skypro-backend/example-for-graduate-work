@@ -1,12 +1,13 @@
 package ru.skypro.homework.model;
 
 import lombok.Data;
+import ru.skypro.homework.dto.CommentDto;
 
 import javax.persistence.*;
 
-//@Data
-//@Entity
-//@Table(name = "comments")
+/*@Data
+@Entity
+@Table(name = "comments")*/
 public class Comment {
    // @Id
   //  @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +28,10 @@ public class Comment {
     private Integer price;
   //  @Column
     private String description;
+
+    public Comment(CommentDto commentDto) {
+
+    }
 
     /*
 
