@@ -1,5 +1,5 @@
 package ru.skypro.homework.mappers;
 
-public interface CommentMapper {
+public class CommentMapper {
     //2******
 }
