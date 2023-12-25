@@ -1,5 +1,7 @@
 package ru.skypro.homework.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -15,6 +17,7 @@ import ru.skypro.homework.util.exceptions.NotFoundException;
 
 public class CustomUserDetailsService implements UserDetailsManager {
 
+    private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
 
@@ -29,6 +32,7 @@ public class CustomUserDetailsService implements UserDetailsManager {
         if(user == null){
             throw new UsernameNotFoundException("Пользователь не найден");
         }
+        logger.info("Password in manager after login: {}", user.getPassword());
         return User
                 .withUsername(user.getLogin())
                 .password(user.getPassword())
@@ -43,6 +47,7 @@ public class CustomUserDetailsService implements UserDetailsManager {
 
     @Override
     public void createUser(UserDetails user) {
+        logger.info("Password in manager: {}", user.getPassword());
         UserEntity result = new UserEntity();
         result.setId(null);
         result.setLogin(user.getUsername());
@@ -52,6 +57,7 @@ public class CustomUserDetailsService implements UserDetailsManager {
         }else {
             result.setRole(Role.USER);
         }
+        logger.info("Password in manager after create entity: {}", result.getPassword());
         userRepo.save(result);
 
     }
@@ -69,7 +75,6 @@ public class CustomUserDetailsService implements UserDetailsManager {
         }else {
             updated.setRole(Role.USER);
         }
-        userRepo.deleteById(updated.getId());
         userRepo.save(updated);
     }
 
@@ -93,7 +98,6 @@ public class CustomUserDetailsService implements UserDetailsManager {
             throw new InCorrectPasswordException("Пароль введен неверно");
         }
         update.setPassword(passwordEncoder.encode(newPassword));
-        userRepo.deleteById(update.getId());
         userRepo.save(update);
     }
 

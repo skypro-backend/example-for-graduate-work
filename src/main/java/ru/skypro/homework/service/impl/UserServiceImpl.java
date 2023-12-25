@@ -27,10 +27,10 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    UserRepo userRepo;
-    UserMapper userMapper;
+    private final UserRepo userRepo;
+    private final UserMapper userMapper;
 
-    UserDetailsManager userDetailsManager;
+    private final UserDetailsManager userDetailsManager;
 
     @Value("${path.to.image.folder}")
     String path;

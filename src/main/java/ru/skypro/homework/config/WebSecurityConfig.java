@@ -22,7 +22,6 @@ import ru.skypro.homework.util.CustomUserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-    private static final Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
             "/swagger-ui.html",
@@ -45,12 +44,11 @@ public class WebSecurityConfig {
          http.csrf().disable().authorizeHttpRequests(httpRequest -> httpRequest
                         .mvcMatchers(AUTH_WHITELIST).permitAll()
                         .mvcMatchers(HttpMethod.GET, "/ads").permitAll()
-                        .mvcMatchers(HttpMethod.POST, "/login").permitAll()
-                        .mvcMatchers(HttpMethod.POST, "/register").permitAll()
+                        .mvcMatchers(HttpMethod.POST, "/login","/register").permitAll()
                         .mvcMatchers(HttpMethod.POST,"/ads").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                         .mvcMatchers("/ads/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                         .mvcMatchers("/users/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
-                );
+                ).httpBasic();
         return http.build();
     }
 

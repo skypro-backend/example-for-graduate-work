@@ -29,7 +29,7 @@ import java.io.IOException;
 @RequestMapping("/users")
 public class UserController {
 
-    UserService userService;
+    private final UserService userService;
 
 
     @Operation(summary = "Обновление пароля", description = "Метод ничего не возвращает. Принимает пароль в виде DTO и обновляет его у пользователя")
@@ -58,7 +58,6 @@ public class UserController {
                     content = @Content(mediaType = MediaType.ALL_VALUE)),
     })
     @GetMapping("/me")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<User> getMe() {
         return ResponseEntity.ok(userService.getMeDTO());
     }

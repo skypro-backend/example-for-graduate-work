@@ -30,5 +30,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "author")
     private Collection<AdEntity> ads;
 
-
+    public int getId(){
+        return id;
+    }
 }
