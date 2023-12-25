@@ -8,6 +8,11 @@ package ru.skypro.homework.model;
 public class Image {
 
     /*
+
+    ===================
+    Скорее всего будет эта модель
+    ===================
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

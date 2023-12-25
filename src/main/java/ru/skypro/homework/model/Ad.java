@@ -24,6 +24,10 @@ public class Ad {
 
 
     /*
+    ===================
+    Скорее всего будет эта модель
+    ===================
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -29,6 +29,11 @@ public class Comment {
     private String description;
 
     /*
+
+    ===================
+    Скорее всего будет эта модель
+    ===================
+
      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
