@@ -47,7 +47,8 @@ public class WebSecurityConfig {
                         .mvcMatchers(HttpMethod.POST, "/login","/register").permitAll()
                         .mvcMatchers(HttpMethod.POST,"/ads").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                         .mvcMatchers("/ads/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
-                        .mvcMatchers("/users/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
+                         .mvcMatchers("/users/**").permitAll()
+                       // .mvcMatchers("/users/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                 ).httpBasic();
         return http.build();
     }

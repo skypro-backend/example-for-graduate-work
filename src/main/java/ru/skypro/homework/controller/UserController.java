@@ -44,7 +44,6 @@ public class UserController {
     })
     @PostMapping("/set_password")
     @PreAuthorize("isAuthenticated()")
-    @PostAuthorize("returnObject.author == principal.username or hasAuthority('ADMIN')")  //Попробуем и так и так
     public ResponseEntity<?> updatePassword(@RequestBody @Valid NewPassword newPassword) {
         logger.info("Request change password: {}, new password: {}", newPassword.getCurrentPassword(), newPassword.getNewPassword());
         userService.updPass(newPassword);
@@ -77,7 +76,6 @@ public class UserController {
     })
     @PatchMapping("/me")
     @PreAuthorize("isAuthenticated()")
-    @PostAuthorize("returnObject.body.author == authentication.name or hasAuthority('ADMIN')")
     public ResponseEntity<?> updateUserInfo(@RequestBody @Valid UpdateUser updateUser) {
         userService.updUsr(updateUser);
         return ResponseEntity.ok(updateUser);
