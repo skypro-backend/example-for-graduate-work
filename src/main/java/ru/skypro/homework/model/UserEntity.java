@@ -30,7 +30,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "author")
     private Collection<AdEntity> ads;
 
-    public int getId(){
+    public Integer getId(){
         return id;
     }
 }

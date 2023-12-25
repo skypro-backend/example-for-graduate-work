@@ -49,14 +49,8 @@ public class CustomUserDetailsService implements UserDetailsManager {
     public void createUser(UserDetails user) {
         logger.info("Password in manager: {}", user.getPassword());
         UserEntity result = new UserEntity();
-        result.setId(null);
         result.setLogin(user.getUsername());
         result.setPassword(user.getPassword());
-        if(user.getAuthorities().stream().anyMatch(a->a.getAuthority().equals(Role.ADMIN.name()))){
-            result.setRole(Role.ADMIN);
-        }else {
-            result.setRole(Role.USER);
-        }
         logger.info("Password in manager after create entity: {}", result.getPassword());
         userRepo.save(result);
 
@@ -89,7 +83,9 @@ public class CustomUserDetailsService implements UserDetailsManager {
 
     @Override
     public void changePassword(String oldPassword, String newPassword) {
+        logger.info("Hi in CustomUserDetailsService in changePassword()");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        logger.info("Loggin User for change password: {}", authentication.getName());
         UserEntity update = userRepo.findByLogin(authentication.getName());
         if(update == null){
             throw new NotFoundException("Пользователь для обновления информации не найден");
@@ -97,7 +93,9 @@ public class CustomUserDetailsService implements UserDetailsManager {
         if(update.getPassword().equals(passwordEncoder.encode(oldPassword))){
             throw new InCorrectPasswordException("Пароль введен неверно");
         }
+        logger.info("Old password: {}", update.getPassword());
         update.setPassword(passwordEncoder.encode(newPassword));
+        logger.info("New password: {}", update.getPassword());
         userRepo.save(update);
     }
 

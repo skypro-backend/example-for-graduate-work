@@ -59,6 +59,7 @@ public class AuthServiceImpl implements AuthService {
             return false;
         }
         logger.info("After Register in manager password: {}", user.getPassword());
+        user.setRole(register.getRole());
         user.setFirstName(register.getFirstName());
         user.setLastName(register.getLastName());
         user.setPhone(register.getPhone());

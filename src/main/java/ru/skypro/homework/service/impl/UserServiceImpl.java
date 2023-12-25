@@ -1,6 +1,8 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.controller.UserController;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
@@ -27,6 +30,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserRepo userRepo;
     private final UserMapper userMapper;
 
@@ -49,6 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updPass(NewPassword newPassword) {
+        logger.info("Hi in UserService in updPass()");
         userDetailsManager.changePassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());  //Я так понимаю, JDBC менеджер сам сохраняет
     }
     @PreAuthorize("isAuthenticated()")

@@ -21,6 +21,7 @@ import ru.skypro.homework.util.CustomUserDetailsService;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
@@ -34,6 +35,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) {
         if (authService.register(register)) {
+            logger.info("Register role: {}", register.getRole());
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -17,6 +19,7 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.util.CustomUserDetailsService;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -28,7 +31,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
-
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
 
@@ -43,6 +46,7 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @PostAuthorize("returnObject.author == principal.username or hasAuthority('ADMIN')")  //Попробуем и так и так
     public ResponseEntity<?> updatePassword(@RequestBody @Valid NewPassword newPassword) {
+        logger.info("Request change password: {}, new password: {}", newPassword.getCurrentPassword(), newPassword.getNewPassword());
         userService.updPass(newPassword);
         return ResponseEntity.ok().build();
     }
@@ -57,6 +61,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "Пользователь не авторизован",
                     content = @Content(mediaType = MediaType.ALL_VALUE)),
     })
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
     public ResponseEntity<User> getMe() {
         return ResponseEntity.ok(userService.getMeDTO());
