@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
-import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repo.UserRepo;
 import ru.skypro.homework.util.exceptions.InCorrectPasswordException;
@@ -64,11 +63,6 @@ public class CustomUserDetailsService implements UserDetailsManager {
         }
         updated.setLogin(user.getUsername());
         updated.setPassword(user.getPassword());
-        if(user.getAuthorities().stream().anyMatch(a->a.getAuthority().equals(Role.ADMIN.name()))){
-            updated.setRole(Role.ADMIN);
-        }else {
-            updated.setRole(Role.USER);
-        }
         userRepo.save(updated);
     }
 

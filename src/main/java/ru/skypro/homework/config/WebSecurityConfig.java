@@ -1,7 +1,5 @@
 package ru.skypro.homework.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -47,8 +45,7 @@ public class WebSecurityConfig {
                         .mvcMatchers(HttpMethod.POST, "/login","/register").permitAll()
                         .mvcMatchers(HttpMethod.POST,"/ads").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                         .mvcMatchers("/ads/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
-                         .mvcMatchers("/users/**").permitAll()
-                       // .mvcMatchers("/users/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
+                        .mvcMatchers("/users/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                 ).httpBasic();
         return http.build();
     }

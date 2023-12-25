@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.repo.UserRepo;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.impl.AuthServiceImpl;
 
 
 import java.io.File;
@@ -32,6 +35,7 @@ import java.nio.file.Paths;
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
 public class AdvertisementController {
+    private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
     private final AdService adService;
     private final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -59,6 +63,8 @@ public class AdvertisementController {
     })
     @PostMapping
     public ResponseEntity<Ad> postAds(CreateOrUpdateAd properties, String image){
+        logger.info("Request to create Ad, title: {}, price: {}, descr: {}, image: {}",properties.getTitle(), properties.getPrice()
+        , properties.getDescription(), image);
         Ad result = adService.createAd(properties, image, authentication.getName());
         return ResponseEntity.status(201).body(result);
     }

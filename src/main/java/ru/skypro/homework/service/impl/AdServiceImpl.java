@@ -73,7 +73,7 @@ public class AdServiceImpl implements AdService {
         return mapper.adToDtoList(result);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @Override
     public Ad createAd(CreateOrUpdateAd ad, String image,String username) {
         AdEntity result;

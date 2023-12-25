@@ -29,8 +29,4 @@ public class UserEntity {
     private String password;
     @OneToMany(mappedBy = "author")
     private Collection<AdEntity> ads;
-
-    public Integer getId(){
-        return id;
-    }
 }

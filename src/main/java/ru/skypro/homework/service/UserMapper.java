@@ -2,6 +2,7 @@ package ru.skypro.homework.service;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.model.UserEntity;
@@ -14,7 +15,10 @@ public interface UserMapper {
      * @param user UserEntity from DB
      * @return User DTO without password and Ads Collection
      */
-    @Mapping(source = "login", target = "email")
+    @Mappings({
+            @Mapping(source = "login", target = "email"),
+            @Mapping(target = "id", expression = "java(user.getId().intValue())")
+    })
     User UserEntityToDTO(UserEntity user);
 
     /**
