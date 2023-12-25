@@ -1,5 +1,12 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreFilter;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
@@ -10,6 +17,10 @@ import ru.skypro.homework.repo.AdRepository;
 import ru.skypro.homework.repo.UserRepo;
 import ru.skypro.homework.service.AdMapper;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.util.exceptions.NotFoundException;
+
+import java.util.Collection;
+
 
 /**
  * Класс {@code AdServiceImpl} предоставляет реализацию интерфейса {@link AdService},
@@ -47,7 +58,7 @@ public class AdServiceImpl implements AdService {
     private final UserRepo userRepository;
     private final AdMapper mapper;
 
-    public AdServiceImpl(AdRepository repository, AdMapper mapper, UserRepo userRepository) {
+    public AdServiceImpl(AdRepository repository, AdMapper mapper, UserRepo userRepository){
         this.repository = repository;
         this.mapper = mapper;
         this.userRepository = userRepository;
@@ -56,65 +67,68 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ads getAllAds() {
-        return null;
-//        return mapper.adToDtoList(repository.findAll());
+        Collection<AdEntity> result = repository.findAll();
+        if(result.isEmpty()){
+            throw new NotFoundException("Обьявления не найдены");
+        }
+        return mapper.adToDtoList(result);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Override
-    public Ad createAd(CreateOrUpdateAd ad, String image, Integer userId) {
-        AdEntity result = new AdEntity();
-        result.setDescription(ad.getDescription());
-        result.setTitle(ad.getTitle());
-        result.setPrice(ad.getPrice());
+    public Ad createAd(CreateOrUpdateAd ad, String image,String username) {
+        AdEntity result;
+        result = mapper.dtoToAd(ad);
         result.setImage(image);
-        result.setAuthor(userRepository.findById(userId).orElse(null));
-//        return mapper.adToDto(repository.save(result));
-        return null;
+        result.setAuthor(userRepository.findByLogin(username));
+        return mapper.adToDto(repository.save(result));
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Override
     public ExtendedAd getExtAd(Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
-        if (result == null) {
+        if(result == null){
             return null;
         }
         return mapper.adToExtDto(result);
     }
 
+    @PostAuthorize("returnObject.author == principal.username or hasRole('ADMIN')")
     @Override
     public Ad deleteAd(Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
-        if (result == null) {
+        if(result == null){
             return null;
         }
         repository.deleteById(id);
-//        return mapper.adToDto(result);
-        return null;
+        return mapper.adToDto(result);
     }
 
+    @PostAuthorize("returnObject.author == principal.username or hasRole('ADMIN')")
     @Override
     public Ad pathAd(CreateOrUpdateAd ad, Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
-        if (result == null) {
+        if(result == null){
             return null;
         }
         result.setDescription(ad.getDescription());
         result.setTitle(ad.getTitle());
         result.setPrice(ad.getPrice());
-//        return mapper.adToDto(repository.save(result));
-        return null;
+        return mapper.adToDto(repository.save(result));
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Override
-    public Ads getAllAdsForUser(Integer userId) {
-//        return mapper.adToDtoList(repository.findAdEntitiesByAuthor(userRepository.findById(userId).orElse(null)));
-        return null;
+    public Ads getAllAdsForUser(String username) {
+        return mapper.adToDtoList(repository.findAdEntitiesByAuthor(userRepository.findByLogin(username)));
     }
 
+    @PostAuthorize("hasRole('ADMIN')") //тут надо будет подправить, доступ нужен еще и автору
     @Override
     public String pathImageAd(Integer id, String image) {
         AdEntity result = repository.findById(id).orElse(null);
-        if (result == null) {
+        if(result == null){
             return null;
         }
         result.setImage(image);

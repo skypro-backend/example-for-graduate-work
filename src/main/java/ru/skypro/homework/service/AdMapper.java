@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -12,13 +13,15 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.AdEntity;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Интерфейс {@code AdMapper} предоставляет методы для преобразования между сущностями
  * рекламных объявлений ({@link AdEntity}) и их представлением в виде Data Transfer Objects (DTO).
  * Обеспечивает удобную конвертацию данных между слоями приложения.
  *
- * <p>Использует библиотеку MapStruct для автоматической генерации кода преобразования.
- * Экземпляр маппера доступен через статическое поле {@code INSTANCE}.</p>
+ * <p>Использует библиотеку MapStruct для автоматической генерации кода преобразования.</p>
  *
  * <p>Методы маппера:</p>
  * <ul>
@@ -37,29 +40,38 @@ import java.util.Collection;
  *
  * @author Michail Z. (GH: HeimTN)
  */
-@Mapper
-@Component
+@Mapper(componentModel = "spring")
 public interface AdMapper {
-    AdMapper INSTANCE = Mappers.getMapper(AdMapper.class);
 
-    @Mappings({
-            @Mapping(source = "id", target = "pk"),
-            @Mapping(source = "author_id", target = "author")
-    })
-    Ad adToDto(AdEntity ad);
-    @Mappings({
-            @Mapping(target = "count", expression = "java(ads.size())"),
-            @Mapping(target = "results", source = "ads")
-    })
-    Ads adToDtoList(Collection<AdEntity> ads);
+//    @Mappings({
+//            @Mapping(source = "id", target = "pk"),
+//            @Mapping(target = "author", expression = "java(ad.getAuthor() != null ? ad.getAuthor().getId() : null)")
+//    })
+//    Ad adToDto(AdEntity ad);
+    default Ad adToDto(AdEntity ad){
+        Ad result = new Ad();
+        result.setPk(ad.getId());
+        result.setTitle(ad.getTitle());
+        result.setAuthor(ad.getAuthor().getId());
+        result.setPrice(ad.getPrice());
+        result.setImage(ad.getImage());
+        return result;
+    }
 
-    AdEntity DtoToAd(CreateOrUpdateAd createOrUpdateAd);
+    default Ads adToDtoList(Collection<AdEntity> ads){
+        List<Ad> adList = ads.stream().map(this::adToDto).collect(Collectors.toList());
+        Ads result = new Ads();
+        result.setResults(adList);
+        result.setCount(adList.size());
+        return result;
+    };
+    AdEntity dtoToAd(CreateOrUpdateAd createOrUpdateAd);
 
     @Mappings({
             @Mapping(source = "id", target = "pk"),
             @Mapping(target = "authorFirstName", expression = "java(ad.getAuthor().getFirstName())"),
             @Mapping(target = "authorLastName", expression = "java(ad.getAuthor().getLastName())"),
-            @Mapping(target = "email", expression = "java(ad.getAuthor().getEmail())"),
+            @Mapping(target = "email", expression = "java(ad.getAuthor().getLogin())"),
             @Mapping(target = "phone", expression = "java(ad.getAuthor().getPhone())")
     })
     ExtendedAd adToExtDto(AdEntity ad);

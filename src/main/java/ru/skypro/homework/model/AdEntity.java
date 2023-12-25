@@ -31,8 +31,8 @@ import java.util.Collection;
 @Table(name = "ads")
 public class AdEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     private String image;
     private int price;
     private String title;
@@ -41,6 +41,5 @@ public class AdEntity {
     @JoinColumn(name = "author_id")
     private UserEntity author;
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
-    @JoinColumn(name = "comments_id")
     private Collection<CommentEntity> comments;
 }

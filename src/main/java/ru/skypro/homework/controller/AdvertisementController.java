@@ -3,16 +3,21 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.*;
+import ru.skypro.homework.repo.UserRepo;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.impl.AuthServiceImpl;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,11 +32,13 @@ import java.nio.file.Paths;
  */
 @RestController
 @RequestMapping("/ads")
+@CrossOrigin(value = "http://localhost:3000")
+@RequiredArgsConstructor
 public class AdvertisementController {
-    private AdService adService;
-    public AdvertisementController(AdService adService){
-        this.adService = adService;
-    }
+    private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
+    private final AdService adService;
+    private final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
 
 
     /**
@@ -56,9 +63,10 @@ public class AdvertisementController {
     })
     @PostMapping
     public ResponseEntity<Ad> postAds(CreateOrUpdateAd properties, String image){
-        //так же нужна проверка авторизации, если не авторизован возваращаем 401
-       // Ad result = adService.createAd(properties, image, userId);
-        return ResponseEntity.status(201).build();
+        logger.info("Request to create Ad, title: {}, price: {}, descr: {}, image: {}",properties.getTitle(), properties.getPrice()
+        , properties.getDescription(), image);
+        Ad result = adService.createAd(properties, image, authentication.getName());
+        return ResponseEntity.status(201).body(result);
     }
     /**
      * Получение информации об объявлении по его идентификатору.
@@ -71,7 +79,6 @@ public class AdvertisementController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> getInfoAds(@PathVariable Integer id){
-        //если не авторизован 401
         ExtendedAd result = adService.getExtAd(id);
         if(result == null){
             return ResponseEntity.status(404).build();
@@ -90,8 +97,6 @@ public class AdvertisementController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity deleteAds(@PathVariable Integer id){
-        //если не авторизован 401
-        //если нет доступа(видимо если не админ) 403
         Ad result = adService.deleteAd(id);
         if(result == null){
             return ResponseEntity.status(404).build();
@@ -110,8 +115,6 @@ public class AdvertisementController {
     })
     @PatchMapping("/{id}")
     public ResponseEntity<Ad> pathAds(@PathVariable Integer id, CreateOrUpdateAd ads){
-        //если не авторизован 401
-        //если нет доступа(видимо если не админ) 403
         Ad result = adService.pathAd(ads, id);
         if(result == null){
             return ResponseEntity.status(404).build();
@@ -128,9 +131,8 @@ public class AdvertisementController {
     })
     @GetMapping("/me")
     public ResponseEntity<Ads> getListAdsUser(){
-        //если не авторизован 401
-       // Ads result = adService.getAllAdsForUser(userId);
-        return ResponseEntity.status(200).build(); //Возвращаем через .ok
+        Ads result = adService.getAllAdsForUser(authentication.getName());
+        return ResponseEntity.ok(result);
     }
     /**
      * Изменение изображения объявления по его идентификатору.
@@ -144,8 +146,6 @@ public class AdvertisementController {
     })
     @PatchMapping("/{id}/image")
     public ResponseEntity<byte[]> pathImageAds(@PathVariable Integer id, String image) throws IOException {
-        //если не авторизован 401
-        //если нет доступа(видимо если не админ) 403
         String result = adService.pathImageAd(id, image);
         if(result == null){
             ResponseEntity.status(404).build();
