@@ -32,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsManager {
         return User
                 .withUsername(user.getLogin())
                 .password(user.getPassword())
-                .authorities(user.getRole().name())
+                .roles(user.getRole().name())
                 .accountExpired(false)
                 .accountLocked(false)
                 .credentialsExpired(false)

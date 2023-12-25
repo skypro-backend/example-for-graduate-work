@@ -73,7 +73,7 @@ public class AdServiceImpl implements AdService {
         return mapper.adToDtoList(result);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Override
     public Ad createAd(CreateOrUpdateAd ad, String image,String username) {
         AdEntity result;
@@ -83,7 +83,7 @@ public class AdServiceImpl implements AdService {
         return mapper.adToDto(repository.save(result));
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Override
     public ExtendedAd getExtAd(Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
@@ -93,7 +93,7 @@ public class AdServiceImpl implements AdService {
         return mapper.adToExtDto(result);
     }
 
-    @PostAuthorize("returnObject.author == principal.username or hasAuthority('ADMIN')")
+    @PostAuthorize("returnObject.author == principal.username or hasRole('ADMIN')")
     @Override
     public Ad deleteAd(Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
@@ -104,7 +104,7 @@ public class AdServiceImpl implements AdService {
         return mapper.adToDto(result);
     }
 
-    @PostAuthorize("returnObject.author == principal.username or hasAuthority('ADMIN')")
+    @PostAuthorize("returnObject.author == principal.username or hasRole('ADMIN')")
     @Override
     public Ad pathAd(CreateOrUpdateAd ad, Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
@@ -117,13 +117,13 @@ public class AdServiceImpl implements AdService {
         return mapper.adToDto(repository.save(result));
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Override
     public Ads getAllAdsForUser(String username) {
         return mapper.adToDtoList(repository.findAdEntitiesByAuthor(userRepository.findByLogin(username)));
     }
 
-    @PostAuthorize("hasAuthority('ADMIN')") //тут надо будет подправить, доступ нужен еще и автору
+    @PostAuthorize("hasRole('ADMIN')") //тут надо будет подправить, доступ нужен еще и автору
     @Override
     public String pathImageAd(Integer id, String image) {
         AdEntity result = repository.findById(id).orElse(null);

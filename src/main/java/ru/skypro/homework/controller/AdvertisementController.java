@@ -29,10 +29,10 @@ import java.nio.file.Paths;
  */
 @RestController
 @RequestMapping("/ads")
+@CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
 public class AdvertisementController {
     private final AdService adService;
-    private final UserRepo userRepo;
     private final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 

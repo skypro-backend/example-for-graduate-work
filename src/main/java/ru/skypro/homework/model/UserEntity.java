@@ -23,6 +23,7 @@ public class UserEntity {
     @Column(name = "last_name")
     private String lastName;
     private String phone;
+    @Enumerated(EnumType.STRING)
     private Role role;
     private String password;
     @OneToMany(mappedBy = "author")
