@@ -21,6 +21,7 @@ import ru.skypro.homework.util.exceptions.NotFoundException;
 
 import java.util.Collection;
 
+
 /**
  * Класс {@code AdServiceImpl} предоставляет реализацию интерфейса {@link AdService},
  * предоставляя функциональность для управления рекламными объявлениями в системе.
