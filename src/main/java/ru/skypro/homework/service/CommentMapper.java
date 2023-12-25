@@ -1,22 +1,42 @@
 package ru.skypro.homework.service;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
-import ru.skypro.homework.dto.Comment;
-import ru.skypro.homework.dto.Comments;
-import ru.skypro.homework.model.CommentEntity;
 
+import ru.skypro.homework.dto.*;
+import ru.skypro.homework.model.CommentEntity;
+import ru.skypro.homework.model.UserEntity;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
-    @Mapping(source = "id", target = "pk")
-    Comment commentEntityToDTO(CommentEntity commentEntity);
 
-    @Mappings({
-            @Mapping(target = "count", expression = "java(commentsList.size()"),
-            @Mapping(source = "commentsList", target = "results")
-    })
-    Comments commentToDTOCommentList(List<CommentEntity> commentsList);
+    /*method will map
+    entity to dto*/
+    default Comment commentEntityToCommentDTO(CommentEntity commentEntity){
+        if(commentEntity == null){
+            return null;
+        }
+        UserEntity user = commentEntity.getAuthor();
+        Comment commentDTO = new Comment();
+        LocalDateTime now = LocalDateTime.now();
+        long milliseconds = now.toInstant(ZoneOffset.UTC).toEpochMilli();
+        commentDTO.setAuthor(user.getId());
+        commentDTO.setAuthorFirstName(user.getFirstName());
+        commentDTO.setCreatedAt(milliseconds);
+        commentEntity.setText(commentEntity.getText());
+        return commentDTO;
+    }
+    /*method will map
+    Comments list to dto*/
+    default Comments commentsToListDTO(List<CommentEntity> comments){
+                List<Comment> commentList = comments
+                .stream()
+                .map(comment -> commentEntityToCommentDTO(comment))
+                .collect(Collectors.toList());
+                Comments result = new Comments(commentList.size(), commentList);
+                return result;
+    }
 }
