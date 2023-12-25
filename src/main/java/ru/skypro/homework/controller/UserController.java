@@ -8,9 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Users.NewPasswordDto;
-import ru.skypro.homework.dto.Users.UpdateUserDto;
-import ru.skypro.homework.dto.Users.UserDto;
+import ru.skypro.homework.dto.users.*;
 
 @RestController
 @RequestMapping
