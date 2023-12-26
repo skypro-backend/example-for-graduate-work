@@ -6,3 +6,6 @@ CREATE table login(
                     username TEXT,
                     password TEXT
                     ) ;
+
+-- changeset antonov333:12
+DROP table login;
