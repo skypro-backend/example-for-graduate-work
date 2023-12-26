@@ -1,38 +1,49 @@
 package ru.skypro.homework.mapper;
 
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
-import ru.skypro.homework.exception.UserNotFoundException;
+import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.User;
-import ru.skypro.homework.repositories.AdRepository;
-import ru.skypro.homework.repositories.UserRepository;
+import ru.skypro.homework.model.Image;
 
-@RequiredArgsConstructor
-@Service
-public class AdMapper {
+@Mapper(componentModel = "spring")
+public interface AdMapper {
 
-    private final UserRepository repository;
+    String address = "/ads/image/";
 
-    Ad toEntity(CreateOrUpdateAdDTO adDTO,String userName){
-        Ad entity = new Ad();
-        entity.setDescription(adDTO.getDescription());
-        entity.setPrice(adDTO.getPrice());
-        entity.setTitle(adDTO.getTitle());
-        return entity;
+    @Mapping(target = "id", source = "pk")
+    @Mapping(target = "author.id", source = "author")
+    @Mapping(target = "image", ignore = true)
+    Ad toEntity(AdDTO dto);
 
-    }
-    AdDTO toEntity(Ad ad){
-        AdDTO adDTO = new AdDTO();
-        adDTO.setTitle(ad.getTitle());
-        adDTO.setPrice(ad.getPrice());
-        adDTO.setAuthor(ad.getAuthor().getId());
+    @Mapping(target = "pk", source = "id")
+    @Mapping(target = "author", source = "author.id")
+    @Mapping(target = "image", source = "image", qualifiedByName = "imageToString")
+    AdDTO toDto(Ad entity);
 
+    @Mapping(target = "pk", source = "id")
+    @Mapping(target = "authorFirstName", source = "author.firstName")
+    @Mapping(target = "authorLastName", source = "author.lastName")
+    @Mapping(target = "email", source = "author.email")
+    @Mapping(target = "phone", source = "author.phone")
+    @Mapping(target = "image", source = "image", qualifiedByName = "imageToString")
+    ExtendedAdDTO toExtendedAdDto(Ad entity);
 
-        return adDTO;
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "image", ignore = true)
+    Ad toEntity(CreateOrUpdateAdDTO dto);
 
+    @Named("imageToString")
+    default String imageToString(Image image) {
+        if (image == null) {
+            return null;
+        }
+        return address + image.getId();
     }
 }

@@ -1,9 +1,6 @@
 package ru.skypro.homework.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,14 +10,15 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @EqualsAndHashCode
-@Table(name = "comments")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer createdAt;
+    private LocalDateTime createdAt;
 
     private String text;
 

@@ -2,18 +2,23 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+
 @Data
 public class CommentDTO {
-    private Long author;
+    private long author;
 
     private String authorImage;
 
     private String authorFirstName;
 
-    private Integer createdAt;
+    private LocalDateTime createdAt;
 
-    private Long pk;
-
+    private long pk;
+    @NotBlank
+    @Size(min = 8)
     private String text;
 
 

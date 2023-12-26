@@ -2,15 +2,18 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 
 @Data
 public class CreateOrUpdateAdDTO {
-    
+    @NotBlank
+    @Size(min = 8)
     private String title;
-
-    private Integer price;
-
+    private int price;
+    @NotBlank
+    @Size(min = 8)
     private String description;
 
 }

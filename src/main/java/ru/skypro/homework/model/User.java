@@ -1,9 +1,6 @@
 package ru.skypro.homework.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
@@ -14,6 +11,8 @@ import javax.persistence.*;
 @ToString
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

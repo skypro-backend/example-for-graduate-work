@@ -15,6 +15,8 @@ import java.util.Optional;
 public class MyUserDetailsService implements UserDetailsService {
 
     private final UserRepository repository;
+
+    // Загрузка пользователя
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = repository.findUserByEmailIgnoreCase(username);

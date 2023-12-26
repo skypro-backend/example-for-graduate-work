@@ -8,6 +8,6 @@ import java.util.List;
 public class AdsDTO {
 
     private int count;
-    private List<AdsDTO> results;
+    private List<AdDTO> results;
 
 }

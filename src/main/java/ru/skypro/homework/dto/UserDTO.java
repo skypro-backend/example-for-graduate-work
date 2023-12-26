@@ -9,7 +9,7 @@ import javax.persistence.Id;
 
 @Data
 public class UserDTO {
-    private Long id;
+    private long id;
 
     private String email;
 

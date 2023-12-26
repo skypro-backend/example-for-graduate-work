@@ -38,7 +38,7 @@ public class AuthController {
 
     })
     @PostMapping("/login")
-    @Operation(summary = "Авторизация пользователя",description = "login", tags = "Пользователи")
+    @Operation(summary = "Авторизация пользователя",description = "login", tags = "Регистрация")
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
@@ -62,8 +62,8 @@ public class AuthController {
 
     })
     @PostMapping("/register")
-    @Operation(summary = "Регистрация пользователя",description = "register", tags = "Пользователи")
-    public ResponseEntity<?> register(@RequestBody Register register) {
+    @Operation(summary = "Регистрация пользователя",description = "register", tags = "Регистрация")
+    public ResponseEntity<Void> register(@RequestBody Register register) {
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {

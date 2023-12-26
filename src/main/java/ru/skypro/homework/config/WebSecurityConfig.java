@@ -1,22 +1,27 @@
 package ru.skypro.homework.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.security.MyUserDetailsService;
 
-import javax.sql.DataSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+
+    private final MyUserDetailsService userDetailsService;
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -30,11 +35,16 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()
-                .disable()
+                .disable().
+                userDetailsService(userDetailsService)
                 .authorizeHttpRequests(
                         authorization ->
                                 authorization
+                                        .antMatchers(HttpMethod.OPTIONS)
+                                        .permitAll()
                                         .mvcMatchers(AUTH_WHITELIST)
+                                        .permitAll()
+                                        .antMatchers(HttpMethod.GET, "/ads", "/ads/image/**", "/user/image/**")
                                         .permitAll()
                                         .mvcMatchers("/ads/**", "/users/**")
                                         .authenticated())
