@@ -26,7 +26,8 @@ public interface CommentMapper {
         commentDTO.setAuthor(user.getId());
         commentDTO.setAuthorFirstName(user.getFirstName());
         commentDTO.setCreatedAt(milliseconds);
-        commentEntity.setText(commentEntity.getText());
+        commentDTO.setText(commentEntity.getText());
+        commentDTO.setPk(commentEntity.getId());
         return commentDTO;
     }
     /*method will map

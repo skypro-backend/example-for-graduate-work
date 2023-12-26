@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentService;
+import ru.skypro.homework.service.impl.AuthServiceImpl;
 import ru.skypro.homework.service.impl.CommentServiceImpl;
 
 import javax.validation.Valid;
@@ -20,6 +23,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/ads")
 public class CommentController {
+    private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
     private final CommentService commentService;
 
     public CommentController(CommentServiceImpl commentService) {
@@ -158,7 +162,10 @@ public class CommentController {
             tags = "Comments"
     )
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> updateComment(@Parameter(description = "Ad id") @PathVariable Integer adId, @Parameter(description = "Comment id") @PathVariable Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+    public ResponseEntity<Comment> updateComment(@Parameter(description = "Ad id") @PathVariable Integer adId,
+                                                 @Parameter(description = "Comment id") @PathVariable Integer commentId,
+                                                 @RequestBody @Valid CreateOrUpdateComment createOrUpdateComment) {
+       logger.info("Request to change comment in Ad id:{}, comment id:{}, text:{}", adId, commentId, createOrUpdateComment.getText());
         Comment comment = commentService.updateComment(adId,commentId,createOrUpdateComment);
         return ResponseEntity.status(200).body(comment);
     }

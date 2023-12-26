@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
@@ -48,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
         AdEntity adEntity = adRepository.findById(id).orElse(null);
         commentEntity.setAuthor(adEntity.getAuthor());
         commentEntity.setCreatedAt(milliseconds);
-        commentEntity.setText(commentEntity.getText());
+        commentEntity.setText(createOrUpdateComment.getText());
         commentEntity.setAd(adEntity);
         commentRepository.save(commentEntity);
         Comment comment = commentMapper.commentEntityToCommentDTO(commentEntity);
@@ -56,6 +57,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public void deleteComment(Integer adId, Integer commentId) {
         commentRepository.deleteByAdIdAndId(adId,commentId);
     }
