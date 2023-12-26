@@ -2,6 +2,7 @@ package ru.skypro.homework.model;
 
 import lombok.Data;
 import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.UserDto;
 
 import javax.persistence.*;
 
@@ -9,27 +10,42 @@ import javax.persistence.*;
 @Entity
 @Table(name = "ad")*/
 public class Ad {
-  //  @Id
- //   @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer author;
- //   @Column
+    //  @Id
+    //   @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long author;
+    //   @Column
     private String image;
-  //  @Column
+    //  @Column
     private Integer pk;
- //   @Column
+    //   @Column
     private Integer price;
-  //  @Column
+    //  @Column
     private String title;
-//    @Column
+    //    @Column
     private String description;
 
  /*   public Ad(AdDto adDto) {
 
     }*/
 
-    public Ad(AdDto adDto) {
+    public Ad(Long author, String image, Integer pk, Integer price, String title, String description) {
+        this.author = author;
+        this.image = image;
+        this.pk = pk;
+        this.price = price;
+        this.title = title;
+        this.description = description;
     }
-/*
+
+    public Ad(AdDto adDto) {
+        this.author = adDto.getAuthor();
+        this.image = adDto.getImage();
+        this.pk = adDto.getPk();
+        this.price = adDto.getPrice();
+        this.title = adDto.getTitle();
+    }
+
+  /*
     ===================
     Скорее всего будет эта модель
     ===================
