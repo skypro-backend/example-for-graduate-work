@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
@@ -30,10 +31,10 @@ import ru.skypro.homework.dto.ExtendedAd;
  */
 public interface AdService {
     Ads getAllAds();
-    Ad createAd(CreateOrUpdateAd ad, String image, String username);
+    Ad createAd(CreateOrUpdateAd ad, MultipartFile image);
     ExtendedAd getExtAd(Integer id);
     Ad deleteAd(Integer id);
     Ad pathAd(CreateOrUpdateAd ad, Integer id);
-    Ads getAllAdsForUser(String username);
-    String pathImageAd(Integer id, String image);
+    Ads getAllAdsForUser();
+    String pathImageAd(Integer id, MultipartFile image);
 }

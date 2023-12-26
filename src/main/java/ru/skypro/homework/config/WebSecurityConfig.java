@@ -46,18 +46,13 @@ public class WebSecurityConfig {
                         .mvcMatchers(HttpMethod.POST,"/ads").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                         .mvcMatchers("/ads/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                         .mvcMatchers("/users/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
-                ).httpBasic();
+                ).cors().and().httpBasic();
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
-    }
-
-    @Bean
-    public Authentication authentication(){
-        return SecurityContextHolder.getContext().getAuthentication();
     }
 
 }

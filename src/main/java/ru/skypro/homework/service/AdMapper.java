@@ -1,11 +1,9 @@
 package ru.skypro.homework.service;
 
-import org.mapstruct.IterableMapping;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
-import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
@@ -43,11 +41,6 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface AdMapper {
 
-//    @Mappings({
-//            @Mapping(source = "id", target = "pk"),
-//            @Mapping(target = "author", expression = "java(ad.getAuthor() != null ? ad.getAuthor().getId() : null)")
-//    })
-//    Ad adToDto(AdEntity ad);
     default Ad adToDto(AdEntity ad){
         Ad result = new Ad();
         result.setPk(ad.getId());
@@ -65,7 +58,13 @@ public interface AdMapper {
         result.setCount(adList.size());
         return result;
     };
-    AdEntity dtoToAd(CreateOrUpdateAd createOrUpdateAd);
+    default AdEntity dtoToAd(CreateOrUpdateAd createOrUpdateAd){
+        AdEntity result = new AdEntity();
+        result.setDescription(createOrUpdateAd.getDescription());
+        result.setPrice(createOrUpdateAd.getPrice());
+        result.setTitle(createOrUpdateAd.getTitle());
+        return result;
+    }
 
     @Mappings({
             @Mapping(source = "id", target = "pk"),

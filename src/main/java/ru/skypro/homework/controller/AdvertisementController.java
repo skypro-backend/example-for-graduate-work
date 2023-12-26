@@ -13,12 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.repo.UserRepo;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
 
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -37,7 +39,6 @@ import java.nio.file.Paths;
 public class AdvertisementController {
     private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
     private final AdService adService;
-    private final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 
 
@@ -61,11 +62,12 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "201", description = "Объявление успешно создано"),
             @ApiResponse(responseCode = "401", description = "Неавторизованный доступ")
     })
-    @PostMapping
-    public ResponseEntity<Ad> postAds(CreateOrUpdateAd properties, String image){
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Ad> postAds(@RequestPart("properties") @Valid CreateOrUpdateAd properties,
+                                      @RequestPart("image") MultipartFile image){
         logger.info("Request to create Ad, title: {}, price: {}, descr: {}, image: {}",properties.getTitle(), properties.getPrice()
         , properties.getDescription(), image);
-        Ad result = adService.createAd(properties, image, authentication.getName());
+        Ad result = adService.createAd(properties, image);
         return ResponseEntity.status(201).body(result);
     }
     /**
@@ -114,7 +116,7 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @PatchMapping("/{id}")
-    public ResponseEntity<Ad> pathAds(@PathVariable Integer id, CreateOrUpdateAd ads){
+    public ResponseEntity<Ad> pathAds(@PathVariable Integer id,@RequestBody @Valid CreateOrUpdateAd ads){
         Ad result = adService.pathAd(ads, id);
         if(result == null){
             return ResponseEntity.status(404).build();
@@ -131,7 +133,7 @@ public class AdvertisementController {
     })
     @GetMapping("/me")
     public ResponseEntity<Ads> getListAdsUser(){
-        Ads result = adService.getAllAdsForUser(authentication.getName());
+        Ads result = adService.getAllAdsForUser();
         return ResponseEntity.ok(result);
     }
     /**
@@ -145,23 +147,11 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @PatchMapping("/{id}/image")
-    public ResponseEntity<byte[]> pathImageAds(@PathVariable Integer id, String image) throws IOException {
-        String result = adService.pathImageAd(id, image);
-        if(result == null){
-            ResponseEntity.status(404).build();
+    public ResponseEntity<byte[]> pathImageAds(@PathVariable Integer id, MultipartFile image) {
+        byte[] imageBytes = adService.pathImageAd(id, image).getBytes();
+        if(imageBytes == null){
+            return ResponseEntity.status(404).build();
         }
-
-        File imageFile = new File(image);
-        InputStream imageStream = new FileInputStream(imageFile);
-        byte[] imageBytes = new byte[(int) imageFile.length()];
-        imageStream.read(imageBytes);
-
-        Path path = Paths.get(image);
-        String mimeType = Files.probeContentType(path);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(mimeType));
-        headers.setContentLength(imageBytes.length);
-        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+        return ResponseEntity.ok(imageBytes);
     }
 }
