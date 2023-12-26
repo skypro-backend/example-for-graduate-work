@@ -147,7 +147,7 @@ public class AdvertisementController {
             @ApiResponse(responseCode = "404", description = "Объявление с указанным идентификатором не найдено")
     })
     @PatchMapping("/{id}/image")
-    public ResponseEntity<byte[]> pathImageAds(@PathVariable Integer id, MultipartFile image) {
+    public ResponseEntity<byte[]> pathImageAds(@PathVariable Integer id, MultipartFile image) throws IOException {
         byte[] imageBytes = adService.pathImageAd(id, image).getBytes();
         if(imageBytes == null){
             return ResponseEntity.status(404).build();

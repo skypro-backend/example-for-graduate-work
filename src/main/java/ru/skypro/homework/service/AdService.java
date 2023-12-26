@@ -36,5 +36,5 @@ public interface AdService {
     Ad deleteAd(Integer id);
     Ad pathAd(CreateOrUpdateAd ad, Integer id);
     Ads getAllAdsForUser();
-    String pathImageAd(Integer id, MultipartFile image);
+    MultipartFile pathImageAd(Integer id, MultipartFile image);
 }
