@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class User {
 
-    private int id; //id пользователя
+    private Integer id; //id пользователя
 
     private String email; //логин пользователя
 
