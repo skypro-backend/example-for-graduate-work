@@ -2,9 +2,8 @@ package ru.skypro.homework.mappers;
 
 import org.modelmapper.ModelMapper;
 import ru.skypro.homework.dto.AdDto;
-import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.User;
+
 
 public class AdMapper {
     private ModelMapper modelMapper;
