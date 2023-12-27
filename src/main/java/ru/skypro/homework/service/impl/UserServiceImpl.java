@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.exceptions.EmptyException;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.ImageRepo;
@@ -30,7 +29,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Long id) {
         logger.info("User getUserById is running");
-        return userRepo.findById(id).orElseThrow(() -> new EmptyException("User not found"));
+        return userRepo.findById(id);
     }
 
     @Override
@@ -53,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
     public Image setImage(Long id, MultipartFile file) throws IOException {
             logger.info("User setImage is running");
-            User user = userRepo.findById(id).orElseThrow(() -> new EmptyException("User not found"));
+            User user = userRepo.findById(id);
             Path filePath = Path.of("./image", user + "." + getExtension(file.getOriginalFilename()));
 
             Files.createDirectories(filePath.getParent());

@@ -39,7 +39,7 @@ public class UserController {
         if (updateUserDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        userService.updateMyProfile(userMapper.convertToUpdateUser(new UpdateUserDTO());
+        userService.updateMyProfile(userMapper.convertToUpdateUser(new UpdateUserDTO()));
         return ResponseEntity.ok().build();
     }
 

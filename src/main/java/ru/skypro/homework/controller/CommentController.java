@@ -26,7 +26,7 @@ public class CommentController {
     @GetMapping("{id}/comments")
     public ResponseEntity<List<CommentsDTO>> getCommentById(@PathVariable Long id) {
         List<CommentsDTO> foundComments = commentService.getAllByCommentById(id).stream().map(commentMapper
-                .convertToCommentsDTO(comment)).collect(Collectors.toList());
+                .convertToCommentsDTO(text)).collect(Collectors.toList());
         if (foundComments == null) {
             return ResponseEntity.notFound().build();
         }
@@ -51,9 +51,9 @@ public class CommentController {
     }
 
     @PatchMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long adId,
-                                                 @PathVariable Long commentId,
-                                                 @RequestBody CreateOrUpdateCommentDTO text) {
+    public ResponseEntity<Comment> updateComment(@PathVariable Long adId,
+                                                @PathVariable Long commentId,
+                                                @RequestBody CreateOrUpdateCommentDTO text) {
         if (text == null) {
             return ResponseEntity.notFound().build();
         }
