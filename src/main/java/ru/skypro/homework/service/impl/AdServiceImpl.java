@@ -1,11 +1,12 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdService;
 
 import java.util.Collection;
-import java.util.List;
 
 @Service
 public class AdServiceImpl implements AdService {

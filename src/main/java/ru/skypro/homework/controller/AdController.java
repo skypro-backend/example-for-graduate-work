@@ -21,6 +21,7 @@ public class AdController {
 
     private final AdService adService;
 
+
     @GetMapping
     public ResponseEntity <Collection<AdDto>> getAll() {
         return ResponseEntity.ok(adService.getAll());

@@ -17,6 +17,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+
     @GetMapping
     public ResponseEntity<CommentsDto> getComments (@PathVariable int adId) {
         try {
