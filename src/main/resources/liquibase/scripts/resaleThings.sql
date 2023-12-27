@@ -24,7 +24,7 @@ CREATE TABLE ad
      title       VARCHAR(255),
   --   image_id   bigint references image (id),
      author_id   BIGINT REFERENCES users(id),
-     author INT,
+     author BIGINT,
      image text,
      pk integer
 );
@@ -48,6 +48,4 @@ CREATE TABLE comments
     pk INT,
     price int,
     title text
-
-
 );
