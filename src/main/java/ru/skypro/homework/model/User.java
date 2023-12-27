@@ -9,42 +9,26 @@ import javax.persistence.*;
 import java.awt.*;
 
 @Data
-//@Entity
-//@Table(name = "users")
+@Entity
+@Table(name = "users")
 public class User {
-    //  @Id
-    //  @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    //  @Column(unique = true, nullable = false)
     private String email;
 
-    // @Column(nullable = false)
     private String password;
 
-    // @Column(nullable = false)
     private String firstName;
 
-    //  @Column(nullable = false)
     private String lastName;
 
-    // @Column(nullable = false)
+    @Column(name = "phone_number")
     private String phone;
 
-    //  @Enumerated(EnumType.STRING)
-    //  @Column(nullable = false)
     private Role role;
 
-  /*  @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private List<Ad> ads;
-
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private List<Comment> comments;*/
-
-  /*  @OneToOne
-    @JsonBackReference
-    @JoinColumn(name = "image_id")
-    private Image image;*/
 
     public User(Integer id, String email, String password, String firstName, String lastName, String phone, Role role) {
         this.id = id;
