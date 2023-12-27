@@ -1,7 +1,7 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,13 +20,12 @@ import ru.skypro.homework.repo.CommentRepository;
 import ru.skypro.homework.repo.UserRepo;
 import ru.skypro.homework.service.CommentMapper;
 import ru.skypro.homework.service.CommentService;
+import ru.skypro.homework.service.WebSecurityService;
 import ru.skypro.homework.util.exceptions.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -34,12 +33,15 @@ public class CommentServiceImpl implements CommentService {
     private final AdRepository adRepository;
     private final CommentMapper commentMapper;
     private final UserRepo userRepo;
+    private final WebSecurityService webSecurityService;
 
-    public CommentServiceImpl(CommentRepository commentRepository, AdRepository adRepository, CommentMapper commentMapper, UserRepo userRepo) {
+    public CommentServiceImpl(CommentRepository commentRepository, AdRepository adRepository, CommentMapper commentMapper, UserRepo userRepo,
+                              WebSecurityServiceImpl webSecurityService) {
         this.commentRepository = commentRepository;
         this.adRepository = adRepository;
         this.commentMapper = commentMapper;
         this.userRepo = userRepo;
+        this.webSecurityService = webSecurityService;
     }
 
     @Override
@@ -74,8 +76,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @PostAuthorize("returnObject.author == principal.username or hasRole('ADMIN')")
-    public Comment updateComment(Integer adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment) {
+    @PreAuthorize("@webSecurityServiceImpl.canAccessInComment(#id, principal.username) or hasRole('ADMIN')")
+    public Comment updateComment(Integer adId, @Param("id") Integer commentId, CreateOrUpdateComment createOrUpdateComment) {
         LocalDateTime now = LocalDateTime.now();
         long milliseconds = now.toInstant(ZoneOffset.UTC).toEpochMilli();
         CommentEntity commentEntity = commentRepository.findByAdIdAndId(adId,commentId);

@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         logger.info("Hi in UserService in updPass()");
         userDetailsManager.changePassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());  //Я так понимаю, JDBC менеджер сам сохраняет
     }
-    
+
     @Override
     public UpdateUser updUsr(UpdateUser updateUser) {
         int id = getMe().getId();

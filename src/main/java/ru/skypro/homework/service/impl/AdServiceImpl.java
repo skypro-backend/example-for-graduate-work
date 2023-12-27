@@ -1,8 +1,9 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -13,11 +14,11 @@ import ru.skypro.homework.repo.AdRepository;
 import ru.skypro.homework.repo.UserRepo;
 import ru.skypro.homework.service.AdMapper;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.WebSecurityService;
 import ru.skypro.homework.util.exceptions.FileNotFoundException;
 import ru.skypro.homework.util.exceptions.NotFoundException;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -59,14 +60,16 @@ public class AdServiceImpl implements AdService {
     private final AdRepository repository;
     private final UserRepo userRepository;
     private final AdMapper mapper;
+    private final WebSecurityService webSecurityService;
 
     @Value("${path.to.image.folder}")
     private String uploadDir;
 
-    public AdServiceImpl(AdRepository repository, AdMapper mapper, UserRepo userRepository){
+    public AdServiceImpl(AdRepository repository, AdMapper mapper, UserRepo userRepository, WebSecurityServiceImpl webSecurityService){
         this.repository = repository;
         this.mapper = mapper;
         this.userRepository = userRepository;
+        this.webSecurityService = webSecurityService;
     }
 
 
@@ -97,9 +100,9 @@ public class AdServiceImpl implements AdService {
         return mapper.adToExtDto(result);
     }
 
-    @PostAuthorize("returnObject.author == principal.username or hasRole('ADMIN')")
+    @PreAuthorize("@webSecurityServiceImpl.canAccessInAd(#id, principal.username) or hasRole('ADMIN')")
     @Override
-    public Ad deleteAd(Integer id) {
+    public Ad deleteAd(@Param("id")Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
         if(result == null){
             return null;
@@ -108,7 +111,7 @@ public class AdServiceImpl implements AdService {
         return mapper.adToDto(result);
     }
 
-    @PostAuthorize("returnObject.author == principal.username or hasRole('ADMIN')")
+    @PreAuthorize("@webSecurityServiceImpl.canAccessInAd(#id, principal.username) or hasRole('ADMIN')")
     @Override
     public Ad pathAd(CreateOrUpdateAd ad, Integer id) {
         AdEntity result = repository.findById(id).orElse(null);
@@ -140,6 +143,22 @@ public class AdServiceImpl implements AdService {
         throw new AccessDeniedException("Нет доступа");
     }
 
+    @Override
+    public byte[] getImageAd(Integer id) {
+        AdEntity result = repository.findById(id).orElse(null);
+        if(result == null){
+        return null;
+        }
+        try {
+            Path path = Paths.get(result.getImage());
+            byte[] fileContent = Files.readAllBytes(path);
+            return fileContent;
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        throw new RuntimeException("Непредвиденная ошибка, проверьте стактрейс");
+
+    }
 
     private String getMe(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

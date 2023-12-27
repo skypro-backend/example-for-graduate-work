@@ -37,4 +37,5 @@ public interface AdService {
     Ad pathAd(CreateOrUpdateAd ad, Integer id);
     Ads getAllAdsForUser();
     MultipartFile pathImageAd(Integer id, MultipartFile image);
+    byte[] getImageAd(Integer id);
 }
