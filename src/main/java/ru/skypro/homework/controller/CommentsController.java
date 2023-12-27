@@ -15,7 +15,7 @@ import ru.skypro.homework.service.impl.CommentServiceImpl;
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @RequestMapping("/ads")
 public class CommentsController {
 
@@ -25,20 +25,16 @@ public class CommentsController {
         this.commentServiceImpl = commentServiceImpl;
     }
 
-    @GetMapping("/{id}/comments")
+    @GetMapping("/{adId}/comments")
     public ResponseEntity<Comments> getComments(@PathVariable Integer adId) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentServiceImpl.getComments(adId));
+        return new ResponseEntity<>(commentServiceImpl.getComments(adId), HttpStatus.OK);
     }
-
-
-    @PostMapping("/{id}/comments")
+    @PostMapping("/{adId}/comments")
     public ResponseEntity<Comment> addComment(@PathVariable Integer adId,
                                               @RequestBody CreateOrUpdateComment createOrUpdateComment,
                                               @AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseEntity.status(HttpStatus.OK).body(commentServiceImpl.addComment(adId, createOrUpdateComment, userDetails));
     }
-
-
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Integer adId,
                                               @PathVariable Integer commentId,
@@ -46,8 +42,6 @@ public class CommentsController {
         commentServiceImpl.deleteComment(adId, commentId, userDetails);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<Comment> updateComment(@PathVariable Integer adId,
                                                  @PathVariable Integer commentId,

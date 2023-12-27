@@ -25,7 +25,6 @@ import java.time.Instant;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
     private final Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
     private final AdEntityRepository adEntityRepository;
@@ -34,16 +33,18 @@ public class CommentServiceImpl implements CommentService {
     private final AuthenticationCheck authenticationCheck;
     private final UserEntityRepository userEntityRepository;
 
+    public CommentServiceImpl(AdEntityRepository adEntityRepository, CommentEntityRepository commentEntityRepository, CommentMapper commentMapper, AuthenticationCheck authenticationCheck, UserEntityRepository userEntityRepository) {
+        this.adEntityRepository = adEntityRepository;
+        this.commentEntityRepository = commentEntityRepository;
+        this.commentMapper = commentMapper;
+        this.authenticationCheck = authenticationCheck;
+        this.userEntityRepository = userEntityRepository;
+    }
+
     @Override
     public Comments getComments(Integer adId) {
 
-        List<CommentEntity> commentEntities = commentEntityRepository.findByAdId_Id(adId);
-        if (commentEntities.isEmpty()) {
-            logger.warn("The Ad message list is empty");
-            return null;
-        }
-
-        List<Comment> comments = commentMapper.commentEntityListToCommentList(commentEntities);
+        List<Comment> comments = commentMapper.commentEntityListToCommentList(commentEntityRepository.findByAdId_id(adId));
         return Comments.builder()
                 .results(comments)
                 .count(comments.size())
@@ -51,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
     }
     @Override
     public Comment addComment(Integer adId, CreateOrUpdateComment createOrUpdateComment, CustomUserDetails userDetails) {
-
+    logger.info("Hi there");
         if (createOrUpdateComment.getText() == null) {
             throw new BlankFieldException("Пустое поле обновленного комментария");
         }
