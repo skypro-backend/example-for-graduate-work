@@ -1,9 +1,12 @@
 package ru.skypro.homework.model;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+
 
 @Entity
 @Table(name = "users")
@@ -15,21 +18,19 @@ public class User {
     private Long id;
 
     @Column(name = "name")
+    @Size(min = 2, max = 10)
     private String name;
+
     @Column(name = "surname")
+    @Size(min = 2, max = 16)
     private String surname;
 
     @Column(name = "phone_number")
     private String phoneNumber;
 
     @Column(name = "email")
+    @Email(message = "Email must to be valid")
     private String email;
-
-    @Column(name = "age")
-    private int age;
-
-    @Column(name = "gender")
-    private String gender;
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
@@ -38,24 +39,26 @@ public class User {
     @Column(name = "avatar")
     private String idImage;
 
-    @Column(name = "user_birthday")
-    private int userBirthday;
+    @Column(name = "password")
+    @Size(min = 8, max = 16)
+    private String password;
+
+
+
 
     public User(Long id, String name,
                 String surname, String phoneNumber,
-                String email, int age,
-                String gender, Role userRole,
-                String idImage, int userBirthday) {
+                String email, Role userRole,
+                String idImage, String password) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.age = age;
-        this.gender = gender;
         this.userRole = userRole;
         this.idImage = idImage;
-        this.userBirthday = userBirthday;
+        this.password = password;
+
     }
     /*
 
