@@ -48,4 +48,6 @@ CREATE TABLE comments
     pk INT,
     price int,
     title text
+
+
 );
