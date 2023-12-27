@@ -3,6 +3,8 @@ package ru.skypro.homework.mapper;
 
 import lombok.Builder;
 import org.mapstruct.Mapper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.CommentEntity;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper
+@Component
 public class CommentMapper {
     public Comment commentEntityToComment(CommentEntity commentEntity) {
         if (commentEntity == null) {

@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.CustomUserDetails;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
@@ -32,23 +34,23 @@ public class UsersController {
     }
 
     @PostMapping("/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword)
+    public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword, CustomUserDetails userDetails)
     {
-        usersService.setPassword(newPassword);
+        usersService.setPassword(newPassword, userDetails);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/me")
-    public ResponseEntity<User> getUser() {
-        return new ResponseEntity<>(usersService.getUser(),HttpStatus.OK);
+    public ResponseEntity<User> getUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return new ResponseEntity<>(usersService.getUser(userDetails),HttpStatus.OK);
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
-        return new ResponseEntity<>(usersService.updateUser(updateUser), HttpStatus.OK);
+    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return new ResponseEntity<>(usersService.updateUser(updateUser, userDetails), HttpStatus.OK);
     }
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateUserImage( @RequestParam MultipartFile image) {
-        usersService.updateUserImage(image);
+    public ResponseEntity<Void> updateUserImage( @RequestParam MultipartFile image, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        usersService.updateUserImage(image, userDetails);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
