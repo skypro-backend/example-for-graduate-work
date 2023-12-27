@@ -25,6 +25,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean login(String userName, String password) {
+        logger.info("method login");
         if (!manager.userExists(userName)) {
             return false;
         }
@@ -34,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(RegisterDto register) {
+        logger.info("method register");
         if (manager.userExists(register.getUsername())) {
             return false;
         }
