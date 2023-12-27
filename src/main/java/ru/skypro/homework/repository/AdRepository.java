@@ -1,4 +1,7 @@
 package ru.skypro.homework.repository;
 
-public interface AdRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AdRepository  {
+
 }

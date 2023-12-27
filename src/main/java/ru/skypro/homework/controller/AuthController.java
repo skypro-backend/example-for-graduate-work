@@ -20,9 +20,6 @@ public class AuthController {
 
     private AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
 
        @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto login) {
