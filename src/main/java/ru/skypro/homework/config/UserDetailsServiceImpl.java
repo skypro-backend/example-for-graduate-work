@@ -17,6 +17,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userEntityRepository = userEntityRepository;
     }
 
+    /**
+     * Loading user's information.
+     * <br> If user not found {@code userEntityRepository.findByUsername(username)},
+     * <br> making new user;
+     * @param username
+     * @return
+     */
     @Override
     public UserDetails loadUserByUsername(String username) {
         UserEntity user = userEntityRepository.findByUsername(username)

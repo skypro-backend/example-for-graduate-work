@@ -34,6 +34,15 @@ public class CommentServiceImpl implements CommentService {
     private final AuthenticationCheck authenticationCheck;
     private final UserEntityRepository userEntityRepository;
 
+    /**
+     * Trying to find the list comments of ad, using
+     * {@code commentEntityRepository.findByAdId_Id(adId)};
+     * <br>
+     * and, if there are some comments, use
+     * {@link CommentMapper#commentEntityListToCommentList(List)}
+     * @param adId
+     * @return
+     */
     @Override
     public Comments getComments(Integer adId) {
 
@@ -49,6 +58,20 @@ public class CommentServiceImpl implements CommentService {
                 .count(comments.size())
                 .build();
     }
+
+    /**
+     * Addition new comment for ad; checking text of new comment and user's data
+     * {@code userEntityRepository.findByUsername(userDetails.getUsername())};
+     * <br>
+     * after use
+     * <br> {@code commentEntityRepository.save(commentEntity)};
+     * <br> and
+     * <br> {@link CommentMapper#commentEntityToComment(CommentEntity)}
+     * @param adId
+     * @param createOrUpdateComment
+     * @param userDetails
+     * @return
+     */
     @Override
     public Comment addComment(Integer adId, CreateOrUpdateComment createOrUpdateComment, CustomUserDetails userDetails) {
 
@@ -70,6 +93,16 @@ public class CommentServiceImpl implements CommentService {
         commentEntityRepository.save(commentEntity);
         return commentMapper.commentEntityToComment(commentEntity);
     }
+
+    /**
+     * Removing comment using {@code adEntityRepository.findById(adId)};
+     * <br> also {@link AuthenticationCheck#accessCheck(CustomUserDetails, UserEntity)},
+     * <br> and
+     * <br> {@link CommentEntityRepository#deleteByIdAndAdId_id(Integer, Integer)};
+     * @param adId
+     * @param commentId
+     * @param userDetails
+     */
     @Override
     @Transactional
     public void deleteComment(Integer adId, Integer commentId, CustomUserDetails userDetails) {
@@ -82,6 +115,21 @@ public class CommentServiceImpl implements CommentService {
 
         commentEntityRepository.deleteByIdAndAdId_id(commentId, adId);
     }
+
+    /**
+     * Updating comment using
+     * <br> {@code adEntityRepository.findById(adId)};
+     * <br> also
+     * <br> {@link AuthenticationCheck#accessCheck(CustomUserDetails, UserEntity)},
+     * <br> {@code commentEntityRepository.save(commentEntity)};
+     * <br> and
+     * <br> {@link CommentMapper#commentEntityToComment(CommentEntity)};
+     * @param adId
+     * @param commentId
+     * @param createOrUpdateComment
+     * @param userDetails
+     * @return
+     */
     @Override
     public Comment updateComment(Integer adId, Integer commentId,CreateOrUpdateComment createOrUpdateComment,CustomUserDetails userDetails) {
 

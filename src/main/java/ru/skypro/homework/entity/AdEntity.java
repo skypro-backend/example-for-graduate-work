@@ -34,59 +34,5 @@ public class AdEntity {
     @OneToMany(mappedBy = "adId")
     private List<CommentEntity> commentEntities;
 
-    public Integer getPk() {
-        return pk;
-    }
 
-    public void setPk(Integer pk) {
-        this.pk = pk;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public UserEntity getUserEntity() {
-        return userEntity;
-    }
-
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
-    }
-
-    public ImageEntity getImageEntity() {
-        return imageEntity;
-    }
-
-    public void setImageEntity(ImageEntity imageEntity) {
-        this.imageEntity = imageEntity;
-    }
-
-    public Collection<CommentEntity> getCommentEntities() {
-        return commentEntities;
-    }
-
-    public void setCommentEntities(Collection<CommentEntity> commentEntities) {
-        this.commentEntities = commentEntities;
-    }
 }

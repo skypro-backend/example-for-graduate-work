@@ -37,6 +37,13 @@ public class UsersServiceImpl implements UsersService {
     private final UserMapper userMapper;
     private final UserEntityRepository userEntityRepository;
 
+    /**
+     * Checking user's data using {@code userEntityRepository.findByUsername(userDetails.getUsername())};
+     * <br> for setting password and saving
+     * <br> {@code userEntityRepository.save(userEntity)};
+     * @param newPassword
+     * @param userDetails
+     */
     @Override
     public void setPassword(NewPassword newPassword, CustomUserDetails userDetails) {
 
@@ -46,6 +53,14 @@ public class UsersServiceImpl implements UsersService {
             userEntity.setPassword(new BCryptPasswordEncoder().encode(newPassword.getNewPassword()));
             userEntityRepository.save(userEntity);
     }
+
+    /**
+     * Getting user's details using {@code userEntityRepository.findByUsername(userDetails.getUsername())};
+     * <br> and
+     * <br> {@link UserMapper#userEntityToUser(UserEntity)};
+     * @param userDetails
+     * @return
+     */
     @Override
     public User getUser(CustomUserDetails userDetails) {
 
@@ -54,6 +69,15 @@ public class UsersServiceImpl implements UsersService {
         return userMapper.userEntityToUser(userEntity);
     }
 
+    /**
+     * Updating user's information using
+     * {@code userEntityRepository.findByUsername(userDetails.getUsername())};
+     * <br> checking if data is not null, and next updating
+     * <br> {@code userEntityRepository.save(userEntity);}
+     * @param updateUser
+     * @param userDetails
+     * @return
+     */
     @Override
     public UpdateUser updateUser(UpdateUser updateUser, CustomUserDetails userDetails) {
 
@@ -72,6 +96,14 @@ public class UsersServiceImpl implements UsersService {
         userEntityRepository.save(userEntity);
         return updateUser;
     }
+
+    /**
+     * Updating user's image using {@code userEntityRepository.findByUsername(userDetails.getUsername())};
+     * <br> and checking if image's content type is suitable
+     * (<b>jpeg</b>, <b>png</b>, <b>gif</b>);
+     * @param image
+     * @param userDetails
+     */
 
     @Override
     public void updateUserImage(MultipartFile image, CustomUserDetails userDetails) {

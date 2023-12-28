@@ -46,6 +46,13 @@ public class AdsServiceImpl implements AdsService {
         this.authenticationCheck = authenticationCheck;
 //        this.imageEntity = imageEntity;
     }
+
+    /**
+     * Trying to find ads, using {@code adEntityRepository.findAll();}
+     *<br>
+     * In case of any ads using method {@link AdMapper#adEntityListToAdList(List)};
+     * @return
+     */
     @Override
     public Ads getAllAds() {
 
@@ -62,6 +69,22 @@ public class AdsServiceImpl implements AdsService {
                 .count(adList.size())
                 .build();
     }
+
+    /**
+     * Trying to find user's name using user details
+     * <br>
+     * {@code userEntityRepository.findByUsername(userDetails.getUsername())}
+     * <br>
+     * In case of not empty fields, using
+     * <br>
+     * {@link AdMapper#AdToAdEntity(CreateOrUpdateAd)}
+     * <br>
+     * Next save in repository using {@code adEntityRepository.save(adEntity)}
+     * @param properties
+     * @param image
+     * @param userDetails
+     * @return
+     */
     @Override
     public Ad addAd(CreateOrUpdateAd properties, MultipartFile image, CustomUserDetails userDetails) {
 
@@ -84,6 +107,12 @@ public class AdsServiceImpl implements AdsService {
         logger.info("A user's ad with a username (email) " + userDetails.getUsername() + " has been added");
         return adMapper.AdEntityToAd(adEntity);
     }
+
+    /**
+     * Trying to find ads using ad's id;
+     * @param adId
+     * @return
+     */
     @Override
     public ExtendedAd getAds(Integer adId) {
 
@@ -95,6 +124,20 @@ public class AdsServiceImpl implements AdsService {
         logger.info("The ad with the specified id = " +  adId +  " was returned" );
         return extendedAd;
     }
+
+    /**
+     * Removing ad in case of ad is not null;
+     * <br>
+     * Using
+     * <br>
+     * {@link AdEntityRepository#findById(Integer id)};
+     * <br>
+     * And
+     * <br>
+     * {@link AuthenticationCheck#accessCheck(CustomUserDetails, UserEntity)};
+     * @param adId
+     * @param userDetails
+     */
 
     public void removeAd(Integer adId, CustomUserDetails userDetails) {
         logger.info("The removeAd method was called with id =" + adId);
@@ -110,10 +153,21 @@ public class AdsServiceImpl implements AdsService {
 
         logger.info("The removeAd method removed the ad with the id = " + adId);
     }
+
+    /**
+     * Updating ads in case of ad is not null,
+     * and in case of not empty property's fields;
+     * <br>
+     * Using {@code adEntityRepository.save(adEntity);}
+     * @param adId
+     * @param properties
+     * @param userDetails
+     * @return
+     */
     @Override
     public CreateOrUpdateAd updateAd(Integer adId, CreateOrUpdateAd properties, CustomUserDetails userDetails) {
 
-        logger.info("The editFaculty method was called with the new ad data " + properties);
+        logger.info("The edit method was called with the new ad data " + properties);
 
         AdEntity adEntity = adEntityRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new IllegalArgumentException("The ad with id = " + adId + " was not found"));
@@ -133,6 +187,14 @@ public class AdsServiceImpl implements AdsService {
         logger.info("The editFaculty method has updated the ad data");
         return properties;
     }
+
+    /**
+     * Truing to find current user's ads using {@link AdEntityRepository#findByUserEntity_id(Integer id)};
+     * <br>
+     * If user has ads, it's possible to find its using {@link AdMapper#adEntityListToAdList(List)};
+     * @param userDetails
+     * @return
+     */
     @Override
     public Ads getAdsMe(CustomUserDetails userDetails) {
 
@@ -149,6 +211,14 @@ public class AdsServiceImpl implements AdsService {
                 .count(adList.size())
                 .build();
     }
+
+    /**
+     * Trying ti update image in case of image is not null and
+     * image's content type is suitable (<b>jpeg</b>, <b>png</b>,<b>gif</b>);
+     * @param adId
+     * @param image
+     * @param userDetails
+     */
     @Override
     public void updateImage(Integer adId, MultipartFile image, CustomUserDetails userDetails) {
 

@@ -22,11 +22,28 @@ public class AuthServiceImpl implements AuthService {
     private final UserDetailsServiceImpl userDetailsService;
     private final UserEntityRepository userEntityRepository;
 
+    /**
+     * Using {@link UserDetailsServiceImpl#loadUserByUsername(String username)}
+     * and {@link PasswordEncoder#matches(CharSequence, String)} login user;
+     * @param userName
+     * @param password
+     * @return
+     */
     @Override
     public boolean login(String userName, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
         return encoder.matches(password, userDetails.getPassword());
     }
+
+    /**
+     * Checking user's information using
+     * {@code userEntityRepository.findByUsername(register.getUsername()).get()};
+     * <br>
+     * In case of new user save user's information using
+     * {@code userEntityRepository.save(userEntity);}
+     * @param register
+     * @return
+     */
     @Override
     public boolean register(Register register) {
 
