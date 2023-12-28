@@ -18,10 +18,6 @@ public class AuthController {
 
     private  AuthService authService;
 
-    //public AuthController(AuthService authService) {
-    //    this.authService = authService;
-    // }
-
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto login) {
@@ -31,15 +27,4 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-
-
- //   @PostMapping("/register")
-   // public ResponseEntity<?> register(@RequestBody Register register) {
-   //     if (authService.register(register)) {
-     //       return ResponseEntity.status(HttpStatus.CREATED).build();
-    //    } else {
-      //      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-     //   }
-   // }
-
 }
