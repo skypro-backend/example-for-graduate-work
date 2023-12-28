@@ -221,16 +221,18 @@ public class AdsController {
     })
     @PatchMapping(value = "/{id}/image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Обновление картинки объявления", description = "updateImage", tags = {"Объявления"})
-    public ResponseEntity<?> updateImage(@Parameter(description = "ID объявления") @PathVariable long id,
-                                         @RequestPart("image") MultipartFile image, Authentication authentication) throws AccessDeniedException {
+    public ResponseEntity<?> updateImage(@Parameter(description = "ID объявления") @PathVariable("id") long id,
+                                         @RequestPart("image") MultipartFile image, Authentication authentication){
         adService.updateAdImage(id,image,authentication);
         return ResponseEntity.ok().build();
     }
     @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE,
             MediaType.IMAGE_JPEG_VALUE,
-            MediaType.IMAGE_GIF_VALUE})
+            MediaType.IMAGE_GIF_VALUE
+    })
     @Operation(summary = "Получение картинки объявления", description = "getAdsImage", tags = {"Объявления"})
-    public ResponseEntity<byte[]> getAdsImage(@PathVariable long id) {
-        return ResponseEntity.ok(imageService.getImage(id).getData());
+    public ResponseEntity<byte[]> getAdsImage(@PathVariable("id") long id) {
+        byte[] image = imageService.getImage(id).getData();
+        return ResponseEntity.ok(image);
     }
 }

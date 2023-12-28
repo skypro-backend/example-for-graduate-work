@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
         User user = new GetAuthentication().getAuthenticationUser(authentication.getName());
         Image imageFile = user.getImage();
         user.setImage(imageService.uploadImage(image));
-        if (image != null) {
+        if (imageFile != null) {
             imageService.removeImage(imageFile);
         }
         repository.save(user);

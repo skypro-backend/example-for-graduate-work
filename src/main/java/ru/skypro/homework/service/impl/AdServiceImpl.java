@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,6 @@ import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
 
 import javax.transaction.Transactional;
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,7 +51,6 @@ public class AdServiceImpl implements AdService {
         User user = new GetAuthentication().getAuthenticationUser(authentication.getName());
 
         ad.setAuthor(user);
-        ad.setAuthor(user);
         ad.setImage(imageService.uploadImage(image));
         adRepository.save(ad);
 
@@ -67,7 +66,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     @Transactional
-    public void deleteAd(Long id, Authentication authentication) throws AccessDeniedException {
+    public void deleteAd(Long id, Authentication authentication){
 
         Ad ad = adRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Объявление с ID" + id + "не найдено"));
@@ -81,7 +80,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDTO updateAd(Long id, CreateOrUpdateAdDTO createOrUpdateAdDTO, Authentication authentication) throws AccessDeniedException {
+    public AdDTO updateAd(Long id, CreateOrUpdateAdDTO createOrUpdateAdDTO, Authentication authentication){
         Ad ad = adRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Объявление с ID" + id + "не найдено"));
         checkPermit(ad, authentication);
@@ -101,7 +100,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     @Transactional
-    public void updateAdImage(Long id, MultipartFile image, Authentication authentication) throws AccessDeniedException {
+    public void updateAdImage(Long id, MultipartFile image, Authentication authentication){
 
         Ad ad = adRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Объявление с ID" + id + "не найдено"));
@@ -113,7 +112,7 @@ public class AdServiceImpl implements AdService {
 
     }
 
-    public void checkPermit(Ad ad, Authentication authentication) throws AccessDeniedException {
+    public void checkPermit(Ad ad, Authentication authentication){
         if (!ad.getAuthor().getEmail().equals(authentication.getName())
                 && !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
             throw new AccessDeniedException("Вы не можете редактировать или удалять чужое объявление");

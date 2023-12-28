@@ -17,13 +17,13 @@ public interface AdService {
 
     ExtendedAdDTO getAd(Long id);
 
-    void deleteAd(Long id, Authentication authentication) throws AccessDeniedException;
+    void deleteAd(Long id, Authentication authentication);
 
-    AdDTO updateAd(Long id, CreateOrUpdateAdDTO createOrUpdateAdDTO, Authentication authentication) throws AccessDeniedException;
+    AdDTO updateAd(Long id, CreateOrUpdateAdDTO createOrUpdateAdDTO, Authentication authentication);
 
     AdsDTO getAdsMe(Authentication authentication);
 
-    void updateAdImage(Long id, MultipartFile image, Authentication authentication) throws AccessDeniedException;
+    void updateAdImage(Long id, MultipartFile image, Authentication authentication);
 
 
 }

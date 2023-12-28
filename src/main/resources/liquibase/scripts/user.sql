@@ -10,7 +10,7 @@ CREATE TABLE users
     email      VARCHAR(255),
     password   VARCHAR(255),
     phone      VARCHAR(255),
-    role       int4,
+    role       INTEGER,
     image_id   bigint references image (id)
 
 );

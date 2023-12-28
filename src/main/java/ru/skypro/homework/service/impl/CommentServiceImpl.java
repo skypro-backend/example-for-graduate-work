@@ -61,7 +61,7 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public void deleteComment(long idAd,
                               long idComment,
-                              Authentication authentication) throws AccessDeniedException {
+                              Authentication authentication){
         Comment comment = commentRepository.findById(idComment).orElseThrow(() ->
                 new NotFoundException("Комментарий с ID" + idComment + "не найден"));
         checkPermit(comment, authentication);
@@ -81,9 +81,9 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDto(commentRepository.save(comment));
     }
 
-    public void checkPermit(Comment comment, Authentication authentication) throws AccessDeniedException {
+    public void checkPermit(Comment comment, Authentication authentication){
         if (!comment.getAuthor().getEmail().equals(authentication.getName()) && !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
-            throw new AccessDeniedException("Вы не можете редактировать или удалять чужое объявление");
+            throw new org.springframework.security.access.AccessDeniedException("Вы не можете редактировать или удалять чужое объявление");
         }
     }
 }
