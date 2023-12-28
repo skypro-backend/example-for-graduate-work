@@ -16,5 +16,5 @@ public interface CommentService {
 
     Comment findById(Long commentId);
     ResponseEntity<Comment> deleteComment(Long adId, Long commentId);
-    ResponseEntity<Comment> updateComment(Long adId, Long commentId, CreateOrUpdateCommentDTO text);
+    Comment updateComment(Long adId, Long commentId, CreateOrUpdateCommentDTO text);
 }

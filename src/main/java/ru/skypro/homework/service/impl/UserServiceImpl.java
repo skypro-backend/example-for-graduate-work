@@ -9,6 +9,7 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.ImageRepo;
 import ru.skypro.homework.repository.UserRepo;
 import ru.skypro.homework.service.UserService;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
     public Image setImage(Long id, MultipartFile file) throws IOException {
             logger.info("User setImage is running");
             User user = userRepo.findById(id);
-            Path filePath = Path.of("./image", user + "." + getExtension(file.getOriginalFilename()));
+            Path filePath = Path.of("./image", user + "." + FilenameUtils.getExtension(file.getOriginalFilename()));
 
             Files.createDirectories(filePath.getParent());
             Files.deleteIfExists(filePath);

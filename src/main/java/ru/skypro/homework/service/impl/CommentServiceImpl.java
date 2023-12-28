@@ -25,13 +25,16 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> getAllByCommentById(Long pk) {
         logger.info("Comment getAllByCommentById is running");
+        commentRepo.count();
         return commentRepo.getAllByAdId(pk);
     }
 
     @Override
     public Comment createComment(CreateOrUpdateCommentDTO text) {
         logger.info("Comment createComment is running");
-        return commentRepo.save(text);
+        final var comment = commentRepo.getCommentByText(String.valueOf(text)).orElseThrow();
+                comment.setText(String.valueOf(text));
+        return commentRepo.save(comment);
     }
 
     @Override
@@ -52,8 +55,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment updateComment(Long adId, Long commentId, CreateOrUpdateCommentDTO text) {
         logger.info("Comment updateComment is running");
-        CreateOrUpdateCommentDTO existing = text;
-        existing.getText();
-        return commentRepo.save(text);
+        final var comment = commentRepo.findById(Math.toIntExact(commentId)).orElseThrow();
+        comment.setText(String.valueOf(text));
+        return commentRepo.save(comment);
     }
 }

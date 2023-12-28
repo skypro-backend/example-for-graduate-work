@@ -9,6 +9,7 @@ import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.mappers.UserMapper;
+import ru.skypro.homework.model.User;
 import ru.skypro.homework.service.UserService;
 
 @Slf4j
@@ -19,6 +20,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private User user;
 
     @PostMapping("/set_password")
     public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
