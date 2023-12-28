@@ -9,6 +9,8 @@ import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.mappers.UserMapper;
+import ru.skypro.homework.model.User;
+import ru.skypro.homework.service.UserService;
 
 @Slf4j
 @RestController
@@ -18,15 +20,15 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private User user;
 
     @PostMapping("/set_password")
     public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
         if (newPasswordDTO.getCurrentPassword() == null) {
             return ResponseEntity.notFound().build();
         }
-//        userService.setPassword(userMapper.convertToUser(new newPasswordDTO));
-//        return ResponseEntity.ok().build();
-        return null;
+        userService.setPassword(userMapper.convertToUser(new NewPasswordDTO()));
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/me")
@@ -39,7 +41,7 @@ public class UserController {
         if (updateUserDTO == null) {
             return ResponseEntity.notFound().build();
         }
-//        userService.updateMyProfile(userMapper.convertToUpdateUser(new UpdateUserDTO);
+        userService.updateMyProfile(userMapper.convertToUpdateUser(new UpdateUserDTO()));
         return ResponseEntity.ok().build();
     }
 
@@ -48,7 +50,7 @@ public class UserController {
         if (imageDTO == null) {
             return ResponseEntity.notFound().build();
         }
-//        userService.setImage();
+        userService.setImage(userMapper.convertToImageDTO(user));
         return ResponseEntity.ok().build();
     }
 

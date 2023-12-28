@@ -28,8 +28,8 @@ public class AdController {
         if (ads.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return adService.findAll().stream().map(adMapper.convertToAdsDTO((ads))
-                .collect(Collectors.toList());
+        return adService.findAll().stream().map(adMapper.convertToAdsDTO((ad))
+                .collect(Collectors.toList()));
     }
 
     @GetMapping("{id}")

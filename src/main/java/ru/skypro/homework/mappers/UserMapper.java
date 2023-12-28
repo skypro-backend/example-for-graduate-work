@@ -4,6 +4,7 @@ import lombok.Data;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.ImageDTO;
+import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.model.User;
@@ -14,8 +15,8 @@ public class UserMapper {
 
     private final ModelMapper modelMapper;
 
-    User convertToUser(UserDto userDto) {
-        return modelMapper.map(userDto, User.class);
+    public User convertToUser(NewPasswordDTO newPasswordDTO) {
+        return modelMapper.map(newPasswordDTO, User.class);
     }
 
     public User convertToUpdateUser(UpdateUserDTO updateUserDTO) {

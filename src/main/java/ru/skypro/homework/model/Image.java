@@ -19,16 +19,16 @@ public class Image {
     @Column(name = "image_id")
     private Integer id;
 
-//    @Column(name = "file_size")
-//    private Long fileSize;
-//
-//    @Column(name = "media_type")
-//    private String mediaType;
-//
-//    @Column(name = "file_path")
-//    private String filePath;
+    @Column(name = "file_size")
+    private Long fileSize;
+
+    @Column(name = "media_type")
+    private String mediaType;
+
+    @Column(name = "file_path")
+    private String filePath;
 
     @Lob
     @Column(name = "bytes")
-    private byte[] bytes;
+    private byte[] data;
 }
