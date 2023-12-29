@@ -3,6 +3,7 @@ package ru.skypro.homework.model;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import lombok.Data;
+import lombok.Getter;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class User {
     @Column(name = "id")
     private Long id;
 
+    @Getter
     @Column(name = "name")
     @Size(min = 2, max = 10)
     private String name;
@@ -78,11 +80,10 @@ public class User {
         this.gender = girl;
         this.gender = boy;
     }
+    */
 
-    public String getName() {
-        return name;
-    }
 
+    /*
     public void setName(String name) {
         this.name = name;
     }

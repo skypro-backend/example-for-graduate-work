@@ -27,6 +27,14 @@ public class UserServiceImpl implements UserService {
         this.userMapper = userMapper;
     }
 
+    public User saveUsers(User user){
+        userRepository.save(user);
+        return user;
+    }
+    public User findByUserName(String username){
+        return userRepository.findByUserName(username).orElseThrow(null);
+    }
+
     @Override
     public UserDto saveUser(UserDto user) {
         logger.info("saving user");
