@@ -9,7 +9,7 @@ import java.io.IOException;
 public interface ImageService {
     Image saveImageToUser(MultipartFile imageFile) throws IOException;
 
-    Image updateImage(MultipartFile imageFile, Long id) throws IOException;
+    Image updateImage(MultipartFile imageFile, Ad id) throws IOException;
 
     Image saveImageToDb(Image image);
 
