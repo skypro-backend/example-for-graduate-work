@@ -93,7 +93,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void updateAdImage(Long id, MultipartFile imageFile) throws IOException {
+    public void updateImage(Long id, MultipartFile imageFile) throws IOException {
         imageService.updateImage(imageFile,
                 adRepo.findById(Math.toIntExact(id)).orElseThrow(() -> new EmptyException("Объявление не найдено")));
     }

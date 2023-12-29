@@ -58,12 +58,11 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image updateImage(MultipartFile imageFile, Ad id) throws IOException {
+    public Image updateImage(MultipartFile imageFile, int id) throws IOException {
         long imageSize = imageFile.getSize();
         checkSize(imageSize);
-        Image image;
 
-        image = imageRepo.findByUserId(Math.toIntExact(id)).orElse(null);
+        Image image = imageRepo.findByUserId(Math.toIntExact(id)).orElse(null);
 
         if (image == null) {
             image = imageRepo.findByAdId(Math.toIntExact(id))
