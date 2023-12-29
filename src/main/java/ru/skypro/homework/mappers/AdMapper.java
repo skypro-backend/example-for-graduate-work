@@ -9,14 +9,20 @@ import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.model.Ad;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Data
 @Component
 public class AdMapper {
 
     private final ModelMapper modelMapper;
 
-    public AdsDTO convertToAdsDTO(Ad ad) {
-        return modelMapper.map(ad, AdsDTO.class);
+    public AdsDTO convertToAdsDTO(List<Ad> ad) {
+        AdsDTO adsDTO = new AdsDTO();
+        adsDTO.setCount(ad.size());
+        adsDTO.setResults(ad.stream().map(this::convertToAdDTO).collect(Collectors.toList()));
+        return adsDTO;
     }
 
     public AdDTO convertToAdDTO(Ad ad) {

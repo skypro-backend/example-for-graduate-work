@@ -1,18 +1,18 @@
 package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ExtendedAdDTO;
-import ru.skypro.homework.mappers.AdMapper;
-import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.service.AdService;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/ads")
@@ -20,64 +20,59 @@ import java.util.stream.Collectors;
 public class AdController {
     private final AdService adService;
 
-    private final AdMapper adMapper;
 
     @GetMapping()
-    public ResponseEntity<List<AdsDTO>> getAllAds() {
-        List<Ad> ads = adService.findAll();
-        if (ads.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<AdsDTO> findAll() {
+        AdsDTO ads = adService.findAll();
+        if (ads.getCount() == 0) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return adService.findAll().stream().map(adMapper.convertToAdsDTO((ad))
-                .collect(Collectors.toList()));
+        return ResponseEntity.ok(ads);
     }
 
-    @GetMapping("{id}")
-    public AdDTO getById(@PathVariable Long id) {
-        return adMapper.convertToAdDTO(adService.findById(id));
+    @GetMapping("/{id}")
+    public ResponseEntity<ExtendedAdDTO> getById(@PathVariable Long id) {
+        ExtendedAdDTO ad = adService.findById(id);
+        if (ad == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(ad);
     }
 
     @GetMapping("/me")
-    public List<ExtendedAdDTO> getAdByMe() {
-//        List<Ad> ads = adService.getAdByAuthUser();
-        return adService.getAdByAuthUser().stream().map(adMapper.convertToExtendedAd())
-                .collect(Collectors.toList());
+    public ResponseEntity<AdsDTO> getAdByMe() {
+        return ResponseEntity.ok(adService.getAdByAuthUser());
     }
-    @PostMapping()
-    public ResponseEntity<Void> addAd(@RequestBody CreateOrUpdateAdDTO ad, @RequestBody byte[] img) {
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdDTO> addAd(@RequestPart(value = "properties") CreateOrUpdateAdDTO createOrUpdateAdDTO,
+                                       @RequestPart("image") MultipartFile imageFile) throws IOException {
+        AdDTO ad = adService.addAd(createOrUpdateAdDTO, imageFile);
         if (ad == null) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-//        adService.addAd(ad, img);
-        return adMapper.convertCreatDTOToAd(adService.addAd(ad, img));
+        return new ResponseEntity<>(ad, HttpStatus.CREATED);
     }
 
-    @PatchMapping("{id}")
-    public ResponseEntity<Void> updateAd(@PathVariable Long id, @RequestBody CreateOrUpdateAdDTO ad) {
-        Ad foundAd = adService.findById(id);
-        if (foundAd == null) {
-            return ResponseEntity.notFound().build();
+    @PatchMapping("/{id}")
+    public ResponseEntity<AdDTO> updateAd(@PathVariable Long id,
+                                          @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+        AdDTO updatedAd = adService.updateAd(id, createOrUpdateAdDTO);
+        if (updatedAd == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-//        adService.updateAd(ad);
-        return adMapper.convertCreatDTOToAd(adService.updateAd(ad));
+        return ResponseEntity.ok(updatedAd);
     }
 
-    @PatchMapping("{id}/image")
-    public ResponseEntity<Void> updateImageAd(@PathVariable Long id, @RequestBody byte[] img) {
-        Ad foundAd = adService.findById(id);
-        if (foundAd == null) {
-            return ResponseEntity.notFound().build();
-        }
-        adService.updateImage(img);
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateAdImage(@PathVariable Long id, @RequestBody MultipartFile image) throws IOException {
+        adService.updateAdImage(id, image);
         return ResponseEntity.ok().build();
     }
-    @DeleteMapping("{id}")
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReportById(@PathVariable Long id) {
-        Ad ad = adService.findById(id);
-        if (ad == null) {
-            return ResponseEntity.notFound().build();
-        }
-        adService.deleteAd(ad);
+        adService.deleteAd(Math.toIntExact(id));
         return ResponseEntity.ok().build();
     }
 

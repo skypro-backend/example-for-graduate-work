@@ -1,20 +1,20 @@
 package ru.skypro.homework.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
-import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.Image;
+import ru.skypro.homework.dto.ExtendedAdDTO;
+import ru.skypro.homework.model.User;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
 
 public interface AdService {
-    List<Ad> findAll();
-    Ad findById(Long id);
-    List<Ad> getAdByAuthUser();
-    AdDTO addAd(CreateOrUpdateAdDTO ad, byte[] img);
-    Ad updateAd(CreateOrUpdateAdDTO ad);
-    Image updateImage(byte[] img);
-    void deleteAd(Ad ad);
+    AdsDTO findAll();
+    ExtendedAdDTO findById(Long id);
+    AdsDTO getAdByAuthUser();
+    AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile imageFile);
+    AdDTO updateAd(Long id, CreateOrUpdateAdDTO createOrUpdateAdDTO);
+    void updateAdImage(Long id, MultipartFile image) throws IOException;
+    void deleteAd(int ad);
 }

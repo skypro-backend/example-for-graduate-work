@@ -20,7 +20,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepo commentRepo;
 
-    private final Logger logger = (Logger) LoggerFactory.getLogger(UserServiceImpl.class);
+    private final Logger logger = (Logger) LoggerFactory.getLogger(CommentServiceImpl.class);
 
     @Override
     public List<Comment> getAllByCommentById(Long pk) {
