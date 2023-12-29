@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JavaKidsUserDetailsManager implements UserDetailsManager {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     /**
      * <h2>createUser</h2>
