@@ -11,6 +11,17 @@ import ru.skypro.homework.repository.UserRepository;
 
 import java.util.Optional;
 
+/**
+ * <h2>JavaKidsUserDetailsManager</h2>
+ * <br>
+ * <b>Methods of parent interface UserDetailsManager {@link UserDetailsManager} </b><br>
+ * <p>
+ * void createUser(UserDetails user);<br>
+ * void updateUser(UserDetails user);<br>
+ * void deleteUser(String username);<br>
+ * void changePassword(String oldPassword, String newPassword);<br>
+ * boolean userExists(String username);
+ */
 @Component
 @RequiredArgsConstructor
 public class JavaKidsUserDetailsManager implements UserDetailsManager {
@@ -20,7 +31,7 @@ public class JavaKidsUserDetailsManager implements UserDetailsManager {
     /**
      * <h2>createUser</h2>
      *
-     * @param userDetails user to be created. <br>Method does nothing if given user is already existed in database
+     * @param userDetails data of user to be created. <br>Method does nothing if given user is already existed in database
      *                    <br><b>If user pretty new saves his entity in database</b>
      */
     @Override

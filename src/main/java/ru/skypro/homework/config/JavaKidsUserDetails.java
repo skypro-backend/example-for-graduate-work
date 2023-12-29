@@ -9,6 +9,17 @@ import ru.skypro.homework.model.User;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * <h2>JavaKidsUserDetails</h2><br>
+ * <b>Methods of parent interface {@link UserDetails }</b><br>
+ * Collection<? extends GrantedAuthority> getAuthorities();<br>
+ * String getPassword();<br>
+ * String getUsername();<br>
+ * boolean isAccountNonExpired();<br>
+ * boolean isAccountNonLocked();<br>
+ * boolean isCredentialsNonExpired();<br>
+ * boolean isEnabled();<br>
+ */
 @RequiredArgsConstructor
 public class JavaKidsUserDetails implements UserDetails {
 
@@ -30,7 +41,9 @@ public class JavaKidsUserDetails implements UserDetails {
     }
 
     /**
-     * @return
+     * <h2>getPassword</h2>
+     *
+     * @return user password
      */
     @Override
     public String getPassword() {
@@ -46,7 +59,8 @@ public class JavaKidsUserDetails implements UserDetails {
     }
 
     /**
-     * @return
+     * Not used in current version
+     * @return always true
      */
     @Override
     public boolean isAccountNonExpired() {
@@ -54,7 +68,8 @@ public class JavaKidsUserDetails implements UserDetails {
     }
 
     /**
-     * @return
+     * Not used in current version
+     * @return always true
      */
     @Override
     public boolean isAccountNonLocked() {
@@ -62,7 +77,8 @@ public class JavaKidsUserDetails implements UserDetails {
     }
 
     /**
-     * @return
+     * Not used in current version
+     * @return always true
      */
     @Override
     public boolean isCredentialsNonExpired() {
@@ -70,7 +86,8 @@ public class JavaKidsUserDetails implements UserDetails {
     }
 
     /**
-     * @return
+     * Not used in current version
+     * @return always true
      */
     @Override
     public boolean isEnabled() {

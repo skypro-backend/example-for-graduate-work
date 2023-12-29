@@ -14,7 +14,8 @@ import ru.skypro.homework.service.AuthService;
 public class AuthServiceImpl implements AuthService {
     private final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
-    private final /*UserDetailsManager*/ JavaKidsUserDetailsManager manager;
+    private final /*UserDetailsManager*/
+            JavaKidsUserDetailsManager manager;
     private final PasswordEncoder encoder;
 
     public AuthServiceImpl(JavaKidsUserDetailsManager manager,
