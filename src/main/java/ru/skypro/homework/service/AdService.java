@@ -13,8 +13,8 @@ public interface AdService {
     AdsDTO findAll();
     ExtendedAdDTO findById(Long id);
     AdsDTO getAdByAuthUser();
-    AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile imageFile);
+    AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile imageFile) throws IOException;
     AdDTO updateAd(Long id, CreateOrUpdateAdDTO createOrUpdateAdDTO);
-    void updateAdImage(Long id, MultipartFile image) throws IOException;
+    void updateImage(int id, MultipartFile image) throws IOException;
     void deleteAd(int ad);
 }

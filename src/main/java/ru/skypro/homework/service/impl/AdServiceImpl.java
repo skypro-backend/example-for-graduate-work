@@ -47,7 +47,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile imageFile) {
+    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile imageFile) throws IOException {
         logger.info("AdService createAd is running");
         Ad ad = adMapper.convertCreatDTOToAd(createOrUpdateAdDTO);
         ad.setAuthor(getAuthUser());
@@ -75,7 +75,6 @@ public class AdServiceImpl implements AdService {
 
     }
 
-    @Override
     public User getAuthUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = ((UserDetails) authentication.getPrincipal()).getUsername();
@@ -94,9 +93,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void updateAdImage(Long id, MultipartFile imageFile) {
-        imageService.updateImage(imageFile,
-                adRepo.findById(Math.toIntExact(id)).orElseThrow(() -> new EmptyException("Объявление не найдено")));
+    public void updateImage(int id, MultipartFile imageFile) throws IOException {
+        imageService.updateImage(imageFile, id);
     }
 
     @Override

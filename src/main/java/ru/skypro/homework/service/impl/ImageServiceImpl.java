@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.exceptions.BigImageException;
 import ru.skypro.homework.exceptions.EmptyException;
+import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.repository.ImageRepo;
 import ru.skypro.homework.service.ImageService;
@@ -57,15 +58,14 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image updateImage(MultipartFile imageFile, Long id) throws IOException {
+    public Image updateImage(MultipartFile imageFile, int generalId) throws IOException {
         long imageSize = imageFile.getSize();
         checkSize(imageSize);
-        Image image;
 
-        image = imageRepo.findByUserId(Math.toIntExact(id)).orElse(null);
+        Image image = imageRepo.findByUserId(Math.toIntExact(generalId)).orElse(null);
 
         if (image == null) {
-            image = imageRepo.findByAdId(Math.toIntExact(id))
+            image = imageRepo.findByAdId(Math.toIntExact(generalId))
                     .orElseThrow(() -> new EmptyException("Обновляемое изображение не найдено"));
         }
 
