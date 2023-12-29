@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.exceptions.EmptyException;
 import ru.skypro.homework.model.Comment;
@@ -23,7 +25,7 @@ public class CommentServiceImpl implements CommentService {
     private final Logger logger = (Logger) LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
-    public List<Comment> getAllByCommentById(Long pk) {
+    public CommentsDTO getAllByCommentById(Long pk) {
         logger.info("Comment getAllByCommentById is running");
         commentRepo.count();
         return commentRepo.getAllByAdId(pk);

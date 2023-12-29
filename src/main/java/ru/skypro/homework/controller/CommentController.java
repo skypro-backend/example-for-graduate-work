@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
@@ -24,21 +25,23 @@ public class CommentController {
 
 
     @GetMapping("{id}/comments")
-    public ResponseEntity<List<CommentsDTO>> getCommentById(@PathVariable Long id) {
-        List<CommentsDTO> foundComments = commentService.getAllByCommentById(id).stream().map(commentMapper
-                .convertToCommentsDTO(text)).collect(Collectors.toList());
-        if (foundComments == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(foundComments);
+    public ResponseEntity<CommentsDTO> getCommentById(@PathVariable Long id) {
+//        List<CommentsDTO> foundComments = commentService.getAllByCommentById(id).stream().map(commentMapper
+//                .convertToCommentsDTO(text)).collect(Collectors.toList());
+//        if (foundComments == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+        return new ResponseEntity<>(commentService.getAllByCommentById(id), HttpStatus.OK);
+//                ResponseEntity.ok(foundComments);
     }
 
     @PostMapping("{id}/comments")
-    public ResponseEntity<Void> createComments(@PathVariable Long id, @RequestBody CreateOrUpdateCommentDTO text) {
+    public ResponseEntity<Comment> createComments(@PathVariable Long id,
+                                                  @RequestBody CreateOrUpdateCommentDTO text) {
         if (text == null || id == null) {
             return ResponseEntity.notFound().build();
         }
-        return commentService.createComment(commentMapper.convertToComment(new CommentDTO()));
+        return new ResponseEntity<>(commentService.createComment(text),HttpStatus.OK);
     }
 
     @DeleteMapping("{adId}/comments/{commentId}")
@@ -57,6 +60,7 @@ public class CommentController {
         if (text == null) {
             return ResponseEntity.notFound().build();
         }
-        return commentService.updateComment(commentMapper.convertToComment(CreateOrUpdateCommentDTO));
+        return new ResponseEntity<>(commentService.updateComment(adId, commentId, text), HttpStatus.OK);
+//        return commentService.updateComment(commentMapper.convertToComment(CreateOrUpdateCommentDTO));
     }
 }
