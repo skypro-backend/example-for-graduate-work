@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.config.JavaKidsUserDetailsManager;
 import ru.skypro.homework.dto.RegisterDto;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
 @Service
@@ -17,11 +18,13 @@ public class AuthServiceImpl implements AuthService {
     private final /*UserDetailsManager*/
             JavaKidsUserDetailsManager manager;
     private final PasswordEncoder encoder;
+    private final UserRepository userRepository;
 
     public AuthServiceImpl(JavaKidsUserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.manager = manager;
         this.encoder = passwordEncoder;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -45,6 +48,8 @@ public class AuthServiceImpl implements AuthService {
                         .username(register.getUsername())
                         .roles(register.getRole().name())
                         .build());
+        User u = userRepository.findByEmail(register.getUsername()).get();
+        userRepository.save(u);
         return true;
     }
 
