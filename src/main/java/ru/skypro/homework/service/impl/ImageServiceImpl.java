@@ -58,14 +58,14 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image updateImage(MultipartFile imageFile, int id) throws IOException {
+    public Image updateImage(MultipartFile imageFile, int generalId) throws IOException {
         long imageSize = imageFile.getSize();
         checkSize(imageSize);
 
-        Image image = imageRepo.findByUserId(Math.toIntExact(id)).orElse(null);
+        Image image = imageRepo.findByUserId(Math.toIntExact(generalId)).orElse(null);
 
         if (image == null) {
-            image = imageRepo.findByAdId(Math.toIntExact(id))
+            image = imageRepo.findByAdId(Math.toIntExact(generalId))
                     .orElseThrow(() -> new EmptyException("Обновляемое изображение не найдено"));
         }
 

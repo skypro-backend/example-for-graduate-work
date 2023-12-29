@@ -66,7 +66,7 @@ public class AdController {
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateAdImage(@PathVariable Long id, @RequestBody MultipartFile image) throws IOException {
-        adService.updateImage(id, image);
+        adService.updateImage(Math.toIntExact(id), image);
         return ResponseEntity.ok().build();
     }
 
