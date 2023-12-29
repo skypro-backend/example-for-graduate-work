@@ -56,6 +56,12 @@ public class Ad {
     private String title;
 
     /**
+     * Описание товара
+     */
+    @Column
+    private String description;
+
+    /**
      * Внешний ключ: комментарии к объявлению из таблицы 'comments'
      * @see Comment
      */
