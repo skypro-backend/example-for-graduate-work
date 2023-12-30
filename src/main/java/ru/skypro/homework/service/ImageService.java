@@ -16,6 +16,6 @@ public interface ImageService {
 
     byte[] getImage(int imageId) throws IOException;
 
-    boolean checkUserAvatar(int userId);
+    boolean checkUserImage(int userId);
 
 }
