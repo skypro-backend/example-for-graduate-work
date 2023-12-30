@@ -2,11 +2,10 @@ package ru.skypro.homework.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.config.JavaKidsUserDetailsManager;
 import ru.skypro.homework.dto.RegisterDto;
 import ru.skypro.homework.service.AuthService;
 
@@ -14,10 +13,11 @@ import ru.skypro.homework.service.AuthService;
 public class AuthServiceImpl implements AuthService {
     private final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
-    private final UserDetailsManager manager;
+    private final /*UserDetailsManager*/
+            JavaKidsUserDetailsManager manager;
     private final PasswordEncoder encoder;
 
-    public AuthServiceImpl(UserDetailsManager manager,
+    public AuthServiceImpl(JavaKidsUserDetailsManager manager,
                            PasswordEncoder passwordEncoder) {
         this.manager = manager;
         this.encoder = passwordEncoder;
@@ -25,7 +25,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean login(String userName, String password) {
-        logger.info("method login");
         if (!manager.userExists(userName)) {
             return false;
         }
@@ -35,17 +34,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(RegisterDto register) {
-        logger.info("method register");
         if (manager.userExists(register.getUsername())) {
             return false;
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
+
+        String rawPassword = register.getPassword();
+        register.setPassword(encoder.encode(rawPassword));
+
+        manager.createUser(register);
+
         return true;
     }
 

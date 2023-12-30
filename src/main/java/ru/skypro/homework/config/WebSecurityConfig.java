@@ -46,6 +46,7 @@ public class WebSecurityConfig {
         return new JdbcUserDetailsManager((DataSource) user);
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()
@@ -55,11 +56,11 @@ public class WebSecurityConfig {
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .mvcMatchers("/ads/**", "/users/**")
+                                        .mvcMatchers("/ads/", "/users/")
                                         .authenticated())
                 .cors()
                 .and()
-                .httpBasic(withDefaults());
+                .httpBasic();
         return http.build();
     }
 
