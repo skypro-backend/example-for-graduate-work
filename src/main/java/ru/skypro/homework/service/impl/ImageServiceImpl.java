@@ -59,6 +59,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image updateImage(MultipartFile imageFile, int generalId) throws IOException {
+        logger.info("ImageService updateImage is running");
         long imageSize = imageFile.getSize();
         checkSize(imageSize);
 
@@ -84,11 +85,13 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image saveImageToDb(Image image) {
+        logger.info("ImageService saveImageToDb is running");
         return imageRepo.save(image);
     }
 
     @Override
     public byte[] getImage(int imageId) throws IOException {
+        logger.info("ImageService getImage is running");
         Path path = Path.of(imagesDir, imageId + "." + getExtension(imageRepo.findFilePathById(imageId)));
         return new ByteArrayResource(Files
                 .readAllBytes(path)
@@ -96,18 +99,20 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public boolean checkUserAvatar(int userId) {
+    public boolean checkUserImage(int userId) {
+        logger.info("ImageService checkUserImage is running");
         return imageRepo.findByUserId(userId).isPresent();
     }
 
     private void checkSize(long imageSize) {
+        logger.info("ImageService checkSize is running");
         if (imageSize > (1024 * 5000)) {
-            throw new BigImageException("Размер изображения (" + (imageSize /1024 / (double) 1000)
-                    + " MB) превышает максимально допустимое значение, равное 5 MB");
+            throw new BigImageException("Размер изображения превышает 5МБ");
         }
     }
 
     private void saveImage(MultipartFile imageFile, Image image) throws IOException {
+        logger.info("ImageService saveImage is running");
         try (
                 InputStream is = imageFile.getInputStream();
                 OutputStream os = Files.newOutputStream(Path.of(image.getFilePath()), CREATE_NEW);

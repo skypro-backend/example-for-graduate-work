@@ -2,6 +2,7 @@ package ru.skypro.homework.mappers;
 
 import lombok.Data;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.ImageDTO;
 import ru.skypro.homework.dto.NewPasswordDTO;
@@ -9,29 +10,31 @@ import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.model.User;
 
+import java.util.Optional;
+
 @Data
 @Component
 public class UserMapper {
 
     private final ModelMapper modelMapper;
 
-    public User convertToUser(NewPasswordDTO newPasswordDTO) {
-        return modelMapper.map(newPasswordDTO, User.class);
-    }
+    @Value("${query.to.get.image}")
+    private String imageQuery;
 
-    public User convertToUpdateUser(UpdateUserDTO updateUserDTO) {
-        return modelMapper.map(updateUserDTO, User.class);
-    }
-
-    public UserDto converToUserDto (User user) {
-        return modelMapper.map(user, UserDto.class);
-    }
 
     public UpdateUserDTO convertToUpdateUserDTO(User user) {
-        return modelMapper.map(user, UpdateUserDTO.class);
+        UpdateUserDTO updateUserDTO = modelMapper.map(user, UpdateUserDTO.class);
+
+        return updateUserDTO;
     }
 
-    public ImageDTO convertToImageDTO(User user) {
-        return modelMapper.map(user, ImageDTO.class);
-    }
+//    public UserDto convertToUserDTO(User user) {
+//        UserDto userDto = modelMapper.map(user, UserDto.class);
+//        Optional.ofNullable(user.getImage())
+//                .ifPresent(elem -> {
+//                    UserDto.setImage(imageQuery + user.getImage().getId());
+//                });
+//        return userDto;
+//    }
+
 }
