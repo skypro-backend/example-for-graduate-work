@@ -1,35 +1,37 @@
-package ru.skypro.homework;
+package ru.skypro.homework.model;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.skypro.homework.dto.UserPrincipalDTO;
 import ru.skypro.homework.model.User;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
-public class MyUserPrincipal implements UserDetails {
-    private User user;
+@RequiredArgsConstructor
+public class UserPrincipal implements UserDetails {
 
-    public MyUserPrincipal(User user) {
-        this.user = user;
-    }
+    private final UserPrincipalDTO userPrincipalDTO;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(user.getRole().toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + userPrincipalDTO.getRole());
+        return Collections.singletonList(authority);
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userPrincipalDTO.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getFirstName() + user.getLastName();
+        return userPrincipalDTO.getEmail();
     }
 
     @Override

@@ -4,16 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
-import ru.skypro.homework.exceptions.EmptyException;
+import ru.skypro.homework.exceptions.CommentNotFoundException;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.repository.CommentRepo;
 import ru.skypro.homework.service.CommentService;
 
 
-import java.util.List;
 import java.util.logging.Logger;
 
 @Service
@@ -42,7 +40,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment findById(Long commentId) {
         logger.info("Comment findById is running");
-        return commentRepo.findById(Math.toIntExact(commentId)).orElseThrow(() -> new EmptyException("Comment not found"));
+        return commentRepo.findById(Math.toIntExact(commentId)).orElseThrow(() -> new CommentNotFoundException("Comment not found"));
     }
 
     @Override
@@ -51,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
         if (adId != null) {
             commentRepo.deleteById(Math.toIntExact(commentId));
         }
-        throw new EmptyException("Cell is empty");
+        throw new CommentNotFoundException("Comment not found");
     }
 
     @Override

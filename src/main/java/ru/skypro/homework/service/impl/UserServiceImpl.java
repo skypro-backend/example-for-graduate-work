@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.exceptions.EmptyException;
+import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
         logger.info("User setPassword is running");
         String encodedPassword = encoder.encode(password);
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new EmptyException("Пользователь не найден"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setPassword(encodedPassword);
         userRepo.save(user);
 
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
     public UserDto findById(Long id) {
         logger.info("User findById is running");
         if (id == null) {
-            throw new EmptyException("Пользователь не найден");
+            throw new UserNotFoundException("User not found");
         }
         return userRepo.findById(id);
     }
@@ -96,7 +97,7 @@ public class UserServiceImpl implements UserService {
     private boolean checkPassword(final String email, final String password) {
         logger.info("User checkPassword is running");
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new EmptyException("Пользователь не найден"));
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
         return encoder.matches(password, user.getPassword());
     }
 
