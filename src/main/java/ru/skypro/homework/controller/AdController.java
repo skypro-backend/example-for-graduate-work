@@ -10,6 +10,7 @@ import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ExtendedAdDTO;
+import ru.skypro.homework.exceptions.ImageSizeExceededException;
 import ru.skypro.homework.service.AdService;
 
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class AdController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdDTO> addAd(@RequestPart(value = "properties") CreateOrUpdateAdDTO createOrUpdateAdDTO,
-                                       @RequestPart("image") MultipartFile imageFile) throws IOException {
+                                       @RequestPart("image") MultipartFile imageFile) throws IOException, ImageSizeExceededException {
         AdDTO ad = adService.addAd(createOrUpdateAdDTO, imageFile);
         if (ad == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

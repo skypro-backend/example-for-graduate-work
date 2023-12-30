@@ -13,6 +13,7 @@ import ru.skypro.homework.dto.ImageDTO;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.exceptions.ImageSizeExceededException;
 import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.service.UserService;
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public UserDto getMyProfile(@PathVariable("id") Long id) {
+    public UserDto getMyProfile(@PathVariable Long id) {
         return userService.findById(id);
     }
 
@@ -57,13 +58,9 @@ public class UserController {
     @PatchMapping(path = "/me/image",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<byte[]> updateMyImage(@RequestBody MultipartFile image) throws IOException {
-        byte[] updatedAvatar = userService.updateMyImage(image);
-        if (updatedAvatar.length != 0) {
-            return ResponseEntity.ok().body(updatedAvatar);
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+    public ResponseEntity<Void> updateMyImage(@RequestBody MultipartFile image) throws IOException, ImageSizeExceededException {
+        userService.updateMyImage(image);
+        return ResponseEntity.ok().build();
     }
 
 }

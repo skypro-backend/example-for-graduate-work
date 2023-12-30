@@ -13,6 +13,7 @@ import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.exceptions.EmptyException;
+import ru.skypro.homework.exceptions.ImageSizeExceededException;
 import ru.skypro.homework.mappers.AdMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
@@ -47,14 +48,12 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile imageFile) throws IOException {
+    public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile imageFile) throws IOException, ImageSizeExceededException {
         logger.info("AdService createAd is running");
         Ad ad = adMapper.convertCreatDTOToAd(createOrUpdateAdDTO);
         ad.setAuthor(getAuthUser());
         Ad savedAd = adRepo.save(ad);
-        Image image = imageService.saveImageToUser(imageFile);
-        ad.setImage(savedAd.getImage());
-        imageService.saveImageToDb(image);
+        Image image = imageService.upLoadImage(imageFile);
         savedAd.setImage(image);
         adRepo.save(savedAd);
         return adMapper.convertToAdDTO(savedAd);
@@ -93,8 +92,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void updateImage(Long id, MultipartFile imageFile) throws IOException {
-        imageService.updateImage(imageFile, id);
+    public void updateImage(Long id, MultipartFile imageFile) {
+        imageService.refactorImage(id, imageFile);
     }
 
     @Override

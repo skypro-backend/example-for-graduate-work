@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.exceptions.EmptyException;
+import ru.skypro.homework.exceptions.ImageSizeExceededException;
 import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
@@ -19,7 +20,6 @@ import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 import java.io.*;
-import java.util.logging.Logger;
 
 
 @Service
@@ -76,20 +76,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public byte[] updateMyImage(final MultipartFile imageFile) throws IOException {
+    public void updateMyImage(final MultipartFile imageFile) throws IOException, ImageSizeExceededException {
         logger.info("User updateMyImage is running");
         User user = this.getAuthorizedUser();
-        Image image;
 
         if (imageService.checkUserImage(user.getId())) {
-            image = imageService.updateImage(imageFile, user.getId());
+            imageService.refactorImage(user.getId(), imageFile);
         } else {
-            image = imageService.saveImageToUser(imageFile);
-            user.setImage(image);
-            userRepo.save(user);
-            imageService.saveImageToDb(image);
+            Image img = imageService.upLoadImage(imageFile);
+            user.setImage(img);
         }
-        return imageService.getImage(image.getId());
     }
 
     private boolean checkPassword(final String email, final String password) {
