@@ -11,6 +11,8 @@ import ru.skypro.homework.dto.RegisterDto;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
+import java.util.Optional;
+
 @Service
 public class AuthServiceImpl implements AuthService {
     private final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
@@ -48,8 +50,11 @@ public class AuthServiceImpl implements AuthService {
                         .username(register.getUsername())
                         .roles(register.getRole().name())
                         .build());
-        User u = userRepository.findByEmail(register.getUsername()).get();
-        userRepository.save(u);
+        Optional<ru.skypro.homework.model.User> o =
+                userRepository.findByEmail(register.getUsername());
+        if (o.isPresent()) {
+            ru.skypro.homework.model.User u = o.get();
+        }
         return true;
     }
 
