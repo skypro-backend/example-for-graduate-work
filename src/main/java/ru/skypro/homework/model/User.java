@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
  * private String name; 2-16 symbols<br>
  * private String surname; 2-16 symbols<br>
  * private String phoneNumber;<br>
- * private String email; <-- must br valid<br>
+ * private String email; <-- must be valid<br>
  * *     private Role userRole;<br>
  * private String idImage;<br>
  * private String password; 8-16 symbols <br>
