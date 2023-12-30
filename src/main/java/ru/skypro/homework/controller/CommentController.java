@@ -11,6 +11,7 @@ import ru.skypro.homework.service.CommentService;
 
 
 @RestController
+@CrossOrigin(value = "http://localhost:3000")
 @RequestMapping("/ads")
 @RequiredArgsConstructor
 public class CommentController {
