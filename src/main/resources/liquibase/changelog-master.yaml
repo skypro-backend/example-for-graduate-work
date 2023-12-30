@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      relativeToChangeLogFile: true
+      file: script/ad.sql
+  - include:
+      relativeToChangeLogFile: true
+      file: script/comment.sql
+  - include:
+      relativeToChangeLogFile: true
+      file: script/user.sql
+  - include:
+      relativeToChangeLogFile: true
+      file: script/image.sql
