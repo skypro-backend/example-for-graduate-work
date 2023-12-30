@@ -4,6 +4,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AvatarDto;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.model.Images;
+import ru.skypro.homework.model.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,4 +21,7 @@ public interface UserService {
     AvatarDto setAvatar(MultipartFile avatar) throws IOException;
 
 
+    String saveToDisk(Long studentId, MultipartFile multipartFile) throws IOException;
+
+    Images saveToDb(Integer userId, MultipartFile multipartFile, String absolutePath) throws IOException;
 }
