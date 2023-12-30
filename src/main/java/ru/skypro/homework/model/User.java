@@ -1,12 +1,25 @@
 package ru.skypro.homework.model;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 
+/**
+ * <h2>User entity</h2>
+ * <br>
+ * <b>Fields:</b><br>
+ * private Long id;
+ * private String name; 2-16 symbols<br>
+ * private String surname; 2-16 symbols<br>
+ * private String phoneNumber;<br>
+ * private String email; <-- must br valid<br>
+ * *     private Role userRole;<br>
+ * private String idImage;<br>
+ * private String password; 8-16 symbols <br>
+ */
 
 @Entity
 @Table(name = "users")
