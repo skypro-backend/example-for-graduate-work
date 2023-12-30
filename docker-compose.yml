@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  backend:
+    image: example-for-graduate-work
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - SERVER_PORT= 8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres/diplom
+
+  frontend:
+    image: ghcr.io/bizinmitya/front-react-avito:v1.21
+    container_name: frontend
+    ports:
+      - 3000:3000
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    ports:
+      - 15432:5432
+    user: root
+    environment:
+      POSTGRES_USER: krassotin
+      POSTGRES_DB: diplom
+      POSTGRES_PASSWORD: uroboros96
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d diplom -U krassotin", "--quiet" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4:7
+    container_name: pgadmin4_container
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+    volumes:
+        - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+ pgadmin-data:
