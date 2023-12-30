@@ -11,17 +11,14 @@
     </parent>
     <groupId>ru.skypro</groupId>
     <artifactId>ads</artifactId>
-    <version>0.0.1-SNAPSHOT
-    </version
+    <version>0.0.1-SNAPSHOT</version
     >
     <name>Ads application</name>
     <description>Application for managing ads</description>
     <properties>
         <java.version>11</java.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
-        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     </properties>
-
     <dependencies>
         <!--suppress VulnerableLibrariesLocal -->
         <dependency>
@@ -80,20 +77,11 @@
         </dependency>
 
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok-mapstruct-binding</artifactId>
-            <version>${lombok-mapstruct-binding.version}</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.28</version> <!-- или более новая версия -->
         </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-            <version>5.7.10</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>2.15.2</version>
-        </dependency>
+
 
 
     </dependencies>

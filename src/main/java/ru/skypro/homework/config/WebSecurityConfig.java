@@ -3,6 +3,7 @@ package ru.skypro.homework.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,6 +36,21 @@ public class WebSecurityConfig {
     };
 
     @Bean
+    public JdbcUserDetailsManager userDetailsService(DataSource dataSource) {
+        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager();
+        userDetailsManager.setDataSource(dataSource);
+        return userDetailsManager;
+    }
+    @Bean
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("iphoneVadik19");
+        return dataSource;
+    }
+
+    /*@Bean
     public JdbcUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user =
                 User.builder()
@@ -45,7 +61,7 @@ public class WebSecurityConfig {
                         .build();
         return new JdbcUserDetailsManager((DataSource) user);
     }
-
+*/
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -64,12 +80,33 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/public/**").permitAll() // разрешаем доступ к открытым страницам
+                .anyRequest().authenticated() // все остальные страницы требуют авторизации
+                .and()
+                .formLogin() // настраиваем форму входа
+                .loginPage("/login") // указываем URL страницы логина
+                .permitAll() // разрешаем доступ к странице логина
+                .and()
+                .logout() // настраиваем выход из системы
+                .permitAll(); // разрешаем доступ к выходу из системы
+    }
 
 
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .inMemoryAuthentication()
+                .withUser("user").password(passwordEncoder().encode("password")).roles("USER") // создаем пользователя "user" с паролем "password" и ролью "USER"
+                .and()
+                .withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN"); // создаем пользователя "admin" с паролем "admin" и ролью "ADMIN"
+    }
 
-   /* @Bean
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-*/
+
 }
