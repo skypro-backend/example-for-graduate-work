@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.config.UserDetailsServiceImpl;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.repository.UserEntityRepository;
 import ru.skypro.homework.service.AuthService;
@@ -40,6 +41,7 @@ public class AuthServiceImpl implements AuthService {
                         .lastName(register.getLastName())
                         .phone(register.getPhone())
                         .role(register.getRole())
+                        .imageEntity(new ImageEntity())
                         .build();
 
         userEntityRepository.save(userEntity);

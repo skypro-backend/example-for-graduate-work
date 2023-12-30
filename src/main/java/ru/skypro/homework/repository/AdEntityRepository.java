@@ -7,11 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AdEntityRepository extends JpaRepository<AdEntity,Long > {
-    void deleteById(Integer id);
     List<AdEntity> findAll();
     Optional<AdEntity> findById(Integer id);
-//    Optional<AdEntity> findByImageEntity_filePath(String filePath);
-
     List<AdEntity> findByUserEntity_id(Integer id);
 
 

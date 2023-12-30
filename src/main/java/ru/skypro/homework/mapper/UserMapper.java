@@ -6,6 +6,7 @@ import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserEntity;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Mapper
@@ -22,7 +23,8 @@ public class UserMapper {
                 .lastName(userEntity.getLastName())
                 .phone(userEntity.getPhone())
                 .role(userEntity.getRole())
-                .image(userEntity.getImageEntity().getFilePath())
+                .image(Optional.ofNullable(userEntity.getImageEntity().getFilePath())
+                        .orElse("The avatar has not been added"))
                 .build();
     }
 

@@ -11,11 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 //@NoArgsConstructor
 public class CreateOrUpdateAd {
-    @JsonProperty("title")
     private String title;
-    @JsonProperty("price")
     private Integer price;
-    @JsonProperty("description")
     private String description;
 
     public CreateOrUpdateAd() {

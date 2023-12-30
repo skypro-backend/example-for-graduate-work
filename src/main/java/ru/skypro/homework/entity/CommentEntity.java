@@ -16,18 +16,16 @@ import java.time.Instant;
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
     @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(name = "text")
     private String text;
 
     @ManyToOne
     @JoinColumn(name = "ad_id")
-    private AdEntity adId;
+    private AdEntity adEntity;
 
     @ManyToOne
     @JoinColumn(name = "user_entity_id")

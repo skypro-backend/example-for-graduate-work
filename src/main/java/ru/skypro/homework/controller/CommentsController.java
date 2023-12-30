@@ -33,12 +33,13 @@ public class CommentsController {
     public ResponseEntity<Comment> addComment(@PathVariable Integer adId,
                                               @RequestBody CreateOrUpdateComment createOrUpdateComment,
                                               @AuthenticationPrincipal CustomUserDetails userDetails) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentServiceImpl.addComment(adId, createOrUpdateComment, userDetails));
+        Comment commentOptional = commentServiceImpl.addComment(adId, createOrUpdateComment, userDetails);
+        return new ResponseEntity<>(commentOptional,HttpStatus.OK);
     }
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Integer adId,
                                               @PathVariable Integer commentId,
-                                              CustomUserDetails userDetails) {
+                                              @AuthenticationPrincipal CustomUserDetails userDetails) {
         commentServiceImpl.deleteComment(adId, commentId, userDetails);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -46,7 +47,7 @@ public class CommentsController {
     public ResponseEntity<Comment> updateComment(@PathVariable Integer adId,
                                                  @PathVariable Integer commentId,
                                                  @RequestBody CreateOrUpdateComment createOrUpdateComment,
-                                                 CustomUserDetails userDetails) {
+                                                 @AuthenticationPrincipal CustomUserDetails userDetails) {
         return new ResponseEntity<>(commentServiceImpl.updateComment(adId,commentId,createOrUpdateComment,userDetails),HttpStatus.OK);
     }
 

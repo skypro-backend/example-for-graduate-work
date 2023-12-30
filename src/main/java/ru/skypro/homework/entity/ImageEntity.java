@@ -1,6 +1,7 @@
 package ru.skypro.homework.entity;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 

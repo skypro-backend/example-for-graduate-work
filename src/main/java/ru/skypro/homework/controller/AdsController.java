@@ -29,9 +29,10 @@ public class AdsController {
         return new ResponseEntity<>(adsService.getAllAds(), HttpStatus.OK);
     }
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Ad> addAd(@RequestPart("properties") CreateOrUpdateAd properties
+    public ResponseEntity<Ad> addAd(@RequestPart("image") MultipartFile image,
+                                    @RequestPart("properties") CreateOrUpdateAd properties
             ,@AuthenticationPrincipal CustomUserDetails userDetails) throws IOException{
-        return new ResponseEntity<>(adsService.addAd(properties, userDetails),HttpStatus.CREATED);
+        return new ResponseEntity<>(adsService.addAd(image, properties, userDetails),HttpStatus.CREATED);
 
     }
     @GetMapping(value = "/{id}")
@@ -39,26 +40,25 @@ public class AdsController {
         return new ResponseEntity<>(adsService.getAds(id), HttpStatus.OK);
     }
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> removeAd(@PathVariable Integer id,@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<Void> removeAd(@PathVariable Integer id,
+                                         @AuthenticationPrincipal CustomUserDetails userDetails) {
         adsService.removeAd(id, userDetails);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @PatchMapping(value = "/{id}")
     public ResponseEntity<CreateOrUpdateAd> updateAds(@PathVariable Integer id,
                                                       @RequestBody CreateOrUpdateAd updateAd,
-                                                      @AuthenticationPrincipal CustomUserDetails userDetails)
-    {
+                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
         return new ResponseEntity<>(adsService.updateAd(id,updateAd,userDetails), HttpStatus.OK);
     }
     @GetMapping(value = "/me")
     public ResponseEntity<Ads> getAdsMe(@AuthenticationPrincipal CustomUserDetails userDetails) {
-
         return new ResponseEntity<>(adsService.getAdsMe(userDetails), HttpStatus.OK);
     }
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateImage(@PathVariable Integer id,
-                                              @RequestParam MultipartFile image,
+                                            @RequestParam MultipartFile image,
                                             @AuthenticationPrincipal CustomUserDetails userDetails) throws IOException {
         adsService.updateImage(id, image, userDetails);
         return new ResponseEntity<>(HttpStatus.OK);

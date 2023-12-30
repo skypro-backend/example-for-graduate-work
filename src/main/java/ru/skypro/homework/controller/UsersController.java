@@ -15,27 +15,20 @@ import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserEntityRepository;
+import ru.skypro.homework.service.UsersService;
 import ru.skypro.homework.service.impl.UsersServiceImpl;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UsersController {
-    private  UserMapper mapper;
-    private UserEntityRepository userEntityRepository;
-    private UsersServiceImpl usersService;
-
-    public UsersController(UserMapper mapper, UserEntityRepository userEntityRepository, UsersServiceImpl usersService) {
-        this.mapper = mapper;
-        this.userEntityRepository = userEntityRepository;
-        this.usersService = usersService;
-    }
+    private final UsersServiceImpl usersService;
 
     @PostMapping("/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword, CustomUserDetails userDetails)
-    {
+    public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        String username = userDetails.getUsername();
         usersService.setPassword(newPassword, userDetails);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -49,7 +42,7 @@ public class UsersController {
         return new ResponseEntity<>(usersService.updateUser(updateUser, userDetails), HttpStatus.OK);
     }
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateUserImage( @RequestParam MultipartFile image, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<Void> updateUserImage( @RequestPart MultipartFile image, @AuthenticationPrincipal CustomUserDetails userDetails) {
         usersService.updateUserImage(image, userDetails);
         return new ResponseEntity<>(HttpStatus.OK);
     }

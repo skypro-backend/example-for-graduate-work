@@ -3,7 +3,6 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,11 +12,10 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.AdEntity;
-import ru.skypro.homework.entity.CommentEntity;
+import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.BlankFieldException;
 import ru.skypro.homework.exceptions.MissingAdException;
-import ru.skypro.homework.exceptions.MissingImageException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdEntityRepository;
 import ru.skypro.homework.repository.CommentEntityRepository;
@@ -41,41 +39,36 @@ public class AdsServiceImpl implements AdsService {
     private final UserEntityRepository userEntityRepository;
     private final CommentEntityRepository commentEntityRepository;
     private final ImageEntityRepository imageEntityRepository;
+    private final ImageServiceImpl imageService;
     private final AuthenticationCheck authenticationCheck;
 
-//    public AdsServiceImpl(AdEntityRepository adEntityRepository, AdMapper adMapper,
-//                          UserEntityRepository userEntityRepository,
-//                          AuthenticationCheck authenticationCheck) {
-//        this.adEntityRepository = adEntityRepository;
-//        this.adMapper = adMapper;
-//        this.userEntityRepository = userEntityRepository;
-//        this.authenticationCheck = authenticationCheck;
-//    }
     @Override
     @Transactional
     public Ads getAllAds() {
-
         return new Ads(adEntityRepository.findAll().stream()
                 .map(adMapper::AdEntityToAd)
                 .collect(Collectors.toList()));
     }
     @Override
-    public Ad addAd(CreateOrUpdateAd properties, CustomUserDetails userDetails) {
+    public Ad addAd(MultipartFile image, CreateOrUpdateAd properties, CustomUserDetails userDetails) {
 
         UserEntity userEntity = userEntityRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(()-> new UsernameNotFoundException("Username not found in database"));
 
-        if (properties.getTitle() == null || properties.getPrice() == null
-                || properties.getDescription() == null) {
-            throw new BlankFieldException("Empty fields when saving an object CreateOrUpdateAd ");
+        if (properties.getTitle().isEmpty() || properties.getPrice().toString().isEmpty()
+                || properties.getDescription().isEmpty()) {
+            throw new BlankFieldException("Empty fields saving an object CreateOrUpdateAd");
         }
 
         AdEntity adEntity = adMapper.AdToAdEntity(properties);
-// туДу поменять строки внутри комментариев на метод по обработке фото
-        adEntity.setImageEntity(null);
-//
+        adEntityRepository.save(adEntity); // сохраняем в базу чтобы получить Id обьявления для формирования названия изображения
+
+        ImageEntity adImage = imageService.uploadImageToServer(image, adEntity.getId(), adEntity.getTitle());
+        adEntity.setImageEntity(Optional.ofNullable(adImage).orElse(new ImageEntity()));
         adEntity.setUserEntity(userEntity);
         adEntityRepository.save(adEntity);
+
+
         logger.info("A user's ad with a username (email) " + userDetails.getUsername() + " has been added");
         return adMapper.AdEntityToAd(adEntity);
     }
@@ -87,36 +80,34 @@ public class AdsServiceImpl implements AdsService {
     }
     @Override
     public void removeAd(Integer adId, CustomUserDetails userDetails) {
-        logger.info("The removeAd method was called with id =" + adId);
 
         AdEntity adEntity = adEntityRepository.findById(adId)
                 .orElseThrow(() ->new EntityNotFoundException("The entity with the specified id = " + adId + " was not found"));
-
         authenticationCheck.accessCheck(userDetails, adEntity.getUserEntity());
+
+        ImageEntity imageToRemove = adEntity.getImageEntity();
 
         commentEntityRepository.deleteAll(adEntity.getCommentEntities());
         adEntityRepository.delete(adEntity);
-        imageEntityRepository.delete(adEntity.getImageEntity());
+        imageEntityRepository.delete(imageToRemove);
 
         logger.info("The removeAd method removed the ad with the id = " + adId);
     }
     @Override
     public CreateOrUpdateAd updateAd(Integer adId, CreateOrUpdateAd properties, CustomUserDetails userDetails) {
 
-        logger.info("The editFaculty method was called with the new ad data " + properties);
 
-        AdEntity adEntity = adEntityRepository.findById(userDetails.getId())
+        AdEntity adEntity = adEntityRepository.findById(adId)
                 .orElseThrow(() -> new IllegalArgumentException("The ad with id = " + adId + " was not found"));
 
         authenticationCheck.accessCheck(userDetails, adEntity.getUserEntity());
 
-        if (properties.getTitle() != null) {
-            adEntity.setTitle(properties.getTitle());
-        } else if (properties.getPrice() != null) {
-            adEntity.setPrice(properties.getPrice());
-        } else if (properties.getDescription() != null) {
-            adEntity.setDescription(properties.getDescription());
-        }
+        if (!properties.getTitle().isEmpty()) {
+            adEntity.setTitle(properties.getTitle());}
+        if (!properties.getPrice().toString().isEmpty()) {
+            adEntity.setPrice(properties.getPrice());}
+        if (!properties.getDescription().isEmpty()) {
+            adEntity.setDescription(properties.getDescription());}
 
         adEntityRepository.save(adEntity);
 
@@ -126,14 +117,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public Ads getAdsMe(CustomUserDetails userDetails) {
 
-        List<AdEntity> adEntityList = adEntityRepository.findByUserEntity_id(userDetails.getId());
-
-        if (adEntityList.isEmpty()) {
-            throw new EntityNotFoundException("The current user has no ads!");
-        }
-
-        List<Ad> adList = adMapper.adEntityListToAdList(adEntityList);
-        logger.info("The getAdsMe method returns a list of the user's ads with the user's username (email) = " + userDetails.getUsername());
+        List<Ad> adList = adMapper.adEntityListToAdList(adEntityRepository.findByUserEntity_id(userDetails.getId()));
         return Ads.builder()
                 .results(adList)
                 .count(adList.size())
@@ -142,21 +126,20 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public void updateImage(Integer adId, MultipartFile image, CustomUserDetails userDetails) {
 
-        logger.info("Был вызван метод updateImage для обьявления с adId" + adId);
         AdEntity adEntity = adEntityRepository.findById(adId)
                 .orElseThrow(() -> new IllegalArgumentException("Обьявление с указанным " + adId + " отсуствует!"));
 
         authenticationCheck.accessCheck(userDetails, adEntity.getUserEntity());
 
-        if (!image.getContentType().equals("image/jpeg") && !image.getContentType().equals("image/png") && !image.getContentType().equals("image/gif") ) {
-            throw new MissingImageException("Некорректный формат изображения обьявления!");
-        }
+        ImageEntity obsoleteImage = adEntity.getImageEntity();
+        ImageEntity newImage = imageService
+                .uploadImageToServer(image, adEntity.getId(), adEntity.getTitle());
+        adEntity.setImageEntity(newImage);
+        adEntityRepository.save(adEntity);
+        imageEntityRepository.delete(obsoleteImage);
 
-        // туДу поменять строки внутри комментариев на метод по обработке фото
-        adEntity.setImageEntity(null);
-        //
 
-        logger.info("Метод updateImage вернул адрес обновленного фото: " ); // туДу добавить путь
+        logger.info("The updateImage method updated the ad image" );
     }
 
 }

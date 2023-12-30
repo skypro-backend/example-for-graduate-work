@@ -1,76 +1,69 @@
 package ru.skypro.homework.service.impl;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.entity.AdEntity;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.ImageEntity;
-import ru.skypro.homework.entity.UserEntity;
-import ru.skypro.homework.repository.AdEntityRepository;
+import ru.skypro.homework.exceptions.MissingImageException;
 import ru.skypro.homework.repository.ImageEntityRepository;
-import ru.skypro.homework.repository.UserEntityRepository;
 import ru.skypro.homework.service.ImageService;
+
+import javax.transaction.Transactional;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 @Service
 public class ImageServiceImpl implements ImageService {
-    private AdEntity adEntity;
-    private UserEntity userEntity;
-    private ImageEntity imageEntity;
-//    private final String imageDir;
-    private UserEntityRepository userEntityRepository;
-    private AdEntityRepository adEntityRepository;
-    private ImageEntityRepository imageEntityRepository;
 
-//    public ImageServiceImpl(AdEntity adEntity, UserEntity userEntity, ImageEntity imageEntity
-//            , @Value("${path.to.images.folder}") String imageDir, UserEntityRepository userEntityRepository
-//            , AdEntityRepository adEntityRepository) {
-//        this.adEntity = adEntity;
-//        this.userEntity = userEntity;
-//        this.imageEntity = imageEntity;
-//        this.imageDir = imageDir;
-//        this.userEntityRepository = userEntityRepository;
-//        this.adEntityRepository = adEntityRepository;
-//    }
+    private final Logger logger = LoggerFactory.getLogger(ImageServiceImpl.class);
+    @Value("${path.to.images.folder}")
+    private final String imagePath;
+    private final ImageEntityRepository imageEntityRepository;
 
-//    private final Logger logger = LoggerFactory.getLogger(ImageServiceImpl.class);
+    public ImageServiceImpl(@Value("${path.to.images.folder}") String imagePath, ImageEntityRepository imageEntityRepository) {
+        this.imagePath = imagePath;
+        this.imageEntityRepository = imageEntityRepository;
+    }
 
-//    @Override
-//    public void uploadAvatar(String imageInfo, MultipartFile multipartFile) throws IOException {
-//
-//        logger.info( "Был вызван метод uploadImage с данными - о обьекте к которому относится изоборажение" + imageInfo
-//                + ". Данные изображения " + multipartFile.getOriginalFilename() + " " + multipartFile.getSize() );
-//
-////        AdEntity adEntity = AdEntity.findStudent(adId);
-//        Path filePath = Path.of(imageDir, imageInfo + ".image");
-//        Files.createDirectories(filePath.getParent());
-//        Files.deleteIfExists(filePath);
-//
-//        try (
-//                InputStream is = multipartFile.getInputStream();
-//                BufferedInputStream bis = new BufferedInputStream(is, 1024);
-////
-//                OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-//                BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
-//        ) {
-//            bis.transferTo(bos);
-//        }
-//        if (adEntityRepository.findByImage_entity_path(filePath.toString()).isPresent()) {
-//            ImageEntity imageEntity = (imageEntityRepository.findByFilePath(filePath.toString())).get();
-//            imageEntity.setFilePath(filePath.toString());
-//            imageEntity.setFileSize(multipartFile.getSize());
-//            imageEntity.setMediaType(multipartFile.getContentType());
-//            imageEntity.setData(multipartFile.getBytes());
-//            imageEntityRepository.save(imageEntity);
-//            logger.info("Метод uploadAvatar обновляет в БД изображение обьявления" + imageEntity);
-//        } else if (userEntityRepository.findByImage_entity_path(filePath.toString()).isPresent()) {
-//            ImageEntity imageEntity = (imageEntityRepository.findByFilePath(filePath.toString())).get();
-//            imageEntity.setFilePath(filePath.toString());
-//            imageEntity.setFileSize(multipartFile.getSize());
-//            imageEntity.setMediaType(multipartFile.getContentType());
-//            imageEntity.setData(multipartFile.getBytes());
-//            imageEntityRepository.save(imageEntity);
-//            logger.info("Метод uploadAvatar обновляет в БД изображение пользователя" + imageEntity);
-//        } else {
-//            logger.info("Метод uploadAvatar сохраняет в БД изображение пользователя или обьявления" );
-//        }
-//
-//    }
+    @Transactional
+    @Override
+    public byte[] getImage(Integer id) {
+        ImageEntity image = imageEntityRepository.findById(id)
+                .orElseThrow(() -> new MissingImageException("The image provided by id was not found "));
+        Path imageFilePath = Path.of(imagePath + image.getFilePath());
+        try {
+            return Files.readAllBytes(imageFilePath);
+        } catch (IOException e) {
+            throw new MissingImageException("The image has not been uploaded to frontEnd");
+        }
+    }
+
+    @Override
+    public ImageEntity uploadImageToServer(MultipartFile adImage, Integer firstPartOfImageName, String secondPartOfImageName) {
+
+        if (!adImage.getContentType().equals("image/jpeg") && !adImage.getContentType().equals("image/png") && !adImage.getContentType().equals("image/gif")) {
+            throw new MissingImageException("Incorrect format of the new image!");
+        }
+        logger.info(adImage.getName());
+
+        Path adImagePath = Path.of(imagePath + firstPartOfImageName + "_" + secondPartOfImageName + "." + adImage.getContentType().split("/")[1]);
+        try (InputStream adImageInputStream = adImage.getInputStream()) {
+            Files.copy(adImageInputStream, adImagePath, StandardCopyOption.REPLACE_EXISTING);
+        }  catch (IOException e) {
+            throw new MissingImageException("The image has not been uploaded to server");
+        }
+
+        return ImageEntity.builder()
+                .filePath(firstPartOfImageName + "_" + secondPartOfImageName + "." + adImage.getContentType().split("/")[1])
+                .mediaType(adImage.getContentType())
+                .fileSize(adImage.getSize())
+                .build();
+
+    }
+
 }
