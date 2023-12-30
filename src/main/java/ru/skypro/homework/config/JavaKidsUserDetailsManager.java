@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Component;
+import ru.skypro.homework.dto.RegisterDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
@@ -45,6 +46,10 @@ public class JavaKidsUserDetailsManager implements UserDetailsManager {
 
 
         userRepository.save(newUser);
+
+    }
+
+    public void createUser(RegisterDto registerDto) {
 
     }
 
