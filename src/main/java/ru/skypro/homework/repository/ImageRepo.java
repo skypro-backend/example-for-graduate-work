@@ -1,3 +1,4 @@
+
 package ru.skypro.homework.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,9 +11,9 @@ import java.util.Optional;
 @Repository
 public interface ImageRepo extends JpaRepository<Image, Integer> {
 
-    Optional<Image> findByUserId(int userId);
+    Optional<Image> findByUserId(Long user_id);
 
-    Optional<Image> findByAdId(int adId);
+    Optional<Image> findImageByAdPk(int adId);
 
     @Query(value = "SELECT file_path FROM images WHERE id = :id", nativeQuery = true)
     String findFilePathById(int id);

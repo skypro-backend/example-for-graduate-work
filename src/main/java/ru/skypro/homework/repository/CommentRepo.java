@@ -10,7 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepo extends JpaRepository<Comment, Integer> {
-    CommentsDTO getAllByAdId(Long pk);
+    CommentsDTO getAllByAdPk(int ad_pk);
 
     Optional<Comment> getCommentByText(String text);
 }
+

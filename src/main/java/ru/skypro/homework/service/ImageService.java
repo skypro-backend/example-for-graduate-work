@@ -10,12 +10,11 @@ import java.util.Optional;
 public interface ImageService {
     Image saveImageToUser(MultipartFile imageFile) throws IOException;
 
-    Image updateImage(MultipartFile imageFile, int generalId) throws IOException;
+    Image updateImage(MultipartFile imageFile, Long generalId) throws IOException;
 
     Image saveImageToDb(Image image);
 
     byte[] getImage(int imageId) throws IOException;
 
-    boolean checkUserImage(int userId);
-
+    boolean checkUserImage(Long userId);
 }

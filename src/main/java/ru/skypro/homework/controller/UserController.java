@@ -30,7 +30,7 @@ public class UserController {
 
     @PostMapping("/set_password")
     public ResponseEntity<String> setNewPassword(@RequestBody NewPasswordDTO newPasswordDTO,
-                                              @NonNull Authentication authentication) {
+                                                 @NonNull Authentication authentication) {
         if (userService.setNewPassword(authentication.getName(),
                 newPasswordDTO.getCurrentPassword(),
                 newPasswordDTO.getNewPassword())) {

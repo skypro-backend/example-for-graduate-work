@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface CommentService {
 
-    CommentsDTO getAllByCommentById(Long id);
+    CommentsDTO getAllByCommentById(int id);
 //    ResponseEntity<Void> createComment(ru.skypro.homework.model.Comment comment);
 
     Comment createComment(CreateOrUpdateCommentDTO text);

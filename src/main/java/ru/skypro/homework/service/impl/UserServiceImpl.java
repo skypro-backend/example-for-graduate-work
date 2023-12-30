@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.exceptions.EmptyException;
-import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
@@ -32,8 +31,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final ImageService imageService;
 
-    private final Logger logger = (Logger) LoggerFactory.getLogger(UserServiceImpl.class);
-
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Override
     public User getAuthorizedUser() {
         logger.info("User getAuthorizedUser is running");
@@ -47,7 +45,7 @@ public class UserServiceImpl implements UserService {
         logger.info("User setPassword is running");
         String encodedPassword = encoder.encode(password);
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new EmptyException("Пользователь не найден"));
         user.setPassword(encodedPassword);
         userRepo.save(user);
 
@@ -72,7 +70,7 @@ public class UserServiceImpl implements UserService {
     public UserDto findById(Long id) {
         logger.info("User findById is running");
         if (id == null) {
-            throw new UserNotFoundException("User not found");
+            throw new EmptyException("Пользователь не найден");
         }
         return userRepo.findById(id);
     }
@@ -83,8 +81,8 @@ public class UserServiceImpl implements UserService {
         User user = this.getAuthorizedUser();
         Image image;
 
-        if (imageService.checkUserImage(Math.toIntExact(user.getId()))) {
-            image = imageService.updateImage(imageFile, Math.toIntExact(user.getId()));
+        if (imageService.checkUserImage(user.getId())) {
+            image = imageService.updateImage(imageFile, user.getId());
         } else {
             image = imageService.saveImageToUser(imageFile);
             user.setImage(image);
@@ -97,7 +95,7 @@ public class UserServiceImpl implements UserService {
     private boolean checkPassword(final String email, final String password) {
         logger.info("User checkPassword is running");
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
+                .orElseThrow(() -> new EmptyException("Пользователь не найден"));
         return encoder.matches(password, user.getPassword());
     }
 
