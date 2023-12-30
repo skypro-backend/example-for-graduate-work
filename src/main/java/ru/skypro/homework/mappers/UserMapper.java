@@ -1,13 +1,11 @@
 package ru.skypro.homework.mappers;
 
 import lombok.Data;
+import lombok.NonNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.skypro.homework.dto.ImageDTO;
-import ru.skypro.homework.dto.NewPasswordDTO;
-import ru.skypro.homework.dto.UpdateUserDTO;
-import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.User;
 
 import java.util.Optional;
@@ -36,5 +34,9 @@ public class UserMapper {
 //                });
 //        return userDto;
 //    }
+
+    public UserPrincipalDTO convertToUserPrincipalDTO(@NonNull User user) {
+        return modelMapper.map(user, UserPrincipalDTO.class);
+    }
 
 }

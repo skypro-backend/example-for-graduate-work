@@ -12,7 +12,8 @@ import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ExtendedAdDTO;
-import ru.skypro.homework.exceptions.EmptyException;
+import ru.skypro.homework.exceptions.AdNotFoundException;
+import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mappers.AdMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
@@ -62,30 +63,33 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public ExtendedAdDTO findById(Long id) {
-        logger.error("AdService findById is running");
+        logger.info("AdService findById is running");
         return adRepo.findById(Math.toIntExact(id))
                 .map(adMapper::convertToExtendedAd)
-                .orElseThrow(() -> new EmptyException("Ad not found"));
+                .orElseThrow(() -> new AdNotFoundException("Ad not found"));
     }
 
     @Override
     public AdsDTO getAdByAuthUser() {
+        logger.info("AdService getAdByAuthUser is running");
         User user = getAuthUser();
         return adMapper.convertToAdsDTO(adRepo.findAllByUserId(Math.toIntExact(user.getId())));
 
     }
 
     public User getAuthUser() {
+        logger.info("AdService getAllUser is running");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = ((UserDetails) authentication.getPrincipal()).getUsername();
         return userRepo.findByEmail(email)
-                .orElseThrow(() -> new EmptyException("User with email: " + email + " is not found"));
+                .orElseThrow(() -> new UserNotFoundException("User is not found"));
     }
 
 
     @Override
     public AdDTO updateAd(Long id, CreateOrUpdateAdDTO createOrUpdateAdDTO) {
-        Ad ad = adRepo.findById(Math.toIntExact(id)).orElseThrow(() -> new EmptyException("Ad not found"));
+        logger.info("AdService updateAd is running");
+        Ad ad = adRepo.findById(Math.toIntExact(id)).orElseThrow(() -> new AdNotFoundException("Ad not found"));
         ad.setPrice(createOrUpdateAdDTO.getPrice());
         ad.setDescription(createOrUpdateAdDTO.getDescription());
         ad.setTitle(createOrUpdateAdDTO.getTitle());
@@ -94,13 +98,15 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public void updateImage(int id, MultipartFile imageFile) throws IOException {
+        logger.info("AdService updateImage is running");
         imageService.updateImage(imageFile, id);
     }
 
     @Override
     public void deleteAd(int id) {
+        logger.info("AdService deleteAd is running");
         adRepo.findById(id)
-                .orElseThrow(() -> new EmptyException("Ad not found"));
+                .orElseThrow(() -> new AdNotFoundException("Ad not found"));
         adRepo.deleteById(id);
     }
 }

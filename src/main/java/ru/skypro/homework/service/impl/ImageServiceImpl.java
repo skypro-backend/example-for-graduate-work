@@ -8,8 +8,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.exceptions.BigImageException;
-import ru.skypro.homework.exceptions.EmptyException;
-import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.exceptions.ImageNotFoundException;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.repository.ImageRepo;
 import ru.skypro.homework.service.ImageService;
@@ -67,7 +66,7 @@ public class ImageServiceImpl implements ImageService {
 
         if (image == null) {
             image = imageRepo.findByAdId(Math.toIntExact(generalId))
-                    .orElseThrow(() -> new EmptyException("Обновляемое изображение не найдено"));
+                    .orElseThrow(() -> new ImageNotFoundException("Updated image not found"));
         }
 
         Path filePath = Path.of(imagesDir, image.getId() + "." +
@@ -107,7 +106,7 @@ public class ImageServiceImpl implements ImageService {
     private void checkSize(long imageSize) {
         logger.info("ImageService checkSize is running");
         if (imageSize > (1024 * 5000)) {
-            throw new BigImageException("Размер изображения превышает 5МБ");
+            throw new BigImageException("Image size bigger than 5MB");
         }
     }
 
