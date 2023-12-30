@@ -7,6 +7,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.RegisterDto;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.mapping.RegisterDtoToUserMapper;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 
@@ -49,8 +50,19 @@ public class JavaKidsUserDetailsManager implements UserDetailsManager {
 
     }
 
+    /**
+     * <h2>createUser(RegisterDto registerDto) -- NOT OVERRIDING!!</h2>
+     * <br> Uses mapper to fill all User entity fields
+     * <br> Does nothing if email given with arg is already saved in database
+     *
+     * @param registerDto new user data from front end
+     */
     public void createUser(RegisterDto registerDto) {
-
+        if (userExists(registerDto.getUsername())) {
+            return;
+        }
+        User u = RegisterDtoToUserMapper.INSTANCE.registerDtoToUserMapper(registerDto);
+        userRepository.save(u);
     }
 
     /**

@@ -2,7 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,8 +9,6 @@ import ru.skypro.homework.config.JavaKidsUserDetailsManager;
 import ru.skypro.homework.dto.RegisterDto;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
-
-import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -43,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
         if (manager.userExists(register.getUsername())) {
             return false;
         }
-        manager.createUser(
+        /*manager.createUser(
                 User.builder()
                         .passwordEncoder(this.encoder::encode)
                         .password(register.getPassword())
@@ -52,9 +49,14 @@ public class AuthServiceImpl implements AuthService {
                         .build());
         Optional<ru.skypro.homework.model.User> o =
                 userRepository.findByEmail(register.getUsername());
-        if (o.isPresent()) {
+        if (o.isEmpty()) {return false;}
             ru.skypro.homework.model.User u = o.get();
-        }
+
+        u = RegisterDtoToUserMapper.INSTANCE.registerDtoToUserMapper(register);
+        u = userRepository.save(u);*/
+
+        manager.createUser(register);
+
         return true;
     }
 
