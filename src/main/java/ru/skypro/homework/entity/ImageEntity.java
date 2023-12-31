@@ -1,11 +1,13 @@
 package ru.skypro.homework.entity;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
-@Getter
+
 @Setter
+@Getter
 @EqualsAndHashCode(exclude = "id")
 @Builder
 @NoArgsConstructor
@@ -25,5 +27,6 @@ public class ImageEntity {
     private String mediaType;
     @Column(name = "data")
     private byte[] data;
+
 
 }
