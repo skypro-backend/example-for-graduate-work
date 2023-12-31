@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.exceptions.EmptyException;
-import ru.skypro.homework.exceptions.UserNotFoundException;
+import ru.skypro.homework.exceptions.ImageSizeExceededException;
 import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
@@ -20,7 +20,6 @@ import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 import java.io.*;
-import java.util.logging.Logger;
 
 
 @Service
@@ -32,8 +31,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final ImageService imageService;
 
-    private final Logger logger = (Logger) LoggerFactory.getLogger(UserServiceImpl.class);
-
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Override
     public User getAuthorizedUser() {
         logger.info("User getAuthorizedUser is running");
@@ -47,7 +45,7 @@ public class UserServiceImpl implements UserService {
         logger.info("User setPassword is running");
         String encodedPassword = encoder.encode(password);
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new EmptyException("Пользователь не найден"));
         user.setPassword(encodedPassword);
         userRepo.save(user);
 
@@ -72,32 +70,28 @@ public class UserServiceImpl implements UserService {
     public UserDto findById(Long id) {
         logger.info("User findById is running");
         if (id == null) {
-            throw new UserNotFoundException("User not found");
+            throw new EmptyException("Пользователь не найден");
         }
         return userRepo.findById(id);
     }
 
     @Override
-    public byte[] updateMyImage(final MultipartFile imageFile) throws IOException {
+    public void updateMyImage(final MultipartFile imageFile) throws IOException, ImageSizeExceededException {
         logger.info("User updateMyImage is running");
         User user = this.getAuthorizedUser();
-        Image image;
 
-        if (imageService.checkUserImage(Math.toIntExact(user.getId()))) {
-            image = imageService.updateImage(imageFile, Math.toIntExact(user.getId()));
+        if (imageService.checkUserImage(user.getId())) {
+            imageService.refactorImage(user.getId(), imageFile);
         } else {
-            image = imageService.saveImageToUser(imageFile);
-            user.setImage(image);
-            userRepo.save(user);
-            imageService.saveImageToDb(image);
+            Image img = imageService.upLoadImage(imageFile);
+            user.setImage(img);
         }
-        return imageService.getImage(image.getId());
     }
 
     private boolean checkPassword(final String email, final String password) {
         logger.info("User checkPassword is running");
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
+                .orElseThrow(() -> new EmptyException("Пользователь не найден"));
         return encoder.matches(password, user.getPassword());
     }
 

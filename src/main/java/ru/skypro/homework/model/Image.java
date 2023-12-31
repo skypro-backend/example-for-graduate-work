@@ -19,6 +19,12 @@ public class Image {
     @Column(name = "image_id")
     private Integer id;
 
+    @OneToOne(mappedBy = "image")
+    private User user;
+
+    @OneToOne(mappedBy = "image")
+    private Ad ad;
+
     @Column(name = "file_size")
     private Long fileSize;
 

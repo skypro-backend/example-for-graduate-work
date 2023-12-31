@@ -1,21 +1,22 @@
 package ru.skypro.homework.service;
 
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.exceptions.ImageSizeExceededException;
 import ru.skypro.homework.model.Image;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.Optional;
 
 public interface ImageService {
-    Image saveImageToUser(MultipartFile imageFile) throws IOException;
 
-    Image updateImage(MultipartFile imageFile, int generalId) throws IOException;
 
-    Image saveImageToDb(Image image);
+    Image findImageById(int id);
 
-    byte[] getImage(int imageId) throws IOException;
+    @Transactional
+    Image upLoadImage(MultipartFile file) throws IOException, ImageSizeExceededException;
 
-    boolean checkUserImage(int userId);
+    void deleteImage(int imageId);
 
+    void refactorImage(Long id, MultipartFile image);
+    boolean checkUserImage(Long userId);
 }

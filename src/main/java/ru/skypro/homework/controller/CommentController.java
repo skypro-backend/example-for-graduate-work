@@ -20,7 +20,7 @@ public class CommentController {
 
 
     @GetMapping("{id}/comments")
-    public ResponseEntity<CommentsDTO> getCommentById(@PathVariable Long id) {
+    public ResponseEntity<CommentsDTO> getCommentById(@PathVariable int id) {
         return new ResponseEntity<>(commentService.getAllByCommentById(id), HttpStatus.OK);
     }
 
@@ -44,8 +44,8 @@ public class CommentController {
 
     @PatchMapping("{adId}/comments/{commentId}")
     public ResponseEntity<Comment> updateComment(@PathVariable Long adId,
-                                                @PathVariable Long commentId,
-                                                @RequestBody CreateOrUpdateCommentDTO text) {
+                                                 @PathVariable Long commentId,
+                                                 @RequestBody CreateOrUpdateCommentDTO text) {
         if (text == null) {
             return ResponseEntity.notFound().build();
         }
