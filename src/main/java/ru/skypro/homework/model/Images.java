@@ -4,6 +4,11 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+/**
+ * <h2>Images</h2>
+ * Entity keeping images: user avatars and photos of items in advertisements<br>
+ * pictureType field of {@link PictureType} class is used to recognize avatars from item photos
+ */
 @Data
 @Entity
 @Table(name = "images")

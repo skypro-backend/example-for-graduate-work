@@ -5,9 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
+import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.mapping.AdMapper;
 import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.AdFound;
+import ru.skypro.homework.model.utils.AdFound;
+import ru.skypro.homework.model.utils.AdsFound;
+import ru.skypro.homework.model.utils.ImageProcessResult;
 import ru.skypro.homework.repository.AdRepository;
 
 import java.util.List;
@@ -54,6 +57,12 @@ public class AdvertisementsService {
         return AdMapper.INSTANCE.adToDto(newAd);
     }
 
+    /**
+     * <h2>getAdById</h2>
+     *
+     * @param id advertisement identifier
+     * @return {@link AdFound} instance
+     */
     public AdFound getAdById(long id) {
 
         AdFound adFound = new AdFound();
@@ -64,6 +73,79 @@ public class AdvertisementsService {
         }
 
         return adFound;
+    }
+
+    /**
+     * <h2>removeAd(long id)</h2>
+     *
+     * @param id advertisement identifier
+     * @return {@link AdFound}
+     */
+    public AdFound removeAd(long id) {
+        AdFound adRemoved = getAdById(id);
+        if (adRemoved.getHttpStatus().is4xxClientError()) {
+            return adRemoved;
+        }
+        adRepository.delete(adRemoved.getAd());
+        return adRemoved;
+    }
+
+    public AdsFound getAdsDtoByUserId(long id) {
+        AdsFound adsFound = new AdsFound();
+        List<Ad> listOfAdvertisements = adRepository.findByAuthor(id);
+        AdsDto adsDto = new AdsDto();
+
+        if (listOfAdvertisements.isEmpty()) {
+            adsDto.setCount(0);
+            adsDto.setResults(null);
+
+            adsFound.setResult(adsDto);
+            adsFound.setHttpStatus(HttpStatus.NOT_FOUND);
+
+            return adsFound;
+        }
+
+        adsDto.setResults(
+                listOfAdvertisements.stream()
+                        .map(AdMapper.INSTANCE::adToDto).collect(Collectors.toList()));
+        adsDto.setCount(listOfAdvertisements.size());
+
+        adsFound.setResult(adsDto);
+        adsFound.setHttpStatus(HttpStatus.OK);
+
+        return adsFound;
+    }
+
+    /**
+     * <h2>updateAd</h2>
+     *
+     * @param id               advertisement identifier
+     * @param updatedAdContent {@link CreateOrUpdateAdDto}
+     * @return {@link AdFound} result of update
+     */
+    public AdFound updateAd(long id, CreateOrUpdateAdDto updatedAdContent) {
+
+        AdFound adUpdateResult = new AdFound();
+        Ad adById = adRepository.findById(id).orElse(null);
+
+        if (adById == null) {
+            return AdFound.adNotFound();
+        }
+
+        adById.setTitle(updatedAdContent.getTitle());
+//            adById.setImage(updatedAdContent.getDescription());
+        // todo: learn what does CreateOrUpdateAdDto description field mean
+        adUpdateResult.setAd(adById);
+        adUpdateResult.setHttpStatus(HttpStatus.OK);
+        return adUpdateResult;
+    }
+
+    public ImageProcessResult getPhotoByAdId(long id) {
+        ImageProcessResult result = new ImageProcessResult();
+        result.setImage(null);
+        result.setHttpStatus(HttpStatus.NOT_FOUND);
+        //todo: fix getPhotoByAdId method in AdvertisementService
+        return result;
     }
 }
 
