@@ -24,8 +24,7 @@ public class CommentMapper {
 
         return Comment.builder()
                 .author(commentEntity.getUserEntity().getId())
-                .authorImage(Optional.ofNullable(commentEntity.getUserEntity().getImageEntity().getFilePath())
-                        .orElse("The avatar has not been added"))
+                .authorImage("/image/"+ commentEntity.getUserEntity().getImageEntity().getId())
                 .authorFirstName(commentEntity.getUserEntity().getFirstName())
                 .createdAt(commentEntity.getCreatedAt())
                 .pk(commentEntity.getId())

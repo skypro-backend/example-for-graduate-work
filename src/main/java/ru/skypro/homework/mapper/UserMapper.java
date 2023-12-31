@@ -1,6 +1,8 @@
 package ru.skypro.homework.mapper;
 import lombok.Builder;
 import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.User;
@@ -12,6 +14,8 @@ import java.util.stream.Collectors;
 @Mapper
 @Component
 public class UserMapper {
+
+
     public User userEntityToUser(UserEntity userEntity) {
         if (userEntity == null) {
             throw new NullPointerException("Ошибка маппера при создании User! UserEntity == null!");
@@ -23,8 +27,7 @@ public class UserMapper {
                 .lastName(userEntity.getLastName())
                 .phone(userEntity.getPhone())
                 .role(userEntity.getRole())
-                .image(Optional.ofNullable(userEntity.getImageEntity().getFilePath())
-                        .orElse("The avatar has not been added"))
+                .image("/image/"+ userEntity.getImageEntity().getId())
                 .build();
     }
 

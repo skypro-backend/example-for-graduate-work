@@ -24,8 +24,7 @@ public class AdMapper {
                 .author(adEntity.getUserEntity().getId())
                 .price(adEntity.getPrice())
                 .title(adEntity.getTitle())
-                .image(Optional.ofNullable(adEntity.getImageEntity().getFilePath())
-                        .orElse("The adPicture has not been added"))
+                .image("/image/"+ adEntity.getImageEntity().getId())
                 .build();
     }
 

@@ -13,6 +13,8 @@ import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.repository.UserEntityRepository;
 import ru.skypro.homework.service.AuthService;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -29,8 +31,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean register(Register register) {
 
-        UserEntity userEntity = userEntityRepository.findByUsername(register.getUsername()).get();
-        if (userEntity != null) {
+        UserEntity userEntity = userEntityRepository.findByUsername(register.getUsername()).orElse(new UserEntity());
+
+       if (userEntity.getUsername() != null) {
             logger.warn("User with current username (email) had been registered before!");
             return false;
         }

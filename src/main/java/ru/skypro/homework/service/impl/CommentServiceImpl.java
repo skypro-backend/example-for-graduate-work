@@ -41,6 +41,7 @@ public class CommentServiceImpl implements CommentService {
         this.userEntityRepository = userEntityRepository;
     }
 
+
     @Override
     public Comments getComments(Integer adId) {
 
@@ -59,12 +60,13 @@ public class CommentServiceImpl implements CommentService {
         }
 
         AdEntity adEntity = adEntityRepository.findById(adId).orElseThrow(() -> new MissingAdException("The ad with the specified id is missing "));
-        authenticationCheck.accessCheck(userDetails, adEntity.getUserEntity());
+        UserEntity userForAuthCheck = userEntityRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new MissingUserException ("User has not been found"));
+        authenticationCheck.accessCheck(userDetails, userForAuthCheck);
 
         CommentEntity newComment = CommentEntity.builder()
                 .text(createOrUpdateComment.getText())
                 .createdAt(Instant.now())
-                .userEntity(adEntity.getUserEntity())
+                .userEntity(userForAuthCheck)
                 .adEntity(adEntity)
                 .build();
 
