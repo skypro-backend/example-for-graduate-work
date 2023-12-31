@@ -1,7 +1,7 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
-
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,47 +9,56 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
+import ru.skypro.homework.mapping.AdMapper;
+import ru.skypro.homework.model.AdFound;
+import ru.skypro.homework.service.AdvertisementsService;
 
 import java.util.List;
 
 /**
  * <h2>Advertisements controller to manage ads</h2>
  */
+@Data
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
-
 @RestController
 public class Advertisements {
 
+    private final AdvertisementsService advertisementsService;
+
 
     /**
+     * <h2>getAllAds()</h2>
      * GET /ads Получение всех объявлений
      *
-     * @return Ads
+     * @return {@link AdsDto}: list of all advertisements found in repository with number of advertisements
      */
     @GetMapping("/ads")
     public ResponseEntity<AdsDto> getAllAds() {
-        return ResponseEntity.ok(new AdsDto());
-
+        return ResponseEntity.ok(advertisementsService.getAll());
     }
 
     /**
+     * <h2>addAd</h2>
      * Добавление объявления
      *
-     * @return Ad
+     * @return {@link AdDto}: DTO of added advertisement
      */
     @PostMapping("/ads")
-
     public ResponseEntity<AdDto> addAd(@RequestBody AdDto ad) {
-        return new ResponseEntity<>(ad, HttpStatus.OK);
+        AdDto newAd = advertisementsService.addNewAd(ad);
+        return new ResponseEntity<>(newAd, HttpStatus.OK);
     }
 
     /**
+     * <h2>getAds(@PathVariable long id)</h2>
      * GET /ads/{id} Получение информации об объявлении
+     * @return DTO of advertisements with given id
      */
     @GetMapping("/ads/{id}")
     public ResponseEntity<AdDto> getAds(@PathVariable long id) {
-        return new ResponseEntity<>(new AdDto(), HttpStatus.OK);
+        AdFound adFound = advertisementsService.getAdById(id);
+        return new ResponseEntity<>(AdMapper.INSTANCE.adToDto(adFound.getAd()), adFound.getHttpStatus());
     }
 
     /**
