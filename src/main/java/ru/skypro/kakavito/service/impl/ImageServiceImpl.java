@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.kakavito.exceptions.ImageNotFoundException;
 import ru.skypro.kakavito.exceptions.ImageSizeExceededException;
 import ru.skypro.kakavito.mappers.UserMapper;
 import ru.skypro.kakavito.model.Image;
@@ -36,7 +37,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image findImageById(int id) {
         return imageRepo.findById(id).orElseThrow(() -> {
-            throw new EntityNotFoundException(String.format("Photo with id %s not found", id));
+            throw new ImageNotFoundException(String.format("Photo with id %s not found", id));
         } );
     }
 
@@ -78,7 +79,7 @@ public class ImageServiceImpl implements ImageService {
     public void deleteImage(int imageId) {
         logger.info("Photo deleted");
         if (imageRepo.findById(imageId).isEmpty()) {
-            throw new EntityNotFoundException(String.format("Photo with id %s not found", imageId));
+            throw new ImageNotFoundException(String.format("Photo with id %s not found", imageId));
         }
         imageRepo.deleteById(imageId);
     }

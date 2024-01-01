@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.skypro.kakavito.dto.CommentsDTO;
 import ru.skypro.kakavito.dto.CreateOrUpdateCommentDTO;
+import ru.skypro.kakavito.exceptions.CommentNotFoundException;
 import ru.skypro.kakavito.exceptions.EmptyException;
 import ru.skypro.kakavito.model.Comment;
 import ru.skypro.kakavito.repository.CommentRepo;
@@ -38,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment findById(Long commentId) {
         logger.info("Comment findById is running");
-        return commentRepo.findById(Math.toIntExact(commentId)).orElseThrow(() -> new EmptyException("Comment not found"));
+        return commentRepo.findById(Math.toIntExact(commentId)).orElseThrow(() -> new CommentNotFoundException("Comment not found"));
     }
 
     @Override
@@ -47,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
         if (adId != null) {
             commentRepo.deleteById(Math.toIntExact(commentId));
         }
-        throw new EmptyException("Cell is empty");
+        throw new CommentNotFoundException("Cell is empty");
     }
 
     @Override

@@ -12,8 +12,10 @@ import ru.skypro.kakavito.dto.AdDTO;
 import ru.skypro.kakavito.dto.AdsDTO;
 import ru.skypro.kakavito.dto.CreateOrUpdateAdDTO;
 import ru.skypro.kakavito.dto.ExtendedAdDTO;
+import ru.skypro.kakavito.exceptions.AdNotFoundException;
 import ru.skypro.kakavito.exceptions.EmptyException;
 import ru.skypro.kakavito.exceptions.ImageSizeExceededException;
+import ru.skypro.kakavito.exceptions.UserNotFoundException;
 import ru.skypro.kakavito.mappers.AdMapper;
 import ru.skypro.kakavito.model.Ad;
 import ru.skypro.kakavito.model.User;
@@ -64,7 +66,7 @@ public class AdServiceImpl implements AdService {
         logger.error("AdService findById is running");
         return adRepo.findById(Math.toIntExact(id))
                 .map(adMapper::convertToExtendedAd)
-                .orElseThrow(() -> new EmptyException("Ad not found"));
+                .orElseThrow(() -> new AdNotFoundException("Ad not found"));
     }
 
     @Override
@@ -78,13 +80,13 @@ public class AdServiceImpl implements AdService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = ((UserDetails) authentication.getPrincipal()).getUsername();
         return userRepo.findByEmail(email)
-                .orElseThrow(() -> new EmptyException("User with email: " + email + " is not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
 
     @Override
     public AdDTO updateAd(Long id, CreateOrUpdateAdDTO createOrUpdateAdDTO) {
-        Ad ad = adRepo.findById(Math.toIntExact(id)).orElseThrow(() -> new EmptyException("Ad not found"));
+        Ad ad = adRepo.findById(Math.toIntExact(id)).orElseThrow(() -> new AdNotFoundException("Ad not found"));
         ad.setPrice(createOrUpdateAdDTO.getPrice());
         ad.setDescription(createOrUpdateAdDTO.getDescription());
         ad.setTitle(createOrUpdateAdDTO.getTitle());
@@ -99,7 +101,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public void deleteAd(int id) {
         adRepo.findById(id)
-                .orElseThrow(() -> new EmptyException("Ad not found"));
+                .orElseThrow(() -> new AdNotFoundException("Ad not found"));
         adRepo.deleteById(id);
     }
 }
