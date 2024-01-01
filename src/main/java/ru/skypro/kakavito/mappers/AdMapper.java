@@ -2,6 +2,7 @@ package ru.skypro.kakavito.mappers;
 
 import lombok.Data;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.skypro.kakavito.dto.AdDTO;
 import ru.skypro.kakavito.dto.AdsDTO;
@@ -18,6 +19,9 @@ public class AdMapper {
 
     private final ModelMapper modelMapper;
 
+    @Value("${query.to.get.image}")
+    private String imageQuery;
+
     public AdsDTO convertToAdsDTO(List<Ad> ad) {
         AdsDTO adsDTO = new AdsDTO();
         adsDTO.setCount(ad.size());
@@ -26,14 +30,28 @@ public class AdMapper {
     }
 
     public AdDTO convertToAdDTO(Ad ad) {
-        return modelMapper.map(ad, AdDTO.class);
+        AdDTO adDTO = modelMapper.map(ad, AdDTO.class);
+        adDTO.setPk(ad.getPk());
+        adDTO.setAuthor(Math.toIntExact(ad.getAuthor() != null ? ad.getAuthor().getId() : null));
+        adDTO.setImage(imageQuery + ad.getImage().getId());
+        return adDTO;
     }
 
     public ExtendedAdDTO convertToExtendedAd(Ad ad) {
-        return modelMapper.map(ad, ExtendedAdDTO.class);
+        ExtendedAdDTO extendedAdDTO = modelMapper.map(ad, ExtendedAdDTO.class);
+        extendedAdDTO.setPk(ad.getPk());
+        if (ad.getAuthor() != null) {
+            extendedAdDTO.setAuthorFirstName(ad.getAuthor().getFirstName());
+            extendedAdDTO.setAuthorLastName(ad.getAuthor().getLastName());
+            extendedAdDTO.setEmail(ad.getAuthor().getEmail());
+            extendedAdDTO.setPhone(ad.getAuthor().getPhone());
+            extendedAdDTO.setImage(imageQuery + ad.getImage().getId());
+        }
+        return extendedAdDTO;
     }
 
     public Ad convertCreatDTOToAd(CreateOrUpdateAdDTO createOrUpdateAdDTO) {
         return modelMapper.map(createOrUpdateAdDTO, Ad.class);
     }
 }
+

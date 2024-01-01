@@ -2,23 +2,23 @@ package ru.skypro.kakavito.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import ru.skypro.kakavito.dto.AdDTO;
 import ru.skypro.kakavito.dto.AdsDTO;
 import ru.skypro.kakavito.dto.CreateOrUpdateAdDTO;
 import ru.skypro.kakavito.dto.ExtendedAdDTO;
 import ru.skypro.kakavito.model.Ad;
+import ru.skypro.kakavito.model.Image;
 import ru.skypro.kakavito.model.User;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RequiredArgsConstructor
 public class AdMapperTest {
 
-    private final AdMapper adMapper;
+    private final AdMapper adMapper = new AdMapper(new ModelMapper());
 
     @Test
     void convertToAdDTO_ShouldMapAdEntityToAdDto() {
@@ -33,12 +33,12 @@ public class AdMapperTest {
         user.setEmail("test@mail.ru");
         ad.setAuthor(user);
 
-        AdDTO adDto = adMapper.convertToAdDTO(ad);
+        AdDTO adDTO = adMapper.convertToAdDTO(ad);
 
-        assertEquals(adDto.getPk(), adDto.getPk());
-        assertEquals(adDto.getTitle(), adDto.getTitle());
-        assertEquals(adDto.getAuthor(), adDto.getPk(), adDto.getAuthor());
-        assertEquals(adDto.getPrice(), adDto.getPrice());
+        assertEquals(adDTO.getPk(), adDTO.getPk());
+        assertEquals(adDTO.getTitle(), adDTO.getTitle());
+        assertEquals(adDTO.getAuthor(), adDTO.getPk(), adDTO.getAuthor());
+        assertEquals(adDTO.getPrice(), adDTO.getPrice());
     }
 
     @Test
@@ -59,13 +59,13 @@ public class AdMapperTest {
         user2.setId(2L);
         ad2.setAuthor(user2);
 
-        Collection<Ad> adList = Arrays.asList(ad1, ad2);
+        List<Ad> adList = Arrays.asList(ad1, ad2);
 
-        AdsDTO adsDto = adMapper.convertToAdsDTO((List<Ad>) adList);
+        AdsDTO adsDTO = adMapper.convertToAdsDTO(adList);
 
-        List<AdDTO> adDtoList = adsDto.getResults();
-        assertEquals(adList.size(), adsDto.getCount());
-        assertEquals(adList.size(), adDtoList.size());
+        List<AdDTO> adDTOList = adsDTO.getResults();
+        assertEquals(adList.size(), adsDTO.getCount());
+        assertEquals(adList.size(), adDTOList.size());
     }
 
     @Test
@@ -84,17 +84,27 @@ public class AdMapperTest {
 
     @Test
     void convertToExtendedDTO_ShouldMapAdEntityToExtendedAdDto() {
+        Image image = new Image();
         Ad ad = new Ad();
+        User user = new User();
+
+        image.setId(1);
+        image.setAd(ad);
+        image.setUser(user);
+        image.setData(image.getData());
+        image.setFileSize(image.getFileSize());
+        image.setFilePath(image.getFilePath());
+
         ad.setPk(1);
         ad.setTitle("Title");
         ad.setDescription("Description");
         ad.setPrice(100);
+        ad.setImage(image);
 
-        User user = new User();
         user.setId(1L);
         user.setEmail("test@mail.ru");
-        user.setFirstName("John");
-        user.setLastName("Doe");
+        user.setFirstName("Name");
+        user.setLastName("LastName");
         user.setPhone("123-456-7890");
         ad.setAuthor(user);
 
@@ -104,6 +114,7 @@ public class AdMapperTest {
         assertEquals(ad.getTitle(), extendedAdDTO.getTitle());
         assertEquals(ad.getDescription(), extendedAdDTO.getDescription());
         assertEquals(ad.getPrice(), extendedAdDTO.getPrice());
+        assertEquals(ad.getImage(), extendedAdDTO.getImage());
         assertEquals(user.getFirstName(), extendedAdDTO.getAuthorFirstName());
         assertEquals(user.getLastName(), extendedAdDTO.getAuthorLastName());
         assertEquals(user.getEmail(), extendedAdDTO.getEmail());

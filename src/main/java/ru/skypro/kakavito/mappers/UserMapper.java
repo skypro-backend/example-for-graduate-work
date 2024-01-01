@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import ru.skypro.kakavito.dto.*;
 import ru.skypro.kakavito.model.User;
 
+import java.util.Optional;
+
 @Data
 @Component
 public class UserMapper {
@@ -24,14 +26,12 @@ public class UserMapper {
         return updateUserDTO;
     }
 
-//    public UserDto convertToUserDTO(User user) {
-//        UserDto userDto = modelMapper.map(user, UserDto.class);
-//        Optional.ofNullable(user.getImage())
-//                .ifPresent(elem -> {
-//                    UserDto.setImage(imageQuery + user.getImage().getId());
-//                });
-//        return userDto;
-//    }
+    public UserDto convertToUserDTO(User user) {
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        Optional.ofNullable(user.getImage())
+                .ifPresent(elem -> userDto.setImage(imageQuery + user.getImage().getId()));
+        return userDto;
+    }
 
     public UserPrincipalDTO convertToUserPrincipalDTO(@NonNull User user) {
         return modelMapper.map(user, UserPrincipalDTO.class);
