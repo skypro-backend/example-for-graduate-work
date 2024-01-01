@@ -8,10 +8,7 @@ import ru.skypro.kakavito.model.Comment;
 public interface CommentService {
 
     CommentsDTO getAllByCommentById(int id);
-//    ResponseEntity<Void> createComment(ru.skypro.homework.model.Comment comment);
-
     Comment createComment(CreateOrUpdateCommentDTO text);
-
     Comment findById(Long commentId);
     ResponseEntity<Comment> deleteComment(Long adId, Long commentId);
     Comment updateComment(Long adId, Long commentId, CreateOrUpdateCommentDTO text);
