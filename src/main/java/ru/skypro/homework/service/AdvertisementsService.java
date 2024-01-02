@@ -2,6 +2,7 @@ package ru.skypro.homework.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
@@ -90,7 +91,9 @@ public class AdvertisementsService {
         return adRemoved;
     }
 
-    public AdsFound getAdsDtoByUserId(long id) {
+    public AdsFound getAdsDtoByUserId(long id, Authentication auth) {
+        String name = auth.getName();
+        auth.getAuthorities();
         AdsFound adsFound = new AdsFound();
         List<Ad> listOfAdvertisements = adRepository.findByAuthor(id);
         AdsDto adsDto = new AdsDto();

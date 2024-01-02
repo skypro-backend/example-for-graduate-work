@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
@@ -117,9 +119,12 @@ public class Advertisements {
      */
 
     @GetMapping("/ads/me")
+    @PreAuthorize("#username == authentication.principal.username, " +
+            "#password == authentication.principal.password, auth == authentication")
      public ResponseEntity<AdsDto> getAdsMe(@Parameter(name = "id", description = "user identifier")
-                                        @PathVariable long id) {
-        AdsFound myAdsFound = advertisementsService.getAdsDtoByUserId(id);
+                                            @PathVariable long id, String username, String password,
+                                            Authentication auth) {
+        AdsFound myAdsFound = advertisementsService.getAdsDtoByUserId(id, auth);
         return new ResponseEntity<>(myAdsFound.getResult(), myAdsFound.getHttpStatus());
     }
 
