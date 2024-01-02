@@ -22,10 +22,11 @@ public class WebSecurityConfig {
             "/v3/api-docs",
             "/webjars/**",
             "/login",
-            "/register"
+            "/register",
+            "/ads"
     };
 
-    @Bean
+/*    @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user =
                 User.builder()
@@ -35,7 +36,7 @@ public class WebSecurityConfig {
                         .roles(Role.USER.name())
                         .build();
         return new InMemoryUserDetailsManager(user);
-    }
+    }*/
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

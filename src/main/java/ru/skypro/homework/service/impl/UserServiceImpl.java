@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 import java.io.IOException;
 
