@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.LoginDto;
-import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.impl.AuthServiceImpl;
+
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController
 public class AuthController {
 
-    private  AuthService authService;
+    private AuthServiceImpl authService;
 
 
     @PostMapping("/login")
