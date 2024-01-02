@@ -3,8 +3,8 @@ package ru.skypro.kakavito.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The Ad class represents the essence of the ad in the database.
@@ -24,41 +24,47 @@ public class Ad {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    private Long id;
+
+//    @Column(nullable = false)
+    /**
+     * Номер объявления
+     */
+    @Column(nullable = false)
     private int pk;
 
     /**
      * Внешний ключ: ID автора из таблицы 'users'
      * @see User
      */
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    private User author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = false)
+    private User user;
 
     /**
      * Внешний ключ: ссылка на фото из таблицы 'images'
      * @see Image
      */
-    @OneToOne
-    @JoinColumn(name = "image_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
     private Image image;
 
     /**
      * Цена объявления
      */
-    @Column(name = "price")
-    private int price;
+    @Column(nullable = false)
+    private Integer price;
 
     /**
      * Заголовок объявления
      */
-    @Column(name = "title")
+    @Column(nullable = false, length = 100)
     private String title;
 
     /**
      * Описание товара
      */
-    @Column
+    @Column(nullable = false)
     private String description;
 
     /**
@@ -66,5 +72,5 @@ public class Ad {
      * @see Comment
      */
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private Set<Comment> comments = new HashSet<>();
 }

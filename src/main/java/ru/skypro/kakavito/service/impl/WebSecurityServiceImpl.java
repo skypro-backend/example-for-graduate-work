@@ -18,12 +18,12 @@ public class WebSecurityServiceImpl implements WebSecurityService {
     @Override
     public boolean canAccessInAd(Integer id, String username) {
         Ad ad = adRepo.findById(id).orElseThrow(() -> new AdNotFoundException("Ad not found"));
-        return ad.getAuthor().getEmail().equals(username);
+        return ad.getUser().getEmail().equals(username);
     }
 
     @Override
     public boolean canAccessInComment(Integer id, String username) {
         Comment comment = commentRepo.findById(id).orElseThrow(() -> new CommentNotFoundException("Comment not found"));
-        return comment.getAuthor().getEmail().equals(username);
+        return comment.getUser().getEmail().equals(username);
     }
 }

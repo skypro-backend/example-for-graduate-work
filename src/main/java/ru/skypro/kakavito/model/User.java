@@ -1,15 +1,16 @@
 package ru.skypro.kakavito.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import ru.skypro.kakavito.dto.Role;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The User class represents a user entity in the database. It stores information about a user,
- * including their unique identifier (id), username, password, first name, last name, phone number, email associated avatar and role.
+ * including their unique identifier (id), username, password, first name, last name, phone number, email associated image and role.
  */
 @Entity
 @Data
@@ -18,40 +19,39 @@ import java.util.List;
 public class User {
 
     @Id
-    @Column(name = "id")
+//    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
      * Email - он же login
      */
-    @Column(name = "email")
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password")
+    @Column(nullable = false)
     private String password;
 
-    @Column(name = "first_name")
+    @Column(nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(nullable = false)
     private String lastName;
 
-    @Column(name = "phone")
+    @Column(nullable = false)
     private String phone;
 
-    @Column(name = "role", nullable = false)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne
-    @JoinColumn(name = "image_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
     private Image image;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ad> AdList = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Ad> ads = new HashSet<>();
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private List<Comment> commentsList = new ArrayList<>();
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Comment> comments = new HashSet<>();
 }

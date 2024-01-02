@@ -13,6 +13,7 @@ import ru.skypro.kakavito.dto.NewPasswordDTO;
 import ru.skypro.kakavito.dto.UpdateUserDTO;
 import ru.skypro.kakavito.dto.UserDto;
 import ru.skypro.kakavito.exceptions.ImageSizeExceededException;
+import ru.skypro.kakavito.model.User;
 import ru.skypro.kakavito.service.UserService;
 
 import java.io.IOException;
@@ -39,8 +40,10 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public UserDto getMyProfile(@PathVariable Long id) {
-        return userService.findById(id);
+    public ResponseEntity<User> getMyProfile(/*@PathVariable Long id*/) {
+        return ResponseEntity.ok(userService.getAuthorizedUser());
+//        return ResponseEntity.ok(userMapper.toDTO(userService.getAuthorizedUser()));
+//                userService.findById(id);
     }
 
     @PatchMapping("/me")

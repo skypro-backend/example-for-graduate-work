@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface AdRepo extends JpaRepository <Ad, Integer> {
 
-    List<Ad> findAllByAuthorId(Long author_id);
+    List<Ad> findAllById(Long authorId);
 
     Ad findByPk(int pk);
 }
