@@ -2,8 +2,9 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,9 +21,10 @@ public class NewPasswordController {
 
     private final NewPasswordImpl newPasswordService;
 
+    private final Logger logger = LoggerFactory.getLogger(NewPasswordImpl.class);
+
     @PostMapping("/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPassword,
-                                            Authentication authentication) {
+    public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPassword) {
         if (newPassword.getNewPassword().length() <= 8 || newPassword.getNewPassword().length() >= 16) {
             throw new NotAllowedPasswordException("Пароль не соответсвует требованиям");
         } else {
