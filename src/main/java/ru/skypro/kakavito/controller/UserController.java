@@ -7,12 +7,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.kakavito.dto.NewPasswordDTO;
 import ru.skypro.kakavito.dto.UpdateUserDTO;
 import ru.skypro.kakavito.dto.UserDto;
 import ru.skypro.kakavito.exceptions.ImageSizeExceededException;
+import ru.skypro.kakavito.mappers.UserMapper;
 import ru.skypro.kakavito.model.User;
 import ru.skypro.kakavito.service.UserService;
 
@@ -26,6 +29,7 @@ import java.io.IOException;
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @PostMapping("/set_password")
     public ResponseEntity<String> setNewPassword(@RequestBody NewPasswordDTO newPasswordDTO,
@@ -40,9 +44,9 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> getMyProfile(/*@PathVariable Long id*/) {
-        return ResponseEntity.ok(userService.getAuthorizedUser());
-//        return ResponseEntity.ok(userMapper.toDTO(userService.getAuthorizedUser()));
+    public ResponseEntity<UserDto> getMyProfile(/*@PathVariable Long id*/) {
+//        return ResponseEntity.ok(userService.getAuthorizedUser());
+        return ResponseEntity.ok(userMapper.convertToUserDTO(userService.getAuthorizedUser()));
 //                userService.findById(id);
     }
 
@@ -52,14 +56,16 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         userService.updateMyProfile(updateUserDTO);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(updateUserDTO);
     }
 
     @PatchMapping(path = "/me/image",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<Void> updateMyImage(@RequestBody MultipartFile image) throws IOException, ImageSizeExceededException {
-        userService.updateMyImage(image);
+    public ResponseEntity<?> updateMyImage(@RequestParam MultipartFile image,
+                                           @AuthenticationPrincipal UserDetails userDetails)
+            throws IOException, ImageSizeExceededException {
+        userService.updateMyImage(image, userDetails);
         return ResponseEntity.ok().build();
     }
 

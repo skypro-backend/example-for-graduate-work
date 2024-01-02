@@ -89,7 +89,7 @@ public class ImageServiceImpl implements ImageService {
     public void refactorImage(Long id, MultipartFile image) {
         logger.info("Photo saved {}", id);
 
-        User user = userRepo.findUserById(id);
+        User user = userRepo.findUserById(Math.toIntExact(id));
         Image newImage = new Image();
 
         try {
