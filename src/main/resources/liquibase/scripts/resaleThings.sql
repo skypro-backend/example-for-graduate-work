@@ -1,3 +1,7 @@
+-- liquibase formatted sql
+
+-- changeset: User2
+
 -- Создание таблицы "users" для хранения информации о пользователях сайта
 create table users
 (
@@ -7,7 +11,8 @@ last_name TEXT, -- Фамилия пользователя
 phone_number TEXT, -- Номер телефона пользователя
 email TEXT, -- почта пользователя
 password TEXT, -- пароль пользователя
-role int4
+image VARCHAR,
+role VARCHAR, --enum Role
 );
 
 -- Создание таблицы "ad" для хранения информации об объявлениях
@@ -48,4 +53,10 @@ CREATE TABLE comments
     pk INT,
     price int,
     title text
+);
+CREATE TABLE image (
+    id SERIAL PRIMARY KEY,
+    data oid,
+    file_size BIGINT,
+    media_type VARCHAR
 );
