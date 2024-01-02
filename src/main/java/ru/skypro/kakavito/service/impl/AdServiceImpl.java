@@ -53,7 +53,7 @@ public class AdServiceImpl implements AdService {
     public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile imageFile) throws IOException, ImageSizeExceededException {
         logger.info("AdService createAd is running");
         Ad ad = adMapper.convertCreatDTOToAd(createOrUpdateAdDTO);
-        ad.setAuthor(getAuthUser());
+        ad.setUser(getAuthUser());
         Ad savedAd = adRepo.save(ad);
         Image image = imageService.upLoadImage(imageFile);
         savedAd.setImage(image);
@@ -72,7 +72,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public AdsDTO getAdByAuthUser() {
         User user = getAuthUser();
-        return adMapper.convertToAdsDTO(adRepo.findAllByAuthorId(user.getId()));
+        return adMapper.convertToAdsDTO(adRepo.findAllById(user.getId()));
 
     }
 

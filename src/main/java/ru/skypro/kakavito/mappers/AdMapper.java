@@ -32,7 +32,7 @@ public class AdMapper {
     public AdDTO convertToAdDTO(Ad ad) {
         AdDTO adDTO = modelMapper.map(ad, AdDTO.class);
         adDTO.setPk(ad.getPk());
-        adDTO.setAuthor(Math.toIntExact(ad.getAuthor() != null ? ad.getAuthor().getId() : null));
+        adDTO.setAuthor(Math.toIntExact(ad.getUser() != null ? ad.getUser().getId() : null));
         adDTO.setImage(imageQuery + ad.getImage().getId());
         return adDTO;
     }
@@ -40,11 +40,11 @@ public class AdMapper {
     public ExtendedAdDTO convertToExtendedAd(Ad ad) {
         ExtendedAdDTO extendedAdDTO = modelMapper.map(ad, ExtendedAdDTO.class);
         extendedAdDTO.setPk(ad.getPk());
-        if (ad.getAuthor() != null) {
-            extendedAdDTO.setAuthorFirstName(ad.getAuthor().getFirstName());
-            extendedAdDTO.setAuthorLastName(ad.getAuthor().getLastName());
-            extendedAdDTO.setEmail(ad.getAuthor().getEmail());
-            extendedAdDTO.setPhone(ad.getAuthor().getPhone());
+        if (ad.getUser() != null) {
+            extendedAdDTO.setAuthorFirstName(ad.getUser().getFirstName());
+            extendedAdDTO.setAuthorLastName(ad.getUser().getLastName());
+            extendedAdDTO.setEmail(ad.getUser().getEmail());
+            extendedAdDTO.setPhone(ad.getUser().getPhone());
             extendedAdDTO.setImage(imageQuery + ad.getImage().getId());
         }
         return extendedAdDTO;

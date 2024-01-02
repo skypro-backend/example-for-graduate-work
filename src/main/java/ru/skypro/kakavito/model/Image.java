@@ -16,25 +16,39 @@ public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+//    @Column(name = "id")
     private Integer id;
 
+    /**
+     * Id юзера
+     */
     @OneToOne(mappedBy = "image")
+    @JoinColumn(name = "user_id")
     private User user;
 
+    /**
+     * Id объявления
+     */
     @OneToOne(mappedBy = "image")
+    @JoinColumn(name = "ad_id")
     private Ad ad;
 
-    @Column(name = "file_size")
+    /**
+     * Размер фото
+     */
+//    @Column(name = "file_size")
     private Long fileSize;
 
-    @Column(name = "media_type")
+//    @Column(name = "media_type")
     private String mediaType;
 
-    @Column(name = "file_path")
+    /**
+     * Путь к файлу
+     */
+//    @Column(name = "file_path")
     private String filePath;
 
     @Lob
-    @Column(name = "bytes")
+//    @Column(name = "bytes")
     private byte[] data;
 }

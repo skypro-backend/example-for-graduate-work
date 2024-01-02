@@ -18,16 +18,16 @@ public class Comment {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int pk;
+//    @Column(name = "id")
+    public int pk;
 
     /**
      * Внешний ключ: ID автора из таблицы 'users'
      * @see User
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
-    private User author;
+    private User user;
 
     /**
      * Внешний ключ: ссылка на аватар автора из таблицы 'images'
@@ -41,26 +41,26 @@ public class Comment {
      * Внешний ключ: ссылка на объявления из 'ads'
      * @see Ad
      */
-    @ManyToOne
-    @JoinColumn(name = "ad_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ad_id", referencedColumnName = "id")
     private Ad ad;
 
-    /**
-     * Имя автора комментария
-     */
-    @Column(name = "author_name")
-    private String authorFirstName;
+//    /**
+//     * Имя автора комментария
+//     */
+////    @Column(name = "author_name")
+//    private String authorFirstName;
 
     /**
      * Дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
      */
     @CreationTimestamp
-    @Column(name = "comment_date")
-    private LocalDateTime createdAt;
+//    @Column(name = "comment_date")
+    public LocalDateTime createdAt;
 
     /**
      * Текст комментария
      */
-    @Column(name = "comment_text")
-    private String text;
+//    @Column(name = "comment_text")
+    public String text;
 }

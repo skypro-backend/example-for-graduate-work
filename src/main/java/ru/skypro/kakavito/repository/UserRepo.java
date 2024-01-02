@@ -2,7 +2,6 @@ package ru.skypro.kakavito.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.skypro.kakavito.dto.UserDto;
 import ru.skypro.kakavito.model.User;
 
 import java.util.Optional;
@@ -14,7 +13,7 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 
     User findByFirstName(String username);
 
-    UserDto findById(Long id);
+    Optional<User> findById(Long id);
 
-    User findUserById(Long id);
+    User findUserById(Integer id);
 }

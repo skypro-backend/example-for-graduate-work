@@ -18,8 +18,6 @@ public class UserMapper {
 
     @Value("${query.to.get.image}")
     private String imageQuery;
-
-
     public UpdateUserDTO convertToUpdateUserDTO(User user) {
         UpdateUserDTO updateUserDTO = modelMapper.map(user, UpdateUserDTO.class);
 

@@ -9,8 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.kakavito.dto.UpdateUserDTO;
-import ru.skypro.kakavito.dto.UserDto;
-import ru.skypro.kakavito.exceptions.EmptyException;
 import ru.skypro.kakavito.exceptions.ImageSizeExceededException;
 import ru.skypro.kakavito.exceptions.UserNotFoundException;
 import ru.skypro.kakavito.mappers.UserMapper;
@@ -21,6 +19,7 @@ import ru.skypro.kakavito.service.ImageService;
 import ru.skypro.kakavito.service.UserService;
 
 import java.io.*;
+import java.util.Optional;
 
 
 @Service
@@ -53,22 +52,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UpdateUserDTO updateMyProfile(final UpdateUserDTO updateUserDTO) {
+    public UpdateUserDTO updateMyProfile(final UpdateUserDTO updateUser) {
         logger.info("User updateMyProfile is running");
         User user = this.getAuthorizedUser();
         userRepo
-                .findById(Math.toIntExact(user.getId()))
+                .findById(user.getId())
                 .map(oldUser -> {
-                    oldUser.setFirstName(updateUserDTO.getFirstName());
-                    oldUser.setLastName(updateUserDTO.getLastName());
-                    oldUser.setPhone(updateUserDTO.getPhone());
+                    oldUser.setFirstName(updateUser.getFirstName());
+                    oldUser.setLastName(updateUser.getLastName());
+                    oldUser.setPhone(updateUser.getPhone());
                     return userMapper.convertToUpdateUserDTO(userRepo.save(oldUser));
                 });
-        return updateUserDTO;
+        return updateUser;
     }
 
     @Override
-    public UserDto findById(Long id) {
+    public Optional<User> findById(Integer id) {
         logger.info("User findById is running");
         if (id == null) {
             throw new UserNotFoundException("User not found");
@@ -77,17 +76,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateMyImage(final MultipartFile imageFile) throws IOException, ImageSizeExceededException {
-        logger.info("User updateMyImage is running");
-        User user = this.getAuthorizedUser();
+    public void updateMyImage(MultipartFile image, UserDetails userDetails) throws ImageSizeExceededException, IOException {
+        User user = userRepo.findByEmail(userDetails.getUsername()).orElseThrow();
+        Image imageEntity = imageService.upLoadImage(image);
+//        imageService.deleteImage(imageId);
+        user.setImage(imageEntity);
 
-        if (imageService.checkUserImage(user.getId())) {
-            imageService.refactorImage(user.getId(), imageFile);
-        } else {
-            Image img = imageService.upLoadImage(imageFile);
-            user.setImage(img);
-        }
+        userRepo.save(user);
     }
+//    @Override
+//    public void updateMyImage(final MultipartFile imageFile) throws IOException, ImageSizeExceededException {
+//        logger.info("User updateMyImage is running");
+//        User user = this.getAuthorizedUser();
+//
+//        if (imageService.checkUserImage(user.getId())) {
+//            imageService.refactorImage(user.getId(), imageFile);
+//        } else {
+//            Image img = imageService.upLoadImage(imageFile);
+//            user.setImage(img);
+//        }
+////        return new byte[];
+//    }
 
     private boolean checkPassword(final String email, final String password) {
         logger.info("User checkPassword is running");
