@@ -24,15 +24,16 @@ public class Ad {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false)
+    private int id;
 
-//    @Column(nullable = false)
     /**
      * Номер объявления
      */
+//    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private int pk;
-
     /**
      * Внешний ключ: ID автора из таблицы 'users'
      * @see User

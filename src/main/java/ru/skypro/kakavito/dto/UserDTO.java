@@ -4,7 +4,7 @@ package ru.skypro.kakavito.dto;
 import lombok.Data;
 
 @Data
-public class UserDto {
+public class UserDTO {
 
     private Integer id;
     private String email;

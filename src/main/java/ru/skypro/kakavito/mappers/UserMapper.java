@@ -24,8 +24,8 @@ public class UserMapper {
         return updateUserDTO;
     }
 
-    public UserDto convertToUserDTO(User user) {
-        UserDto userDto = modelMapper.map(user, UserDto.class);
+    public UserDTO convertToUserDTO(User user) {
+        UserDTO userDto = modelMapper.map(user, UserDTO.class);
         Optional.ofNullable(user.getImage())
                 .ifPresent(elem -> userDto.setImage(imageQuery + user.getImage().getId()));
         return userDto;

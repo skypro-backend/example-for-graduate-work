@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import ru.skypro.kakavito.dto.AdDTO;
 import ru.skypro.kakavito.dto.CommentDTO;
 import ru.skypro.kakavito.dto.ExtendedAdDTO;
-import ru.skypro.kakavito.dto.UserDto;
+import ru.skypro.kakavito.dto.UserDTO;
 import ru.skypro.kakavito.model.Ad;
 import ru.skypro.kakavito.model.Comment;
 import ru.skypro.kakavito.model.User;
@@ -54,14 +54,14 @@ public class MapperConfig {
         }
     });
 
-        modelMapper.addMappings(new PropertyMap<UserDto, User>() {
+        modelMapper.addMappings(new PropertyMap<UserDTO, User>() {
         @Override
         protected void configure() {
             skip(destination.getImage());
         }
     });
 
-        modelMapper.addMappings(new PropertyMap<User, UserDto>() {
+        modelMapper.addMappings(new PropertyMap<User, UserDTO>() {
         @Override
         protected void configure() {
             skip(destination.getImage());

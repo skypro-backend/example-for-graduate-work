@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.kakavito.dto.CommentDTO;
 import ru.skypro.kakavito.dto.CommentsDTO;
 import ru.skypro.kakavito.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.kakavito.model.Comment;
@@ -25,12 +26,12 @@ public class CommentController {
     }
 
     @PostMapping("{id}/comments")
-    public ResponseEntity<Comment> createComments(@PathVariable Long id,
-                                                  @RequestBody CreateOrUpdateCommentDTO text) {
-        if (text == null || id == null) {
+    public ResponseEntity<CommentDTO> createComments(@PathVariable int id,
+                                                     @RequestBody CreateOrUpdateCommentDTO text) {
+        if (text == null) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<>(commentService.createComment(text),HttpStatus.OK);
+        return new ResponseEntity<>(commentService.createComment(id, text),HttpStatus.OK);
     }
 
     @DeleteMapping("{adId}/comments/{commentId}")

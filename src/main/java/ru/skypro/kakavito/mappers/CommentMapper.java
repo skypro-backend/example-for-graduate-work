@@ -22,18 +22,7 @@ public class CommentMapper {
     @Value("${query.to.get.image}")
     private String imageQuery;
 
-    public Comment convertToComment(CommentDTO commentDTO) {
-        return modelMapper.map(commentDTO, Comment.class);
-    }
-
-    public CommentsDTO convertToCommentsDTO(List<Comment> comment) {
-        CommentsDTO commentsDTO = new CommentsDTO();
-        commentsDTO.setCount(comment.size());
-        commentsDTO.setResults(comment.stream().map(this::convertToCommentDTO).collect(Collectors.toList()));
-        return commentsDTO;
-}
-
-    public CommentDTO convertToCommentDTO(Comment comment) {
+    public CommentDTO toDto(Comment comment) {
         CommentDTO commentDTO = modelMapper.map(comment, CommentDTO.class);
         commentDTO.setPk(comment.getPk());
         commentDTO.setCreatedAt(comment.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
@@ -45,4 +34,37 @@ public class CommentMapper {
         }
         return commentDTO;
     }
+
+    public CommentsDTO toCommentsDTO(List<Comment> comments) {
+        CommentsDTO commentsDTO = new CommentsDTO();
+        commentsDTO.setCount(comments.size());
+        commentsDTO.setResults(comments.stream().map(this::toDto).collect(Collectors.toList()));
+        return commentsDTO;
+    }
 }
+//
+//    public Comment convertToComment(CommentDTO commentDTO) {
+//        return modelMapper.map(commentDTO, Comment.class);
+////        commentDTO.setPk(comment.getId());
+//    }
+//
+//    public CommentsDTO convertToCommentsDTO(List<Comment> comment) {
+//        CommentsDTO commentsDTO = new CommentsDTO();
+//        commentsDTO.setCount(comment.size());
+//        commentsDTO.setResults(comment.stream().map(this::convertToCommentDTO).collect(Collectors.toList()));
+//        return commentsDTO;
+//}
+//
+//    public CommentDTO convertToCommentDTO(Comment comment) {
+//        CommentDTO commentDTO = modelMapper.map(comment, CommentDTO.class);
+//        commentDTO.setPk(comment.getPk());
+//        commentDTO.setCreatedAt(comment.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+//        User user = comment.getUser();
+//        if (user != null) {
+//            commentDTO.setAuthor(Math.toIntExact(user.getId()));
+//            commentDTO.setAuthorFirstName(user.getFirstName());
+//            commentDTO.setAuthorImage(imageQuery + user.getImage().getId());
+//        }
+//        return commentDTO;
+//    }
+//}

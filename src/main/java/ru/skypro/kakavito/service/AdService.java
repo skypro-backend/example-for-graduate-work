@@ -11,12 +11,10 @@ import java.io.IOException;
 
 public interface AdService {
     AdsDTO findAll();
-    ExtendedAdDTO findById(Long id);
+    ExtendedAdDTO findById(int id);
     AdsDTO getAdByAuthUser();
     AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile imageFile) throws IOException, ImageSizeExceededException;
-    AdDTO updateAd(Long id, CreateOrUpdateAdDTO createOrUpdateAdDTO);
-
-    void updateImage(Long id, MultipartFile imageFile);
-
+    AdDTO updateAd(int id, CreateOrUpdateAdDTO createOrUpdateAdDTO);
+    void updateImage(int id, MultipartFile imageFile);
     void deleteAd(int ad);
 }

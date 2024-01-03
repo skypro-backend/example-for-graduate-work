@@ -31,7 +31,7 @@ public class AdMapper {
 
     public AdDTO convertToAdDTO(Ad ad) {
         AdDTO adDTO = modelMapper.map(ad, AdDTO.class);
-        adDTO.setPk(ad.getPk());
+        adDTO.setPk(ad.getId());
         adDTO.setAuthor(Math.toIntExact(ad.getUser() != null ? ad.getUser().getId() : null));
         adDTO.setImage(imageQuery + ad.getImage().getId());
         return adDTO;
@@ -39,7 +39,7 @@ public class AdMapper {
 
     public ExtendedAdDTO convertToExtendedAd(Ad ad) {
         ExtendedAdDTO extendedAdDTO = modelMapper.map(ad, ExtendedAdDTO.class);
-        extendedAdDTO.setPk(ad.getPk());
+        extendedAdDTO.setPk(ad.getId());
         if (ad.getUser() != null) {
             extendedAdDTO.setAuthorFirstName(ad.getUser().getFirstName());
             extendedAdDTO.setAuthorLastName(ad.getUser().getLastName());

@@ -33,7 +33,7 @@ public class AdController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAdDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<ExtendedAdDTO> getById(@PathVariable int id) {
         ExtendedAdDTO ad = adService.findById(id);
         if (ad == null) {
             return ResponseEntity.notFound().build();
@@ -57,9 +57,9 @@ public class AdController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AdDTO> updateAd(@PathVariable Long id,
+    public ResponseEntity<AdDTO> updateAd(@PathVariable int pk,
                                           @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
-        AdDTO updatedAd = adService.updateAd(id, createOrUpdateAdDTO);
+        AdDTO updatedAd = adService.updateAd(pk, createOrUpdateAdDTO);
         if (updatedAd == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -67,14 +67,14 @@ public class AdController {
     }
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateAdImage(@PathVariable Long id, @RequestBody MultipartFile image) throws IOException {
-        adService.updateImage(id, image);
+    public ResponseEntity<Void> updateAdImage(@PathVariable int pk, @RequestBody MultipartFile image) throws IOException {
+        adService.updateImage(pk, image);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReportById(@PathVariable Long id) {
-        adService.deleteAd(Math.toIntExact(id));
+    public ResponseEntity<Void> deleteReportById(@PathVariable int pk) {
+        adService.deleteAd(Math.toIntExact(pk));
         return ResponseEntity.ok().build();
     }
 
