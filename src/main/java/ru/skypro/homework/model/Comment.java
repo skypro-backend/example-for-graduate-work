@@ -5,6 +5,10 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
+/**
+ * <h2>Comment</h2>
+ * Represents entity of comment published by user to advertisement or other comment
+ */
 @Entity
 @Table(name = "comments")
 @Data

@@ -1,28 +1,34 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
+import ru.skypro.homework.model.utils.CommentsDtoFound;
+import ru.skypro.homework.service.CommentsService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 public class CommentsController {
+    final private CommentsService commentsService;
     /**
      *GET /ads/{id}/comments <h2>Получение комментариев объявления</h2>
-     * @param id Comment identifier
-     * @return List of comments
+     * @param id Advertisement identifier
+     * @return List of comments related to advertisement with provided identifier
      */
 
     @GetMapping("/ads/{id}/comments")
-    public ResponseEntity<CommentsDto> getComments(@PathVariable(name = "id") long id){
+    public ResponseEntity<CommentsDto> getComments(@Parameter(name = "id", description = "Advertisement identifier")
+                                                   @PathVariable(name = "id") int id) {
+        CommentsDtoFound commentsDtoFound = commentsService.findCommentsRelatedToAd(id);
         return new ResponseEntity<CommentsDto>(new CommentsDto(), HttpStatus.OK);
     }
 
@@ -37,6 +43,7 @@ public class CommentsController {
      */
 
     @PostMapping("/ads/{id}/comments")
+    @PreAuthorize("")
     public ResponseEntity<CommentDto> addComment(@PathVariable(name = "id") long id,
                                                  @RequestBody CreateOrUpdateCommentDto comment){
         return new ResponseEntity<CommentDto>(new CommentDto(), HttpStatus.OK);
