@@ -40,12 +40,14 @@ public class AdServiceImpl implements AdService {
     private final ImageService imageService;
 
     private final Logger logger = LoggerFactory.getLogger(AdServiceImpl.class);
-    ;
+
 
     @Override
     public AdsDTO findAll() {
         logger.info("AdService findAll is running");
-        return adMapper.convertToAdsDTO(adRepo.findAll());
+        AdsDTO adsDTO = adMapper.convertToAdsDTO(adRepo.findAll());
+        adsDTO.getCount();
+        return adsDTO;
     }
 
     @Override
