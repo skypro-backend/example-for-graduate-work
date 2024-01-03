@@ -29,7 +29,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<CommentDto> addComment(@PathVariable int adId, @RequestBody CreateOrUpdateCommentDto commentDto) {
+    public ResponseEntity<CommentDto> addComment(@PathVariable Integer adId, @RequestBody CreateOrUpdateCommentDto commentDto) {
         try {
             CommentDto comment = commentService.addComment(adId, commentDto);
             return ResponseEntity.ok(comment);
