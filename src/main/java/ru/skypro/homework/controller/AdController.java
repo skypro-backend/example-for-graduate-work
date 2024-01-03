@@ -68,7 +68,7 @@ public class AdController {
     }
 
     @GetMapping("/me")
-    public AdsDto getAdsForCurrentUser(Authentication authentication) {
+    public AdsDto getMyAds(Authentication authentication) {
         return adService.getMyAds(authentication);
     }
 

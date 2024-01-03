@@ -63,10 +63,9 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdsDto getAdsForCurrentUser() {
+    public AdsDto getMyAds(Authentication authentication) {
         return null;
     }
-
     @Override
     public void updateAdImage(Integer id, MultipartFile image, Authentication authentication) {
         String adAuthorName = adRepository.findById(id).orElseThrow(AdNotFoundException::new).getAuthor().getEmail();

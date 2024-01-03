@@ -17,5 +17,5 @@ public interface AdService {
     AdsDto getAdsForCurrentUser();
     void updateAdImage(Integer id, MultipartFile image, Authentication authentication);
     AdsDto getMyAds(Authentication authentication);
-
+    AdsDto getMyAds();
 }
