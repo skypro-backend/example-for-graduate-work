@@ -46,6 +46,9 @@ public class AdMapper {
             extendedAdDTO.setEmail(ad.getUser().getEmail());
             extendedAdDTO.setPhone(ad.getUser().getPhone());
             extendedAdDTO.setImage(imageQuery + ad.getImage().getId());
+            extendedAdDTO.setDescription(ad.getDescription());
+            extendedAdDTO.setTitle(ad.getTitle());
+            extendedAdDTO.setPrice(ad.getPrice());
         }
         return extendedAdDTO;
     }
