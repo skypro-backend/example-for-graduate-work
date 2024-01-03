@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.mapping.CommentMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
@@ -64,9 +65,6 @@ public class CommentsService {
         if (user == null) {
             return CommentDtoWithHttpStatus.unAuthorized();
         }
-        if (!user.getName().equals(username)) {
-            return CommentDtoWithHttpStatus.unAuthorized();
-        }
 
         Comment commentNew = new Comment(0, user.getId(), id, createOrUpdateCommentDto.getText());
         result.setCommentDto(CommentMapper.INSTANCE.commentToDto(commentNew));
@@ -95,20 +93,28 @@ public class CommentsService {
         }
 
         //Does advertisement exist?
-        // Ad ad = adRepository.findById(adId).orElse(null);
-        // if (ad == null){ return new ResponseEntity<>(HttpStatus.NOT_FOUND);}
         // I guess it does not matter whether advertisement exist while user has a right
         // to delete own comment
 
         // Is user authorized?
-        User user = userRepository.findById((int) comment.getUserId()).orElse(null);
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        if (!user.getEmail().equals(userName)) {
+        User actualUser = userRepository.findByEmail(userName).orElse(null);
+        if (actualUser == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
+        User authorOfAd = userRepository.findById((int) comment.getUserId()).orElse(null);
+        String authorLoginName;
+        if (authorOfAd == null) {
+            authorLoginName = "";
+        } else {
+            authorLoginName = authorOfAd.getEmail();
+        }
+        if (!actualUser.getEmail().equals(authorLoginName)
+                | Role.USER.equals(actualUser.getUserRole())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        // Well, delete that comment...
         commentRepository.delete(comment);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -128,7 +134,12 @@ public class CommentsService {
         if (author == null) {
             return CommentDtoWithHttpStatus.unAuthorized();
         }
-        if (!author.getName().equals(userName)) {
+        User actualUser = userRepository.findByEmail(userName).orElse(null);
+        Role role = Role.USER;
+        if (actualUser != null) {
+            role = actualUser.getUserRole();
+        }
+        if (!author.getName().equals(userName) & Role.USER.equals(role)) {
             return CommentDtoWithHttpStatus.unAuthorized();
         }
 

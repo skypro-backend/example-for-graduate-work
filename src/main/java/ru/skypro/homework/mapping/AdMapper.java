@@ -9,4 +9,6 @@ import ru.skypro.homework.model.Ad;
 public interface AdMapper {
     AdMapper INSTANCE = Mappers.getMapper(AdMapper.class);
     AdDto adToDto (Ad ad);
+
+    Ad adDtoToad(AdDto dto);
 }

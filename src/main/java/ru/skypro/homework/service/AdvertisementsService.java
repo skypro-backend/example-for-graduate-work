@@ -2,19 +2,23 @@ package ru.skypro.homework.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.mapping.AdMapper;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.User;
 import ru.skypro.homework.model.utils.AdFound;
 import ru.skypro.homework.model.utils.AdsFound;
 import ru.skypro.homework.model.utils.ImageProcessResult;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -24,6 +28,7 @@ import java.util.stream.Collectors;
 @Service
 public class AdvertisementsService {
     private final AdRepository adRepository;
+    private final UserRepository userRepository;
 
     /**
      * <h2>getAll()</h2><br>
@@ -58,6 +63,7 @@ public class AdvertisementsService {
         return AdMapper.INSTANCE.adToDto(newAd);
     }
 
+
     /**
      * <h2>getAdById</h2>
      *
@@ -73,6 +79,8 @@ public class AdvertisementsService {
             adFound.setHttpStatus(HttpStatus.NOT_FOUND);
         }
 
+        adFound.setHttpStatus(HttpStatus.OK);
+
         return adFound;
     }
 
@@ -82,30 +90,58 @@ public class AdvertisementsService {
      * @param id advertisement identifier
      * @return {@link AdFound}
      */
-    public AdFound removeAd(long id) {
-        AdFound adRemoved = getAdById(id);
-        if (adRemoved.getHttpStatus().is4xxClientError()) {
-            return adRemoved;
+    public AdFound removeAd(long id, String userLoginName) {
+
+        AdFound result = getAdById(id); // Advertisement exists?
+        if (result.getHttpStatus().is4xxClientError()) {
+            return result;
         }
-        adRepository.delete(adRemoved.getAd());
-        return adRemoved;
+
+        if (userLoginName.isEmpty()) { // Logged in?
+            result.setHttpStatus(HttpStatus.UNAUTHORIZED);
+            return result;
+        }
+
+        User actualUser, authorOfAd; // User allowed to delete advertisement?
+        actualUser = userRepository.findByEmail(userLoginName).orElse(null);
+        if (actualUser == null) {
+            result.setHttpStatus(HttpStatus.UNAUTHORIZED);
+            return result;
+        }
+
+        authorOfAd = userRepository.findById((int) result.getAd().getAuthor()).orElse(null);
+        if (this.isAdmin(userLoginName) |
+                actualUser.getEmail().equals(authorOfAd.getEmail())) {
+            adRepository.delete(result.getAd());
+        }
+        return result;
     }
 
-    public AdsFound getAdsDtoByUserId(long id, Authentication auth) {
-        String name = auth.getName();
-        auth.getAuthorities();
+    /**
+     * <h2>isAdmin</h2>
+     * Checks whether user granted with Admin rights
+     *
+     * @param userLoginName user login name (email on User entity), nullable
+     * @return true if admin role is granted to user specified by provided login
+     */
+    private boolean isAdmin(String userLoginName) {
+        if (userLoginName.isEmpty()) {
+            return false;
+        }
+        Optional<User> userOptional = userRepository.findByEmail(userLoginName);
+        return userOptional.filter(user -> Role.ADMIN.equals(user.getUserRole())).isPresent();
+    }
+
+    public ResponseEntity<AdsDto> getAdsDtoByUserId(long id, String userLogin) {
+        if (userRepository.findById((int) id).isEmpty()) {
+            return new ResponseEntity<>(new AdsDto(), HttpStatus.NOT_FOUND);
+        }
         AdsFound adsFound = new AdsFound();
         List<Ad> listOfAdvertisements = adRepository.findByAuthor(id);
         AdsDto adsDto = new AdsDto();
 
         if (listOfAdvertisements.isEmpty()) {
-            adsDto.setCount(0);
-            adsDto.setResults(null);
-
-            adsFound.setResult(adsDto);
-            adsFound.setHttpStatus(HttpStatus.NOT_FOUND);
-
-            return adsFound;
+            return new ResponseEntity<>(adsDto, HttpStatus.OK);
         }
 
         adsDto.setResults(
@@ -116,7 +152,7 @@ public class AdvertisementsService {
         adsFound.setResult(adsDto);
         adsFound.setHttpStatus(HttpStatus.OK);
 
-        return adsFound;
+        return new ResponseEntity<>(adsFound.getResult(), adsFound.getHttpStatus());
     }
 
     /**
@@ -126,21 +162,39 @@ public class AdvertisementsService {
      * @param updatedAdContent {@link CreateOrUpdateAdDto}
      * @return {@link AdFound} result of update
      */
-    public AdFound updateAd(long id, CreateOrUpdateAdDto updatedAdContent) {
+    public ResponseEntity<AdDto> updateAd(long id, CreateOrUpdateAdDto updatedAdContent, String userLoginName) {
 
-        AdFound adUpdateResult = new AdFound();
-        Ad adById = adRepository.findById(id).orElse(null);
-
+        Ad adById = adRepository.findById(id).orElse(null); // Does specified advertisement exist?
         if (adById == null) {
-            return AdFound.adNotFound();
+            return new ResponseEntity<>(new AdDto(), HttpStatus.NOT_FOUND);
         }
 
-        adById.setTitle(updatedAdContent.getTitle());
+        // Consider whether user is allowed to update specified advertisement
+        if (userLoginName.isEmpty()) {
+            return new ResponseEntity<>(new AdDto(), HttpStatus.UNAUTHORIZED);
+        }
+        User actualUser = userRepository.findByEmail(userLoginName).orElse(null);
+        if (actualUser == null) {
+            return new ResponseEntity<>(new AdDto(), HttpStatus.UNAUTHORIZED);
+        }
+        User author = userRepository.findById(adById.getAuthor()).orElse(null);
+        boolean allowed;
+        if (author != null) {
+            allowed = userLoginName.equals(author.getEmail()) | Role.ADMIN.equals(actualUser.getUserRole());
+        } else {
+            allowed = Role.ADMIN.equals(actualUser.getUserRole());
+        }
+        if (allowed) {
+            adById.setTitle(updatedAdContent.getTitle());
+            adById.setPrice(updatedAdContent.getPrice());
 //            adById.setImage(updatedAdContent.getDescription());
-        // todo: learn what does CreateOrUpdateAdDto description field mean
-        adUpdateResult.setAd(adById);
-        adUpdateResult.setHttpStatus(HttpStatus.OK);
-        return adUpdateResult;
+            // todo: learn what does CreateOrUpdateAdDto description field mean
+
+            adById = adRepository.save(adById);
+
+            return new ResponseEntity<>(AdMapper.INSTANCE.adToDto(adById), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new AdDto(), HttpStatus.UNAUTHORIZED);
     }
 
     public ImageProcessResult getPhotoByAdId(long id) {
