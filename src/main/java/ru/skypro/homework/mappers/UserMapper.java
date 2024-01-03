@@ -15,12 +15,12 @@ public class UserMapper {
         }
 
         // Метод для маппинга UserDto в User
-        public User mapToUser(UserDto userDto) {
+        public static User mapToUser(UserDto userDto) {
             return new User(userDto);
         }
 
         // Метод для маппинга User в UserDto
-        public UserDto mapToUserDto(User user) {
+        public static UserDto mapToUserDto(User user) {
             return new UserDto(user);
         }
     }

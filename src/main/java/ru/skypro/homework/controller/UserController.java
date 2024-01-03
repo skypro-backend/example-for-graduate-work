@@ -2,10 +2,12 @@ package ru.skypro.homework.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import ru.skypro.homework.dto.*;
 
 import lombok.RequiredArgsConstructor;
@@ -30,35 +32,43 @@ public class UserController {
 
 
     @PostMapping("/set_password")
-    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDto newPassword) {
+    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDto newPassword,Authentication authentication) {
         try {
-            userService.updatePassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());
-            return ResponseEntity.ok().body("Password updated successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(401).body("Error updating password: " + e.getMessage());
+            userService.updatePassword(newPassword, authentication);
+            return ResponseEntity.ok().build();
+        } catch (HttpClientErrorException.Unauthorized e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (HttpClientErrorException.Forbidden e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getUser() {
-        UserDto user = userService.getUserDetails();
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserDto> getUser(Authentication authentication) {
+        try {
+            return ResponseEntity.ok(userService.getUser(authentication));
+        } catch (HttpClientErrorException.Unauthorized e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto updateUser) {
+    public ResponseEntity<UserDto> updateUser(@RequestBody UpdateUserDto updateUser, Authentication authentication) {
         try {
-            UpdateUserDto updatedUser = userService.updateUser(updateUser);
-            return ResponseEntity.ok(updatedUser);
-        } catch (Exception e) {
-            return ResponseEntity.status(401).build();
+            return ResponseEntity.ok(userService.updateUser(updateUser, authentication));
+        } catch (HttpClientErrorException.Unauthorized e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
     @PatchMapping("/me/image")
-    public ResponseEntity<String> updateUserImage(@RequestBody MultipartFile image) throws IOException, IOException {
-        byte[] imageBytes = image.getBytes();
-        userService.updateUserImage(imageBytes);
-        return ResponseEntity.ok("User image updated successfully");
+    public  ResponseEntity<Void> updateUserImage(@RequestBody MultipartFile image,
+                                                 Authentication authentication) throws IOException {
+        try {
+            userService.updateUserImage(image, authentication);
+            return ResponseEntity.ok().build();
+        } catch (HttpClientErrorException.Unauthorized e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 }

@@ -12,11 +12,4 @@ public class AdDto {
     private String title;
 
 
-    public AdDto(Ad ad) {
-        this.author = ad.getAuthor();
-        this.image = ad.getImage();
-        this.pk = ad.getPk();
-        this.price = ad.getPrice();
-        this.title = ad.getTitle();
-    }
 }
