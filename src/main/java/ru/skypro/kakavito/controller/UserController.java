@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.kakavito.dto.NewPasswordDTO;
 import ru.skypro.kakavito.dto.UpdateUserDTO;
-import ru.skypro.kakavito.dto.UserDto;
+import ru.skypro.kakavito.dto.UserDTO;
 import ru.skypro.kakavito.exceptions.ImageSizeExceededException;
 import ru.skypro.kakavito.mappers.UserMapper;
-import ru.skypro.kakavito.model.User;
 import ru.skypro.kakavito.service.UserService;
 
 import java.io.IOException;
@@ -44,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getMyProfile(/*@PathVariable Long id*/) {
+    public ResponseEntity<UserDTO> getMyProfile(/*@PathVariable Long id*/) {
 //        return ResponseEntity.ok(userService.getAuthorizedUser());
         return ResponseEntity.ok(userMapper.convertToUserDTO(userService.getAuthorizedUser()));
 //                userService.findById(id);

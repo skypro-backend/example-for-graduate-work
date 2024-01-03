@@ -13,7 +13,6 @@ import ru.skypro.kakavito.dto.AdsDTO;
 import ru.skypro.kakavito.dto.CreateOrUpdateAdDTO;
 import ru.skypro.kakavito.dto.ExtendedAdDTO;
 import ru.skypro.kakavito.exceptions.AdNotFoundException;
-import ru.skypro.kakavito.exceptions.EmptyException;
 import ru.skypro.kakavito.exceptions.ImageSizeExceededException;
 import ru.skypro.kakavito.exceptions.UserNotFoundException;
 import ru.skypro.kakavito.mappers.AdMapper;
@@ -62,7 +61,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public ExtendedAdDTO findById(Long id) {
+    public ExtendedAdDTO findById(int id) {
         logger.error("AdService findById is running");
         return adRepo.findById(Math.toIntExact(id))
                 .map(adMapper::convertToExtendedAd)
@@ -72,7 +71,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public AdsDTO getAdByAuthUser() {
         User user = getAuthUser();
-        return adMapper.convertToAdsDTO(adRepo.findAllById(user.getId()));
+        return adMapper.convertToAdsDTO(adRepo.findAllById(Math.toIntExact(user.getId())));
 
     }
 
@@ -85,7 +84,7 @@ public class AdServiceImpl implements AdService {
 
 
     @Override
-    public AdDTO updateAd(Long id, CreateOrUpdateAdDTO createOrUpdateAdDTO) {
+    public AdDTO updateAd(int id, CreateOrUpdateAdDTO createOrUpdateAdDTO) {
         Ad ad = adRepo.findById(Math.toIntExact(id)).orElseThrow(() -> new AdNotFoundException("Ad not found"));
         ad.setPrice(createOrUpdateAdDTO.getPrice());
         ad.setDescription(createOrUpdateAdDTO.getDescription());
@@ -94,7 +93,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void updateImage(Long id, MultipartFile imageFile) {
+    public void updateImage(int id, MultipartFile imageFile) {
         imageService.refactorImage(id, imageFile);
     }
 

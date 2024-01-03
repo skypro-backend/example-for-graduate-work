@@ -86,7 +86,7 @@ public class ImageServiceImpl implements ImageService {
 
 
     @Override
-    public void refactorImage(Long id, MultipartFile image) {
+    public void refactorImage(int id, MultipartFile image) {
         logger.info("Photo saved {}", id);
 
         User user = userRepo.findUserById(Math.toIntExact(id));
@@ -104,7 +104,7 @@ public class ImageServiceImpl implements ImageService {
 
 
     @Override
-    public boolean checkUserImage(Long userId) {
+    public boolean checkUserImage(int userId) {
         logger.info("ImageService checkUserImage is running");
         return imageRepo.findByUserId(userId).isPresent();
     }

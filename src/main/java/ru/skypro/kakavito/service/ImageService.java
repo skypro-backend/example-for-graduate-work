@@ -17,6 +17,6 @@ public interface ImageService {
 
     void deleteImage(int imageId);
 
-    void refactorImage(Long id, MultipartFile image);
-    boolean checkUserImage(Long userId);
+    void refactorImage(int id, MultipartFile image);
+    boolean checkUserImage(int userId);
 }
