@@ -19,7 +19,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    @Column(name = "id")
-    public int pk;
+    public int id;
 
     /**
      * Внешний ключ: ID автора из таблицы 'users'
@@ -29,13 +29,13 @@ public class Comment {
     @JoinColumn(name = "author_id")
     private User user;
 
-    /**
-     * Внешний ключ: ссылка на аватар автора из таблицы 'images'
-     * @see Image
-     */
-    @OneToOne
-    @JoinColumn(name = "image_id")
-    private Image authorImage;
+//    /**
+//     * Внешний ключ: ссылка на аватар автора из таблицы 'images'
+//     * @see Image
+//     */
+//    @OneToOne
+//    @JoinColumn(name = "image_id")
+//    private Image authorImage;
 
     /**
      * Внешний ключ: ссылка на объявления из 'ads'
