@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
-import ru.skypro.homework.model.utils.CommentsDtoFound;
+import ru.skypro.homework.model.utils.CommentDtoWithHttpStatus;
 import ru.skypro.homework.service.CommentsService;
 
 @Slf4j
@@ -28,8 +28,8 @@ public class CommentsController {
     @GetMapping("/ads/{id}/comments")
     public ResponseEntity<CommentsDto> getComments(@Parameter(name = "id", description = "Advertisement identifier")
                                                    @PathVariable(name = "id") int id) {
-        CommentsDtoFound commentsDtoFound = commentsService.findCommentsRelatedToAd(id);
-        return new ResponseEntity<CommentsDto>(new CommentsDto(), HttpStatus.OK);
+        CommentsDto commentsDto = commentsService.findCommentsRelatedToAd(id);
+        return new ResponseEntity<CommentsDto>(commentsDto, HttpStatus.OK);
     }
 
 
@@ -41,13 +41,13 @@ public class CommentsController {
      *         <br>'401': Unauthorized
      *         <br>'404': Not found
      */
-
     @PostMapping("/ads/{id}/comments")
-    @PreAuthorize("")
-    public ResponseEntity<CommentDto> addComment(@PathVariable(name = "id") long id,
+    @PreAuthorize("#username == authentication.principal.username")
+    public ResponseEntity<CommentDto> addComment(@PathVariable(name = "id") int id, String username,
                                                  @RequestBody CreateOrUpdateCommentDto comment){
-        return new ResponseEntity<CommentDto>(new CommentDto(), HttpStatus.OK);
-
+        CommentDtoWithHttpStatus commentDtoWithHttpStatus = commentsService.addComment(id, username, comment);
+        return new ResponseEntity<CommentDto>(commentDtoWithHttpStatus.getCommentDto(),
+                commentDtoWithHttpStatus.getHttpStatus());
     }
 
     /**
@@ -64,26 +64,13 @@ public class CommentsController {
      *           description: Not found <br>
      */
     @DeleteMapping("/ads/{adId}/comments/{commentId}")
+    @PreAuthorize("#userName == authentication.principal.username")
     public ResponseEntity<HttpStatus> deleteComment(
             @PathVariable(name = "adId") long adId,
-            @PathVariable(name = "commentId") long commentId){
-
-        return new ResponseEntity<>(HttpStatus.OK);
+            @PathVariable(name = "commentId") long commentId, String userName) {
+        return commentsService.deleteComment(adId, commentId, userName);
     }
 
-    /*
-     *  '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Comment'
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not found*/
 
     /**
      * PATCH /ads/{adId}/comments/{commentId} <h2>Обновление комментария</h2>
@@ -103,12 +90,20 @@ public class CommentsController {
      *         <br>'404':
      *           description: Not found
      */
+    @PreAuthorize("#userName == authentication.principal.username")
     @PatchMapping("/ads/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDto> updateComment(
             @PathVariable(name = "adId") long adId,
             @PathVariable(name = "commentId") long commentId,
+            String userName,
             @RequestBody CreateOrUpdateCommentDto comment) {
-        return new ResponseEntity<>(new CommentDto(), HttpStatus.OK);
+
+        CommentDtoWithHttpStatus commentDtoWithHttpStatus =
+                commentsService.updateComment(adId, commentId, userName, comment);
+
+        return new ResponseEntity<>(
+                commentDtoWithHttpStatus.getCommentDto(),
+                commentDtoWithHttpStatus.getHttpStatus());
     }
 }
 
