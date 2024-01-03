@@ -4,6 +4,7 @@ import lombok.Data;
 import ru.skypro.homework.dto.CommentDto;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -11,34 +12,16 @@ import javax.persistence.*;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer author;
-
-    private String authorImage;
-
-    private String authorFirstName;
-
-    private Long createdAt;
-
-    private Integer pk;
+    private Integer id;
 
     private String text;
 
-    private String title;
-
-    private Integer price;
-
-    private String description;
-
-
-
-    public Comment(CommentDto commentDto) {
-        this.author = commentDto.getAuthor();
-        this.authorImage = commentDto.getAuthorImage();
-        this.authorFirstName = commentDto.getAuthorFirstName();
-        this.createdAt = commentDto.getCreatedAt();
-        this.pk = commentDto.getPk();
-        this.text = commentDto.getText();
-
-    }
+    private LocalDateTime createdAt;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
+    @ManyToOne
+    @JoinColumn(name = "ad_id")
+    private Ad ad;
 
 }
