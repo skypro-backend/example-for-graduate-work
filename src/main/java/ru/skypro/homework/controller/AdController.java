@@ -3,13 +3,17 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.service.AdService;
 
+import java.io.IOException;
 import java.util.Collection;
 
 @Slf4j
@@ -21,21 +25,17 @@ public class AdController {
 
     private final AdService adService;
 
-
     @GetMapping
-    public ResponseEntity <Collection<AdDto>> getAll() {
+    public ResponseEntity <AdsDto> getAll() {
         return ResponseEntity.ok(adService.getAll());
     }
-    @PostMapping
-    public ResponseEntity<?> addAd(@RequestBody CreateOrUpdateAdDto adDto) {
-
-            if (adService.addAd(adDto)) {
-                return ResponseEntity.status(HttpStatus.CREATED).build();
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-            }
-        }
-           // return new ResponseEntity<>(adService.addAd(adDto), HttpStatus.CREATED);
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<AdDto> createAd(@RequestPart(value = "properties") CreateOrUpdateAdDto properties,
+                                          @RequestPart("image") MultipartFile image,
+                                          Authentication authentication) throws IOException {
+        adService.createAd(properties, image, authentication);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAdDto> getAdById(@PathVariable int id) {
@@ -68,23 +68,23 @@ public class AdController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<AdsDto> getAdsForCurrentUser() {
-        try {
-            AdsDto ads = adService.getAdsForCurrentUser();
-            return ResponseEntity.ok(ads);
-        } catch (Exception e) {
-            return ResponseEntity.status(401).build();
-        }
+    public AdsDto getMyAds(Authentication authentication) {
+        return adService.getMyAds(authentication);
     }
 
     @PatchMapping("/{id}/image")
-    public ResponseEntity<Void> updateAdImage(@PathVariable int id, @RequestParam("image") MultipartFile image) {
+    public ResponseEntity<Void> updateAdImage(@PathVariable Integer id,
+                                              @RequestBody MultipartFile image,
+                                              Authentication authentication) throws IOException {
         try {
-            byte[] imageBytes = image.getBytes();
-            adService.updateAdImage(id, imageBytes);
+            adService.updateAdImage(id, image, authentication);
             return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(404).build();
+        } catch (HttpClientErrorException.Forbidden e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } catch (HttpClientErrorException.Unauthorized e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (HttpClientErrorException.NotFound e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }

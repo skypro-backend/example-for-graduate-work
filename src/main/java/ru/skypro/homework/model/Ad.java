@@ -5,6 +5,7 @@ import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.UserDto;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -12,10 +13,6 @@ import javax.persistence.*;
 public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long author;
-
-    private String image;
-
     private Integer pk;
 
     private Integer price;
@@ -23,13 +20,17 @@ public class Ad {
     private String title;
 
     private String description;
+    private String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
 
-    public Ad(AdDto adDto) {
-        this.author = adDto.getAuthor();
-        this.image = adDto.getImage();
-        this.pk = adDto.getPk();
-        this.price = adDto.getPrice();
-        this.title = adDto.getTitle();
-    }
+    @OneToMany(mappedBy = "ad")
+    private List<Comment> comments;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id")
+    private Image image;
 }
+
