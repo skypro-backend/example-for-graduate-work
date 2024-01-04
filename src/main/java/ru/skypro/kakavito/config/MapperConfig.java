@@ -25,7 +25,7 @@ public class MapperConfig {
         modelMapper.addMappings(new PropertyMap<Ad, AdDTO>() {
             @Override
             protected void configure() {
-                skip(destination.getPk());
+                skip(destination.getId());
                 skip(destination.getImage());
                 skip(destination.getAuthor());
             }
@@ -34,7 +34,7 @@ public class MapperConfig {
     modelMapper.addMappings(new PropertyMap<Ad, ExtendedAdDTO>() {
         @Override
         protected void configure() {
-            skip(destination.getPk());
+            skip(destination.getId());
             skip(destination.getImage());
             skip(destination.getPhone());
             skip(destination.getEmail());
@@ -50,7 +50,7 @@ public class MapperConfig {
             skip(destination.getAuthorImage());
             skip(destination.getAuthor());
             skip(destination.getAuthorFirstName());
-            skip(destination.getPk());
+            skip(destination.getId());
         }
     });
 
