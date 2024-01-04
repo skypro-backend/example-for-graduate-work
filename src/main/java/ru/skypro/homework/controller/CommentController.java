@@ -19,7 +19,7 @@ public class CommentController {
 
 
     @GetMapping
-    public ResponseEntity<CommentsDto> getComments (@PathVariable int adId) {
+    public ResponseEntity<CommentsDto> getComments (@PathVariable Integer adId) {
         try {
             CommentsDto comments = commentService.getComments(adId);
             return ResponseEntity.ok(comments);
@@ -39,7 +39,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable int adId, @PathVariable int commentId) {
+    public ResponseEntity<Void> deleteComment(@PathVariable Integer adId, @PathVariable Integer commentId) {
         try {
             commentService.deleteComment(adId, commentId);
             return ResponseEntity.ok().build();
@@ -49,7 +49,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity<CommentDto> updateComment(@PathVariable int adId, @PathVariable int commentId, @RequestBody CreateOrUpdateCommentDto commentDto) {
+    public ResponseEntity<CommentDto> updateComment(@PathVariable Integer adId, @PathVariable Integer commentId, @RequestBody CreateOrUpdateCommentDto commentDto) {
         try {
             CommentDto updatedComment = commentService.updateComment(adId, commentId, commentDto);
             return ResponseEntity.ok(updatedComment);

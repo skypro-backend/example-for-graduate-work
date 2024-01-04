@@ -41,8 +41,8 @@ public class CommentMapper {
         return dto;
     }
 
-    public Comment createOrUpdateCommentFromDto(CreateOrUpdateCommentDto dto, Comment comment) {
-        comment = new Comment();
+    public Comment createOrUpdateCommentFromDto(CreateOrUpdateCommentDto dto) {
+        Comment comment = new Comment();
         comment.setText(dto.getText());
         return comment;
     }

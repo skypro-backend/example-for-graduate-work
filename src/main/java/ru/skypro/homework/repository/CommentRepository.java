@@ -7,10 +7,18 @@ import org.springframework.stereotype.Repository;
 import ru.skypro.homework.model.Comment;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
-    @Query(value = "select * from comments where ad_id = :ad_id", nativeQuery = true)
-    List<Comment> findByAdId(@Param("ad_id") Integer adId);
+ @Query(value = "select * from comments where ad_id = :ad_id", nativeQuery = true)
+
+    List<Comment> findByAd_Id(@Param("ad_id") Integer adId);
+
+    Optional<Comment> findByIdAndAd_Id(Integer id, Integer adId);
+
+    boolean existsByIdAndUserEmail(Integer id, String email);
+
+    List<Comment> findByAdId(Integer adId);
 
 }

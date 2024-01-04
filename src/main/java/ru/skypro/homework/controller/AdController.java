@@ -84,7 +84,7 @@ public class AdController {
 
     @PatchMapping(value = "/{id}/image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Обновление картинки объявления", description = "updateImage", tags = {"Объявления"})
-    public ResponseEntity<?> updateImage(@Parameter(description = "ID объявления") @PathVariable("id") long id,
+    public ResponseEntity<?> updateImage(@Parameter(description = "ID объявления") @PathVariable("id") Integer id,
                                          @RequestPart("image") MultipartFile image, Authentication authentication){
         adService.updateAdImage(id,image,authentication);
         return ResponseEntity.ok().build();

@@ -26,6 +26,7 @@ import ru.skypro.homework.service.ImageService;
 @RequiredArgsConstructor
 @Slf4j
 public class AdServiceImpl implements AdService {
+
     private final AdRepository adRepository;
     private final ImageService imageService;
     private final UserService userService;
@@ -64,27 +65,9 @@ public class AdServiceImpl implements AdService {
         return null;
     }
 
-   /* @Override
-    public void updateAdImage(Long id, MultipartFile image, Authentication authentication) {
-        Ad ad = adRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Объявление с ID" + id + "не найдено"));
-        checkPermit(ad, authentication);
-        Image imageFile = ad.getImage();
-        ad.setImage(imageService.uploadImage(image));
-        imageService.removeImage(imageFile);
-        adRepository.save(ad);
-    }*/
-
-  /*  @Override
-    public AdsDTO getAdsMe(Authentication authentication) {
-        User user = new GetAuthentication().getAuthenticationUser(authentication.getName());
-        List<Ad> adList = adRepository.findAdByAuthorId(user.getId());
-        return mapAdsDto(adList);
-    }*/
 
     @Override
-//    @Transactional
-    public void updateAdImage(Long id, MultipartFile image, Authentication authentication){
+    public void updateAdImage(Integer id, MultipartFile image, Authentication authentication){
 
         Ad ad = adRepository.findById(id).orElseThrow(() ->
                 new ImageNotFoundException("Объявление с ID" + id + "не найдено"));
