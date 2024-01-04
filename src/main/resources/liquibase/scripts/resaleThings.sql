@@ -29,9 +29,7 @@ CREATE TABLE ad
      title       VARCHAR(255),
   --   image_id   bigint references image (id),
      author_id   BIGINT REFERENCES users(id),
-     author BIGINT,
-     image text,
-     pk integer
+     author BIGINT
 );
 -- Создание таблицы "comments" для хранения информации об комментариях
 CREATE TABLE comments

@@ -9,5 +9,6 @@ public class CommentsDto {
     private int count;
     private List<CommentDto> results;
 
-
+    public CommentsDto(int size, List<CommentDto> comments) {
+    }
 }
