@@ -54,9 +54,11 @@ CREATE TABLE comments
     price int,
     title text
 );
-CREATE TABLE image (
-    id SERIAL PRIMARY KEY,
-    data oid,
-    file_size BIGINT,
-    media_type VARCHAR
+CREATE TABLE image(
+    id        BIGSERIAL PRIMARY KEY,
+    file_path  varchar(255),
+    file_size  bigint,
+    media_type varchar(255),
+    data      bytea
+
 );

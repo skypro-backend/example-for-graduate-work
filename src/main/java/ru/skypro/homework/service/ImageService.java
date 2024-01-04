@@ -6,11 +6,20 @@ import ru.skypro.homework.model.Image;
 import java.io.IOException;
 
 public interface ImageService {
-    Image getById(Integer id);
+    Image uploadImage(MultipartFile imageFile);
 
-    Image saveToDataBase(MultipartFile multipartFile) throws IOException;
+    /**
+     * Удаление изображения из БД.
+     * @param image - объект изображения
+     */
 
-    void deleteImage(Image image);
+    void removeImage(Image image);
 
-    Image findById(Integer id);
+    /**
+     * Получаем изображение из БД
+     * @param id - ID изображения
+     * @return Image объект изображения
+     */
+
+    Image getImage(Long id);
 }

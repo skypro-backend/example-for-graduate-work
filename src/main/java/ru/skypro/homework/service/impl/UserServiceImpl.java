@@ -55,17 +55,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserImage(MultipartFile image, Authentication authentication) throws IOException {
+    public void updateUserImage(MultipartFile image, Authentication authentication) {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
         Image usersImage = user.getImage();
-        Image newImage = imageService.saveToDataBase(image);
+        Image newImage = imageService.uploadImage(image);
         if (user.getImage() != null) {
-            imageService.deleteImage(usersImage);
+            imageService.removeImage(usersImage);
         }
         user.setImage(newImage);
         user.setImageUrl("/images/" + newImage.getId());
         userRepository.save(user);
     }
+
+/*   @Override
+public void updateUserImage(MultipartFile image, Authentication authentication) {
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
+        Image imageFile = user.getImage();
+        user.setImage(imageService.uploadImage(image));
+        if (imageFile != null) {
+            imageService.removeImage(imageFile);
+        }
+        userRepository.save(user);
+
+    }*/
+
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);

@@ -15,28 +15,28 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
-
     @Override
-    public Image saveToDataBase(MultipartFile multipartFile) throws IOException {
+    public Image uploadImage(MultipartFile imageFile) {
         Image image = new Image();
-        image.setData(multipartFile.getBytes());
-        image.setFileSize(multipartFile.getSize());
-        image.setMediaType(multipartFile.getContentType());
-        return imageRepository.save(image);
+        try{
+            image.setData(imageFile.getBytes());
+            image.setFileSize(imageFile.getSize());
+            image.setMediaType(imageFile.getContentType());
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        image = imageRepository.save(image);
+        return image;
     }
 
     @Override
-    public void deleteImage(Image image) {
+    public void removeImage(Image image) {
         imageRepository.delete(image);
+
     }
 
     @Override
-    public Image getById(Integer id) {
-        return imageRepository.findById(id).orElseThrow(ImageNotFoundException::new);
-    }
-
-    @Override
-    public Image findById(Integer id) {
-        return imageRepository.findById(id).orElseThrow(ImageNotFoundException::new);
+    public Image getImage(Long id) {
+        return imageRepository.findById(id).orElse(new Image());
     }
 }
