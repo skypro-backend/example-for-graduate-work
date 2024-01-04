@@ -19,7 +19,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    @Column(name = "id")
-    public int id;
+    public Integer id;
 
     /**
      * Внешний ключ: ID автора из таблицы 'users'

@@ -22,10 +22,9 @@ import java.io.IOException;
 public class AdController {
     private final AdService adService;
 
-
     @GetMapping()
-    public ResponseEntity<AdsDTO> findAll() {
-        AdsDTO ads = adService.findAll();
+    public ResponseEntity<AdsDTO> findAllAds() {
+        AdsDTO ads = adService.findAllAds();
         if (ads.getCount() == 0) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -67,15 +66,15 @@ public class AdController {
     }
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateAdImage(@PathVariable int pk, @RequestBody MultipartFile image) throws IOException {
-        adService.updateImage(pk, image);
+    public ResponseEntity<Void> updateAdImage(@PathVariable int pk,
+                                              @RequestBody MultipartFile image) throws IOException {
+        adService.updateAdImage(pk, image);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReportById(@PathVariable int pk) {
-        adService.deleteAd(Math.toIntExact(pk));
+    public ResponseEntity<Void> deleteReportById(@PathVariable int id) {
+        adService.deleteAd(Math.toIntExact(id));
         return ResponseEntity.ok().build();
     }
-
 }

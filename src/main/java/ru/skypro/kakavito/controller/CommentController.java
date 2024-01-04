@@ -1,13 +1,10 @@
 package ru.skypro.kakavito.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.kakavito.dto.CommentDTO;
-import ru.skypro.kakavito.dto.CommentsDTO;
 import ru.skypro.kakavito.dto.CreateOrUpdateCommentDTO;
-import ru.skypro.kakavito.model.Comment;
 import ru.skypro.kakavito.service.CommentService;
 
 
@@ -21,35 +18,46 @@ public class CommentController {
 
 
     @GetMapping("{id}/comments")
-    public ResponseEntity<CommentsDTO> getCommentById(@PathVariable int id) {
-        return new ResponseEntity<>(commentService.getAllByCommentById(id), HttpStatus.OK);
+    public ResponseEntity<?> getCommentsById(@PathVariable int id) {
+        return ResponseEntity.ok(commentService.getAllByCommentById(id));
+//        return new ResponseEntity<>(commentService.getAllByCommentById(id), HttpStatus.OK);
     }
 
     @PostMapping("{id}/comments")
-    public ResponseEntity<CommentDTO> createComments(@PathVariable int id,
+    public ResponseEntity<?> createComments(@PathVariable int id,
                                                      @RequestBody CreateOrUpdateCommentDTO text) {
-        if (text == null) {
+        CommentDTO commentDTO = commentService.createComment(id, text);
+        if (commentDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<>(commentService.createComment(id, text),HttpStatus.OK);
+        return ResponseEntity.ok(commentDTO);
     }
 
+//        if (text == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        return ResponseEntity.ok(commentService.createComment(text));
+//        return new ResponseEntity<>(commentService.createComment(id, text),HttpStatus.OK);
+//    }
+
     @DeleteMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> deleteComments(@PathVariable Long adId, @PathVariable Long commentId) {
-        Comment comment = commentService.findById(commentId);
-        if (comment == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return commentService.deleteComment(adId, commentId);
+    public ResponseEntity<?> deleteComment(@PathVariable int adId, @PathVariable int commentId) {
+        commentService.deleteComment(adId, commentId);
+//        Comment comment = commentService.findById(commentId);
+//        if (comment == null) {
+            return ResponseEntity.ok().build();
+//        }
+//        return commentService.deleteComment(adId, commentId);
     }
 
     @PatchMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Long adId,
-                                                 @PathVariable Long commentId,
-                                                 @RequestBody CreateOrUpdateCommentDTO text) {
+    public ResponseEntity<?> updateComment(@PathVariable int adId,
+                                           @PathVariable int commentId,
+                                           @RequestBody CreateOrUpdateCommentDTO text) {
         if (text == null) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<>(commentService.updateComment(adId, commentId, text), HttpStatus.OK);
+        return ResponseEntity.ok(text);
+//                new ResponseEntity<>(commentService.updateComment(adId, commentId, text), HttpStatus.OK);
     }
 }

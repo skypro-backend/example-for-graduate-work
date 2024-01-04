@@ -10,11 +10,11 @@ import ru.skypro.kakavito.exceptions.ImageSizeExceededException;
 import java.io.IOException;
 
 public interface AdService {
-    AdsDTO findAll();
+    AdsDTO findAllAds();
     ExtendedAdDTO findById(int id);
     AdsDTO getAdByAuthUser();
     AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile imageFile) throws IOException, ImageSizeExceededException;
     AdDTO updateAd(int id, CreateOrUpdateAdDTO createOrUpdateAdDTO);
-    void updateImage(int id, MultipartFile imageFile);
+    void updateAdImage(int id, MultipartFile imageFile) throws IOException;
     void deleteAd(int ad);
 }
