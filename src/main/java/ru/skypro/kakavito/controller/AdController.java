@@ -56,9 +56,9 @@ public class AdController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AdDTO> updateAd(@PathVariable int pk,
+    public ResponseEntity<AdDTO> updateAd(@PathVariable int id,
                                           @RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
-        AdDTO updatedAd = adService.updateAd(pk, createOrUpdateAdDTO);
+        AdDTO updatedAd = adService.updateAd(id, createOrUpdateAdDTO);
         if (updatedAd == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -3,6 +3,7 @@ package ru.skypro.kakavito.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import ru.skypro.kakavito.model.Ad;
 import ru.skypro.kakavito.model.User;
 import ru.skypro.kakavito.model.Image;
 import ru.skypro.kakavito.repository.AdRepo;
+import ru.skypro.kakavito.repository.ImageRepo;
 import ru.skypro.kakavito.repository.UserRepo;
 import ru.skypro.kakavito.service.AdService;
 import ru.skypro.kakavito.service.ImageService;
@@ -31,6 +33,7 @@ public class AdServiceImpl implements AdService {
     private final AdMapper adMapper;
     private final AdRepo adRepo;
     private final UserRepo userRepo;
+    private final ImageRepo imageRepo;
     private final ImageService imageService;
     private final Logger logger = LoggerFactory.getLogger(AdServiceImpl.class);
 
@@ -98,19 +101,25 @@ public class AdServiceImpl implements AdService {
     }
 
 
+    @PreAuthorize("@webSecurityServiceImpl.canAccessInAd(#id, principal.username) or hasRole('ADMIN')")
     @Override
     public AdDTO updateAd(int id, CreateOrUpdateAdDTO createOrUpdateAdDTO) {
-        Ad ad = adRepo.findById(Math.toIntExact(id)).orElseThrow(() -> new AdNotFoundException("Ad not found"));
-        ad.setPrice(createOrUpdateAdDTO.getPrice());
-        ad.setDescription(createOrUpdateAdDTO.getDescription());
-        ad.setTitle(createOrUpdateAdDTO.getTitle());
-        return adMapper.convertToAdDTO(ad);
+        logger.info("AdService updateAd is running");
+        Ad result = adRepo.findById(id).orElse(null);
+        if(result == null){
+            return null;
+        }
+        result.setPrice(createOrUpdateAdDTO.getPrice());
+        result.setDescription(createOrUpdateAdDTO.getDescription());
+        result.setTitle(createOrUpdateAdDTO.getTitle());
+        return adMapper.convertToAdDTO(adRepo.save(result));
     }
 
     @Override
     public void updateAdImage(int id, MultipartFile imageFile) {
         imageService.updateImage(adRepo.findById(id).orElseThrow(() ->
         new AdNotFoundException("Ad not found")).getId(), imageFile);
+
     }
 
     @Override
