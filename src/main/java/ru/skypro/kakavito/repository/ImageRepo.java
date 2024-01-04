@@ -13,7 +13,7 @@ public interface ImageRepo extends JpaRepository<Image, Integer> {
 
     Optional<Image> findByUserId(int userId);
 
-    Optional<Image> findImageByAdPk(int adId);
+//    Optional<Image> findImageByAdId(int adId);
 
     @Query(value = "SELECT file_path FROM images WHERE id = :id", nativeQuery = true)
     String findFilePathById(int id);

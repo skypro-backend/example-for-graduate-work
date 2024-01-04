@@ -8,10 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.kakavito.dto.AdDTO;
-import ru.skypro.kakavito.dto.AdsDTO;
-import ru.skypro.kakavito.dto.CreateOrUpdateAdDTO;
-import ru.skypro.kakavito.dto.ExtendedAdDTO;
+import ru.skypro.kakavito.dto.*;
 import ru.skypro.kakavito.exceptions.AdNotFoundException;
 import ru.skypro.kakavito.exceptions.ImageSizeExceededException;
 import ru.skypro.kakavito.exceptions.UserNotFoundException;
@@ -32,49 +29,65 @@ import java.io.IOException;
 public class AdServiceImpl implements AdService {
 
     private final AdMapper adMapper;
-
     private final AdRepo adRepo;
-
     private final UserRepo userRepo;
-
     private final ImageService imageService;
-
     private final Logger logger = LoggerFactory.getLogger(AdServiceImpl.class);
 
-
+    /**
+     * Получает все объявления из репозитория.
+     *
+     * @return список всех объявлений.
+     */
     @Override
-    public AdsDTO findAll() {
-        logger.info("AdService findAll is running");
+    public AdsDTO findAllAds() {
         AdsDTO adsDTO = adMapper.convertToAdsDTO(adRepo.findAll());
-        adsDTO.getCount();
+        logger.info("AdService findAll is running");
+//        adsDTO.getCount();
         return adsDTO;
     }
 
+    /**
+     * Создает новое объявление.
+     *
+     * @param createOrUpdateAdDTO DTO для создания объявления.
+     * @param imageFile фотография предмета
+     * @return созданное объявление.
+     */
     @Override
     public AdDTO addAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, MultipartFile imageFile) throws IOException, ImageSizeExceededException {
-        logger.info("AdService createAd is running");
         Ad ad = adMapper.convertCreatDTOToAd(createOrUpdateAdDTO);
         ad.setUser(getAuthUser());
         Ad savedAd = adRepo.save(ad);
         Image image = imageService.upLoadImage(imageFile);
         savedAd.setImage(image);
         adRepo.save(savedAd);
+        logger.info("AdService createAd is running");
         return adMapper.convertToAdDTO(savedAd);
     }
 
+    /**
+     * Получает объявление по его идентификатору.
+     *
+     * @param id идентификатор объявления.
+     * @return объявление.
+     * @throws AdNotFoundException если объявление не найдено.
+     */
     @Override
     public ExtendedAdDTO findById(int id) {
-        logger.error("AdService findById is running");
         return adRepo.findById(Math.toIntExact(id))
                 .map(adMapper::convertToExtendedAd)
-                .orElseThrow(() -> new AdNotFoundException("Ad not found"));
+                .orElseThrow(() -> {
+                    logger.error("AdService findById is running");
+                    return new AdNotFoundException("Ad not found");
+                });
     }
+
 
     @Override
     public AdsDTO getAdByAuthUser() {
         User user = getAuthUser();
         return adMapper.convertToAdsDTO(adRepo.findAllById(Math.toIntExact(user.getId())));
-
     }
 
     public User getAuthUser() {
@@ -95,8 +108,9 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void updateImage(int id, MultipartFile imageFile) {
-        imageService.refactorImage(id, imageFile);
+    public void updateAdImage(int id, MultipartFile imageFile) {
+        imageService.updateImage(adRepo.findById(id).orElseThrow(() ->
+        new AdNotFoundException("Ad not found")).getId(), imageFile);
     }
 
     @Override
@@ -104,5 +118,6 @@ public class AdServiceImpl implements AdService {
         adRepo.findById(id)
                 .orElseThrow(() -> new AdNotFoundException("Ad not found"));
         adRepo.deleteById(id);
+        logger.info("AdService deleteAd is running");
     }
 }

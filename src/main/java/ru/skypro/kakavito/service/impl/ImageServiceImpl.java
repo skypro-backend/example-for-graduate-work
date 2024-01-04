@@ -86,7 +86,7 @@ public class ImageServiceImpl implements ImageService {
 
 
     @Override
-    public void refactorImage(int id, MultipartFile image) {
+    public void updateImage(int id, MultipartFile image) {
         logger.info("Photo saved {}", id);
 
         User user = userRepo.findUserById(Math.toIntExact(id));
