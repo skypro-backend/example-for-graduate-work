@@ -35,6 +35,7 @@ public class UserController {
 
     /**
      * Запрос на изменение пароля
+     *
      * @param newPasswordDTO
      * @param authentication
      */
@@ -52,6 +53,7 @@ public class UserController {
 
     /**
      * Запрос на получение информации об авторизированном пользователе
+     *
      * @return UserDTO
      * @see UserDTO
      */
@@ -64,6 +66,7 @@ public class UserController {
 
     /**
      * Запрос на редактирование данных зарегестрированного пользователя
+     *
      * @param updateUserDTO
      * @return UpdateUserDTO
      * @see UpdateUserDTO
@@ -79,6 +82,7 @@ public class UserController {
 
     /**
      * Запрос на редактирование аватара пользователя
+     *
      * @param image
      * @param userDetails
      * @throws IOException
