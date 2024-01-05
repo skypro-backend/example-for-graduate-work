@@ -30,21 +30,22 @@ public class AdController {
     private final ImageService imageService;
 
     @GetMapping
-    public ResponseEntity <AdsDto> getAll() {
-        return ResponseEntity.ok(adService.getAll());
+    public ResponseEntity <AdsDto> getAllAds() {
+        return ResponseEntity.ok(adService.getAllAds());
     }
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<AdDto> createAd(@RequestPart(value = "properties") CreateOrUpdateAdDto properties,
+    public ResponseEntity<AdDto> addAd(@RequestPart(value = "properties") CreateOrUpdateAdDto properties,
                                           @RequestPart("image") MultipartFile image,
                                           Authentication authentication) throws IOException {
-        adService.createAd(properties, image, authentication);
+        adService.addAd(properties, image, authentication);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAdDto> getAdById(@PathVariable int id) {
+    @Operation(summary = "Получение информации об объявлении", description = "getAds", tags = {"Объявления"})
+    public ResponseEntity<ExtendedAdDto> getAds(@PathVariable int id) {
         try {
-            ExtendedAdDto ad = adService.getAdById(id);
+            ExtendedAdDto ad = adService.getAds(id);
             return ResponseEntity.ok(ad);
         } catch (Exception e) {
             return ResponseEntity.status(404).build();
@@ -52,9 +53,9 @@ public class AdController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAd(@PathVariable int id) {
+    public ResponseEntity<Void> removeAd(@PathVariable int id) {
         try {
-            adService.deleteAd(id);
+            adService.removeAd(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.status(404).build();
@@ -62,9 +63,9 @@ public class AdController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AdDto> updateAd(@PathVariable int id, @RequestBody CreateOrUpdateAdDto adDto) {
+    public ResponseEntity<AdDto> updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAdDto adDto) {
         try {
-            AdDto updatedAd = adService.updateAd(id, adDto);
+            AdDto updatedAd = adService.updateAds(id, adDto);
             return ResponseEntity.ok(updatedAd);
         } catch (Exception e) {
             return ResponseEntity.status(404).build();
@@ -81,7 +82,7 @@ public class AdController {
     @Operation(summary = "Обновление картинки объявления", description = "updateImage", tags = {"Объявления"})
     public ResponseEntity<?> updateImage(@Parameter(description = "ID объявления") @PathVariable("id") Integer id,
                                          @RequestPart("image") MultipartFile image, Authentication authentication){
-        adService.updateAdImage(id,image,authentication);
+        adService.updateImage(id,image,authentication);
         return ResponseEntity.ok().build();
     }
     @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE,
@@ -93,4 +94,5 @@ public class AdController {
         byte[] image = imageService.getImage(id).getData();
         return ResponseEntity.ok(image);
     }
+
 }

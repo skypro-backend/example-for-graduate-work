@@ -48,14 +48,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePassword(NewPasswordDto newPasswordDto, Authentication authentication) {
+    public void setPassword (NewPasswordDto newPasswordDto, Authentication authentication) {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
         String oldPassword = newPasswordDto.getCurrentPassword();
         String newPassword = newPasswordDto.getNewPassword();
         manager.changePassword(oldPassword, newPassword, user);
     }
 
-    @Override
+   @Override
     public void updateUserImage(MultipartFile image, Authentication authentication) {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
         Image usersImage = user.getImage();
@@ -67,7 +67,8 @@ public class UserServiceImpl implements UserService {
         user.setImageUrl("/images/" + newImage.getId());
         userRepository.save(user);
     }
- /*   public byte[] updateUserImage(MultipartFile image, Authentication authentication) throws IOException {
+/*    @Override
+   public byte[] updateUserImage(MultipartFile image, Authentication authentication) throws IOException {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
         Image usersImage = user.getImage();
         Image newImage = imageService.uploadImage(image);

@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ public class CommentController {
 
 
     @GetMapping
+    @Operation(summary = "Получение комментариев объявления", description = "getComments", tags = {"Комментарии"})
     public ResponseEntity<CommentsDto> getComments (@PathVariable Integer adId) {
         try {
             CommentsDto comments = commentService.getComments(adId);
@@ -29,6 +31,7 @@ public class CommentController {
     }
 
     @PostMapping
+    @Operation(summary = "Добавление комментария к объявлению", description = "ddComment", tags = {"Комментарии"})
     public ResponseEntity<CommentDto> addComment(@PathVariable Integer adId, @RequestBody CreateOrUpdateCommentDto commentDto) {
         try {
             CommentDto comment = commentService.addComment(adId, commentDto);

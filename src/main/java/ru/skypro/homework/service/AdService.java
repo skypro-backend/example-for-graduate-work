@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.util.Collection;
 
 public interface AdService {
-    AdsDto getAll();
-    AdDto createAd(CreateOrUpdateAdDto ad, MultipartFile imageBytes, Authentication authentication) throws IOException;
-    ExtendedAdDto getAdById(int id);
-    void deleteAd(int id);
-    AdDto updateAd(int id, CreateOrUpdateAdDto createOrUpdateAdDto);
-    void updateAdImage(Integer id, MultipartFile image, Authentication authentication);
-    AdsDto getMyAds(Authentication authentication);
+   AdsDto getAllAds();
 
+    AdDto addAd(CreateOrUpdateAdDto ad, MultipartFile imageBytes, Authentication authentication) throws IOException;
+    ExtendedAdDto getAds (int id);
+    void removeAd (int id);
+    AdDto updateAds(int id, CreateOrUpdateAdDto createOrUpdateAdDto);
+    void updateImage(Integer id, MultipartFile image, Authentication authentication);
+    AdsDto getMyAds(Authentication authentication);
 }
