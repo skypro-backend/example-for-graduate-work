@@ -25,14 +25,24 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean login(String userName, String password) {
-        if ("JavaKidsTeam".equals(userName)) {
+        logger.info("User name: " + userName + " | Password: " + password);
+        if ("Java@Kids.Team".equals(userName)) {
             return true;
         } //todo: delete upon completion of development
         if (!manager.userExists(userName)) {
             return false;
         }
         UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
+        logger.info("password: " + userDetails.getPassword()
+                + " | matches: " + encoder.matches(password, userDetails.getPassword()));
+        String encodedPassword = encoder.encode(password);
+        logger.info("Provided password: " + password);
+        logger.info("Encoded password: " + encodedPassword);
+        logger.info("Password in database: " + userDetails.getPassword());
+        boolean matches = encoder.matches(password, userDetails.getPassword());
+        logger.info("Password matches: " + matches);
+        /* TODO: remove useless logger statements */
+        return matches;
     }
 
     @Override

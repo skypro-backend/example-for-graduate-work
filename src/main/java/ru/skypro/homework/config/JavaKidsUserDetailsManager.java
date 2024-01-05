@@ -1,6 +1,8 @@
 package ru.skypro.homework.config;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -28,6 +30,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JavaKidsUserDetailsManager implements UserDetailsManager {
 
+    private final Logger logger = LoggerFactory.getLogger(JavaKidsUserDetailsManager.class);
+
     private final UserRepository userRepository;
 
     /**
@@ -45,9 +49,7 @@ public class JavaKidsUserDetailsManager implements UserDetailsManager {
         User newUser = new User(0L, "", "", "",
                 userDetails.getUsername(), Role.USER, "", userDetails.getPassword());
 
-
         userRepository.save(newUser);
-
     }
 
     /**
@@ -58,6 +60,7 @@ public class JavaKidsUserDetailsManager implements UserDetailsManager {
      * @param registerDto new user data from front end
      */
     public void createUser(RegisterDto registerDto) {
+        logger.info(registerDto.toString());
         if (userExists(registerDto.getUsername())) {
             return;
         }
@@ -104,6 +107,7 @@ public class JavaKidsUserDetailsManager implements UserDetailsManager {
      */
     @Override
     public boolean userExists(String username) {
+        logger.info("User name : " + username);
         return userRepository.findByEmail(username).isPresent();
     }
 
