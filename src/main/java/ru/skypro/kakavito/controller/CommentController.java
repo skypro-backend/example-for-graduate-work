@@ -54,10 +54,11 @@ public class CommentController {
     public ResponseEntity<?> updateComment(@PathVariable int adId,
                                            @PathVariable int commentId,
                                            @RequestBody CreateOrUpdateCommentDTO text) {
+        commentService.updateComment(adId, commentId, text);
         if (text == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(text);
+        return ResponseEntity.ok().build();
 //                new ResponseEntity<>(commentService.updateComment(adId, commentId, text), HttpStatus.OK);
     }
 }

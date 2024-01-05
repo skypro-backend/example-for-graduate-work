@@ -26,6 +26,7 @@ public class CommentMapper {
         CommentDTO commentDTO = modelMapper.map(comment, CommentDTO.class);
         commentDTO.setPk(comment.getId());
         commentDTO.setCreatedAt(comment.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        commentDTO.setText(comment.getText());
         User user = comment.getUser();
         if (user != null) {
             commentDTO.setAuthor(Math.toIntExact(user.getId()));
