@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import ru.skypro.kakavito.dto.CommentDTO;
 import ru.skypro.kakavito.dto.CommentsDTO;
 import ru.skypro.kakavito.dto.CreateOrUpdateCommentDTO;
-import ru.skypro.kakavito.dto.Role;
 import ru.skypro.kakavito.exceptions.AdNotFoundException;
 import ru.skypro.kakavito.exceptions.CommentNotFoundException;
 import ru.skypro.kakavito.exceptions.UserNotAuthorizedException;
@@ -88,8 +87,6 @@ public class CommentServiceImpl implements CommentService {
      *
      * @param adId Id объявления
      * @param commentId Id комментария
-     * @throws CommentNotFoundException   если комментария с переданным Id не существует
-     * @throws UserNotAuthorizedException если пользователь не является автором комментария и не админ
      */
     @PreAuthorize("@webSecurityServiceImpl.canAccessInAd(#id, principal.username) or hasRole('ADMIN')")
     @Override
