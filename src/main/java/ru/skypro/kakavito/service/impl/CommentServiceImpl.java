@@ -3,6 +3,7 @@ package ru.skypro.kakavito.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import ru.skypro.kakavito.dto.CommentDTO;
 import ru.skypro.kakavito.dto.CommentsDTO;
 import ru.skypro.kakavito.dto.CreateOrUpdateCommentDTO;
-import ru.skypro.kakavito.dto.Role;
 import ru.skypro.kakavito.exceptions.AdNotFoundException;
 import ru.skypro.kakavito.exceptions.CommentNotFoundException;
 import ru.skypro.kakavito.exceptions.UserNotAuthorizedException;
@@ -87,18 +87,12 @@ public class CommentServiceImpl implements CommentService {
      *
      * @param adId Id объявления
      * @param commentId Id комментария
-     * @throws CommentNotFoundException   если комментария с переданным Id не существует
-     * @throws UserNotAuthorizedException если пользователь не является автором комментария и не админ
      */
+    @PreAuthorize("@webSecurityServiceImpl.canAccessInComment(#id, principal.username) or hasRole('ADMIN')")
     @Override
     public void deleteComment(int adId, int commentId) {
         logger.info("Comment deleteComment is running");
-        if (isCurrentUserAuthorized(commentId)) {
             commentRepo.deleteById(Math.toIntExact(commentId));
-        } else {
-            throw new UserNotAuthorizedException("У пользователя c id: " + getCurrentUser().getId() +
-                    " недостаточно прав для удаления комментария: " + commentId);
-        }
     }
 
     /**
@@ -108,28 +102,19 @@ public class CommentServiceImpl implements CommentService {
      * @param commentId id комментария
      * @param text DTO объект, представляющий обновленный комментарий
      * @return обновленный CommentDTO
-     * @throws CommentNotFoundException   если комментария с переданным Id не существует
-     * @throws UserNotAuthorizedException если пользователь не является автором комментария и не админ
      */
+    @PreAuthorize("@webSecurityServiceImpl.canAccessInComment(#id, principal.username) or hasRole('ADMIN')")
     @Override
     public CommentDTO updateComment(int adId,
                                  int commentId,
                                  CreateOrUpdateCommentDTO text) {
         logger.info("Comment updateComment is running");
-        checkIfCommentExist(commentId);
-        if (isCurrentUserAuthorized(commentId)) {
-            Comment commentToUpdate = commentRepo.findById(commentId).get();
-            commentToUpdate.setText(text.getText());
-            commentToUpdate.setCreatedAt(LocalDateTime.now());
-            return commentMapper.toDto(commentRepo.save(commentToUpdate));
+        Comment result = commentRepo.findById(commentId).orElse(null);
+        assert result != null;
+        result.setText(text.getText());
+        result.setCreatedAt(LocalDateTime.now());
+        return commentMapper.toDto(commentRepo.save(result));
         }
-        throw new UserNotAuthorizedException("У пользователя c id: " + getCurrentUser().getId() +
-                " недостаточно прав для редактирования комментария: " + commentId);
-    }
-//        final var comment = commentRepo.findById(Math.toIntExact(commentId)).orElseThrow();
-//        comment.setText(String.valueOf(text));
-//        return commentRepo.save(comment);
-//    }
 
     /**
      * Метод, который возвращает текущего пользователя
@@ -141,24 +126,6 @@ public class CommentServiceImpl implements CommentService {
         String email = ((UserDetails) ((org.springframework.security.core.Authentication) authentication).getPrincipal()).getUsername();
         return userRepo.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User with email: " + email + " is not found"));
-    }
-
-    /**
-     * Метод, который определяет, уполномочен ли текущий пользователь осуществлять
-     * редактирование и удаление комментария (пользователь вправе делать это
-     * в случае, если он является автором данного комментария либо имеет роль админ).
-     *
-     * @param commentId Id комментария
-     * @return true, если текущий пользователь - это автор комментария (или админ),
-     * false - если нет.
-     * @see Role
-     */
-    private boolean isCurrentUserAuthorized(int commentId) {
-        User currentUser = getCurrentUser();
-        User commentAuthor = userRepo.findById(commentRepo.findAuthorIdById(commentId)
-                        .orElseThrow(() -> new CommentNotFoundException("Комментарий с id: " + commentId + " не найден")))
-                .orElseThrow(() -> new UserNotFoundException("Пользователь, написавший комментария с id: " + commentId + " не найден"));
-        return currentUser.equals(commentAuthor) || currentUser.getRole() == Role.ADMIN;
     }
 
     private void checkIfCommentExist(int commentId) {
