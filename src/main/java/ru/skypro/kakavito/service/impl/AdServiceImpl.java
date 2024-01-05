@@ -115,6 +115,7 @@ public class AdServiceImpl implements AdService {
         return adMapper.convertToAdDTO(adRepo.save(result));
     }
 
+    @PreAuthorize("@webSecurityServiceImpl.canAccessInAd(#id, principal.username) or hasRole('ADMIN')")
     @Override
     public void updateAdImage(int id, MultipartFile imageFile) {
         imageService.updateImage(adRepo.findById(id).orElseThrow(() ->
@@ -122,6 +123,7 @@ public class AdServiceImpl implements AdService {
 
     }
 
+    @PreAuthorize("@webSecurityServiceImpl.canAccessInAd(#id, principal.username) or hasRole('ADMIN')")
     @Override
     public void deleteAd(int id) {
         adRepo.findById(id)
