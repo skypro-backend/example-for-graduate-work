@@ -1,6 +1,9 @@
 package ru.skypro.kakavito.exceptions;
 
-public class ImageNotFoundException extends RuntimeException{
+/**
+ * Создание исключения для отметки, что изображение не найдено
+ */
+public class ImageNotFoundException extends RuntimeException {
     public ImageNotFoundException(String message) {
         super(message);
     }

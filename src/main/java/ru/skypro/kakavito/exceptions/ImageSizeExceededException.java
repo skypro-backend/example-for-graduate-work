@@ -1,5 +1,8 @@
 package ru.skypro.kakavito.exceptions;
 
+/**
+ * Создание исключения для отметки, что изображение слишком большое
+ */
 public class ImageSizeExceededException extends Throwable {
     public ImageSizeExceededException(String message, long MAX_SIZE) {
     }
