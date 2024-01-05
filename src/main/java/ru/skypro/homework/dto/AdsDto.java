@@ -12,5 +12,5 @@ import java.util.List;
 @Builder
 public class AdsDto {
     private Integer count;
-    private List<AdDto> result;
+    private List<AdDto> results;
 }
