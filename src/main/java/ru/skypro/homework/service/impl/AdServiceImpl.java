@@ -60,7 +60,9 @@ public class AdServiceImpl implements AdService {
     }
     @Override
     public ExtendedAdDto getAdById(int id) {
-        return null;
+        return adRepository.findById(id)
+                .map(AdMapper::adToExtendedAdDto)
+                .orElseThrow(AdNotFoundException::new);
     }
     @Override
     public void deleteAd(int id) {

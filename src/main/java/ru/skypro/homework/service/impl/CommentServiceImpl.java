@@ -37,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentsDto getComments(Integer adId) {
-        List<CommentDto> comments = commentRepository.findByAd_Pk(adId).stream()
+        List<CommentDto> comments = commentRepository.findByAd_Id(adId).stream()
                 .map(CommentMapper::commentToCommentDto)
                 .collect(Collectors.toList());
 
@@ -65,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment( Integer commentId, Integer adId) {
-        commentRepository.findByIdAndAd_Pk(commentId, adId)
+        commentRepository.findByIdAndAd_Id(commentId, adId)
                 .ifPresentOrElse(comment -> commentRepository.deleteById(comment.getId()), () -> {
                     throw new CommentNotFoundException();
                 });
@@ -73,7 +73,7 @@ public class CommentServiceImpl implements CommentService {
 
  @Override
     public CommentDto updateComment (Integer adId, Integer commentId, CreateOrUpdateCommentDto commentDto) {
-     return commentRepository.findByIdAndAd_Pk(commentId, adId)
+     return commentRepository.findByIdAndAd_Id(commentId, adId)
              .map(comment -> {
                  if (commentDto.getText() != null) {
                      comment.setText(commentDto.getText());

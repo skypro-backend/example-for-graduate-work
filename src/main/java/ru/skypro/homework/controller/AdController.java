@@ -71,11 +71,6 @@ public class AdController {
         }
     }
 
-/*    @GetMapping("/me")
-    public AdsDto getMyAds(Authentication authentication) {
-        return adService.getMyAds(authentication);
-    }*/
-
     @GetMapping("/me")
     @Operation(summary = "Получение объявлений авторизованного пользователя", description = "getAdsMe", tags = {"Объявления"})
     public ResponseEntity<AdsDto> getAdsMe(Authentication authentication) {

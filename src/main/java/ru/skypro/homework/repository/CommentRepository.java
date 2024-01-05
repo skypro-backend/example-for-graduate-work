@@ -13,8 +13,8 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
  @Query(value = "select * from comments where ad_id = :ad_id", nativeQuery = true)
 
-    List<Comment> findByAd_Pk(@Param("ad_id") Integer adId);
+    List<Comment> findByAd_Id(@Param("ad_id") Integer adId);
 
-    Optional<Comment> findByIdAndAd_Pk (Integer id, Integer adId);
+    Optional<Comment> findByIdAndAd_Id (Integer id, Integer adId);
 
    }

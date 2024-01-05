@@ -14,6 +14,7 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Optional;
 
 
@@ -66,17 +67,18 @@ public class UserServiceImpl implements UserService {
         user.setImageUrl("/images/" + newImage.getId());
         userRepository.save(user);
     }
-
-/*   @Override
-public void updateUserImage(MultipartFile image, Authentication authentication) {
+ /*   public byte[] updateUserImage(MultipartFile image, Authentication authentication) throws IOException {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
-        Image imageFile = user.getImage();
-        user.setImage(imageService.uploadImage(image));
-        if (imageFile != null) {
-            imageService.removeImage(imageFile);
+        Image usersImage = user.getImage();
+        Image newImage = imageService.uploadImage(image);
+        byte[] imageBytes = image.getBytes();
+        if (user.getImage() != null) {
+            imageService.removeImage(usersImage);
         }
+        user.setImage(newImage);
+        user.setImageUrl("/images/" + newImage.getId());
         userRepository.save(user);
-
+        return imageBytes;
     }*/
 
     @Override
