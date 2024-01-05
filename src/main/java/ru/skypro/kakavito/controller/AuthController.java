@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.kakavito.dto.Login;
 import ru.skypro.kakavito.service.AuthService;
 
+/**
+ * Класс для управления потоком данных при авторизации пользователя
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -19,6 +22,11 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * Запрос на проверку авторизации пользователя
+     *
+     * @param login
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {

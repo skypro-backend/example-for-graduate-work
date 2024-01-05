@@ -13,7 +13,6 @@ import ru.skypro.kakavito.dto.CommentsDTO;
 import ru.skypro.kakavito.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.kakavito.exceptions.AdNotFoundException;
 import ru.skypro.kakavito.exceptions.CommentNotFoundException;
-import ru.skypro.kakavito.exceptions.UserNotAuthorizedException;
 import ru.skypro.kakavito.exceptions.UserNotFoundException;
 import ru.skypro.kakavito.mappers.CommentMapper;
 import ru.skypro.kakavito.model.Comment;
@@ -68,19 +67,6 @@ public class CommentServiceImpl implements CommentService {
         newComment.setUser(getCurrentUser());
         return commentMapper.toDto(commentRepo.save(newComment));
     }
-
-//            CreateOrUpdateCommentDTO text) {
-//        logger.info("Comment createComment is running");
-//        final var comment = commentRepo.getCommentByText(String.valueOf(text)).orElseThrow();
-//        comment.setText(String.valueOf(text));
-//        return commentRepo.save(comment);
-//    }
-
-//    @Override
-//    public CommentDTO findById(int commentId) {
-//        logger.info("Comment findById is running");
-//        return commentRepo.findById(Math.toIntExact(commentId)).orElseThrow(() -> new CommentNotFoundException("Comment not found"));
-//    }
 
     /**
      * Удаление ранее опубликованного комментария, принадлежащего текущему пользователю

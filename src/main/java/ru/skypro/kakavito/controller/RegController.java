@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.kakavito.dto.Register;
 import ru.skypro.kakavito.service.RegService;
 
+/**
+ * Класс для управления потоком данных при регистрации
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -19,6 +22,12 @@ public class RegController {
 
     private final RegService regService;
 
+    /**
+     * Запрос на регистрацию и создание нового пользователя
+     *
+     * @param register
+     * @see ru.skypro.kakavito.model.User
+     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) {
         if (regService.register(register)) {
