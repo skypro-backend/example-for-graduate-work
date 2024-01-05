@@ -88,7 +88,7 @@ public class CommentServiceImpl implements CommentService {
      * @param adId Id объявления
      * @param commentId Id комментария
      */
-    @PreAuthorize("@webSecurityServiceImpl.canAccessInAd(#id, principal.username) or hasRole('ADMIN')")
+    @PreAuthorize("@webSecurityServiceImpl.canAccessInComment(#id, principal.username) or hasRole('ADMIN')")
     @Override
     public void deleteComment(int adId, int commentId) {
         logger.info("Comment deleteComment is running");
@@ -103,7 +103,7 @@ public class CommentServiceImpl implements CommentService {
      * @param text DTO объект, представляющий обновленный комментарий
      * @return обновленный CommentDTO
      */
-    @PreAuthorize("@webSecurityServiceImpl.canAccessInAd(#id, principal.username) or hasRole('ADMIN')")
+    @PreAuthorize("@webSecurityServiceImpl.canAccessInComment(#id, principal.username) or hasRole('ADMIN')")
     @Override
     public CommentDTO updateComment(int adId,
                                  int commentId,
