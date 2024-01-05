@@ -22,10 +22,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import ru.skypro.homework.service.ImageService;
 
+import static ru.skypro.homework.dto.AdsDto.*;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AdServiceImpl implements AdService {
+
     private final AdRepository adRepository;
     private final ImageService imageService;
     private final UserService userService;
@@ -35,7 +38,11 @@ public class AdServiceImpl implements AdService {
         List<AdDto> allAds = adRepository.findAll().stream()
                 .map(AdMapper::mapToAdDto)
                 .collect(Collectors.toList());
-        return new AdsDto(allAds.size(), allAds);
+        return AdsDto.builder()
+                .count(allAds.size())
+                .result(allAds)
+                .build();
+        /*new AdsDto(allAds.size(), allAds);*/
     }
     @Override
     public AdDto createAd(CreateOrUpdateAdDto AdDto, MultipartFile image, Authentication authentication) throws IOException {
@@ -64,27 +71,9 @@ public class AdServiceImpl implements AdService {
         return null;
     }
 
-   /* @Override
-    public void updateAdImage(Long id, MultipartFile image, Authentication authentication) {
-        Ad ad = adRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Объявление с ID" + id + "не найдено"));
-        checkPermit(ad, authentication);
-        Image imageFile = ad.getImage();
-        ad.setImage(imageService.uploadImage(image));
-        imageService.removeImage(imageFile);
-        adRepository.save(ad);
-    }*/
-
-  /*  @Override
-    public AdsDTO getAdsMe(Authentication authentication) {
-        User user = new GetAuthentication().getAuthenticationUser(authentication.getName());
-        List<Ad> adList = adRepository.findAdByAuthorId(user.getId());
-        return mapAdsDto(adList);
-    }*/
 
     @Override
-//    @Transactional
-    public void updateAdImage(Long id, MultipartFile image, Authentication authentication){
+    public void updateAdImage(Integer id, MultipartFile image, Authentication authentication){
 
         Ad ad = adRepository.findById(id).orElseThrow(() ->
                 new ImageNotFoundException("Объявление с ID" + id + "не найдено"));
