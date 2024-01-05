@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import ru.skypro.homework.service.ImageService;
 
+import static ru.skypro.homework.dto.AdsDto.*;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -36,7 +38,11 @@ public class AdServiceImpl implements AdService {
         List<AdDto> allAds = adRepository.findAll().stream()
                 .map(AdMapper::mapToAdDto)
                 .collect(Collectors.toList());
-        return new AdsDto(allAds.size(), allAds);
+        return AdsDto.builder()
+                .count(allAds.size())
+                .result(allAds)
+                .build();
+        /*new AdsDto(allAds.size(), allAds);*/
     }
     @Override
     public AdDto createAd(CreateOrUpdateAdDto AdDto, MultipartFile image, Authentication authentication) throws IOException {

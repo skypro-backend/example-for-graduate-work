@@ -1,6 +1,7 @@
 package ru.skypro.homework.mappers;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 import ru.skypro.homework.dto.UserDto;
@@ -9,7 +10,7 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 
 import java.time.format.DateTimeFormatter;
-
+@Component
 public class CommentMapper {
     private static UserRepository userRepository;
 
