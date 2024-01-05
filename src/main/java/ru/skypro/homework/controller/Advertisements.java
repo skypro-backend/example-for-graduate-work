@@ -3,6 +3,8 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +18,8 @@ import ru.skypro.homework.model.utils.AdFound;
 import ru.skypro.homework.model.utils.ImageProcessResult;
 import ru.skypro.homework.service.AdvertisementsService;
 
+import java.security.Principal;
+
 /**
  * <h2>Advertisements controller to manage ads</h2>
  */
@@ -27,6 +31,7 @@ public class Advertisements {
 
     private final AdvertisementsService advertisementsService;
 
+    Logger logger = LoggerFactory.getLogger(Advertisements.class);
 
     /**
      * <h2>getAllAds()</h2>
@@ -47,7 +52,8 @@ public class Advertisements {
      */
     @PostMapping("/ads")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
-    public ResponseEntity<AdDto> addAd(@RequestBody AdDto ad, String userName) {
+    public ResponseEntity<AdDto> addAd(@RequestBody AdDto ad) {
+        logger.info("addAd method invoked");
         AdDto newAd = advertisementsService.addNewAd(ad);
         return new ResponseEntity<>(newAd, HttpStatus.OK);
     }
@@ -113,15 +119,14 @@ public class Advertisements {
     /**<h2>getAdsMe</h2>
      * GET /ads/me <h3>Получение объявлений авторизованного пользователя</h3>
      *
-     * @param id user identifier
+     * @param principal authentication data from Spring Security
      * @return list of advertisement DTOs
      */
 
     @GetMapping("/ads/me")
-    @PreAuthorize("#username == authentication.principal.username")
-     public ResponseEntity<AdsDto> getAdsMe(@Parameter(name = "id", description = "user identifier")
-                                            @PathVariable long id, String username) {
-        return advertisementsService.getAdsDtoByUserId(id, username);
+    public ResponseEntity<AdsDto> getAdsMe(Principal principal) {
+        logger.info("User login name: " + principal.getName());
+        return advertisementsService.getAdsDtoByUserLoginName(principal.getName());
     }
 
 

@@ -1,6 +1,7 @@
 package ru.skypro.homework.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -8,6 +9,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "ads")
 @Data
+@NoArgsConstructor
 public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

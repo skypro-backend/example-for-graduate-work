@@ -14,7 +14,8 @@ public interface UserService {
     List<UserDto> users = new ArrayList<>();
     UserDto saveUser(UserDto user);
     UserDto deleteUser(UserDto user);
-    UserDto getInfoUser();
+
+    UserDto getInfoUser(String userName);
     UpdateUserDto setInfoUser(UpdateUserDto updateUser);
     AvatarDto setAvatar(MultipartFile avatar) throws IOException;
 

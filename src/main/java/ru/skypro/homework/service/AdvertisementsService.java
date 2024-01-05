@@ -1,6 +1,8 @@
 package ru.skypro.homework.service;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 public class AdvertisementsService {
     private final AdRepository adRepository;
     private final UserRepository userRepository;
+    private final Logger logger = LoggerFactory.getLogger(AdvertisementsService.class);
 
     /**
      * <h2>getAll()</h2><br>
@@ -132,12 +135,17 @@ public class AdvertisementsService {
         return userOptional.filter(user -> Role.ADMIN.equals(user.getUserRole())).isPresent();
     }
 
-    public ResponseEntity<AdsDto> getAdsDtoByUserId(long id, String userLogin) {
-        if (userRepository.findById((int) id).isEmpty()) {
+    public ResponseEntity<AdsDto> getAdsDtoByUserLoginName(String userLogin) {
+
+        Optional<User> userOptional = userRepository.findByEmail(userLogin);
+        if (userOptional.isEmpty()) {
             return new ResponseEntity<>(new AdsDto(), HttpStatus.NOT_FOUND);
         }
+        User user = userOptional.get();
+        logger.info(user.toString());
         AdsFound adsFound = new AdsFound();
-        List<Ad> listOfAdvertisements = adRepository.findByAuthor(id);
+        logger.info("about to adRepository.findByAuthor(user.getId())");
+        List<Ad> listOfAdvertisements = adRepository.findByAuthor(Math.toIntExact(user.getId()));
         AdsDto adsDto = new AdsDto();
 
         if (listOfAdvertisements.isEmpty()) {
