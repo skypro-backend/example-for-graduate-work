@@ -1,13 +1,14 @@
 package ru.skypro.homework.mappers;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.repository.UserRepository;
 
-
+@Component
 public class AdMapper {
     private ModelMapper modelMapper;
     private static UserRepository userRepository;

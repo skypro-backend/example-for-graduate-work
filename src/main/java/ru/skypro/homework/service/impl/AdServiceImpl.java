@@ -13,7 +13,10 @@ import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.exception.ImageNotFoundException;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Image;
+import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.mappers.AdMapper;
@@ -31,7 +34,9 @@ public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
     private final ImageService imageService;
     private final UserService userService;
-
+    private final CommentRepository commentRepository;
+    private final ImageRepository imageRepository;
+    private final AdMapper adMapper;
      @Override
       public AdsDto getAllAds() {
           List<AdDto> allAds = adRepository.findAll().stream()
@@ -49,7 +54,7 @@ public class AdServiceImpl implements AdService {
             Ad adEntity = AdMapper.createOrUpdateAdFromDto(AdDto);
             adEntity.setAuthor(userService.findByEmail(authentication.getName()));
             adEntity.setImage(newImage);
-            adEntity.setImageUrl("/images/" + newImage.getId());
+            adEntity.setImageUrl("/image/" + newImage.getId());
             adRepository.save(adEntity);
             return AdMapper.mapToAdDto(adEntity);
         } else {
@@ -65,16 +70,27 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void removeAd(int id) {
+    public void removeAd(int id, Authentication authentication) {
+        Ad ad = adRepository.findById(id).orElseThrow(() ->
+                new AdNotFoundException("Объявление с ID" + id + "не найдено"));
+
+        checkPermit(ad,authentication);
+        commentRepository.deleteCommentsByAdId(id);
+        imageRepository.deleteById(ad.getImage().getId());
+        adRepository.deleteById(id);
     }
 
     @Override
     public AdDto updateAds(int id, CreateOrUpdateAdDto adDto) {
-        return null;
+        Ad ad = adRepository.findById(id).orElseThrow(() ->
+                new AdNotFoundException("Объявление с ID" + id + "не найдено"));
+        ad.setTitle(adDto.getTitle());
+        ad.setDescription(adDto.getDescription());
+        ad.setPrice(adDto.getPrice());
+        adRepository.save(ad);
+        return adMapper.mapToAdDto(ad);
     }
-
-
-    @Override
+        @Override
     public void updateImage(Integer id, MultipartFile image, Authentication authentication) {
 
         Ad ad = adRepository.findById(id).orElseThrow(() ->
@@ -86,11 +102,49 @@ public class AdServiceImpl implements AdService {
         adRepository.save(ad);
 
     }
-
     @Override
     public AdsDto getMyAds(Authentication authentication) {
-        return null;
+        Integer userId = userService.findByEmail(authentication.getName()).getId();
+        List<AdDto> allMyAds = adRepository.findAll()
+                .stream()
+                .filter(ad -> ad.getAuthor().getId().equals(userId))
+                .map(AdMapper::mapToAdDto)
+                .collect(Collectors.toList());
+        return new AdsDto(allMyAds.size(), allMyAds);
     }
+
+  /*  @Override
+    public AdsDto getMyAds(Authentication authentication){
+        if (authentication.isAuthenticated()) {
+            Integer userId = authentication.get;
+        List<AdDto> adsDto = adRepository.findAdByAuthorId(authentication).stream()
+                .map(AdMapper::mapToAdDto)
+                .collect(Collectors.toList());
+        return AdsDto.builder()
+                .count(adsDto.size())
+                .results(adsDto)
+                .build();}
+        else {
+            throw new RuntimeException();
+        }
+    }*/
+/*    public AdsDto getMyAds(Authentication authentication) {
+        if (authentication.isAuthenticated()) {
+            String username = authentication.getName(); // Получаем имя аутентифицированного пользователя
+
+            List<AdDto> adsDto = adRepository.findAdByAuthorId(username).stream()
+                    .map(AdMapper::mapToAdDto)
+                    .collect(Collectors.toList());
+
+            return AdsDto.builder()
+                    .count(adsDto.size())
+                    .results(adsDto)
+                    .build();
+        } else {
+            throw new RuntimeException("User not authenticated");
+        }
+    }*/
+
 
     public void checkPermit(Ad ad, Authentication authentication) {
         if (!ad.getAuthor().getEmail().equals(authentication.getName())

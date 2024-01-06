@@ -21,5 +21,6 @@ public class UserDto {
         this.lastName = user.getLastName();
         this.phone = user.getPhone();
         this.role = user.getRole();
+        this.image = user.getImageUrl();
             }
 }
