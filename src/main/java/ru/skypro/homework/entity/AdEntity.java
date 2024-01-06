@@ -18,20 +18,17 @@ public class AdEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id; //
-    @Column(name = "description")
     private String description;
-    @Column(name = "price")
     private Integer price;
-    @Column(name = "title")
     private String title;
 
     @ManyToOne
     @JoinColumn(name = "user_entity_id")
     private UserEntity userEntity;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_entity_path")
     private ImageEntity imageEntity;
-    @OneToMany(mappedBy = "adId")
+    @OneToMany(mappedBy = "adEntity",cascade = CascadeType.ALL)
     private List<CommentEntity> commentEntities;
 
 
