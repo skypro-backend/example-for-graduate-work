@@ -24,18 +24,11 @@ public class Ad {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(nullable = false)
     private int id;
 
-//    /**
-//     * Номер объявления
-//     */
-////    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Column(nullable = false)
-//    private int pk;
     /**
      * Внешний ключ: ID автора из таблицы 'users'
+     *
      * @see User
      */
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,6 +37,7 @@ public class Ad {
 
     /**
      * Внешний ключ: ссылка на фото из таблицы 'images'
+     *
      * @see Image
      */
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -70,6 +64,7 @@ public class Ad {
 
     /**
      * Внешний ключ: комментарии к объявлению из таблицы 'comments'
+     *
      * @see Comment
      */
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, orphanRemoval = true)

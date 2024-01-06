@@ -13,6 +13,11 @@ import ru.skypro.kakavito.model.Ad;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Маппер для преобразования сущности Ad
+ *
+ * @see Ad
+ */
 @Data
 @Component
 public class AdMapper {
@@ -22,6 +27,13 @@ public class AdMapper {
     @Value("${query.to.get.image}")
     private String imageQuery;
 
+    /**
+     * Конвертирует в AdsDTO
+     *
+     * @param ad
+     * @return AdsDTO
+     * @see AdsDTO
+     */
     public AdsDTO convertToAdsDTO(List<Ad> ad) {
         AdsDTO adsDTO = new AdsDTO();
         adsDTO.setCount(ad.size());
@@ -29,6 +41,13 @@ public class AdMapper {
         return adsDTO;
     }
 
+    /**
+     * Конвертирует в AdDTO
+     *
+     * @param ad
+     * @return AdDTO
+     * @see AdDTO
+     */
     public AdDTO convertToAdDTO(Ad ad) {
         AdDTO adDTO = modelMapper.map(ad, AdDTO.class);
         adDTO.setPk(ad.getId());
@@ -37,6 +56,13 @@ public class AdMapper {
         return adDTO;
     }
 
+    /**
+     * Конвертирует в ExtendedAdDTO
+     *
+     * @param ad
+     * @return ExtendedAdDTO
+     * @see ExtendedAdDTO
+     */
     public ExtendedAdDTO convertToExtendedAd(Ad ad) {
         ExtendedAdDTO extendedAdDTO = modelMapper.map(ad, ExtendedAdDTO.class);
         extendedAdDTO.setPk(ad.getId());
@@ -53,6 +79,14 @@ public class AdMapper {
         return extendedAdDTO;
     }
 
+    /**
+     * Конвертирует CreateOrUpdateAdDTO в Ad
+     *
+     * @param createOrUpdateAdDTO
+     * @return Ad
+     * @see Ad
+     * @see CreateOrUpdateAdDTO
+     */
     public Ad convertCreatDTOToAd(CreateOrUpdateAdDTO createOrUpdateAdDTO) {
         return modelMapper.map(createOrUpdateAdDTO, Ad.class);
     }

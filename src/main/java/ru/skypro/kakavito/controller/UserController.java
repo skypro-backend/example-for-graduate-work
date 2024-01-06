@@ -20,6 +20,9 @@ import ru.skypro.kakavito.service.UserService;
 
 import java.io.IOException;
 
+/**
+ * Класс для управления потоком данных при работе с пользователями
+ */
 @Slf4j
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
@@ -30,6 +33,12 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    /**
+     * Запрос на изменение пароля
+     *
+     * @param newPasswordDTO
+     * @param authentication
+     */
     @PostMapping("/set_password")
     public ResponseEntity<String> setNewPassword(@RequestBody NewPasswordDTO newPasswordDTO,
                                                  @NonNull Authentication authentication) {
@@ -42,6 +51,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Запрос на получение информации об авторизированном пользователе
+     *
+     * @return UserDTO
+     * @see UserDTO
+     */
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getMyProfile(/*@PathVariable Long id*/) {
 //        return ResponseEntity.ok(userService.getAuthorizedUser());
@@ -49,6 +64,13 @@ public class UserController {
 //                userService.findById(id);
     }
 
+    /**
+     * Запрос на редактирование данных зарегестрированного пользователя
+     *
+     * @param updateUserDTO
+     * @return UpdateUserDTO
+     * @see UpdateUserDTO
+     */
     @PatchMapping("/me")
     public ResponseEntity<UpdateUserDTO> updateMyProfile(@RequestBody UpdateUserDTO updateUserDTO) {
         if (updateUserDTO == null) {
@@ -58,6 +80,14 @@ public class UserController {
         return ResponseEntity.ok(updateUserDTO);
     }
 
+    /**
+     * Запрос на редактирование аватара пользователя
+     *
+     * @param image
+     * @param userDetails
+     * @throws IOException
+     * @throws ImageSizeExceededException
+     */
     @PatchMapping(path = "/me/image",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
