@@ -19,6 +19,7 @@ import ru.skypro.homework.model.utils.ImageProcessResult;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.UserRepository;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,9 +60,10 @@ public class AdvertisementsService {
      * @param ad DTO ({@link AdDto}) with data to create a new advertisement ({@link ru.skypro.homework.model.Ad} entity)
      * @return DTO of created ad entity
      */
-    public AdDto addNewAd(AdDto ad) {
-        Ad newAd = new Ad(Long.valueOf(ad.getPk()), ad.getAuthor(), ad.getImage(), ad.getPrice(),
-                ad.getTitle());
+    public AdDto addNewAd(CreateOrUpdateAdDto ad, Principal principal) {
+        logger.info("CreateOrUpdateAdDto: " + ad.toString());
+        Ad newAd = AdMapper.INSTANCE.CrOUpdToAd(ad);
+        logger.info("newAd: " + newAd.toString());
         newAd = adRepository.save(newAd);
         return AdMapper.INSTANCE.adToDto(newAd);
     }

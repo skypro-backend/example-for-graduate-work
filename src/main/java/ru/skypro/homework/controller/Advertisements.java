@@ -52,9 +52,9 @@ public class Advertisements {
      */
     @PostMapping("/ads")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
-    public ResponseEntity<AdDto> addAd(@RequestBody AdDto ad) {
+    public ResponseEntity<AdDto> addAd(@RequestBody CreateOrUpdateAdDto ad, Principal principal) {
         logger.info("addAd method invoked");
-        AdDto newAd = advertisementsService.addNewAd(ad);
+        AdDto newAd = advertisementsService.addNewAd(ad, principal);
         return new ResponseEntity<>(newAd, HttpStatus.OK);
     }
 
