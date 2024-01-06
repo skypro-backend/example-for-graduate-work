@@ -64,6 +64,7 @@ public class AdvertisementsService {
         logger.info("Author login name: " + principal.getName() +
                 "CreateOrUpdateAdDto: " + ad.toString());
         Ad newAd = AdMapper.INSTANCE.CrOUpdToAd(ad);
+        newAd.setImage(image);
         Optional<User> authorOptional = userRepository.findByEmail(principal.getName());
         if (authorOptional.isPresent()) {
             newAd.setAuthor(Math.toIntExact(authorOptional.get().getId()));
