@@ -9,4 +9,5 @@ public interface ImageEntityRepository extends JpaRepository<ImageEntity,Long > 
 
     Optional<ImageEntity> findByFilePath(String filePath);
 
+    Optional<ImageEntity> findById(Integer id);
 }

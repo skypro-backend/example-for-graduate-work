@@ -12,7 +12,8 @@ public class AuthenticationCheck {
 
     public void accessCheck(CustomUserDetails userDetails, UserEntity userEntity) {
 
-        if (!userDetails.getUsername().equals(userEntity.getUsername()) && !(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))))  {
+        if (!userDetails.getUsername().equals(userEntity.getUsername()) && !(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
+        && !userDetails.getPassword().equals(userEntity.getPassword()))  {
             throw new AuthenticationCredentialsNotFoundException("Denial of access. An unauthorized user (not an ADMIN or a author USER)");
         }
     }

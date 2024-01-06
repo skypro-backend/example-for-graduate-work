@@ -25,7 +25,6 @@ import java.time.Instant;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
     private final Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
     private final AdEntityRepository adEntityRepository;
@@ -34,61 +33,58 @@ public class CommentServiceImpl implements CommentService {
     private final AuthenticationCheck authenticationCheck;
     private final UserEntityRepository userEntityRepository;
 
+    public CommentServiceImpl(AdEntityRepository adEntityRepository, CommentEntityRepository commentEntityRepository, CommentMapper commentMapper, AuthenticationCheck authenticationCheck, UserEntityRepository userEntityRepository) {
+        this.adEntityRepository = adEntityRepository;
+        this.commentEntityRepository = commentEntityRepository;
+        this.commentMapper = commentMapper;
+        this.authenticationCheck = authenticationCheck;
+        this.userEntityRepository = userEntityRepository;
+    }
+
+
     @Override
     public Comments getComments(Integer adId) {
 
-        List<CommentEntity> commentEntities = commentEntityRepository.findByAdId_Id(adId);
-        if (commentEntities.isEmpty()) {
-            logger.warn("The Ad message list is empty");
-            return null;
-        }
-
-        List<Comment> comments = commentMapper.commentEntityListToCommentList(commentEntities);
+        List<Comment> comments = commentMapper
+                .commentEntityListToCommentList(commentEntityRepository.findByAdEntity_id(adId));
         return Comments.builder()
                 .results(comments)
                 .count(comments.size())
                 .build();
     }
+
     @Override
     public Comment addComment(Integer adId, CreateOrUpdateComment createOrUpdateComment, CustomUserDetails userDetails) {
-
         if (createOrUpdateComment.getText() == null) {
             throw new BlankFieldException("Пустое поле обновленного комментария");
         }
 
-        UserEntity userEntity = userEntityRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() ->new AuthWasNotPerformedException("The user has not logged in/or not registered "));
         AdEntity adEntity = adEntityRepository.findById(adId).orElseThrow(() -> new MissingAdException("The ad with the specified id is missing "));
+        UserEntity userForAuthCheck = userEntityRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new MissingUserException ("User has not been found"));
+        authenticationCheck.accessCheck(userDetails, userForAuthCheck);
 
-        CommentEntity commentEntity = CommentEntity.builder()
+        CommentEntity newComment = CommentEntity.builder()
                 .text(createOrUpdateComment.getText())
                 .createdAt(Instant.now())
-                .userEntity(userEntity)
-                .adId(adEntity)
+                .userEntity(userForAuthCheck)
+                .adEntity(adEntity)
                 .build();
 
-        commentEntityRepository.save(commentEntity);
-        return commentMapper.commentEntityToComment(commentEntity);
+        return commentMapper.commentEntityToComment(commentEntityRepository.save(newComment));
     }
     @Override
     @Transactional
     public void deleteComment(Integer adId, Integer commentId, CustomUserDetails userDetails) {
 
-        AdEntity adEntity = adEntityRepository.findById(adId).orElseThrow(() -> new MissingAdException("The ad with the specified id is missing "));
-        CommentEntity commentEntity = adEntity.getCommentEntities().stream()
-                .filter(comment -> comment.getId().equals(commentId)).findFirst().orElseThrow(() -> new MissingCommentException("The comment with the specified id is missing "));
-
+        CommentEntity commentEntity = commentEntityRepository.findById(commentId).orElseThrow(() -> new MissingAdException(" The comment with the specified id is missing"));
         authenticationCheck.accessCheck(userDetails, commentEntity.getUserEntity());
 
-        commentEntityRepository.deleteByIdAndAdId_id(commentId, adId);
+        commentEntityRepository.deleteById(commentId);
     }
     @Override
     public Comment updateComment(Integer adId, Integer commentId,CreateOrUpdateComment createOrUpdateComment,CustomUserDetails userDetails) {
 
-        AdEntity adEntity = adEntityRepository.findById(adId).orElseThrow(() -> new MissingAdException("The ad with the specified id is missing "));
-        CommentEntity commentEntity = adEntity.getCommentEntities().stream()
-                .filter(comment -> comment.getId().equals(commentId)).findFirst().orElseThrow(() -> new MissingCommentException("The comment with the specified id is missing "));
-
+        CommentEntity commentEntity = commentEntityRepository.findById(commentId).orElseThrow(() -> new MissingAdException(" The comment with the specified id is missing"));
         authenticationCheck.accessCheck(userDetails, commentEntity.getUserEntity());
 
         commentEntity.setText(createOrUpdateComment.getText());

@@ -10,23 +10,26 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.CommentEntity;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Mapper
 @Component
 public class CommentMapper {
+//    private class Opt
     public Comment commentEntityToComment(CommentEntity commentEntity) {
         if (commentEntity == null) {
             throw new NullPointerException("Ошибка маппера при создании Comment! CommentEntity == null!");
         }
+
         return Comment.builder()
                 .author(commentEntity.getUserEntity().getId())
-                .authorImage(commentEntity.getUserEntity().getImageEntity().getFilePath())
+                .authorImage("/image/"+ commentEntity.getUserEntity().getImageEntity().getId())
                 .authorFirstName(commentEntity.getUserEntity().getFirstName())
                 .createdAt(commentEntity.getCreatedAt())
                 .pk(commentEntity.getId())
                 .text(commentEntity.getText())
-                .adId(commentEntity.getAdId().getId())
+                .adId(commentEntity.getAdEntity().getId())
                 .build();
     }
 

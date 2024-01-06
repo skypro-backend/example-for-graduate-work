@@ -1,5 +1,6 @@
 package ru.skypro.homework.entity;
 import lombok.*;
+import org.springframework.lang.Nullable;
 import ru.skypro.homework.dto.Role;
 import javax.persistence.*;
 import java.util.Collection;
@@ -29,14 +30,14 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_entity_path")
     private ImageEntity imageEntity;
 
-    @OneToMany(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL )
     private Collection<AdEntity> adEntity;
 
-    @OneToMany(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL)
     private List<CommentEntity> commentEntities;
 
 

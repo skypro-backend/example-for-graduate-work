@@ -1,5 +1,6 @@
 package ru.skypro.homework.mapper;
 import org.mapstruct.Mapper;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
@@ -7,6 +8,7 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.AdEntity;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -22,7 +24,7 @@ public class AdMapper {
                 .author(adEntity.getUserEntity().getId())
                 .price(adEntity.getPrice())
                 .title(adEntity.getTitle())
-                .image(adEntity.getImageEntity().getFilePath())
+                .image("/image/"+ adEntity.getImageEntity().getId())
                 .build();
     }
 

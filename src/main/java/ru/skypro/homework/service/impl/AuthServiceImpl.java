@@ -3,16 +3,17 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.config.UserDetailsServiceImpl;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.repository.UserEntityRepository;
 import ru.skypro.homework.service.AuthService;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +31,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean register(Register register) {
 
-        UserEntity userEntity = userEntityRepository.findByUsername(register.getUsername()).get();
-        if (userEntity != null) {
+        UserEntity userEntity = userEntityRepository.findByUsername(register.getUsername()).orElse(new UserEntity());
+
+       if (userEntity.getUsername() != null) {
             logger.warn("User with current username (email) had been registered before!");
             return false;
         }
@@ -42,6 +44,7 @@ public class AuthServiceImpl implements AuthService {
                         .lastName(register.getLastName())
                         .phone(register.getPhone())
                         .role(register.getRole())
+                        .imageEntity(new ImageEntity())
                         .build();
 
         userEntityRepository.save(userEntity);
