@@ -13,7 +13,6 @@ import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
-import ru.skypro.homework.exceptions.MissingImageException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.ImageEntityRepository;
 import ru.skypro.homework.repository.UserEntityRepository;
@@ -32,8 +31,16 @@ public class UsersServiceImpl implements UsersService {
     private final ImageServiceImpl imageService;
     private final ImageEntityRepository imageEntityRepository;
 
+    /**
+     * Checking user's data using {@code userEntityRepository.findByUsername(userDetails.getUsername())};
+     * <br> next use {@link AuthenticationCheck#accessCheck(CustomUserDetails, UserEntity)},
+     * <br> and set new password for user {@code userEntity.setPassword(encoder.encode(newPassword.getNewPassword()));}
+     * <br> next save it
+     * <br> {@code userEntityRepository.save(userEntity)};
+     * @param newPassword NewPassword;
+     * @param userDetails CustomUserDetails;
+     */
     @Override
-
     public void setPassword(NewPassword newPassword, CustomUserDetails userDetails) {
 
         UserEntity userEntity = userEntityRepository.findByUsername(userDetails.getUsername())
@@ -44,6 +51,13 @@ public class UsersServiceImpl implements UsersService {
         userEntityRepository.save(userEntity);
     }
 
+    /**
+     * Getting user's details using {@code userEntityRepository.findByUsername(userDetails.getUsername())};
+     * <br> next {@link AuthenticationCheck#accessCheck(CustomUserDetails, UserEntity)},
+     * <br> and {@link UserMapper#userEntityToUser(UserEntity)};
+     * @param userDetails CustomUserDetails;
+     * @return userMapper.userEntityToUser(userEntity);
+     */
     @Override
     public User getUser(CustomUserDetails userDetails) {
 
@@ -53,6 +67,16 @@ public class UsersServiceImpl implements UsersService {
         return userMapper.userEntityToUser(userEntity);
     }
 
+    /**
+     * Updating user's information using
+     * {@code userEntityRepository.findByUsername(userDetails.getUsername())};
+     * <br> checking if data is not null (like <b>firstName</b>, <b>lastName</b>, and <b>phone</b>),
+     * <br> and next updating
+     * <br> {@code userEntityRepository.save(userEntity);}
+     * @param updateUser UpdateUser;
+     * @param userDetails CustomUserDetails;
+     * @return updateUser;
+     */
     @Override
     public UpdateUser updateUser(UpdateUser updateUser, CustomUserDetails userDetails) {
 
@@ -73,6 +97,16 @@ public class UsersServiceImpl implements UsersService {
         return updateUser;
     }
 
+    /**
+     * Updating user's image using {@code userEntityRepository.findByUsername(userDetails.getUsername())};
+     * <br> and {@link AuthenticationCheck#accessCheck(CustomUserDetails, UserEntity)});
+     * <br>
+     * <br> Next using {@code imageService.uploadImageToServer(image, userEntity.getId(), userEntity.getUsername())},
+     * <br> save new image {@code userEntityRepository.save(userEntity);}
+     * <br> and delete previous {@code imageEntityRepository.delete(obsoleteAvatar);}
+     * @param image MultipartFile;
+     * @param userDetails CustomUserDetails;
+     */
     @Override
     public void updateUserImage(MultipartFile image, CustomUserDetails userDetails) {
 
