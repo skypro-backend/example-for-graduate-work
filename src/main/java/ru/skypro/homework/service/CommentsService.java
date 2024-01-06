@@ -67,6 +67,7 @@ public class CommentsService {
         }
 
         Comment commentNew = new Comment(0, user.getId(), id, createOrUpdateCommentDto.getText());
+        commentNew = commentRepository.save(commentNew);
         result.setCommentDto(CommentMapper.INSTANCE.commentToDto(commentNew));
         result.setHttpStatus(HttpStatus.OK);
 

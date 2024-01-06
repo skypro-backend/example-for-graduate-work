@@ -13,11 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
+import ru.skypro.homework.dto.NewAdDto;
 import ru.skypro.homework.mapping.AdMapper;
 import ru.skypro.homework.model.utils.AdFound;
 import ru.skypro.homework.model.utils.ImageProcessResult;
 import ru.skypro.homework.service.AdvertisementsService;
 
+import java.io.IOException;
 import java.security.Principal;
 
 /**
@@ -41,6 +43,7 @@ public class Advertisements {
      */
     @GetMapping("/ads")
     public ResponseEntity<AdsDto> getAllAds() {
+        logger.info("getAllAds invoked");
         return ResponseEntity.ok(advertisementsService.getAll());
     }
 
@@ -50,11 +53,16 @@ public class Advertisements {
      *
      * @return {@link AdDto}: DTO of added advertisement
      */
-    @PostMapping("/ads")
+    @PostMapping(value = "/ads"/*, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+                                                MULTIPART_FORM_DATA,
+                                                MediaType.IMAGE_JPEG_VALUE,
+                                                MediaType.IMAGE_PNG_VALUE,
+                                                MediaType.IMAGE_GIF_VALUE}*/)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
-    public ResponseEntity<AdDto> addAd(@RequestBody CreateOrUpdateAdDto ad, Principal principal) {
+    public ResponseEntity<AdDto> addAd(@RequestBody NewAdDto ad,
+                                       Principal principal) throws IOException {
         logger.info("addAd method invoked");
-        AdDto newAd = advertisementsService.addNewAd(ad, principal);
+        AdDto newAd = advertisementsService.addNewAd(ad.getProperties(), ad.getImage(), principal);
         return new ResponseEntity<>(newAd, HttpStatus.OK);
     }
 

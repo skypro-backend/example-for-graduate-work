@@ -13,6 +13,8 @@ import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 import ru.skypro.homework.model.utils.CommentDtoWithHttpStatus;
 import ru.skypro.homework.service.CommentsService;
 
+import java.security.Principal;
+
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -43,9 +45,10 @@ public class CommentsController {
      */
     @PostMapping("/ads/{id}/comments")
     @PreAuthorize("#username == authentication.principal.username")
-    public ResponseEntity<CommentDto> addComment(@PathVariable(name = "id") int id, String username,
+    public ResponseEntity<CommentDto> addComment(@PathVariable(name = "id") int id, Principal principal,
                                                  @RequestBody CreateOrUpdateCommentDto comment){
-        CommentDtoWithHttpStatus commentDtoWithHttpStatus = commentsService.addComment(id, username, comment);
+        CommentDtoWithHttpStatus commentDtoWithHttpStatus = commentsService.addComment(id, principal.getName(),
+                comment);
         return new ResponseEntity<CommentDto>(commentDtoWithHttpStatus.getCommentDto(),
                 commentDtoWithHttpStatus.getHttpStatus());
     }

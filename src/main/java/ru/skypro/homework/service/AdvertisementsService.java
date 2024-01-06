@@ -60,9 +60,16 @@ public class AdvertisementsService {
      * @param ad DTO ({@link AdDto}) with data to create a new advertisement ({@link ru.skypro.homework.model.Ad} entity)
      * @return DTO of created ad entity
      */
-    public AdDto addNewAd(CreateOrUpdateAdDto ad, Principal principal) {
-        logger.info("CreateOrUpdateAdDto: " + ad.toString());
+    public AdDto addNewAd(CreateOrUpdateAdDto ad, String image, Principal principal) {
+        logger.info("Author login name: " + principal.getName() +
+                "CreateOrUpdateAdDto: " + ad.toString());
         Ad newAd = AdMapper.INSTANCE.CrOUpdToAd(ad);
+        Optional<User> authorOptional = userRepository.findByEmail(principal.getName());
+        if (authorOptional.isPresent()) {
+            newAd.setAuthor(Math.toIntExact(authorOptional.get().getId()));
+        } else {
+            newAd.setAuthor(null);
+        }
         logger.info("newAd: " + newAd.toString());
         newAd = adRepository.save(newAd);
         return AdMapper.INSTANCE.adToDto(newAd);
@@ -144,9 +151,8 @@ public class AdvertisementsService {
             return new ResponseEntity<>(new AdsDto(), HttpStatus.NOT_FOUND);
         }
         User user = userOptional.get();
-        logger.info(user.toString());
+        logger.info("getAdsDtoByUserLoginName | user: " + user.toString());
         AdsFound adsFound = new AdsFound();
-        logger.info("about to adRepository.findByAuthor(user.getId())");
         List<Ad> listOfAdvertisements = adRepository.findByAuthor(Math.toIntExact(user.getId()));
         AdsDto adsDto = new AdsDto();
 
