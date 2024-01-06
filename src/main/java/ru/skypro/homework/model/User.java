@@ -50,7 +50,7 @@ public class User {
         this.lastName = userDto.getLastName();
         this.phone = userDto.getPhone();
         this.role = userDto.getRole();
-    }
+         }
 }
 
 

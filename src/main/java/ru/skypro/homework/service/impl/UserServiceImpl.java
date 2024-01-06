@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
             imageService.removeImage(usersImage);
         }
         user.setImage(newImage);
-        user.setImageUrl("/images/" + newImage.getId());
+        user.setImageUrl("/image/" + newImage.getId());
         userRepository.save(user);
     }
 /*    @Override

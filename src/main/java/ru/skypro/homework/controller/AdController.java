@@ -53,9 +53,9 @@ public class AdController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeAd(@PathVariable int id) {
+    public ResponseEntity<Void> removeAd(@PathVariable Integer id,Authentication authentication) {
         try {
-            adService.removeAd(id);
+            adService.removeAd(id, authentication);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.status(404).build();

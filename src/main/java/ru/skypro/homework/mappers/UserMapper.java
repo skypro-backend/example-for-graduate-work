@@ -2,9 +2,10 @@ package ru.skypro.homework.mappers;
 
 
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.model.User;
-
+@Component
 public class UserMapper {
 
 
