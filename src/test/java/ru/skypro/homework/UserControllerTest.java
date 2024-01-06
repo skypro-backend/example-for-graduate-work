@@ -17,12 +17,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.controller.UserController;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.impl.ImageServiceImpl;
 import ru.skypro.homework.service.impl.UserServiceImpl;
 
