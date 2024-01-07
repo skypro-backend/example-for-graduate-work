@@ -11,7 +11,8 @@ import java.util.List;
 public class CommentsDto {
     private int count;
     private List<CommentDto> results= new ArrayList<>();
-
-    public CommentsDto(int size, List<CommentDto> comments) {
+    public CommentsDto(int count, List<CommentDto> results) {
+        this.count = count;
+        this.results = results;
     }
 }

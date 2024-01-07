@@ -15,7 +15,7 @@ public class ExtendedAdMapper {
         dto.setPhone(ad.getAuthor().getPhone());
         dto.setPrice(ad.getPrice());
         dto.setTitle(ad.getTitle());
-        dto.setImage("/images/" + ad.getImageUrl());
+        dto.setImage("/image/" + ad.getImageUrl());
         return dto;
     }
 }

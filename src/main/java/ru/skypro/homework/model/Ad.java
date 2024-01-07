@@ -26,7 +26,7 @@ public class Ad {
     @JoinColumn(name = "author_id")
     private User author;
 
-    @OneToMany(mappedBy = "ad")
+    @OneToMany(mappedBy = "ad",cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     @OneToOne(fetch = FetchType.LAZY)
