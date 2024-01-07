@@ -10,10 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdDto;
-import ru.skypro.homework.dto.AdsDto;
-import ru.skypro.homework.dto.CreateOrUpdateAdDto;
-import ru.skypro.homework.dto.NewAdDto;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.mapping.AdMapper;
 import ru.skypro.homework.model.utils.AdFound;
 import ru.skypro.homework.model.utils.ImageProcessResult;
@@ -155,5 +152,17 @@ public class Advertisements {
 
         return new ResponseEntity<byte[]>(HttpStatus.OK);
 
+    }
+
+    @PostMapping(value = "/training/")
+    public ResponseEntity<String> trainingEndpoint(@RequestBody NewAdDtoWithMultiPartFile dto)
+
+            throws IOException {
+        if (dto == null) {
+            return ResponseEntity.ok("Nothing in dto!!");
+        }
+
+        String response = "dto: " + dto.toString();
+        return ResponseEntity.ok(response);
     }
 }
