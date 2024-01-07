@@ -11,6 +11,7 @@ import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.AccessNotException;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.exception.ImageNotFoundException;
+import ru.skypro.homework.mappers.ExtendedAdMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
@@ -113,37 +114,14 @@ public class AdServiceImpl implements AdService {
         return new AdsDto(allMyAds.size(), allMyAds);
     }
 
-  /*  @Override
-    public AdsDto getMyAds(Authentication authentication){
-        if (authentication.isAuthenticated()) {
-            Integer userId = authentication.get;
-        List<AdDto> adsDto = adRepository.findAdByAuthorId(authentication).stream()
-                .map(AdMapper::mapToAdDto)
-                .collect(Collectors.toList());
-        return AdsDto.builder()
-                .count(adsDto.size())
-                .results(adsDto)
-                .build();}
-        else {
-            throw new RuntimeException();
+    @Override
+    public ExtendedAdDto findExtendedAd(Integer id) {
+        Ad ad = adRepository.findAdById(id);
+        if (ad != null) {
+            return ExtendedAdMapper.toDto(ad);
         }
-    }*/
-/*    public AdsDto getMyAds(Authentication authentication) {
-        if (authentication.isAuthenticated()) {
-            String username = authentication.getName(); // Получаем имя аутентифицированного пользователя
-
-            List<AdDto> adsDto = adRepository.findAdByAuthorId(username).stream()
-                    .map(AdMapper::mapToAdDto)
-                    .collect(Collectors.toList());
-
-            return AdsDto.builder()
-                    .count(adsDto.size())
-                    .results(adsDto)
-                    .build();
-        } else {
-            throw new RuntimeException("User not authenticated");
-        }
-    }*/
+        return null;
+    }
 
 
     public void checkPermit(Ad ad, Authentication authentication) {

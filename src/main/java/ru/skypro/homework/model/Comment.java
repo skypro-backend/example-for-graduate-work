@@ -4,6 +4,7 @@ import lombok.Data;
 import ru.skypro.homework.dto.CommentDto;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,7 +17,7 @@ public class Comment {
 
     private String text;
 
-    private LocalDateTime createdAt;
+    Timestamp createdAt;
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
