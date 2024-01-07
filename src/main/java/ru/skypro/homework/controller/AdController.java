@@ -13,8 +13,10 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.dto.ExtendedAdDto;
+import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
+import ru.skypro.homework.service.impl.ValidationServiceImpl;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -28,6 +30,7 @@ public class AdController {
 
     private final AdService adService;
     private final ImageService imageService;
+    private final AdRepository adRepository;
 
     @GetMapping
     public ResponseEntity <AdsDto> getAllAds() {
@@ -54,12 +57,22 @@ public class AdController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeAd(@PathVariable Integer id,Authentication authentication) {
-        try {
-            adService.removeAd(id, authentication);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(404).build();
+        if (authentication == null || authentication.getName() == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
+        String userEmail = adRepository.findAdById(id).getAuthor().getEmail();
+        boolean isAdminOrOwner = ValidationServiceImpl.isAdmin(authentication, userEmail);
+        ExtendedAdDto foundAd = adService.findExtendedAd(id);
+
+        if (!isAdminOrOwner) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } else if (foundAd == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        adService.removeAd(id, authentication);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("/{id}")
