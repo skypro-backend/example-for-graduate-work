@@ -6,19 +6,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.mapping.AdMapper;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.Images;
+import ru.skypro.homework.model.PictureType;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.model.utils.AdFound;
 import ru.skypro.homework.model.utils.AdsFound;
 import ru.skypro.homework.model.utils.ImageProcessResult;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.ImagesRepository;
 import ru.skypro.homework.repository.UserRepository;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +37,7 @@ import java.util.stream.Collectors;
 public class AdvertisementsService {
     private final AdRepository adRepository;
     private final UserRepository userRepository;
+    private final ImagesRepository imagesRepository;
     private final Logger logger = LoggerFactory.getLogger(AdvertisementsService.class);
 
     /**
@@ -60,12 +66,16 @@ public class AdvertisementsService {
      * @param ad DTO ({@link AdDto}) with data to create a new advertisement ({@link ru.skypro.homework.model.Ad} entity)
      * @return DTO of created ad entity
      */
-    public AdDto addNewAd(CreateOrUpdateAdDto ad, String image, Principal principal) {
+    public AdDto addNewAd(CreateOrUpdateAdDto ad, MultipartFile imageFile, Principal principal) {
         logger.info("Author login name: " + principal.getName() +
-                "CreateOrUpdateAdDto: " + ad.toString());
+                " | CreateOrUpdateAdDto: " + ad.toString() + " | Picture file name: " + imageFile.getName());
+
+        // First, let's create new Ad entity and save to database
         Ad newAd = AdMapper.INSTANCE.CrOUpdToAd(ad);
-        newAd.setImage(image);
+        newAd.setImage(imageFile.getName());
+
         Optional<User> authorOptional = userRepository.findByEmail(principal.getName());
+        logger.info("authorOptional is present:" + authorOptional.isPresent());
         if (authorOptional.isPresent()) {
             newAd.setAuthor(Math.toIntExact(authorOptional.get().getId()));
         } else {
@@ -73,6 +83,24 @@ public class AdvertisementsService {
         }
         logger.info("newAd: " + newAd.toString());
         newAd = adRepository.save(newAd);
+
+        // Now let's save advertisement picture in database
+        Images itemPicture = Images.builder().
+                pictureType(PictureType.ITEM_PICTURE).
+                adId(newAd.getPk()).
+                userId(newAd.getAuthor()).
+                mediaType(imageFile.getContentType()).
+                fileSize(imageFile.getSize()).
+                build();
+
+        try {
+            itemPicture.setData(imageFile.getBytes());
+        } catch (IOException e) {
+            logger.info(e.toString());
+        }
+
+        imagesRepository.save(itemPicture);
+
         return AdMapper.INSTANCE.adToDto(newAd);
     }
 

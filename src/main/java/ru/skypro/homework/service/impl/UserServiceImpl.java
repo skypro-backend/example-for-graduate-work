@@ -9,12 +9,14 @@ import ru.skypro.homework.dto.AvatarDto;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.mapping.UserMapper;
+import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.security.Principal;
+import java.util.Optional;
 
 @Service
 @Data
@@ -43,10 +45,21 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserDto getInfoUser(String userName) {
+        logger.info("getInfoUser || userName: " + userName);
         if (userName.isEmpty()) {
             return new UserDto();
         }
-        return UserMapper.INSTANCE.userToDto(userRepository.findByEmail(userName).orElse(null));
+        Optional<User> userOptional = userRepository.findByEmail(userName);
+
+        logger.info("getInfoUser | userOptional is present? -- see next line");
+        logger.info(" " + userOptional.isPresent());
+
+        if (userOptional.isEmpty()) {
+            return new UserDto();
+        } else {
+            logger.info(userOptional.get().toString());
+            return UserMapper.INSTANCE.userToDto(userOptional.get());
+        }
     }
 
     @Override

@@ -67,7 +67,7 @@ public class Advertisements {
                                        @RequestPart(value = "image") MultipartFile image,
                                        Principal principal) throws IOException {
         logger.info("addAd method invoked");
-        AdDto newAd = advertisementsService.addNewAd(properties, image.getName(), principal);
+        AdDto newAd = advertisementsService.addNewAd(properties, image, principal);
         return new ResponseEntity<>(newAd, HttpStatus.OK);
     }
 

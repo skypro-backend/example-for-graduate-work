@@ -42,12 +42,5 @@ public class UserController {
         logger.info("Principal.name: " + principal.getName());
         return ResponseEntity.ok(userService.getInfoUser(principal.getName()));
 
-/*    public ResponseEntity<User> getUser() {
-        return new ResponseEntity<>(userService.getInfoUser(), HttpStatus.OK);
-    }
-
-    @PatchMapping("/me")
-    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser user){
-        return new ResponseEntity<>(new UpdateUser(), HttpStatus.OK); */
     }
 }

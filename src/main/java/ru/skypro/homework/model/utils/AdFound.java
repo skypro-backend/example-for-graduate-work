@@ -12,7 +12,7 @@ import ru.skypro.homework.model.Ad;
 public class AdFound {
 
     private Ad ad;
-    HttpStatus httpStatus;
+    private HttpStatus httpStatus;
 
     /**
      * <h2>adNotFound()</h2>
