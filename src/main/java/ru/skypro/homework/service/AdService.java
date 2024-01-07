@@ -13,7 +13,7 @@ public interface AdService {
 
     AdDto addAd(CreateOrUpdateAdDto ad, MultipartFile imageBytes, Authentication authentication) throws IOException;
     ExtendedAdDto getAds (int id);
-    void removeAd (int id, Authentication authentication);
+    void removeAd (Integer id, Authentication authentication);
     AdDto updateAds(int id, CreateOrUpdateAdDto adDto);
     void updateImage(Integer id, MultipartFile image, Authentication authentication);
     AdsDto getMyAds(Authentication authentication);

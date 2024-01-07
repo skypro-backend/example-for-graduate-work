@@ -9,15 +9,14 @@ import java.util.stream.Collectors;
 public class ValidationServiceImpl {
 
 
-        public static boolean isAdmin(Authentication authentication) {
-            return authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toList())
-                    .contains("ROLE_ADMIN");
-        }
+        public static boolean isAdmin (Authentication authentication, String roleAutorAd) {
+                boolean isAdmin = authentication.getAuthorities()
+                        .stream()
+                        .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
 
-        public static boolean isOwner(Authentication authentication, String userName) {
-            return authentication.getName().equals(userName);
+                boolean isOwnerAd = authentication.getName().equals(roleAutorAd);
+
+                return isAdmin || isOwnerAd;
+            }
         }
-    }
 

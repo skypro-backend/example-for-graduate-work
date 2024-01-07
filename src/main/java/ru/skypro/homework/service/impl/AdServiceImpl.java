@@ -71,14 +71,13 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void removeAd(int id, Authentication authentication) {
-        Ad ad = adRepository.findById(id).orElseThrow(() ->
-                new AdNotFoundException("Объявление с ID" + id + "не найдено"));
-
-        checkPermit(ad,authentication);
-        commentRepository.deleteCommentsByAdId(id);
-        imageRepository.deleteById(ad.getImage().getId());
-        adRepository.deleteById(id);
+    public void removeAd(Integer id, Authentication authentication) {
+        Ad ad = adRepository.findAdById(id);
+        if (ValidationServiceImpl.isAdmin(authentication, ad.getAuthor().getEmail())) {
+            adRepository.deleteById(id);
+        } else {
+            throw new AccessNotException();
+        }
     }
 
     @Override
@@ -126,7 +125,7 @@ public class AdServiceImpl implements AdService {
 
     public void checkPermit(Ad ad, Authentication authentication) {
         if (!ad.getAuthor().getEmail().equals(authentication.getName())
-                && !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+                || !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
             throw new AccessNotException("Вы не можете редактировать или удалять чужое объявление");
         }
     }
