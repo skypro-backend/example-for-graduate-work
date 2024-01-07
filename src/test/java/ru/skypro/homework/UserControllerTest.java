@@ -91,7 +91,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.firstName").value(user.getFirstName()))
                 .andExpect(jsonPath("$.lastName").value(user.getLastName()))
                 .andExpect(jsonPath("$.phone").value(user.getPhone()))
-                .andExpect(jsonPath("$.role").value(user.getRole()))
+                .andExpect(jsonPath("$.role").value("USER"))
                 .andExpect(jsonPath("$.image").value(user.getImage()));
     }
 
