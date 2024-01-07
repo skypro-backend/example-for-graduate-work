@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.comment.CommentDTO;
-import ru.skypro.homework.dto.comment.Comments;
+import ru.skypro.homework.dto.comment.CommentsDTO;
 import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
 
 @Slf4j
@@ -17,8 +17,8 @@ import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
 public class CommentsController {
 
     @GetMapping("{id}/comments")
-    public ResponseEntity<Comments> getCommentsByListing(@PathVariable Integer id) {
-        return ResponseEntity.ok(new Comments());
+    public ResponseEntity<CommentsDTO> getCommentsByListing(@PathVariable Integer id) {
+        return ResponseEntity.ok(new CommentsDTO());
     }
 
     @PostMapping("{id}/comments")

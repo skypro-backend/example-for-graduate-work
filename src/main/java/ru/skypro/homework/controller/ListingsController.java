@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.listing.CreateOrUpdateListing;
 import ru.skypro.homework.dto.listing.ExtendedListingDTO;
-import ru.skypro.homework.dto.listing.Listing;
-import ru.skypro.homework.dto.listing.Listings;
+import ru.skypro.homework.dto.listing.ListingDTO;
+import ru.skypro.homework.dto.listing.ListingsDTO;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -21,13 +21,13 @@ import ru.skypro.homework.dto.listing.Listings;
 public class ListingsController {
 
     @GetMapping()
-    public ResponseEntity<Listings> getAllListings() {
-        return ResponseEntity.ok(new Listings());
+    public ResponseEntity<ListingsDTO> getAllListings() {
+        return ResponseEntity.ok(new ListingsDTO());
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Listing> addListing(@RequestBody CreateOrUpdateListing properties, @RequestBody MultipartFile image) {
-        return new ResponseEntity<>(new Listing(), HttpStatus.CREATED);
+    public ResponseEntity<ListingDTO> addListing(@RequestBody CreateOrUpdateListing properties, @RequestBody MultipartFile image) {
+        return new ResponseEntity<>(new ListingDTO(), HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
@@ -41,13 +41,13 @@ public class ListingsController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Listing> updateListingInformation(@PathVariable Integer id, @RequestBody CreateOrUpdateListing properties) {
-        return ResponseEntity.ok(new Listing());
+    public ResponseEntity<ListingDTO> updateListingInformation(@PathVariable Integer id, @RequestBody CreateOrUpdateListing properties) {
+        return ResponseEntity.ok(new ListingDTO());
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Listings> getListingsFromAuthorizedUser() {
-        return ResponseEntity.ok(new Listings());
+    public ResponseEntity<ListingsDTO> getListingsFromAuthorizedUser() {
+        return ResponseEntity.ok(new ListingsDTO());
     }
 
     @PutMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

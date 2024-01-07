@@ -6,7 +6,7 @@ import javax.xml.stream.events.Comment;
 import java.util.List;
 
 @Data
-public class Comments {
+public class CommentsDTO {
     private Integer count;
     private List<Comment> results;
 }
