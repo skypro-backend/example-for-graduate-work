@@ -64,33 +64,11 @@ public class CommentServiceImpl implements CommentService {
         List<CommentDto> commentList = comment.stream()
                 .map(commentMapper::commentToCommentDto)
                 .collect(Collectors.toList());
-        return new CommentsDto(commentList.size(), commentList);
+        return new CommentsDto (commentList.size(), commentList);
     }
 
-/*    @Override
-    public CommentDto addComment(Integer adId, CreateOrUpdateCommentDto commentDto) {
-        Comment comment = new Comment();
-        Ad ad = adRepository.findById(adId).orElseThrow(() -> new AdNotFoundException());
-
-        comment.setAd(ad);
-
-        commentMapper.createOrUpdateDtoFromComment(comment);
-
-        Comment savedComment = commentRepository.save(comment);
-
-        return commentMapper.commentToCommentDto(savedComment);
-    }*/
-/*@Override
-    public CommentDto addComment(CommentDto commentDto) {
-        return commentMapper.commentToCommentDto(commentRepository.save(commentMapper.commentDtoToComment(commentDto)));
-    }
     @Override
-    public CommentDto addComment(CreateOrUpdateCommentDto commentDto) {
-        return commentMapper.commentToCommentDto(commentRepository.save(commentMapper.createOrUpdateCommentFromDto(commentDto)));
-    }*/
-
-    @Override
-    public void deleteComment( Integer commentId, Integer adId) {
+    public void deleteComment( Integer adId, Integer commentId) {
         Comment comment = commentRepository.findById(commentId);
         commentRepository.delete(comment);
     }

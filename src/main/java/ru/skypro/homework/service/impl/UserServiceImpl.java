@@ -32,11 +32,13 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserDetails() {
         return null;
     }
+
     @Override
     public UserDto getUser(Authentication authentication) {
         return UserMapper.mapToUserDto(userRepository.findByEmail(authentication.getName()).
                 orElseThrow(UserNotFoundException::new));
     }
+
     @Override
     public UserDto updateUser(UpdateUserDto newProperties, Authentication authentication) {
         User updatedUser = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
@@ -48,25 +50,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void setPassword (NewPasswordDto newPasswordDto, Authentication authentication) {
+    public void setPassword(NewPasswordDto newPasswordDto, Authentication authentication) {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
         String oldPassword = newPasswordDto.getCurrentPassword();
         String newPassword = newPasswordDto.getNewPassword();
         manager.changePassword(oldPassword, newPassword, user);
     }
 
-   @Override
+    @Override
     public void updateUserImage(MultipartFile image, Authentication authentication) {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
         Image usersImage = user.getImage();
         Image newImage = imageService.uploadImage(image);
-        if (user.getImage() != null) {
-            imageService.removeImage(usersImage);
-        }
         user.setImage(newImage);
         user.setImageUrl("/image/" + newImage.getId());
         userRepository.save(user);
+        if (user.getImage() != null) {
+            imageService.removeImage(usersImage);
+        }
     }
+   /*  if (user.getImage() != null) {
+        imageService.removeImage(usersImage);
+    }
+        user.setImage(newImage);
+        user.setImageUrl("/image/" + newImage.getId());
+        userRepository.save(user);*/
+
 /*    @Override
    public byte[] updateUserImage(MultipartFile image, Authentication authentication) throws IOException {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
@@ -92,3 +101,4 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 }
+

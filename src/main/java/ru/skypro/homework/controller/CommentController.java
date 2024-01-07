@@ -25,7 +25,7 @@ public class CommentController {
 
     @GetMapping
     @Operation(summary = "Получение комментариев объявления", description = "getComments", tags = {"Комментарии"})
-    public ResponseEntity<CommentsDto> getComments(@PathVariable("id") Integer id,
+    public ResponseEntity<CommentsDto> getComments(@PathVariable("adId") Integer id,
                                                    Authentication authentication) {
         boolean commentsExist = commentService.getComments(id) != null;
         boolean isAuthenticated = authentication != null && authentication.getName() != null;
