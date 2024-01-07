@@ -10,11 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, Integer> {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
  @Query(value = "select * from comments where ad_id = :ad_id", nativeQuery = true)
 
     List<Comment> findByAd_Id(@Param("ad_id") Integer adId);
     void deleteCommentsByAdId(long id);
     Optional<Comment> findByIdAndAd_Id (Integer id, Integer adId);
+    Comment findById(Integer id);
 
    }

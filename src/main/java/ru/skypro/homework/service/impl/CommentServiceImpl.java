@@ -21,6 +21,9 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
 
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,18 +39,35 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
 
     @Override
+    public CommentDto createComment(Integer id,
+                                    CreateOrUpdateCommentDto createCommentDto,
+                                    Authentication authentication) {
+        Timestamp localDateTime = Timestamp.valueOf(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
+        Comment comment = new Comment();
+        Ad ad = adRepository.findAdById(id);
+        if (ad == null) {
+            return null;
+        }
+        comment.setText(createCommentDto.getText());
+        comment.setCreatedAt(localDateTime);
+        comment.setAd(ad);
+        comment.setAuthor(userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new));
+        commentRepository.save(comment);
+        return commentMapper.commentToCommentDto(comment);
+    }
+    @Override
     public CommentsDto getComments(Integer adId) {
-        List<CommentDto> comments = commentRepository.findByAd_Id(adId).stream()
-                .map(CommentMapper::commentToCommentDto)
+        List<Comment> comment = commentRepository.findByAd_Id(adId);
+        if (comment == null) {
+            return null;
+        }
+        List<CommentDto> commentList = comment.stream()
+                .map(commentMapper::commentToCommentDto)
                 .collect(Collectors.toList());
-
-        return CommentsDto.builder()
-                .count(comments.size())
-                .results(comments)
-                .build();
+        return new CommentsDto(commentList.size(), commentList);
     }
 
-    @Override
+/*    @Override
     public CommentDto addComment(Integer adId, CreateOrUpdateCommentDto commentDto) {
         Comment comment = new Comment();
         Ad ad = adRepository.findById(adId).orElseThrow(() -> new AdNotFoundException());
@@ -59,30 +79,30 @@ public class CommentServiceImpl implements CommentService {
         Comment savedComment = commentRepository.save(comment);
 
         return commentMapper.commentToCommentDto(savedComment);
+    }*/
+/*@Override
+    public CommentDto addComment(CommentDto commentDto) {
+        return commentMapper.commentToCommentDto(commentRepository.save(commentMapper.commentDtoToComment(commentDto)));
     }
-
-
+    @Override
+    public CommentDto addComment(CreateOrUpdateCommentDto commentDto) {
+        return commentMapper.commentToCommentDto(commentRepository.save(commentMapper.createOrUpdateCommentFromDto(commentDto)));
+    }*/
 
     @Override
     public void deleteComment( Integer commentId, Integer adId) {
-        commentRepository.findByIdAndAd_Id(commentId, adId)
-                .ifPresentOrElse(comment -> commentRepository.deleteById(comment.getId()), () -> {
-                    throw new CommentNotFoundException();
-                });
+        Comment comment = commentRepository.findById(commentId);
+        commentRepository.delete(comment);
     }
 
  @Override
     public CommentDto updateComment (Integer adId, Integer commentId, CreateOrUpdateCommentDto commentDto) {
-     return commentRepository.findByIdAndAd_Id(commentId, adId)
-             .map(comment -> {
-                 if (commentDto.getText() != null) {
-                     comment.setText(commentDto.getText());
-                     comment = commentRepository.save(comment);
-                 }
-                 return commentMapper.commentToCommentDto(comment);
-             })
-             .orElseThrow(CommentNotFoundException::new);
+     Comment comment = commentRepository.findById(commentId);
+     if (comment != null) {
+         comment.setText(commentDto.getText());
+         commentRepository.save(comment);
+         return commentMapper.commentToCommentDto(comment);
+     }
+     return null;
  }
-
-
 }

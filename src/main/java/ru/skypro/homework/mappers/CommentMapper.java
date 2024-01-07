@@ -18,15 +18,15 @@ public class CommentMapper {
         this.userRepository = userRepository;
     }
 
-    public static CommentDto commentToCommentDto(Comment comment) {
-        CommentDto dto = new CommentDto();
-        dto.setPk(comment.getId());
-        dto.setAuthor(comment.getAuthor().getId());
-        dto.setAuthorFirstName(comment.getAuthor().getFirstName());
-        dto.setAuthorImage(comment.getAuthor().getImageUrl());
-        dto.setCreatedAt(comment.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        dto.setText(comment.getText());
-        return dto;
+    public CommentDto commentToCommentDto(Comment comment) {
+        CommentDto commentDto = new CommentDto();
+        commentDto.setPk(comment.getId());
+        commentDto.setAuthor(comment.getAuthor().getId());
+        commentDto.setAuthorImage("/avatars/" + comment.getAuthor().getId());
+        commentDto.setAuthorFirstName(comment.getAuthor().getFirstName());
+        commentDto.setCreatedAt(String.valueOf(comment.getCreatedAt()));
+        commentDto.setText(comment.getText());
+        return commentDto;
     }
     public Comment commentDtoToComment(CommentDto dto) {
         Comment comment = new Comment();
