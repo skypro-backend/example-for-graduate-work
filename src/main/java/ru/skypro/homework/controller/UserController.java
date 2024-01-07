@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.User.UpdateUser;
-import ru.skypro.homework.dto.User.UserDTO;
+import ru.skypro.homework.dto.user.UpdateUser;
+import ru.skypro.homework.dto.user.UserDTO;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")

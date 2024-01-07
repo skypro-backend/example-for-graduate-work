@@ -8,10 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Listing.CreateOrUpdateListing;
-import ru.skypro.homework.dto.Listing.ExtendedListingDTO;
-import ru.skypro.homework.dto.Listing.Listing;
-import ru.skypro.homework.dto.Listing.Listings;
+import ru.skypro.homework.dto.listing.CreateOrUpdateListing;
+import ru.skypro.homework.dto.listing.ExtendedListingDTO;
+import ru.skypro.homework.dto.listing.Listing;
+import ru.skypro.homework.dto.listing.Listings;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")

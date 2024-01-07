@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Comment.CommentDTO;
-import ru.skypro.homework.dto.Comment.Comments;
-import ru.skypro.homework.dto.Comment.CreateOrUpdateComment;
+import ru.skypro.homework.dto.comment.CommentDTO;
+import ru.skypro.homework.dto.comment.Comments;
+import ru.skypro.homework.dto.comment.CreateOrUpdateComment;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
