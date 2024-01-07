@@ -122,7 +122,7 @@ public class AdvertisementsService {
             return result;
         }
 
-        authorOfAd = userRepository.findById((int) result.getAd().getAuthor()).orElse(null);
+        authorOfAd = userRepository.findById(result.getAd().getAuthor()).orElse(null);
         if (this.isAdmin(userLoginName) |
                 actualUser.getEmail().equals(authorOfAd.getEmail())) {
             adRepository.delete(result.getAd());

@@ -1,6 +1,9 @@
 package ru.skypro.homework.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -11,7 +14,10 @@ import javax.persistence.*;
  */
 @Data
 @Entity
+@Builder
 @Table(name = "images")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Images {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,4 +46,5 @@ public class Images {
     @Lob
     @Column(name = "data")
     private byte[] data;
+
 }

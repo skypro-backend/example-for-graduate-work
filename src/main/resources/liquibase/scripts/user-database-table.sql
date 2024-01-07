@@ -15,3 +15,7 @@
 
 -- changeset antonov333:12
 ALTER table users ADD password TEXT;
+
+--changeset antonov333:14
+ALTER table users DROP column id;
+ALTER table users ADD column id SERIAL PRIMARY key;

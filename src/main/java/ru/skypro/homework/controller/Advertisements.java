@@ -1,19 +1,26 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.AdsDto;
+import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.mapping.AdMapper;
+import ru.skypro.homework.model.Images;
+import ru.skypro.homework.model.PictureType;
 import ru.skypro.homework.model.utils.AdFound;
 import ru.skypro.homework.model.utils.ImageProcessResult;
+import ru.skypro.homework.repository.ImagesRepository;
 import ru.skypro.homework.service.AdvertisementsService;
 
 import java.io.IOException;
@@ -31,6 +38,9 @@ public class Advertisements {
     private final AdvertisementsService advertisementsService;
 
     Logger logger = LoggerFactory.getLogger(Advertisements.class);
+
+    final private ImagesRepository imagesRepository;
+    //TODO: remove ImagesRepository from Advertisements controller and training... endpoints
 
     /**
      * <h2>getAllAds()</h2>
@@ -50,16 +60,14 @@ public class Advertisements {
      *
      * @return {@link AdDto}: DTO of added advertisement
      */
-    @PostMapping(value = "/ads"/*, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
-                                                MULTIPART_FORM_DATA,
-                                                MediaType.IMAGE_JPEG_VALUE,
-                                                MediaType.IMAGE_PNG_VALUE,
-                                                MediaType.IMAGE_GIF_VALUE}*/)
+    @PostMapping(value = "/ads", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
-    public ResponseEntity<AdDto> addAd(@RequestBody NewAdDto ad,
+    @Operation(description = "Добавление нового объявления")
+    public ResponseEntity<AdDto> addAd(@RequestPart(value = "properties") CreateOrUpdateAdDto properties,
+                                       @RequestPart(value = "image") MultipartFile image,
                                        Principal principal) throws IOException {
         logger.info("addAd method invoked");
-        AdDto newAd = advertisementsService.addNewAd(ad.getProperties(), ad.getImage(), principal);
+        AdDto newAd = advertisementsService.addNewAd(properties, image.getName(), principal);
         return new ResponseEntity<>(newAd, HttpStatus.OK);
     }
 
@@ -90,8 +98,9 @@ public class Advertisements {
     @DeleteMapping("/ads/{id}")
     @PreAuthorize("#userName == authentication.principal.username")
     public ResponseEntity<HttpStatus> removeAd(@Parameter(name = "id", description = "advertisement identifier")
-                                               @PathVariable long id, String userName) {
-        AdFound adRemoved = advertisementsService.removeAd(id, userName);
+                                                   @PathVariable int id, Principal principal) {
+        logger.info("id: " + id + " | User Name: " + principal.getName());
+        AdFound adRemoved = advertisementsService.removeAd((long) id, principal.getName());
         return new ResponseEntity<>(adRemoved.getHttpStatus());
     }
 
@@ -154,15 +163,47 @@ public class Advertisements {
 
     }
 
-    @PostMapping(value = "/training/")
-    public ResponseEntity<String> trainingEndpoint(@RequestBody NewAdDtoWithMultiPartFile dto)
+    @PostMapping(value = "/training/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> trainingEndpoint(@RequestBody CreateOrUpdateAdDto dto,
+                                                   @RequestParam MultipartFile picture)
 
             throws IOException {
         if (dto == null) {
             return ResponseEntity.ok("Nothing in dto!!");
         }
 
-        String response = "dto: " + dto.toString();
+        String response = "dto: " + dto.toString() + picture.getName();
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping(value = "/training-with-avatar-picture/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<String> trainingWithAvatarPicture(@RequestParam MultipartFile sourceFile,
+                                                     @PathVariable("userId") Integer userId) {
+        Images image = Images.builder()
+                .pictureType(PictureType.USER_AVATAR)
+                .userId(userId)
+                .fileSize(sourceFile.getSize())
+                .mediaType(sourceFile.getContentType())
+                .build();
+
+        try {
+            image.setData(sourceFile.getBytes());
+        } catch (IOException e) {
+            logger.info(e.toString());
+        }
+
+        imagesRepository.save(image);
+
+        return ResponseEntity.ok("trainingWithAvatarPicture: " + image.getPictureType());
+    }
+
+    @GetMapping(value = "/training-with-avatar-picture/{userId}", produces = {MediaType.IMAGE_PNG_VALUE,
+            MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*" })
+    byte[] viewPicture(@PathVariable Integer userId) {
+        if (imagesRepository.findById(Long.valueOf(userId)).isPresent()) {
+            return imagesRepository.findById(userId.longValue()).get().getData();
+        }
+        return null;
+    }
+
 }

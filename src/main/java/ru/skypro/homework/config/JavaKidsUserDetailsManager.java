@@ -46,7 +46,7 @@ public class JavaKidsUserDetailsManager implements UserDetailsManager {
         if (userExists(userDetails.getUsername())) {
             return;
         }
-        User newUser = new User(0L, "", "", "",
+        User newUser = new User(0, "", "", "",
                 userDetails.getUsername(), Role.USER, "", userDetails.getPassword());
 
         userRepository.save(newUser);
