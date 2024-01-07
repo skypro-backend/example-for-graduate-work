@@ -1,5 +1,7 @@
 package ru.skypro.homework.mappers;
 
+import lombok.AllArgsConstructor;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.CommentDto;
@@ -11,25 +13,31 @@ import ru.skypro.homework.repository.UserRepository;
 
 import java.time.format.DateTimeFormatter;
 @Component
+
+@AllArgsConstructor
 public class CommentMapper {
     private static UserRepository userRepository;
 
-    public CommentMapper(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public CommentDto commentToCommentDto(Comment comment) {
+     public CommentDto commentToCommentDto(Comment comment) {
         CommentDto commentDto = new CommentDto();
         commentDto.setPk(comment.getId());
         commentDto.setAuthor(comment.getAuthor().getId());
-        if (comment.getAuthor().getImage() != null) {
-            commentDto.setAuthorImage("/image/" + comment.getAuthor().getImage().getId());
-        }
+        commentDto.setAuthorImage("/image/" + comment.getAuthor().getImage().getId());
         commentDto.setAuthorFirstName(comment.getAuthor().getFirstName());
         commentDto.setCreatedAt(String.valueOf(comment.getCreatedAt()));
         commentDto.setText(comment.getText());
         return commentDto;
     }
+/*    public CommentDto commentToCommentDto(Comment comment) {
+        CommentDto commentDto = new CommentDto();
+        commentDto.setPk(comment.getId());
+        commentDto.setAuthor(comment.getUser().getId());
+        commentDto.setAuthorImage("/avatars/" + comment.ggetId());etUser().
+        commentDto.setAuthorFirstName(comment.getUser().getFirstName());
+        commentDto.setCreatedAt(comment.getCreatedAt());
+        commentDto.setText(comment.getText());
+        return commentDto;
+    }*/
     public Comment commentDtoToComment(CommentDto dto) {
         Comment comment = new Comment();
         comment.setId(dto.getPk());
