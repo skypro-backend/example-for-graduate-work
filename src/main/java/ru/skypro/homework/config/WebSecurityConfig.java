@@ -2,6 +2,8 @@ package ru.skypro.homework.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -29,19 +31,8 @@ public class WebSecurityConfig {
             "/webjars/**",
             "/login",
             "/register",
-            "/image/*"
+            "/ads/me"
     };
-
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-//        UserDetails user =
-//                User.builder()
-//                        .username("user@gmail.com")
-//                        .password("password")
-//                        .roles(Role.USER.name())
-//                        .build();
-//        return new InMemoryUserDetailsManager(user);
-//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -59,6 +50,17 @@ public class WebSecurityConfig {
                 .httpBasic(withDefaults());
         return http.build();
     }
+
+    //    @Bean
+//    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
+//        UserDetails user =
+//                User.builder()
+//                        .username("user@gmail.com")
+//                        .password("password")
+//                        .roles(Role.USER.name())
+//                        .build();
+//        return new InMemoryUserDetailsManager(user);
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

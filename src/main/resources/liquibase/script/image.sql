@@ -7,5 +7,4 @@ CREATE TABLE image_entity
     file_path                integer,
     file_size                varchar(255),
     media_type               varchar(255),
-    data                      bytea,
 );

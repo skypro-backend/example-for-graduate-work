@@ -41,7 +41,7 @@ public class AdMapper {
                 .phone(adEntity.getUserEntity().getPhone())
                 .price(adEntity.getPrice())
                 .title(adEntity.getTitle())
-                .image(adEntity.getImageEntity().getFilePath())
+                .image("/image/"+ adEntity.getImageEntity().getId())
                 .build();
     }
 

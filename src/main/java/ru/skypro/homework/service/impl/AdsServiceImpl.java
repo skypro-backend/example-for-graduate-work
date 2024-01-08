@@ -74,9 +74,8 @@ public class AdsServiceImpl implements AdsService {
     }
     @Override
     public ExtendedAd getAds(Integer adId) {
-        AdEntity adEntity = adEntityRepository.findById(adId)
-                .orElseThrow(()->new MissingAdException("Ad with current id is not found"));
-        return adMapper.AdEntityToExtendedAd(adEntity);
+        return adMapper.AdEntityToExtendedAd(adEntityRepository.findById(adId)
+                .orElseThrow(()->new MissingAdException("Ad with current id is not found")));
     }
     @Override
     public void removeAd(Integer adId, CustomUserDetails userDetails) {
