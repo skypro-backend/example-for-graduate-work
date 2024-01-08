@@ -7,7 +7,7 @@ import ru.skypro.homework.service.NewPasswordService;
 
 import java.beans.Encoder;
 
-kji'p09'
+
 @Service
 public class NewPasswordImpl implements NewPasswordService {
     private final Logger logger = LoggerFactory.getLogger(NewPasswordImpl.class);

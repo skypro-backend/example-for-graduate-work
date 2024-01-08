@@ -46,15 +46,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean register(RegisterDto register) {
-        if (manager.userExists(register.getUsername())) {
+    public boolean register(RegisterDto registerDto) {
+        if (manager.userExists(registerDto.getUsername())) {
             return false;
         }
 
-        String rawPassword = register.getPassword();
-        register.setPassword(encoder.encode(rawPassword));
+        String rawPassword = registerDto.getPassword();
+        registerDto.setPassword(encoder.encode(rawPassword));
 
-        manager.createUser(register);
+        manager.createUser(registerDto);
 
         return true;
     }
