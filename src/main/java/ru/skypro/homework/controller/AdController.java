@@ -86,7 +86,7 @@ public class AdController {
     }
 
     @GetMapping("/me")
-    @Operation(summary = "Получение объявлений авторизованного пользователя", description = "getAdsMe", tags = {"Объявления"})
+    @Operation(summary = "Получение объявлений авторизованного  пользователя", description = "getAdsMe", tags = {"Объявления"})
     public ResponseEntity<AdsDto> getAdsMe(Authentication authentication) {
         return ResponseEntity.ok(adService.getMyAds(authentication));
     }
