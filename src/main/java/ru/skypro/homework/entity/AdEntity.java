@@ -31,4 +31,5 @@ public class AdEntity {
     @OneToMany(mappedBy = "adEntity",cascade = CascadeType.ALL)
     private List<CommentEntity> commentEntities;
 
+
 }

@@ -1,6 +1,7 @@
 package ru.skypro.homework.mapper;
 
 
+import lombok.Builder;
 import org.mapstruct.Mapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,6 @@ import ru.skypro.homework.entity.CommentEntity;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 @Mapper
 @Component
