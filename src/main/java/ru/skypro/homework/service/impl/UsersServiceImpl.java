@@ -1,8 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +21,6 @@ import ru.skypro.homework.service.helper.AuthenticationCheck;
 @RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
 
-    private final Logger logger = LoggerFactory.getLogger(UsersServiceImpl.class);
     private final AuthenticationCheck authenticationCheck;
     private final PasswordEncoder encoder;
     private final UserMapper userMapper;

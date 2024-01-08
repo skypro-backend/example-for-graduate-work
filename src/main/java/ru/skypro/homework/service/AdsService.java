@@ -7,7 +7,6 @@ public interface AdsService {
     Ads getAllAds();
 
     Ad addAd(MultipartFile image, CreateOrUpdateAd properties, CustomUserDetails userDetails);
-
     ExtendedAd getAds(Integer adId);
     void removeAd(Integer adId,CustomUserDetails userDetails);
     CreateOrUpdateAd updateAd(Integer adId, CreateOrUpdateAd properties, CustomUserDetails userDetails);

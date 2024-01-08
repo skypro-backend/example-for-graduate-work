@@ -11,5 +11,4 @@ public interface ImageService {
     byte[] getImage(Integer id) ;
 
     ImageEntity uploadImageToServer(MultipartFile adImage, Integer firstPartOfImageName, String secondPartOfImageName);
-//    void uploadAvatar(String imageInfo, MultipartFile multipartFile) throws IOException;
 }

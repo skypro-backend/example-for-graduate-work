@@ -1,7 +1,6 @@
 databaseChangeLog:
   - include:
       relativeToChangeLogFile: true
-<<<<<<< HEAD
       file: script/ad.sql
   - include:
       relativeToChangeLogFile: true
@@ -12,6 +11,3 @@ databaseChangeLog:
   - include:
       relativeToChangeLogFile: true
       file: script/image.sql
-=======
-      file: script/comment.sql
->>>>>>> 9307f98 (для Влада)

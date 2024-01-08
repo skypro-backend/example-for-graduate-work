@@ -5,7 +5,6 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.AdEntity;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
