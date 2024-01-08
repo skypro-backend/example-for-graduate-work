@@ -14,7 +14,6 @@ import java.io.IOException;
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-//@RequiredArgsConstructor
 @RequestMapping("/ads")
 public class AdsController {
 
