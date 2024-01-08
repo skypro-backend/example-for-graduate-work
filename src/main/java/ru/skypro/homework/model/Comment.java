@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.sql.Timestamp;
 
 /**
  * <h2>Comment</h2>
@@ -27,7 +26,7 @@ public class Comment {
     long userId;
 
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    private long createdAt;
 
     @Column(name = "text")
     @Size(min = 8, max = 64)

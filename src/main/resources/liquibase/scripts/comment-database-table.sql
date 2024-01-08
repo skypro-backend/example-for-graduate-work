@@ -21,3 +21,7 @@ ALTER TABLE comments DROP COLUMN password;
 --changeset antonov333:52
 ALTER TABLE comments DROP COLUMN created_at;
 ALTER TABLE comments ADD created_at TIMESTAMP;
+
+--changeset antonov333:53
+ALTER TABLE comments DROP COLUMN created_at;
+ALTER TABLE comments ADD created_at BIGINT;
