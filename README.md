@@ -1,6 +1,6 @@
 Материалы для выполнения курсовой работы учениками профессии java-разработчик. 
 
-## **Над проектом работали:**
+## Над проектом работали:
 - [Азамат Владислав](https://github.com/csa21472001)
 - [Юрченко Мария](https://github.com/123Masha456)
 - [Козлов Иван](https://github.com/IvanKozl)
@@ -31,6 +31,7 @@
 - Настройте базу данных и пропишите значения в файле application.properties.
 - Настройте путь к файлу с картинками. Пример: `path.to.image.folder=/Users/master/Pictures/image
 - Скачайте и установите программу Docker. Запустите проект с помощью программы Docker.
-- Команды для запуска фронтенда по адресу: [localhost:3000](http://localhost:3000/)
-docker pull ghcr.io/bizinmitya/front-react-avito:v1.21						
-docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.21						
+ ---
+ Docker-команды для работы с контейнерами фронтенда,для просмотра которого необходимо перейти по адресу [localhost:3000](http://localhost:3000/):
+- docker pull ghcr.io/bizinmitya/front-react-avito:v1.21						
+- docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.21						
