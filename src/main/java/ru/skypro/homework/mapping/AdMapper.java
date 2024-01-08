@@ -14,4 +14,5 @@ public interface AdMapper {
     Ad adDtoToad(AdDto dto);
 
     Ad CrOUpdToAd(CreateOrUpdateAdDto createOrUpdateAdDto);
+
 }

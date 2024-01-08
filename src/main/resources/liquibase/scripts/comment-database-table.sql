@@ -17,3 +17,7 @@ ALTER TABLE comments ADD password TEXT;
 
 --changeset antonov333:11
 ALTER TABLE comments DROP COLUMN password;
+
+--changeset antonov333:52
+ALTER TABLE comments DROP COLUMN created_at;
+ALTER TABLE comments ADD created_at TIMESTAMP;

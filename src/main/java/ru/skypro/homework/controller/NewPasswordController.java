@@ -23,7 +23,7 @@ public class NewPasswordController {
 
     private final Logger logger = LoggerFactory.getLogger(NewPasswordImpl.class);
 
-    @PostMapping("/set_password")
+    @PostMapping("/users/set_password")
     public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPassword) {
         if (newPassword.getNewPassword().length() <= 8 || newPassword.getNewPassword().length() >= 16) {
             throw new NotAllowedPasswordException("Пароль не соответсвует требованиям");

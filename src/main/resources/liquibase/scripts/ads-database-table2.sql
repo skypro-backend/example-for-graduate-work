@@ -23,3 +23,11 @@ CREATE table ads(
 
     )
 
+-- changeset antonov333:50
+ALTER table ads DROP id;
+ALTER table ads ADD column id SERIAL;
+
+-- changeset antonov333:51
+ALTER table ads DROP id;
+ALTER table ads ADD column id BIGSERIAL;
+
