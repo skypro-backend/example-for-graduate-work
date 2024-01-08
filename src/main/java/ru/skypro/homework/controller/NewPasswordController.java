@@ -13,6 +13,8 @@ import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.exception.NotAllowedPasswordException;
 import ru.skypro.homework.service.impl.NewPasswordImpl;
 
+import java.security.Principal;
+
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -24,12 +26,13 @@ public class NewPasswordController {
     private final Logger logger = LoggerFactory.getLogger(NewPasswordImpl.class);
 
     @PostMapping("/users/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPassword) {
-        if (newPassword.getNewPassword().length() <= 8 || newPassword.getNewPassword().length() >= 16) {
+    public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPasswordDto,
+                                            Principal principal) {
+        if (newPasswordDto.getNewPassword().length() <= 8 || newPasswordDto.getNewPassword().length() >= 16) {
             throw new NotAllowedPasswordException("Пароль не соответсвует требованиям");
         } else {
-            newPasswordService.setPassword(newPassword.getCurrentPassword(),
-                    newPassword.getNewPassword());
+            newPasswordService.setPassword(newPasswordDto.getCurrentPassword(),
+                    newPasswordDto.getNewPassword(), principal);
             return ResponseEntity.ok().build();
         }
     }
