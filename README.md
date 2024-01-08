@@ -31,4 +31,6 @@
 - Настройте базу данных и пропишите значения в файле application.properties.
 - Настройте путь к файлу с картинками. Пример: `path.to.image.folder=/Users/master/Pictures/image
 - Скачайте и установите программу Docker. Запустите проект с помощью программы Docker.
-- [Ссылка на фронтенд](ghcr.io/bizinmitya/front-react-avito:v1.21);
+- Команды для запуска фронтенда по адресу: [localhost:3000](http://localhost:3000/)
+docker pull ghcr.io/bizinmitya/front-react-avito:v1.21						
+docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.21						
