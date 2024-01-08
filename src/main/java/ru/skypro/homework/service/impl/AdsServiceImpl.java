@@ -37,7 +37,6 @@ public class AdsServiceImpl implements AdsService {
     private final AdEntityRepository adEntityRepository;
     private final AdMapper adMapper;
     private final UserEntityRepository userEntityRepository;
-    private final CommentEntityRepository commentEntityRepository;
     private final ImageEntityRepository imageEntityRepository;
     private final ImageServiceImpl imageService;
     private final AuthenticationCheck authenticationCheck;
@@ -86,7 +85,7 @@ public class AdsServiceImpl implements AdsService {
         }
 
         AdEntity adEntity = adMapper.AdToAdEntity(properties);
-        adEntityRepository.save(adEntity); // сохраняем в базу чтобы получить Id обьявления для формирования названия изображения
+        adEntityRepository.save(adEntity);
 
         ImageEntity adImage = imageService.uploadImageToServer(image, adEntity.getId(), adEntity.getTitle());
         adEntity.setImageEntity(Optional.ofNullable(adImage).orElse(new ImageEntity()));

@@ -7,7 +7,6 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.AdEntity;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 

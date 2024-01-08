@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.CustomUserDetails;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
-import java.io.IOException;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -30,7 +29,7 @@ public class AdsController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Ad> addAd(@RequestPart("image") MultipartFile image,
                                     @RequestPart("properties") CreateOrUpdateAd properties
-            ,@AuthenticationPrincipal CustomUserDetails userDetails) throws IOException{
+            ,@AuthenticationPrincipal CustomUserDetails userDetails) {
         return new ResponseEntity<>(adsService.addAd(image, properties, userDetails),HttpStatus.CREATED);
 
     }
@@ -58,7 +57,7 @@ public class AdsController {
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateImage(@PathVariable Integer id,
                                             @RequestParam MultipartFile image,
-                                            @AuthenticationPrincipal CustomUserDetails userDetails) throws IOException {
+                                            @AuthenticationPrincipal CustomUserDetails userDetails) {
         adsService.updateImage(id, image, userDetails);
         return new ResponseEntity<>(HttpStatus.OK);
     }
