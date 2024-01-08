@@ -31,4 +31,4 @@
 - Настройте базу данных и пропишите значения в файле application.properties.
 - Настройте путь к файлу с картинками. Пример: `path.to.image.folder=/Users/master/Pictures/image
 - Скачайте и установите программу Docker. Запустите проект с помощью программы Docker.
-- [Ссылка на фронтенд](https://drive.google.com/uc?id=1UZTpeTAQpC4ANkHEFAGK2yjTFzZhXLPz&export=download)
+- [Ссылка на фронтенд](ghcr.io/bizinmitya/front-react-avito:v1.21);
