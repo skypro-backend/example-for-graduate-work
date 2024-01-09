@@ -13,6 +13,11 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Маппер для преобразования сущности Comment
+ *
+ * @see Comment
+ */
 @Data
 @Component
 public class CommentMapper {
@@ -22,6 +27,13 @@ public class CommentMapper {
     @Value("${query.to.get.image}")
     private String imageQuery;
 
+    /**
+     * Конвертирует в CommentDTO
+     *
+     * @param comment
+     * @return CommenDTO
+     * @see CommentDTO
+     */
     public CommentDTO toDto(Comment comment) {
         CommentDTO commentDTO = modelMapper.map(comment, CommentDTO.class);
         commentDTO.setPk(comment.getId());
@@ -36,6 +48,13 @@ public class CommentMapper {
         return commentDTO;
     }
 
+    /**
+     * Конвертирует в Comments DTO
+     *
+     * @param comments
+     * @return CommentsDTO
+     * @see CommentsDTO
+     */
     public CommentsDTO toCommentsDTO(List<Comment> comments) {
         CommentsDTO commentsDTO = new CommentsDTO();
         commentsDTO.setCount(comments.size());
@@ -43,29 +62,3 @@ public class CommentMapper {
         return commentsDTO;
     }
 }
-//
-//    public Comment convertToComment(CommentDTO commentDTO) {
-//        return modelMapper.map(commentDTO, Comment.class);
-////        commentDTO.setPk(comment.getId());
-//    }
-//
-//    public CommentsDTO convertToCommentsDTO(List<Comment> comment) {
-//        CommentsDTO commentsDTO = new CommentsDTO();
-//        commentsDTO.setCount(comment.size());
-//        commentsDTO.setResults(comment.stream().map(this::convertToCommentDTO).collect(Collectors.toList()));
-//        return commentsDTO;
-//}
-//
-//    public CommentDTO convertToCommentDTO(Comment comment) {
-//        CommentDTO commentDTO = modelMapper.map(comment, CommentDTO.class);
-//        commentDTO.setPk(comment.getPk());
-//        commentDTO.setCreatedAt(comment.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-//        User user = comment.getUser();
-//        if (user != null) {
-//            commentDTO.setAuthor(Math.toIntExact(user.getId()));
-//            commentDTO.setAuthorFirstName(user.getFirstName());
-//            commentDTO.setAuthorImage(imageQuery + user.getImage().getId());
-//        }
-//        return commentDTO;
-//    }
-//}

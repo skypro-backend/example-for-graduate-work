@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.kakavito.service.ImageService;
 
-
+/**
+ * Класс для управления потоком данных при работе с изображениями
+ */
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -14,6 +16,13 @@ import ru.skypro.kakavito.service.ImageService;
 public class ImageController {
     private final ImageService imageService;
 
+    /**
+     * Запрос на получение массива байт изображения
+     *
+     * @param imageId
+     * @return byte[]
+     * @see ru.skypro.kakavito.model.Image
+     */
     @GetMapping(value = "/{imageId}", produces = {
             MediaType.IMAGE_PNG_VALUE,
             MediaType.IMAGE_JPEG_VALUE,

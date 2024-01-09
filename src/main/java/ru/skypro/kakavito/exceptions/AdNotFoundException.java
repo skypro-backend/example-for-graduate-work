@@ -1,6 +1,9 @@
 package ru.skypro.kakavito.exceptions;
 
-public class AdNotFoundException extends RuntimeException{
+/**
+ * Создание исключения для отметки, что объявление не найдено
+ */
+public class AdNotFoundException extends RuntimeException {
     public AdNotFoundException(String message) {
         super(message);
     }
