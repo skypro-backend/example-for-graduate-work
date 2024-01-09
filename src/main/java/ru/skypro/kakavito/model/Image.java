@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 /**
- * The Image class represents a photo entity in the database. It is used to store binary image data associated with a user.
+ * The Avatar class represents a photo entity in the database. It is used to store binary image data associated with a user.
  */
 @Entity
 @Data
@@ -14,49 +14,41 @@ import javax.persistence.*;
 @Table(name = "images")
 public class Image {
 
-    /**
-     * Id картинки
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id")
     private Integer id;
 
     /**
      * Id юзера
-     *
-     * @see User
      */
     @OneToOne(mappedBy = "image")
-    @JoinColumn(name = "user_id")
+//    @JoinColumn(name = "user_id")
     private User user;
 
     /**
      * Id объявления
-     *
-     * @see Ad
-     */
+//     */
     @OneToOne(mappedBy = "image")
-    @JoinColumn(name = "ad_id")
+//    @JoinColumn(name = "ad_id")
     private Ad ad;
 
     /**
      * Размер фото
      */
+    @Column(name = "file_size")
     private Long fileSize;
 
-    /**
-     * Тип медиафайла
-     */
+    @Column(name = "media_type")
     private String mediaType;
 
     /**
      * Путь к файлу
      */
+    @Column(name = "file_path")
     private String filePath;
 
-    /**
-     * Массив байт
-     */
     @Lob
+    @Column(name = "data")
     private byte[] data;
 }

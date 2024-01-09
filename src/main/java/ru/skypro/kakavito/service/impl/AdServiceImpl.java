@@ -100,7 +100,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public AdsDTO getAdByAuthUser() {
         User user = getAuthUser();
-        return adMapper.convertToAdsDTO(adRepo.findAllById(Math.toIntExact(user.getId())));
+        return adMapper.convertToAdsDTO(adRepo.findAllByUserId(user.getId()));
     }
 
     public User getAuthUser() {
