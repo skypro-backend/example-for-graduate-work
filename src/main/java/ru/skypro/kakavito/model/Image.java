@@ -23,32 +23,32 @@ public class Image {
      * Id юзера
      */
     @OneToOne(mappedBy = "image")
-    @JoinColumn(name = "user_id")
+//    @JoinColumn(name = "user_id")
     private User user;
 
     /**
      * Id объявления
-     */
+//     */
     @OneToOne(mappedBy = "image")
-    @JoinColumn(name = "ad_id")
+//    @JoinColumn(name = "ad_id")
     private Ad ad;
 
     /**
      * Размер фото
      */
-//    @Column(name = "file_size")
+    @Column(name = "file_size")
     private Long fileSize;
 
-//    @Column(name = "media_type")
+    @Column(name = "media_type")
     private String mediaType;
 
     /**
      * Путь к файлу
      */
-//    @Column(name = "file_path")
+    @Column(name = "file_path")
     private String filePath;
 
     @Lob
-//    @Column(name = "bytes")
+    @Column(name = "data")
     private byte[] data;
 }
