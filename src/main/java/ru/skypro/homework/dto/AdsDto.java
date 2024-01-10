@@ -4,8 +4,9 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 import java.util.List;
 
+
 @Data
-public class Comments {
+public class AdsDto {
     private int count;
-    private List<Comment> results;
+    private List<AdDto> results;
 }

@@ -19,13 +19,13 @@ import ru.skypro.homework.dto.*;
 public class AdsController {
 
     @GetMapping()
-    public ResponseEntity<Ads> getAllAds() {
-        return ResponseEntity.ok(new Ads());
+    public ResponseEntity<AdsDto> getAllAds() {
+        return ResponseEntity.ok(new AdsDto());
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE) //+ 401 Unauthorized
-    public ResponseEntity<Ad> addAd(@RequestBody CreateOrUpdateAd properties, @RequestBody MultipartFile image) {
-        return new ResponseEntity<>(new Ad(), HttpStatus.CREATED);
+    public ResponseEntity<AdDto> addAd(@RequestBody CreateOrUpdateAd properties, @RequestBody MultipartFile image) {
+        return new ResponseEntity<>(new AdDto(), HttpStatus.CREATED);
     }
 
     @GetMapping("{id}") //+ 401 Unauthorized + 404 Not found
@@ -39,13 +39,13 @@ public class AdsController {
     }
 
     @PutMapping("{id}") //+ 401 Unauthorized + 403 Forbidden + 404 Not found
-    public ResponseEntity<Ad> updateAdInformation(@PathVariable Integer id, @RequestBody CreateOrUpdateAd properties) {
-        return ResponseEntity.ok(new Ad());
+    public ResponseEntity<AdDto> updateAdInformation(@PathVariable Integer id, @RequestBody CreateOrUpdateAd properties){
+        return ResponseEntity.ok(new AdDto());
     }
 
     @GetMapping("/me") //+ 401 Unauthorized
-    public ResponseEntity<Ads> getAdsFromAuthorizedUser() {
-        return ResponseEntity.ok(new Ads());
+    public ResponseEntity<AdsDto> getAdsFromAuthorizedUser() {
+        return ResponseEntity.ok(new AdsDto());
     }
 
     @PutMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
