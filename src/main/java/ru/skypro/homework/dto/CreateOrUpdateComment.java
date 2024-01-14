@@ -2,7 +2,12 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 @Data
 public class CreateOrUpdateComment {
-    private String text; //minLength: 8 maxLength: 64 текст комментария
+    @NotBlank
+    @Size(min = 8)
+    private String text;
 }

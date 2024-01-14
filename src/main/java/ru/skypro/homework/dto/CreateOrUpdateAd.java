@@ -2,11 +2,16 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 @Data
 public class CreateOrUpdateAd {
-    private String title; //minLength: 4 maxLength: 32 заголовок объявления
-
-    private int price; //minimum: 0 maximum: 10000000 цена объявления
-
-    private String description; //minLength: 8 maxLength: 64 описание объявления
+    @NotBlank
+    @Size(min = 8)
+    private String title;
+    private int price;
+    @NotBlank
+    @Size(min = 8)
+    private String description;
 }

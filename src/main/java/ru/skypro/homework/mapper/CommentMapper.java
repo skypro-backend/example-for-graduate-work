@@ -1,51 +1,34 @@
 package ru.skypro.homework.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import ru.skypro.homework.dto.CommentDto;
-import ru.skypro.homework.dto.CommentsDto;
-
-import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.model.Avatar;
 import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.model.User;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Mapper(componentModel = "spring")
 public interface CommentMapper {
+    String address = "/users/image/";
 
-    default CommentDto commentToCommentDto(Comment comment) {
-        CommentDto commentDto = new CommentDto();
-        commentDto.setAuthor(comment.getUser().getId());
-        commentDto.setAuthorImage(comment.getUser().getAvatar().getFilePath());
-        commentDto.setAuthorFirstName(comment.getUser().getFirstName());
-        commentDto.setCreatedAt(comment.getTime());
-        commentDto.setPk(comment.getId());
-        commentDto.setText(comment.getText());
-        return commentDto;
-    }
-    default Comment commentDtoToComment(CommentDto commentDto, User user) {
-        Comment comment = new Comment(user, commentDto.getCreatedAt(), commentDto.getText());
-        return comment;
-    }
-    default CommentsDto commentsToCommentsDto(List<Comment> commentList) { //без обратного метода
-        CommentsDto commentsDto = new CommentsDto();
-        commentsDto.setCount(commentList.size());
-        List<CommentDto> commentDtoList = new ArrayList<>();
-        for (Comment comment : commentList) {
-            commentDtoList.add(commentToCommentDto(comment));
+    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "id", source = "pk")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "ad", ignore = true)
+    Comment commentDtoToComment(CommentDto dto);
+
+    @Mapping(target = "author", source = "author.id")
+    @Mapping(target = "authorFirstName", source = "author.firstName")
+    @Mapping(source = "id", target = "pk")
+    @Mapping(target = "createdAt", source = "createdAt")
+    @Mapping(target = "authorImage", source = "author.avatar", qualifiedByName = "avatarToString")
+    CommentDto commentToCommentDto(Comment entity);
+
+    @Named("avatarToString")
+    default String avatarToString(Avatar avatar) {
+        if (avatar == null) {
+            return null;
         }
-        commentsDto.setResults(commentDtoList);
-        return commentsDto;
-    }
-
-    default CreateOrUpdateComment commentToCreateOrUpdateComment(Comment comment){
-        CreateOrUpdateComment createOrUpdateComment = new CreateOrUpdateComment();
-        createOrUpdateComment.setText(comment.getText());
-        return  createOrUpdateComment;
-    }
-
-    default Comment CreateOrUpdateCommentToComment(CreateOrUpdateComment createOrUpdateComment){
-        Comment comment = new Comment();
-        comment.setText(createOrUpdateComment.getText());
-        return comment;
+        return address + avatar.getId();
     }
 }

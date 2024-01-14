@@ -1,28 +1,54 @@
 package ru.skypro.homework.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.model.Image;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Mapper(componentModel = "spring")
 public interface AdMapper {
-    default AdDto adToAdDto(Ad ad) {
-        AdDto adDto = new AdDto();
-        adDto.setAuthor(ad.getUser().getId());
-        adDto.setImage(ad.getImage().getFilePath());
-        adDto.setPk(ad.getId());
-        adDto.setPrice(ad.getPrice());
-        adDto.setTitle(ad.getTitle());
-        return adDto;
+
+    String address = "/ads/image/";
+
+    @Mapping(target = "id", source = "pk")
+    @Mapping(target = "author.id", source = "author")
+    @Mapping(target = "image", ignore = true)
+    Ad adDtoToAd(AdDto dto);
+
+    @Mapping(target = "pk", source = "id")
+    @Mapping(target = "author", source = "author.id")
+    @Mapping(target = "image", source = "image", qualifiedByName = "imageToString")
+    AdDto adToAdDto(Ad entity);
+
+    @Mapping(target = "pk", source = "id")
+    @Mapping(target = "authorFirstName", source = "author.firstName")
+    @Mapping(target = "authorLastName", source = "author.lastName")
+    @Mapping(target = "email", source = "author.email")
+    @Mapping(target = "phone", source = "author.phone")
+    @Mapping(target = "image", source = "image", qualifiedByName = "imageToString")
+    ExtendedAd toExtendedAd(Ad entity);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "image", ignore = true)
+    Ad createOrUpdateAdToAd(CreateOrUpdateAd dto);
+
+    @Named("imageToString")
+    default String imageToString(Image image) {
+        if (image == null) {
+            return null;
+        }
+        return address + image.getId();
     }
-    default Ad adDtoToAd(AdDto adDto, User user) {
-        Ad ad = new Ad(adDto.getPrice(), adDto.getTitle(), null, user, null);
-        return ad;
-    }
+
     default AdsDto adListToAds(List<Ad> list) { //без обратного метода
         AdsDto adsDto = new AdsDto();
         adsDto.setCount(list.size());
@@ -34,31 +60,4 @@ public interface AdMapper {
         return adsDto;
     }
 
-    default ExtendedAd toExtendedAd(Ad ad) { //без обратного метода
-        ExtendedAd extendedAd = new ExtendedAd();
-        extendedAd.setPk(ad.getId());
-        extendedAd.setAuthorFirstName(ad.getUser().getFirstName());
-        extendedAd.setAuthorLastName(ad.getUser().getLastName());
-        extendedAd.setDescription(ad.getDescription());
-        extendedAd.setEmail(ad.getUser().getEmail());
-        extendedAd.setImage(ad.getImage().getFilePath());
-        extendedAd.setPhone(ad.getUser().getPhone());
-        extendedAd.setPrice(ad.getPrice());
-        extendedAd.setTitle(ad.getTitle());
-        return extendedAd;
-    }
-    default Ad createOrUpdateAdToAd(CreateOrUpdateAd createOrUpdateAd){
-        Ad ad = new Ad();
-        ad.setDescription(createOrUpdateAd.getDescription());
-        ad.setPrice(createOrUpdateAd.getPrice());
-        ad.setTitle(createOrUpdateAd.getTitle());
-        return ad;
-    }
-    default CreateOrUpdateAd adToCreateOrUpdateAd(Ad ad){
-        CreateOrUpdateAd createOrUpdateAd = new CreateOrUpdateAd();
-        createOrUpdateAd.setDescription(ad.getDescription());
-        createOrUpdateAd.setTitle(ad.getTitle());
-        createOrUpdateAd.setPrice(ad.getPrice());
-        return createOrUpdateAd;
-    }
 }

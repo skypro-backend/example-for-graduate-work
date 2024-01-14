@@ -1,12 +1,20 @@
 package ru.skypro.homework.dto;
 
 import lombok.Data;
+import ru.skypro.homework.validatoin.Regex;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Data
 public class UpdateUser {
-    private String firstName; //minLength: 3 maxLength: 10 имя пользователя
-
-    private String lastName; //minLength: 3 maxLength: 10 фамилия пользователя
-
-    private String phone; //pattern: \+7\s?\(?\d{3}\)?\s?\d{3}-?\d{2}-?\d{2} телефон пользователя
+    @NotBlank
+    @Size(min = 2,max = 16)
+    private String firstName;
+    @NotBlank
+    @Size(min = 2,max = 16)
+    private String lastName;
+    @Pattern(regexp = Regex.PHONE_REGEXP)
+    private String phone;
 }

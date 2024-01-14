@@ -1,32 +1,32 @@
 package ru.skypro.homework.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
+@AllArgsConstructor
 @NoArgsConstructor
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private int id;
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    private User user;
+    private LocalDateTime createdAt;
 
-    private Integer time;
-    @ManyToOne
-    @JoinColumn(name = "ads_id")
-    private Ad ad;
     private String text;
 
-    public Comment(User user, Integer time, String text) {
-            this.user = user;
-            this.time = time;
-            this.text = text;
-        }
+    @ManyToOne(fetch = FetchType.LAZY)
+
+    @JoinColumn(name = "author_id")
+    private User author;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pk_ad")
+    private Ad ad;
+
     }
