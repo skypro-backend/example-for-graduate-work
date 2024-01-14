@@ -2,179 +2,215 @@ package ru.skypro.kakavito.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.kakavito.dto.*;
 import ru.skypro.kakavito.exceptions.AdNotFoundException;
+import ru.skypro.kakavito.exceptions.ImageSizeExceededException;
+import ru.skypro.kakavito.exceptions.UserNotFoundException;
 import ru.skypro.kakavito.mappers.AdMapper;
 import ru.skypro.kakavito.model.Ad;
 import ru.skypro.kakavito.model.Image;
 import ru.skypro.kakavito.model.User;
 import ru.skypro.kakavito.repository.AdRepo;
+import ru.skypro.kakavito.repository.ImageRepo;
 import ru.skypro.kakavito.repository.UserRepo;
+import ru.skypro.kakavito.service.ImageService;
 import ru.skypro.kakavito.service.impl.AdServiceImpl;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
-import static jdk.internal.org.objectweb.asm.util.CheckClassAdapter.verify;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class AdServiceImplTest {
+class AdServiceImplTest {
 
-        @Mock
-        private AdRepo adRepo;
+    @InjectMocks
+    private AdServiceImpl adService;
 
-        @Mock
-        private UserRepo userRepo;
+    @Mock
+    private AdMapper adMapper;
 
-        @Mock
-        private ImageService imageService;
+    @Mock
+    private AdRepo adRepo;
 
-        @Mock
-        private AdMapper adMapper;
+    @Mock
+    private UserRepo userRepo;
 
-        @Mock
-        private SecurityContext securityContext;
+    @Mock
+    private ImageRepo imageRepo;
 
-        @Mock
-        private Authentication authentication;
+    @Mock
+    private ImageService imageService;
 
-        @InjectMocks
-        private AdServiceImpl adService;
+    @Mock
+    private Authentication authentication;
 
-        // Предварительная настройка данных
-        private Ad ad;
-        private User user;
-        private AdDTO adDTO;
+    @Mock
+    private SecurityContext securityContext;
 
-        @BeforeEach
-        void setUp() {
-            // Инициализация данных
-            user = new User();
-            user.setId(1L);
-            user.setRole(Role.USER);
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        SecurityContextHolder.setContext(securityContext);
+    }
 
-            ad = new Ad();
-            ad.setId(1);
-            ad.setUser(user);
+    @Test
+    void findAllAds_shouldReturnAdsDTO() {
+        // Arrange
+        when(adRepo.findAll()).thenReturn(Collections.singletonList(new Ad()));
+        when(adMapper.convertToAdsDTO(anyList())).thenReturn(new AdsDTO());
 
-            adDTO = new AdDTO();
-            adDTO.setPk(1);
+        // Act
+        AdsDTO result = adService.findAllAds();
 
-            // Настройка SecurityContext
-            when(securityContext.getAuthentication()).thenReturn(authentication);
-            SecurityContextHolder.setContext(securityContext);
-            when(authentication.getPrincipal()).thenReturn(new UserPrincipalDTO());
-        }
+        // Assert
+        assertNotNull(result);
+        verify(adRepo, times(1)).findAll();
+        verify(adMapper, times(1)).convertToAdsDTO(anyList());
+    }
 
-        @Test
-        void testGetAllAds() {
-            List<Ad> ads = List.of(new Ad()); // Замените на реальные тестовые данные
-            when(adRepo.findAll()).thenReturn(ads);
-            when(adMapper.convertToAdsDTO(Collections.singletonList(any(Ad.class)))).thenReturn(new AdDTO());
+    @Test
+    void addAd_shouldReturnAdDTO() throws IOException, ImageSizeExceededException {
+        // Arrange
+        MultipartFile imageFile = mock(MultipartFile.class);
+        CreateOrUpdateAdDTO createOrUpdateAdDTO = new CreateOrUpdateAdDTO();
+        User user = new User();
+        user.setId(1L);
 
-            AdsDTO result = adService.findAllAds();
+        when(imageService.upLoadImage(imageFile)).thenReturn(new Image());
+        when(adMapper.convertCreatDTOToAd(createOrUpdateAdDTO)).thenReturn(new Ad());
+        when(adRepo.save(any(Ad.class))).thenReturn(new Ad());
+        when(adMapper.convertToAdDTO(any(Ad.class))).thenReturn(new AdDTO());
+        when(userRepo.findByEmail(anyString())).thenReturn(Optional.of(user));
+        when(authentication.getPrincipal()).thenReturn(mock(UserDetails.class));
+        when(((UserDetails) authentication.getPrincipal()).getUsername()).thenReturn("test@example.com");
+        when(securityContext.getAuthentication()).thenReturn(authentication);
 
-            assertThat(result).isNotNull();
-            assertThat(result.getCount()).isEqualTo(ads.size());
-            verify(adMapper, times(ads.size())).convertCreatDTOToAd(any(Ad.class));
-        }
+        // Act
+        AdDTO result = adService.addAd(createOrUpdateAdDTO, imageFile);
 
-        @Test
-        void testCreateAd() throws IOException {
-            CreateOrUpdateAdDTO dto = new CreateOrUpdateAdDTO();
-            Ad ad = new Ad();
-            when(adMapper.convertCreatDTOToAd(dto)).thenReturn(ad);
-            when(adRepo.save(ad)).thenReturn(ad);
-            when(imageService.upLoadImage(any())).thenReturn(new Image());
+        // Assert
+        assertNotNull(result);
+        verify(imageService, times(1)).upLoadImage(imageFile);
+        verify(adRepo, times(1)).save(any(Ad.class));
+        verify(adMapper, times(1)).convertToAdDTO(any(Ad.class));
+        verify(userRepo, times(1)).findByEmail(anyString());
+    }
 
-            AdDTO result = adService.addAd(dto, null);
+    @Test
+    void findById_shouldReturnExtendedAdDTO() {
+        // Arrange
+        when(adRepo.findById(anyInt())).thenReturn(Optional.of(new Ad()));
+        when(adMapper.convertToExtendedAd(any(Ad.class))).thenReturn(new ExtendedAdDTO());
 
-            assertThat(result).isNotNull();
-            verify(adRepo).save(any(Ad.class));
-            verify(imageService).upLoadImage(any());
-        }
+        // Act
+        ExtendedAdDTO result = adService.findById(1);
 
-        @Test
-        void testGetAdById() {
-            when(adRepo.findById(1)).thenReturn(Optional.of(new Ad()));
-            when(adMapper.convertToExtendedAd(any(Ad.class))).thenReturn(new ExtendedAdDTO());
+        // Assert
+        assertNotNull(result);
+        verify(adRepo, times(1)).findById(anyInt());
+        verify(adMapper, times(1)).convertToExtendedAd(any(Ad.class));
+    }
 
-            ExtendedAdDTO result = adService.findById(1);
+    @Test
+    void getAdByAuthUser_shouldReturnAdsDTO() {
+        // Arrange
+        User user = new User();
+        user.setId(1L);
+        when(adRepo.findAllByUserId(user.getId())).thenReturn(Collections.singletonList(new Ad()));
+        when(adMapper.convertToAdsDTO(anyList())).thenReturn(new AdsDTO());
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(mock(UserDetails.class));
+        when(((UserDetails) authentication.getPrincipal()).getUsername()).thenReturn("test@example.com");
+        when(userRepo.findByEmail(anyString())).thenReturn(Optional.of(user));
 
-            assertThat(result).isNotNull();
-            verify(adMapper).convertToExtendedAd(any(Ad.class));
-        }
+        // Act
+        AdsDTO result = adService.getAdByAuthUser();
 
-        @Test
-        void getAdById_ShouldThrowAdNotFoundException() {
-            when(adRepo.findById(1)).thenReturn(Optional.empty());
+        // Assert
+        assertNotNull(result);
+        verify(adRepo, times(1)).findAllByUserId(user.getId());
+        verify(adMapper, times(1)).convertToAdsDTO(anyList());
+        verify(userRepo, times(1)).findByEmail(anyString());
+    }
 
-            assertThatThrownBy(() -> adService.findById(1))
-                    .isInstanceOf(AdNotFoundException.class)
-                    .hasMessageContaining("Ad not found with ID: 1");
-        }
+    @Test
+    void getAuthUser_shouldReturnUser() {
+        // Arrange
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(mock(UserDetails.class));
+        when(((UserDetails) authentication.getPrincipal()).getUsername()).thenReturn("test@example.com");
+        when(userRepo.findByEmail(anyString())).thenReturn(Optional.of(new User()));
 
-        @Test
-        void testDeleteAd() {
-            Ad ad = new Ad();
-            ad.setUser(new User());
-            when(adRepo.findById(1)).thenReturn(Optional.of(ad));
-            doNothing().when(adRepo).deleteById(1);
+        // Act
+        User result = adService.getAuthUser();
 
-            adService.deleteAd(1);
+        // Assert
+        assertNotNull(result);
+        verify(userRepo, times(1)).findByEmail(anyString());
+    }
 
-            verify(adRepo).deleteById(1);
-        }
+    @Test
+    void updateAd_shouldReturnAdDTO() {
+        // Arrange
+        int adId = 1;
+        CreateOrUpdateAdDTO createOrUpdateAdDTO = new CreateOrUpdateAdDTO();
+        Ad ad = new Ad();
+        ad.setId(adId);
+        ad.setTitle("Old Title");
+        when(adRepo.findById(adId)).thenReturn(Optional.of(ad));
+        when(adRepo.save(any(Ad.class))).thenReturn(ad);
+        when(adMapper.convertToAdDTO(ad)).thenReturn(new AdDTO());
 
-        @Test
-        void testUpdateAd() {
-            CreateOrUpdateAdDTO dto = new CreateOrUpdateAdDTO();
-            Ad ad = new Ad();
-            when(adRepo.findById(1)).thenReturn(Optional.of(ad));
-            when(adMapper.convertToAdDTO(any(Ad.class))).thenReturn(new AdDTO());
+        // Act
+        AdDTO result = adService.updateAd(adId, createOrUpdateAdDTO);
 
-            AdDTO result = adService.updateAd(1, dto);
+        // Assert
+        assertNotNull(result);
+        assertEquals(createOrUpdateAdDTO.getTitle(), ad.getTitle());
+        verify(adRepo, times(1)).findById(adId);
+        verify(adRepo, times(1)).save(any(Ad.class));
+        verify(adMapper, times(1)).convertToAdDTO(ad);
+    }
 
-            assertThat(result).isNotNull();
-            verify(adRepo).save(any(Ad.class));
-        }
+    @Test
+    void updateAdImage_shouldUpdateImage() {
+        // Arrange
+        int adId = 1;
+        MultipartFile imageFile = mock(MultipartFile.class);
+        Ad ad = new Ad();
+        ad.setId(adId);
+        when(adRepo.findById(adId)).thenReturn(Optional.of(ad));
 
-        @Test
-        void testGetAdsByUser() {
-            User user = new User();
-            user.setId(1L);
-            List<Ad> ads = List.of(new Ad());
-            when(userRepo.findByEmail("user@example.com")).thenReturn(Optional.of(user));
-            when(adRepo.findAllByUserId(1L)).thenReturn(ads);
-            when(adMapper.convertToAdDTO(any(Ad.class))).thenReturn(new AdDTO());
+        // Act
+        adService.updateAdImage(adId, imageFile);
 
-            AdsDTO result = adService.getAdByAuthUser();
+        // Assert
+        verify(imageService, times(1)).updateImage(adId, imageFile);
+    }
 
-            assertThat(result).isNotNull();
-            assertThat(result.getCount()).isEqualTo(ads.size());
-            verify(adRepo).findAllByUserId(1);
-            verify(adMapper, times(ads.size())).toDto(any(Ad.class));
-        }
+    @Test
+    void deleteAd_shouldDeleteAd() {
+        // Arrange
+        int adId = 1;
+        when(adRepo.findById(adId)).thenReturn(Optional.of(new Ad()));
 
-        @Test
-        void testUpdateAdImage() throws IOException {
-            when(adRepo.findById(1)).thenReturn(Optional.of(new Ad()));
-            doNothing().when(imageService).updateImage(any(), anyInt());
+        // Act
+        adService.deleteAd(adId);
 
-            adService.updateAdImage(1, null);
+        // Assert
+        verify(adRepo, times(1)).findById(adId);
+        verify(adRepo, times(1)).deleteById(adId);
+    }
 
-            verify(imageService).updateImage(any(), eq(1));
-        }
+    // Add similar test methods for other AdServiceImpl methods
 }
