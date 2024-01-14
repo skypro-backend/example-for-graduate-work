@@ -1,6 +1,7 @@
 package ru.skypro.homework.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.skypro.homework.dto.Role;
@@ -15,7 +16,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+@Builder
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,11 +46,13 @@ public class User {
 
     private Role role;
 
-    private String image;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ImageEntity image;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
     private List<Ad> ads;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
     private List<Comment> comments;
+
 }

@@ -13,7 +13,7 @@ public class AdMapper {
         return AdDto.builder()
                 .pk(ad.getId())
                 .author(ad.getAuthor().getId())
-                .image(ad.getAuthor().getImage())
+                .image("/image/" + ad.getImage().getId())
                 .price(ad.getPrice())
                 .title(ad.getTittle())
                 .build();
@@ -27,7 +27,7 @@ public class AdMapper {
                 .description(ad.getDescription())
                 .email(ad.getAuthor().getEmail())
                 .phone(ad.getAuthor().getPhone())
-                .image(ad.getAuthor().getImage())
+                .image("/image/" + ad.getImage().getId())
                 .price(ad.getPrice())
                 .title(ad.getTittle())
                 .build();
@@ -38,6 +38,14 @@ public class AdMapper {
                 .title(ad.getTittle())
                 .price(ad.getPrice())
                 .description(ad.getDescription())
+                .build();
+    }
+
+    public Ad adToEntity(CreateOrUpdateAdDto dto) {
+        return Ad.builder()
+                .tittle(dto.getTitle())
+                .price(dto.getPrice())
+                .description(dto.getDescription())
                 .build();
     }
 }

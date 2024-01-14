@@ -6,14 +6,23 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.comments.*;
+import ru.skypro.homework.entity.CustomUserDetails;
+import ru.skypro.homework.service.CommentService;
 
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping
 public class CommentsController {
+
+    private final CommentService commentService;
 
     @Operation(summary = "Получение комментариев объявления", tags = {"Комментарии"})
     @ApiResponses(value = {
@@ -28,7 +37,7 @@ public class CommentsController {
     public CommentsDto getComments(
             @Parameter(name = "id", required = true)
             @PathVariable int id) {
-        return new CommentsDto();
+        return commentService.getComments(id);
     }
 
     @Operation(summary = "Добавление комментария к объявлению", tags = {"Комментарии"})
@@ -44,8 +53,10 @@ public class CommentsController {
     public CommentDto addComment(
             @Parameter(name = "id", required = true)
             @PathVariable int id,
-            @RequestBody CreateOrUpdateComment text) {
-        return new CommentDto();
+            @RequestBody CreateOrUpdateComment text,
+            Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return commentService.addComment(id, text, userDetails.getUsername());
     }
 
     @Operation(summary = "Удаление комментария", tags = {"Комментарии"})
@@ -64,7 +75,10 @@ public class CommentsController {
             @Parameter(name = "adId", required = true)
             @PathVariable int adId,
             @Parameter(name = "commentId", required = true)
-            @PathVariable int commentId) {
+            @PathVariable int commentId,
+            Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        commentService.deleteComment(adId, commentId, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -85,7 +99,9 @@ public class CommentsController {
             @PathVariable int adId,
             @Parameter(name = "commentId", required = true)
             @PathVariable int commentId,
-            @RequestBody CreateOrUpdateComment text) {
-        return new CommentDto();
+            @RequestBody CreateOrUpdateComment text,
+            Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return commentService.updateComment(adId, commentId, text, userDetails.getUsername());
     }
 }

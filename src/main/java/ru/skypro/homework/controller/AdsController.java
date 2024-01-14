@@ -6,14 +6,25 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.*;
+import ru.skypro.homework.entity.CustomUserDetails;
+import ru.skypro.homework.service.AdService;
 
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequestMapping
+@RequiredArgsConstructor
+@RequestMapping()
 public class AdsController {
+
+    private final AdService adsService;
 
     @Operation(summary = "Получение всех объявлений", tags = {"Объявления"})
     @ApiResponses(value = {
@@ -22,7 +33,7 @@ public class AdsController {
     })
     @GetMapping("/ads")
     public AdsDto getAllAds() {
-        return new AdsDto();
+        return adsService.findAll();
     }
 
     @Operation(summary = "Добавление объявления", tags = {"Объявления"})
@@ -32,12 +43,14 @@ public class AdsController {
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
-    @PostMapping("/ads")
+    @PostMapping(value = "/ads", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public AdDto addAd(
-            @RequestParam(name = "image", required = true) String image,
+            @RequestPart(name = "image") MultipartFile image,
             @Parameter(name = "properties", required = true)
-            @RequestBody CreateOrUpdateAdDto properties) {
-        return new AdDto();
+            @RequestPart CreateOrUpdateAdDto properties,
+            Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return adsService.addAd(image, properties, userDetails.getUsername());
     }
 
     @Operation(summary = "Получение информации об объявлении", tags = {"Объявления"})
@@ -52,13 +65,15 @@ public class AdsController {
     @GetMapping("/ads/{id}")
     public ExtendedAdDto getAds(
             @Parameter(name = "id", required = true)
-            @PathVariable int id) {
-        return new ExtendedAdDto();
+            @PathVariable int id,
+            Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return adsService.getAdById(userDetails.getUsername(), id);
     }
 
     @Operation(summary = "Удаление объявления", tags = {"Объявления"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "No Content",
+            @ApiResponse(responseCode = "204", description = "No Content",
                     content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(schema = @Schema(implementation = String.class))),
@@ -70,7 +85,10 @@ public class AdsController {
     @DeleteMapping("/ads/{id}")
     public ResponseEntity<?> removeAd(
             @Parameter(name = "id", required = true)
-            @PathVariable int id) {
+            @PathVariable int id,
+            Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        adsService.deleteAd(id, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -89,8 +107,10 @@ public class AdsController {
     public AdDto updateAds(
             @Parameter(name = "id", required = true)
             @PathVariable int id,
-            @RequestBody CreateOrUpdateAdDto dto) {
-        return new AdDto();
+            @RequestBody CreateOrUpdateAdDto dto,
+            Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return adsService.updateAd(id, dto, userDetails.getUsername());
     }
 
     @Operation(summary = "Получение объявлений авторизованного пользователя", tags = {"Объявления"})
@@ -101,8 +121,9 @@ public class AdsController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("/ads/me")
-    public AdsDto getAdsMe() {
-        return new AdsDto();
+    public AdsDto getAdsMe(Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return adsService.getAdsAuthorizedUser(userDetails.getUsername());
     }
 
     @Operation(summary = "Обновление картинки объявления", tags = {"Объявления"})
@@ -121,7 +142,9 @@ public class AdsController {
             @Parameter(name = "id", required = true)
             @PathVariable int id,
             @Parameter(name = "image", required = true)
-            @RequestParam String image) {
-        return "1243sq";
+            @RequestParam MultipartFile image,
+            Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return adsService.updateImage(id, image, userDetails.getUsername());
     }
 }

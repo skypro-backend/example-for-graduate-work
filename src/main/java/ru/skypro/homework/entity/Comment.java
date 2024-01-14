@@ -1,11 +1,14 @@
 package ru.skypro.homework.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -13,6 +16,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Comment {
 
     @Id
@@ -20,13 +24,16 @@ public class Comment {
     private int id;
 
     @ManyToOne
-    @JoinColumn(nullable = false, updatable = false, name = "user_id")
-    private User author;
+    @JoinColumn(nullable = false, updatable = false, name = "author_id")
+    private UserEntity author;
 
     @Size(min = 8, max = 64)
     private String text;
 
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
+    @ManyToOne
+    @JoinColumn(nullable = false, updatable = false, name = "ad_id")
+    private Ad ad;
 }

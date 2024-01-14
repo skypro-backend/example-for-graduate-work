@@ -5,6 +5,8 @@ import ru.skypro.homework.dto.comments.CommentDto;
 import ru.skypro.homework.dto.comments.CreateOrUpdateComment;
 import ru.skypro.homework.entity.Comment;
 
+import java.time.ZoneOffset;
+
 @Component
 public class CommentMapper {
 
@@ -13,8 +15,8 @@ public class CommentMapper {
                 .pk(comment.getId())
                 .author(comment.getAuthor().getId())
                 .authorFirstName(comment.getAuthor().getFirstName())
-                .authorImage(comment.getAuthor().getImage())
-                .createdAt((int) comment.getCreatedAt().getTime())
+                .authorImage("/image/" + comment.getAuthor().getImage().getId())
+                .createdAt(comment.getCreatedAt())
                 .text(comment.getText())
                 .build();
        }
