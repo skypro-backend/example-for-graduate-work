@@ -1,8 +1,6 @@
 package ru.skypro.homework.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +10,9 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 public class Image {
 
     @Id
@@ -23,10 +23,4 @@ public class Image {
     private String mediaType;
     private byte[] data;
 
-    public Image(String filePath, long fileSize, String mediaType, byte[] data) {
-        this.filePath = filePath;
-        this.fileSize = fileSize;
-        this.mediaType = mediaType;
-        this.data = data;
-    }
 }

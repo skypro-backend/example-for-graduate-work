@@ -1,8 +1,6 @@
 package ru.skypro.homework.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +10,9 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 public class Avatar {
 
     @Id
@@ -23,11 +23,4 @@ public class Avatar {
     private String mediaType;
     private byte[] data;
 
-    public Avatar(long id, String filePath, long fileSize, String mediaType, byte[] data) {
-        this.id = id;
-        this.filePath = filePath;
-        this.fileSize = fileSize;
-        this.mediaType = mediaType;
-        this.data = data;
-    }
 }

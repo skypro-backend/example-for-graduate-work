@@ -13,7 +13,7 @@ public interface UserMapper {
 
     String address = "/users/image/";
 
-    @Mapping(target = "avatar", source = "avatar", qualifiedByName = "avatarToString")
+    @Mapping(target = "image", source = "avatar", qualifiedByName = "avatarToString")
     UserDTO userToUserDto(User entity);
 
     @Mapping(target = "password", ignore = true)

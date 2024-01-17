@@ -1,17 +1,16 @@
 package ru.skypro.homework.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.apache.catalina.User;
+import lombok.*;
 
 import javax.persistence.*;
-import java.awt.*;
 
 @Entity
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 public class Listing {
 
     @Id

@@ -14,7 +14,7 @@ public interface CommentMapper {
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "id", source = "pk")
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "ad", ignore = true)
+    @Mapping(target = "listing", ignore = true)
     Comment commentDtoToComment(CommentDTO dto);
 
     @Mapping(target = "author", source = "author.id")
