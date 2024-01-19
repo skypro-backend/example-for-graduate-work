@@ -1,4 +1,7 @@
-CREATE TABLE avatar
+-- liquibase formatted sql
+
+-- changeset poma:1
+CREATE TABLE image
 (
 
     id        BIGSERIAL PRIMARY KEY,

@@ -6,7 +6,10 @@ import org.mapstruct.Named;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.model.Avatar;
 import ru.skypro.homework.model.Comment;
-
+/**
+ * <b> Маппер комментариев </b> <p>
+ * Контролируется MapStruct
+ */
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
     String address = "/users/image/";

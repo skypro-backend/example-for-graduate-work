@@ -1,11 +1,13 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import ru.skypro.homework.config.GetAuthentication;
+import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
@@ -18,14 +20,13 @@ import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.CommentsService;
 
 import javax.transaction.Transactional;
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CommentsServiceImpl extends CommentsService {
+public class CommentsServiceImpl implements CommentsService {
     private final AdRepository adRepository;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
@@ -76,7 +77,7 @@ public class CommentsServiceImpl extends CommentsService {
 
     public void checkPermit(Comment comment, Authentication authentication){
         if (!comment.getAuthor().getEmail().equals(authentication.getName()) && !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
-            throw new AccessDeniedException("Вы не можете редактировать или удалять чужое объявление");
+            throw new AccessDeniedException("Вы не можете редактировать или удалять чужое объявление") ;
         }
     }
 }

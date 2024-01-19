@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,13 @@ import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
 
-import javax.transaction.Transactional;
-import java.nio.file.AccessDeniedException;
+import java.io.IOException;
 import java.util.List;
+import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AdsServiceImpl extends AdsService {
+public class AdsServiceImpl implements AdsService {
     private final AdRepository adRepository;
     private final CommentRepository commentRepository;
     private final ImageRepository imageRepository;

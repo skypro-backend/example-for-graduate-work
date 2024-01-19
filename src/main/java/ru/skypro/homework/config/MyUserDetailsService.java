@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
-
 import java.util.Optional;
 
 @Service
@@ -22,7 +21,6 @@ public class MyUserDetailsService implements UserDetailsService {
         Optional<User> user = repository.findUserByEmailIgnoreCase(username);
         if (user.isEmpty())
             throw new UsernameNotFoundException("Не найден Пользователь");
-
         return new UserDetailsImpl(user.get());
     }
 }

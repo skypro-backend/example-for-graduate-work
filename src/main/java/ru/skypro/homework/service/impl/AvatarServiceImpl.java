@@ -12,7 +12,7 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 
-public class AvatarServiceImpl extends AvatarService {
+public class AvatarServiceImpl implements AvatarService {
     private final AvatarRepository repository;
 
     @Override

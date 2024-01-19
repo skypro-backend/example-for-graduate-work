@@ -1,3 +1,6 @@
+-- liquibase formatted sql
+
+-- changeset poma:1
 CREATE TABLE ad
 (
 

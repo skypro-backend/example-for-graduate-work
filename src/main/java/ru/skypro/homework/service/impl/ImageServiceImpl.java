@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
-public class ImageServiceImpl extends ImageService {
+public class ImageServiceImpl implements ImageService {
     private final ImageRepository repository;
 
     @Override

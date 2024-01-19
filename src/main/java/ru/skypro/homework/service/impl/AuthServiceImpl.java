@@ -2,14 +2,14 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.config.MyUserDetailsService;
 import ru.skypro.homework.dto.Register;
-import ru.skypro.homework.exeption.UserAlreadyAddException;
+import ru.skypro.homework.exception.UserAlreadyAddException;
 import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 

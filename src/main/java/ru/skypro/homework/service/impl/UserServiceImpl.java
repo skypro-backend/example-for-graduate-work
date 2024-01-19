@@ -1,7 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,19 +9,19 @@ import ru.skypro.homework.config.GetAuthentication;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.exeption.IncorrectPasswordException;
+import ru.skypro.homework.exception.IncorrectPasswordException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.Avatar;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.UserService;
-
 import javax.transaction.Transactional;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl extends UserService {
+public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
     private final AvatarService avatarService;

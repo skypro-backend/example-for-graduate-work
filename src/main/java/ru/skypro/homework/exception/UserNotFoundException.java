@@ -1,4 +1,4 @@
-package ru.skypro.homework.exeption;
+package ru.skypro.homework.exception;
 
 public class UserNotFoundException extends RuntimeException{
     public UserNotFoundException() {

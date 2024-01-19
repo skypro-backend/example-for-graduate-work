@@ -1,4 +1,4 @@
-package ru.skypro.homework.exeption;
+package ru.skypro.homework.exception;
 
 
 public class UserAlreadyAddException extends RuntimeException{

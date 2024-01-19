@@ -8,8 +8,10 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 
-public class AdsService {
+
+public interface AdsService {
     AdsDto getAllAds();
 
     AdDto addAd(CreateOrUpdateAd createOrUpdateAdDTO, MultipartFile image, Authentication authentication);
