@@ -1,46 +1,47 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.config.MyUserDetailsService;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.exception.UserAlreadyAddException;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.User;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
+import javax.validation.constraints.NotNull;
+
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
+    private final MyUserDetailsService userDetailsService;
+    private final UserRepository repository;
     private final PasswordEncoder encoder;
+    private final UserMapper mapper;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
-        this.encoder = passwordEncoder;
-    }
 
     @Override
-    public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
-            return false;
+    public boolean login(@NotNull String userName, @NotNull String password) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+        if (encoder.matches(password,userDetails.getPassword())){
+            return true;
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
+        throw new BadCredentialsException("Неверный логин или пароль");
     }
 
     @Override
     public boolean register(Register register) {
-        if (manager.userExists(register.getUsername())) {
-            return false;
+        User user = mapper.registerToUser(register);
+        if (repository.existsUserByEmailIgnoreCase(user.getEmail())){
+            throw new UserAlreadyAddException("Пользователь уже добавлен!");
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
+        user.setPassword(encoder.encode(register.getPassword()));
+        repository.save(user);
         return true;
     }
 
