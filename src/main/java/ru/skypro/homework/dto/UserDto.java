@@ -18,6 +18,6 @@ public class UserDto {
 
     private Role role; //роль пользователя
 
-    private String avatar; //ссылка на аватар пользователя
+    private String image; //ссылка на аватар пользователя
 
 }

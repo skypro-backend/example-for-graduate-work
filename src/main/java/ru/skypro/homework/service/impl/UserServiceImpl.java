@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import ru.skypro.homework.service.UserService;
 import javax.transaction.Transactional;
 import java.io.IOException;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -47,8 +49,8 @@ public class UserServiceImpl implements UserService {
     public UpdateUser updateUserInfo(UpdateUser update, Authentication authentication) {
         User user = new GetAuthentication().getAuthenticationUser(authentication.getName());
         user.setFirstName(update.getFirstName());
-        user.setLastName(user.getLastName());
-        user.setPhone(user.getPhone());
+        user.setLastName(update.getLastName());
+        user.setPhone(update.getPhone());
         repository.save(user);
         return update;
     }

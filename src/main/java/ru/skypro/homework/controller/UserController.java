@@ -47,11 +47,14 @@ public class UserController {
         service .updateUserAvatar(image,authentication);
         return ResponseEntity.ok().build();
     }
-    @Operation(summary = "Получение аватара пользователя", description = "getImage")
+
     @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE,
             MediaType.IMAGE_JPEG_VALUE,
-            MediaType.IMAGE_GIF_VALUE})
-    public ResponseEntity<byte[]> getImage(@PathVariable long id) {
-        return ResponseEntity.ok(avatarService.getAvatar(id).getData());
+            MediaType.IMAGE_GIF_VALUE
+    })
+    @Operation(summary = "Получение аватара пользователя", description = "getImage")
+    public ResponseEntity<byte[]> getImage(@PathVariable("id") long id) {
+        byte[] image = avatarService.getAvatar(id).getData();
+        return ResponseEntity.ok(image);
     }
 }

@@ -12,7 +12,7 @@ import ru.skypro.homework.model.User;
 public interface UserMapper {
     String address = "/users/image/";
 
-    @Mapping(target = "avatar", source = "avatar", qualifiedByName = "avatarToString")
+    @Mapping(target = "image", source = "avatar", qualifiedByName = "avatarToString")
     UserDto userToUserDto(User entity);
 
     @Mapping(target = "password", ignore = true)
