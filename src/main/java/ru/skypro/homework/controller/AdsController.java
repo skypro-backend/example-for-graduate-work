@@ -12,25 +12,25 @@ import ru.skypro.homework.dto.*;
 public class AdsController {
 
     @GetMapping
-    public ResponseEntity<Ads> getAllAds() {
+    public ResponseEntity<AdsDTO> getAllAds() {
         //  логика
-        Ads ads = null;// получения всех объявлений
-        return new ResponseEntity<>(ads, HttpStatus.OK);
+        AdsDTO adsDTO = null;// получения всех объявлений
+        return new ResponseEntity<>(adsDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Ad> addAd(@RequestParam("image") String image, @RequestBody CreateOrUpdateAd ad) {
+    public ResponseEntity<AdDTO> addAd(@RequestParam("image") String image, @RequestBody CreateOrUpdateAdDTO ad) {
         // логика
         if (image != null && ad != null) { // условие проверки наличия авторизации
-            Ad newAd = null; //  добавления объявления
-            return new ResponseEntity<>(newAd, HttpStatus.CREATED);
+            AdDTO newAdDTO = null; //  добавления объявления
+            return new ResponseEntity<>(newAdDTO, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAd> getAdById(@PathVariable("id") int id) {
-        ExtendedAd ad = null;// получения объявления по id
+    public ResponseEntity<ExtendedAdDTO> getAdById(@PathVariable("id") int id) {
+        ExtendedAdDTO ad = null;// получения объявления по id
         if (ad != null) {
             return new ResponseEntity<>(ad, HttpStatus.OK);
         } else {

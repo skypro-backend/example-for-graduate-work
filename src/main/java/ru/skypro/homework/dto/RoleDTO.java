@@ -1,5 +1,5 @@
 package ru.skypro.homework.dto;
 
-public enum Role {
+public enum RoleDTO {
     USER, ADMIN
 }

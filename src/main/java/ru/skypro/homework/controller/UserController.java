@@ -19,8 +19,8 @@ public class UserController {
     }
 
     @PostMapping("/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword) {
-        if (isValidPassword(newPassword)) {
+    public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
+        if (isValidPassword(newPasswordDTO)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -38,10 +38,10 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
-        UserDTO updatedUser = userService.updateUserDetails(updateUser);
+    public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
+        UserDTO updatedUser = userService.updateUserDetails(updateUserDTO);
         if (updatedUser != null) {
-            return new ResponseEntity<>(updateUser, HttpStatus.OK);
+            return new ResponseEntity<>(updateUserDTO, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -55,8 +55,8 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-    private boolean isValidPassword(NewPassword newPassword) {
-        return newPassword.getCurrentPassword().length() >= 5
-                && newPassword.getNewPassword().length() >= 5; // Проверка длины
+    private boolean isValidPassword(NewPasswordDTO newPasswordDTO) {
+        return newPasswordDTO.getCurrentPassword().length() >= 5
+                && newPasswordDTO.getNewPassword().length() >= 5; // Проверка длины
     }
 }
