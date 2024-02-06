@@ -1,19 +1,31 @@
 package ru.skypro.homework.mapper;
 
 import org.mapstruct.*;
-import ru.skypro.homework.dto.RegisterDTO;
-import ru.skypro.homework.dto.UpdateUserDTO;
-import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.dto.*;
+import ru.skypro.homework.entity.PhotoEntity;
 import ru.skypro.homework.entity.UserEntity;
 
-@Mapper(componentModel = "spring")
+/**
+ * Interface UserMapper
+ * The mapper is used to map the UserDTO fields to the User entity
+ */
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "role", defaultValue = "USER")
+    @Mapping(target = "photo", source = "photo")
+    UserEntity toEntity(UserDTO dto);
 
-    @Mapping(target = "image", source ="photo.path")
+    @Mapping(target = "photo", expression = "java(photoMapper(entity))")
     UserDTO toUserDto(UserEntity user);
+    default String photoMapper(UserEntity userEntity){
+        return "/users/"+ userEntity.getId() + "/photo";
+    }
+    PhotoEntity map(String value);
 
-    UpdateUserDTO toUpdateUserDto(UserEntity user);
+    UserEntity toEntity(LoginDTO loginDTO);
+    @Mapping(target = "email", source = "username")
+    UserEntity toEntity(RegisterDTO registerDTO);
 
-    @Mapping(target = "password", ignore = true)
-    UserEntity fromUserRegisterDto(RegisterDTO registerDto);
+    SecurityUserDto toSecurityDto(UserEntity userEntity);
 }

@@ -8,7 +8,13 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
 
+import java.util.Collection;
 import java.util.List;
+
+/**
+ * Interface CommentMapper
+ * The mapper is used to map the CommentDTO fields to the Comment entity
+ */
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
@@ -29,4 +35,18 @@ public interface CommentMapper {
     CommentDTO commentsEntityToCommentDTO(CommentEntity commentEntity);
 
     List<CommentDTO> listCommentEntityToListCommentDto(List<CommentEntity> commentEntityList);
+
+    @Mapping(source = "author.id", target = "author")
+    @Mapping(target = "authorImage", expression = "java(image(comment))")
+    @Mapping(source = "author.firstName", target = "authorFirstName")
+    @Mapping(source = "id", target = "pk")
+    CommentDTO toCommentDTO(CommentEntity commentEntity);
+
+    default String image(CommentEntity commentEntity) {
+        int id = commentEntity.getAuthor().getId().intValue();
+        return "/users/" + id + "/image";
+    }
+
+    CommentEntity toComment(CreateOrUpdateCommentDTO createOrUpdateCommentDTO);
+    List<CommentDTO> toCommentsListDto(Collection<CommentEntity> commentCollection);
 }
