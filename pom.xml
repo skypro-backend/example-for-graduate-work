@@ -67,6 +67,15 @@
       <artifactId>mapstruct</artifactId>
       <version>1.5.5.Final</version>
     </dependency>
+    <dependency>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-core</artifactId>
+      <version>2.2.7</version>
+    </dependency>
   </dependencies>
 
   <build>

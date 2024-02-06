@@ -6,8 +6,9 @@ import ru.skypro.homework.entity.PhotoEntity;
 import java.io.IOException;
 
 public interface PhotoService {
-    PhotoEntity saveImage(MultipartFile imageFile) throws IOException;
-    PhotoEntity getImage(Integer imageId);
-    PhotoEntity updateImage(MultipartFile image, Integer imageId) throws IOException;
-    byte[] getByteFromFile(String path) throws IOException;
+    PhotoEntity downloadPhoto(MultipartFile image) throws IOException;
+
+    void deletePhoto(Long id);
+
+    byte[] getPhoto(Long id);
 }

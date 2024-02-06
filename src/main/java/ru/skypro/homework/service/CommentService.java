@@ -1,6 +1,7 @@
 package ru.skypro.homework.service;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
@@ -9,10 +10,12 @@ import ru.skypro.homework.entity.CommentEntity;
 import java.security.Principal;
 
 public interface CommentService {
-    CommentEntity findById(Integer id);
-    CommentDTO createComment(Integer adId, CreateOrUpdateCommentDTO createOrUpdateCommentDto, Principal principal);
+    CommentsDTO getAllComments(int id);
+    CommentEntity getComment(long commentId);
 
-    CommentsDTO getComments(Integer adId);
-    CommentDTO editComment(Integer adId, Integer commentId, CreateOrUpdateCommentDTO createOrUpdateCommentDto);
-    HttpStatus deleteComment(Integer adId, Integer commentId);
+    CommentDTO addComment(int id, CreateOrUpdateCommentDTO comment, Authentication authentication);
+
+    void deleteComment(int adId, int commentId);
+    void deleteAllByAdId(long adId);
+    CommentDTO updateComment(int adId, int commentId, CommentDTO comment);
 }
