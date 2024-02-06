@@ -15,10 +15,10 @@ public class CommentController {
     //Получение комментариев объявления
     @GetMapping("/{id}/comments")
 
-    public ResponseEntity<Comments> getComments(@PathVariable("id") Integer id) {
-        Comments comments = null;// получение комментариев объявления по id
-        if (comments != null) {
-            return new ResponseEntity<>(comments, HttpStatus.OK);
+    public ResponseEntity<CommentsDTO> getComments(@PathVariable("id") Integer id) {
+        CommentsDTO commentsDTO = null;// получение комментариев объявления по id
+        if (commentsDTO != null) {
+            return new ResponseEntity<>(commentsDTO, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -26,11 +26,11 @@ public class CommentController {
 
     //Добавление комментария к объявлению
     @PostMapping ("/{id}/comments")
-    public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id,
-                                              @RequestBody CreateOrUpdateComment comment) {
+    public ResponseEntity<CommentDTO> addComment(@PathVariable("id") Integer id,
+                                                 @RequestBody CreateOrUpdateCommentDTO comment) {
         if (id != null && comment != null) { // проверка
-            Comment newComment = null; //  добавление комментария
-            return new ResponseEntity<>(newComment, HttpStatus.CREATED);
+            CommentDTO newCommentDTO = null; //  добавление комментария
+            return new ResponseEntity<>(newCommentDTO, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -49,10 +49,10 @@ public class CommentController {
 // Обновление комментария
 
     @PatchMapping ("/{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable("adId") int adId,
-                                                 @PathVariable("commentId") int commentId){
-        Comment updatedComment = new Comment();
-        return ResponseEntity.ok(updatedComment);
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable("adId") int adId,
+                                                    @PathVariable("commentId") int commentId){
+        CommentDTO updatedCommentDTO = new CommentDTO();
+        return ResponseEntity.ok(updatedCommentDTO);
 
     }
 }
