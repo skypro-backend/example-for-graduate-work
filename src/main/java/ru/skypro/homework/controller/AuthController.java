@@ -23,6 +23,20 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @Operation(
+            tags = "Авторизация",
+            summary = "Авторизация пользователя",
+//            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+//                    description = "описание метода login... ",
+//                    content = {@Content(
+//                            schema = @Schema(implementation = Login.class))
+//                    }
+//            ),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {@Content()}),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content()})
+            }
+    )
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
