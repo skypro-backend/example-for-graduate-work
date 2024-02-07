@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
+import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -43,13 +43,15 @@ public class CommentController {
             requestBody = @RequestBody(
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CreateOrUpdateAdDTO.class)
+                            schema = @Schema(implementation = CreateOrUpdateCommentDTO.class)
                     )
             ),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema())),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
-                    @ApiResponse(responseCode = "404", description = "Not found")
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CommentDTO.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized",content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Not found",content = @Content())
             }
     )
     @PostMapping("/{id}/comments")
@@ -59,17 +61,11 @@ public class CommentController {
     @Operation(
             tags = "Комментарии",
             summary = "Удаление комментария",
-            requestBody = @RequestBody(
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CommentDTO.class)
-                    )
-            ),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
-                    @ApiResponse(responseCode = "403", description = "Forbidden"),
-                    @ApiResponse(responseCode = "404", description = "Not found")
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content()),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
             }
     )
     @DeleteMapping("/{adId}/comments/{commentId}")
@@ -83,14 +79,17 @@ public class CommentController {
             requestBody = @RequestBody(
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CommentDTO.class)
+                            schema = @Schema(implementation = CreateOrUpdateCommentDTO.class)
                     )
             ),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
-                    @ApiResponse(responseCode = "403", description = "Forbidden"),
-                    @ApiResponse(responseCode = "404", description = "Not found")
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CommentDTO.class)
+                    )),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
             }
     )
     @PatchMapping("/{adId}/comments/{commentId}")
