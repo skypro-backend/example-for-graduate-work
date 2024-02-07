@@ -29,7 +29,7 @@ public class CommentController {
             }
     )
     @GetMapping("/{id}/comments")
-    public ResponseEntity<?> getComments(int id) {
+    public ResponseEntity<?> getComments(@RequestParam int id) {
         return ResponseEntity.status(HttpStatus.OK).build();//пустышка
     }
 
@@ -49,7 +49,7 @@ public class CommentController {
             }
     )
     @PostMapping("/{id}/comments")
-    public ResponseEntity<?> addComment(int id) {
+    public ResponseEntity<?> addComment(@RequestParam int id) {
         return ResponseEntity.status(HttpStatus.OK).build();//пустышка
     }
     @Operation(
@@ -69,7 +69,7 @@ public class CommentController {
             }
     )
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteComment(int adId, int commentId) {
+    public ResponseEntity<?> deleteComment(@RequestParam int adId, @RequestParam int commentId) {
         return ResponseEntity.status(HttpStatus.OK).build();//пустышка
     }
 
@@ -90,7 +90,7 @@ public class CommentController {
             }
     )
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> updateComments(int adId, int commentId) {
+    public ResponseEntity<?> updateComments(@RequestParam int adId, @RequestParam int commentId) {
         return ResponseEntity.status(HttpStatus.OK).build();//пустышка
     }
 }
