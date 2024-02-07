@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CommentsDTO;
+import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -21,15 +23,17 @@ import ru.skypro.homework.dto.CommentDTO;
 public class CommentController {
     @Operation(
             tags = "Комментарии",
-            summary = "Получение комментариев",
+            summary = "Получение комментариев объявления",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema())),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
-                    @ApiResponse(responseCode = "404", description = "Not found")
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CommentsDTO.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized",content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Not found",content = @Content())
             }
     )
     @GetMapping("/{id}/comments")
-    public ResponseEntity<?> getComments(@RequestParam int id) {
+    public ResponseEntity<?> getComments(@PathVariable int id) {
         return ResponseEntity.status(HttpStatus.OK).build();//пустышка
     }
 
@@ -39,7 +43,7 @@ public class CommentController {
             requestBody = @RequestBody(
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CommentDTO.class)
+                            schema = @Schema(implementation = CreateOrUpdateAdDTO.class)
                     )
             ),
             responses = {
@@ -49,7 +53,7 @@ public class CommentController {
             }
     )
     @PostMapping("/{id}/comments")
-    public ResponseEntity<?> addComment(@RequestParam int id) {
+    public ResponseEntity<?> addComment(@PathVariable int id) {
         return ResponseEntity.status(HttpStatus.OK).build();//пустышка
     }
     @Operation(
@@ -69,7 +73,7 @@ public class CommentController {
             }
     )
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteComment(@RequestParam int adId, @RequestParam int commentId) {
+    public ResponseEntity<?> deleteComment(@PathVariable int adId, @PathVariable int commentId) {
         return ResponseEntity.status(HttpStatus.OK).build();//пустышка
     }
 
@@ -90,7 +94,7 @@ public class CommentController {
             }
     )
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> updateComments(@RequestParam int adId, @RequestParam int commentId) {
+    public ResponseEntity<?> updateComments(@PathVariable int adId, @PathVariable int commentId) {
         return ResponseEntity.status(HttpStatus.OK).build();//пустышка
     }
 }

@@ -7,7 +7,7 @@ public class CommentDTO {
     /**
      * id автора комментария
      */
-    Integer id;
+    Integer author;
     /**
      * ссылка на аватар автора комментария
      */
