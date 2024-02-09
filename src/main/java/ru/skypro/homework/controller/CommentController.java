@@ -11,9 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.CommentsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.Comments;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -27,7 +27,7 @@ public class CommentController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CommentsDTO.class))),
+                            schema = @Schema(implementation = Comments.class))),
                     @ApiResponse(responseCode = "401", description = "Unauthorized",content = @Content()),
                     @ApiResponse(responseCode = "404", description = "Not found",content = @Content())
             }
@@ -43,13 +43,13 @@ public class CommentController {
             requestBody = @RequestBody(
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CreateOrUpdateCommentDTO.class)
+                            schema = @Schema(implementation = CreateOrUpdateComment.class)
                     )
             ),
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CommentDTO.class))),
+                            schema = @Schema(implementation = Comment.class))),
                     @ApiResponse(responseCode = "401", description = "Unauthorized",content = @Content()),
                     @ApiResponse(responseCode = "404", description = "Not found",content = @Content())
             }
@@ -79,13 +79,13 @@ public class CommentController {
             requestBody = @RequestBody(
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CreateOrUpdateCommentDTO.class)
+                            schema = @Schema(implementation = CreateOrUpdateComment.class)
                     )
             ),
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CommentDTO.class)
+                            schema = @Schema(implementation = Comment.class)
                     )),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content()),
