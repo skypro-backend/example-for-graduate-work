@@ -12,9 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.NewPasswordDTO;
-import ru.skypro.homework.dto.UpdateUserDTO;
-import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.User;
 
 import javax.validation.constraints.NotBlank;
 
@@ -36,7 +36,7 @@ public class UsersController {
             }
     )
     @PostMapping(value = "/setPassword")
-    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
+    public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
         return ResponseEntity.status(HttpStatus.OK).build();//ПУСТЫШКА
     }
 
@@ -47,7 +47,7 @@ public class UsersController {
                     @ApiResponse(responseCode = "200", description = "OK", content =
                             {@Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = UserDTO.class))}),
+                                    schema = @Schema(implementation = User.class))}),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content()})
             }
     )
@@ -63,14 +63,14 @@ public class UsersController {
                     @ApiResponse(responseCode = "200", description = "OK", content =
                             {@Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = UpdateUserDTO.class))}),
+                                    schema = @Schema(implementation = UpdateUser.class))}),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content()})
             }
     )
     @PatchMapping(value = "/me")
-    public ResponseEntity<UserDTO> updateUser(
+    public ResponseEntity<User> updateUser(
             @RequestBody
-            @NotBlank(message = "updateUser не должен быть пустым") UpdateUserDTO updateUserDTO, Authentication authentication) {
+            @NotBlank(message = "updateUser не должен быть пустым") UpdateUser updateUser, Authentication authentication) {
         return ResponseEntity.ok().build();//ПУСТЫШКА
     }
 

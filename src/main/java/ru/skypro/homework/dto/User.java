@@ -3,10 +3,10 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 
 /**
- * Сущность UserDTO
+ * Сущность User
  */
 @Data
-public class UserDTO {
+public class User {
     /**
      * id пользователя
      */

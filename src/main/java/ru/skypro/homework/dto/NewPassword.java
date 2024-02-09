@@ -2,8 +2,11 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+/**
+ * сущность NewPassword
+ */
 @Data
-public class NewPasswordDTO {
+public class NewPassword {
     /**
      * текущий пароль
      */
