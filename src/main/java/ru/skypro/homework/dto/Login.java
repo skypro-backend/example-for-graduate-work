@@ -5,6 +5,9 @@ import lombok.Data;
 
 import javax.validation.constraints.Size;
 
+/**
+ * сущность Login
+ */
 @Data
 public class Login {
     /**
