@@ -20,6 +20,7 @@ import ru.skypro.homework.service.CommentService;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -32,12 +33,10 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
 
     @Override
-    public CommentsDTO getAllComments(int idAd) {
+    public Collection<CommentsDTO> getAllComments(int idAd) {
         log.info("getAllComments method");
         List<CommentEntity> comments = commentRepository.findAllByAdId(idAd);
-        CommentsDTO commentsDTO = new CommentsDTO();
-        commentsDTO.setResults(commentMapper.toCommentsListDto(comments));
-        return commentsDTO;
+        return commentMapper.toCommentsListDto(comments);
     }
 
     @Override
