@@ -8,9 +8,10 @@ import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.CommentEntity;
 
 import java.security.Principal;
+import java.util.Collection;
 
 public interface CommentService {
-    CommentsDTO getAllComments(int id);
+    Collection<CommentsDTO> getAllComments(int id);
     CommentEntity getComment(long commentId);
 
     CommentDTO addComment(int id, CreateOrUpdateCommentDTO comment, Authentication authentication);
