@@ -1,4 +1,4 @@
-GET http://localhost:8080/ads/1/comments
+GET http://localhost:8080/adsDTO/1/commentsDTO
 Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/register
+POST http://localhost:8080/registerDTO
 Content-Type: application/json
 
 {
@@ -25,7 +25,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/ads/me
+GET http://localhost:8080/adsDTO/me
 Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
@@ -46,7 +46,7 @@ Authorization: Basic user@gmail.com password
 }
 
 ###
-GET http://localhost:8080/ads
+GET http://localhost:8080/adsDTO
 Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
@@ -56,12 +56,12 @@ Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
 {
-  "newPassword": "password",
+  "newPasswordDTO": "password",
   "currentPassword": "password1"
 }
 
 ###
-POST http://localhost:8080/ads
+POST http://localhost:8080/adsDTO
 Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
