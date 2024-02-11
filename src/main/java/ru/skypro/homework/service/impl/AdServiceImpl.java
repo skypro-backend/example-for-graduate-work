@@ -13,6 +13,7 @@ import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.PhotoEntity;
+import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
@@ -56,20 +57,21 @@ public class AdServiceImpl implements AdService {
         if (createAdDTO.getPrice() < 0) {
             throw new IllegalArgumentException("Price cannot be negative");
         }
-        AdEntity ad = adMapper.adDtoToAdEntity(createAdDTO);
-        ad.setAuthor(userService.getAuthorizedUser(authentication));
-        log.info("Request to create new ad");
+//        AdEntity ad = adMapper.adEntityToAddDTO(createAdDTO);
+        UserEntity userEntity = userService.getAuthorizedUser(authentication);
+//        log.info("Request to create new ad");
         PhotoEntity adImage;
         try {
             adImage = photoService.downloadPhoto(image);
         } catch (IOException e) {
             throw new RuntimeException("Не удалось сохранить фото");
         }
-        ad.setPhoto(adImage);
+        AdEntity ad = adMapper.adDTOAndUserEntityToAdEntity(userEntity, createAdDTO, adImage);
+//        ad.setPhoto(adImage);
         adRepository.save(ad);
         log.info("Save new ad ID:" + ad.getId());
 
-        return adMapper.adEntityToAdDTO(ad);
+        return adMapper.adEntityToAddDTO(ad);
     }
 
     @Override
@@ -95,10 +97,10 @@ public class AdServiceImpl implements AdService {
             throw new IllegalArgumentException("Price cannot be negative");
         }
         AdEntity ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
-        adMapper.updateAd(createAdDTO, ad);
+//        updateAd()
         adRepository.save(ad);
 
-        return adMapper.adEntityToAdDTO(ad);
+        return adMapper.adEntityToAddDTO(ad);
     }
 
     @Override
@@ -119,7 +121,7 @@ public class AdServiceImpl implements AdService {
         updateAd.setPhoto(photoService.downloadPhoto(image));
         photoService.deletePhoto(idImage);
         adRepository.save(updateAd);
-        return adMapper.adEntityToAdDTO(updateAd).getImage();
+        return adMapper.adEntityToAddDTO(updateAd).getImage();
     }
 
     @Override
