@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Сущность Ads
+ */
 @Data
 public class Ads {
     /**
