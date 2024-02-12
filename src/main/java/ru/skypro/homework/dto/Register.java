@@ -8,8 +8,16 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
- * сущность Register
+ * Register - регистрация пользователя
+ * <br><i>содержит следующие поля:</i>
+ * <br>- username <i>(логин)</i>;
+ * <br>- password <i>(пароль)</i>;
+ * <br>- firstName <i>(имя пользователя)</i>;
+ * <br>- lastName <i>(фамилия пользователя)</i>;
+ * <br>- phone <i>(телефон пользователя)</i>;
+ * <br>- role <i>(роль пользователя, {@link Role})</i>;
  */
+
 @Data
 public class Register {
     /**

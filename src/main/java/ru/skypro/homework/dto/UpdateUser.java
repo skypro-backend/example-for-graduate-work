@@ -6,6 +6,13 @@ import lombok.Data;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * UpdateUser  обновление данных пользователя
+ * <br><i>содержит следующие поля:</i>
+ * <br>- firstName <i>(имя пользователя)</i>;
+ * <br>- lastName <i>(фамилия пользователя)</i>;
+ * <br>- phone <i>(телефон пользователя)</i>;
+ */
 @Data
 public class UpdateUser {
     @Size(min = 3, max = 10)

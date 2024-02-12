@@ -7,7 +7,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
 /**
- * сущность Login
+ * Login  пользователя
+ * <br><i>содержит следующие поля:</i>
+ * <br>- username <i>(логин)</i>;
+ * <br>- password <i>(пароль)</i>;
  */
 @Data
 public class Login {

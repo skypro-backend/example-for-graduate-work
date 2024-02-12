@@ -6,7 +6,10 @@ import lombok.Data;
 import javax.validation.constraints.Size;
 
 /**
- * сущность NewPassword
+ * NewPassword  обновление пароля пользователя
+ * <br><i>содержит следующие поля:</i>
+ * <br>- currentPassword <i>(текущий пароль)</i>;
+ * <br>- newPassword <i>(новый пароль)</i>;
  */
 @Data
 public class NewPassword {
