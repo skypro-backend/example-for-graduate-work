@@ -34,8 +34,7 @@ public class WebSecurityConfig {
                         .passwordEncoder(passwordEncoder::encode)
                         .roles(Role.USER.name())
                         .build();
-        return new InMemoryUserDetailsManager(user);
-    }
+        return new InMemoryUserDetailsManager(user);    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
