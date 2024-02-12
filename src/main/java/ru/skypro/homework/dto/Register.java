@@ -1,12 +1,6 @@
 package ru.skypro.homework.dto;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -29,21 +23,21 @@ public class Register {
     /**
      * пароль
      */
-    @Size(min =8, max = 16)
+    @Size(min = 8, max = 16)
     @Schema(description = "пароль")
     private String password;
 
     /**
      * имя пользователя
      */
-    @Size(min =2, max = 16)
+    @Size(min = 2, max = 16)
     @Schema(description = "имя пользователя")
     private String firstName;
 
     /**
      * фамилия пользователя
      */
-    @Size(min =2, max = 16)
+    @Size(min = 2, max = 16)
     @Schema(description = "фамилия пользователя")
     private String lastName;
 
