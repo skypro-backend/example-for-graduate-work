@@ -90,7 +90,11 @@ public class AdsController {
             tags = "Объявления",
             summary = "Обновление информации об объявлении",
             responses = {
-                    @ApiResponse(responseCode = "200",description = "OK")
+                    @ApiResponse(responseCode = "200",description = "OK"),
+                    @ApiResponse(responseCode = "403",description = "Forbidden"),
+                    @ApiResponse(responseCode = "401",description = "Unauthorized"),
+                    @ApiResponse(responseCode = "404",description = "Not found")
+
             }
     )
     @PatchMapping("/{id}")
@@ -98,11 +102,29 @@ public class AdsController {
         return ResponseEntity.ok(ads);
 
     }
+    @Operation(
+            tags = "Объявления",
+            summary = "Получение объявлений авторизованного пользователя",
+            responses = {
+                    @ApiResponse(responseCode = "200",description = "OK"),
+                    @ApiResponse(responseCode = "401",description = "Unauthorized")
+            }
+    )
     @GetMapping(value = "/me")
     public ResponseEntity<?>getAdsMe(@RequestBody Ads ads){
         return ResponseEntity.ok().build();
 
     }
+    @Operation(
+            tags = "Объявления",
+            summary = "Обновление картинки объявления",
+            responses = {
+                    @ApiResponse(responseCode = "200",description = "OK"),
+                    @ApiResponse(responseCode = "403",description = "Forbidden"),
+                    @ApiResponse(responseCode = "401",description = " Unauthorized"),
+                    @ApiResponse(responseCode = "404",description = " Not found")
+            }
+    )
     @PatchMapping(value = "{id}/image")
     public ResponseEntity<?> updateImage(@RequestBody MultipartFile image,
                                          Ads ads){
