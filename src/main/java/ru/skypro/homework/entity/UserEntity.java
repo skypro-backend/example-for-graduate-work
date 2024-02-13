@@ -26,6 +26,7 @@ import static javax.persistence.GenerationType.IDENTITY;
  */
 @Entity
 @Data
+@Table(name = "users")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)//GenerationType
@@ -41,6 +42,7 @@ public class UserEntity {
 
     private String phone;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     private String image;
