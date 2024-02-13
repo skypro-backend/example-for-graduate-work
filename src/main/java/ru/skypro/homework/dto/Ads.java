@@ -15,6 +15,7 @@ public class Ads {
      * Общее количество объявлений
      */
 
+
     @Schema(description = "общее количество объявлений")
     private int count;
     /**
