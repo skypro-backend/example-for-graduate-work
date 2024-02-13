@@ -29,7 +29,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)//GenerationType
-    private Integer id;
+    private Long id;
 
     private String userName;//login-email
 
@@ -45,11 +45,11 @@ public class UserEntity {
 
     private String image;
 
-//    private Long adId;// id объявления
+    private Long adId;// id объявления
 
-    private List<?> adsId;//список  id_объявлений
+//    private List<?> adsId;//список  id_объявлений
 
-//    private Long commentId;// id комментария
+    private Long commentId;// id комментария
 
-    private List<?> commentsId;//список  id_комментариев
+//    private List<?> commentsId;//список  id_комментариев
 }
