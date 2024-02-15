@@ -3,19 +3,14 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
-import java.util.List;
+import java.util.Collection;
 
 @Data
-public class AdsDTO {
-    private int count;
-    private List<AdDTO> results;
-    public static AdsDTO of(List<AdDTO> results) {
-        AdsDTO responseWrapper = new AdsDTO();
-        if (results == null) {
-            return responseWrapper;
-        }
-        responseWrapper.results = results;
-        responseWrapper.count = results.size();
-        return responseWrapper;
+public class AdsDTO<A> {
+    private final int count;
+    private Collection<AdDTO> results;
+    public AdsDTO (Collection<AdDTO> results) {
+        this.count = results.size();
+        this.results = results;
     }
 }
