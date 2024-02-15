@@ -3,10 +3,9 @@ package ru.skypro.homework.entity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * AdEntity - сущность
@@ -23,12 +22,12 @@ import javax.persistence.Table;
 
 public class AdEntity {
     @Id
-    @GeneratedValue
-    private int author;
+    @GeneratedValue(strategy = IDENTITY)
+    private Long author;
     private String image;
     @Id
-    @GeneratedValue
-    private int pk;
+    @GeneratedValue(strategy = IDENTITY)
+    private Long pk;
     private int price;
     private String title;
 }
