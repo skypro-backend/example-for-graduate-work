@@ -23,9 +23,10 @@ public interface AdMapper {
 
     @Mapping(source = "id",target = "pk")
     @Mapping(target = "author", source = "author.id")
-    @Mapping(target = "image", source = "photo.path")
+    @Mapping(target = "image", source = "photo.filePath")
     AdDTO adEntityToAdDTO (AdEntity adEntity);
 
+    @Mapping(target = "title", source = "createOrUpdateAdDTO.title")
     AdEntity adDtoToAdEntity(CreateOrUpdateAdDTO createOrUpdateAdDTO);
 
 
@@ -34,7 +35,7 @@ public interface AdMapper {
     @Mapping(target = "authorLastName", source = "author.lastName")
     @Mapping(target = "email", source = "author.email")
     @Mapping(target = "phone", source = "author.phone")
-    @Mapping(target = "image", source = "adEntity.photo.path")
+    @Mapping(target = "image", source = "adEntity.photo.filePath")
     ExtendedAdDTO adEntityAndUserEntityToExtendedAdDTO(AdEntity adEntity);
 
     void updateAd(CreateOrUpdateAdDTO createOrUpdateAdDTO, @MappingTarget AdEntity adEntity);
@@ -42,7 +43,8 @@ public interface AdMapper {
     Collection<AdDTO> adToAdListDto(Collection<AdEntity> adEntityCollection);
 
 
-    @Mapping(target = "author", source = "userEntity")
+    @Mapping(target = "author.id", source = "userEntity.id")
     @Mapping(target = "description", ignore = true)
+    @Mapping(target = "id", source = "adDTO.pk")
     AdEntity adDTOAndUserEntityToAdEntity (UserEntity userEntity, AdDTO adDTO, PhotoEntity photoEntity);
 }
