@@ -3,6 +3,7 @@ package ru.skypro.homework.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
@@ -32,8 +33,6 @@ public interface CommentMapper {
 
     @Mapping(target = "author", source = "commentEntity.author.id")
     CommentDTO commentsEntityToCommentDTO(CommentEntity commentEntity);
-
-    List<CommentDTO> listCommentEntityToListCommentDto(List<CommentEntity> commentEntityList);
 
     @Mapping(source = "author.id", target = "author")
     @Mapping(target = "authorImage", expression = "java(image(commentEntity))")
