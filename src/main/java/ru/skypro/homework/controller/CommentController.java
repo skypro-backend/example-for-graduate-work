@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.CommentService;
 
+import java.util.Collection;
+
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -49,7 +51,7 @@ public class CommentController {
             }
     )
     @GetMapping("/{id}/comments")
-    public ResponseEntity<CommentsDTO> getComments(@PathVariable("id") int id) {
+    public ResponseEntity<Collection<CommentsDTO>> getComments(@PathVariable("id") int id) {
         return ResponseEntity.ok(commentService.getAllComments(id));
     }
 
