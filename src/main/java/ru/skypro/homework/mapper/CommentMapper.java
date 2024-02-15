@@ -22,6 +22,7 @@ public interface CommentMapper {
     @Mapping(target = "createAt", source = "createAt")
     @Mapping(target = "pk", source = "pk")
     @Mapping(target = "text", source = "text")
+    @Mapping(target = "count", source = "count")
     CommentEntity toDTO(CommentEntity commentEntity);
 
     @Mapping(target = "author", source = "author")
@@ -30,5 +31,6 @@ public interface CommentMapper {
     @Mapping(target = "createAt", source = "createAt")
     @Mapping(target = "pk", source = "pk")
     @Mapping(target = "text", source = "text")
+    @Mapping(target = "count", source = "count")
     CommentEntity toEntity(Comment comment);
 }
