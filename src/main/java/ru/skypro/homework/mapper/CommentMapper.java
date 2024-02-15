@@ -10,8 +10,6 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,6 +37,7 @@ public interface CommentMapper {
 
     @Mapping(source = "author.id", target = "author")
     @Mapping(target = "authorImage", expression = "java(image(commentEntity))")
+
     @Mapping(source = "author.firstName", target = "authorFirstName")
     @Mapping(source = "id", target = "pk")
     CommentDTO toCommentDTO(CommentEntity commentEntity);
@@ -50,6 +49,6 @@ public interface CommentMapper {
 
     CommentEntity toComment(CreateOrUpdateCommentDTO createOrUpdateCommentDTO);
 
-
     Collection<CommentsDTO> toCommentsListDto(Collection<CommentEntity> commentCollection);
+
 }

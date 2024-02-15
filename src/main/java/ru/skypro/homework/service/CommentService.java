@@ -12,6 +12,7 @@ import java.util.Collection;
 
 public interface CommentService {
     Collection<CommentsDTO> getAllComments(int id);
+
     CommentEntity getComment(long commentId);
 
     CommentDTO addComment(int id, CreateOrUpdateCommentDTO comment, Authentication authentication);

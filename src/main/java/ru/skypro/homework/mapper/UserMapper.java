@@ -17,6 +17,7 @@ public interface UserMapper {
     UserEntity toEntity(UserDTO dto);
 
     @Mapping(target = "photo", expression = "java(photoMapper(user))")
+
     UserDTO toUserDto(UserEntity user);
     default String photoMapper(UserEntity userEntity){
         return "/users/"+ userEntity.getId() + "/photo";
