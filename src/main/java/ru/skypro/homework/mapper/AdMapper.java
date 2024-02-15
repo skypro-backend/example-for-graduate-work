@@ -43,7 +43,8 @@ public interface AdMapper {
     Collection<AdDTO> adToAdListDto(Collection<AdEntity> adEntityCollection);
 
 
-    @Mapping(target = "author", source = "userEntity")
+    @Mapping(target = "author.id", source = "userEntity.id")
     @Mapping(target = "description", ignore = true)
+    @Mapping(target = "id", source = "adDTO.pk")
     AdEntity adDTOAndUserEntityToAdEntity (UserEntity userEntity, AdDTO adDTO, PhotoEntity photoEntity);
 }
