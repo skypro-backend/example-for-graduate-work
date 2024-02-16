@@ -16,11 +16,12 @@ import static javax.persistence.GenerationType.IDENTITY;
  * <br><i>содержит следующие поля:</i>
  * <br>- id <i>(id пользователя)</i>;
  * <br>- email <i>(логин пользователя)</i>;
+ * <br>- password <i>(пароль пользователя)</i>;
  * <br>- firstName <i>(имя пользователя)</i>;
  * <br>- lastName <i>(фамилия пользователя)</i>;
  * <br>- phone <i>(телефон пользователя)</i>;
  * <br>- role <i>(роль пользователя, {@link Role})</i>;
- * <br>- image <i>(аватар пользователя)</i>.
+ * <br>- image <i>(аватар пользователя)</i>;
  * <br>- adsId <i>(объявления пользователя, {@link List<>})</i>;
  * <br>- commentsId <i>(комментарии пользователя, {@link List<>})</i>.
  */
@@ -32,7 +33,7 @@ public class UserEntity {
     @GeneratedValue(strategy = IDENTITY)//GenerationType
     private Long id;
 
-    private String userName;//login-email
+    private String email;//login-email-username
 
     private String password;
 
