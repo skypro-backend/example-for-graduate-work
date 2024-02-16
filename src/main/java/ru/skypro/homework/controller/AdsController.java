@@ -9,12 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.ExtendedAd;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RequestMapping("/ads")
@@ -28,9 +30,8 @@ public class AdsController {
             summary = "Получение всех объявлений",
             responses = {
                     @ApiResponse(responseCode = "200",description = "OK",
-                    content = @Content(schema = @Schema()))
-
-
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Ads.class)))
             }
     )
     @GetMapping
@@ -42,32 +43,39 @@ public class AdsController {
             summary = "Добавление объявления",
             responses = {
                     @ApiResponse(responseCode = "201",description = "Created",
-                    content = @Content(schema = @Schema())),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Ad.class))),
                     @ApiResponse(responseCode = "401",description = "Unauthorized",
                     content = {@Content()})
-            }
-    )
+                            }
+                    )
+
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addAd(@RequestBody MultipartFile image, Ads ads){
-        return ResponseEntity.ok().build();
+
+    public ResponseEntity<?> addAd
+            (@RequestPart  CreateOrUpdateAd properties,@RequestPart MultipartFile image){
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
     @Operation(
             tags = "Объявления",
             summary = "Получение информации об объявлении",
             responses = {
                     @ApiResponse(responseCode = "200",description = "OK",
-                            content = @Content(schema = @Schema())),
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExtendedAd.class))),
                     @ApiResponse(responseCode = "401",description = "Unauthorized",
                             content = {@Content()}),
-                    @ApiResponse(responseCode = "404",description = " Not found")
+                    @ApiResponse(responseCode = "404",description = " Not found",
+                    content = {@Content()})
 
             }
     )
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAds(Ads ads){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ExtendedAd> getAds(@PathVariable int id){
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
     @Operation(
             tags = "Объявления",
@@ -111,7 +119,7 @@ public class AdsController {
             }
     )
     @GetMapping(value = "/me")
-    public ResponseEntity<?>getAdsMe(@RequestBody Ads ads){
+    public ResponseEntity<?>getAdsMe(@RequestBody CreateOrUpdateAd ads){
         return ResponseEntity.ok().build();
 
     }

@@ -17,10 +17,10 @@ public class Ads {
 
 
     @Schema(description = "общее количество объявлений")
-    private int count;
+   int count;
     /**
      * {@link Ad}
      */
-    private List<Ad> results;
+    List<Ad> results;
 
 }
