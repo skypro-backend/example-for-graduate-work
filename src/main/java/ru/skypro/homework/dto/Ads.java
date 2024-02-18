@@ -1,5 +1,7 @@
 package ru.skypro.homework.dto;
 
+import io.swagger.v3.oas.annotations.links.Link;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
@@ -12,10 +14,13 @@ public class Ads {
     /**
      * Общее количество объявлений
      */
-    private int count;
+
+
+    @Schema(description = "общее количество объявлений")
+   int count;
     /**
      * {@link Ad}
      */
-    private List<Ad> results;
+    List<Ad> results;
 
 }

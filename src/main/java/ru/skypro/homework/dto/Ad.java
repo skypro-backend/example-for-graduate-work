@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * Сущность Ad
+ * Ad
  */
 @Data
 public class Ad {
@@ -12,21 +12,25 @@ public class Ad {
      * ID автора объявления
      */
     @Schema(description = "id автора объявления")
-    private int author;
+    int author;
     /**
      * Ссылка на картинку объявления
      */
-    private String image;
+    @Schema(description = "ссылка на картинку объявления")
+    String image;
     /**
      * ID объявления
      */
-    private int pk;
+    @Schema(description = "id объявления")
+    int pk;
     /**
      * Цена объявления
      */
-    private int price;
+    @Schema(description = "цена объявления")
+    int price;
     /**
      * Заголовок объявления
      */
-    private String title;
+    @Schema(description = "заголовок объявления")
+    String title;
 }
