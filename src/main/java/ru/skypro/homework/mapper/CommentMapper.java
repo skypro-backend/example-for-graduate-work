@@ -12,9 +12,8 @@ import ru.skypro.homework.entity.CommentEntity;
  */
 @Mapper
 public interface CommentMapper {
-
-
-    CommentEntity toDTO(CommentEntity commentEntity);
+    
+    Comment toDTO(CommentEntity commentEntity);
 
     CommentEntity toEntity(Comment commentDto);
 }
