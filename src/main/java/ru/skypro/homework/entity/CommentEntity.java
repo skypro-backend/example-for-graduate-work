@@ -1,11 +1,11 @@
 package ru.skypro.homework.entity;
 
-import lombok.Data;
-import ru.skypro.homework.dto.Comment;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * CommentEntity - сущность
@@ -18,7 +18,8 @@ import java.util.List;
  * <br>- text<i>(текст комментария)</i>
  */
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "comments")
 public class CommentEntity {
     @Id
@@ -34,8 +35,4 @@ public class CommentEntity {
     private Integer pk;
 
     private String text;
-
-    private Integer count;
-
-    //private List<Comment> results;
 }

@@ -1,6 +1,8 @@
 package ru.skypro.homework.entity;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
@@ -25,7 +27,8 @@ import static javax.persistence.GenerationType.IDENTITY;
  * <br>- commentsId <i>(комментарии пользователя, {@link List<>})</i>.
  */
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "users")
 public class UserEntity {
     @Id
