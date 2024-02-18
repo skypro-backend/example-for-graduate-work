@@ -15,6 +15,12 @@ import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
+/**
+ * AuthController - авторизация пользователя
+ * <br>
+ * <br>- login <i>(вход авторизованного пользователя)</i>;
+ * <br>- register <i>(регистрация нового пользователя)</i>;
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -26,12 +32,6 @@ public class AuthController {
     @Operation(
             tags = "Авторизация",
             summary = "Авторизация пользователя",
-//            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-//                    description = "описание метода login... ",
-//                    content = {@Content(
-//                            schema = @Schema(implementation = Login.class))
-//                    }
-//            ),
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = {@Content()}),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content()})
@@ -39,21 +39,21 @@ public class AuthController {
     )
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
+        log.info("Поступил запрос на ВХОД... от " + login.getUsername());
+
         if (authService.login(login.getUsername(), login.getPassword())) {
+
+            log.info("Пользователь " + login.getUsername() + ": Вход выполнен успешно!");
             return ResponseEntity.ok().build();
         } else {
+            log.info("Вход не выполнен! " + login.getUsername() + " не авторизован!");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
     @Operation(
             tags = "Регистрация",
             summary = "Регистрация пользователя",
-//            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-//                    description = "описание метода register... ",
-//                    content = {@Content(
-//                            schema = @Schema(implementation = Register.class))
-//                    }
-//            ),
             responses = {
                     @ApiResponse(responseCode = "201", description = "Created", content = {@Content()}),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {@Content()})
@@ -61,9 +61,12 @@ public class AuthController {
     )
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) {
+        log.info("Поступил запрос на РЕГИСТРАЦИЮ...");
         if (authService.register(register)) {
+            log.info("Регистрация прошла успешно!" + register.getUsername() + " зарегистрирован!");
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
+            log.info("Регистрация не пройдена!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
