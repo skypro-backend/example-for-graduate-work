@@ -1,10 +1,19 @@
 package ru.skypro.homework.model;
 
+import lombok.*;
+
 import javax.persistence.*;
 
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "ads")
 public class Ad {
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

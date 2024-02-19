@@ -1,12 +1,20 @@
 package ru.skypro.homework.model;
 
+import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
