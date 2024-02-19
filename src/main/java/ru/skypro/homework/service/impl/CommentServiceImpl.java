@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.repository.AdRepository;
@@ -19,46 +20,31 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final AdRepository adRepository;
+    private final CommentMapper commentMapper;
 
-    public CommentServiceImpl(CommentRepository commentRepository, AdRepository adRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, AdRepository adRepository, CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
         this.adRepository = adRepository;
+        this.commentMapper = commentMapper;
     }
 
     @Override
     public List<CommentDTO> getComments(Long adId) {
-        List<Comment> comments = commentRepository.findByAdId(adId);
-        return comments.stream().map(comment -> new CommentDTO(
-                comment.getId(),
-                comment.getAuthor(),
-                comment.getAuthorImage(),
-                comment.getAuthorFirstName(),
-                comment.getCreatedAt(),
-                comment.getText()
-        )).collect(Collectors.toList());
+        Ad ad = adRepository.findById(adId).orElseThrow(() -> new RuntimeException("Ad was not found"));
+        List<Comment> comments = ad.getComments();
+        return comments.stream()
+                .map(commentMapper::toCommentDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     public CommentDTO addComment(Long adId, CreateOrUpdateComment comment) {
         Ad ad = adRepository.findById(adId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Comment newComment = new Comment(
-                null,
-                comment.getText(),
-                ad,
-                null,
-                null,
-                null,
-                null
-        );
+        Comment newComment = new Comment();
+        newComment.setText(comment.getText());
+        newComment.setAd(ad);
         commentRepository.save(newComment);
-        return new CommentDTO(
-                newComment.getId(),
-                newComment.getAuthor(),
-                newComment.getAuthorImage(),
-                newComment.getAuthorFirstName(),
-                newComment.getCreatedAt(),
-                newComment.getText()
-        );
+        return commentMapper.toCommentDTO(newComment);
     }
 
     @Override
@@ -66,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
         Ad ad = adRepository.findById(adId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (!Objects.equals(ad.getId(), comment.getAd().getId())) {
+        if (comment.getAd() == null || !Objects.equals(ad.getId(), comment.getAd().getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
@@ -78,20 +64,13 @@ public class CommentServiceImpl implements CommentService {
         Ad ad = adRepository.findById(adId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Comment commentToUpdate = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (!Objects.equals(ad.getId(), commentToUpdate.getAd().getId())) {
+        if (commentToUpdate.getAd() == null || !Objects.equals(ad.getId(), commentToUpdate.getAd().getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         commentToUpdate.setText(comment.getText());
         commentRepository.save(commentToUpdate);
 
-        return new CommentDTO(
-                commentToUpdate.getId(),
-                commentToUpdate.getAuthor(),
-                commentToUpdate.getAuthorImage(),
-                commentToUpdate.getAuthorFirstName(),
-                commentToUpdate.getCreatedAt(),
-                commentToUpdate.getText()
-        );
+        return commentMapper.toCommentDTO(commentToUpdate);
     }
 }
