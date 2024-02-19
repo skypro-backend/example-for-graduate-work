@@ -18,14 +18,15 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long author;
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
 
-    @Column(nullable = false)
-    private String authorImage;
-
-    @Column(nullable = false)
-    private String authorFirstName;
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name = "ad_id")
+    private Ad ad;
 
     @Column(nullable = false)
     private Long createdAt;

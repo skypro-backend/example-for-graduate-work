@@ -4,6 +4,7 @@ import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -41,4 +42,11 @@ public class User {
     @Column(nullable = false)
     private String image;
 
+    @ToString.Exclude
+    @OneToMany(mappedBy = "author")
+    private List<Ad> ads;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "author")
+    private List<Comment> comments;
 }
