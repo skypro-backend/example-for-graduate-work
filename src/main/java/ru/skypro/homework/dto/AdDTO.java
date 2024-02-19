@@ -5,11 +5,10 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CommentDTO {
+public class AdDTO {
     private Long pk;
+    private String title;
+    private Integer price;
+    private String image;
     private Long author;
-    private String authorImage;
-    private String authorFirstName;
-    private Long createdAt;
-    private String text;
 }

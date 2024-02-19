@@ -7,7 +7,6 @@ import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AdServiceImpl implements AdService {
@@ -24,8 +23,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Optional<Ad> getAdById(Long id) {
-        return adRepository.findById(id);
+    public Ad getAdById(Long id) {
+        return adRepository.findById(id).orElseThrow(() -> new RuntimeException("Ad not found with id: " + id));
     }
 
     @Override
@@ -35,7 +34,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ad updateAd(Long id, Ad ad) {
-        Ad existingAd = getAdById(id).orElseThrow(() -> new RuntimeException("Ad not found with id: " + id));
+        Ad existingAd = getAdById(id);
         existingAd.setTitle(ad.getTitle());
         existingAd.setDescription(ad.getDescription());
         existingAd.setPrice(ad.getPrice());

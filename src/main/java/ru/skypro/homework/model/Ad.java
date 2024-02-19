@@ -1,16 +1,32 @@
 package ru.skypro.homework.model;
 
-import javax.persistence.*;
+import lombok.*;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "ads")
 public class Ad {
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long author;
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "ad")
+    private List<Comment> comments;
 
     @Column(nullable = false)
     private String image;
