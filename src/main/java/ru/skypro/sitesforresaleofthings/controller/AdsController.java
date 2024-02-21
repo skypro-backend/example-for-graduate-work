@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 /**
  * Контроллер по работе с объявлениями
  */
@@ -29,7 +31,7 @@ public class AdsController {
             responseCode = "200",
             description = "OK"
     )
-    public ResponseEntity<?> getAllAds() {
+    public ResponseEntity<Collection<?>> getAllAds() {
         // написать код + продумать возможные исключения
         return ResponseEntity.ok().build();
     }

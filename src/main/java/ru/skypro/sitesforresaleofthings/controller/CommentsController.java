@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 /**
  * Контроллер по работе с комментариями
  */
@@ -38,7 +40,7 @@ public class CommentsController {
             responseCode = "404",
             description = "Not found"
     )
-    public ResponseEntity<?> getComments() {
+    public ResponseEntity<Collection<?>> getComments() {
         // написать код + продумать возможные исключения
         return ResponseEntity.ok().build();
     }
