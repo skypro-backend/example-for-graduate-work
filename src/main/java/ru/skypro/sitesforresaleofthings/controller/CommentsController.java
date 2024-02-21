@@ -1,12 +1,13 @@
 package ru.skypro.sitesforresaleofthings.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
+import ru.skypro.sitesforresaleofthings.dto.CommentDTO;
+import ru.skypro.sitesforresaleofthings.dto.CreateOrUpdateCommentDTO;
 
 /**
  * Контроллер по работе с комментариями
@@ -17,7 +18,6 @@ import java.util.Collection;
 public class CommentsController {
 
     // здесь будут поля сервисов
-
 
     public CommentsController() {
     }
@@ -40,9 +40,9 @@ public class CommentsController {
             responseCode = "404",
             description = "Not found"
     )
-    public ResponseEntity<Collection<?>> getComments() {
+    public ResponseEntity<CommentDTO> getComments(@PathVariable long id) {
         // написать код + продумать возможные исключения
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new CommentDTO());
     }
 
     @PostMapping("/{id}/comments")
@@ -61,9 +61,10 @@ public class CommentsController {
             responseCode = "404",
             description = "Not found"
     )
-    public ResponseEntity<?> addComment() {
+    public ResponseEntity<CommentDTO> addComment(@PathVariable long id,
+                                                 @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         // написать код + продумать возможные исключения
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new CommentDTO());
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
@@ -86,7 +87,8 @@ public class CommentsController {
             responseCode = "404",
             description = "Not found"
     )
-    public ResponseEntity<?> deleteComment() {
+    public ResponseEntity<CommentDTO> deleteComment(@PathVariable long adId,
+                                                    @PathVariable long commentId) {
         // написать код + продумать возможные исключения
         return ResponseEntity.ok().build();
     }
@@ -111,8 +113,10 @@ public class CommentsController {
             responseCode = "404",
             description = "Not found"
     )
-    public ResponseEntity<?> updateComment() {
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable long adId,
+                                                    @PathVariable long commentId,
+                                                    @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         // написать код + продумать возможные исключения
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new CommentDTO());
     }
 }

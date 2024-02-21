@@ -11,7 +11,7 @@ import lombok.Data;
  * 1) text - текст комментария
  */
 @Data
-public class CreateOrUpdateComment {
+public class CreateOrUpdateCommentDTO {
 
     private String text;
 }

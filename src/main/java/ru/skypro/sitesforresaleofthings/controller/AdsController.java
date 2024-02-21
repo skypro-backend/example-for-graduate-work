@@ -1,12 +1,15 @@
 package ru.skypro.sitesforresaleofthings.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.sitesforresaleofthings.dto.AdDTO;
+import ru.skypro.sitesforresaleofthings.dto.AdsDTO;
+import ru.skypro.sitesforresaleofthings.dto.ExtendedAdDTO;
 
 /**
  * Контроллер по работе с объявлениями
@@ -31,9 +34,9 @@ public class AdsController {
             responseCode = "200",
             description = "OK"
     )
-    public ResponseEntity<Collection<?>> getAllAds() {
+    public ResponseEntity<AdsDTO> getAllAds() {
         // написать код + продумать возможные исключения
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new AdsDTO());
     }
 
     @PostMapping
@@ -48,9 +51,9 @@ public class AdsController {
             responseCode = "401",
             description = "Unauthorized"
     )
-    public ResponseEntity<?> addAd() {
+    public ResponseEntity<AdDTO> addAd() {
         // написать код + продумать возможные исключения
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new AdDTO());
     }
 
     @GetMapping("/{id}")
@@ -69,9 +72,9 @@ public class AdsController {
             responseCode = "404",
             description = "Not found"
     )
-    public ResponseEntity<?> getAds() {
+    public ResponseEntity<ExtendedAdDTO> getAds(@PathVariable long id) {
         // написать код + продумать возможные исключения
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new ExtendedAdDTO());
     }
 
     @DeleteMapping("/{id}")
@@ -94,7 +97,7 @@ public class AdsController {
             responseCode = "404",
             description = "Not found"
     )
-    public ResponseEntity<?> removeAd() {
+    public ResponseEntity<?> removeAd(@PathVariable long id) {
         // написать код + продумать возможные исключения
         return ResponseEntity.ok().build();
     }
@@ -119,9 +122,9 @@ public class AdsController {
             responseCode = "404",
             description = "Not found"
     )
-    public ResponseEntity<?> updateAds() {
+    public ResponseEntity<AdDTO> updateAds(@PathVariable long id) {
         // написать код + продумать возможные исключения
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new AdDTO());
     }
 
     @GetMapping("/me")
@@ -136,7 +139,7 @@ public class AdsController {
             responseCode = "401",
             description = "Unauthorized"
     )
-    public ResponseEntity<?> getAdsMe() {
+    public ResponseEntity<AdsDTO> getAdsMe() {
         // написать код + продумать возможные исключения
         return ResponseEntity.ok().build();
     }
@@ -161,7 +164,7 @@ public class AdsController {
             responseCode = "404",
             description = "Not found"
     )
-    public ResponseEntity<?> updateImage() {
+    public ResponseEntity<?> updateImage(@PathVariable long id) {
         // написать код + продумать возможные исключения
         return ResponseEntity.ok().build();
     }

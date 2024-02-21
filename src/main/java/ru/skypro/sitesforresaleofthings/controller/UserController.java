@@ -5,6 +5,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.sitesforresaleofthings.dto.NewPasswordDTO;
+import ru.skypro.sitesforresaleofthings.dto.UpdateUserDTO;
+import ru.skypro.sitesforresaleofthings.dto.UserDTO;
 
 /**
  * Крнтроллер для работы с пользователями
@@ -36,7 +39,7 @@ public class UserController {
             responseCode = "403",
             description = "Forbidden"
     )
-    public ResponseEntity<?> setPassword() {
+    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDTO newPasswordDto) {
         // написать код + продумать возможные исключения
         return ResponseEntity.ok().build();
     }
@@ -53,9 +56,9 @@ public class UserController {
             responseCode = "401",
             description = "Unauthorized"
     )
-    public ResponseEntity<?> getUser() {
+    public ResponseEntity<UserDTO> getUser() {
         // написать код + продумать возможные исключения
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new UserDTO());
     }
 
     @PatchMapping("/me")
@@ -70,9 +73,9 @@ public class UserController {
             responseCode = "401",
             description = "Unauthorized"
     )
-    public ResponseEntity<?> updateUser() {
+    public ResponseEntity<UpdateUserDTO> updateUser() {
         // написать код + продумать возможные исключения
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new UpdateUserDTO());
     }
 
     @PatchMapping("/me/image")

@@ -12,7 +12,7 @@ import lombok.Data;
  * 2) newPassword - новый пароль
  */
 @Data
-public class NewPassword {
+public class NewPasswordDTO {
 
     private String currentPassword;
     private String newPassword;

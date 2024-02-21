@@ -13,7 +13,7 @@ import lombok.Data;
  * 3) description - описание объявления
  */
 @Data
-public class CreateOrUpdateAd {
+public class CreateOrUpdateAdDTO {
 
     private String title;
     private Integer price;

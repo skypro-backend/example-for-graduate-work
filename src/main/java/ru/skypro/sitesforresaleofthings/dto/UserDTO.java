@@ -10,7 +10,7 @@ import ru.skypro.sitesforresaleofthings.constant.Role;
 /**
  * Свойства:
  * 1) id - id пользователя,
- * 2) email - логин пользователя,
+ * 2) email - электронная почта пользователя,
  * 3) firstName - имя пользователя,
  * 4) lastName - фамилия пользователя,
  * 5) phone - телефон пользователя,
@@ -18,7 +18,7 @@ import ru.skypro.sitesforresaleofthings.constant.Role;
  * 7) image - ссылка на аватар пользователя
  */
 @Data
-public class User {
+public class UserDTO {
 
     private Integer id;
     private String email;

@@ -13,7 +13,7 @@ import lombok.Data;
  * 3) phone - телефон пользователя
  */
 @Data
-public class UpdateUser {
+public class UpdateUserDTO {
 
     private String firstName;
     private String lastName;

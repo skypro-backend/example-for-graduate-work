@@ -15,7 +15,7 @@ import lombok.Data;
  * 5) title - заголовок объявления
  */
 @Data
-public class Ad {
+public class AdDTO {
 
     private Integer author;
     private String image;

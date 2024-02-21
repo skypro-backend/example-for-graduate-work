@@ -16,7 +16,7 @@ import lombok.Data;
  * 6) text - текст комментария
  */
 @Data
-public class Comment {
+public class CommentDTO {
 
     private Integer author;
     private String authorImage;

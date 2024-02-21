@@ -14,8 +14,8 @@ import java.util.List;
  * 2) results - список комментариев
  */
 @Data
-public class Comments {
+public class CommentsDTO {
 
     private Integer count;
-    private List<Comment> results;
+    private List<CommentDTO> results;
 }
