@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.security.UserDetailServiceImpl;
 import ru.skypro.homework.service.AuthService;
 
 /**
@@ -27,7 +28,7 @@ import ru.skypro.homework.service.AuthService;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+    private final UserDetailServiceImpl userDetailService;
 
     @Operation(
             tags = "Авторизация",
@@ -39,14 +40,15 @@ public class AuthController {
     )
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
-        log.info("Поступил запрос на ВХОД... от " + login.getUsername());
-
-        if (authService.login(login.getUsername(), login.getPassword())) {
+        if (userDetailService.login(login.getUsername(), login.getPassword())) {
 
             log.info("Пользователь " + login.getUsername() + ": Вход выполнен успешно!");
+
             return ResponseEntity.ok().build();
         } else {
+
             log.info("Вход не выполнен! " + login.getUsername() + " не авторизован!");
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
@@ -62,11 +64,15 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) {
         log.info("Поступил запрос на РЕГИСТРАЦИЮ...");
-        if (authService.register(register)) {
+        if (userDetailService.register(register)) {
+
             log.info("Регистрация прошла успешно!" + register.getUsername() + " зарегистрирован!");
+
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
+
             log.info("Регистрация не пройдена!");
+
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }

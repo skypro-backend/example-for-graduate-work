@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.security.logger.FormLogInfo;
+import ru.skypro.homework.service.UserService;
 
 import javax.validation.constraints.NotBlank;
 
@@ -24,7 +26,11 @@ import javax.validation.constraints.NotBlank;
 @Tag(name = "Пользователи")
 @RestController
 public class UsersController {
+    private final UserService userService;
 
+    public UsersController(UserService userService) {
+        this.userService = userService;
+    }
 
     @Operation(
             tags = "Пользователи",
@@ -53,7 +59,8 @@ public class UsersController {
     )
     @GetMapping(value = "/me")
     public ResponseEntity<?> getUser(Authentication authentication) {
-        return ResponseEntity.ok().build();//ПУСТЫШКА
+        log.info(FormLogInfo.getInfo());
+        return ResponseEntity.ok(userService.getUser(authentication));
     }
 
     @Operation(
@@ -68,10 +75,10 @@ public class UsersController {
             }
     )
     @PatchMapping(value = "/me")
-    public ResponseEntity<User> updateUser(
+    public ResponseEntity<UpdateUser> updateUser(
             @RequestBody
             @NotBlank(message = "updateUser не должен быть пустым") UpdateUser updateUser, Authentication authentication) {
-        return ResponseEntity.ok().build();//ПУСТЫШКА
+        return ResponseEntity.ok(userService.updateUser(updateUser, authentication));
     }
 
     @Operation(
