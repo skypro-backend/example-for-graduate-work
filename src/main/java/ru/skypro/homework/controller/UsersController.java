@@ -42,10 +42,10 @@ public class UsersController {
             }
     )
     @PostMapping(value = "/setPassword")
-    public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
-        log.info(FormLogInfo.getInfo());
-        NewPassword newPasswordDTO = userService.setPassword(newPassword);
-        return ResponseEntity.ok(newPasswordDTO);
+    public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword, Authentication authentication) {
+        log.info("Обновление пароля: " + FormLogInfo.getInfo());
+        userService.setPassword(newPassword, authentication);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(

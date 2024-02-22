@@ -22,5 +22,5 @@ public interface UserService {
     /**
      * установить новый пароль пользователя
      */
-    NewPassword setPassword(NewPassword newPassword);
+    void setPassword(NewPassword newPassword, Authentication authentication);
 }
