@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.sitesforresaleofthings.dto.AdDTO;
 import ru.skypro.sitesforresaleofthings.dto.AdsDTO;
+import ru.skypro.sitesforresaleofthings.dto.CreateOrUpdateAdDTO;
 import ru.skypro.sitesforresaleofthings.dto.ExtendedAdDTO;
 
 /**
@@ -97,7 +98,7 @@ public class AdsController {
             responseCode = "404",
             description = "Not found"
     )
-    public ResponseEntity<?> removeAd(@PathVariable long id) {
+    public ResponseEntity<AdDTO> removeAd(@PathVariable long id) {
         // написать код + продумать возможные исключения
         return ResponseEntity.ok().build();
     }
@@ -139,7 +140,7 @@ public class AdsController {
             responseCode = "401",
             description = "Unauthorized"
     )
-    public ResponseEntity<AdsDTO> getAdsMe() {
+    public ResponseEntity<AdsDTO> getAdsMe(@RequestBody CreateOrUpdateAdDTO createOrUpdateAdDTO) {
         // написать код + продумать возможные исключения
         return ResponseEntity.ok().build();
     }

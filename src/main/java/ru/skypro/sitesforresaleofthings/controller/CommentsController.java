@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.sitesforresaleofthings.dto.CommentDTO;
+import ru.skypro.sitesforresaleofthings.dto.CommentsDTO;
 import ru.skypro.sitesforresaleofthings.dto.CreateOrUpdateCommentDTO;
 
 /**
@@ -40,7 +41,8 @@ public class CommentsController {
             responseCode = "404",
             description = "Not found"
     )
-    public ResponseEntity<CommentDTO> getComments(@PathVariable long id) {
+    public ResponseEntity<CommentDTO> getComments(@PathVariable long id,
+                                                  @RequestBody CommentsDTO commentsDTO) {
         // написать код + продумать возможные исключения
         return ResponseEntity.ok(new CommentDTO());
     }

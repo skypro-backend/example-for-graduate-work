@@ -39,7 +39,7 @@ public class UserController {
             responseCode = "403",
             description = "Forbidden"
     )
-    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDTO newPasswordDto) {
+    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDTO newPasswordDTO) {
         // написать код + продумать возможные исключения
         return ResponseEntity.ok().build();
     }

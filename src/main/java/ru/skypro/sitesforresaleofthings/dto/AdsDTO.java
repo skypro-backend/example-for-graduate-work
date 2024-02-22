@@ -14,8 +14,8 @@ import java.util.List;
  * 2) results - список объявлений
  */
 @Data
-public class Ads {
+public class AdsDTO {
 
     private Integer count;
-    private List<Ad> results;
+    private List<AdDTO> results;
 }
