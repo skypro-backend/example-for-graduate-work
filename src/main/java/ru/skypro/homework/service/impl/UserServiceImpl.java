@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserEntity;
@@ -56,6 +57,15 @@ public class UserServiceImpl implements UserService {
         log.info(FormLogInfo.getInfo());
 
         return userMapper.toDtoUpdateUser(oldUser);
+    }
+
+    /**
+     * Установить пароль пользователя
+     */
+    @Override
+    public NewPassword setPassword(NewPassword newPassword) {
+        log.info(FormLogInfo.getInfo());
+        return null;
     }
 
     /**

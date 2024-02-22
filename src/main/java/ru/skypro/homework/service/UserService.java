@@ -1,6 +1,7 @@
 package ru.skypro.homework.service;
 
 import org.springframework.security.core.Authentication;
+import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 
@@ -17,4 +18,9 @@ public interface UserService {
      * обновить пользователя
      */
     UpdateUser updateUser(UpdateUser updateUserDto, Authentication authentication);
+
+    /**
+     * установить новый пароль пользователя
+     */
+    NewPassword setPassword(NewPassword newPassword);
 }

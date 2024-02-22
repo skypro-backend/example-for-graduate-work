@@ -43,7 +43,9 @@ public class UsersController {
     )
     @PostMapping(value = "/setPassword")
     public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
-        return ResponseEntity.status(HttpStatus.OK).build();//ПУСТЫШКА
+        log.info(FormLogInfo.getInfo());
+        NewPassword newPasswordDTO = userService.setPassword(newPassword);
+        return ResponseEntity.ok(newPasswordDTO);
     }
 
     @Operation(
