@@ -30,7 +30,7 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     // to use UserMapper.INSTANCE.toEntity();
-    // to use UserMapper.INSTANCE.toDto_();
+    // to use UserMapper.INSTANCE.toDto___();
 
     //_____ toEntity___
 
@@ -38,7 +38,6 @@ public interface UserMapper {
     UserEntity toEntity(Login dto);
 
     @Mapping(source = "currentPassword", target = "email")
-//?...или... source = "newPassword"...?
     UserEntity toEntity(NewPassword dto);
 
     @Mapping(source = "username", target = "email")
@@ -46,14 +45,15 @@ public interface UserMapper {
 
     UserEntity toEntity(UpdateUser dto);
 
+    @Mapping(source = "image", target = "image.fileSize")
     UserEntity toEntity(User dto);
 
-    //_____ toDto___
+
+    //    //_____ toDto___
     @Mapping(source = "email", target = "username")
     Login toDtoLogin(UserEntity userEntity);
 
     @Mapping(source = "password", target = "newPassword")
-//? source = "currentPassword"
     NewPassword toDtoNewPassword(UserEntity userEntity);
 
     @Mapping(source = "email", target = "username")
@@ -61,5 +61,6 @@ public interface UserMapper {
 
     UpdateUser toDtoUpdateUser(UserEntity userEntity);
 
+    @Mapping(source = "image.id", target = "image")
     User toDtoUser(UserEntity userEntity);
 }

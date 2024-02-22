@@ -1,38 +1,55 @@
 package ru.skypro.homework.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
  * CommentEntity - сущность
- * <br><i>содержит следующие поля</i>
- * <br>- author<i>(id автора комментария)</i>
- * <br>- authorImage<i>(ссылка на аватар автора комментария)</i>
- * <br>- authorFirstName<i>(имя создателя комментария)</i>
- * <br>- createAt<i>(дата и время создания комментария в милисекундах с 00:00:00 01.01.1970)</i>
- * <br>- pk<i>(id комментария)</i>
- * <br>- text<i>(текст комментария)</i>
+ * <br><i>содержит поля</i>
+ * <br>- id<i> (id комментария)</i>
+ * <br>- createAt<i> (дата и время создания комментария)</i>
+ * <br>- text<i> (текст комментария)</i>
+ * <br>- author<i> (id автора комментария, {@link UserEntity})</i>
+ * <br>- pk<i> (ссылка на id_объявления, {@link AdEntity})</i>
  */
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "comments")
 public class CommentEntity {
+    /**
+     * id комментария
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer author;
+    private Long id;
 
-    private String authorImage;
-
-    private String authorFirstName;
-
+    /**
+     * дата и время создания комментария
+     */
     private LocalDateTime createAt;
 
-    private Integer pk;
-
+    /**
+     * текст комментария
+     */
     private String text;
+
+    /**
+     * связь {@link AdEntity} и {@link CommentEntity}
+     * <br><i>много комментариев - одно  объявление </i>
+     */
+    @ManyToOne
+//    @JsonIgnore
+    @JoinColumn(name = "ad_id", nullable = false)
+    private AdEntity pk;
+
+    /**
+     * связь {@link UserEntity} и {@link CommentEntity}
+     * <br><i>много комментариев - один  пользователь </i>
+     */
+    @ManyToOne
+//    @JsonIgnore
+    @JoinColumn(name = "author_id", nullable = false)
+    private UserEntity author;
 }

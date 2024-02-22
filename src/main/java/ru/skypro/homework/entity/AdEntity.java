@@ -1,38 +1,69 @@
 package ru.skypro.homework.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.User;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.IDENTITY;
+import java.util.List;
+
 
 /**
- * AdEntity - сущность
- * <br><i>содержит следующие поля:</i>
- * <br>- author<i> (id автора)</i>
- * <br>- image<i>(ссылка на картинку объявления)</i>
- * <br>- pk<i>(id объявления)</i>
- * <br>- price<i>(цена объявления)</i>
- * <br>- title<i>(заголовок объявления)</i>
- * <br>- description<i>(описание объявления)</i>
+ * AdEntity- сущность
+ * <br><i>содержит поля:</i>
+ * <br>- id<i> (id объявления)</i>
+ * <br>- name<i> (заголовок объявления)</i>
+ * <br>- price<i> (цена объявления)</i>
+ * <br>- description<i> (описание объявления)</i>
+ * <br>- author<i> (связь {@link AdEntity} и {@link UserEntity})</i>
+ * <br>- comments<i> (связь {@link AdEntity} и {@link CommentEntity})</i>
+ * <br>- image<i> (фото объявления, связь {@link AdEntity} и {@link ImageEntity})</i>
  */
-@Entity
-@Getter
-@Setter
-@Table(name = "ads")
-
+@Entity(name = "ads")
+@Data
 public class AdEntity {
+    /**
+     * id
+     */
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private int author;
-    private String image;
-    private int pk;
-    private int price;
-    private String title;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    /**
+     * заголовок объявления
+     */
+    private String name;//title
+
+    /**
+     * цена объявления
+     */
+    private Double price;
+
+    /**
+     * описание объявления
+     */
     private String description;
+
+    /**
+     * связь {@link AdEntity} и {@link UserEntity}
+     * <br><i>много объявлений - один пользователь</i>
+     */
+    @ManyToOne
+//    @JsonIgnore
+    @JoinColumn(name = "author_id", nullable = false)
+    private UserEntity author;
+
+    /**
+     * связь {@link AdEntity} и {@link CommentEntity}
+     * <br><i>одно  объявление - много комментариев</i>
+     */
+    @OneToMany(mappedBy = "pk", cascade = CascadeType.ALL)
+//    @JsonIgnore
+    private List<CommentEntity> comments;
+
+    /**
+     * фото объявления
+     */
+    @OneToOne
+    @JoinColumn(name = "image")
+    private ImageEntity image;
 }
