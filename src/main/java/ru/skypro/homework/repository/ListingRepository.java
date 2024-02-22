@@ -6,6 +6,6 @@ import ru.skypro.homework.entity.Listing;
 import java.util.List;
 
 public interface ListingRepository extends JpaRepository<Listing, Long> {
-    List<Listing> findListingByAuthorId(long id);
+    List<Listing> findListingByUserId(long id);
 
 }

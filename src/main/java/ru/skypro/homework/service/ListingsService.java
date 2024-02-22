@@ -10,10 +10,11 @@ import ru.skypro.homework.dto.listing.ListingsDTO;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 public interface ListingsService {
 
-    ListingDTO getAllListings();
+    List<ListingDTO> getAllListings();
 
     ListingsDTO addListing(CreateOrUpdateListing createOrUpdateListingDTO, MultipartFile image, Authentication authentication) throws IOException;
 

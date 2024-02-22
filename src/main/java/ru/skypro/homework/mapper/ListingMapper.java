@@ -22,7 +22,7 @@ public interface ListingMapper {
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "user.id")
     @Mapping(target = "image", source = "image", qualifiedByName = "imageToString")
-    ListingDTO listingToListingDTO(List<Listing> entity);
+    ListingDTO listingToListingDTO(Listing entity);
 
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "authorFirstName", source = "user.firstName")
@@ -35,7 +35,7 @@ public interface ListingMapper {
 
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "user", ignore = true)
     @Mapping(target = "image", ignore = true)
     Listing createOrUpdateListingToListing(CreateOrUpdateListing dto);
 
