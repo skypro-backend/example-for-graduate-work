@@ -1,8 +1,6 @@
 package ru.skypro.homework.entity;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
@@ -15,7 +13,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * UserEntity - сущность
- * <br><i>содержит следующие поля:</i>
+ * <br><i>содержит поля:</i>
  * <br>- id <i>(id пользователя)</i>;
  * <br>- email <i>(логин пользователя)</i>;
  * <br>- password <i>(пароль пользователя)</i>;
@@ -23,39 +21,66 @@ import static javax.persistence.GenerationType.IDENTITY;
  * <br>- lastName <i>(фамилия пользователя)</i>;
  * <br>- phone <i>(телефон пользователя)</i>;
  * <br>- role <i>(роль пользователя, {@link Role})</i>;
- * <br>- image <i>(аватар пользователя)</i>;
- * <br>- adsId <i>(объявления пользователя, {@link List<>})</i>;
- * <br>- commentsId <i>(комментарии пользователя, {@link List<>})</i>.
+ * <br>- adsId <i>(объявления пользователя, {@link List<AdEntity>})</i>;
+ * <br>- commentsId <i>(комментарии пользователя, {@link List<CommentEntity>})</i>.
  */
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "users")
 public class UserEntity {
+    /**
+     * id
+     */
     @Id
     @GeneratedValue(strategy = IDENTITY)//GenerationType
     private Long id;
 
+    /**
+     * логин пользователя
+     */
     private String email;//login-email-username
 
+    /**
+     * пароль пользователя
+     */
     private String password;
 
+    /**
+     * имя пользователя
+     */
     private String firstName;
 
+    /**
+     * фамилия пользователя
+     */
     private String lastName;
 
+    /**
+     * телефон пользователя
+     */
     private String phone;
 
+    /**
+     * роль пользователя
+     */
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String image;
+    /**
+     * связь {@link UserEntity} и {@link AdEntity}
+     * <br><i>один пользователь - много объявлений</i>
+     */
+    @OneToMany(mappedBy = "author")
+    private List<AdEntity> ads;// id объявления
 
-    private Long adId;// id объявления
+    /**
+     * связь {@link UserEntity} и {@link CommentEntity}
+     * <br><i>один пользователь - много комментариев</i>
+     */
+    @OneToMany(mappedBy = "author")
+    private List<CommentEntity> comments;// id комментария
 
-//    private List<?> adsId;//список  id_объявлений
-
-    private Long commentId;// id комментария
-
-//    private List<?> commentsId;//список  id_комментариев
+    @OneToOne
+    @JoinColumn(name = "image")
+    private ImageEntity image;
 }

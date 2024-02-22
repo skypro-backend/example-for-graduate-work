@@ -13,7 +13,17 @@ public interface AdMapper {
     @Mapping(target = "pk",source = "pk")
     @Mapping(target = "price",source = "price")
     @Mapping(target = "title",source = "title")
-    @Mapping(target = "description",source = "description")
+    @Mapping(target = "description",source = "description")default
+    AdEntity toDTO() {
+        return toDTO(null);
+    }
+
+    @Mapping(target = "author",source = "author")
+    @Mapping(target = "image",source = "image")
+    @Mapping(target = "pk",source = "pk")
+    @Mapping(target = "price",source = "price")
+    @Mapping(target = "title",source = "title")
+//    @Mapping(target = "description",source = "description")
     AdEntity toDTO(AdEntity adEntity);
 
     @Mapping(target = "author",source = "author")
@@ -21,6 +31,6 @@ public interface AdMapper {
     @Mapping(target = "pk",source = "pk")
     @Mapping(target = "price",source = "price")
     @Mapping(target = "title",source = "title")
-    @Mapping(target = "description",source = "description")
+//    @Mapping(target = "description",source = "description")
     AdEntity toEntity(Ad ad);
 }
