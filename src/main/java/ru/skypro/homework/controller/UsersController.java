@@ -41,7 +41,7 @@ public class UsersController {
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(schema = @Schema()))
             }
     )
-    @PostMapping(value = "/setPassword")
+    @PostMapping(value = "/set_password")
     public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword, Authentication authentication) {
         log.info("Обновление пароля: " + FormLogInfo.getInfo());
         userService.setPassword(newPassword, authentication);
