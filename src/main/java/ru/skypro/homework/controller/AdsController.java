@@ -1,23 +1,25 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.Type;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.ImageService;
 
-import javax.validation.constraints.NotBlank;
-import java.lang.reflect.Array;
+import java.io.IOException;
 import java.util.List;
 
 @RequestMapping("/ads")
@@ -26,6 +28,17 @@ import java.util.List;
 @Tag(name = "Объявления")
 @RestController
 public class AdsController {
+    private final AdsService adsService;
+    private final ImageService imageService;
+    private final AdMapper adMapper;
+
+    public AdsController(AdsService adsService,ImageService imageService,AdMapper adMapper) {
+        this.adsService = adsService;
+        this.imageService = imageService;
+        this.adMapper = adMapper;
+
+    }
+
     @Operation(
             tags = "Объявления",
             summary = "Получение всех объявлений",
@@ -54,10 +67,10 @@ public class AdsController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 
-    public ResponseEntity<?> addAd
-            (@RequestPart  CreateOrUpdateAd properties,@RequestPart MultipartFile image){
+    public ResponseEntity<CreateOrUpdateAd> addAd
+            (@RequestPart  CreateOrUpdateAd properties, @RequestPart MultipartFile image, Authentication authentication) throws IOException {
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok(adsService.addAds(properties,image,authentication));
     }
     @Operation(
             tags = "Объявления",
@@ -75,8 +88,8 @@ public class AdsController {
     )
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAd> getAds(@PathVariable int id){
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<ExtendedAd> getAds(@PathVariable Long id){
+        return ResponseEntity.ok(adsService.getAds(id));
     }
     @Operation(
             tags = "Объявления",
