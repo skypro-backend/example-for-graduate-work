@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Login {
-
-    private String username;
-    private String password;
+public class UpdateUser {
+    private String firstName;
+    private String lastName;
+    private String phone;
 }
