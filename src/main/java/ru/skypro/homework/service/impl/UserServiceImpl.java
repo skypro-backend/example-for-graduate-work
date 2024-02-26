@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
      * @param email email - логину пользователя
      * @return пользователь
      */
-    private UserEntity findEntityByEmail(String email) {
+    public UserEntity findEntityByEmail(String email) {
         log.info("Пользователь найден по email: " + FormLogInfo.getInfo());
 //        return userRepository.findByEmail(email).get();
         return userRepository.findByEmail(email).orElseThrow(UserNotFound::new);
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
      * @param id id пользователя
      * @return пользователь
      */
-    private UserEntity findById(long id) {
+    public UserEntity findById(long id) {
         log.info("Пользователь найден по Id: " + FormLogInfo.getInfo());
         return userRepository.findById(id).orElseThrow(UserNotFound::new);
     }
