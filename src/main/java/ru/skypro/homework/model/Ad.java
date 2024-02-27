@@ -28,8 +28,8 @@ public class Ad {
     @OneToMany(mappedBy = "ad")
     private List<Comment> comments;
 
-    @Column(nullable = false)
-    private String image;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Image image;
 
     @Column(nullable = false)
     private Integer price;

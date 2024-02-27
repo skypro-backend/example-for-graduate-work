@@ -16,21 +16,21 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public UserDTO getUser(String userName) {
-        User user = userRepository.findByUsername(userName).orElseThrow(() -> new RuntimeException("User was not found"));
+        User user = userRepository.findByEmail(userName).orElseThrow(() -> new RuntimeException("User was not found"));
         return new UserDTO(
                 user.getId(),
-                user.getUsername(),
+                user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getPhone(),
                 user.getRole().toString(),
-                user.getImage()
+                "images/" + user.getImage().getId()
         );
     }
 
     @Override
     public UserDTO updateUser(String userName, UpdateUser updateUser) {
-        User user = userRepository.findByUsername(userName).orElseThrow(() -> new RuntimeException("User was not found"));
+        User user = userRepository.findByEmail(userName).orElseThrow(() -> new RuntimeException("User was not found"));
 
         user.setFirstName(updateUser.getFirstName());
         user.setLastName(updateUser.getLastName());
@@ -39,12 +39,12 @@ public class UserServiceImpl implements UserService {
 
         return new UserDTO(
                 user.getId(),
-                user.getUsername(),
+                user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getPhone(),
                 user.getRole().toString(),
-                user.getImage()
+                "images/" + user.getImage().getId()
         );
     }
 }
