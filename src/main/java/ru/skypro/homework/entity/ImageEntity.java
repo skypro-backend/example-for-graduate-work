@@ -43,7 +43,7 @@ public class ImageEntity {
     /**
      * данные файла
      */
-    @Lob
+//    @Lob// фронт не дает "сохранять"
     private byte[] data;
     /**
      * userId

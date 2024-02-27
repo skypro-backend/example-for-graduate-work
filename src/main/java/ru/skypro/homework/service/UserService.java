@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.entity.UserEntity;
 
 /**
  * сервис пользователя
@@ -23,4 +24,15 @@ public interface UserService {
      * установить новый пароль пользователя
      */
     void setPassword(NewPassword newPassword, Authentication authentication);
+
+    /**
+     * найти пользователя по email - логину*
+     */
+    UserEntity findEntityByEmail(String email);
+
+    /**
+     * найти пользователя по id
+     */
+    UserEntity findById(long id);
+
 }

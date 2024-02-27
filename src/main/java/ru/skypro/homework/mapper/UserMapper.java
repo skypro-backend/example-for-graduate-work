@@ -45,7 +45,7 @@ public interface UserMapper {
 
     UserEntity toEntity(UpdateUser dto);
 
-    @Mapping(source = "image", target = "image.fileSize")
+    @Mapping(source = "image", target = "image.filePath")
     UserEntity toEntity(User dto);
 
 
@@ -61,6 +61,6 @@ public interface UserMapper {
 
     UpdateUser toDtoUpdateUser(UserEntity userEntity);
 
-    @Mapping(source = "image.id", target = "image")
+    @Mapping(source = "image.filePath", target = "image")
     User toDtoUser(UserEntity userEntity);
 }

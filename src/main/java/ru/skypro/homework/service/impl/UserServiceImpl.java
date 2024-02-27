@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exception.PasswordIsNotMatchException;
 import ru.skypro.homework.exception.UserNotFound;
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
      * Получить данные пользователя
      */
     @Override
+    @Transactional
     public User getUser(Authentication authentication) {
         log.info("Получить данные пользователя" + FormLogInfo.getInfo());
         String nameEmail = authentication.getName();
@@ -48,6 +50,7 @@ public class UserServiceImpl implements UserService {
      * Обновить данные пользователя
      */
     @Override
+    @Transactional
     public UpdateUser updateUser(UpdateUser newpUpdateUserDto, Authentication authentication) {
         log.info("Обновить данные пользователя:  " + FormLogInfo.getInfo());
         String nameEmail = authentication.getName();
@@ -91,6 +94,7 @@ public class UserServiceImpl implements UserService {
      * @param email email - логину пользователя
      * @return пользователь
      */
+    @Override
     public UserEntity findEntityByEmail(String email) {
         log.info("Пользователь найден по email: " + FormLogInfo.getInfo());
 //        return userRepository.findByEmail(email).get();

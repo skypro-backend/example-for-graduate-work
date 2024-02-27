@@ -42,8 +42,8 @@ public class UsersController {
             }
     )
     @PostMapping(value = "/set_password")
-    public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword, Authentication authentication) {
-        log.info("Обновление пароля: " + FormLogInfo.getInfo());
+    public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword, Authentication authentication) {
+        log.info("Обновление пароля___" + FormLogInfo.getInfo());
         userService.setPassword(newPassword, authentication);
         return ResponseEntity.ok().build();
     }
@@ -60,8 +60,8 @@ public class UsersController {
             }
     )
     @GetMapping(value = "/me")
-    public ResponseEntity<?> getUser(Authentication authentication) {
-        log.info(FormLogInfo.getInfo());
+    public ResponseEntity<User> getUser(Authentication authentication) {
+        log.info("Получение информации об авторизованном пользователе___" + FormLogInfo.getInfo());
         return ResponseEntity.ok(userService.getUser(authentication));
     }
 
@@ -80,20 +80,27 @@ public class UsersController {
     public ResponseEntity<UpdateUser> updateUser(
             @RequestBody
             @NotBlank(message = "updateUser не должен быть пустым") UpdateUser updateUser, Authentication authentication) {
+        log.info("Обновление информации об авторизованном пользователе___" + FormLogInfo.getInfo());
         return ResponseEntity.ok(userService.updateUser(updateUser, authentication));
     }
 
-    @Operation(
-            tags = "Пользователи",
-            summary = "Обновление аватара авторизованного пользователя",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema())),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content()})
-            }
-    )
-    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image,
-                                             Authentication authentication) {
-        return ResponseEntity.ok().build();//ПУСТЫШКА
-    }
+    //переместился в ImageController
+
+//    @Operation(
+//            tags = "Пользователи",
+//            summary = "Обновление аватара авторизованного пользователя",
+//            responses = {
+//                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema())),
+//                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = {@Content()})
+//            }
+//    )
+//    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image,
+//                                             Authentication authentication) {
+//        log.info("Обновление аватара авторизованного пользователя___" + FormLogInfo.getInfo());
+//
+//        //userService.updateUserImage(image, authentication);
+//
+//        return ResponseEntity.ok().build();//ПУСТЫШКА
+//    }
 }

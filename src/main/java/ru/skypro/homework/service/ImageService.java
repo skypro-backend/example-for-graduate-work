@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.ImageEntity;
 
@@ -15,6 +16,8 @@ public interface ImageService {
 
     void remove(ImageEntity image);
 
-
+    //Далее до конца
+    // методы для загрузки аватарок для пользователя
+    void updateUserImage(MultipartFile image, Authentication authentication)throws IOException;
 
 }
