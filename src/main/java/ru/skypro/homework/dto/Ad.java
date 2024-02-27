@@ -1,4 +1,5 @@
 package ru.skypro.homework.dto;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import lombok.Data;
@@ -12,7 +13,8 @@ public class Ad {
      * ID автора объявления
      */
     @Schema(description = "id автора объявления")
-    int author;
+    Integer author;
+//    int author;
     /**
      * Ссылка на картинку объявления
      */
@@ -22,12 +24,14 @@ public class Ad {
      * ID объявления
      */
     @Schema(description = "id объявления")
-    int pk;
+    Integer pk;
+//    int pk;
     /**
      * Цена объявления
      */
     @Schema(description = "цена объявления")
-    int price;
+    Integer price;
+//    int price;
     /**
      * Заголовок объявления
      */

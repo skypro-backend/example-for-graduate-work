@@ -23,7 +23,7 @@ public interface AdMapper {
 
     //_____ toEntity___
     @Mapping(source = "author", target = "author.id")
-    @Mapping(source = "image", target = "image.id")
+    @Mapping(source = "image", target = "image.filePath")
     @Mapping(source = "pk", target = "id")
     @Mapping(source = "title", target = "name")
     AdEntity toEntity(Ad ad);

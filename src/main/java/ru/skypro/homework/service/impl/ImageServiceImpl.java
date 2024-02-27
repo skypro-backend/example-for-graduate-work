@@ -32,6 +32,8 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 public class ImageServiceImpl implements ImageService {
     @Value("${image.user.dir.path}")
     private String avatarsDir;//полный путь к папке... (application.properties -> image.user.dir.path=./src/main/resources/images/avatars)
+    @Value("${image.ads.dir.path}")
+    private String adsDir;//полный путь к папке ads... (application.properties)
 
     private final ImageRepository imageRepository;
     private final UserService userService;
@@ -62,8 +64,10 @@ public class ImageServiceImpl implements ImageService {
     public void updateUserImage(MultipartFile avatarFile, Authentication authentication) throws IOException {
         log.info("STEP_3_updateUserImage" + FormLogInfo.getInfo());
 
-        int fileName = userService.getUser(authentication).getId();//имя файла
-        Path filePath = Path.of(avatarsDir, fileName + "." + getExtensions(Objects.requireNonNull(avatarFile.getOriginalFilename())));
+        int getId = userService.getUser(authentication).getId();//имя файла
+        String fileName = getId + "." + getExtensions(Objects.requireNonNull(avatarFile.getOriginalFilename()));
+        Path filePath = Path.of(avatarsDir, fileName);
+
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
         log.info("STEP_A_createDirectories:   " + FormLogInfo.getInfo());
@@ -78,21 +82,36 @@ public class ImageServiceImpl implements ImageService {
             bis.transferTo(bos);
             log.info("STEP_B_transferTo:   " + FormLogInfo.getInfo());
         }
-        ImageEntity avatar = findUserAvatar((long) fileName);
+        ImageEntity avatar = findUserAvatar((long) getId);
 
-        avatar.setFilePath(filePath.toString());
+        avatar.setFilePath(fileName);//1.jpg
+//        avatar.setFilePath(filePath.toString());
         avatar.setFileSize(avatarFile.getSize());
         avatar.setMediaType(avatarFile.getContentType());
-//        avatar.setData(avatarFile.getBytes());
-        avatar.setData(generateImagePreview(filePath));
-        avatar.setUser(userService.findById(fileName));
+        avatar.setData(avatarFile.getBytes());
+//        avatar.setData(generateImagePreview(filePath));//если надо превью
+
+        avatar.setUser(userService.findById(getId));
 
         imageRepository.save(avatar);
         log.info("STEP_C_SAVE___" + FormLogInfo.getInfo());
         //заполнить поле image у UserEntity
-        UserEntity userEntity = userService.findById(fileName);
+        UserEntity userEntity = userService.findById(getId);
         userEntity.setImage(avatar);
         log.info("STEP_D_SAVE_userEntity.setImage(avatar)__" + FormLogInfo.getInfo());
+        //надо ли тут запустить мапперы?
+    }
+
+    @Override
+    public ImageEntity findUserAvatar(String filePath) {
+        log.info("FIND_USER_AVATAR" + FormLogInfo.getInfo());
+        return imageRepository.findByFilePath(filePath).orElseThrow();
+    }
+
+    @Override
+    public byte[] getImage(String imagePath) {
+
+        return new byte[0];
     }
 
     public byte[] generateImagePreview(Path filePath) throws IOException {

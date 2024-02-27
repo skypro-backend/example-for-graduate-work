@@ -1,5 +1,6 @@
 package ru.skypro.homework.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -48,7 +49,7 @@ public class AdEntity {
      * <br><i>много объявлений - один пользователь</i>
      */
     @ManyToOne
-//    @JsonIgnore
+    @JsonIgnore
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
@@ -57,13 +58,14 @@ public class AdEntity {
      * <br><i>одно  объявление - много комментариев</i>
      */
     @OneToMany(mappedBy = "pk", cascade = CascadeType.ALL)
-//    @JsonIgnore
+    @JsonIgnore
     private List<CommentEntity> comments;
 
     /**
      * фото объявления
      */
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "image")
     private ImageEntity image;
 }

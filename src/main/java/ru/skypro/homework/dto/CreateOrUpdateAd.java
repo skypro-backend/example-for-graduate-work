@@ -24,7 +24,8 @@ public class CreateOrUpdateAd {
     @Min(0)
     @Max(10000000)
     @Schema(description = "цена объявления" )
-    int price;
+    Integer price;
+//    int price;
     /**
      * Описание объявления
      */
