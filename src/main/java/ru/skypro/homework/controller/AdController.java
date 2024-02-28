@@ -6,12 +6,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.CommentService;
 
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
@@ -19,7 +18,9 @@ import ru.skypro.homework.service.AdService;
 @RequiredArgsConstructor
 public class AdController {
     private final AdService adService;
+    private final CommentService commentService;
     private final AdMapper adMapper;
+    private final CommentMapper commentMapper;
 
     @GetMapping
     public ResponseEntity<Ads> getAllAds() {
@@ -42,7 +43,8 @@ public class AdController {
     @PutMapping("/{id}")
     public ResponseEntity<AdDTO> updateAd(
             @PathVariable Long id,
-            @RequestBody CreateOrUpdateAd dto) {
+            @RequestBody CreateOrUpdateAd dto
+    ) {
         return ResponseEntity.ok(adMapper.toAdDTO(adService.updateAd(id, dto)));
     }
 
@@ -61,5 +63,36 @@ public class AdController {
     public ResponseEntity<AdDTO> updateAdImage(@PathVariable("id") long id,
                                                @RequestPart(value = "image") MultipartFile image) {
         return ResponseEntity.ok(adMapper.toAdDTO(adService.updateAdImage(id, image)));
+    }
+
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<Comments> getAdComments(@PathVariable("id") long id) {
+        return ResponseEntity.ok(commentMapper.toComments(commentService.getComments(id)));
+    }
+
+    @PostMapping("/{id}/comments")
+    public ResponseEntity<CommentDTO> getAdComments(
+            @PathVariable("id") long id,
+            @RequestBody CreateOrUpdateComment dto
+    ) {
+        return ResponseEntity.ok(commentMapper.toCommentDTO(commentService.addComment(id, dto)));
+    }
+
+    @DeleteMapping("/{id}/comments/{commentId}")
+    public ResponseEntity<CommentDTO> getAdComments(
+            @PathVariable("id") long id,
+            @PathVariable("commentId") long commentId
+    ) {
+        commentService.deleteComment(id, commentId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/comments/{commentId}")
+    public ResponseEntity<CommentDTO> getAdComments(
+            @PathVariable("id") long id,
+            @PathVariable("commentId") long commentId,
+            @RequestBody CreateOrUpdateComment dto
+    ) {
+        return ResponseEntity.ok(commentMapper.toCommentDTO(commentService.updateComment(id, commentId, dto)));
     }
 }

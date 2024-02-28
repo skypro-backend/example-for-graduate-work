@@ -3,7 +3,6 @@ package ru.skypro.homework.service.impl;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Ad;
@@ -14,7 +13,6 @@ import ru.skypro.homework.service.CommentService;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -29,22 +27,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDTO> getComments(Long adId) {
+    public List<Comment> getComments(Long adId) {
         Ad ad = adRepository.findById(adId).orElseThrow(() -> new RuntimeException("Ad was not found"));
-        List<Comment> comments = ad.getComments();
-        return comments.stream()
-                .map(commentMapper::toCommentDTO)
-                .collect(Collectors.toList());
+        return ad.getComments();
     }
 
     @Override
-    public CommentDTO addComment(Long adId, CreateOrUpdateComment comment) {
+    public Comment addComment(Long adId, CreateOrUpdateComment comment) {
         Ad ad = adRepository.findById(adId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Comment newComment = new Comment();
         newComment.setText(comment.getText());
         newComment.setAd(ad);
-        commentRepository.save(newComment);
-        return commentMapper.toCommentDTO(newComment);
+        return commentRepository.save(newComment);
     }
 
     @Override
@@ -60,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDTO updateComment(Long adId, Long commentId, CreateOrUpdateComment comment) {
+    public Comment updateComment(Long adId, Long commentId, CreateOrUpdateComment comment) {
         Ad ad = adRepository.findById(adId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Comment commentToUpdate = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -69,8 +63,6 @@ public class CommentServiceImpl implements CommentService {
         }
 
         commentToUpdate.setText(comment.getText());
-        commentRepository.save(commentToUpdate);
-
-        return commentMapper.toCommentDTO(commentToUpdate);
+        return commentRepository.save(commentToUpdate);
     }
 }
