@@ -1,30 +1,55 @@
 package ru.skypro.homework.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Collection;
 
 @Entity
-@Table(name = "users")
-@Setter
+@Data
 @Getter
-public class UserEntity {
-
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "users")
+public class UserEntity extends ModelEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String email;
+    private Integer id;
+    private String userName;
+    private String password;
     private String firstName;
     private String lastName;
     private String phone;
     private Role role;
-    private String image;
 
-    @OneToMany
-    private List<AdEntity> ads;
+    @OneToOne
+    @JsonBackReference
+    private PhotoEntity photo;
 
+    @OneToMany(mappedBy = "author")
+    private Collection<AdEntity> ads;
+
+    @OneToMany(mappedBy = "author")
+    private Collection<CommentEntity> comments;
+
+    private String filePath;
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", role=" + role +
+                ", photo=" + photo +
+                ", ads=" + ads +
+                ", comments=" + comments +
+                '}';
+    }
 }

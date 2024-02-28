@@ -1,30 +1,37 @@
 package ru.skypro.homework.entities;
 
-
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
-@Table(name = "ads")
-@Setter
+@Data
 @Getter
-public class AdEntity {
-
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "ads")
+public class AdEntity extends ModelEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @JoinColumn(name = "user_id")
-    @ManyToOne
-    private UserEntity author;
-
-    private String image;
-
+    private Integer id;
+    @Column(nullable = false)
     private String title;
-
+    @Column(nullable = false)
+    private Integer price;
+    @Column(nullable = false, length = 250)
     private String description;
 
-    private int price;
+    @OneToOne
+    private PhotoEntity photo;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
+    private UserEntity author;
+
+    @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
+    private Collection<CommentEntity> comments;
+
+    private String filePath; //путь на ПК
 }
