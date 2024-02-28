@@ -19,12 +19,12 @@ public class Comment {
     private Long id;
 
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private User author;
 
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ad_id")
     private Ad ad;
 

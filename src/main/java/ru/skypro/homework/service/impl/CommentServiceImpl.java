@@ -1,10 +1,10 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.repository.AdRepository;
@@ -15,16 +15,10 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@AllArgsConstructor
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final AdRepository adRepository;
-    private final CommentMapper commentMapper;
-
-    public CommentServiceImpl(CommentRepository commentRepository, AdRepository adRepository, CommentMapper commentMapper) {
-        this.commentRepository = commentRepository;
-        this.adRepository = adRepository;
-        this.commentMapper = commentMapper;
-    }
 
     @Override
     public List<Comment> getComments(Long adId) {

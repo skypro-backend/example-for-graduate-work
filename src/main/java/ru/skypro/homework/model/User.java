@@ -43,10 +43,10 @@ public class User {
     private Image image;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "author")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
     private List<Ad> ads;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "author")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
     private List<Comment> comments;
 }
