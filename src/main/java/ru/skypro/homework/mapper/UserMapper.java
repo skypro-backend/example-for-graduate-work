@@ -17,7 +17,7 @@ public class UserMapper {
                 user.getLastName(),
                 user.getPhone(),
                 user.getRole().toString(),
-                image != null ? "images/" + image.getId() : null
+                image != null ? "/images/" + image.getId() : null
         );
     }
 

@@ -20,7 +20,7 @@ public class AdMapper {
                 ad.getId(),
                 ad.getTitle(),
                 ad.getPrice(),
-                image != null ? "images/" + ad.getImage().getId() : null,
+                image != null ? "/images/" + ad.getImage().getId() : null,
                 author != null ? author.getId() : null
         );
     }
@@ -34,7 +34,7 @@ public class AdMapper {
                 author != null ? author.getLastName() : null,
                 ad.getDescription(),
                 author != null ? author.getEmail() : null,
-                image != null ? "images/" + ad.getImage().getId() : null,
+                image != null ? "/images/" + ad.getImage().getId() : null,
                 author != null ? author.getPhone() : null,
                 ad.getPrice(),
                 ad.getTitle()

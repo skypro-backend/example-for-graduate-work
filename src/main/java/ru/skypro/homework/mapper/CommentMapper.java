@@ -18,7 +18,7 @@ public class CommentMapper {
         return new CommentDTO(
                 comment.getId(),
                 author != null ? author.getId() : null,
-                image != null ? "images/" + image.getId() : null,
+                image != null ? "/images/" + image.getId() : null,
                 author != null ? author.getFirstName() : null,
                 comment.getCreatedAt(),
                 comment.getText()

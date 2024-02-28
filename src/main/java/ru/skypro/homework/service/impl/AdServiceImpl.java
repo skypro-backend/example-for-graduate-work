@@ -7,6 +7,7 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.security.CustomUserDetails;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
@@ -17,11 +18,13 @@ import java.util.List;
 @Service
 public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
+    private final CommentRepository commentRepository;
     private final ImageService imageService;
 
     @Autowired
-    public AdServiceImpl(AdRepository adRepository, ImageService imageService) {
+    public AdServiceImpl(AdRepository adRepository, CommentRepository commentRepository, ImageService imageService) {
         this.adRepository = adRepository;
+        this.commentRepository = commentRepository;
         this.imageService = imageService;
     }
 
@@ -57,9 +60,8 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public void deleteAd(Long id) {
-        if (!adRepository.existsById(id)) {
-            throw new RuntimeException("Ad not found with id: " + id);
-        }
+        Ad ad = adRepository.findById(id).orElseThrow(() -> new RuntimeException("Ad not found with id: " + id));
+        commentRepository.deleteAll(ad.getComments());
         adRepository.deleteById(id);
     }
 

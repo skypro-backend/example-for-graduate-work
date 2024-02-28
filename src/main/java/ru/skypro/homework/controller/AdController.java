@@ -40,7 +40,7 @@ public class AdController {
         return ResponseEntity.status(HttpStatus.CREATED).body(adMapper.toAdDTO(adService.createAd(dto, image)));
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<AdDTO> updateAd(
             @PathVariable Long id,
             @RequestBody CreateOrUpdateAd dto
@@ -71,7 +71,7 @@ public class AdController {
     }
 
     @PostMapping("/{id}/comments")
-    public ResponseEntity<CommentDTO> getAdComments(
+    public ResponseEntity<CommentDTO> createAdComment(
             @PathVariable("id") long id,
             @RequestBody CreateOrUpdateComment dto
     ) {
@@ -79,7 +79,7 @@ public class AdController {
     }
 
     @DeleteMapping("/{id}/comments/{commentId}")
-    public ResponseEntity<CommentDTO> getAdComments(
+    public ResponseEntity<CommentDTO> deleteAdComment(
             @PathVariable("id") long id,
             @PathVariable("commentId") long commentId
     ) {
@@ -87,8 +87,8 @@ public class AdController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{id}/comments/{commentId}")
-    public ResponseEntity<CommentDTO> getAdComments(
+    @PatchMapping("/{id}/comments/{commentId}")
+    public ResponseEntity<CommentDTO> updateAdComment(
             @PathVariable("id") long id,
             @PathVariable("commentId") long commentId,
             @RequestBody CreateOrUpdateComment dto
