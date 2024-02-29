@@ -10,6 +10,7 @@ import ru.skypro.homework.config.GetAuthentication;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.user.UpdateUser;
 import ru.skypro.homework.dto.user.UserDTO;
+import ru.skypro.homework.entity.Avatar;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exception.IncorrectPasswordException;
 import ru.skypro.homework.mapper.UserMapper;
@@ -17,6 +18,7 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.UserService;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 
 @Slf4j
@@ -43,16 +45,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUser(Authentication authentication) {
-        return null;
+        User user = new GetAuthentication().getAuthenticationUser(authentication.getName());
+        return mapper.userToUserDto(user);
     }
 
     @Override
     public UpdateUser updateUserInfo(UpdateUser update, Authentication authentication) {
-        return null;
+        User user = new GetAuthentication().getAuthenticationUser(authentication.getName());
+        user.setFirstName(update.getFirstName());
+        user.setLastName(update.getLastName());
+        user.setPhone(update.getPhone());
+        repository.save(user);
+        return update;
     }
 
     @Override
+    @Transactional
     public void updateUserAvatar(MultipartFile image, Authentication authentication) throws IOException {
-
+        User user = new GetAuthentication().getAuthenticationUser(authentication.getName());
+        Avatar imageFile = user.getAvatar();
+        user.setAvatar(avatarService.uploadAvatar(image));
+        if (imageFile != null) {
+            avatarService.removeAvatar(imageFile);
+        }
+        repository.save(user);
     }
 }
