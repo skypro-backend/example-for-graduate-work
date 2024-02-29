@@ -5,12 +5,12 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Register {
-
-    private String username;
-    private String password;
+public class UserDTO {
+    private Long id;
+    private String email;
     private String firstName;
     private String lastName;
     private String phone;
-    private Role role;
+    private String role;
+    private String image;
 }
