@@ -2,6 +2,8 @@ package ru.skypro.sitesforresaleofthings.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * DTO комментария
  */
@@ -21,7 +23,7 @@ public class CommentDTO {
     private Integer author;
     private String authorImage;
     private String authorFirstName;
-    private Integer createdAt;
+    private LocalDateTime createdAt;
     private Integer pk;
     private String text;
 }

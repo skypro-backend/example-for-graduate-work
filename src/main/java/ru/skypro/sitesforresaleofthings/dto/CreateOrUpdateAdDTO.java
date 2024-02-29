@@ -2,6 +2,9 @@ package ru.skypro.sitesforresaleofthings.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 /**
  * DTO создания или обновления объявления
  */
@@ -15,7 +18,12 @@ import lombok.Data;
 @Data
 public class CreateOrUpdateAdDTO {
 
+    @NotBlank
+    @Size(min = 4, max = 32)
     private String title;
+    @Size(max = 10000000)
     private Integer price;
+    @NotBlank
+    @Size(min = 8, max = 64)
     private String description;
 }
