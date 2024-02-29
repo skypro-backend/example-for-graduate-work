@@ -62,6 +62,10 @@
       <artifactId>spring-security-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
@@ -78,7 +82,28 @@
           </excludes>
         </configuration>
       </plugin>
-    </plugins>
+
+
+       <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.1</version>
+          <configuration>
+            <source>11</source> <!-- depending on your project -->
+            <target>11</target> <!-- depending on your project -->
+            <annotationProcessorPaths>
+              <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.28</version>
+              </path>
+
+            </annotationProcessorPaths>
+          </configuration>
+        </plugin>
+      </plugins>
   </build>
+
+
 
 </project>
