@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.exception.NotEnoughPermissionsException;
+import ru.skypro.homework.exception.ResourceNotFoundException;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
@@ -37,7 +39,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ad getAdById(Long id) {
-        return adRepository.findById(id).orElseThrow(() -> new RuntimeException("Ad not found with id: " + id));
+        return adRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Ad with id %d not found", id)));
     }
 
     @Override
@@ -63,7 +65,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public void deleteAd(Long id) {
-        Ad ad = adRepository.findById(id).orElseThrow(() -> new RuntimeException("Ad not found with id: " + id));
+        Ad ad = getAdById(id);
         checkPermissions(ad);
         commentRepository.deleteAll(ad.getComments());
         adRepository.deleteById(id);
@@ -88,7 +90,7 @@ public class AdServiceImpl implements AdService {
         CustomUserDetails userDetails = SecurityUtil.getUserDetails();
 
         if (!Objects.equals(userDetails.getUser(), ad.getAuthor()) && !userDetails.getAuthorities().contains(Role.ADMIN)) {
-            throw new RuntimeException("Permissions error");
+            throw new NotEnoughPermissionsException("You don't have enough rights");
         }
     }
 }
