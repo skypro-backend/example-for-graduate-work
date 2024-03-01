@@ -1,11 +1,11 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.exception.NotEnoughPermissionsException;
+import ru.skypro.homework.exception.ResourceNotFoundException;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.repository.AdRepository;
@@ -25,13 +25,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> getComments(Long adId) {
-        Ad ad = adRepository.findById(adId).orElseThrow(() -> new RuntimeException("Ad was not found"));
+        Ad ad = adRepository.findById(adId).orElseThrow(() -> new ResourceNotFoundException(String.format("Ad with id %d not found", adId)));
         return ad.getComments();
     }
 
     @Override
     public Comment addComment(Long adId, CreateOrUpdateComment comment) {
-        Ad ad = adRepository.findById(adId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Ad ad = adRepository.findById(adId).orElseThrow(() -> new ResourceNotFoundException(String.format("Ad with id %d not found", adId)));
         Comment newComment = new Comment();
         newComment.setText(comment.getText());
         newComment.setAd(ad);
@@ -40,11 +40,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment(Long adId, Long commentId) {
-        Ad ad = adRepository.findById(adId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Ad ad = adRepository.findById(adId).orElseThrow(() -> new ResourceNotFoundException(String.format("Ad with id %d not found", adId)));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException(String.format("Comment with id %d not found", commentId)));
         checkPermissions(comment);
         if (comment.getAd() == null || !Objects.equals(ad.getId(), comment.getAd().getId())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException(String.format("Ad with id %d has no comment with id %d", adId, commentId));
         }
 
         commentRepository.deleteById(commentId);
@@ -52,11 +52,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment updateComment(Long adId, Long commentId, CreateOrUpdateComment comment) {
-        Ad ad = adRepository.findById(adId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Comment commentToUpdate = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Ad ad = adRepository.findById(adId).orElseThrow(() -> new ResourceNotFoundException(String.format("Ad with id %d not found", adId)));
+        Comment commentToUpdate = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException(String.format("Comment with id %d not found", commentId)));
         checkPermissions(commentToUpdate);
         if (commentToUpdate.getAd() == null || !Objects.equals(ad.getId(), commentToUpdate.getAd().getId())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException(String.format("Ad with id %d has no comment with id %d", adId, commentId));
         }
 
         commentToUpdate.setText(comment.getText());
@@ -67,7 +67,7 @@ public class CommentServiceImpl implements CommentService {
         CustomUserDetails userDetails = SecurityUtil.getUserDetails();
 
         if (!Objects.equals(userDetails.getUser(), comment.getAuthor()) && !userDetails.getAuthorities().contains(Role.ADMIN)) {
-            throw new RuntimeException("Permissions error");
+            throw new NotEnoughPermissionsException("You don't have enough rights");
         }
     }
 }

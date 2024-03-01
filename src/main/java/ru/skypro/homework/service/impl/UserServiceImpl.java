@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     public User updatePassword(NewPassword dto) {
         User user = SecurityUtil.getUserDetails().getUser();
         if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
-            throw new RuntimeException("Wrong current password");
+            throw new IllegalArgumentException("Wrong current password");
         }
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         return userRepository.save(user);

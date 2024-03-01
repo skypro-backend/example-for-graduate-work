@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.exception.ResourceAlreadyExistsException;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
@@ -26,14 +27,14 @@ public class AuthServiceImpl implements AuthService {
     public void login(String userName, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
         if (!encoder.matches(password, userDetails.getPassword())) {
-            throw new RuntimeException("Wrong password or username");
+            throw new IllegalArgumentException("Wrong password or username");
         }
     }
 
     @Override
     public User register(Register register) {
         if (userRepository.existsByEmail(register.getUsername())) {
-            throw new RuntimeException("User already exists");
+            throw new ResourceAlreadyExistsException("User already exists");
         }
         User user = new User();
         user.setEmail(register.getUsername());
