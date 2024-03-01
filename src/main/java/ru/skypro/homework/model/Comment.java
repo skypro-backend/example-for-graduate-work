@@ -3,6 +3,7 @@ package ru.skypro.homework.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,17 +20,17 @@ public class Comment {
     private Long id;
 
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private User author;
 
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ad_id")
     private Ad ad;
 
-    @Column(nullable = false)
-    private Long createdAt;
+    @Column
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private String text;

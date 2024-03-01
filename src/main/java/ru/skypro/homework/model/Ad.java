@@ -20,16 +20,16 @@ public class Ad {
     private Long id;
 
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private User author;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "ad")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "ad")
     private List<Comment> comments;
 
-    @Column(nullable = false)
-    private String image;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Image image;
 
     @Column(nullable = false)
     private Integer price;

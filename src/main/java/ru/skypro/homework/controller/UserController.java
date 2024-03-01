@@ -1,45 +1,49 @@
 package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.model.User;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.UserService;
 
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
-@RequestMapping("/api/v1/users")
+@RequestMapping("users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
- //   @GetMapping("/{id}")
-  //  public ResponseEntity<User> getUserById(@PathVariable Long id) {
-  //      User user = userService.getUserById(id);
-  //      if (user == null) {
- //           return ResponseEntity.notFound().build();
- //       }
- //       return ResponseEntity.ok(user);
- //   }
+    private final UserMapper userMapper;
 
-  //  @PostMapping
-  //  public ResponseEntity<User> createUser(@RequestBody User user) {
-  //      user = userService.createUser(user);
-  //      return ResponseEntity.status(HttpStatus.CREATED).body(user);
-  //  }
+    @PostMapping("/set_password")
+    public ResponseEntity<Void> setPassword(
+            @RequestBody NewPassword dto
+    ) {
+        userService.updatePassword(dto);
+        return ResponseEntity.ok().build();
+    }
 
- //   @PutMapping("/{id}")
-   // public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
- //       user = userService.updateUser(id, user);
- //       if (user == null) {
-  //          return ResponseEntity.notFound().build();
-  //      }
-  //      return ResponseEntity.ok(user);
-  //  }
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getMe() {
+        return ResponseEntity.ok(userMapper.toUserDTO(userService.getMe()));
+    }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
- //       userService.deleteUser(id);
-        return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+    @PatchMapping("/me")
+    public ResponseEntity<UpdateUser> updateMe(
+            @RequestBody UpdateUser dto
+    ) {
+        return ResponseEntity.ok(userMapper.toUpdateUser(userService.updateMe(dto)));
+    }
+
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateMyImage(
+            @RequestPart("image") MultipartFile image
+    ) {
+        userService.updateMyImage(image);
+        return ResponseEntity.ok().build();
     }
 }

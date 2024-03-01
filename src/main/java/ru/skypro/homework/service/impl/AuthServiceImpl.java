@@ -1,47 +1,48 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.model.User;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
+    private final UserDetailsService userDetailsService;
     private final PasswordEncoder encoder;
+    private final UserRepository userRepository;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
+    public AuthServiceImpl(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, UserRepository userRepository) {
+        this.userDetailsService = userDetailsService;
         this.encoder = passwordEncoder;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
-            return false;
+    public void login(String userName, String password) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+        if (!encoder.matches(password, userDetails.getPassword())) {
+            throw new RuntimeException("Wrong password or username");
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
     }
 
     @Override
-    public boolean register(Register register) {
-        if (manager.userExists(register.getUsername())) {
-            return false;
+    public User register(Register register) {
+        if (userRepository.existsByEmail(register.getUsername())) {
+            throw new RuntimeException("User already exists");
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
-        return true;
+        User user = new User();
+        user.setEmail(register.getUsername());
+        user.setPassword(encoder.encode(register.getPassword()));
+        user.setFirstName(register.getFirstName());
+        user.setLastName(register.getLastName());
+        user.setPhone(register.getPhone());
+        user.setRole(register.getRole());
+        return userRepository.save(user);
     }
 
 }

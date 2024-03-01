@@ -3,6 +3,8 @@ package ru.skypro.homework.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 public class CommentDTO {
@@ -10,6 +12,6 @@ public class CommentDTO {
     private Long author;
     private String authorImage;
     private String authorFirstName;
-    private Long createdAt;
+    private LocalDateTime createdAt;
     private String text;
 }
