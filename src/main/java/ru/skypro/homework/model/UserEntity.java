@@ -1,10 +1,11 @@
-package ru.skypro.homework.entities;
+package ru.skypro.homework.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.util.Collection;
 
 @Entity
@@ -35,7 +36,7 @@ public class UserEntity extends ModelEntity{
     @OneToMany(mappedBy = "author")
     private Collection<CommentEntity> comments;
 
-    private String filePath;
+    private String filePath; //путь на ПК
 
     @Override
     public String toString() {

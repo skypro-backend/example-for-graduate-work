@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Ads {
 
-    private int count;
+    private int count; // общее количество объявлений
     private List<Ad> results;
 }
 

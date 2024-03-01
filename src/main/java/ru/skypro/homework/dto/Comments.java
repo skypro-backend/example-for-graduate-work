@@ -9,6 +9,6 @@ import java.util.List;
 @AllArgsConstructor
 public class Comments {
 
-    private int count;
+    private int count; // общее количество комментариев
     private List<Comment> results;
 }

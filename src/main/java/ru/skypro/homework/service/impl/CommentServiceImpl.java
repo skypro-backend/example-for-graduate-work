@@ -1,5 +1,7 @@
 package ru.skypro.homework.service.impl;
 
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.Comment;
@@ -7,12 +9,12 @@ import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.mapper.CommentMapper;
-import ru.skypro.homework.entities.AdEntity;
-import ru.skypro.homework.entities.CommentEntity;
-import ru.skypro.homework.entities.UserEntity;
-import ru.skypro.homework.repositories.AdRepository;
-import ru.skypro.homework.repositories.CommentRepository;
-import ru.skypro.homework.repositories.UserRepository;
+import ru.skypro.homework.model.AdEntity;
+import ru.skypro.homework.model.CommentEntity;
+import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
 
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-
+@Slf4j
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
@@ -41,10 +43,16 @@ public class CommentServiceImpl implements CommentService {
         this.userService = userService;
     }
 
-
+    /**
+     * Метод получает список всех комментариев объявления
+     *
+     * @param id - id объявления
+     * @return возвращает DTO - список моделей комментариев
+     */
     @Transactional
     @Override
     public Comments getComments(Integer id) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         List<Comment> comments = commentRepository.findByAdId(id).stream()
                 .map(comment -> commentMapper.mapToCommentDto(comment))
                 .collect(Collectors.toList());
@@ -52,10 +60,18 @@ public class CommentServiceImpl implements CommentService {
         return new Comments(comments.size(), comments);
     }
 
-
+    /**
+     * Метод добавляет комментарий к объявлению
+     *
+     * @param id                    - id объявления
+     * @param createOrUpdateComment - DTO модель класса {@link CreateOrUpdateComment}
+     * @param username              - логин пользователя
+     * @return DTO модель комментария
+     */
     @Transactional
     @Override
     public Comment addComment(Integer id, CreateOrUpdateComment createOrUpdateComment, String username) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
 
         UserEntity author = userService.getUser(username);//todo заменить метод на getUser
         AdEntity ad = adRepository.findById(id).orElse(null);
@@ -79,6 +95,8 @@ public class CommentServiceImpl implements CommentService {
         commentDTO.setAuthor(author.getId());
 
         Integer avatarId = author.getPhoto().getId();
+        log.info("id автора комментария - {}", author.getId());
+        log.info("URL для получения аватара автора комментария: /photo/image/{}", avatarId);
         commentDTO.setAuthorImage("/photo/image/" + avatarId);
 
         commentDTO.setAuthorFirstName(author.getFirstName());
@@ -89,9 +107,16 @@ public class CommentServiceImpl implements CommentService {
         return commentDTO;
     }
 
-
+    /**
+     * Метод удаляет комментарий
+     *
+     * @param commentId - id комментария
+     * @param username  - логин пользователя
+     * @return строку с результатом выполнения метода
+     */
     @Override
     public String deleteComment(Integer commentId, String username) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         Optional<CommentEntity> comment = commentRepository.findById(commentId);
         if (comment.isPresent()) {
             UserEntity author = userService.getUser(username);
@@ -110,10 +135,18 @@ public class CommentServiceImpl implements CommentService {
         return "not found"; //'404' Comment not found
     }
 
-
+    /**
+     * Метод обновляет комментарий
+     *
+     * @param commentId             - id комментария
+     * @param createOrUpdateComment - DTO модель класса {@link CreateOrUpdateComment}
+     * @param username              - логин пользователя
+     * @return строку с результатом выполнения метода
+     */
     @Transactional
     @Override
     public Comment updateComment(Integer commentId, CreateOrUpdateComment createOrUpdateComment, String username) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         Optional<CommentEntity> commentOptional = commentRepository.findById(commentId);
         if (commentOptional.isPresent()) {
             CommentEntity comment = commentOptional.get();
@@ -130,3 +163,4 @@ public class CommentServiceImpl implements CommentService {
     }
 
 }
+

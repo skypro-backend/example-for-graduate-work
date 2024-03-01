@@ -1,10 +1,12 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +19,11 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.AdService;
-
+import ru.skypro.homework.service.impl.LoggingMethodImpl;
 
 import java.io.IOException;
 
-
+@Slf4j
 @RestController
 @AllArgsConstructor
 @CrossOrigin("http://localhost:3000")
@@ -46,7 +48,7 @@ public class AdController {
     )
     @GetMapping
     public ResponseEntity<Ads> getAllAds() {
-
+        log.info("За запущен метод контроллера: getAllAds");
         return ResponseEntity.ok(adService.getAllAds());
     }
 
@@ -73,7 +75,7 @@ public class AdController {
     public ResponseEntity<Ad> addAd(@RequestPart(value = "properties", required = false) CreateOrUpdateAd properties,
                                     @RequestPart("image") MultipartFile image,
                                     Authentication authentication) throws IOException {
-
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         return ResponseEntity.ok(adService.addAd(properties, image, authentication));
     }
 
@@ -100,7 +102,7 @@ public class AdController {
     )
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> getAds(@PathVariable("id") Integer id) {
-
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         ExtendedAd ad = adService.getAds(id);
         if (ad != null) {
             return ResponseEntity.ok(ad);
@@ -138,7 +140,7 @@ public class AdController {
     @DeleteMapping("/{id}")
     @PreAuthorize(value = "hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.getName(), #adId)")
     public ResponseEntity removeAd(@PathVariable("id") Integer adId) throws IOException {
-
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         return (adService.removeAd(adId)) ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
@@ -175,7 +177,7 @@ public class AdController {
     @PatchMapping("/{id}")
     @PreAuthorize(value = "hasRole('ADMIN') or @adServiceImpl.isAuthorAd(authentication.getName(), #adId)")
     public ResponseEntity<Ad> updateAds(@PathVariable("id") Integer adId, @RequestBody CreateOrUpdateAd dto) {
-
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         Ad ad = adService.updateAds(adId, dto);
         if (ad != null) {
             return ResponseEntity.ok(ad);
@@ -206,7 +208,7 @@ public class AdController {
     )
     @GetMapping("/me")
     public ResponseEntity<Ads> getAdsMe(Authentication authentication) {
-
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         if (authentication.getName() != null) {   //если пользователь авторизовался
             String username = authentication.getName();
             return ResponseEntity.ok(adService.getAdsMe(username));
@@ -251,7 +253,8 @@ public class AdController {
     public ResponseEntity<Void> updateImage(@PathVariable("id") Integer adId,
                                             @RequestPart MultipartFile image,
                                             Authentication authentication) throws IOException {
-
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
+        log.info("adId = {}", adId);
         adService.updateImage(adId, image);
         return ResponseEntity.ok().build();
 

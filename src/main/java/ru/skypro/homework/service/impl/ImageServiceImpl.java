@@ -1,23 +1,23 @@
 package ru.skypro.homework.service.impl;
 
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.mapper.UserMapper;
-import ru.skypro.homework.entities.ModelEntity;
-import ru.skypro.homework.entities.PhotoEntity;
-import ru.skypro.homework.repositories.PhotoRepository;
+import ru.skypro.homework.model.ModelEntity;
+import ru.skypro.homework.model.PhotoEntity;
+import ru.skypro.homework.repository.PhotoRepository;
 import ru.skypro.homework.service.ImageService;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
-@Service
 
+@Service
+@Slf4j
 public class ImageServiceImpl implements ImageService {
     private final PhotoRepository photoRepository;
     private final UserMapper userMapper;
@@ -40,12 +40,14 @@ public class ImageServiceImpl implements ImageService {
 
         //заполняем поля photo и сохраняем фото в БД
         PhotoEntity photoEntity = userMapper.mapMuptipartFileToPhoto(image);
+        log.info("Создана сущность photoEntity - {}", photoEntity != null);
         entity.setPhoto(photoEntity);
         photoRepository.save(photoEntity);
 
         //адрес до директории хранения фото на ПК
         Path filePath = Path.of(photoDir, entity.getPhoto().getId() + "."
                 + this.getExtension(image.getOriginalFilename()));
+        log.info("путь к файлу для хранения фото на ПК: {}", filePath);
 
         //добавляем в сущность фото путь где оно хранится на ПК
         entity.getPhoto().setFilePath(filePath.toString());
@@ -60,8 +62,17 @@ public class ImageServiceImpl implements ImageService {
     }
 
 
+    /**
+     * Метод сохраняет изображение на диск
+     *
+     * @param image    - изображение
+     * @param filePath - путь, куда будет сохранено изображение
+     * @return boolean
+     * @throws IOException
+     */
     @Override
     public boolean saveFileOnDisk(MultipartFile image, Path filePath) throws IOException {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
         try (InputStream is = image.getInputStream();
@@ -86,8 +97,15 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
+    /**
+     * Метод получает расширение изображения
+     *
+     * @param fileName - полное название изображения
+     * @return расширение изображения
+     */
     @Override
     public String getExtension(String fileName) {
+        log.info("Запущен метод сервиса {}", LoggingMethodImpl.getMethodName());
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }

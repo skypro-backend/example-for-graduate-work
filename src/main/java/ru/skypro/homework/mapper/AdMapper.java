@@ -8,11 +8,11 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.exception.UserNotFoundException;
-import ru.skypro.homework.entities.AdEntity;
-import ru.skypro.homework.entities.PhotoEntity;
-import ru.skypro.homework.entities.UserEntity;
-import ru.skypro.homework.repositories.PhotoRepository;
-import ru.skypro.homework.repositories.UserRepository;
+import ru.skypro.homework.model.AdEntity;
+import ru.skypro.homework.model.PhotoEntity;
+import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.PhotoRepository;
+import ru.skypro.homework.repository.UserRepository;
 
 import java.io.IOException;
 
@@ -23,6 +23,13 @@ public class AdMapper {
     private final UserRepository userRepository;
     private final PhotoRepository photoRepository;
 
+
+    /**
+     * Entity -> dto mapping
+     *
+     * @param entity AdEntity entity class
+     * @return Ad dto class
+     */
     public Ad mapToAdDto(AdEntity entity) {
         Ad dto = new Ad();
         dto.setAuthor(entity.getAuthor().getId());
@@ -33,7 +40,13 @@ public class AdMapper {
         return dto;
     }
 
-
+    /**
+     * Dto -> entity mapping without image.
+     * Image will be saved separately because it needs a created ad with id.
+     *
+     * @param dto CreateAds dto class
+     * @return AdEntity entity class
+     */
     public AdEntity mapToAdEntity(CreateOrUpdateAd dto, String username) {
         UserEntity author = userRepository.findUserEntityByUserName(username);
         if (author == null) {
@@ -47,7 +60,12 @@ public class AdMapper {
         return entity;
     }
 
-
+    /**
+     * AdEntity entity -> ExtendedAd dto mapping
+     *
+     * @param entity AdEntity entity class
+     * @return ExtendedAd dto class
+     */
     public ExtendedAd mapToExtendedAdDto(AdEntity entity) {
         ExtendedAd dto = new ExtendedAd();
         dto.setPk(entity.getId());
@@ -62,7 +80,12 @@ public class AdMapper {
         return dto;
     }
 
-
+    /**
+     * Метод конвертирует {@link MultipartFile} в сущность {@link PhotoEntity}
+     * @param image
+     * @return photo сущность {@link PhotoEntity}
+     * @throws IOException
+     */
     public PhotoEntity mapMultipartFileToPhoto(MultipartFile image) throws IOException {
         PhotoEntity photo = new PhotoEntity();
         photo.setData(image.getBytes());

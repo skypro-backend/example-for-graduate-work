@@ -1,10 +1,7 @@
 package ru.skypro.homework.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +9,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.User;
 import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.User;
 import ru.skypro.homework.mapper.UserMapper;
-import ru.skypro.homework.entities.UserEntity;
+import ru.skypro.homework.model.UserEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import ru.skypro.homework.service.impl.LoggingMethodImpl;
 import ru.skypro.homework.service.impl.UserServiceImpl;
 
 import java.io.IOException;
 
+@Slf4j
 @RestController
 @Tag(name = "\uD83D\uDE4B Пользователи")
 @CrossOrigin("http://localhost:3000")
@@ -59,6 +62,7 @@ public class UserController {
     )
     @PostMapping("/set_password") // http://localhost:8080/users/set_password
     public ResponseEntity setPassword(@RequestBody NewPassword newPass, Authentication authentication) {
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         userService.setPassword(newPass, authentication);
         return ResponseEntity.ok().build();
     }
@@ -84,6 +88,7 @@ public class UserController {
     )
     @GetMapping("/me") // http://localhost:8080/users/me
     public ResponseEntity<User> getUser(Authentication authentication) {
+        log.info("Запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         UserEntity user = userService.getUser(authentication.getName());
         if (user != null) {
             return ResponseEntity.ok(UserMapper.mapFromUserEntityToUser(user));
@@ -113,6 +118,7 @@ public class UserController {
     )
     @PatchMapping("/me") // http://localhost:8080/users/me
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
+        log.info("Запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         UserEntity user = userService.updateUser(updateUser, authentication);
         if (user != null) {
             return ResponseEntity.ok(UserMapper.mapFromUserEntityToUpdateUser(user));
@@ -140,6 +146,7 @@ public class UserController {
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateUserImage(@RequestParam MultipartFile image,
                                                 Authentication authentication) throws IOException {
+        log.info("За запущен метод контроллера: {}", LoggingMethodImpl.getMethodName());
         userService.updateUserImage(image, authentication);
         return ResponseEntity.ok().build();
     }

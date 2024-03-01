@@ -1,4 +1,4 @@
-package ru.skypro.homework.entities;
+package ru.skypro.homework.model;
 
 import lombok.*;
 
