@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
@@ -10,25 +11,25 @@ import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.util.SecurityUtil;
 
-import java.util.Objects;
-
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ImageService imageService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, ImageService imageService) {
+    public UserServiceImpl(UserRepository userRepository, ImageService imageService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.imageService = imageService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User updatePassword(NewPassword dto) {
         User user = SecurityUtil.getUserDetails().getUser();
-        if (!Objects.equals(user.getPassword(), dto.getCurrentPassword())) {
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
             throw new RuntimeException("Wrong current password");
         }
-        user.setPassword(dto.getNewPassword());
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         return userRepository.save(user);
     }
 

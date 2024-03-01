@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
@@ -14,6 +15,7 @@ import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.util.SecurityUtil;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AdServiceImpl implements AdService {
@@ -52,6 +54,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public Ad updateAd(Long id, CreateOrUpdateAd dto) {
         Ad ad = getAdById(id);
+        checkPermissions(ad);
         ad.setTitle(dto.getTitle());
         ad.setDescription(dto.getDescription());
         ad.setPrice(dto.getPrice());
@@ -61,6 +64,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public void deleteAd(Long id) {
         Ad ad = adRepository.findById(id).orElseThrow(() -> new RuntimeException("Ad not found with id: " + id));
+        checkPermissions(ad);
         commentRepository.deleteAll(ad.getComments());
         adRepository.deleteById(id);
     }
@@ -75,7 +79,16 @@ public class AdServiceImpl implements AdService {
     @Override
     public Ad updateAdImage(Long id, MultipartFile imageFile) {
         Ad ad = getAdById(id);
+        checkPermissions(ad);
         ad.setImage(imageService.saveImage(imageFile));
         return adRepository.save(ad);
+    }
+
+    private void checkPermissions(Ad ad) {
+        CustomUserDetails userDetails = SecurityUtil.getUserDetails();
+
+        if (!Objects.equals(userDetails.getUser(), ad.getAuthor()) && !userDetails.getAuthorities().contains(Role.ADMIN)) {
+            throw new RuntimeException("Permissions error");
+        }
     }
 }
