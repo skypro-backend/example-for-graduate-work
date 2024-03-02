@@ -7,6 +7,7 @@ import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
 
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class CommentMapper {
                 author != null ? author.getId() : null,
                 image != null ? "/images/" + image.getId() : null,
                 author != null ? author.getFirstName() : null,
-                comment.getCreatedAt(),
+                comment.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),
                 comment.getText()
         );
     }

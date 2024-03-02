@@ -29,7 +29,7 @@ public class Comment {
     @JoinColumn(name = "ad_id")
     private Ad ad;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)

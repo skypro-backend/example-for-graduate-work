@@ -14,6 +14,7 @@ import ru.skypro.homework.security.CustomUserDetails;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.util.SecurityUtil;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,6 +37,7 @@ public class CommentServiceImpl implements CommentService {
         newComment.setText(comment.getText());
         newComment.setAd(ad);
         newComment.setAuthor(SecurityUtil.getUserDetails().getUser());
+        newComment.setCreatedAt(LocalDateTime.now());
         return commentRepository.save(newComment);
     }
 
