@@ -35,6 +35,7 @@ public class CommentServiceImpl implements CommentService {
         Comment newComment = new Comment();
         newComment.setText(comment.getText());
         newComment.setAd(ad);
+        newComment.setAuthor(SecurityUtil.getUserDetails().getUser());
         return commentRepository.save(newComment);
     }
 

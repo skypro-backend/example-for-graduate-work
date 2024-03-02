@@ -3,7 +3,7 @@
 ### Frontend
 
 ```shell
-docker run -p 3000:3000 ghcr.io/dmitry-bizin/front-react-avito:v1.21
+docker run -d -p 3000:3000 ghcr.io/dmitry-bizin/front-react-avito:v1.21
 ```
 
 ### DB
