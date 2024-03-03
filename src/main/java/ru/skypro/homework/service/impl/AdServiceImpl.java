@@ -7,6 +7,7 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.exception.NotEnoughPermissionsException;
 import ru.skypro.homework.exception.ResourceNotFoundException;
+import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
@@ -24,12 +25,14 @@ public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
     private final CommentRepository commentRepository;
     private final ImageService imageService;
+    private final AdMapper adMapper;
 
     @Autowired
-    public AdServiceImpl(AdRepository adRepository, CommentRepository commentRepository, ImageService imageService) {
+    public AdServiceImpl(AdRepository adRepository, CommentRepository commentRepository, ImageService imageService, AdMapper adMapper) {
         this.adRepository = adRepository;
         this.commentRepository = commentRepository;
         this.imageService = imageService;
+        this.adMapper = adMapper;
     }
 
     @Override
@@ -44,10 +47,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ad createAd(CreateOrUpdateAd dto, MultipartFile imageFile) {
-        Ad ad = new Ad();
-        ad.setTitle(dto.getTitle());
-        ad.setDescription(dto.getDescription());
-        ad.setPrice(dto.getPrice());
+        Ad ad = adMapper.toAd(dto);
         ad.setImage(imageService.saveImage(imageFile));
         ad.setAuthor(SecurityUtil.getUserDetails().getUser());
         return adRepository.save(ad);

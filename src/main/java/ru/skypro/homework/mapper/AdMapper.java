@@ -3,6 +3,7 @@ package ru.skypro.homework.mapper;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Image;
@@ -47,5 +48,13 @@ public class AdMapper {
                 ads.stream().map(this::toAdDTO)
                         .collect(Collectors.toList())
         );
+    }
+
+    public Ad toAd(CreateOrUpdateAd dto) {
+        Ad ad = new Ad();
+        ad.setTitle(dto.getTitle());
+        ad.setDescription(dto.getDescription());
+        ad.setPrice(dto.getPrice());
+        return ad;
     }
 }
