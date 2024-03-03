@@ -6,6 +6,7 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.exception.NotEnoughPermissionsException;
 import ru.skypro.homework.exception.ResourceNotFoundException;
+import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.repository.AdRepository;
@@ -23,6 +24,7 @@ import java.util.Objects;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final AdRepository adRepository;
+    private final CommentMapper commentMapper;
 
     @Override
     public List<Comment> getComments(Long adId) {
@@ -31,14 +33,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment addComment(Long adId, CreateOrUpdateComment comment) {
+    public Comment addComment(Long adId, CreateOrUpdateComment dto) {
         Ad ad = adRepository.findById(adId).orElseThrow(() -> new ResourceNotFoundException(String.format("Ad with id %d not found", adId)));
-        Comment newComment = new Comment();
-        newComment.setText(comment.getText());
-        newComment.setAd(ad);
-        newComment.setAuthor(SecurityUtil.getUserDetails().getUser());
-        newComment.setCreatedAt(LocalDateTime.now());
-        return commentRepository.save(newComment);
+        Comment comment = commentMapper.toComment(dto);
+        comment.setAd(ad);
+        comment.setAuthor(SecurityUtil.getUserDetails().getUser());
+        comment.setCreatedAt(LocalDateTime.now());
+        return commentRepository.save(comment);
     }
 
     @Override

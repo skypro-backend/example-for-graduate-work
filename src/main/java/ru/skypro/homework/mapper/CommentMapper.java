@@ -3,6 +3,7 @@ package ru.skypro.homework.mapper;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.Comments;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
@@ -33,5 +34,11 @@ public class CommentMapper {
                         .map(this::toCommentDTO)
                         .collect(Collectors.toList())
         );
+    }
+
+    public Comment toComment(CreateOrUpdateComment dto) {
+        Comment comment = new Comment();
+        comment.setText(dto.getText());
+        return comment;
     }
 }
