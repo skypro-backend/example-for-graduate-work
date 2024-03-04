@@ -13,7 +13,7 @@ import ru.skypro.homework.dto.UserDto;
 @RequestMapping("/users")
 public class UserController {
 
-    @PostMapping("/setPassword")
+    @PostMapping("/set_password")
     public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto dto) {
         return ResponseEntity.ok(dto);
     }
