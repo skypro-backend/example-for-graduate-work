@@ -15,7 +15,7 @@ import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDto;
 public class CommentsController {
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<CommentsDto> getAllAds(@PathVariable Integer id) {
+    public ResponseEntity<CommentsDto> getAllComments(@PathVariable Integer id) {
         CommentsDto dto = new CommentsDto();
         return ResponseEntity.ok(dto);
     }
@@ -26,7 +26,7 @@ public class CommentsController {
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteAds(@PathVariable Integer adId, @PathVariable Integer commentId) {
+    public ResponseEntity<?> deleteComments(@PathVariable Integer adId, @PathVariable Integer commentId) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
     @PutMapping("{adId}/comments/{commentId}")
