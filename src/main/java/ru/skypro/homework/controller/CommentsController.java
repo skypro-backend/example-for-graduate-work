@@ -20,6 +20,7 @@ public class CommentsController {
         return ResponseEntity.ok(dto);
     }
 
+
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDto> addComment(@RequestBody CommentDto dto) {
         return ResponseEntity.ok(dto);
