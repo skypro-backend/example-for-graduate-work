@@ -1,29 +1,29 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ru.skypro.homework.dto.Role;
 
-@Getter
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Register {
-
-    private String username;
-    private String password;
+public class UserDTO {
+    private Long id;
+    private String email;
     private String firstName;
     private String lastName;
     private String phone;
     private Role role;
+    private String image;
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setFirstName(String firstName) {
@@ -40,5 +40,9 @@ public class Register {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

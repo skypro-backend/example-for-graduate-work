@@ -1,4 +1,4 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,22 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Register {
-
-    private String username;
-    private String password;
+public class UpdateUser {
     private String firstName;
     private String lastName;
     private String phone;
-    private Role role;
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -36,9 +24,5 @@ public class Register {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 }
