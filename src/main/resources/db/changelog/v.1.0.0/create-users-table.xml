@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="create-users-table" author="PankovMark">
+        <preConditions>
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="users">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="email" type="VARCHAR(32)">
+                ‹!-- constraints nullable="false"/ -->
+            </column>
+
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(16)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_name" type="VARCHAR(16)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="phone" type="VARCHAR(32)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="avatar" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
