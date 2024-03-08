@@ -24,12 +24,12 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
-    @PutMapping("/me")
+    @PatchMapping("/me")
     public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto dto) {
         return ResponseEntity.ok(dto);
     }
 
-    @PutMapping("/me/image")
+    @PatchMapping("/me/image")
     public ResponseEntity<Void> updateUserImage(MultipartFile image) {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
