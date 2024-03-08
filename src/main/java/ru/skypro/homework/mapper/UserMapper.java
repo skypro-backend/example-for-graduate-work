@@ -23,7 +23,7 @@ public class UserMapper {
     
     public User toEntity(RegisterDto dto) {
         User user = new User();
-
+        user.setEmail(dto.getUsername());
         user.setPhone(dto.getPhone());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
