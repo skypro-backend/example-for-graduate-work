@@ -30,7 +30,7 @@ public class CommentsController {
     public ResponseEntity<?> deleteComment(@PathVariable Integer adId, @PathVariable Integer commentId) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-    @PutMapping("{adId}/comments/{commentId}")
+    @PatchMapping("{adId}/comments/{commentId}")
     public ResponseEntity<CreateOrUpdateCommentDto> updateComment(@PathVariable Integer adId, @PathVariable Integer commentId) {
         CreateOrUpdateCommentDto dto = new CreateOrUpdateCommentDto();
         return ResponseEntity.ok(dto);
