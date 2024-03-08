@@ -7,4 +7,5 @@
 
 
     <include file="create-users-table.xml" relativeToChangelogFile="true"/>
+    <include file="create-ads-table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

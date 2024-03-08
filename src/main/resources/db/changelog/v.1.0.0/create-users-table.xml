@@ -12,30 +12,30 @@
             </not>
         </preConditions>
         <createTable tableName="users">
-            <column name="id" type="INT" autoIncrement="true">
+            <column name="id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
 
-            <column name="email" type="VARCHAR(32)">
+            <column name="email" type="varchar(32)">
                 ‹!-- constraints nullable="false"/ -->
             </column>
 
-            <column name="password" type="VARCHAR(255)">
+            <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="first_name" type="VARCHAR(16)">
+            <column name="first_name" type="varchar(16)">
                 <constraints nullable="true"/>
             </column>
-            <column name="last_name" type="VARCHAR(16)">
+            <column name="last_name" type="varchar(16)">
                 <constraints nullable="true"/>
             </column>
-            <column name="phone" type="VARCHAR(32)">
+            <column name="phone" type="varchar(32)">
                 <constraints nullable="true"/>
             </column>
-            <column name="role" type="VARCHAR(255)">
+            <column name="role" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="avatar" type="VARCHAR(255)">
+            <column name="image" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
