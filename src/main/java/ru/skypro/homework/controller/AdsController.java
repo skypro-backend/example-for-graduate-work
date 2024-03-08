@@ -35,7 +35,7 @@ public class AdsController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<CreateOrUpdateAdDto> updateAds(@PathVariable Integer id) {
         CreateOrUpdateAdDto dto = new CreateOrUpdateAdDto();
         return ResponseEntity.ok(dto);
@@ -47,7 +47,7 @@ public class AdsController {
         return ResponseEntity.ok(dto);
     }
 
-    @PutMapping("/{id}/image")
+    @PatchMapping("/{id}/image")
     public ResponseEntity<Void> updateImage(@PathVariable Integer id, MultipartFile image) {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
