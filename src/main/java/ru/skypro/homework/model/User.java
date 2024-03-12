@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.skypro.homework.dto.Role;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+
 /**
  * Модель пользователя
  */
@@ -17,6 +19,7 @@ public class User {
     @Column(name = "ID", nullable = false)
     private Integer id;
 
+    @Email
     @Column(name = "EMAIL")
     private String email;
 
