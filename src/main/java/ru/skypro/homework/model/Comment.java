@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
+
 /**
  * Модель для комментариев к объявлениям
  * связанные таблицы UserDto (много комментов к одному UserDto)
@@ -39,5 +41,17 @@ public class Comment {
     @JoinColumn(name = "USER_ID")
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Comment)) return false;
+        Comment comment = (Comment) o;
+        return Objects.equals(id, comment.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
 }
