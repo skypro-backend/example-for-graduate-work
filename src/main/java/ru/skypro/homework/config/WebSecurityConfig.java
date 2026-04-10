@@ -2,55 +2,42 @@ package ru.skypro.homework.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.dto.Role;
 
-import static org.springframework.security.config.Customizer.withDefaults;
+import org.springframework.security.web.SecurityFilterChain;
+
+import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.repository.UserRepository;
+
 
 @Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
-    private static final String[] AUTH_WHITELIST = {
-            "/swagger-resources/**",
-            "/swagger-ui.html",
-            "/v3/api-docs",
-            "/webjars/**",
-            "/login",
-            "/register"
-    };
+    private final UserRepository userRepository;
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user =
-                User.builder()
-                        .username("user@gmail.com")
-                        .password("password")
-                        .passwordEncoder(passwordEncoder::encode)
-                        .roles(Role.USER.name())
-                        .build();
-        return new InMemoryUserDetailsManager(user);
+    public WebSecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
-                .authorizeHttpRequests(
-                        authorization ->
-                                authorization
-                                        .mvcMatchers(AUTH_WHITELIST)
-                                        .permitAll()
-                                        .mvcMatchers("/ads/**", "/users/**")
-                                        .authenticated())
-                .cors()
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/ads").permitAll()
+                .antMatchers("/ads/**", "/comments/**").hasAnyRole("USER", "ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                .httpBasic(withDefaults());
+                .httpBasic();
+
         return http.build();
     }
 
@@ -59,4 +46,17 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return username -> {
+            UserEntity user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            return org.springframework.security.core.userdetails.User.builder()
+                    .username(user.getUsername())
+                    .password(user.getPassword())
+                    .roles(user.getRole().name())
+                    .build();
+        };
+    }
 }
