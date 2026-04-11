@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Фильтр для добавления заголовков CORS, позволяющих отправлять запросы с учетными данными.
+ * Расположен как компонент Spring и вызывается для каждого запроса один раз.
+ */
 @Component
 public class BasicAuthCorsFilter extends OncePerRequestFilter {
 
