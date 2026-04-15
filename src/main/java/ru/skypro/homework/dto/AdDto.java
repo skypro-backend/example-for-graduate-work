@@ -1,10 +1,9 @@
 package ru.skypro.homework.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-public class Ad {
+public class AdDto {
 
     private Integer author;
     private String image;

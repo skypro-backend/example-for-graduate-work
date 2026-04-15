@@ -1,10 +1,9 @@
 package ru.skypro.homework.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-public class User {
+public class UserDto {
 
     private Integer id;
     private String email;

@@ -6,7 +6,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
-public class UpdateUser {
+public class UpdateUserDto {
 
     @Size(min = 3, max = 10, message = "Имя пользователя должно содержать от 3 до 10 символов")
     private String firstName;

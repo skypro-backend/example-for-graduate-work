@@ -1,14 +1,17 @@
 package ru.skypro.homework.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
-public class CreateOrUpdateAd {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class CreateOrUpdateAdDto {
 
     @Size(min = 4, max = 32, message = "Заголовок объявления должен содержать от 4 до 32 символов")
     private String title;

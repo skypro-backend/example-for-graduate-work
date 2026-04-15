@@ -5,11 +5,11 @@ import lombok.Data;
 import javax.validation.constraints.Size;
 
 @Data
-public class Login {
-
-    @Size(min = 4, max = 32, message = "Логин должен содержать от 4 до 32 символов")
-    private String username;
+public class NewPasswordDto {
 
     @Size(min = 8, max = 16, message = "Пароль должен содержать от 8 до 16 символов")
-    private String password;
+    private String currentPassword;
+
+    @Size(min = 8, max = 16, message = "Пароль должен содержать от 8 до 16 символов")
+    private String newPassword;
 }
