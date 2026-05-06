@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: marina
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  type: SERIAL
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: text
+                  type: TEXT
+              - column:
+                  name: created_at
+                  type: BIGINT
+              - column:
+                  name: author_id
+                  type: INT
+              - column:
+                  name: ad_id
+                  type: INT
+        - addForeignKeyConstraint:
+            constraintName: fk_comments_users_author
+            baseTableName: comments
+            baseColumnNames: author_id
+            referencedTableName: users
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_comments_ads_ad
+            baseTableName: comments
+            baseColumnNames: ad_id
+            referencedTableName: ads
+            referencedColumnNames: id
