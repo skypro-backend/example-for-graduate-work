@@ -1,47 +1,59 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.dto.request.RegisterRequestDto;
+import ru.skypro.homework.entity.User;
+import ru.skypro.homework.exception.BadRequestException;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
+/**
+ * Сервис аутентификации и регистрации пользователей.
+ * Отвечает за:
+ * - логин пользователя,
+ * - регистрацию нового пользователя.
+ */
+@RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
     private final PasswordEncoder encoder;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
-        this.encoder = passwordEncoder;
-    }
-
+    /**
+     * Выполняет аутентификацию пользователя.
+     * @param username логин
+     * @param password пароль
+     */
     @Override
-    public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
-            return false;
-        }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
+    public void login(String username, String password) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
+    /**
+     * Регистрация нового пользователя.
+     * @throws BadRequestException если пользователь уже существует
+     */
     @Override
-    public boolean register(Register register) {
-        if (manager.userExists(register.getUsername())) {
-            return false;
+    public void register(RegisterRequestDto register) {
+        if (userRepository.existsByUsername(register.getUsername())) {
+            throw new BadRequestException("User already exists");
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
-        return true;
+        User user = new User();
+        user.setUsername(register.getUsername());
+        user.setPassword(encoder.encode(register.getPassword()));
+        user.setFirstName(register.getFirstName());
+        user.setLastName(register.getLastName());
+        user.setPhone(register.getPhone());
+        user.setRole(register.getRole());
+        userRepository.save(user);
     }
-
 }

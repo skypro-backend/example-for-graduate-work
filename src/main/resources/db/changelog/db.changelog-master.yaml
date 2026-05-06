@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/001-create-user.yaml
+  - include:
+      file: db/changelog/002-create-ad.yaml
+  - include:
+      file: db/changelog/003-create-comment.yaml
