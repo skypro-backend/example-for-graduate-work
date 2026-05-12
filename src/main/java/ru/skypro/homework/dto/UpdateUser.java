@@ -1,0 +1,27 @@
+package ru.skypro.homework.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+@Data
+@Schema(description = "Данные для обновления профиля пользователя")
+public class UpdateUser {
+    @Schema(description = "Имя пользователя", example = "Иван", minLength = 3, maxLength = 10)
+    @NotBlank(message = "Имя обязательно")
+    @Size(min = 3, max = 10, message = "Имя должно быть от 3 до 10 символов")
+    private String firstName;
+
+    @Schema(description = "Фамилия пользователя", example = "Иванов", minLength = 3, maxLength = 10)
+    @NotBlank(message = "Фамилия обязательна")
+    @Size(min = 3, max = 10, message = "Фамилия должна быть от 3 до 10 символов")
+    private String lastName;
+
+    @Schema(description = "Телефон пользователя", example = "+7 (999) 123-45-67", pattern = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
+    @NotBlank(message = "Телефон обязателен")
+    @Pattern(regexp = "^\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}$", message = "Телефон должен соответствовать формату +7 (XXX) XXX-XX-XX")
+    private String phone;
+}

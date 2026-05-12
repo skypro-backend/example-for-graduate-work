@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: ads-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./uploads:/uploads
+      - ./data:/app/data  # ← Сохраняем БД вне контейнера
+    environment:
+      - SPRING_PROFILES_ACTIVE=h2
+    networks:
+      - ads-network
+
+  frontend:
+    image: node:16-alpine
+    container_name: ads-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./uploads:/usr/share/nginx/html/uploads
+    networks:
+      - ads-network
+
+networks:
+  ads-network:
+    driver: bridge
