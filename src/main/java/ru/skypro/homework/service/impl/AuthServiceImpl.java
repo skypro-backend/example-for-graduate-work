@@ -30,18 +30,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean register(Register register) {
-        if (manager.userExists(register.getUsername())) {
-            return false;
-        }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
-        return true;
+    public Integer register(Register register) {
+
+        Integer userId = generateUserId();
+        return userId;
+    }
+
+    private Integer generateUserId() {
+
+        return 1;
     }
 
 }
