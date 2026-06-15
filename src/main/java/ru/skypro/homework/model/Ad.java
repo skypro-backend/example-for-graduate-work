@@ -1,12 +1,32 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Ad {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     private Integer author;
     private String image;
     private Integer pk;
     private Integer price;
     private String title;
+
+    public Ad() {}
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getAuthor() {
         return author;

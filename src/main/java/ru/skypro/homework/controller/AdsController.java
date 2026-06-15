@@ -3,8 +3,8 @@ package ru.skypro.homework.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 
@@ -13,15 +13,15 @@ import ru.skypro.homework.dto.ExtendedAd;
 public class AdsController {
 
     @GetMapping
-    public ResponseEntity<Ads> getAllAds() {
-        return ResponseEntity.ok(new Ads());
+    public ResponseEntity<AdsDTO> getAllAds() {
+        return ResponseEntity.ok(new AdsDTO());
     }
 
     @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<Ad> addAd(
+    public ResponseEntity<AdDTO> addAd(
             @RequestParam("properties") CreateOrUpdateAd properties,
             @RequestParam("image") MultipartFile image) {
-        return ResponseEntity.status(201).body(new Ad());
+        return ResponseEntity.status(201).body(new AdDTO());
     }
 
     @GetMapping("/{id}")
@@ -35,13 +35,13 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Ad> updateAds(@PathVariable Integer id, @RequestBody CreateOrUpdateAd createOrUpdateAd) {
-        return ResponseEntity.ok(new Ad());
+    public ResponseEntity<AdDTO> updateAds(@PathVariable Integer id, @RequestBody CreateOrUpdateAd createOrUpdateAd) {
+        return ResponseEntity.ok(new AdDTO());
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Ads> getAdsMe() {
-        return ResponseEntity.ok(new Ads());
+    public ResponseEntity<AdsDTO> getAdsMe() {
+        return ResponseEntity.ok(new AdsDTO());
     }
 
     @PatchMapping(value = "/{id}/image", consumes = "multipart/form-data")

@@ -2,10 +2,10 @@ package ru.skypro.homework.dto;
 
 import java.util.List;
 
-public class Comments {
+public class AdsDTO {
 
     private Integer count;
-    private List<Comment> results;
+    private List<AdDTO> results;
 
     public Integer getCount() {
         return count;
@@ -15,11 +15,11 @@ public class Comments {
         this.count = count;
     }
 
-    public List<Comment> getResults() {
+    public List<AdDTO> getResults() {
         return results;
     }
 
-    public void setResults(List<Comment> results) {
+    public void setResults(List<AdDTO> results) {
         this.results = results;
     }
 }

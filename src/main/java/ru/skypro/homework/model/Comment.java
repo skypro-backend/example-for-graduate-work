@@ -1,6 +1,16 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Comment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     private Integer author;
     private String authorImage;
@@ -8,6 +18,16 @@ public class Comment {
     private Long createdAt;
     private Integer pk;
     private String text;
+
+    public Comment() {}
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getAuthor() {
         return author;
