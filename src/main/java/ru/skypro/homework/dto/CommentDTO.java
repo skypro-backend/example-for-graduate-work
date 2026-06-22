@@ -2,11 +2,11 @@ package ru.skypro.homework.dto;
 
 public class CommentDTO {
 
+    private Integer id;
     private Integer author;
     private String authorImage;
     private String authorFirstName;
     private Long createdAt;
-    private Integer pk;
     private String text;
 
     public Integer getAuthor() {
@@ -41,12 +41,12 @@ public class CommentDTO {
         this.createdAt = createdAt;
     }
 
-    public Integer getPk() {
-        return pk;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPk(Integer pk) {
-        this.pk = pk;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getText() {

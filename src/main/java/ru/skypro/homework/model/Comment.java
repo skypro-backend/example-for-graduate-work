@@ -16,7 +16,6 @@ public class Comment {
     private String authorImage;
     private String authorFirstName;
     private Long createdAt;
-    private Integer pk;
     private String text;
 
     public Comment() {}
@@ -59,14 +58,6 @@ public class Comment {
 
     public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public Integer getPk() {
-        return pk;
-    }
-
-    public void setPk(Integer pk) {
-        this.pk = pk;
     }
 
     public String getText() {

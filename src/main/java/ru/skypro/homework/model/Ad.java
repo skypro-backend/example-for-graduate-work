@@ -14,7 +14,6 @@ public class Ad {
 
     private Integer author;
     private String image;
-    private Integer pk;
     private Integer price;
     private String title;
 
@@ -42,14 +41,6 @@ public class Ad {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public Integer getPk() {
-        return pk;
-    }
-
-    public void setPk(Integer pk) {
-        this.pk = pk;
     }
 
     public Integer getPrice() {

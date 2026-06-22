@@ -2,7 +2,7 @@ package ru.skypro.homework.dto;
 
 public class ExtendedAd {
 
-    private Integer pk;
+    private Integer id;
     private String authorFirstName;
     private String authorLastName;
     private String description;
@@ -12,12 +12,12 @@ public class ExtendedAd {
     private Integer price;
     private String title;
 
-    public Integer getPk() {
-        return pk;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPk(Integer pk) {
-        this.pk = pk;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getAuthorFirstName() {

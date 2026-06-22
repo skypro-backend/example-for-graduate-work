@@ -2,9 +2,9 @@ package ru.skypro.homework.dto;
 
 public class AdDTO {
 
+    private Integer id;
     private Integer author;
     private String image;
-    private Integer pk;
     private Integer price;
     private String title;
 
@@ -24,12 +24,12 @@ public class AdDTO {
         this.image = image;
     }
 
-    public Integer getPk() {
-        return pk;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPk(Integer pk) {
-        this.pk = pk;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getPrice() {
