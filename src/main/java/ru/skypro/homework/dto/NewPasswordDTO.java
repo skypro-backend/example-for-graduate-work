@@ -1,6 +1,6 @@
 package ru.skypro.homework.dto;
 
-public class NewPassword {
+public class NewPasswordDTO {
     private String password;
     private String newPassword;
 

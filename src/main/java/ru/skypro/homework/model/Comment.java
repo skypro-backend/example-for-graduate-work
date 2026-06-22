@@ -1,9 +1,6 @@
 package ru.skypro.homework.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Comment {
@@ -12,11 +9,24 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer author;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Users author;
     private String authorImage;
     private String authorFirstName;
     private Long createdAt;
     private String text;
+    @ManyToOne
+    @JoinColumn(name = "ad_id")
+    private Ad ad;
+
+    public Ad getAd() {
+        return ad;
+    }
+
+    public void setAd(Ad ad) {
+        this.ad = ad;
+    }
 
     public Comment() {}
 
@@ -28,11 +38,11 @@ public class Comment {
         this.id = id;
     }
 
-    public Integer getAuthor() {
+    public Users getAuthor() {
         return author;
     }
 
-    public void setAuthor(Integer author) {
+    public void setAuthor(Users author) {
         this.author = author;
     }
 

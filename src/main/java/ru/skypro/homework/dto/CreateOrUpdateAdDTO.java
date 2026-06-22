@@ -1,6 +1,6 @@
 package ru.skypro.homework.dto;
 
-public class CreateOrUpdateAd {
+public class CreateOrUpdateAdDTO {
 
     private String title;
     private Integer price;

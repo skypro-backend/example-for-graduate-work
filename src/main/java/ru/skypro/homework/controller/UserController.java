@@ -4,8 +4,8 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.NewPasswordDTO;
+import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 
 @RestController
@@ -13,7 +13,7 @@ import ru.skypro.homework.dto.UserDTO;
 public class UserController {
 
     @PostMapping("/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword) {
+    public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDTO newPassword) {
         return ResponseEntity.ok().build();
     }
 
@@ -23,8 +23,8 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
-        return ResponseEntity.ok(new UpdateUser());
+    public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody UpdateUserDTO updateUser) {
+        return ResponseEntity.ok(new UpdateUserDTO());
     }
 
     @PatchMapping(value = "/me/image", consumes = "multipart/form-data")

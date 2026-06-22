@@ -1,9 +1,6 @@
 package ru.skypro.homework.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Ad {
@@ -12,7 +9,9 @@ public class Ad {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer author;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Users author;
     private String image;
     private Integer price;
     private String title;
@@ -27,11 +26,11 @@ public class Ad {
         this.id = id;
     }
 
-    public Integer getAuthor() {
+    public Users getAuthor() {
         return author;
     }
 
-    public void setAuthor(Integer author) {
+    public void setAuthor(Users author) {
         this.author = author;
     }
 

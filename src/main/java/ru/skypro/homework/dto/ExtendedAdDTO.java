@@ -1,6 +1,6 @@
 package ru.skypro.homework.dto;
 
-public class ExtendedAd {
+public class ExtendedAdDTO {
 
     private Integer id;
     private String authorFirstName;

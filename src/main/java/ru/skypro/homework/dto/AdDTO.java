@@ -1,18 +1,20 @@
 package ru.skypro.homework.dto;
 
+import ru.skypro.homework.model.Users;
+
 public class AdDTO {
 
     private Integer id;
-    private Integer author;
+    private Users author;
     private String image;
     private Integer price;
     private String title;
 
-    public Integer getAuthor() {
+    public Users getAuthor() {
         return author;
     }
 
-    public void setAuthor(Integer author) {
+    public void setAuthor(Users author) {
         this.author = author;
     }
 

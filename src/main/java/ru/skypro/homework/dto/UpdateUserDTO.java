@@ -1,6 +1,6 @@
 package ru.skypro.homework.dto;
 
-public class UpdateUser {
+public class UpdateUserDTO {
 
     private String firstName;
     private String lastName;

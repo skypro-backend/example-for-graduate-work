@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
+import ru.skypro.homework.dto.ExtendedAdDTO;
 
 @RestController
 @RequestMapping
@@ -19,14 +19,14 @@ public class AdsController {
 
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<AdDTO> addAd(
-            @RequestParam("properties") CreateOrUpdateAd properties,
+            @RequestParam("properties") CreateOrUpdateAdDTO properties,
             @RequestParam("image") MultipartFile image) {
         return ResponseEntity.status(201).body(new AdDTO());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAd> getAds(@PathVariable Integer id) {
-        return ResponseEntity.ok(new ExtendedAd());
+    public ResponseEntity<ExtendedAdDTO> getAds(@PathVariable Integer id) {
+        return ResponseEntity.ok(new ExtendedAdDTO());
     }
 
     @DeleteMapping("/{id}")
@@ -35,7 +35,7 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AdDTO> updateAds(@PathVariable Integer id, @RequestBody CreateOrUpdateAd createOrUpdateAd) {
+    public ResponseEntity<AdDTO> updateAds(@PathVariable Integer id, @RequestBody CreateOrUpdateAdDTO createOrUpdateAd) {
         return ResponseEntity.ok(new AdDTO());
     }
 
