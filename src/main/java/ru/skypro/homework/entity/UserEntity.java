@@ -3,7 +3,6 @@ package ru.skypro.homework.entity;
 import lombok.*;
 import ru.skypro.homework.dto.Role;
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -36,10 +35,4 @@ public class UserEntity {
     private Role role;
 
     private String image;
-
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<AdEntity> ads;
-
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<CommentEntity> comments;
 }
