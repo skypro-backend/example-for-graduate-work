@@ -30,6 +30,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public Comments getComments(Integer adId) {
         List<Comment> commentList = commentRepository.findAllByAdId(adId).stream()
                 .map(commentMapper::toDto)

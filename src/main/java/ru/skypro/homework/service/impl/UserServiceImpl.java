@@ -11,13 +11,17 @@ import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final ImageService imageService;
     private final UserMapper userMapper;
     private final PasswordEncoder encoder;
 
@@ -51,9 +55,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserImage(MultipartFile image, String username) {
         UserEntity user = userRepository.findByEmail(username).orElseThrow();
-        // Здесь должна быть логика сохранения файла на диск/облако
-        // Для примера просто сохраним имя файла
-        user.setImage(image.getOriginalFilename());
-        userRepository.save(user);
+        try {
+            String fileName = imageService.saveImage(image);
+            user.setImage("/images/" + fileName);
+            userRepository.save(user);
+        } catch (IOException e) {
+            throw new RuntimeException("Ошибка сохранения аватара", e);
+        }
     }
+
 }
