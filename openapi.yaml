@@ -1,16 +1,18 @@
 openapi: 3.0.3
+# Информация о проекте
 info:
   title: API Documentation
   version: '1.0'
 servers:
   - url: http://localhost:8080
+# Описание всех путей(URL)
 paths:
   /users/set_password:
     post:
       tags:
         - Пользователи
       summary: 'Обновление пароля'
-      operationId: setPassword
+      operationId: setPassword # входящие DTO
       requestBody:
         content:
           application/json:
@@ -34,7 +36,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserEntity'
           description: OK
         '401':
           description: Unauthorized
@@ -42,7 +44,7 @@ paths:
       tags:
         - Пользователи
       summary: 'Обновление информации об авторизованном пользователе'
-      operationId: updateUser
+      operationId: updateUser # входящие DTO
       requestBody:
         content:
           application/json:
@@ -62,7 +64,7 @@ paths:
       tags:
         - Пользователи
       summary: 'Обновление аватара авторизованного пользователя'
-      operationId: updateUserImage
+      operationId: updateUserImage # входящие DTO
       requestBody:
         content:
           multipart/form-data:
@@ -85,7 +87,7 @@ paths:
       tags:
         - Регистрация
       summary: 'Регистрация пользователя'
-      operationId: register
+      operationId: register # входящие DTO
       requestBody:
         content:
           application/json:
@@ -101,7 +103,7 @@ paths:
       tags:
         - Авторизация
       summary: 'Авторизация пользователя'
-      operationId: login
+      operationId: login # входящие DTO
       requestBody:
         content:
           application/json:
@@ -129,7 +131,7 @@ paths:
       tags:
         - Объявления
       summary: 'Добавление объявления'
-      operationId: addAd
+      operationId: addAd # входящие DTO
       requestBody:
         content:
           multipart/form-data:
@@ -150,7 +152,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ad'
+                $ref: '#/components/schemas/AdEntity'
         '401':
           description: Unauthorized
   /ads/{id}/comments:
@@ -182,7 +184,7 @@ paths:
       tags:
         - Комментарии
       summary: 'Добавление комментария к объявлению'
-      operationId: addComment
+      operationId: addComment # входящие DTO
       parameters:
         - name: id
           in: path
@@ -201,7 +203,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Comment'
+                $ref: '#/components/schemas/CommentEntity'
         '401':
           description: Unauthorized
         '404':
@@ -256,7 +258,7 @@ paths:
       tags:
         - Объявления
       summary: 'Обновление информации об объявлении'
-      operationId: updateAds
+      operationId: updateAds # входящие DTO
       parameters:
         - name: id
           in: path
@@ -275,7 +277,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ad'
+                $ref: '#/components/schemas/AdEntity'
         '403':
           description: Forbidden
         '401':
@@ -314,7 +316,7 @@ paths:
       tags:
         - Комментарии
       summary: 'Обновление комментария'
-      operationId: updateComment
+      operationId: updateComment # входящие DTO
       parameters:
         - name: adId
           in: path
@@ -339,7 +341,7 @@ paths:
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/Comment'
+                $ref: '#/components/schemas/CommentEntity'
         '403':
           description: Forbidden
         '401':
@@ -367,7 +369,7 @@ paths:
       tags:
         - Объявления
       summary: 'Обновление картинки объявления'
-      operationId: updateImage
+      operationId: updateImage # входящие DTO
       parameters:
         - name: id
           in: path
@@ -402,7 +404,7 @@ paths:
           description: Unauthorized
         '404':
           description: Not found
-
+# Описание схем данных(DTO)
 components:
   schemas:
     NewPassword:
@@ -593,7 +595,7 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/Ad'
+            $ref: '#/components/schemas/AdEntity'
     ExtendedAd:
       type: object
       properties:
@@ -636,4 +638,4 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/Comment'
+            $ref: '#/components/schemas/CommentEntity'
