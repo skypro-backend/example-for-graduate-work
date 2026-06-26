@@ -12,6 +12,10 @@ import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
+/**
+ * REST-контроллер для обработки открытых запросов аутентификации.
+ * Обеспечивает вход существующих пользователей и регистрацию новых учетных записей.
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
