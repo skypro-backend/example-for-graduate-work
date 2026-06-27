@@ -1,5 +1,8 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -8,12 +11,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.skypro.homework.constant.WebConfigConstant;
 import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
+/**
+ * REST-контроллер для обработки запросов авторизации и регистрации пользователей.
+ */
 @Slf4j
-@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(value = WebConfigConstant.CORS_ORIGIN)
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -21,6 +28,10 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
+    @Tag(name = "Авторизация")
+    @Operation(summary = "Авторизация пользователя")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
@@ -30,6 +41,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Tag(name = "Регистрация")
+    @Operation(summary = "Регистрация пользователя")
+    @ApiResponse(responseCode = "201", description = "Created")
+    @ApiResponse(responseCode = "400", description = "Bad Request")
     public ResponseEntity<?> register(@RequestBody Register register) {
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
