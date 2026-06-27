@@ -20,6 +20,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация сервиса комментариев {@link CommentService}.
+ */
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
@@ -29,6 +32,9 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
     private final CommentMapper commentMapper;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(readOnly = true)
     public Comments getComments(Integer adId) {
@@ -42,6 +48,10 @@ public class CommentServiceImpl implements CommentService {
         return comments;
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws IllegalArgumentException если объявление или пользователь не найдены в БД
+     */
     @Override
     @Transactional
     public Comment addComment(Integer adId, CreateOrUpdateComment dto, String username) {
@@ -58,12 +68,19 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDto(commentRepository.save(commentEntity));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void deleteComment(Integer commentId) {
         commentRepository.deleteById(commentId);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws IllegalArgumentException если комментарий не найден
+     */
     @Override
     @Transactional
     public Comment updateComment(Integer commentId, CreateOrUpdateComment dto) {
@@ -74,6 +91,10 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDto(commentRepository.save(comment));
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws IllegalArgumentException если комментарий или пользователь не найдены
+     */
     @Override
     public boolean isCommentAuthorOrAdmin(Integer commentId, String username) {
         CommentEntity comment = commentRepository.findById(commentId)

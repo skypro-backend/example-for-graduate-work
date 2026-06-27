@@ -3,6 +3,9 @@ package ru.skypro.homework.entity;
 import lombok.*;
 import javax.persistence.*;
 
+/**
+ * JPA-сущность для представления объявления в базе данных (таблица "ads").
+ */
 @Entity
 @Table(name = "ads")
 @Getter

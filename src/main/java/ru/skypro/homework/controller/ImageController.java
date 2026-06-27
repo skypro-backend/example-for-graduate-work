@@ -7,6 +7,9 @@ import ru.skypro.homework.service.ImageService;
 
 import java.io.IOException;
 
+/**
+ * REST-контроллер для отдачи (скачивания) сохраненных изображений.
+ */
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(value = "http://localhost:3000")

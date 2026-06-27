@@ -7,6 +7,10 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.AdEntity;
 
+/**
+ * Интерфейс маппера для преобразования сущностей {@link AdEntity} в соответствующие DTO и наоборот.
+ * Использует библиотеку MapStruct для генерации реализации в Spring-компоненте.
+ */
 @Mapper(componentModel = "spring")
 public interface AdMapper {
     @Mapping(source = "author.id", target = "author")

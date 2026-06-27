@@ -16,6 +16,9 @@ import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
+/**
+ * REST-контроллер для обработки запросов авторизации и регистрации пользователей.
+ */
 @Slf4j
 @CrossOrigin(value = WebConfigConstant.CORS_ORIGIN)
 @RestController

@@ -4,6 +4,9 @@ import lombok.*;
 import ru.skypro.homework.dto.Role;
 import javax.persistence.*;
 
+/**
+ * JPA-сущность для представления пользователя в базе данных (таблица "users").
+ */
 @Entity
 @Table(name = "users")
 @Getter

@@ -3,6 +3,9 @@ package ru.skypro.homework.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+/**
+ * DTO для передачи персональных данных при регистрации нового пользователя.
+ */
 @Data
 @Schema(description = "Данные для регистрации")
 public class Register {

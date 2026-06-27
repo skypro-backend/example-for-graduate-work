@@ -16,6 +16,10 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.AdService;
 
+/**
+ * REST-контроллер для управления объявлениями.
+ * Обрабатывает запросы на создание, получение, обновление и удаление объявлений.
+ */
 @Slf4j
 @CrossOrigin(value = WebConfigConstant.CORS_ORIGIN)
 @RestController

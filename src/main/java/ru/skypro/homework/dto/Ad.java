@@ -3,6 +3,9 @@ package ru.skypro.homework.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+/**
+ * DTO с краткой информацией об объявлении.
+ */
 @Data
 @Schema(description = "Объявление")
 public class Ad {

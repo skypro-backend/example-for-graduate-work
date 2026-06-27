@@ -6,6 +6,9 @@ import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.CommentEntity;
 
+/**
+ * Интерфейс маппера для конвертации сущности {@link CommentEntity} в DTO и обратно.
+ */
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
     @Mapping(source = "author.id", target = "author")

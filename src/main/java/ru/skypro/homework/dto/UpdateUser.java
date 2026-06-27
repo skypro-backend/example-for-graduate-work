@@ -3,6 +3,9 @@ package ru.skypro.homework.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+/**
+ * DTO для частичного обновления информации о профиле пользователя.
+ */
 @Data
 @Schema(description = "Данные для обновления профиля")
 public class UpdateUser {

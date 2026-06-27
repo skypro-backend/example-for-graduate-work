@@ -7,6 +7,9 @@ import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserEntity;
 
+/**
+ * Интерфейс маппера для конвертации данных пользователя между {@link UserEntity} и DTO.
+ */
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     @Mapping(source = "email", target = "email")

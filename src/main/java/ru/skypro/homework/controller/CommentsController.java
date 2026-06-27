@@ -14,6 +14,9 @@ import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentService;
 
+/**
+ * REST-контроллер для работы с комментариями к объявлениям.
+ */
 @Slf4j
 @CrossOrigin(value = WebConfigConstant.CORS_ORIGIN)
 @RestController

@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * DTO, содержащее список комментариев и их общее количество.
+ */
 @Data
 @Schema(description = "Список комментариев")
 public class Comments {

@@ -3,6 +3,9 @@ package ru.skypro.homework.entity;
 import lombok.*;
 import javax.persistence.*;
 
+/**
+ * JPA-сущность для представления комментария в базе данных (таблица "comments").
+ */
 @Entity
 @Table(name = "comments")
 @Getter

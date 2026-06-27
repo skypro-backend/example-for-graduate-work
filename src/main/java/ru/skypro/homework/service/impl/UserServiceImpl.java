@@ -16,6 +16,9 @@ import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
 
+/**
+ * Реализация сервиса управления пользователями {@link UserService}.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -25,6 +28,10 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder encoder;
 
+    /**
+     * {@inheritDoc}
+     * @throws UsernameNotFoundException если пользователь с указанным username не найден
+     */
     @Override
     public boolean setPassword(NewPassword newPassword, String username) {
         UserEntity user = userRepository.findByEmail(username)
@@ -38,12 +45,20 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws java.util.NoSuchElementException если пользователь не найден
+     */
     @Override
     public User getUser(String username) {
         UserEntity user = userRepository.findByEmail(username).orElseThrow();
         return userMapper.toDto(user);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws java.util.NoSuchElementException если пользователь не найден
+     */
     @Override
     public UpdateUser updateUser(UpdateUser dto, String username) {
         UserEntity user = userRepository.findByEmail(username).orElseThrow();
@@ -52,6 +67,11 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws java.util.NoSuchElementException если пользователь не найден
+     * @throws RuntimeException в случае ошибки сохранения файла аватара на диск
+     */
     @Override
     public void updateUserImage(MultipartFile image, String username) {
         UserEntity user = userRepository.findByEmail(username).orElseThrow();
@@ -63,5 +83,4 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Ошибка сохранения аватара", e);
         }
     }
-
 }

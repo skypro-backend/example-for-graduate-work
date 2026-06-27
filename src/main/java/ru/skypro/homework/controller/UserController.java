@@ -14,10 +14,11 @@ import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UserService;
 
+/**
+ * REST-контроллер для управления профилями пользователей.
+ */
 @Slf4j
 @CrossOrigin(value = WebConfigConstant.CORS_ORIGIN)
-
-
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
