@@ -27,30 +27,25 @@ public class WebSecurityConfig {
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user =
-                User.builder()
-                        .username("user@gmail.com")
-                        .password("password")
-                        .passwordEncoder(passwordEncoder::encode)
-                        .roles(Role.USER.name())
-                        .build();
+        // В Spring Security 6 можно передавать функцию-кодировщик прямо в билдер
+        UserDetails user = User.builder()
+                .username("user@gmail.com")
+                .password(passwordEncoder.encode("password")) // Сразу кодируем пароль
+                .roles(Role.USER.name())
+                .build();
         return new InMemoryUserDetailsManager(user);
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
-                .authorizeHttpRequests(
-                        authorization ->
-                                authorization
-                                        .mvcMatchers(AUTH_WHITELIST)
-                                        .permitAll()
-                                        .mvcMatchers("/ads/**", "/users/**")
-                                        .authenticated())
-                .cors()
-                .and()
-                .httpBasic(withDefaults());
+        http.csrf(csrf -> csrf.disable()) // Новый стиль настройки CSRF
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(AUTH_WHITELIST).permitAll() // permitAll для белого списка
+                        .requestMatchers("/ads/**", "/users/**").authenticated() // доступ только авторизованным
+                        .anyRequest().authenticated())
+                .cors(withDefaults()) // Включаем CORS с настройками по умолчанию
+                .httpBasic(withDefaults()); // Включаем HTTP Basic Auth
+
         return http.build();
     }
 
@@ -58,5 +53,4 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
