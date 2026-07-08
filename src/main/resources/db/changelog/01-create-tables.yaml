@@ -1,0 +1,167 @@
+databaseChangeLog:
+  # Таблица пользователей
+  - changeSet:
+      id: create-table-users
+      author: developer
+      preConditions:
+        onFail: HALT
+        onError: HALT
+        not:
+          tableExists:
+            schemaName: public
+            tableName: users
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: VARCHAR(16)
+              - column:
+                  name: role
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image_url
+                  type: VARCHAR(1024)
+                  constraints:
+                    nullable: true
+
+  # Таблица объявлений
+  - changeSet:
+      id: create-table-ads
+      author: developer
+      preConditions:
+        onFail: HALT
+        onError: HALT
+        not:
+          tableExists:
+            schemaName: public
+            tableName: ads
+      changes:
+        - createTable:
+            tableName: ads
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: price
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image_url
+                  type: VARCHAR(1024)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: author_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: author_id
+            baseTableName: ads
+            constraintName: fk_ads_author
+            referencedColumnNames: id
+            referencedTableName: users
+            onDelete: NO ACTION
+
+  # Таблица комментариев
+  - changeSet:
+      id: create-table-comments
+      author: developer
+      preConditions:
+        onFail: HALT
+        onError: HALT
+        not:
+          tableExists:
+            schemaName: public
+            tableName: comments
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: text
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ad_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: author_id
+            baseTableName: comments
+            constraintName: fk_comments_author
+            referencedColumnNames: id
+            referencedTableName: users
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseColumnNames: ad_id
+            baseTableName: comments
+            constraintName: fk_comments_ad
+            referencedColumnNames: id
+            referencedTableName: ads
+            onDelete: CASCADE

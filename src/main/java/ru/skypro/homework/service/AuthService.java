@@ -1,9 +1,16 @@
 package ru.skypro.homework.service;
 
+import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
 
-public interface AuthService {
-    boolean login(String userName, String password);
+    //* Сервис регистрации новых пользователей.
 
-    boolean register(Register register);
+public interface AuthService {
+
+    //* Регистрирует нового пользователя в системе.
+    //* @param register данные для регистрации (логин, пароль, ФИО)
+    //* @return ID созданной сущности UserEntity
+
+    Integer register(Register register);
+    Boolean login(String userName, String password);
 }
