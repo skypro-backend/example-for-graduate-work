@@ -1,0 +1,67 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: create-comments-table
+      author: katya
+
+      changes:
+
+        - createTable:
+            tableName: comments
+
+            columns:
+
+              - column:
+                  name: id
+                  type: SERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+
+              - column:
+                  name: text
+                  type: VARCHAR(1000)
+
+
+              - column:
+                  name: created_at
+                  type: BIGINT
+
+
+              - column:
+                  name: author_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+
+
+              - column:
+                  name: ad_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+
+
+
+        - addForeignKeyConstraint:
+
+            baseTableName: comments
+            baseColumnNames: author_id
+
+            referencedTableName: users
+            referencedColumnNames: id
+
+            constraintName: fk_comments_users
+
+
+
+        - addForeignKeyConstraint:
+
+            baseTableName: comments
+            baseColumnNames: ad_id
+
+            referencedTableName: ads
+            referencedColumnNames: id
+
+            constraintName: fk_comments_ads

@@ -1,83 +1,84 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.service.CommentService;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/ads")
+@RequiredArgsConstructor
 @Tag(name = "Комментарии")
 public class CommentController {
 
+    private final CommentService commentService;
 
     @Operation(
-            summary = "Получение комментариев объявления",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
-                    @ApiResponse(responseCode = "404", description = "Not found")
-            }
+            summary = "Получение комментариев объявления"
     )
     @GetMapping("/{id}/comments")
     public ResponseEntity<Comments> getComments(
-            @PathVariable Integer id) {
+            @PathVariable Integer id
+    ) {
 
-        return ResponseEntity.ok(new Comments());
+        return ResponseEntity.ok(
+                commentService.getComments(id)
+        );
     }
 
-
     @Operation(
-            summary = "Добавление комментария к объявлению",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized")
-            }
+            summary = "Добавление комментария"
     )
     @PostMapping("/{id}/comments")
     public ResponseEntity<Comment> addComment(
             @PathVariable Integer id,
-            @RequestBody CreateOrUpdateComment comment) {
+            @Valid @RequestBody CreateOrUpdateComment comment
+    ) {
 
-        return ResponseEntity.ok(new Comment());
+        return ResponseEntity.ok(
+                commentService.addComment(id, comment)
+        );
     }
 
-
     @Operation(
-            summary = "Удаление комментария",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
-                    @ApiResponse(responseCode = "403", description = "Forbidden")
-            }
+            summary = "Удаление комментария"
     )
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(
             @PathVariable Integer adId,
-            @PathVariable Integer commentId) {
+            @PathVariable Integer commentId
+    ) {
+
+        commentService.deleteComment(
+                adId,
+                commentId
+        );
 
         return ResponseEntity.ok().build();
     }
 
-
     @Operation(
-            summary = "Обновление комментария",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
-                    @ApiResponse(responseCode = "403", description = "Forbidden")
-            }
+            summary = "Обновление комментария"
     )
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<Comment> updateComment(
             @PathVariable Integer adId,
             @PathVariable Integer commentId,
-            @RequestBody CreateOrUpdateComment comment) {
-
-        return ResponseEntity.ok(new Comment());
+            @Valid @RequestBody CreateOrUpdateComment comment
+    ) {
+        return ResponseEntity.ok(
+                commentService.updateComment(
+                        adId,
+                        commentId,
+                        comment
+                )
+        );
     }
 }
