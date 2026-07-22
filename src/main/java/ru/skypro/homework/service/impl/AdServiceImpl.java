@@ -1,18 +1,24 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.constants.ErrorMessages;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exception.AccessDeniedException;
 import ru.skypro.homework.exception.ResourceNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.image.ImageStorageService;
 
 import java.util.List;
 
@@ -23,11 +29,12 @@ public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
     private final UserRepository userRepository;
     private final AdMapper adMapper;
+    private final ImageStorageService imageStorageService;
 
     @Override
     public Ads getAllAds() {
 
-        List<ru.skypro.homework.entity.Ad> ads =
+        List<Ad> ads =
                 adRepository.findAll();
 
         Ads result = new Ads();
@@ -49,32 +56,32 @@ public class AdServiceImpl implements AdService {
             MultipartFile image
     ) {
 
-        String email =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName();
-
-        ru.skypro.homework.entity.User user =
-                userRepository.findByEmail(email)
+        User user =
+                userRepository.findByEmail(getCurrentUserEmail())
                         .orElseThrow(
                                 () -> new ResourceNotFoundException(
-                                        "User not found"
+                                        ErrorMessages.USER_NOT_FOUND
                                 )
                         );
 
-        ru.skypro.homework.entity.Ad ad =
-                new ru.skypro.homework.entity.Ad();
+        Ad ad = adMapper.toEntity(dto);
 
-        ad.setTitle(dto.getTitle());
-        ad.setPrice(dto.getPrice());
-        ad.setDescription(dto.getDescription());
         ad.setAuthor(user);
 
-        if (image != null) {
-            ad.setImage(
-                    image.getOriginalFilename()
-            );
+        if (image != null && !image.isEmpty()) {
+
+            try {
+
+                ad.setImage(
+                        imageStorageService.saveAdImage(image)
+                );
+
+            } catch (Exception e) {
+
+                throw new RuntimeException(
+                        ErrorMessages.IMAGE_SAVE_ERROR
+                );
+            }
         }
 
         return adMapper.toDto(
@@ -85,67 +92,16 @@ public class AdServiceImpl implements AdService {
     @Override
     public ExtendedAd getAd(Integer id) {
 
-        ru.skypro.homework.entity.Ad ad =
-                adRepository.findById(id)
-                        .orElseThrow(
-                                () -> new ResourceNotFoundException(
-                                        "Ad not found"
-                                )
-                        );
-
-        ExtendedAd result = new ExtendedAd();
-
-        result.setPk(ad.getId());
-        result.setTitle(ad.getTitle());
-        result.setPrice(ad.getPrice());
-        result.setDescription(ad.getDescription());
-        result.setImage(ad.getImage());
-
-        if (ad.getAuthor() != null) {
-
-            result.setEmail(
-                    ad.getAuthor().getEmail()
-            );
-
-            result.setAuthorFirstName(
-                    ad.getAuthor().getFirstName()
-            );
-
-            result.setAuthorLastName(
-                    ad.getAuthor().getLastName()
-            );
-
-            result.setPhone(
-                    ad.getAuthor().getPhone()
-            );
-        }
-
-        return result;
+        Ad ad = getAdById(id);
+        return adMapper.toExtendedDto(ad);
     }
 
     @Override
     public void deleteAd(Integer id) {
 
-        ru.skypro.homework.entity.Ad ad =
-                adRepository.findById(id)
-                        .orElseThrow(
-                                () -> new ResourceNotFoundException(
-                                        "Ad not found"
-                                )
-                        );
+        Ad ad = getAdById(id);
 
-        String email =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName();
-
-        if (!ad.getAuthor().getEmail().equals(email)) {
-
-            throw new AccessDeniedException(
-                    "You are not the owner"
-            );
-        }
+        checkOwner(ad);
 
         adRepository.delete(ad);
     }
@@ -156,31 +112,14 @@ public class AdServiceImpl implements AdService {
             CreateOrUpdateAd dto
     ) {
 
-        ru.skypro.homework.entity.Ad ad =
-                adRepository.findById(id)
-                        .orElseThrow(
-                                () -> new ResourceNotFoundException(
-                                        "Ad not found"
-                                )
-                        );
+        Ad ad = getAdById(id);
 
-        String email =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName();
+        checkOwner(ad);
 
-        if (!ad.getAuthor().getEmail().equals(email)) {
-
-            throw new AccessDeniedException(
-                    "You are not the owner"
-            );
-        }
-
-        ad.setTitle(dto.getTitle());
-        ad.setPrice(dto.getPrice());
-        ad.setDescription(dto.getDescription());
-
+        adMapper.updateEntityFromDto(
+                dto,
+                ad
+        );
 
         return adMapper.toDto(
                 adRepository.save(ad)
@@ -190,21 +129,15 @@ public class AdServiceImpl implements AdService {
     @Override
     public Ads getMyAds() {
 
-        String email =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName();
-
-        ru.skypro.homework.entity.User user =
-                userRepository.findByEmail(email)
+        User user =
+                userRepository.findByEmail(getCurrentUserEmail())
                         .orElseThrow(
                                 () -> new ResourceNotFoundException(
-                                        "User not found"
+                                        ErrorMessages.USER_NOT_FOUND
                                 )
                         );
 
-        List<ru.skypro.homework.entity.Ad> ads =
+        List<Ad> ads =
                 adRepository.findByAuthorId(
                         user.getId()
                 );
@@ -227,31 +160,77 @@ public class AdServiceImpl implements AdService {
             Integer id,
             MultipartFile image
     ) {
-        ru.skypro.homework.entity.Ad ad =
-                adRepository.findById(id)
-                        .orElseThrow(
-                                () -> new ResourceNotFoundException(
-                                        "Ad not found"
-                                )
-                        );
 
-        String email =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName();
+        Ad ad = getAdById(id);
 
-        if (!ad.getAuthor().getEmail().equals(email)) {
+        checkOwner(ad);
 
-            throw new AccessDeniedException(
-                    "You are not the owner"
+        try {
+
+            ad.setImage(
+                    imageStorageService.saveAdImage(image)
+            );
+
+        } catch (Exception e) {
+
+            throw new RuntimeException(
+                    ErrorMessages.IMAGE_SAVE_ERROR
             );
         }
 
-        ad.setImage(
-                image.getOriginalFilename()
-        );
-
         adRepository.save(ad);
+    }
+
+    private Ad getAdById(Integer id) {
+
+        return adRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                ErrorMessages.AD_NOT_FOUND
+                        )
+                );
+    }
+
+    private boolean isAdmin(Authentication authentication) {
+
+        return authentication.getAuthorities()
+                .stream()
+                .anyMatch(
+                        authority ->
+                                authority.getAuthority()
+                                        .equals("ROLE_ADMIN")
+                );
+    }
+
+    private void checkOwner(Ad ad) {
+
+        Authentication authentication =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+
+        if (isAdmin(authentication)) {
+            return;
+        }
+
+
+        if (ad.getAuthor() == null ||
+                !ad.getAuthor()
+                        .getEmail()
+                        .equals(authentication.getName())) {
+
+            throw new AccessDeniedException(
+                    ErrorMessages.YOU_ARE_NOT_THE_OWNER
+            );
+        }
+    }
+
+    private String getCurrentUserEmail() {
+
+        return SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.entity.Role;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
@@ -15,6 +16,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @Override
     public boolean login(String username, String password) {
@@ -38,9 +40,8 @@ public class AuthServiceImpl implements AuthService {
             return false;
         }
 
-        User user = new User();
-
-        user.setEmail(register.getUsername());
+        User user =
+                userMapper.registerToEntity(register);
 
         user.setPassword(
                 passwordEncoder.encode(
@@ -48,18 +49,7 @@ public class AuthServiceImpl implements AuthService {
                 )
         );
 
-        user.setFirstName(register.getFirstName());
-
-        user.setLastName(register.getLastName());
-
-        user.setPhone(register.getPhone());
-
-        user.setRole(
-                register.getRole() != null
-                        ? Role.valueOf(register.getRole().name())
-                        : Role.USER
-        );
-
+        user.setRole(Role.USER);
 
         userRepository.save(user);
 

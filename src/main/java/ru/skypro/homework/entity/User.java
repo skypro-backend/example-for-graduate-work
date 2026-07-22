@@ -16,34 +16,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @Column(nullable = false, unique = true)
     private String email;
-
 
     @Column(nullable = false)
     private String password;
 
-
     private String firstName;
-
 
     private String lastName;
 
-
     private String phone;
-
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-
     private String image;
-
 
     @OneToMany(mappedBy = "author")
     private List<Ad> ads;
-
 
     @OneToMany(mappedBy = "author")
     private List<Comment> comments;

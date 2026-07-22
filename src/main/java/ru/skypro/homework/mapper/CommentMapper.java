@@ -2,7 +2,9 @@ package ru.skypro.homework.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 
 @Mapper(
         componentModel = "spring",
@@ -17,9 +19,16 @@ public interface CommentMapper {
             ru.skypro.homework.entity.Comment comment
     );
 
-    @Mapping(source = "pk", target = "id")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "ad", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     ru.skypro.homework.entity.Comment toEntity(
-            Comment comment
+            CreateOrUpdateComment comment
     );
 
+    void updateCommentFromDto(
+            CreateOrUpdateComment dto,
+            @MappingTarget ru.skypro.homework.entity.Comment comment
+    );
 }

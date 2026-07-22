@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UserService;
@@ -63,8 +64,26 @@ public class UserController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     public ResponseEntity<Void> updateUserImage(
-            @RequestPart MultipartFile image) {
+            @RequestPart("image") MultipartFile image) {
         userService.updateImage(image);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "Обновление пароля пользователя",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "400", description = "Bad Request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized")
+            }
+    )
+    @PatchMapping("/me/password")
+    public ResponseEntity<Void> updatePassword(
+            @Valid @RequestBody NewPassword newPassword
+    ) {
+
+        userService.updatePassword(newPassword);
+
         return ResponseEntity.ok().build();
     }
 }

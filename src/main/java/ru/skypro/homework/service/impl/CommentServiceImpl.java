@@ -1,20 +1,23 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.constants.ErrorMessages;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.User;
+import ru.skypro.homework.exception.AccessDeniedException;
 import ru.skypro.homework.exception.ResourceNotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
-import ru.skypro.homework.exception.AccessDeniedException;
-import ru.skypro.homework.exception.ResourceNotFoundException;
 
 import java.time.Instant;
 import java.util.List;
@@ -30,6 +33,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comments getComments(Integer adId) {
+
+        adRepository.findById(adId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                ErrorMessages.AD_NOT_FOUND
+                        )
+                );
 
         List<ru.skypro.homework.entity.Comment> comments =
                 commentRepository.findAllByAdId(adId);
@@ -55,25 +65,21 @@ public class CommentServiceImpl implements CommentService {
 
         Ad ad = adRepository.findById(adId)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Ad not found")
+                        () -> new ResourceNotFoundException(
+                                ErrorMessages.AD_NOT_FOUND
+                        )
                 );
 
-        String email =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName();
-
-        ru.skypro.homework.entity.User user =
-                userRepository.findByEmail(email)
+        User user =
+                userRepository.findByEmail(getCurrentUserEmail())
                         .orElseThrow(
-                                () -> new ResourceNotFoundException("User not found")
+                                () -> new ResourceNotFoundException(
+                                        ErrorMessages.USER_NOT_FOUND
+                                )
                         );
 
         ru.skypro.homework.entity.Comment comment =
-                new ru.skypro.homework.entity.Comment();
-
-        comment.setText(dto.getText());
+                commentMapper.toEntity(dto);
 
         comment.setCreatedAt(
                 Instant.now().toEpochMilli()
@@ -95,27 +101,10 @@ public class CommentServiceImpl implements CommentService {
             Integer commentId
     ) {
 
-        String email =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName();
-
         ru.skypro.homework.entity.Comment comment =
-                commentRepository.findById(commentId)
-                        .orElseThrow(
-                                () -> new ResourceNotFoundException(
-                                        "Comment not found"
-                                )
-                        );
+                getCommentById(commentId);
 
-        if (comment.getAuthor() == null ||
-                !comment.getAuthor().getEmail().equals(email)) {
-
-            throw new AccessDeniedException(
-                    "You are not the owner"
-            );
-        }
+        checkOwner(comment);
 
         commentRepository.delete(comment);
     }
@@ -126,32 +115,74 @@ public class CommentServiceImpl implements CommentService {
             Integer commentId,
             CreateOrUpdateComment dto
     ) {
-        String email =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName();
 
         ru.skypro.homework.entity.Comment comment =
-                commentRepository.findById(commentId)
-                        .orElseThrow(
-                                () -> new ResourceNotFoundException(
-                                        "Comment not found"
-                                )
-                        );
+                getCommentById(commentId);
 
-        if (comment.getAuthor() == null ||
-                !comment.getAuthor().getEmail().equals(email)) {
+        checkOwner(comment);
 
-            throw new AccessDeniedException(
-                    "You are not the owner"
-            );
-        }
-
-        comment.setText(dto.getText());
+        commentMapper.updateCommentFromDto(
+                dto,
+                comment
+        );
 
         return commentMapper.toDto(
                 commentRepository.save(comment)
         );
+    }
+
+    private ru.skypro.homework.entity.Comment getCommentById(
+            Integer commentId
+    ) {
+
+        return commentRepository.findById(commentId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                ErrorMessages.COMMENT_NOT_FOUND
+                        )
+                );
+    }
+
+    private void checkOwner(
+            ru.skypro.homework.entity.Comment comment
+    ) {
+
+        Authentication authentication =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+
+        boolean isAdmin =
+                authentication.getAuthorities()
+                        .stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .anyMatch(
+                                role -> role.equals("ROLE_ADMIN")
+                        );
+
+
+        if (isAdmin) {
+            return;
+        }
+
+
+        if (comment.getAuthor() == null ||
+                !comment.getAuthor()
+                        .getEmail()
+                        .equals(authentication.getName())) {
+
+            throw new AccessDeniedException(
+                    ErrorMessages.YOU_ARE_NOT_THE_OWNER
+            );
+        }
+    }
+
+    private String getCurrentUserEmail() {
+
+        return SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
     }
 }
