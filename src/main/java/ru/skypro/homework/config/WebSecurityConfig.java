@@ -1,62 +1,157 @@
 package ru.skypro.homework.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.dto.Role;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import static org.springframework.security.config.Customizer.withDefaults;
+import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
+
     private static final String[] AUTH_WHITELIST = {
-            "/swagger-resources/**",
-            "/swagger-ui.html",
-            "/v3/api-docs",
-            "/webjars/**",
             "/login",
-            "/register"
+            "/register",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     };
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user =
-                User.builder()
-                        .username("user@gmail.com")
-                        .password("password")
-                        .passwordEncoder(passwordEncoder::encode)
-                        .roles(Role.USER.name())
-                        .build();
-        return new InMemoryUserDetailsManager(user);
-    }
+    public SecurityFilterChain filterChain(
+            HttpSecurity http
+    ) throws Exception {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
+        http
+                .csrf()
                 .disable()
-                .authorizeHttpRequests(
-                        authorization ->
-                                authorization
-                                        .mvcMatchers(AUTH_WHITELIST)
-                                        .permitAll()
-                                        .mvcMatchers("/ads/**", "/users/**")
-                                        .authenticated())
+
                 .cors()
+
                 .and()
-                .httpBasic(withDefaults());
+
+                .authorizeHttpRequests(auth -> auth
+
+                        // открытые эндпоинты
+                        .antMatchers(AUTH_WHITELIST)
+                        .permitAll()
+
+
+                        // просмотр объявлений доступен всем
+                        .antMatchers(
+                                HttpMethod.GET,
+                                "/ads"
+                        )
+                        .permitAll()
+
+
+                        .antMatchers(
+                                HttpMethod.GET,
+                                "/ads/**"
+                        )
+                        .permitAll()
+
+
+                        // создание, изменение, удаление объявлений
+                        .antMatchers(
+                                HttpMethod.POST,
+                                "/ads/**",
+                                "/comments/**"
+                        )
+                        .hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+
+
+                        .antMatchers(
+                                HttpMethod.PUT,
+                                "/ads/**",
+                                "/comments/**"
+                        )
+                        .hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+                        .antMatchers(
+                                HttpMethod.DELETE,
+                                "/ads/**",
+                                "/comments/**"
+                        )
+                        .hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+                        // работа с профилем пользователя
+                        .antMatchers(
+                                "/users/**"
+                        )
+                        .authenticated()
+
+                        .anyRequest()
+                        .permitAll()
+                )
+
+                .httpBasic();
+
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration configuration =
+                new CorsConfiguration();
+
+        configuration.setAllowedOrigins(
+                List.of(
+                        "http://localhost:3000"
+                )
+        );
+
+        configuration.setAllowedMethods(
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE",
+                        "OPTIONS"
+                )
+        );
+
+        configuration.setAllowedHeaders(
+                List.of(
+                        "*"
+                )
+        );
+
+        configuration.setAllowCredentials(true);
+
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
+
+        return source;
+    }
 }
