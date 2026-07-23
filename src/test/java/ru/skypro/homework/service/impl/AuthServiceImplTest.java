@@ -2,7 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.entity.Role;

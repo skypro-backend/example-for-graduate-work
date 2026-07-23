@@ -46,7 +46,15 @@ public class WebSecurityConfig {
                         .permitAll()
 
 
-                        // просмотр объявлений доступен всем
+                        // просмотр своих объявлений
+                        .antMatchers(
+                                HttpMethod.GET,
+                                "/ads/me"
+                        )
+                        .authenticated()
+
+
+                        // просмотр всех объявлений
                         .antMatchers(
                                 HttpMethod.GET,
                                 "/ads"
@@ -54,9 +62,10 @@ public class WebSecurityConfig {
                         .permitAll()
 
 
+                        // просмотр конкретного объявления
                         .antMatchers(
                                 HttpMethod.GET,
-                                "/ads/**"
+                                "/ads/{id}"
                         )
                         .permitAll()
 
@@ -77,6 +86,16 @@ public class WebSecurityConfig {
                                 HttpMethod.PUT,
                                 "/ads/**",
                                 "/comments/**"
+                        )
+                        .hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+                        .antMatchers(
+                                HttpMethod.PATCH,
+                                "/ads/**",
+                                "/comments/**",
+                                "/users/**"
                         )
                         .hasAnyRole(
                                 "USER",
