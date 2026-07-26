@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-ads-table
+      author: skypro
+      changes:
+        - createTable:
+            tableName: ads
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: title
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_ads_author
+                    references: users(id)
+              - column:
+                  name: image
+                  type: varchar(255)
