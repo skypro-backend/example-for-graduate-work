@@ -1,9 +1,9 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,30 +13,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.service.AuthService;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Авторизация")
 public class AuthController {
 
+    private final AuthService authService;
 
-    @Operation(summary = "Авторизация пользователя")
+    @Operation(summary = "Авторизация пользователя", tags = "Авторизация")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
     })
     @PostMapping("/login")
     public ResponseEntity<Void> login(@Valid @RequestBody Login login) {
-        return ResponseEntity.ok().build();
+        if (authService.login(login.getUsername(), login.getPassword())) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @Operation(summary = "Регистрация пользователя")
+    @Operation(summary = "Регистрация пользователя", tags = "Регистрация")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Created"),
-            @ApiResponse(responseCode = "400", description = "Bad Request")
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     })
     @PostMapping("/register")
     public ResponseEntity<Integer> register(@Valid @RequestBody Register register) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(1);
+        return authService.register(register)
+                .map(id -> ResponseEntity.status(HttpStatus.CREATED).body(id))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 }

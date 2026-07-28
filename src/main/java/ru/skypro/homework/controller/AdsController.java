@@ -6,26 +6,29 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.constants.ApiConstants;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.*;
+import ru.skypro.homework.service.AdService;
 
 @Tag(name = "Объявления")
 @RestController
 @RequestMapping("/ads")
+@RequiredArgsConstructor
 public class AdsController {
+
+    private final AdService adService;
 
     @Operation(summary = "Получение всех объявлений")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping
     public ResponseEntity<Ads> getAllAds() {
-        return ResponseEntity.ok(new Ads());
+        return ResponseEntity.ok(adService.getAllAds());
     }
 
     @Operation(summary = "Добавление объявления")
@@ -35,12 +38,10 @@ public class AdsController {
     })
     @PostMapping(consumes = ApiConstants.MULTIPART_FORM_DATA)
     public ResponseEntity<Ad> addAd(@RequestPart("properties") @Valid CreateOrUpdateAd properties,
-                                    @RequestPart("image") MultipartFile image) {
-        Ad createdAd = new Ad();
-        createdAd.setPk(0);
-        createdAd.setTitle(properties.getTitle());
-        createdAd.setPrice(properties.getPrice());
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdAd);
+                                    @RequestPart("image") MultipartFile image,
+                                    Authentication authentication) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(adService.addAd(properties, image, authentication));
     }
 
     @Operation(summary = "Получение объявлений авторизованного пользователя")
@@ -49,8 +50,8 @@ public class AdsController {
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
     })
     @GetMapping("/me")
-    public ResponseEntity<Ads> getAdsMe() {
-        return ResponseEntity.ok(new Ads());
+    public ResponseEntity<Ads> getAdsMe(Authentication authentication) {
+        return ResponseEntity.ok(adService.getAdsMe(authentication));
     }
 
     @Operation(summary = "Получение информации об объявлении")
@@ -61,9 +62,7 @@ public class AdsController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> getAds(@PathVariable Integer id) {
-        ExtendedAd extendedAd = new ExtendedAd();
-        extendedAd.setPk(id);
-        return ResponseEntity.ok(extendedAd);
+        return ResponseEntity.ok(adService.getAds(id));
     }
 
     @Operation(summary = "Удаление объявления")
@@ -74,7 +73,8 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeAd(@PathVariable Integer id) {
+    public ResponseEntity<Void> removeAd(@PathVariable Integer id, Authentication authentication) {
+        adService.removeAd(id, authentication);
         return ResponseEntity.noContent().build();
     }
 
@@ -87,12 +87,9 @@ public class AdsController {
     })
     @PatchMapping("/{id}")
     public ResponseEntity<Ad> updateAds(@PathVariable Integer id,
-                                        @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd) {
-        Ad updatedAd = new Ad();
-        updatedAd.setPk(id);
-        updatedAd.setTitle(createOrUpdateAd.getTitle());
-        updatedAd.setPrice(createOrUpdateAd.getPrice());
-        return ResponseEntity.ok(updatedAd);
+                                        @Valid @RequestBody CreateOrUpdateAd createOrUpdateAd,
+                                        Authentication authentication) {
+        return ResponseEntity.ok(adService.updateAds(id, createOrUpdateAd, authentication));
     }
 
     @Operation(summary = "Обновление картинки объявления")
@@ -104,7 +101,8 @@ public class AdsController {
     })
     @PatchMapping(value = "/{id}/image", consumes = ApiConstants.MULTIPART_FORM_DATA)
     public ResponseEntity<byte[]> updateImage(@PathVariable Integer id,
-                                              @RequestPart("image") MultipartFile image) {
-        return ResponseEntity.ok(new byte[0]);
+                                              @RequestPart("image") MultipartFile image,
+                                              Authentication authentication) {
+        return ResponseEntity.ok(adService.updateImage(id, image, authentication));
     }
 }

@@ -17,4 +17,7 @@ public final class ApiConstants {
     public static final int AD_TITLE_LENGTH = 32;
     public static final int AD_DESCRIPTION_LENGTH = 64;
     public static final int COMMENT_TEXT_LENGTH = 64;
+
+    public static final String ROLE_PREFIX = "ROLE_";
+    public static final String IMAGES_URL_PREFIX = "/images/";
 }

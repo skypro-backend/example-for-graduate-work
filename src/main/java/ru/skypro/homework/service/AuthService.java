@@ -2,8 +2,11 @@ package ru.skypro.homework.service;
 
 import ru.skypro.homework.dto.Register;
 
-public interface AuthService {
-    boolean login(String userName, String password);
+import java.util.Optional;
 
-    boolean register(Register register);
+public interface AuthService {
+
+    boolean login(String username, String password);
+
+    Optional<Integer> register(Register register);
 }
