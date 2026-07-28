@@ -78,7 +78,7 @@ class AdMapperTest {
         assertThat(entity.getTitle()).isEqualTo("Ноутбук");
         assertThat(entity.getPrice()).isEqualTo(50000);
         assertThat(entity.getDescription()).isEqualTo("В отличном состоянии, без царапин");
-        assertThat(entity.getAuthor()).isNull(); // автор проставляется в сервисе, не маппером
-        assertThat(entity.getId()).isNull(); // id ещё не присвоен, сущность не сохранена
+        assertThat(entity.getAuthor()).isNull();
+        assertThat(entity.getId()).isNull();
     }
 }

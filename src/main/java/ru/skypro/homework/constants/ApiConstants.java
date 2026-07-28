@@ -9,7 +9,7 @@ public final class ApiConstants {
     public static final String PHONE_PATTERN = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}";
 
     public static final int USERNAME_LENGTH = 32;
-    public static final int PASSWORD_LENGTH = 255; // хранится хешированный пароль, не сырой
+    public static final int PASSWORD_LENGTH = 255;
     public static final int NAME_LENGTH = 16;
     public static final int PHONE_LENGTH = 20;
     public static final int ROLE_LENGTH = 20;

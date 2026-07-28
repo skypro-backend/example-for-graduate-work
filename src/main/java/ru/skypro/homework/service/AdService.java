@@ -14,27 +14,34 @@ import ru.skypro.homework.dto.ExtendedAd;
 
 public interface AdService {
 
-    /** Возвращает все объявления. */
+    /**
+     * Возвращает все объявления.
+     */
 
     Ads getAllAds();
 
-    /** Создаёт новое объявление от имени текущего пользователя. */
+    /**
+     * Создаёт новое объявление от имени текущего пользователя.
+     */
 
     Ad addAd(CreateOrUpdateAd properties, MultipartFile image, Authentication authentication);
 
-    /** Возвращает объявления текущего пользователя. */
+    /**
+     * Возвращает объявления текущего пользователя.
+     */
 
     Ads getAdsMe(Authentication authentication);
 
-    /** Возвращает подробную информацию об объявлении по id. */
+    /**
+     * Возвращает подробную информацию об объявлении по id.
+     */
 
     ExtendedAd getAds(Integer id);
 
     /**
      * Удаляет объявление.
      *
-     * @throws org.springframework.security.access.AccessDeniedException
-     *         если текущий пользователь не автор объявления и не ADMIN
+     * @throws org.springframework.security.access.AccessDeniedException если текущий пользователь не автор объявления и не ADMIN
      */
 
     void removeAd(Integer id, Authentication authentication);
@@ -42,8 +49,7 @@ public interface AdService {
     /**
      * Обновляет данные объявления.
      *
-     * @throws org.springframework.security.access.AccessDeniedException
-     *         если текущий пользователь не автор объявления и не ADMIN
+     * @throws org.springframework.security.access.AccessDeniedException если текущий пользователь не автор объявления и не ADMIN
      */
 
     Ad updateAds(Integer id, CreateOrUpdateAd dto, Authentication authentication);
@@ -51,8 +57,7 @@ public interface AdService {
     /**
      * Обновляет картинку объявления и возвращает её байты.
      *
-     * @throws org.springframework.security.access.AccessDeniedException
-     *         если текущий пользователь не автор объявления и не ADMIN
+     * @throws org.springframework.security.access.AccessDeniedException если текущий пользователь не автор объявления и не ADMIN
      */
 
     byte[] updateImage(Integer id, MultipartFile image, Authentication authentication);

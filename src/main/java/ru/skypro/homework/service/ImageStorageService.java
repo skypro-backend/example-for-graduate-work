@@ -7,5 +7,6 @@ public interface ImageStorageService {
     String save(MultipartFile file, String fileNamePrefix);
 
     byte[] read(String imageUrl);
+
     String detectContentType(String imageUrl);
 }

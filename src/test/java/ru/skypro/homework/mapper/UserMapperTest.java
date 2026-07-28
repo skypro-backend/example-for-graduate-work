@@ -46,7 +46,7 @@ class UserMapperTest {
         User entity = userMapper.toEntity(register);
 
         assertThat(entity.getEmail()).isEqualTo("new@mail.com");
-        assertThat(entity.getPassword()).isNull(); // пароль шифруется отдельно в сервисе, не маппером
+        assertThat(entity.getPassword()).isNull();
         assertThat(entity.getFirstName()).isEqualTo("Petr");
         assertThat(entity.getRole()).isEqualTo(Role.ADMIN);
     }
@@ -60,12 +60,11 @@ class UserMapperTest {
 
         ru.skypro.homework.dto.UpdateUser updateDto = new ru.skypro.homework.dto.UpdateUser();
         updateDto.setFirstName("NewName");
-        // lastName и phone намеренно не заданы (null)
 
         userMapper.updateEntityFromDto(updateDto, existingUser);
 
         assertThat(existingUser.getFirstName()).isEqualTo("NewName");
-        assertThat(existingUser.getLastName()).isEqualTo("OldSurname"); // не затёрлось
-        assertThat(existingUser.getPhone()).isEqualTo("+79990000000"); // не затёрлось
+        assertThat(existingUser.getLastName()).isEqualTo("OldSurname");
+        assertThat(existingUser.getPhone()).isEqualTo("+79990000000");
     }
 }

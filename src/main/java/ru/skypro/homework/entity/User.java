@@ -3,7 +3,6 @@ package ru.skypro.homework.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import ru.skypro.homework.constants.ApiConstants;
-import ru.skypro.homework.entity.Role;
 
 @Data
 @Entity

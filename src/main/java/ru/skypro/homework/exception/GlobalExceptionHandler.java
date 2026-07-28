@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * Единая точка обработки исключений для всех контроллеров приложения.
  */
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {

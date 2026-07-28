@@ -48,8 +48,8 @@ class CommentMapperTest {
         ru.skypro.homework.entity.Comment entity = commentMapper.toEntity(dto);
 
         assertThat(entity.getText()).isEqualTo("Комментарий длиной больше восьми символов");
-        assertThat(entity.getAuthor()).isNull(); // проставляется в сервисе
-        assertThat(entity.getAd()).isNull(); // проставляется в сервисе
-        assertThat(entity.getCreatedAt()).isNull(); // проставляется в сервисе
+        assertThat(entity.getAuthor()).isNull();
+        assertThat(entity.getAd()).isNull();
+        assertThat(entity.getCreatedAt()).isNull();
     }
 }
