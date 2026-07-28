@@ -1,6 +1,8 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,12 +14,13 @@ import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exception.NotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.service.utils.SecurityUtils;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageStorageService;
+import ru.skypro.homework.service.utils.SecurityUtils;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AdServiceImpl implements AdService {
@@ -42,7 +45,9 @@ public class AdServiceImpl implements AdService {
         ad.setAuthor(author);
         ru.skypro.homework.entity.Ad savedAd = adRepository.save(ad);
         savedAd.setImage(imageStorageService.save(image, "ad_" + savedAd.getId()));
-        return adMapper.toDto(adRepository.save(savedAd));
+        ru.skypro.homework.entity.Ad result = adRepository.save(savedAd);
+        log.info("Пользователь {} создал объявление id={}", author.getEmail(), result.getId());
+        return adMapper.toDto(result);
     }
 
     @Override
@@ -62,8 +67,15 @@ public class AdServiceImpl implements AdService {
     @Override
     public void removeAd(Integer id, Authentication authentication) {
         ru.skypro.homework.entity.Ad ad = getAdOrThrow(id);
-        securityUtils.checkOwnership(ad.getAuthor(), authentication);
+        try {
+            securityUtils.checkOwnership(ad.getAuthor(), authentication);
+        } catch (AccessDeniedException e) {
+            log.warn("Пользователь {} попытался удалить чужое объявление id={}",
+                    authentication.getName(), id);
+            throw e;
+        }
         adRepository.delete(ad);
+        log.info("Объявление id={} удалено пользователем {}", id, authentication.getName());
     }
 
     @Override
@@ -88,6 +100,9 @@ public class AdServiceImpl implements AdService {
 
     private ru.skypro.homework.entity.Ad getAdOrThrow(Integer id) {
         return adRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Объявление не найдено"));
+                .orElseThrow(() -> {
+                    log.warn("Объявление id={} не найдено", id);
+                    return new NotFoundException("Объявление не найдено");
+                });
     }
 }

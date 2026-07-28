@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+@Slf4j
 @Service
 public class ImageStorageServiceImpl implements ImageStorageService {
 
@@ -26,8 +28,10 @@ public class ImageStorageServiceImpl implements ImageStorageService {
             String fileName = fileNamePrefix + extractExtension(file.getOriginalFilename());
             Path filePath = directory.resolve(fileName);
             file.transferTo(filePath);
+            log.info("Сохранён файл изображения: {}", fileName);
             return ApiConstants.IMAGES_URL_PREFIX + fileName;
         } catch (IOException e) {
+            log.error("Не удалось сохранить изображение {}", fileNamePrefix, e);
             throw new ImageStorageException("Не удалось сохранить файл изображения", e);
         }
     }
