@@ -1,9 +1,9 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.data.dto.auth;
 
 import lombok.Data;
 
 @Data
-public class Register {
+public class RegisterRequestDto {
 
     private String username;
     private String password;
