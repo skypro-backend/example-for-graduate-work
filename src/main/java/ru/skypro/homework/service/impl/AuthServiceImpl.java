@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.data.dto.auth.RegisterRequestDto;
+import ru.skypro.homework.data.dto.auth.Role;
 import ru.skypro.homework.service.AuthService;
 
 @Service
@@ -39,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
                         .passwordEncoder(this.encoder::encode)
                         .password(register.getPassword())
                         .username(register.getUsername())
-                        .roles(register.getRole().name())
+                        .roles(Role.USER.name())
                         .build());
         return true;
     }
