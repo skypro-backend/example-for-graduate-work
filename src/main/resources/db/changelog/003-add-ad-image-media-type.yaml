@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-add-ad-image-media-type
+      author: yurii
+
+      preConditions:
+        onFail: MARK_RAN
+        onError: HALT
+        not:
+          columnExists:
+            tableName: ad
+            columnName: image_media_type
+
+      changes:
+        - addColumn:
+            tableName: ad
+            columns:
+              - column:
+                  name: image_media_type
+                  type: varchar(100)

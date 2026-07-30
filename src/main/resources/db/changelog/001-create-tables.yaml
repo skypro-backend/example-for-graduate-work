@@ -1,0 +1,174 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 001-create-users
+      author: yurii
+      changes:
+        - createTable:
+            tableName: app_user
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: username
+                  type: VARCHAR(32)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: first_name
+                  type: VARCHAR(16)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: last_name
+                  type: VARCHAR(16)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: phone
+                  type: VARCHAR(32)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: role
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: image
+                  type: BYTEA
+
+              - column:
+                  name: image_media_type
+                  type: VARCHAR(100)
+
+  - changeSet:
+      id: 002-create-ads
+      author: yurii
+      changes:
+        - createTable:
+            tableName: ad
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: title
+                  type: VARCHAR(32)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: price
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: description
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: image
+                  type: BYTEA
+
+              - column:
+                  name: image_media_type
+                  type: VARCHAR(100)
+
+              - column:
+                  name: author_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_ad_author
+                    references: app_user(id)
+                    deleteCascade: true
+
+        - createIndex:
+            tableName: ad
+            indexName: idx_ad_author
+            columns:
+              - column:
+                  name: author_id
+
+  - changeSet:
+      id: 003-create-comments
+      author: yurii
+      changes:
+        - createTable:
+            tableName: comment
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: text
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: author_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_comment_author
+                    references: app_user(id)
+                    deleteCascade: true
+
+              - column:
+                  name: ad_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_comment_ad
+                    references: ad(id)
+                    deleteCascade: true
+
+        - createIndex:
+            tableName: comment
+            indexName: idx_comment_ad
+            columns:
+              - column:
+                  name: ad_id
+
+        - createIndex:
+            tableName: comment
+            indexName: idx_comment_author
+            columns:
+              - column:
+                  name: author_id

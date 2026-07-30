@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/001-create-tables.yaml
+
+  - include:
+      file: db/changelog/002-add-image-media-type.yaml
+
+  - include:
+      file: db/changelog/003-add-ad-image-media-type.yaml

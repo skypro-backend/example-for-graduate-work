@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-add-user-image-media-type
+      author: yurii
+
+      preConditions:
+        onFail: MARK_RAN
+        onError: HALT
+        not:
+          columnExists:
+            tableName: app_user
+            columnName: image_media_type
+
+      changes:
+        - addColumn:
+            tableName: app_user
+            columns:
+              - column:
+                  name: image_media_type
+                  type: varchar(100)
