@@ -1,6 +1,7 @@
 package ru.skypro.homework.data.dto.ads;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
@@ -8,5 +9,6 @@ import java.math.BigDecimal;
 public class CreateOrUpdateAd {
     private String title;
     private String description;
-    private Integer price;
+    private BigDecimal price;
+    private MultipartFile image;
 }
