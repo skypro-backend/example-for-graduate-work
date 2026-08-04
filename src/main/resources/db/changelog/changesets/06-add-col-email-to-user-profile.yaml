@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: boris
+      changes:
+        - addColumn:
+            tableName: user_profile
+            columns:
+              - column:
+                  name: email
+                  type: VARCHAR(255)

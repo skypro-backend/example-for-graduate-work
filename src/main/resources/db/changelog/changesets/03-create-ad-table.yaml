@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 03
+      author: boris
+      changes:
+        - createTable:
+            tableName: ad
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: profile_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_ad_profile
+                    referencedTableName: user_profile
+                    referencedColumnNames: id
+                    deleteCascade: true
+
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: price
+                  type: NUMERIC(19, 2)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: description
+                  type: TEXT
