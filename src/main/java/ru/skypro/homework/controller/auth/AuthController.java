@@ -13,7 +13,6 @@ import ru.skypro.homework.data.dto.auth.RegisterRequestDto;
 import ru.skypro.homework.service.AuthService;
 
 @Slf4j
-@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
