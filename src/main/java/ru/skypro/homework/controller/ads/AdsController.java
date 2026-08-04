@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller.ads;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,7 +9,6 @@ import ru.skypro.homework.data.dto.ads.AdItemDto;
 import ru.skypro.homework.data.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.data.dto.ads.ExtendedAdItem;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -21,12 +21,11 @@ public class AdsController {
         return ResponseEntity.ok(new ListResponseDto<>());
     }
 
-    @PostMapping
+    @PostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ResponseEntity<AdItemDto> saveAd(
-            @RequestParam("title") String title,
-            @RequestParam("price") BigDecimal price,
-            @RequestParam("description") String description,
-            @RequestParam("image") MultipartFile imageFile
+            @ModelAttribute CreateOrUpdateAd postAdRequest
     ) {
         return ResponseEntity.ok(null);
     }
