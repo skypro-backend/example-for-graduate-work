@@ -1,48 +1,55 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.data.dto.auth.RegisterRequestDto;
-import ru.skypro.homework.data.dto.auth.Role;
+import ru.skypro.homework.data.entity.AccountEntity;
+import ru.skypro.homework.data.entity.ProfileEntity;
+import ru.skypro.homework.repository.AccountRepository;
+import ru.skypro.homework.repository.ProfileRepository;
 import ru.skypro.homework.service.AuthService;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
+    private final AccountRepository accountRepository;
+    private final ProfileRepository profileRepository;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
-        this.encoder = passwordEncoder;
-    }
 
     @Override
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
-            return false;
-        }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
+        return accountRepository.findByEmail(userName)
+                .map(account -> encoder.matches(password, account.getPasswordHash()))
+                .orElse(false);
     }
 
     @Override
     public boolean register(RegisterRequestDto register) {
-        if (manager.userExists(register.getUsername())) {
+        if (accountRepository.findByEmail(register.getUsername()).isPresent()) {
             return false;
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(Role.USER.name())
-                        .build());
+        ProfileEntity profileEntity = profileRepository.save(
+                ProfileEntity.builder()
+                        .firstName(register.getFirstName())
+                        .lastName(register.getLastName())
+                        .phone(register.getPhone())
+                        .build()
+        );
+
+        AccountEntity account = AccountEntity.builder()
+                .email(register.getUsername())
+                .passwordHash(encoder.encode(register.getPassword()))
+                .role("USER")
+                .profile(profileEntity).build();
+
+        accountRepository.save(account);
+
         return true;
+
+
     }
 
 }
