@@ -8,5 +8,5 @@ public class AdItemDto {
     private String title;
     private Integer price;
     private String image;
-    private Integer author;
+    private Long author;
 }
