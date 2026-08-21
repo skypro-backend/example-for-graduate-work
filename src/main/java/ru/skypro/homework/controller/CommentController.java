@@ -15,7 +15,7 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/ads/{adId}/comments")
+@RequestMapping("/ads/{id}/comments")
 @RequiredArgsConstructor
 @Tag(name = "Комментарии")
 public class CommentController {
@@ -27,7 +27,7 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Comments> getComments(@PathVariable Integer adId) {
+    public ResponseEntity<Comments> getComments(@PathVariable Integer id) {
         return ResponseEntity.ok(new Comments());
     }
 
@@ -38,7 +38,7 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Comment> addComment(@PathVariable Integer adId,
+    public ResponseEntity<Comment> addComment(@PathVariable Integer id,
                                               @Valid @RequestBody CreateOrUpdateComment comment) {
         return ResponseEntity.ok(new Comment());
     }
@@ -51,7 +51,7 @@ public class CommentController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Void> deleteComment(@PathVariable Integer adId,
+    public ResponseEntity<Void> deleteComment(@PathVariable Integer id,
                                               @PathVariable Integer commentId) {
         return ResponseEntity.ok().build();
     }
@@ -64,7 +64,7 @@ public class CommentController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Comment> updateComment(@PathVariable Integer adId,
+    public ResponseEntity<Comment> updateComment(@PathVariable Integer id,
                                                  @PathVariable Integer commentId,
                                                  @Valid @RequestBody CreateOrUpdateComment comment) {
         return ResponseEntity.ok(new Comment());

@@ -38,8 +38,8 @@ public class AdController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     public ResponseEntity<Ad> addAd(
-            @RequestParam("properties") String properties,
-            @RequestParam("image") MultipartFile image) {
+            @RequestPart("properties") @Valid CreateOrUpdateAd properties,
+            @RequestPart("image") MultipartFile image) {
         return ResponseEntity.status(HttpStatus.CREATED).body(new Ad());
     }
 
