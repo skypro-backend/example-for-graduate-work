@@ -10,6 +10,7 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.mapper.AdMapper;
@@ -66,7 +67,6 @@ public class AdServiceImpl implements AdService {
         log.debug("Adding new ad by user: {}", username);
         UserEntity author = findUserByUsername(username);
 
-        // Сохраняем картинку
         String fileName = "ad_" + System.currentTimeMillis();
         String imagePath = imageService.saveImage(image, "ads", fileName);
 
@@ -94,9 +94,10 @@ public class AdServiceImpl implements AdService {
     public void removeAd(Integer id, String username) {
         log.debug("Removing ad with id: {} by user: {}", id, username);
         AdEntity adEntity = findAdById(id);
+
+        // Проверяем права доступа
         checkAccess(adEntity, username);
 
-        // Удаляем картинку
         if (adEntity.getImage() != null) {
             imageService.deleteImage(adEntity.getImage());
         }
@@ -109,7 +110,10 @@ public class AdServiceImpl implements AdService {
     public Ad updateAd(Integer id, CreateOrUpdateAd createOrUpdateAd, String username) {
         log.debug("Updating ad with id: {} by user: {}", id, username);
         AdEntity adEntity = findAdById(id);
+
+        // Проверяем права доступа
         checkAccess(adEntity, username);
+
         adMapper.updateAdEntity(createOrUpdateAd, adEntity);
         adEntity = adRepository.save(adEntity);
 
@@ -146,14 +150,14 @@ public class AdServiceImpl implements AdService {
     public String updateImage(Integer id, MultipartFile image, String username) {
         log.debug("Updating image for ad id: {} by user: {}", id, username);
         AdEntity adEntity = findAdById(id);
+
+        // Проверяем права доступа
         checkAccess(adEntity, username);
 
-        // Удаляем старую картинку
         if (adEntity.getImage() != null) {
             imageService.deleteImage(adEntity.getImage());
         }
 
-        // Сохраняем новую картинку
         String fileName = "ad_" + id;
         String imagePath = imageService.saveImage(image, "ads", fileName);
         adEntity.setImage(imagePath);
@@ -165,7 +169,17 @@ public class AdServiceImpl implements AdService {
     @Override
     public boolean isAuthor(String username, Integer adId) {
         return adRepository.findById(adId)
-                .map(ad -> ad.getAuthor().getUsername().equals(username))
+                .map(ad -> {
+                    // Проверяем, является ли пользователь автором
+                    boolean isAuthor = ad.getAuthor().getUsername().equals(username);
+                    if (isAuthor) {
+                        return true;
+                    }
+                    // Если не автор, проверяем, является ли администратором
+                    return userRepository.findByUsername(username)
+                            .map(user -> user.getRole() == Role.ADMIN)
+                            .orElse(false);
+                })
                 .orElse(false);
     }
 
@@ -180,8 +194,17 @@ public class AdServiceImpl implements AdService {
     }
 
     private void checkAccess(AdEntity adEntity, String username) {
+        UserEntity user = findUserByUsername(username);
+
+        // Если пользователь администратор - разрешаем
+        if (user.getRole() == Role.ADMIN) {
+            log.debug("Admin {} is performing action on ad {}", username, adEntity.getId());
+            return;
+        }
+
+        // Иначе проверяем, что пользователь является автором
         if (!adEntity.getAuthor().getUsername().equals(username)) {
-            throw new AccessDeniedException("You are not the author of this ad");
+            throw new AccessDeniedException("You are not the author of this ad and not an admin");
         }
     }
 }

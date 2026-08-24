@@ -1,11 +1,11 @@
 package ru.skypro.homework.dto;
 
 public class Ad {
-    private Integer author;
-    private String image;
-    private Integer pk;
-    private Integer price;
-    private String title;
+    private Integer author;    // ID автора
+    private String image;      // URL картинки
+    private Integer pk;        // ID объявления
+    private Integer price;     // Цена
+    private String title;      // Заголовок
 
     public Integer getAuthor() {
         return author;

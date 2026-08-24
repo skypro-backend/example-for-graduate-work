@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
@@ -50,7 +51,6 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> comments = commentEntities.stream()
                 .map(comment -> {
                     Comment commentDto = commentMapper.toDto(comment);
-                    // Добавляем URL для аватара автора комментария
                     if (comment.getAuthor().getImage() != null) {
                         commentDto.setAuthorImage(imageService.getImageUrl(comment.getAuthor().getImage()));
                     }
@@ -91,7 +91,9 @@ public class CommentServiceImpl implements CommentService {
             throw new RuntimeException("Comment does not belong to this ad");
         }
 
+        // Проверяем права доступа
         checkAccess(commentEntity, username);
+
         commentRepository.delete(commentEntity);
     }
 
@@ -106,7 +108,9 @@ public class CommentServiceImpl implements CommentService {
             throw new RuntimeException("Comment does not belong to this ad");
         }
 
+        // Проверяем права доступа
         checkAccess(commentEntity, username);
+
         commentMapper.updateCommentEntity(createOrUpdateComment, commentEntity);
         commentEntity = commentRepository.save(commentEntity);
 
@@ -120,7 +124,17 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public boolean isAuthor(String username, Integer commentId) {
         return commentRepository.findById(commentId)
-                .map(comment -> comment.getAuthor().getUsername().equals(username))
+                .map(comment -> {
+                    // Проверяем, является ли пользователь автором
+                    boolean isAuthor = comment.getAuthor().getUsername().equals(username);
+                    if (isAuthor) {
+                        return true;
+                    }
+                    // Если не автор, проверяем, является ли администратором
+                    return userRepository.findByUsername(username)
+                            .map(user -> user.getRole() == Role.ADMIN)
+                            .orElse(false);
+                })
                 .orElse(false);
     }
 
@@ -140,8 +154,17 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private void checkAccess(CommentEntity commentEntity, String username) {
+        UserEntity user = findUserByUsername(username);
+
+        // Если пользователь администратор - разрешаем
+        if (user.getRole() == Role.ADMIN) {
+            log.debug("Admin {} is performing action on comment {}", username, commentEntity.getId());
+            return;
+        }
+
+        // Иначе проверяем, что пользователь является автором
         if (!commentEntity.getAuthor().getUsername().equals(username)) {
-            throw new AccessDeniedException("You are not the author of this comment");
+            throw new AccessDeniedException("You are not the author of this comment and not an admin");
         }
     }
 }

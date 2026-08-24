@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,8 +27,14 @@ public class WebSecurityConfig {
             "/v3/api-docs",
             "/webjars/**",
             "/login",
-            "/register",
-            "/ads"
+            "/register"
+    };
+
+    // Публичные GET запросы для объявлений и изображений
+    private static final String[] PUBLIC_GET_ENDPOINTS = {
+            "/ads",
+            "/ads/{id}",
+            "/images/**"
     };
 
     @Bean
@@ -44,26 +51,39 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
+        http
+                .csrf()
                 .disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeHttpRequests(
                         authorization ->
                                 authorization
+                                        // Swagger и регистрация - доступны всем
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .mvcMatchers("/ads/me")
-                                        .authenticated()
+                                        // GET запросы на объявления и изображения - доступны всем
+                                        .mvcMatchers(org.springframework.http.HttpMethod.GET, "/ads")
+                                        .permitAll()
+                                        .mvcMatchers(org.springframework.http.HttpMethod.GET, "/ads/{id}")
+                                        .permitAll()
+                                        .mvcMatchers(org.springframework.http.HttpMethod.GET, "/images/**")
+                                        .permitAll()
+                                        // Остальные запросы к /ads/** требуют аутентификации
                                         .mvcMatchers("/ads/**")
                                         .hasAnyRole("USER", "ADMIN")
+                                        // Запросы к /users/** требуют аутентификации
                                         .mvcMatchers("/users/**")
                                         .hasAnyRole("USER", "ADMIN")
-                                        .mvcMatchers("/ads/**/comments/**")
-                                        .hasAnyRole("USER", "ADMIN")
+                                        // Все остальные запросы требуют аутентификации
                                         .anyRequest()
-                                        .authenticated())
+                                        .authenticated()
+                )
                 .cors()
                 .and()
                 .httpBasic(withDefaults());
+
         return http.build();
     }
 

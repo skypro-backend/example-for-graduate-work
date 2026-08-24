@@ -34,6 +34,7 @@ public class AdController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Ad> addAd(
             @RequestParam("properties") CreateOrUpdateAd properties,
             @RequestParam("image") MultipartFile image,
@@ -50,7 +51,7 @@ public class AdController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @adService.isAuthor(authentication.name, #id)")
+    @PreAuthorize("hasAnyRole('ADMIN') or @adService.isAuthor(authentication.name, #id)")
     public ResponseEntity<?> removeAd(@PathVariable Integer id, Authentication authentication) {
         log.debug("Remove ad id: {} by user: {}", id, authentication.getName());
         adService.removeAd(id, authentication.getName());
@@ -58,7 +59,7 @@ public class AdController {
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @adService.isAuthor(authentication.name, #id)")
+    @PreAuthorize("hasAnyRole('ADMIN') or @adService.isAuthor(authentication.name, #id)")
     public ResponseEntity<Ad> updateAds(
             @PathVariable Integer id,
             @RequestBody CreateOrUpdateAd createOrUpdateAd,
@@ -69,13 +70,14 @@ public class AdController {
     }
 
     @GetMapping("/me")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Ads> getAdsMe(Authentication authentication) {
         log.debug("Get my ads for user: {}", authentication.getName());
         return ResponseEntity.ok(adService.getAdsMe(authentication.getName()));
     }
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('ADMIN') or @adService.isAuthor(authentication.name, #id)")
+    @PreAuthorize("hasAnyRole('ADMIN') or @adService.isAuthor(authentication.name, #id)")
     public ResponseEntity<String> updateImage(
             @PathVariable Integer id,
             @RequestParam("image") MultipartFile image,

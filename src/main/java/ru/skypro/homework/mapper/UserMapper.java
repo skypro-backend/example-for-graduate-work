@@ -34,9 +34,7 @@ public interface UserMapper {
         if (userEntity == null) {
             return null;
         }
-
         User user = toUserDto(userEntity);
-        // image обрабатывается в сервисе, так как нужен полный URL
         return user;
     }
 }

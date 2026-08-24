@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
@@ -46,7 +47,13 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         UserEntity userEntity = userMapper.toEntity(register);
         userEntity.setPassword(passwordEncoder.encode(register.getPassword()));
 
+        // Если роль не указана, устанавливаем USER по умолчанию
+        if (register.getRole() == null) {
+            userEntity.setRole(Role.USER);
+        }
+
         userRepository.save(userEntity);
+        log.info("User registered successfully: {}", register.getUsername());
         return true;
     }
 

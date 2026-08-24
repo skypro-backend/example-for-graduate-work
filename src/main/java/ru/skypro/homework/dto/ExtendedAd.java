@@ -1,7 +1,8 @@
 package ru.skypro.homework.dto;
 
 public class ExtendedAd {
-    private Integer pk;
+    private Integer pk;              // ID объявления
+    private Integer authorId;        // ID автора (добавляем отдельно)
     private String authorFirstName;
     private String authorLastName;
     private String description;
@@ -17,6 +18,14 @@ public class ExtendedAd {
 
     public void setPk(Integer pk) {
         this.pk = pk;
+    }
+
+    public Integer getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Integer authorId) {
+        this.authorId = authorId;
     }
 
     public String getAuthorFirstName() {

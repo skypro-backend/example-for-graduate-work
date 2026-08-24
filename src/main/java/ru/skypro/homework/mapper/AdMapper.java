@@ -13,6 +13,7 @@ import ru.skypro.homework.entity.UserEntity;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AdMapper {
 
+    @Mapping(source = "id", target = "pk")
     @Mapping(source = "author.id", target = "author")
     @Mapping(source = "image", target = "image")
     Ad toDto(AdEntity adEntity);
@@ -29,7 +30,8 @@ public interface AdMapper {
     @Mapping(target = "comments", ignore = true)
     AdEntity updateAdEntity(CreateOrUpdateAd createOrUpdateAd, @MappingTarget AdEntity adEntity);
 
-    @Mapping(source = "author.id", target = "pk")
+    @Mapping(source = "id", target = "pk")
+    @Mapping(source = "author.id", target = "authorId")
     @Mapping(source = "author.firstName", target = "authorFirstName")
     @Mapping(source = "author.lastName", target = "authorLastName")
     @Mapping(source = "author.username", target = "email")

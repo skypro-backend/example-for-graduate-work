@@ -30,6 +30,7 @@ public class CommentController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Comment> addComment(
             @PathVariable Integer adId,
             @RequestBody CreateOrUpdateComment createOrUpdateComment,
@@ -40,7 +41,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    @PreAuthorize("hasRole('ADMIN') or @commentService.isAuthor(authentication.name, #commentId)")
+    @PreAuthorize("hasAnyRole('ADMIN') or @commentService.isAuthor(authentication.name, #commentId)")
     public ResponseEntity<?> deleteComment(
             @PathVariable Integer adId,
             @PathVariable Integer commentId,
@@ -52,7 +53,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
-    @PreAuthorize("hasRole('ADMIN') or @commentService.isAuthor(authentication.name, #commentId)")
+    @PreAuthorize("hasAnyRole('ADMIN') or @commentService.isAuthor(authentication.name, #commentId)")
     public ResponseEntity<Comment> updateComment(
             @PathVariable Integer adId,
             @PathVariable Integer commentId,

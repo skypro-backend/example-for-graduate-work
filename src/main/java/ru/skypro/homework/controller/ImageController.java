@@ -39,7 +39,6 @@ public class ImageController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        // Определяем Content-Type по расширению
         String contentType = getContentType(fileName);
 
         return ResponseEntity.ok()
