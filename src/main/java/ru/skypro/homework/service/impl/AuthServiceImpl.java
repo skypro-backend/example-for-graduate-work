@@ -1,24 +1,25 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
-
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
-        this.encoder = passwordEncoder;
-    }
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public boolean login(String userName, String password) {
@@ -34,14 +35,22 @@ public class AuthServiceImpl implements AuthService {
         if (manager.userExists(register.getUsername())) {
             return false;
         }
+
+        // 1. Регистрируем пользователя в Spring Security для защиты
         manager.createUser(
                 User.builder()
-                        .passwordEncoder(this.encoder::encode)
+                        .passwordEncoder(encoder::encode)
                         .password(register.getPassword())
                         .username(register.getUsername())
                         .roles(register.getRole().name())
-                        .build());
+                        .build()
+        );
+
+        // 2. Сохраняем полную информацию о компании/мастере в БД PostgreSQL
+        UserEntity entity = userMapper.registerToEntity(register);
+        entity.setEmail(register.getUsername()); // email является логином
+        userRepository.save(entity);
+
         return true;
     }
-
 }
