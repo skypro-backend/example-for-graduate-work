@@ -6,59 +6,54 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.AdEntity;
 
+import java.util.Optional;
+
 @Component
 public class AdMapper {
 
-    public Ad toAdDto(AdEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        Ad dto = new Ad();
-        dto.setPk(entity.getId());
-        dto.setTitle(entity.getTitle());
-        dto.setPrice(entity.getPrice());
-        dto.setImage(entity.getImage());
-
-        if (entity.getAuthor() != null) {
-            dto.setAuthor(entity.getAuthor().getId());
-        }
-
-        return dto;
+    public Optional<Ad> toAdDto(AdEntity entity) {
+        return Optional.ofNullable(entity)
+                .map(e -> {
+                    Ad dto = new Ad();
+                    dto.setPk(e.getId());
+                    dto.setTitle(e.getTitle());
+                    dto.setPrice(e.getPrice());
+                    dto.setImage(e.getImage());
+                    if (e.getAuthor() != null) {
+                        dto.setAuthor(e.getAuthor().getId());
+                    }
+                    return dto;
+                });
     }
 
-    public ExtendedAd toExtendedAdDto(AdEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        ExtendedAd dto = new ExtendedAd();
-        dto.setPk(entity.getId());
-        dto.setTitle(entity.getTitle());
-        dto.setPrice(entity.getPrice());
-        dto.setDescription(entity.getDescription());
-        dto.setImage(entity.getImage());
-
-        if (entity.getAuthor() != null) {
-            dto.setAuthorFirstName(entity.getAuthor().getFirstName());
-            dto.setAuthorLastName(entity.getAuthor().getLastName());
-            dto.setEmail(entity.getAuthor().getEmail());
-            dto.setPhone(entity.getAuthor().getPhone());
-        }
-
-        return dto;
+    public Optional<ExtendedAd> toExtendedAdDto(AdEntity entity) {
+        return Optional.ofNullable(entity)
+                .map(e -> {
+                    ExtendedAd dto = new ExtendedAd();
+                    dto.setPk(e.getId());
+                    dto.setTitle(e.getTitle());
+                    dto.setPrice(e.getPrice());
+                    dto.setDescription(e.getDescription());
+                    dto.setImage(e.getImage());
+                    if (e.getAuthor() != null) {
+                        dto.setAuthorFirstName(e.getAuthor().getFirstName());
+                        dto.setAuthorLastName(e.getAuthor().getLastName());
+                        dto.setEmail(e.getAuthor().getEmail());
+                        dto.setPhone(e.getAuthor().getPhone());
+                    }
+                    return dto;
+                });
     }
 
-    public AdEntity toEntity(CreateOrUpdateAd dto) {
-        if (dto == null) {
-            return null;
-        }
 
-        AdEntity entity = new AdEntity();
-        entity.setTitle(dto.getTitle());
-        entity.setPrice(dto.getPrice());
-        entity.setDescription(dto.getDescription());
-
-        return entity;
+    public Optional<AdEntity> toEntity(CreateOrUpdateAd dto) {
+        return Optional.ofNullable(dto)
+                .map(d -> {
+                    AdEntity entity = new AdEntity();
+                    entity.setTitle(d.getTitle());
+                    entity.setPrice(d.getPrice());
+                    entity.setDescription(d.getDescription());
+                    return entity;
+                });
     }
 }

@@ -9,14 +9,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/ads")
@@ -24,11 +28,18 @@ import javax.validation.Valid;
 @Tag(name = "Объявления")
 public class AdController {
 
+    private final AdService adService;
+    private final UserService userService;
+
     @GetMapping
     @Operation(summary = "Получение всех объявлений")
     @ApiResponse(responseCode = "200", description = "OK")
     public ResponseEntity<Ads> getAllAds() {
-        return ResponseEntity.ok(new Ads());
+        List<Ad> ads = adService.getAllAds();
+        Ads response = new Ads();
+        response.setCount(ads.size());
+        response.setResults(ads);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -39,8 +50,14 @@ public class AdController {
     })
     public ResponseEntity<Ad> addAd(
             @RequestPart("properties") @Valid CreateOrUpdateAd properties,
-            @RequestPart("image") MultipartFile image) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(new Ad());
+            @RequestPart("image") MultipartFile image,
+        Authentication authentication) {
+
+            String email = authentication.getName();
+            return userService.getUserByEmail(email)
+                    .flatMap(user -> adService.createAd(properties, image, user.getId()))
+                    .map(ad -> ResponseEntity.status(HttpStatus.CREATED).body(ad))
+                    .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
     @GetMapping("/{id}")
@@ -51,7 +68,9 @@ public class AdController {
             @ApiResponse(responseCode = "404", description = "Not found")
     })
     public ResponseEntity<ExtendedAd> getAd(@PathVariable Integer id) {
-        return ResponseEntity.ok(new ExtendedAd());
+        return adService.getAdById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
@@ -62,8 +81,11 @@ public class AdController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Void> deleteAd(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<Void> deleteAd(@PathVariable Integer id, Authentication authentication) { // ИЗМЕНЕНО: добавлен Authentication
+        String email = authentication.getName();
+        return userService.getUserByEmail(email)
+                .map(user -> adService.deleteAd(id, user.getId()) ? ResponseEntity.noContent().<Void>build() : ResponseEntity.notFound().<Void>build())
+                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
     @PatchMapping("/{id}")
@@ -75,8 +97,13 @@ public class AdController {
             @ApiResponse(responseCode = "404", description = "Not found")
     })
     public ResponseEntity<Ad> updateAd(@PathVariable Integer id,
-                                       @Valid @RequestBody CreateOrUpdateAd ad) {
-        return ResponseEntity.ok(new Ad());
+                                       @Valid @RequestBody CreateOrUpdateAd ad,
+                                       Authentication authentication) {
+        String email = authentication.getName();
+        return userService.getUserByEmail(email)
+                .flatMap(user -> adService.updateAd(id, ad, user.getId()))
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/me")
@@ -85,8 +112,17 @@ public class AdController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    public ResponseEntity<Ads> getAdsMe() {
-        return ResponseEntity.ok(new Ads());
+    public ResponseEntity<Ads> getAdsMe(Authentication authentication) {
+        String email = authentication.getName();
+        return userService.getUserByEmail(email)
+                .map(user -> {
+                    List<Ad> ads = adService.getAdsByUser(user.getId());
+                    Ads response = new Ads();
+                    response.setCount(ads.size());
+                    response.setResults(ads);
+                    return ResponseEntity.ok(response);
+                })
+                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

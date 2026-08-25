@@ -4,43 +4,39 @@ import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.model.UserEntity;
 
+import java.util.Optional;
+
 @Component
 public class UserMapper {
 
-    public User toDto(UserEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        User dto = new User();
-        dto.setId(entity.getId());
-        dto.setEmail(entity.getEmail());
-        dto.setFirstName(entity.getFirstName());
-        dto.setLastName(entity.getLastName());
-        dto.setPhone(entity.getPhone());
-        dto.setRole(entity.getRole());
-        dto.setImage(entity.getImage());
-
-        return dto;
+    public Optional<User> toDto(UserEntity entity) {
+            return Optional.ofNullable(entity)
+                    .map(e -> {
+                        User dto = new User();
+                        dto.setId(e.getId());
+                        dto.setEmail(e.getEmail());
+                        dto.setFirstName(e.getFirstName());
+                        dto.setLastName(e.getLastName());
+                        dto.setPhone(e.getPhone());
+                        dto.setRole(e.getRole());
+                        dto.setImage(e.getImage());
+                        return dto;
+                    });
     }
 
 
-    public UserEntity toEntity(User dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        UserEntity entity = new UserEntity();
-        entity.setId(dto.getId());
-        entity.setEmail(dto.getEmail());
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-        entity.setPhone(dto.getPhone());
-        entity.setRole(dto.getRole());
-        entity.setImage(dto.getImage());
-
-        return entity;
+    public Optional<UserEntity> toEntity(User dto) {
+        return Optional.ofNullable(dto)
+                .map(d -> {
+                    UserEntity entity = new UserEntity();
+                    entity.setId(d.getId());
+                    entity.setEmail(d.getEmail());
+                    entity.setFirstName(d.getFirstName());
+                    entity.setLastName(d.getLastName());
+                    entity.setPhone(d.getPhone());
+                    entity.setRole(d.getRole());
+                    entity.setImage(d.getImage());
+                    return entity;
+                });
     }
-
-
 }
