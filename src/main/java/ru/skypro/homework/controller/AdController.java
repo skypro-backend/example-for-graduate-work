@@ -15,6 +15,10 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.AdService;
 
+/**
+ * Контроллер для управления объявлениями.
+ * Предоставляет REST API для создания, получения, обновления и удаления объявлений.
+ */
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
@@ -27,12 +31,27 @@ public class AdController {
         this.adService = adService;
     }
 
+    /**
+     * Получает список всех объявлений.
+     * Доступен без авторизации.
+     *
+     * @return ResponseEntity со списком объявлений
+     */
     @GetMapping
     public ResponseEntity<Ads> getAllAds() {
         log.debug("Get all ads request");
         return ResponseEntity.ok(adService.getAllAds());
     }
 
+    /**
+     * Создает новое объявление.
+     * Требуется авторизация с ролью USER или ADMIN.
+     *
+     * @param properties данные объявления
+     * @param image изображение объявления
+     * @param authentication объект аутентификации
+     * @return ResponseEntity с созданным объявлением
+     */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Ad> addAd(
@@ -44,12 +63,27 @@ public class AdController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ad);
     }
 
+    /**
+     * Получает детальную информацию об объявлении по ID.
+     * Доступен без авторизации.
+     *
+     * @param id ID объявления
+     * @return ResponseEntity с детальной информацией об объявлении
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> getAds(@PathVariable Integer id) {
         log.debug("Get ad by id: {}", id);
         return ResponseEntity.ok(adService.getAd(id));
     }
 
+    /**
+     * Удаляет объявление по ID.
+     * Требуется быть автором объявления или иметь роль ADMIN.
+     *
+     * @param id ID объявления
+     * @param authentication объект аутентификации
+     * @return ResponseEntity с кодом 204 No Content
+     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN') or @adService.isAuthor(authentication.name, #id)")
     public ResponseEntity<?> removeAd(@PathVariable Integer id, Authentication authentication) {
@@ -58,6 +92,15 @@ public class AdController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    /**
+     * Обновляет информацию об объявлении.
+     * Требуется быть автором объявления или иметь роль ADMIN.
+     *
+     * @param id ID объявления
+     * @param createOrUpdateAd обновленные данные
+     * @param authentication объект аутентификации
+     * @return ResponseEntity с обновленным объявлением
+     */
     @PatchMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN') or @adService.isAuthor(authentication.name, #id)")
     public ResponseEntity<Ad> updateAds(
@@ -69,6 +112,13 @@ public class AdController {
         return ResponseEntity.ok(ad);
     }
 
+    /**
+     * Получает объявления авторизованного пользователя.
+     * Требуется авторизация с ролью USER или ADMIN.
+     *
+     * @param authentication объект аутентификации
+     * @return ResponseEntity со списком объявлений пользователя
+     */
     @GetMapping("/me")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Ads> getAdsMe(Authentication authentication) {
@@ -76,6 +126,15 @@ public class AdController {
         return ResponseEntity.ok(adService.getAdsMe(authentication.getName()));
     }
 
+    /**
+     * Обновляет изображение объявления.
+     * Требуется быть автором объявления или иметь роль ADMIN.
+     *
+     * @param id ID объявления
+     * @param image новое изображение
+     * @param authentication объект аутентификации
+     * @return ResponseEntity с URL загруженного изображения
+     */
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN') or @adService.isAuthor(authentication.name, #id)")
     public ResponseEntity<String> updateImage(

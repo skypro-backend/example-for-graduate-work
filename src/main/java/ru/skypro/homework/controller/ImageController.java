@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.service.ImageService;
 
+/**
+ * Контроллер для получения изображений.
+ * Предоставляет REST API для доступа к загруженным изображениям.
+ * Доступен без авторизации.
+ */
 @RestController
 @RequestMapping("/images")
 public class ImageController {
@@ -22,6 +27,15 @@ public class ImageController {
         this.imageService = imageService;
     }
 
+    /**
+     * Получает изображение по его пути.
+     * Определяет Content-Type на основе расширения файла.
+     *
+     * @param subDirectory поддиректория с изображением
+     * @param fileName имя файла с расширением
+     * @return ResponseEntity с массивом байтов изображения и правильным Content-Type,
+     *         или 404 Not Found, если изображение не найдено
+     */
     @GetMapping(value = "/{subDirectory}/{fileName:.+}",
             produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE,
                     MediaType.IMAGE_GIF_VALUE, "image/*"})
@@ -46,6 +60,12 @@ public class ImageController {
                 .body(image);
     }
 
+    /**
+     * Определяет MIME-тип изображения на основе расширения файла.
+     *
+     * @param fileName имя файла с расширением
+     * @return MIME-тип изображения (по умолчанию image/jpeg)
+     */
     private String getContentType(String fileName) {
         if (fileName == null || fileName.isEmpty()) {
             return "image/jpeg";

@@ -16,6 +16,11 @@ import javax.sql.DataSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * Конфигурация безопасности приложения.
+ * Настраивает аутентификацию, авторизацию и права доступа к ресурсам.
+ * Использует Spring Security и JdbcUserDetailsManager для работы с пользователями в БД.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -30,13 +35,19 @@ public class WebSecurityConfig {
             "/register"
     };
 
-    // Публичные GET запросы для объявлений и изображений
     private static final String[] PUBLIC_GET_ENDPOINTS = {
             "/ads",
             "/ads/{id}",
             "/images/**"
     };
 
+    /**
+     * Настраивает UserDetailsService для загрузки пользователей из базы данных.
+     * Использует JdbcUserDetailsManager с кастомными SQL-запросами.
+     *
+     * @param dataSource источник данных для подключения к БД
+     * @return настроенный UserDetailsService
+     */
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource) {
         JdbcUserDetailsManager manager = new JdbcUserDetailsManager(dataSource);
@@ -49,6 +60,14 @@ public class WebSecurityConfig {
         return manager;
     }
 
+    /**
+     * Настраивает цепочку фильтров безопасности.
+     * Определяет, какие запросы требуют аутентификации, а какие доступны публично.
+     *
+     * @param http объект HttpSecurity для настройки
+     * @return настроенный SecurityFilterChain
+     * @throws Exception если произошла ошибка конфигурации
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -60,23 +79,18 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         authorization ->
                                 authorization
-                                        // Swagger и регистрация - доступны всем
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        // GET запросы на объявления и изображения - доступны всем
                                         .mvcMatchers(org.springframework.http.HttpMethod.GET, "/ads")
                                         .permitAll()
                                         .mvcMatchers(org.springframework.http.HttpMethod.GET, "/ads/{id}")
                                         .permitAll()
                                         .mvcMatchers(org.springframework.http.HttpMethod.GET, "/images/**")
                                         .permitAll()
-                                        // Остальные запросы к /ads/** требуют аутентификации
                                         .mvcMatchers("/ads/**")
                                         .hasAnyRole("USER", "ADMIN")
-                                        // Запросы к /users/** требуют аутентификации
                                         .mvcMatchers("/users/**")
                                         .hasAnyRole("USER", "ADMIN")
-                                        // Все остальные запросы требуют аутентификации
                                         .anyRequest()
                                         .authenticated()
                 )
@@ -87,6 +101,12 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    /**
+     * Создает бин для кодирования паролей.
+     * Использует BCrypt для безопасного хеширования паролей.
+     *
+     * @return экземпляр PasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
