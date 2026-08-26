@@ -1,5 +1,4 @@
-package ru.skypro.homework.controller;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,6 +14,8 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.AdService;
 
+import java.io.IOException;
+
 /**
  * Контроллер для управления объявлениями.
  * Предоставляет REST API для создания, получения, обновления и удаления объявлений.
@@ -26,9 +27,11 @@ public class AdController {
 
     private static final Logger log = LoggerFactory.getLogger(AdController.class);
     private final AdService adService;
+    private final ObjectMapper objectMapper;
 
-    public AdController(AdService adService) {
+    public AdController(AdService adService, ObjectMapper objectMapper) {
         this.adService = adService;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -46,19 +49,26 @@ public class AdController {
     /**
      * Создает новое объявление.
      * Требуется авторизация с ролью USER или ADMIN.
+     * Принимает multipart/form-data с JSON-строкой properties и файлом image.
      *
-     * @param properties данные объявления
-     * @param image изображение объявления
+     * @param propertiesJson JSON-строка с данными объявления
+     * @param image файл с изображением объявления
      * @param authentication объект аутентификации
      * @return ResponseEntity с созданным объявлением
+     * @throws IOException если не удалось преобразовать JSON
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Ad> addAd(
-            @RequestParam("properties") CreateOrUpdateAd properties,
+            @RequestParam("properties") String propertiesJson,
             @RequestParam("image") MultipartFile image,
-            Authentication authentication) {
+            Authentication authentication) throws IOException {
+
         log.debug("Add ad request by user: {}", authentication.getName());
+
+        // Преобразование JSON-строки в объект
+        CreateOrUpdateAd properties = objectMapper.readValue(propertiesJson, CreateOrUpdateAd.class);
+
         Ad ad = adService.addAd(properties, image, authentication.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(ad);
     }

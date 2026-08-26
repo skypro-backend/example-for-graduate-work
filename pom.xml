@@ -20,6 +20,7 @@
   <properties>
     <java.version>11</java.version>
     <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+    <lombok.version>1.18.30</lombok.version>
   </properties>
 
   <dependencies>
@@ -47,7 +48,7 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- PostgreSQL драйвер -->
+    <!-- PostgreSQL -->
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
@@ -74,17 +75,10 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- Liquibase для миграций -->
+    <!-- Liquibase -->
     <dependency>
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
-    </dependency>
-
-    <!-- Lombok -->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <optional>true</optional>
     </dependency>
   </dependencies>
 
@@ -102,32 +96,26 @@
           </excludes>
         </configuration>
       </plugin>
-      <!-- Плагин для компиляции с MapStruct -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
+        <version>3.11.0</version>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <source>11</source>
+          <target>11</target>
           <annotationProcessorPaths>
             <path>
               <groupId>org.mapstruct</groupId>
               <artifactId>mapstruct-processor</artifactId>
               <version>${org.mapstruct.version}</version>
             </path>
-            <!-- Добавляем Lombok для совместимости с MapStruct -->
-            <path>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-              <version>1.18.24</version>
-            </path>
-            <path>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok-mapstruct-binding</artifactId>
-              <version>0.2.0</version>
-            </path>
+
           </annotationProcessorPaths>
+          <compilerArgs>
+            <compilerArg>
+              -Amapstruct.defaultComponentModel=spring
+            </compilerArg>
+          </compilerArgs>
         </configuration>
       </plugin>
     </plugins>

@@ -9,6 +9,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+
 /**
  * Глобальный обработчик исключений для всего приложения.
  * Перехватывает и обрабатывает исключения, возникающие в контроллерах,
@@ -56,14 +58,80 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Обрабатывает общие исключения времени выполнения.
+     * Обрабатывает исключение, возникающее при ошибках ввода-вывода (например, при работе с файлами).
+     *
+     * @param e исключение IOException
+     * @return ResponseEntity с кодом 500 Internal Server Error
+     */
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<?> handleIOException(IOException e) {
+        log.error("IO error: {}", e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Ошибка при обработке файла: " + e.getMessage());
+    }
+
+    /**
+     * Обрабатывает исключение, возникающее при ошибках хранения файлов.
+     *
+     * @param e исключение RuntimeException (ошибка сохранения файла)
+     * @return ResponseEntity с кодом 500 Internal Server Error
+     */
+    @ExceptionHandler(StorageException.class)
+    public ResponseEntity<?> handleStorageException(StorageException e) {
+        log.error("Storage error: {}", e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Ошибка при сохранении файла: " + e.getMessage());
+    }
+
+    /**
+     * Обрабатывает исключение, возникающее при ошибках маппинга.
+     *
+     * @param e исключение RuntimeException (ошибка маппинга)
+     * @return ResponseEntity с кодом 500 Internal Server Error
+     */
+    @ExceptionHandler(MappingException.class)
+    public ResponseEntity<?> handleMappingException(MappingException e) {
+        log.error("Mapping error: {}", e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Ошибка при преобразовании данных: " + e.getMessage());
+    }
+
+    /**
+     * Обрабатывает исключение, возникающее при ошибках базы данных.
+     *
+     * @param e исключение RuntimeException (ошибка БД)
+     * @return ResponseEntity с кодом 500 Internal Server Error
+     */
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<?> handleDatabaseException(DatabaseException e) {
+        log.error("Database error: {}", e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Ошибка базы данных: " + e.getMessage());
+    }
+
+    /**
+     * Обрабатывает исключение, когда объект не найден.
+     *
+     * @param e исключение RuntimeException (объект не найден)
+     * @return ResponseEntity с кодом 404 Not Found
+     */
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> handleNotFoundException(NotFoundException e) {
+        log.warn("Not found: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(e.getMessage());
+    }
+
+    /**
+     * Обрабатывает все остальные исключения времени выполнения.
      *
      * @param e исключение RuntimeException
-     * @return ResponseEntity с кодом 404 Not Found или другим соответствующим кодом
+     * @return ResponseEntity с кодом 500 Internal Server Error
      */
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(RuntimeException e) {
-        log.error("Runtime error: {}", e.getMessage(), e);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        log.error("Unexpected runtime error: {}", e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Внутренняя ошибка сервера: " + e.getMessage());
     }
 }

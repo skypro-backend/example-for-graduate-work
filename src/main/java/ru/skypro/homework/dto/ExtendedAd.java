@@ -1,15 +1,37 @@
 package ru.skypro.homework.dto;
 
+/**
+ * DTO для детального представления объявления.
+ * Используется в ответе на GET /ads/{id}.
+ * Содержит расширенную информацию, включая данные об авторе.
+ * Соответствует OpenAPI-спецификации.
+ */
 public class ExtendedAd {
-    private Integer pk;              // ID объявления
-    private Integer authorId;        // ID автора (добавляем отдельно)
+    /** ID объявления (первичный ключ) */
+    private Integer pk;
+
+    /** Имя автора объявления */
     private String authorFirstName;
+
+    /** Фамилия автора объявления */
     private String authorLastName;
+
+    /** Описание объявления */
     private String description;
+
+    /** Email (логин) автора объявления */
     private String email;
+
+    /** Ссылка на картинку объявления */
     private String image;
+
+    /** Телефон автора объявления */
     private String phone;
+
+    /** Цена объявления */
     private Integer price;
+
+    /** Заголовок объявления */
     private String title;
 
     public Integer getPk() {
@@ -18,14 +40,6 @@ public class ExtendedAd {
 
     public void setPk(Integer pk) {
         this.pk = pk;
-    }
-
-    public Integer getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(Integer authorId) {
-        this.authorId = authorId;
     }
 
     public String getAuthorFirstName() {
