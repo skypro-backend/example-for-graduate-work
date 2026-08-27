@@ -80,4 +80,23 @@
                 referencedColumnNames="id"
                 referencedTableName="ads"/>
     </changeSet>
+
+    <changeSet id="4" author="user">
+        <createTable tableName="images">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="data" type="BYTEA">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_size" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>
+

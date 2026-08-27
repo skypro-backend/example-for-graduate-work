@@ -20,6 +20,7 @@ import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -53,11 +54,17 @@ public class AdController {
             @RequestPart("image") MultipartFile image,
         Authentication authentication) {
 
-            String email = authentication.getName();
-            return userService.getUserByEmail(email)
-                    .flatMap(user -> adService.createAd(properties, image, user.getId()))
-                    .map(ad -> ResponseEntity.status(HttpStatus.CREATED).body(ad))
-                    .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+        String email = authentication.getName();
+        return userService.getUserByEmail(email)
+                .flatMap(user -> {
+                    try {
+                        return adService.createAd(properties, image, user.getId());
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to create ad", e);
+                    }
+                })
+                .map(ad -> ResponseEntity.status(HttpStatus.CREATED).body(ad))
+                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
     @GetMapping("/{id}")
@@ -81,11 +88,13 @@ public class AdController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Void> deleteAd(@PathVariable Integer id, Authentication authentication) { // ИЗМЕНЕНО: добавлен Authentication
-        String email = authentication.getName();
-        return userService.getUserByEmail(email)
-                .map(user -> adService.deleteAd(id, user.getId()) ? ResponseEntity.noContent().<Void>build() : ResponseEntity.notFound().<Void>build())
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    public ResponseEntity<Void> deleteAd(@PathVariable Integer id, Authentication authentication) {
+        boolean deleted = adService.deleteAd(id, authentication);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PatchMapping("/{id}")
@@ -99,9 +108,7 @@ public class AdController {
     public ResponseEntity<Ad> updateAd(@PathVariable Integer id,
                                        @Valid @RequestBody CreateOrUpdateAd ad,
                                        Authentication authentication) {
-        String email = authentication.getName();
-        return userService.getUserByEmail(email)
-                .flatMap(user -> adService.updateAd(id, ad, user.getId()))
+        return adService.updateAd(id, ad, authentication)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -133,8 +140,10 @@ public class AdController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<byte[]> updateImage(@PathVariable Integer id,
-                                              @RequestParam("image") MultipartFile image) {
-        return ResponseEntity.ok(new byte[0]);
+    public ResponseEntity<Void> updateImage(@PathVariable Integer id,
+                                            @RequestParam("image") MultipartFile image,
+                                            Authentication authentication) throws IOException {
+        adService.updateAdImage(id, image, authentication);
+        return ResponseEntity.ok().build();
     }
 }

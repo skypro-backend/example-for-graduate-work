@@ -41,4 +41,8 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<CommentEntity> comments;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "avatar_id")
+    private ImageEntity avatar;
 }

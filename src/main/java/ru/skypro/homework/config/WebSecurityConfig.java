@@ -44,10 +44,11 @@ public class WebSecurityConfig {
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .userDetailsService(userDetailsService)
                 .authorizeHttpRequests(auth -> auth
-                        .antMatchers(AUTH_WHITELIST).permitAll()  // ✅ заменено на antMatchers
+                        .antMatchers(AUTH_WHITELIST).permitAll()
                         .antMatchers(org.springframework.http.HttpMethod.GET, "/ads/**").permitAll()
                         .antMatchers(org.springframework.http.HttpMethod.POST, "/ads/**").hasAnyRole("USER", "ADMIN")
                         .antMatchers(org.springframework.http.HttpMethod.PUT, "/ads/**").hasAnyRole("USER", "ADMIN")
+                        .antMatchers(org.springframework.http.HttpMethod.PATCH, "/ads/**").hasAnyRole("USER", "ADMIN")
                         .antMatchers(org.springframework.http.HttpMethod.DELETE, "/ads/**").hasAnyRole("USER", "ADMIN")
                         .antMatchers(org.springframework.http.HttpMethod.GET, "/ads/*/comments").permitAll()
                         .antMatchers("/ads/*/comments/**").hasAnyRole("USER", "ADMIN")

@@ -19,7 +19,11 @@ public class UserMapper {
                         dto.setLastName(e.getLastName());
                         dto.setPhone(e.getPhone());
                         dto.setRole(e.getRole());
-                        dto.setImage(e.getImage());
+                        if (e.getAvatar() != null) {
+                            dto.setImage("/images/" + e.getAvatar().getId());
+                        } else {
+                            dto.setImage(null);
+                        }
                         return dto;
                     });
     }

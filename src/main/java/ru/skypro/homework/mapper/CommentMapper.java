@@ -20,7 +20,11 @@ public class CommentMapper {
                     if (e.getAuthor() != null) {
                         dto.setAuthor(e.getAuthor().getId());
                         dto.setAuthorFirstName(e.getAuthor().getFirstName());
-                        dto.setAuthorImage(e.getAuthor().getImage());
+                        if (e.getAuthor().getAvatar() != null) {
+                            dto.setAuthorImage("/images/" + e.getAuthor().getAvatar().getId());
+                        } else {
+                            dto.setAuthorImage(null);
+                        }
                     }
                     return dto;
                 });

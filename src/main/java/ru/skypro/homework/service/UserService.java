@@ -3,11 +3,15 @@ package ru.skypro.homework.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.User;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.ImageEntity;
+import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -17,6 +21,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ImageService imageService;
 
     public Optional<User> getUserById(Integer id) {
         return userRepository.findById(id)
@@ -57,4 +62,22 @@ public class UserService {
         return userRepository.findByEmail(email).isPresent();
     }
 
+    public void updateUserAvatar(Integer userId, MultipartFile file) throws IOException {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        ImageEntity avatar = imageService.saveImage(file);
+
+        if (user.getAvatar() != null) {
+            imageService.deleteImage(user.getAvatar().getId());
+        }
+
+        user.setAvatar(avatar);
+        userRepository.save(user);
+    }
+
+    public UserEntity getUserEntityByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 }

@@ -68,20 +68,15 @@ public class CommentController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Object> deleteComment(@PathVariable Integer id,
+    public ResponseEntity<Void> deleteComment(@PathVariable Integer id,
                                                 @PathVariable Integer commentId,
                                                 Authentication authentication) {
-        String email = authentication.getName();
-        return userService.getUserByEmail(email)
-                .map(user -> {
-                    boolean deleted = commentService.deleteComment(id, commentId, user.getId());
-                    if (deleted) {
-                        return ResponseEntity.<Void>ok().build();
-                    } else {
-                        return ResponseEntity.<Void>notFound().build();
-                    }
-                })
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+        boolean deleted = commentService.deleteComment(id, commentId, authentication);
+        if (deleted) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PatchMapping("/{commentId}")
@@ -97,8 +92,7 @@ public class CommentController {
                                                  @Valid @RequestBody CreateOrUpdateComment comment,
                                                  Authentication authentication) {
         String email = authentication.getName();
-        return userService.getUserByEmail(email)
-                .flatMap(user -> commentService.updateComment(id, commentId, comment, user.getId()))
+        return commentService.updateComment(id, commentId, comment, authentication)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

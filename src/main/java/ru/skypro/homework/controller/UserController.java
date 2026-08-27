@@ -14,9 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/users")
@@ -97,7 +99,11 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile image) {
+    public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile image,
+                                                Authentication authentication) throws IOException {
+        String email = authentication.getName();
+        UserEntity user = userService.getUserEntityByEmail(email);
+        userService.updateUserAvatar(user.getId(), image);
         return ResponseEntity.ok().build();
     }
 }
