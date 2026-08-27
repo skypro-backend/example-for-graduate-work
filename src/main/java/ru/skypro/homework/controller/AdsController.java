@@ -6,13 +6,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.ImageService;
 
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
@@ -22,6 +25,7 @@ import ru.skypro.homework.service.AdService;
 public class AdsController {
 
     private final AdService adService;
+    private final ImageService imageService;
 
     @GetMapping
     @Operation(summary = "Получение всех объявлений")
@@ -31,9 +35,9 @@ public class AdsController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Добавление объявления")
-    public ResponseEntity<ExtendedAd> addAd(@RequestPart("properties") CreateOrUpdateAd properties,
-                                            @RequestPart("image") MultipartFile image,
-                                            Authentication authentication) {
+    public ResponseEntity<Ad> addAd(@RequestPart("properties") CreateOrUpdateAd properties,
+                                    @RequestPart("image") MultipartFile image,
+                                    Authentication authentication) {
         return ResponseEntity.status(HttpStatus.CREATED).body(adService.addAd(properties, image, authentication.getName()));
     }
 
@@ -44,6 +48,7 @@ public class AdsController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("principal.username == @adServiceImpl.getAd(#id).email or hasRole('ROLE_ADMIN')")
     @Operation(summary = "Удаление объявления")
     public ResponseEntity<Void> removeAd(@PathVariable int id) {
         adService.removeAd(id);
@@ -51,10 +56,11 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("principal.username == @adServiceImpl.getAd(#id).email or hasRole('ROLE_ADMIN')")
     @Operation(summary = "Обновление информации об объявлении")
-    public ResponseEntity<ExtendedAd> updateAds(@PathVariable int id,
-                                                @RequestBody CreateOrUpdateAd createOrUpdateAd) {
-        return ResponseEntity.ok(adService.updateAds(id, createOrUpdateAd));
+    public ResponseEntity<Ad> updateAds(@PathVariable int id,
+                                        @RequestBody CreateOrUpdateAd createOrUpdateAd) {
+        return ResponseEntity.ok(adService.updateAdsBasic(id, createOrUpdateAd));
     }
 
     @GetMapping("/me")
@@ -68,5 +74,15 @@ public class AdsController {
     public ResponseEntity<byte[]> updateImage(@PathVariable int id,
                                               @RequestParam MultipartFile image) {
         return ResponseEntity.ok(adService.updateImage(id, image));
+    }
+
+    @GetMapping(value = "/image/{fileName}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    @Operation(summary = "Получение картинки из файла")
+    public ResponseEntity<byte[]> getImageFromFile(@PathVariable String fileName) {
+        try {
+            return ResponseEntity.ok(imageService.getImage(fileName));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

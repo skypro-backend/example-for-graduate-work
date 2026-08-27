@@ -36,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
             return false;
         }
 
-        // 1. Регистрируем пользователя в Spring Security для защиты
+        // Регистрируем в секьюрити таблице
         manager.createUser(
                 User.builder()
                         .passwordEncoder(encoder::encode)
@@ -46,9 +46,9 @@ public class AuthServiceImpl implements AuthService {
                         .build()
         );
 
-        // 2. Сохраняем полную информацию о компании/мастере в БД PostgreSQL
+        // Сохраняем профиль в users
         UserEntity entity = userMapper.registerToEntity(register);
-        entity.setEmail(register.getUsername()); // email является логином
+        entity.setEmail(register.getUsername());
         userRepository.save(entity);
 
         return true;

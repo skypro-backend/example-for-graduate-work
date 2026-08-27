@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
@@ -13,6 +14,7 @@ import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.ImageService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +28,7 @@ public class AdServiceImpl implements AdService {
     private final UserRepository userRepository;
     private final AdMapper adMapper;
     private final CommentMapper commentMapper;
+    private final ImageService imageService;
 
     @Override
     public Ads getAllAds() {
@@ -39,15 +42,22 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public ExtendedAd addAd(CreateOrUpdateAd properties, MultipartFile image, String username) {
+    @SneakyThrows
+    public Ad addAd(CreateOrUpdateAd properties, MultipartFile image, String username) {
         UserEntity author = userRepository.findByEmail(username)
                 .orElseThrow(() -> new IllegalArgumentException("Мастер не найден"));
+
         AdEntity entity = new AdEntity();
         adMapper.updateAdFromDto(properties, entity);
         entity.setAuthor(author);
-        entity.setImage("/ads/image/placeholder");
+
+        // Сохраняем реальную картинку через ImageService
+        String fileName = imageService.uploadImage(image);
+        // Формируем ссылку на наш новый эндпоинт в AdsController
+        entity.setImage("/ads/image/" + fileName);
+
         adRepository.save(entity);
-        return adMapper.toExtendedDto(entity);
+        return adMapper.toDto(entity);
     }
 
     @Override
@@ -72,14 +82,36 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Ads getAdsMe(String username) {
-        // Упрощенный вывод всех для скелета авторизованного пользователя
-        return getAllAds();
+    public Ad updateAdsBasic(int id, CreateOrUpdateAd createOrUpdateAd) {
+        AdEntity entity = adRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Объявление не найдено"));
+        adMapper.updateAdFromDto(createOrUpdateAd, entity);
+        adRepository.save(entity);
+        return adMapper.toDto(entity);
     }
 
     @Override
+    public Ads getAdsMe(String username) {
+        List<Ad> list = adRepository.findAllByAuthorEmail(username).stream()
+                .map(adMapper::toDto)
+                .collect(Collectors.toList());
+        Ads ads = new Ads();
+        ads.setCount(list.size());
+        ads.setResults(list);
+        return ads;
+    }
+
+    @Override
+    @SneakyThrows
     public byte[] updateImage(int id, MultipartFile image) {
-        return new byte[0];
+        AdEntity entity = adRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Объявление не найдено"));
+
+        String fileName = imageService.uploadImage(image);
+        entity.setImage("/ads/image/" + fileName);
+        adRepository.save(entity);
+
+        return image.getBytes();
     }
 
     @Override
@@ -121,5 +153,12 @@ public class AdServiceImpl implements AdService {
         commentMapper.updateCommentFromDto(createOrUpdateComment, entity);
         commentRepository.save(entity);
         return commentMapper.toDto(entity);
+    }
+
+    @Override
+    public String getCommentAuthorUsername(int commentId) {
+        CommentEntity entity = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Отзыв не найден"));
+        return entity.getAuthor().getEmail();
     }
 }
