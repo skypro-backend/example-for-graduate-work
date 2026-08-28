@@ -1,9 +1,11 @@
 package ru.skypro.homework.exception;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -54,11 +56,25 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e) {
         log.warn("Illegal argument: {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Некорректные данные запроса: " + e.getMessage());
     }
 
     /**
-     * Обрабатывает исключение, возникающее при ошибках ввода-вывода (например, при работе с файлами).
+     * Обрабатывает исключение, возникающее при ошибках парсинга JSON.
+     *
+     * @param e исключение JsonProcessingException или HttpMessageNotReadableException
+     * @return ResponseEntity с кодом 400 Bad Request
+     */
+    @ExceptionHandler({JsonProcessingException.class, HttpMessageNotReadableException.class})
+    public ResponseEntity<?> handleJsonProcessingException(Exception e) {
+        log.warn("Invalid JSON format: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Неверный формат JSON: " + e.getMessage());
+    }
+
+    /**
+     * Обрабатывает исключение, возникающее при ошибках ввода-вывода.
      *
      * @param e исключение IOException
      * @return ResponseEntity с кодом 500 Internal Server Error
@@ -73,7 +89,7 @@ public class GlobalExceptionHandler {
     /**
      * Обрабатывает исключение, возникающее при ошибках хранения файлов.
      *
-     * @param e исключение RuntimeException (ошибка сохранения файла)
+     * @param e исключение StorageException
      * @return ResponseEntity с кодом 500 Internal Server Error
      */
     @ExceptionHandler(StorageException.class)
@@ -84,22 +100,22 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Обрабатывает исключение, возникающее при ошибках маппинга.
+     * Обрабатывает исключение, когда объект не найден.
      *
-     * @param e исключение RuntimeException (ошибка маппинга)
-     * @return ResponseEntity с кодом 500 Internal Server Error
+     * @param e исключение NotFoundException
+     * @return ResponseEntity с кодом 404 Not Found
      */
-    @ExceptionHandler(MappingException.class)
-    public ResponseEntity<?> handleMappingException(MappingException e) {
-        log.error("Mapping error: {}", e.getMessage(), e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Ошибка при преобразовании данных: " + e.getMessage());
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> handleNotFoundException(NotFoundException e) {
+        log.warn("Not found: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(e.getMessage());
     }
 
     /**
      * Обрабатывает исключение, возникающее при ошибках базы данных.
      *
-     * @param e исключение RuntimeException (ошибка БД)
+     * @param e исключение DatabaseException
      * @return ResponseEntity с кодом 500 Internal Server Error
      */
     @ExceptionHandler(DatabaseException.class)
@@ -110,16 +126,16 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Обрабатывает исключение, когда объект не найден.
+     * Обрабатывает исключение, возникающее при ошибках маппинга.
      *
-     * @param e исключение RuntimeException (объект не найден)
-     * @return ResponseEntity с кодом 404 Not Found
+     * @param e исключение MappingException
+     * @return ResponseEntity с кодом 500 Internal Server Error
      */
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<?> handleNotFoundException(NotFoundException e) {
-        log.warn("Not found: {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(e.getMessage());
+    @ExceptionHandler(MappingException.class)
+    public ResponseEntity<?> handleMappingException(MappingException e) {
+        log.error("Mapping error: {}", e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Ошибка при преобразовании данных: " + e.getMessage());
     }
 
     /**

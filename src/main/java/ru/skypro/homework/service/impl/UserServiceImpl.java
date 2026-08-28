@@ -10,6 +10,8 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exception.NotFoundException;
+import ru.skypro.homework.exception.StorageException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.ImageService;
@@ -39,7 +41,6 @@ public class UserServiceImpl implements UserService {
         log.debug("Getting user by username: {}", username);
         UserEntity userEntity = findUserByUsername(username);
         User user = userMapper.toUserDto(userEntity);
-        // Добавляем полный URL для аватара
         if (userEntity.getImage() != null) {
             user.setImage(imageService.getImageUrl(userEntity.getImage()));
         }
@@ -77,23 +78,28 @@ public class UserServiceImpl implements UserService {
         log.debug("Updating user image for: {}", username);
         UserEntity userEntity = findUserByUsername(username);
 
-        // Удаляем старую картинку, если она есть
-        if (userEntity.getImage() != null) {
-            imageService.deleteImage(userEntity.getImage());
+        try {
+            // Удаляем старую картинку, если она есть
+            if (userEntity.getImage() != null) {
+                imageService.deleteImage(userEntity.getImage());
+            }
+
+            // Сохраняем новую картинку
+            String fileName = "user_" + userEntity.getId();
+            String imagePath = imageService.saveImage(image, "users", fileName);
+
+            userEntity.setImage(imagePath);
+            userRepository.save(userEntity);
+
+            return imageService.getImageUrl(imagePath);
+        } catch (Exception e) {
+            log.error("Failed to save user image for user: {}", username, e);
+            throw new StorageException("Failed to save user image: " + e.getMessage(), e);
         }
-
-        // Сохраняем новую картинку
-        String fileName = "user_" + userEntity.getId();
-        String imagePath = imageService.saveImage(image, "users", fileName);
-
-        userEntity.setImage(imagePath);
-        userRepository.save(userEntity);
-
-        return imageService.getImageUrl(imagePath);
     }
 
     private UserEntity findUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+                .orElseThrow(() -> new NotFoundException("User not found: " + username));
     }
 }

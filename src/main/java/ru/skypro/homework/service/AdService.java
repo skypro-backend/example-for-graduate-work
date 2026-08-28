@@ -26,7 +26,8 @@ public interface AdService {
      * @param image файл с изображением объявления
      * @param username имя автора объявления
      * @return DTO созданного объявления
-     * @throws RuntimeException если пользователь не найден
+     * @throws ru.skypro.homework.exception.NotFoundException если пользователь не найден
+     * @throws ru.skypro.homework.exception.StorageException если ошибка сохранения файла
      */
     Ad addAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username);
 
@@ -35,7 +36,7 @@ public interface AdService {
      *
      * @param id ID объявления
      * @return DTO с расширенной информацией об объявлении
-     * @throws RuntimeException если объявление не найдено
+     * @throws ru.skypro.homework.exception.NotFoundException если объявление не найдено
      */
     ExtendedAd getAd(Integer id);
 
@@ -44,7 +45,7 @@ public interface AdService {
      *
      * @param id ID объявления
      * @param username имя пользователя, выполняющего операцию
-     * @throws RuntimeException если объявление не найдено
+     * @throws ru.skypro.homework.exception.NotFoundException если объявление не найдено
      * @throws org.springframework.security.access.AccessDeniedException если пользователь не является автором или администратором
      */
     void removeAd(Integer id, String username);
@@ -56,7 +57,7 @@ public interface AdService {
      * @param createOrUpdateAd DTO с обновленными данными
      * @param username имя пользователя, выполняющего операцию
      * @return DTO обновленного объявления
-     * @throws RuntimeException если объявление не найдено
+     * @throws ru.skypro.homework.exception.NotFoundException если объявление не найдено
      * @throws org.springframework.security.access.AccessDeniedException если пользователь не является автором или администратором
      */
     Ad updateAd(Integer id, CreateOrUpdateAd createOrUpdateAd, String username);
@@ -66,21 +67,22 @@ public interface AdService {
      *
      * @param username имя пользователя
      * @return DTO со списком объявлений пользователя
-     * @throws RuntimeException если пользователь не найден
+     * @throws ru.skypro.homework.exception.NotFoundException если пользователь не найден
      */
     Ads getAdsMe(String username);
 
     /**
-     * Обновляет изображение объявления.
+     * Обновляет изображение объявления и возвращает бинарные данные.
      *
      * @param id ID объявления
      * @param image файл с новым изображением
      * @param username имя пользователя, выполняющего операцию
-     * @return URL загруженного изображения
-     * @throws RuntimeException если объявление не найдено
+     * @return массив байтов изображения
+     * @throws ru.skypro.homework.exception.NotFoundException если объявление не найдено
      * @throws org.springframework.security.access.AccessDeniedException если пользователь не является автором или администратором
+     * @throws ru.skypro.homework.exception.StorageException если ошибка сохранения файла
      */
-    String updateImage(Integer id, MultipartFile image, String username);
+    byte[] updateImage(Integer id, MultipartFile image, String username);
 
     /**
      * Проверяет, является ли пользователь автором объявления или администратором.

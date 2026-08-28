@@ -11,9 +11,9 @@ public interface ImageService {
     /**
      * Сохраняет изображение в файловой системе.
      *
-     * @param file файл с изображением
+     * @param file         файл с изображением
      * @param subDirectory поддиректория для сохранения
-     * @param fileName имя файла (без расширения)
+     * @param fileName     имя файла (без расширения)
      * @return относительный путь к сохраненному файлу
      * @throws RuntimeException если не удалось сохранить файл
      */

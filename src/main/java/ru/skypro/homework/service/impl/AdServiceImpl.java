@@ -13,6 +13,7 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exception.StorageException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.UserRepository;
@@ -49,7 +50,8 @@ public class AdServiceImpl implements AdService {
                 .map(ad -> {
                     Ad adDto = adMapper.toDto(ad);
                     if (ad.getImage() != null) {
-                        adDto.setImage(imageService.getImageUrl(ad.getImage()));
+                        // Формируем полный URL для фронтенда
+                        adDto.setImage("http://localhost:8080/images/" + ad.getImage());
                     }
                     return adDto;
                 })
@@ -67,15 +69,20 @@ public class AdServiceImpl implements AdService {
         log.debug("Adding new ad by user: {}", username);
         UserEntity author = findUserByUsername(username);
 
-        String fileName = "ad_" + System.currentTimeMillis();
-        String imagePath = imageService.saveImage(image, "ads", fileName);
+        try {
+            String fileName = "ad_" + System.currentTimeMillis();
+            String imagePath = imageService.saveImage(image, "ads", fileName);
 
-        AdEntity adEntity = adMapper.createAdEntity(createOrUpdateAd, author, imagePath);
-        adEntity = adRepository.save(adEntity);
+            AdEntity adEntity = adMapper.createAdEntity(createOrUpdateAd, author, imagePath);
+            adEntity = adRepository.save(adEntity);
 
-        Ad adDto = adMapper.toDto(adEntity);
-        adDto.setImage(imageService.getImageUrl(imagePath));
-        return adDto;
+            Ad adDto = adMapper.toDto(adEntity);
+            adDto.setImage(imageService.getImageUrl(imagePath));
+            return adDto;
+        } catch (Exception e) {
+            log.error("Failed to save ad image for user: {}", username, e);
+            throw new StorageException("Failed to save ad image: " + e.getMessage(), e);
+        }
     }
 
     @Override
@@ -98,11 +105,15 @@ public class AdServiceImpl implements AdService {
         // Проверяем права доступа
         checkAccess(adEntity, username);
 
-        if (adEntity.getImage() != null) {
-            imageService.deleteImage(adEntity.getImage());
+        try {
+            if (adEntity.getImage() != null) {
+                imageService.deleteImage(adEntity.getImage());
+            }
+            adRepository.delete(adEntity);
+        } catch (Exception e) {
+            log.error("Failed to delete ad image: {}", id, e);
+            throw new StorageException("Failed to delete ad image: " + e.getMessage(), e);
         }
-
-        adRepository.delete(adEntity);
     }
 
     @Override
@@ -147,23 +158,31 @@ public class AdServiceImpl implements AdService {
 
     @Override
     @Transactional
-    public String updateImage(Integer id, MultipartFile image, String username) {
+    public byte[] updateImage(Integer id, MultipartFile image, String username) {
         log.debug("Updating image for ad id: {} by user: {}", id, username);
         AdEntity adEntity = findAdById(id);
 
         // Проверяем права доступа
         checkAccess(adEntity, username);
 
-        if (adEntity.getImage() != null) {
-            imageService.deleteImage(adEntity.getImage());
+        // Удаляем старую картинку
+        try {
+            if (adEntity.getImage() != null) {
+                imageService.deleteImage(adEntity.getImage());
+            }
+
+            // Сохраняем новую картинку
+            String fileName = "ad_" + id;
+            String imagePath = imageService.saveImage(image, "ads", fileName);
+            adEntity.setImage(imagePath);
+            adRepository.save(adEntity);
+
+            // Возвращаем байты изображения согласно OpenAPI
+            return imageService.getImage(imagePath);
+        } catch (Exception e) {
+            log.error("Failed to update ad image for ad: {}", id, e);
+            throw new StorageException("Failed to update ad image: " + e.getMessage(), e);
         }
-
-        String fileName = "ad_" + id;
-        String imagePath = imageService.saveImage(image, "ads", fileName);
-        adEntity.setImage(imagePath);
-        adRepository.save(adEntity);
-
-        return imageService.getImageUrl(imagePath);
     }
 
     @Override

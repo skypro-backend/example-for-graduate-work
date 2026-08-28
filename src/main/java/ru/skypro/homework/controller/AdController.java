@@ -1,3 +1,5 @@
+package ru.skypro.homework.controller;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,11 +68,14 @@ public class AdController {
 
         log.debug("Add ad request by user: {}", authentication.getName());
 
-        // Преобразование JSON-строки в объект
-        CreateOrUpdateAd properties = objectMapper.readValue(propertiesJson, CreateOrUpdateAd.class);
-
-        Ad ad = adService.addAd(properties, image, authentication.getName());
-        return ResponseEntity.status(HttpStatus.CREATED).body(ad);
+        try {
+            CreateOrUpdateAd properties = objectMapper.readValue(propertiesJson, CreateOrUpdateAd.class);
+            Ad ad = adService.addAd(properties, image, authentication.getName());
+            return ResponseEntity.status(HttpStatus.CREATED).body(ad);
+        } catch (IOException e) {
+            log.error("Failed to parse JSON: {}", propertiesJson, e);
+            throw new IllegalArgumentException("Invalid JSON format for properties", e);
+        }
     }
 
     /**
@@ -139,20 +144,21 @@ public class AdController {
     /**
      * Обновляет изображение объявления.
      * Требуется быть автором объявления или иметь роль ADMIN.
+     * Возвращает бинарное содержимое согласно OpenAPI спецификации.
      *
      * @param id ID объявления
      * @param image новое изображение
      * @param authentication объект аутентификации
-     * @return ResponseEntity с URL загруженного изображения
+     * @return ResponseEntity с бинарными данными изображения
      */
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN') or @adService.isAuthor(authentication.name, #id)")
-    public ResponseEntity<String> updateImage(
+    public ResponseEntity<byte[]> updateImage(
             @PathVariable Integer id,
             @RequestParam("image") MultipartFile image,
             Authentication authentication) {
         log.debug("Update image for ad id: {} by user: {}", id, authentication.getName());
-        String imageUrl = adService.updateImage(id, image, authentication.getName());
-        return ResponseEntity.ok(imageUrl);
+        byte[] imageData = adService.updateImage(id, image, authentication.getName());
+        return ResponseEntity.ok(imageData);
     }
 }

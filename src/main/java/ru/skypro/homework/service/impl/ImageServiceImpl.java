@@ -128,7 +128,7 @@ public class ImageServiceImpl implements ImageService {
         if (filePath == null || filePath.isEmpty()) {
             return null;
         }
-        // Возвращаем URL для доступа к картинке через контроллер
-        return baseUrl + filePath;
+        // Возвращаем полный URL для фронтенда
+        return "http://localhost:8080/images/" + filePath;
     }
 }
