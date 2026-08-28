@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.exception.StorageException;
 import ru.skypro.homework.service.ImageService;
 
 import javax.annotation.PostConstruct;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @Service
@@ -35,6 +37,8 @@ public class ImageServiceImpl implements ImageService {
                 Files.createDirectories(rootLocation);
                 log.info("Created upload directory: {}", rootLocation.toAbsolutePath());
             }
+            log.info("Upload directory exists: {}", Files.exists(rootLocation));
+            log.info("Upload directory path: {}", rootLocation.toAbsolutePath());
         } catch (IOException e) {
             log.error("Could not create upload directory", e);
             throw new RuntimeException("Could not initialize storage", e);
@@ -43,13 +47,21 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public String saveImage(MultipartFile file, String subDirectory, String fileName) {
-        log.debug("Saving image: {}, subDirectory: {}, fileName: {}", file.getOriginalFilename(), subDirectory, fileName);
+        log.info("=== SAVING IMAGE ===");
+        log.info("Original filename: {}", file.getOriginalFilename());
+        log.info("Subdirectory: {}", subDirectory);
+        log.info("FileName: {}", fileName);
+        log.info("File size: {} bytes", file.getSize());
+        log.info("Content type: {}", file.getContentType());
 
         try {
             // Создаем путь к директории
             Path directory = rootLocation.resolve(subDirectory);
+            log.info("Full directory path: {}", directory.toAbsolutePath());
+
             if (!Files.exists(directory)) {
                 Files.createDirectories(directory);
+                log.info("Created subdirectory: {}", directory.toAbsolutePath());
             }
 
             // Определяем расширение файла
@@ -59,24 +71,27 @@ public class ImageServiceImpl implements ImageService {
                 extension = originalFilename.substring(originalFilename.lastIndexOf("."));
             }
 
-            // Если имя файла не указано, генерируем его
-            if (fileName == null || fileName.isEmpty()) {
-                fileName = UUID.randomUUID().toString();
+            // Если расширение не определено, используем .jpg по умолчанию
+            if (extension.isEmpty()) {
+                extension = ".jpg";
             }
 
             String fullFileName = fileName + extension;
             Path filePath = directory.resolve(fullFileName);
+            log.info("Full file path: {}", filePath.toAbsolutePath());
 
             // Сохраняем файл
-            file.transferTo(filePath.toFile());
-            log.debug("Image saved to: {}", filePath.toAbsolutePath());
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            log.info("Image saved successfully to: {}", filePath.toAbsolutePath());
 
             // Возвращаем относительный путь
-            return subDirectory + "/" + fullFileName;
+            String relativePath = subDirectory + "/" + fullFileName;
+            log.info("Returning relative path: {}", relativePath);
+            return relativePath;
 
         } catch (IOException e) {
             log.error("Error saving image", e);
-            throw new RuntimeException("Failed to save image", e);
+            throw new StorageException("Failed to save image: " + e.getMessage(), e);
         }
     }
 
@@ -91,12 +106,16 @@ public class ImageServiceImpl implements ImageService {
             }
 
             Path path = rootLocation.resolve(filePath);
+            log.debug("Resolved path: {}", path.toAbsolutePath());
+
             if (!Files.exists(path)) {
                 log.warn("Image not found at: {}", path.toAbsolutePath());
                 return null;
             }
 
-            return Files.readAllBytes(path);
+            byte[] imageData = Files.readAllBytes(path);
+            log.debug("Image loaded, size: {} bytes", imageData.length);
+            return imageData;
 
         } catch (IOException e) {
             log.error("Error reading image from: {}", filePath, e);
@@ -117,6 +136,8 @@ public class ImageServiceImpl implements ImageService {
             if (Files.exists(path)) {
                 Files.delete(path);
                 log.debug("Image deleted: {}", path.toAbsolutePath());
+            } else {
+                log.warn("Image not found for deletion: {}", path.toAbsolutePath());
             }
         } catch (IOException e) {
             log.error("Error deleting image from: {}", filePath, e);
@@ -128,7 +149,8 @@ public class ImageServiceImpl implements ImageService {
         if (filePath == null || filePath.isEmpty()) {
             return null;
         }
-        // Возвращаем полный URL для фронтенда
-        return "http://localhost:8080/images/" + filePath;
+        String url = "http://localhost:8080/images/" + filePath;
+        log.debug("Generated image URL: {}", url);
+        return url;
     }
 }

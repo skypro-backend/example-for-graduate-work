@@ -37,14 +37,15 @@ public class WebSecurityConfig {
             "/v3/api-docs",
             "/webjars/**",
             "/login",
-            "/register"
-    };
-
-    private static final String[] PUBLIC_GET_ENDPOINTS = {
-            "/ads",
-            "/ads/{id}",
+            "/register",
             "/images/**"
     };
+
+  //  private static final String[] PUBLIC_GET_ENDPOINTS = {
+   //         "/ads",
+  //          "/ads/{id}",
+  //          "/images/**"
+ //   };
 
     /**
      * Настраивает UserDetailsService для загрузки пользователей из базы данных.
@@ -76,36 +77,24 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf()
-                .disable()
-                .cors()
-                .configurationSource(corsConfigurationSource())
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeHttpRequests(
-                        authorization ->
-                                authorization
-                                        .mvcMatchers(AUTH_WHITELIST)
-                                        .permitAll()
-                                        .mvcMatchers(org.springframework.http.HttpMethod.GET, "/ads")
-                                        .permitAll()
-                                        .mvcMatchers(org.springframework.http.HttpMethod.GET, "/ads/{id}")
-                                        .permitAll()
-                                        .mvcMatchers(org.springframework.http.HttpMethod.GET, "/images/**")
-                                        .permitAll()
-                                        .mvcMatchers("/ads/**")
-                                        .hasAnyRole("USER", "ADMIN")
-                                        .mvcMatchers("/users/**")
-                                        .hasAnyRole("USER", "ADMIN")
-                                        .anyRequest()
-                                        .authenticated()
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(authorization -> authorization
+                        .antMatchers(AUTH_WHITELIST).permitAll()
+                        .antMatchers(org.springframework.http.HttpMethod.GET, "/ads").permitAll()
+                        .antMatchers(org.springframework.http.HttpMethod.GET, "/ads/**").permitAll()
+                        .antMatchers("/ads/**").hasAnyRole("USER", "ADMIN")
+                        .antMatchers("/users/**").hasAnyRole("USER", "ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults());
 
         return http.build();
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -113,13 +102,12 @@ public class WebSecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Disposition"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Disposition", "Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
     /**
      * Создает бин для кодирования паролей.
      * Использует BCrypt для безопасного хеширования паролей.

@@ -22,7 +22,7 @@ import java.io.IOException;
  * Контроллер для управления объявлениями.
  * Предоставляет REST API для создания, получения, обновления и удаления объявлений.
  */
-@CrossOrigin(value = "http://localhost:3000")
+//@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
 public class AdController {
@@ -67,6 +67,8 @@ public class AdController {
             Authentication authentication) throws IOException {
 
         log.debug("Add ad request by user: {}", authentication.getName());
+        log.debug("Properties JSON: {}", propertiesJson);
+        log.debug("Image size: {}", image.getSize());
 
         try {
             CreateOrUpdateAd properties = objectMapper.readValue(propertiesJson, CreateOrUpdateAd.class);

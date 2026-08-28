@@ -15,7 +15,7 @@ import ru.skypro.homework.service.CommentService;
  * Контроллер для управления комментариями.
  * Предоставляет REST API для создания, получения, обновления и удаления комментариев к объявлениям.
  */
-@CrossOrigin(value = "http://localhost:3000")
+// @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads/{adId}/comments")
 public class CommentController {

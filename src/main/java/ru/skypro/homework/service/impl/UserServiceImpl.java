@@ -91,12 +91,15 @@ public class UserServiceImpl implements UserService {
             userEntity.setImage(imagePath);
             userRepository.save(userEntity);
 
-            return imageService.getImageUrl(imagePath);
+            // Возвращаем полный URL для фронтенда
+            return "http://localhost:8080/images/" + imagePath;
+
         } catch (Exception e) {
             log.error("Failed to save user image for user: {}", username, e);
             throw new StorageException("Failed to save user image: " + e.getMessage(), e);
         }
     }
+
 
     private UserEntity findUserByUsername(String username) {
         return userRepository.findByUsername(username)

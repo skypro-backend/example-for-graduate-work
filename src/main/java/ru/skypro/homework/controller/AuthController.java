@@ -15,7 +15,7 @@ import ru.skypro.homework.service.AuthService;
  * Контроллер для обработки запросов аутентификации и регистрации.
  * Предоставляет REST API для входа в систему и создания новых пользователей.
  */
-@CrossOrigin(value = "http://localhost:3000")
+// @CrossOrigin(value = "http://localhost:3000")
 @RestController
 public class AuthController {
 

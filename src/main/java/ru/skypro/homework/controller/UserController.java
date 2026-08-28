@@ -17,7 +17,7 @@ import ru.skypro.homework.service.UserService;
  * Предоставляет REST API для получения, обновления информации пользователя,
  * смены пароля и управления аватаром.
  */
-@CrossOrigin(value = "http://localhost:3000")
+//@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -33,10 +33,10 @@ public class UserController {
      * Изменяет пароль авторизованного пользователя.
      * Требуется авторизация.
      *
-     * @param newPassword DTO с текущим и новым паролем
+     * @param newPassword    DTO с текущим и новым паролем
      * @param authentication объект аутентификации
      * @return ResponseEntity с кодом 200 OK при успехе,
-     *         или 400 Bad Request при неверном текущем пароле
+     * или 400 Bad Request при неверном текущем пароле
      */
     @PostMapping("/set_password")
     public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword,
@@ -68,7 +68,7 @@ public class UserController {
      * Обновляет информацию об авторизованном пользователе.
      * Требуется авторизация.
      *
-     * @param updateUser обновленные данные
+     * @param updateUser     обновленные данные
      * @param authentication объект аутентификации
      * @return ResponseEntity с обновленной информацией
      */
@@ -84,15 +84,27 @@ public class UserController {
      * Обновляет аватар авторизованного пользователя.
      * Требуется авторизация.
      *
-     * @param image файл с изображением
+     * @param image          файл с изображением
      * @param authentication объект аутентификации
      * @return ResponseEntity с кодом 200 OK
      */
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile image,
-                                             Authentication authentication) {
-        log.debug("Update user image for: {}", authentication.getName());
-        userService.updateUserImage(authentication.getName(), image);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> updateUserImage(
+            @RequestParam("image") MultipartFile image,
+            Authentication authentication) {
+        log.info("=== UPDATE USER IMAGE ===");
+        log.info("User: {}", authentication.getName());
+        log.info("Image original filename: {}", image.getOriginalFilename());
+        log.info("Image size: {} bytes", image.getSize());
+        log.info("Image content type: {}", image.getContentType());
+
+        try {
+            String imageUrl = userService.updateUserImage(authentication.getName(), image);
+            log.info("Image updated successfully, URL: {}", imageUrl);
+            return ResponseEntity.ok(imageUrl);
+        } catch (Exception e) {
+            log.error("Error updating user image", e);
+            throw e;
+        }
     }
 }
