@@ -4,6 +4,13 @@ package ru.skypro.homework.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+/**
+ * DTO для краткой информации об объявлении.
+ * Используется для передачи данных в списках объявлений, при создании и обновлении.
+ * Основные функции:
+ * - хранение минимального набора данных об объявлении (ID, заголовок, цена, картинка, автор);
+ * - используется в ответах на GET /ads и GET /ads/me.
+ */
 @Data
 @Schema(description = "Краткая информация об объявлении")
 public class Ad {

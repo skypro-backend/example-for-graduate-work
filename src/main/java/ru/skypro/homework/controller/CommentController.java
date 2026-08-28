@@ -19,6 +19,13 @@ import ru.skypro.homework.service.UserService;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * Контроллер для управления комментариями к объявлениям.
+ * Основные функции:
+ * - получение всех комментариев к объявлению;
+ * - добавление нового комментария;
+ * - обновление и удаление существующих комментариев.
+ */
 @RestController
 @RequestMapping("/ads/{id}/comments")
 @RequiredArgsConstructor
@@ -28,6 +35,12 @@ public class CommentController {
     private final CommentService commentService;
     private final UserService userService;
 
+    /**
+     * Получить все комментарии к объявлению.
+     * Доступно без авторизации.
+     * @param id ID объявления
+     * @return список комментариев с общим количеством
+     */
     @GetMapping
     @Operation(summary = "Получение комментариев объявления")
     @ApiResponses(value = {
@@ -43,6 +56,14 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Добавить новый комментарий к объявлению.
+     * Только для авторизованных пользователей (USER или ADMIN).
+     * @param id             ID объявления
+     * @param comment        DTO с текстом комментария
+     * @param authentication данные авторизованного пользователя
+     * @return созданный комментарий
+     */
     @PostMapping
     @Operation(summary = "Добавление комментария к объявлению")
     @ApiResponses(value = {
@@ -60,6 +81,14 @@ public class CommentController {
                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
+    /**
+     * Удалить комментарий.
+     * Только для автора комментария или администратора.
+     * @param id           ID объявления
+     * @param commentId    ID комментария
+     * @param authentication данные авторизованного пользователя
+     * @return 200 OK при успешном удалении, 404 если комментарий не найден
+     */
     @DeleteMapping("/{commentId}")
     @Operation(summary = "Удаление комментария")
     @ApiResponses(value = {
@@ -79,6 +108,15 @@ public class CommentController {
         }
     }
 
+    /**
+     * Обновить текст комментария.
+     * Только для автора комментария или администратора.
+     * @param id           ID объявления
+     * @param commentId    ID комментария
+     * @param comment      DTO с новым текстом комментария
+     * @param authentication данные авторизованного пользователя
+     * @return обновлённый комментарий
+     */
     @PatchMapping("/{commentId}")
     @Operation(summary = "Обновление комментария")
     @ApiResponses(value = {

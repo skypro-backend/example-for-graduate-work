@@ -7,6 +7,14 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
+/**
+ * DTO для создания или обновления объявления.
+ * Используется в запросах POST /ads и PATCH /ads/{id}.
+ * Содержит валидацию полей для обеспечения корректности данных.
+ * Основные функции:
+ * - передача данных нового объявления на сервер;
+ * - обновление существующего объявления.
+ */
 @Data
 @Schema(description = "Объект для создания или обновления объявления")
 public class CreateOrUpdateAd {

@@ -5,6 +5,14 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * Сущность для таблицы "comments".
+ * Хранит данные комментария в базе данных.
+ * Основные функции:
+ * - хранение текста комментария и времени создания;
+ * - связь с автором комментария (UserEntity);
+ * - связь с объявлением, к которому оставлен комментарий (AdEntity).
+ */
 @Entity
 @Table(name = "comments")
 @Data

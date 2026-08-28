@@ -23,6 +23,16 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Контроллер для управления объявлениями.
+ * Обрабатывает все HTTP-запросы, связанные с объявлениями.
+ * Основные функции:
+ * - получение списка всех объявлений;
+ * - создание, обновление и удаление объявлений;
+ * - получение объявлений текущего пользователя;
+ * - загрузка и обновление картинок объявлений.
+ */
+
 @RestController
 @RequestMapping("/ads")
 @RequiredArgsConstructor
@@ -32,6 +42,11 @@ public class AdController {
     private final AdService adService;
     private final UserService userService;
 
+    /**
+     * Получить все объявления.
+     * Доступно без авторизации.
+     * @return список всех объявлений с общим количеством
+     */
     @GetMapping
     @Operation(summary = "Получение всех объявлений")
     @ApiResponse(responseCode = "200", description = "OK")
@@ -43,6 +58,14 @@ public class AdController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Создать новое объявление.
+     * Только для авторизованных пользователей (USER или ADMIN).
+     * @param properties      данные объявления (заголовок, цена, описание)
+     * @param image           файл картинки объявления
+     * @param authentication  данные авторизованного пользователя
+     * @return созданное объявление с ID
+     */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Добавление объявления")
     @ApiResponses(value = {
@@ -67,6 +90,12 @@ public class AdController {
                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
+    /**
+     * Получить расширенную информацию об объявлении по ID.
+     * Доступно без авторизации.
+     * @param id ID объявления
+     * @return расширенная информация об объявлении (включая данные автора)
+     */
     @GetMapping("/{id}")
     @Operation(summary = "Получение информации об объявлении")
     @ApiResponses(value = {
@@ -80,6 +109,13 @@ public class AdController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Удалить объявление по ID.
+     * Только для автора объявления или администратора.
+     * @param id             ID объявления
+     * @param authentication данные авторизованного пользователя
+     * @return 204 No Content при успешном удалении, 404 если объявление не найдено
+     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление объявления")
     @ApiResponses(value = {
@@ -97,6 +133,14 @@ public class AdController {
         }
     }
 
+    /**
+     * Обновить данные объявления.
+     * Только для автора объявления или администратора.
+     * @param id             ID объявления
+     * @param ad             новые данные объявления
+     * @param authentication данные авторизованного пользователя
+     * @return обновлённое объявление
+     */
     @PatchMapping("/{id}")
     @Operation(summary = "Обновление информации об объявлении")
     @ApiResponses(value = {
@@ -113,6 +157,11 @@ public class AdController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Получить все объявления текущего авторизованного пользователя.
+     * @param authentication данные авторизованного пользователя
+     * @return список объявлений пользователя
+     */
     @GetMapping("/me")
     @Operation(summary = "Получение объявлений авторизованного пользователя")
     @ApiResponses(value = {
@@ -132,6 +181,15 @@ public class AdController {
                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
+    /**
+     * Обновить картинку объявления.
+     * Только для автора объявления или администратора.
+     * @param id             ID объявления
+     * @param image          новый файл картинки
+     * @param authentication данные авторизованного пользователя
+     * @return байтовый массив обновлённой картинки
+     * @throws IOException если ошибка при сохранении файла
+     */
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Обновление картинки объявления")
     @ApiResponses(value = {
@@ -140,10 +198,12 @@ public class AdController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Void> updateImage(@PathVariable Integer id,
+    public ResponseEntity<byte[]> updateImage(@PathVariable Integer id,
                                             @RequestParam("image") MultipartFile image,
                                             Authentication authentication) throws IOException {
-        adService.updateAdImage(id, image, authentication);
-        return ResponseEntity.ok().build();
+        byte[] updatedImageData = adService.updateAdImage(id, image, authentication);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(updatedImageData);
     }
 }

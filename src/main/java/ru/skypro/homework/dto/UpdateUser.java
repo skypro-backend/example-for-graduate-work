@@ -7,6 +7,14 @@ import lombok.Data;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * DTO для обновления информации о пользователе.
+ * Используется в запросе PATCH /users/me.
+ * Позволяет обновить имя, фамилию и телефон пользователя.
+ * Основные функции:
+ * - передача обновлённых данных профиля на сервер;
+ * - валидация полей (длина имени/фамилии, формат телефона).
+ */
 @Data
 @Schema(description = "Объект для обновления информации о пользователе")
 public class UpdateUser {

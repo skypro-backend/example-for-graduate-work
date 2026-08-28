@@ -4,6 +4,13 @@ package ru.skypro.homework.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+/**
+ * DTO для информации о пользователе.
+ * Используется для передачи данных пользователя в ответах на запросы.
+ * Основные функции:
+ * - предоставление полных данных о пользователе (ID, логин, имя, фамилия, телефон, роль, аватар);
+ * - используется в ответах на GET /users/me и других запросах.
+ */
 @Data
 @Schema(description = "Информация о пользователе")
 public class User {

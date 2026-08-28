@@ -6,9 +6,22 @@ import ru.skypro.homework.model.UserEntity;
 
 import java.util.Optional;
 
+/**
+ * Маппер для преобразования сущности {@link UserEntity} в DTO и обратно.
+ * Основные функции:
+ * - преобразование сущности пользователя в DTO (User);
+ * - преобразование DTO в сущность пользователя для создания/обновления.
+ * Также формирует ссылку на аватар пользователя.
+ */
 @Component
 public class UserMapper {
 
+    /**
+     * Преобразует сущность пользователя в DTO.
+     * Формирует ссылку на аватар в формате /images/{id}.
+     * @param entity сущность пользователя
+     * @return Optional с DTO или пустой Optional
+     */
     public Optional<User> toDto(UserEntity entity) {
             return Optional.ofNullable(entity)
                     .map(e -> {
@@ -29,6 +42,12 @@ public class UserMapper {
     }
 
 
+    /**
+     * Преобразует DTO в сущность пользователя.
+     * Используется при создании или обновлении пользователя.
+     * @param dto DTO с данными пользователя
+     * @return Optional с сущностью или пустой Optional
+     */
     public Optional<UserEntity> toEntity(User dto) {
         return Optional.ofNullable(dto)
                 .map(d -> {
@@ -39,7 +58,6 @@ public class UserMapper {
                     entity.setLastName(d.getLastName());
                     entity.setPhone(d.getPhone());
                     entity.setRole(d.getRole());
-                    entity.setImage(d.getImage());
                     return entity;
                 });
     }

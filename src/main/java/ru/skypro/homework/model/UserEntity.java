@@ -6,6 +6,15 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Сущность для таблицы "users".
+ * Хранит данные пользователя в базе данных.
+ * Основные функции:
+ * - хранение учётных данных пользователя (email, пароль, имя, фамилия, телефон, роль);
+ * - связь с объявлениями пользователя (OneToMany);
+ * - связь с комментариями пользователя (OneToMany);
+ * - связь с аватаром пользователя (OneToOne).
+ */
 @Entity
 @Table(name = "users")
 @Data
@@ -34,7 +43,6 @@ public class UserEntity {
     @Column(length = 10)
     private String role;
 
-    private String image;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<AdEntity> ads;

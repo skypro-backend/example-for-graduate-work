@@ -7,6 +7,13 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+/**
+ * Глобальный обработчик исключений для приложения.
+ * Перехватывает исключения, выбрасываемые в процессе работы, и возвращает клиенту соответствующие HTTP-статусы.
+ * Основные функции:
+ * - обработка ошибок аутентификации (401 Unauthorized);
+ * - обработка ошибок доступа (403 Forbidden).
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

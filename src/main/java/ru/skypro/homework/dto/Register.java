@@ -6,6 +6,14 @@ import lombok.Data;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * DTO для регистрации нового пользователя.
+ * Используется в запросе POST /register.
+ * Содержит все необходимые данные для создания учётной записи.
+ * Основные функции:
+ * - передача данных нового пользователя на сервер;
+ * - валидация всех полей (логин, пароль, имя, телефон, роль).
+ */
 @Data
 @Schema(description = "Запрос на регистрацию")
 public class Register {

@@ -6,6 +6,12 @@ import lombok.Data;
 
 import javax.validation.constraints.Size;
 
+/**
+ * DTO для смены пароля.
+ * Используется в запросе POST /users/set_password.
+ * Основные функции:
+ * - передача текущего и нового пароля для обновления учётных данных пользователя.
+ */
 @Data
 @Schema(description = "Объект для смены пароля")
 public class NewPassword {

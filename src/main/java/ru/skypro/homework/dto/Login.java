@@ -5,6 +5,13 @@ import lombok.Data;
 
 import javax.validation.constraints.Size;
 
+/**
+ * DTO для авторизации пользователя.
+ * Используется в запросе POST /login.
+ * Содержит логин и пароль для аутентификации.
+ * Основные функции:
+ * - передача учётных данных пользователя на сервер.
+ */
 @Data
 @Schema(description = "Запрос на авторизацию")
 public class Login {

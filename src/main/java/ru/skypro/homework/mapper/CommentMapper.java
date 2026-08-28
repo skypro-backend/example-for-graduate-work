@@ -7,9 +7,22 @@ import ru.skypro.homework.model.CommentEntity;
 
 import java.util.Optional;
 
+/**
+ * Маппер для преобразования сущности {@link CommentEntity} в DTO и обратно.
+ * Основные функции:
+ * - преобразование сущности комментария в DTO (Comment);
+ * - преобразование DTO (CreateOrUpdateComment) в сущность для создания/обновления комментария.
+ * Также формирует ссылку на аватар автора комментария.
+ */
 @Component
 public class CommentMapper {
 
+    /**
+     * Преобразует сущность комментария в DTO.
+     * Формирует ссылку на аватар автора в формате /images/{id}.
+     * @param entity сущность комментария
+     * @return Optional с DTO или пустой Optional
+     */
     public Optional<Comment> toDto(CommentEntity entity) {
         return Optional.ofNullable(entity)
                 .map(e -> {
@@ -30,7 +43,12 @@ public class CommentMapper {
                 });
     }
 
-
+    /**
+     * Преобразует DTO в сущность комментария.
+     * Автоматически устанавливает текущее время создания.
+     * @param dto DTO с текстом комментария
+     * @return Optional с сущностью или пустой Optional
+     */
     public Optional<CommentEntity> toEntity(CreateOrUpdateComment dto) {
         return Optional.ofNullable(dto)
                 .map(d -> {

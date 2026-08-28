@@ -20,6 +20,18 @@ import ru.skypro.homework.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+/**
+ * Сервис для управления объявлениями.
+ * Содержит бизнес-логику по созданию, обновлению, удалению и получению объявлений.
+ * Основные функции:
+ * - получение всех объявлений;
+ * - создание нового объявления с сохранением картинки;
+ * - получение объявления по ID;
+ * - обновление и удаление объявления с проверкой прав доступа;
+ * - получение объявлений пользователя;
+ * - обновление картинки объявления.
+ */
 @Service
 @RequiredArgsConstructor
 public class AdService {
@@ -29,6 +41,10 @@ public class AdService {
     private final AdMapper adMapper;
     private final ImageService imageService;
 
+    /**
+     * Получить все объявления.
+     * @return список всех объявлений
+     */
     public List<Ad> getAllAds() {
         return adRepository.findAll().stream()
                 .map(adMapper::toAdDto)
@@ -37,6 +53,14 @@ public class AdService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Создать новое объявление.
+     * @param createDto DTO с данными объявления
+     * @param image     файл картинки объявления
+     * @param authorId  ID автора
+     * @return Optional с созданным объявлением
+     * @throws IOException если ошибка при сохранении картинки
+     */
     public Optional<Ad> createAd(CreateOrUpdateAd createDto, MultipartFile image, Integer authorId) throws IOException {
         return userRepository.findById(authorId)
                 .flatMap(author -> adMapper.toEntity(createDto)
@@ -55,12 +79,22 @@ public class AdService {
                 .flatMap(adMapper::toAdDto);
     }
 
+    /**
+     * Получить расширенную информацию об объявлении по ID.
+     * @param id ID объявления
+     * @return Optional с расширенной информацией
+     */
     public Optional<ExtendedAd> getAdById(Integer id) {
         return adRepository.findById(id)
                 .flatMap(adMapper::toExtendedAdDto);
     }
 
 
+    /**
+     * Проверить, имеет ли пользователь роль ADMIN.
+     * @param authentication данные аутентификации
+     * @return true если роль ADMIN, иначе false
+     */
     private boolean hasAdminRole(Authentication authentication) {
         if (authentication == null) {
             return false;
@@ -69,6 +103,12 @@ public class AdService {
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
     }
 
+    /**
+     * Получить ID пользователя из аутентификации.
+     * @param authentication данные аутентификации
+     * @return ID пользователя
+     * @throws UsernameNotFoundException если пользователь не найден
+     */
     private Integer getUserId(Authentication authentication) {
         String email = authentication.getName();
         return userRepository.findByEmail(email)
@@ -76,6 +116,14 @@ public class AdService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
+    /**
+     * Обновить объявление.
+     * @param id             ID объявления
+     * @param updateDto      новые данные
+     * @param authentication данные аутентификации
+     * @return Optional с обновлённым объявлением
+     * @throws AccessDeniedException если пользователь не автор и не ADMIN
+     */
     public Optional<Ad> updateAd(Integer id, CreateOrUpdateAd updateDto, Authentication authentication) {
         return adRepository.findById(id)
                 .map(entity -> {
@@ -91,6 +139,13 @@ public class AdService {
 
     }
 
+    /**
+     * Удалить объявление.
+     * @param id             ID объявления
+     * @param authentication данные аутентификации
+     * @return true если удаление успешно, иначе false
+     * @throws AccessDeniedException если пользователь не автор и не ADMIN
+     */
     public boolean deleteAd(Integer id, Authentication authentication) {
         return adRepository.findById(id)
                 .map(entity -> {
@@ -103,6 +158,11 @@ public class AdService {
                 .orElse(false);
     }
 
+    /**
+     * Получить объявления пользователя.
+     * @param userId ID пользователя
+     * @return список объявлений пользователя
+     */
     public List<Ad> getAdsByUser(Integer userId) {
         return adRepository.findByAuthorId(userId).stream()
                 .map(adMapper::toAdDto)
@@ -111,7 +171,16 @@ public class AdService {
                 .collect(Collectors.toList());
     }
 
-    public void updateAdImage(Integer adId, MultipartFile file, Authentication authentication) throws IOException {
+    /**
+     * Обновить картинку объявления.
+     * @param adId           ID объявления
+     * @param file           новый файл картинки
+     * @param authentication данные аутентификации
+     * @return данные обновлённой картинки
+     * @throws IOException          если ошибка при сохранении
+     * @throws AccessDeniedException если пользователь не автор и не ADMIN
+     */
+    public byte[] updateAdImage(Integer adId, MultipartFile file, Authentication authentication) throws IOException {
         AdEntity ad = adRepository.findById(adId)
                 .orElseThrow(() -> new RuntimeException("Ad not found"));
 
@@ -127,5 +196,7 @@ public class AdService {
 
         ad.setImage(image);
         adRepository.save(ad);
+
+        return image.getData();
     }
 }

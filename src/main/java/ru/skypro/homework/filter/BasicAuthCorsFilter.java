@@ -10,6 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Фильтр для настройки CORS (Cross-Origin Resource Sharing).
+ * Добавляет заголовок Access-Control-Allow-Credentials для поддержки кросс-доменных запросов.
+ * Основные функции:
+ * - разрешение отправки учётных данных (cookies, авторизационных заголовков) при кросс-доменных запросах.
+ */
 @Component
 public class BasicAuthCorsFilter extends OncePerRequestFilter {
 
