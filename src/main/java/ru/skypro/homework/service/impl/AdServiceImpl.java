@@ -51,9 +51,7 @@ public class AdServiceImpl implements AdService {
         adMapper.updateAdFromDto(properties, entity);
         entity.setAuthor(author);
 
-        // Сохраняем реальную картинку через ImageService
         String fileName = imageService.uploadImage(image);
-        // Формируем ссылку на наш новый эндпоинт в AdsController
         entity.setImage("/ads/image/" + fileName);
 
         adRepository.save(entity);

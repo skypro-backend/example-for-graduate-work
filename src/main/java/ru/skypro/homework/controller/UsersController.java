@@ -43,8 +43,8 @@ public class UsersController {
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Обновление аватарки пользователя/логотипа компании")
-    public ResponseEntity<Void> updateUserImage(@RequestParam MultipartFile image, Authentication authentication) {
+    public ResponseEntity<Void> updateUserImage(@RequestPart("image") MultipartFile image, Authentication authentication) {
         userService.updateUserImage(image, authentication.getName());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(org.springframework.http.HttpStatus.OK).build();
     }
 }

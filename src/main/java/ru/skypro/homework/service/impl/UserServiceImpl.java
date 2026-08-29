@@ -1,8 +1,8 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
@@ -12,6 +12,11 @@ import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.service.ImageService;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +24,20 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
+    private final ImageService imageService;
+    private final DataSource dataSource;
 
     @Override
+    @SneakyThrows
     public void setPassword(NewPassword newPassword, String username) {
-        manager.changePassword(newPassword.getCurrentPassword(), encoder.encode(newPassword.getNewPassword()));
+        // Меняем пароль напрямую в нашей таблице безопасности через SQL
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement("UPDATE users_security SET password = ? WHERE username = ?")) {
+            ps.setString(1, encoder.encode(newPassword.getNewPassword()));
+            ps.setString(2, username);
+            ps.executeUpdate();
+        }
     }
 
     @Override
@@ -44,11 +57,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @SneakyThrows
     public void updateUserImage(MultipartFile image, String username) {
         UserEntity entity = userRepository.findByEmail(username)
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
-        // Временная симуляция сохранения пути картинки
-        entity.setImage("/users/me/image");
+
+        String fileName = imageService.uploadImage(image);
+        entity.setImage("/ads/image/" + fileName);
         userRepository.save(entity);
     }
 }

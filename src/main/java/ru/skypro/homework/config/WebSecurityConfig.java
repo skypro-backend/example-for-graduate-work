@@ -7,17 +7,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
-import javax.sql.DataSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true) // Это включит защиту методов @PreAuthorize
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
@@ -29,13 +24,6 @@ public class WebSecurityConfig {
             "/register",
             "/ads/image/**"
     };
-
-    @Bean
-    public JdbcUserDetailsManager userDetailsService(DataSource dataSource) {
-        JdbcUserDetailsManager manager = new JdbcUserDetailsManager(dataSource);
-        // Спринг будет использовать встроенные таблицы для проверки логинов
-        return manager;
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
