@@ -148,22 +148,6 @@ public class AdService {
         }
     }
 
-    public byte[] getImage(Integer id) {
-
-        AdEntity entity = getAdEntity(id);
-
-        if (entity.getImage() == null) {
-            throw new IllegalArgumentException(
-                    "Image not found"
-            );
-        }
-
-        String fileName = entity.getImage()
-                .substring("/images/".length());
-
-        return imageService.getImage(fileName);
-    }
-
     public byte[] updateImage(
             Integer id,
             MultipartFile image,

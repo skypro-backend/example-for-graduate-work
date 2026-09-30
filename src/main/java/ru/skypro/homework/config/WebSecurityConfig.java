@@ -2,6 +2,7 @@ package ru.skypro.homework.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -24,11 +25,14 @@ public class WebSecurityConfig {
             "/v3/api-docs/**",
             "/webjars/**",
             "/login",
-            "/register"
+            "/register",
+            "/images/**"
     };
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(
+            HttpSecurity http
+    ) throws Exception {
 
         http
                 .csrf()
@@ -38,7 +42,15 @@ public class WebSecurityConfig {
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .mvcMatchers("/ads/**", "/users/**")
+                                        .mvcMatchers(
+                                                HttpMethod.GET,
+                                                "/ads"
+                                        )
+                                        .permitAll()
+                                        .mvcMatchers(
+                                                "/ads/**",
+                                                "/users/**"
+                                        )
                                         .authenticated()
                                         .anyRequest()
                                         .permitAll()
@@ -59,6 +71,7 @@ public class WebSecurityConfig {
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration
     ) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+        return authenticationConfiguration
+                .getAuthenticationManager();
     }
 }

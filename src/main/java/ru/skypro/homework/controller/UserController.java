@@ -18,7 +18,9 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(
+            UserService userService
+    ) {
         this.userService = userService;
     }
 
@@ -43,9 +45,13 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "User information returned")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @GetMapping("/me")
-    public ResponseEntity<User> getUser(Authentication authentication) {
+    public ResponseEntity<User> getUser(
+            Authentication authentication
+    ) {
         return ResponseEntity.ok(
-                userService.getUser(authentication.getName())
+                userService.getUser(
+                        authentication.getName()
+                )
         );
     }
 
@@ -73,6 +79,11 @@ public class UserController {
             @RequestParam("image") MultipartFile image,
             Authentication authentication
     ) {
+        userService.updateImage(
+                authentication.getName(),
+                image
+        );
+
         return ResponseEntity.ok().build();
     }
 }

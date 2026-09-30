@@ -1,22 +1,16 @@
 package ru.skypro.homework.mapper;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.entity.CommentEntity;
 
-@Component
-public class CommentMapper {
+@Mapper(componentModel = "spring")
+public interface CommentMapper {
 
-    public Comment toDto(CommentEntity entity) {
-        Comment dto = new Comment();
-
-        dto.setPk(entity.getId());
-        dto.setAuthor(entity.getAuthor().getId());
-        dto.setAuthorFirstName(entity.getAuthor().getFirstName());
-        dto.setAuthorImage(entity.getAuthor().getImage());
-        dto.setCreatedAt(entity.getCreatedAt());
-        dto.setText(entity.getText());
-
-        return dto;
-    }
+    @Mapping(source = "id", target = "pk")
+    @Mapping(source = "author.id", target = "author")
+    @Mapping(source = "author.image", target = "authorImage")
+    @Mapping(source = "author.firstName", target = "authorFirstName")
+    Comment toDto(CommentEntity entity);
 }

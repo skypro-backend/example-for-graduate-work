@@ -18,7 +18,9 @@ public class ImageService {
     public ImageService(
             @Value("${app.images.directory}") String imageDirectory
     ) {
-        this.imageDirectory = Paths.get(imageDirectory);
+        this.imageDirectory = Paths.get(imageDirectory)
+                .toAbsolutePath()
+                .normalize();
 
         try {
             Files.createDirectories(this.imageDirectory);
@@ -33,12 +35,10 @@ public class ImageService {
     public String saveImage(MultipartFile file) {
 
         String originalFilename = file.getOriginalFilename();
-
         String extension = "";
 
         if (originalFilename != null
                 && originalFilename.contains(".")) {
-
             extension = originalFilename.substring(
                     originalFilename.lastIndexOf(".")
             );
@@ -48,7 +48,8 @@ public class ImageService {
                 UUID.randomUUID() + extension;
 
         Path filePath =
-                imageDirectory.resolve(fileName);
+                imageDirectory.resolve(fileName)
+                        .normalize();
 
         try {
             file.transferTo(filePath);
@@ -65,7 +66,14 @@ public class ImageService {
     public byte[] getImage(String fileName) {
 
         Path filePath =
-                imageDirectory.resolve(fileName);
+                imageDirectory.resolve(fileName)
+                        .normalize();
+
+        if (!filePath.startsWith(imageDirectory)) {
+            throw new IllegalArgumentException(
+                    "Invalid image path"
+            );
+        }
 
         try {
             return Files.readAllBytes(filePath);
@@ -73,6 +81,25 @@ public class ImageService {
             throw new IllegalArgumentException(
                     "Image not found"
             );
+        }
+    }
+
+    public String getContentType(String fileName) {
+
+        Path filePath =
+                imageDirectory.resolve(fileName)
+                        .normalize();
+
+        try {
+            String contentType =
+                    Files.probeContentType(filePath);
+
+            return contentType != null
+                    ? contentType
+                    : "application/octet-stream";
+
+        } catch (IOException e) {
+            return "application/octet-stream";
         }
     }
 }

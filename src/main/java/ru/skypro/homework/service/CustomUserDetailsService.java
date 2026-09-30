@@ -3,7 +3,7 @@ package ru.skypro.homework.service;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.entity.UserEntity;
@@ -12,7 +12,7 @@ import ru.skypro.homework.repository.UserRepository;
 import java.util.Collections;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsManager {
 
     private final UserRepository userRepository;
 
@@ -43,5 +43,41 @@ public class CustomUserDetailsService implements UserDetailsService {
                         )
                 )
         );
+    }
+
+    @Override
+    public void createUser(UserDetails user) {
+        throw new UnsupportedOperationException(
+                "Use AuthService for user registration"
+        );
+    }
+
+    @Override
+    public void updateUser(UserDetails user) {
+        throw new UnsupportedOperationException(
+                "Use UserService for user updates"
+        );
+    }
+
+    @Override
+    public void deleteUser(String username) {
+        throw new UnsupportedOperationException(
+                "User deletion is not supported"
+        );
+    }
+
+    @Override
+    public void changePassword(
+            String oldPassword,
+            String newPassword
+    ) {
+        throw new UnsupportedOperationException(
+                "Use UserService for password change"
+        );
+    }
+
+    @Override
+    public boolean userExists(String username) {
+        return userRepository.existsByUsername(username);
     }
 }

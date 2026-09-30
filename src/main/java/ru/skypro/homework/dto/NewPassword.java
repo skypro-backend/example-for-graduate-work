@@ -7,9 +7,17 @@ import lombok.Data;
 @Schema(description = "Password change data")
 public class NewPassword {
 
-    @Schema(description = "Current password", minLength = 8, maxLength = 16)
+    @Schema(
+            description = "Current password",
+            minLength = 8,
+            maxLength = 16
+    )
     private String currentPassword;
 
-    @Schema(description = "New password", minLength = 8, maxLength = 16)
+    @Schema(
+            description = "New password",
+            minLength = 8,
+            maxLength = 16
+    )
     private String newPassword;
 }

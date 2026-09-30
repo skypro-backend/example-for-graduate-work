@@ -7,6 +7,10 @@ import lombok.Data;
 @Schema(description = "Data for creating or updating a comment")
 public class CreateOrUpdateComment {
 
-    @Schema(description = "Comment text", minLength = 8, maxLength = 64)
+    @Schema(
+            description = "Comment text",
+            minLength = 8,
+            maxLength = 64
+    )
     private String text;
 }

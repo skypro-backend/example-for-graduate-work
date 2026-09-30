@@ -135,19 +135,4 @@ public class AdsController {
                 )
         );
     }
-
-    @Operation(summary = "Get ad image")
-    @ApiResponse(responseCode = "200", description = "Image returned")
-    @ApiResponse(responseCode = "404", description = "Image not found")
-    @GetMapping(
-            value = "/{id}/image",
-            produces = "application/octet-stream"
-    )
-    public ResponseEntity<byte[]> getImage(
-            @PathVariable Integer id
-    ) {
-        return ResponseEntity.ok(
-                adService.getImage(id)
-        );
-    }
 }
