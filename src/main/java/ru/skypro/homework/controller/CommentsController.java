@@ -3,23 +3,37 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.service.CommentService;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
 public class CommentsController {
 
+    private final CommentService commentService;
+
+    public CommentsController(
+            CommentService commentService
+    ) {
+        this.commentService = commentService;
+    }
+
     @Operation(summary = "Get ad comments")
     @ApiResponse(responseCode = "200", description = "Comments returned")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Ad not found")
     @GetMapping("/{id}/comments")
-    public ResponseEntity<Comments> getComments(@PathVariable Integer id) {
-        return ResponseEntity.ok(new Comments());
+    public ResponseEntity<Comments> getComments(
+            @PathVariable Integer id
+    ) {
+        return ResponseEntity.ok(
+                commentService.getComments(id)
+        );
     }
 
     @Operation(summary = "Add comment")
@@ -29,9 +43,16 @@ public class CommentsController {
     @PostMapping("/{id}/comments")
     public ResponseEntity<Comment> addComment(
             @PathVariable Integer id,
-            @RequestBody CreateOrUpdateComment comment
+            @RequestBody CreateOrUpdateComment comment,
+            Authentication authentication
     ) {
-        return ResponseEntity.ok(new Comment());
+        return ResponseEntity.ok(
+                commentService.addComment(
+                        id,
+                        authentication.getName(),
+                        comment
+                )
+        );
     }
 
     @Operation(summary = "Delete comment")
@@ -42,8 +63,15 @@ public class CommentsController {
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(
             @PathVariable Integer adId,
-            @PathVariable Integer commentId
+            @PathVariable Integer commentId,
+            Authentication authentication
     ) {
+        commentService.deleteComment(
+                adId,
+                commentId,
+                authentication.getName()
+        );
+
         return ResponseEntity.ok().build();
     }
 
@@ -56,8 +84,16 @@ public class CommentsController {
     public ResponseEntity<Comment> updateComment(
             @PathVariable Integer adId,
             @PathVariable Integer commentId,
-            @RequestBody CreateOrUpdateComment comment
+            @RequestBody CreateOrUpdateComment comment,
+            Authentication authentication
     ) {
-        return ResponseEntity.ok(new Comment());
+        return ResponseEntity.ok(
+                commentService.updateComment(
+                        adId,
+                        commentId,
+                        comment,
+                        authentication.getName()
+                )
+        );
     }
 }
