@@ -1,0 +1,26 @@
+CREATE TABLE users(
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    phone VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    image VARCHAR(255)
+);
+
+CREATE TABLE ads (
+    id SERIAL PRIMARY KEY,
+    author_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    image VARCHAR(255),
+    price INTEGER NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL
+);
+CREATE TABLE comments(
+    id SERIAL PRIMARY KEY,
+    author_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    ad_id INTEGER NOT NULL REFERENCES ads(id) ON DELETE CASCADE,
+    text VARCHAR(255) NOT NULL,
+    created_at BIGINT NOT NULL
+);
