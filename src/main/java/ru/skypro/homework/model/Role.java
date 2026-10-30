@@ -1,4 +1,4 @@
-package ru.skypro.homework.dto.users;
+package ru.skypro.homework.model;
 
 public enum Role {
     USER, ADMIN

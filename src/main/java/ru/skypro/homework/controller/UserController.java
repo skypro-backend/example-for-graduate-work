@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.users.NewPasswordDto;
-import ru.skypro.homework.dto.users.Role;
+import ru.skypro.homework.model.Role;
 import ru.skypro.homework.dto.users.UpdateUserDto;
 import ru.skypro.homework.dto.users.UserDto;
 
