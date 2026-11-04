@@ -1,47 +1,71 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
-
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
-        this.encoder = passwordEncoder;
-    }
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final DataSource dataSource;
 
     @Override
+    @SneakyThrows
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
-            return false;
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement("SELECT password FROM users_security WHERE username = ?")) {
+            ps.setString(1, userName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return encoder.matches(password, rs.getString("password"));
+                }
+            }
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
+        return false;
     }
 
     @Override
+    @SneakyThrows
     public boolean register(Register register) {
-        if (manager.userExists(register.getUsername())) {
-            return false;
+        // Проверяем, есть ли уже такой логин
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement("SELECT username FROM users_security WHERE username = ?")) {
+            ps.setString(1, register.getUsername());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return false;
+                }
+            }
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
+
+        // 1. Сохраняем данные для входа в users_security
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement("INSERT INTO users_security (username, password, enabled) VALUES (?, ?, true)")) {
+            ps.setString(1, register.getUsername());
+            ps.setString(2, encoder.encode(register.getPassword()));
+            ps.executeUpdate();
+        }
+
+        // 2. Сохраняем профиль пользователя в users
+        UserEntity entity = userMapper.registerToEntity(register);
+        entity.setEmail(register.getUsername());
+        userRepository.save(entity);
+
         return true;
     }
-
 }
