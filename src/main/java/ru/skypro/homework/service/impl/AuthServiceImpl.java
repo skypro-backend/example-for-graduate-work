@@ -1,47 +1,51 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.skypro.homework.dto.users.Login;
 import ru.skypro.homework.dto.users.Register;
+import ru.skypro.homework.exception.BadRequestException;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.User;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
-    private final PasswordEncoder encoder;
-
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
-        this.encoder = passwordEncoder;
-    }
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
-            return false;
+    public void login(Login login) {
+        User user = userRepository.findByEmail(login.getUsername())
+                        .orElseThrow(() -> new BadRequestException("Неверный логин или пароль"));
+        if(!passwordEncoder.matches(login.getPassword(), user.getPassword())){
+            throw new BadRequestException("Неверный логин или пароль");
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
     }
 
+
     @Override
-    public boolean register(Register register) {
-        if (manager.userExists(register.getUsername())) {
-            return false;
+    @Transactional
+    public void register(Register register) {
+        if (userRepository.findByEmail(register.getUsername()).isPresent()) {
+            throw new BadRequestException("Пользователь с таким email уже существует");
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
-        return true;
+
+        User user = userMapper.toEntity(register);
+
+        user.setPassword(passwordEncoder.encode(register.getPassword()));
+
+        if (user.getRole() == null) {
+            user.setRole(register.getRole());
+        }
+
+        userRepository.save(user);
     }
 
 }
