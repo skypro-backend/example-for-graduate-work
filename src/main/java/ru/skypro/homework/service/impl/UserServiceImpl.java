@@ -13,6 +13,7 @@ import ru.skypro.homework.exception.NotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 @Service
@@ -21,6 +22,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+
+    private final ImageService imageService;
 
     @Override
     public UserDto getUser(String email) {
@@ -46,6 +49,9 @@ public class UserServiceImpl implements UserService {
     public void updateUserImage(String email, MultipartFile image) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+        String imagePath = imageService.saveImage(image);
+        user.setImage(imagePath);
+        userRepository.save(user);
     }
 
     @Override

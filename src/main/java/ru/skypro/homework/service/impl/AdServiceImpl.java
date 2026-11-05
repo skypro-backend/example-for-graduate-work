@@ -16,6 +16,7 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.ImageService;
 
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
     private final UserRepository userRepository;
     private final AdMapper adMapper;
+
+    private final ImageService imageService;
 
     @Override
     public AdsDto getAllAds() {
@@ -42,6 +45,8 @@ public class AdServiceImpl implements AdService {
         Ad ad = adMapper.toEntity(dto);
         ad.setAuthor(author);
 
+        String imagePath = imageService.saveImage(image);
+        ad.setImage(imagePath);
         Ad savedAd = adRepository.save(ad);
         return adMapper.toDto(savedAd);
     }
@@ -58,7 +63,7 @@ public class AdServiceImpl implements AdService {
     public void removeAd(String email, Integer id) {
         Ad ad = adRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Объявление не найдено"));
-        if(ad.getAuthor().getEmail().equals(email)){
+        if(!ad.getAuthor().getEmail().equals(email)){
             throw new ForbiddenException("У вас нет прав на удаление этого объявления");
         }
         adRepository.delete(ad);
@@ -83,8 +88,8 @@ public class AdServiceImpl implements AdService {
     @Override
     public AdsDto getAdsMe(String email) {
         User author = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
-        List<AdDto> ads = adRepository.findAllByAuthor(author.getId())
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+        List<AdDto> ads = adRepository.findAllByAuthorId(author.getId())
                 .stream()
                 .map(adMapper::toDto)
                 .toList();
@@ -92,12 +97,17 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
+    @Transactional
     public byte[] updateAdImage(String email, Integer id, MultipartFile image) {
         Ad ad = adRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Объявление не найдено"));
+                .orElseThrow(()-> new NotFoundException("Объявление не найдено"));
         if(!ad.getAuthor().getEmail().equals(email)){
-            throw new RuntimeException("Недостаточно прав для изменения объявления");
+            throw new ForbiddenException("Недостаточно прав для изменения объявления");
         }
-        return new byte[0];
+
+        String imagePath = imageService.saveImage(image);
+        ad.setImage(imagePath);
+        adRepository.save(ad);
+        return imageService.getImage(imagePath.substring("/images/".length()));
     }
 }

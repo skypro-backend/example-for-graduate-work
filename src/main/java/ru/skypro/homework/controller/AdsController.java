@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import ru.skypro.homework.dto.ad.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ad.ExtendedAdDto;
 import ru.skypro.homework.service.AdService;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/ads")
 @RequiredArgsConstructor
@@ -29,11 +32,13 @@ public class AdsController {
         return ResponseEntity.ok(adService.getAllAds());
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Добавление объявления")
-    public ResponseEntity<AdDto> addAd(@RequestPart("properties")CreateOrUpdateAdDto properties,
+    public ResponseEntity<AdDto> addAd(@RequestPart("properties") String propertiesJson,
                                        @RequestPart("image")MultipartFile image,
-                                       Authentication authentication){
+                                       Authentication authentication) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        CreateOrUpdateAdDto properties = mapper.readValue(propertiesJson, CreateOrUpdateAdDto.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(adService.addAd(authentication.getName(),
                 properties, image));
     }
