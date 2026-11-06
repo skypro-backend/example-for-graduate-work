@@ -9,6 +9,7 @@ import ru.skypro.homework.model.Ad;
 
 @Mapper(componentModel = "spring")
 public interface AdMapper {
+    @Mapping(source = "id", target = "pk")
     @Mapping(source = "author.id", target = "author")
     AdDto toDto(Ad ad);
 

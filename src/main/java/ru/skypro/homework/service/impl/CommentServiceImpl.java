@@ -54,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void removeComment(String email, Integer id, Integer adId) {
+    public void removeComment(String email, Integer adId, Integer id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Комментарий не найден"));
         if(!comment.getAuthor().getEmail().equals(email)){
@@ -68,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentDto updateComment(String email, Integer id, Integer adId,
+    public CommentDto updateComment(String email, Integer adId, Integer id,
                                     CreateOrUpdateCommentDto dto) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Комментарий не найден"));
