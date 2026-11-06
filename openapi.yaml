@@ -47,14 +47,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUser'
+              $ref: '#/components/schemas/UpdateUserDto'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateUser'
+                $ref: '#/components/schemas/UpdateUserDto'
         '401':
           description: Unauthorized
   /users/me/image:
