@@ -14,6 +14,8 @@ import ru.skypro.homework.dto.users.UpdateUserDto;
 import ru.skypro.homework.dto.users.UserDto;
 import ru.skypro.homework.service.UserService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/users")
 @Tag(name = "Пользователи")
@@ -30,7 +32,7 @@ public class UserController {
 
     @PostMapping("/set_password")
     @Operation(summary = "Обновление пароля")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPass,
+    public ResponseEntity<Void> setPassword(@Valid @RequestBody NewPasswordDto newPass,
                                             Authentication authentication) {
         userService.setPassword(authentication.getName(), newPass);
         return ResponseEntity.ok().build();
@@ -38,7 +40,7 @@ public class UserController {
 
     @PatchMapping("/me")
     @Operation(summary = "обновление информации об авторизированном пользователе")
-    public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto dto,
+    public ResponseEntity<UpdateUserDto> updateUser(@Valid @RequestBody UpdateUserDto dto,
                                                     Authentication authentication) {
         return ResponseEntity.ok(userService.updateUser(authentication.getName(), dto));
     }

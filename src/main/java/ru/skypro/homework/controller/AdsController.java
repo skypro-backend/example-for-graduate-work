@@ -14,8 +14,11 @@ import ru.skypro.homework.dto.ad.AdDto;
 import ru.skypro.homework.dto.ad.AdsDto;
 import ru.skypro.homework.dto.ad.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ad.ExtendedAdDto;
+import ru.skypro.homework.exception.BadRequestException;
 import ru.skypro.homework.service.AdService;
 
+import javax.validation.Valid;
+import javax.validation.Validator;
 import java.io.IOException;
 
 @RestController
@@ -25,33 +28,40 @@ import java.io.IOException;
 public class AdsController {
 
     private final AdService adService;
+    private final Validator validator;
 
     @GetMapping
     @Operation(summary = "Получение всех объявлений")
-    public ResponseEntity<AdsDto> getAllAds(){
+    public ResponseEntity<AdsDto> getAllAds() {
         return ResponseEntity.ok(adService.getAllAds());
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Добавление объявления")
     public ResponseEntity<AdDto> addAd(@RequestPart("properties") String propertiesJson,
-                                       @RequestPart("image")MultipartFile image,
+                                       @RequestPart("image") MultipartFile image,
                                        Authentication authentication) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         CreateOrUpdateAdDto properties = mapper.readValue(propertiesJson, CreateOrUpdateAdDto.class);
+        var violations = validator.validate(properties);
+        if (!violations.isEmpty()) {
+            throw new BadRequestException("Неверные данные объявления:" + violations.iterator().next()
+                    .getMessage());
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(adService.addAd(authentication.getName(),
                 properties, image));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Получение информации об объявлении")
-    public ResponseEntity<ExtendedAdDto> getAds(@PathVariable Integer id){
+    public ResponseEntity<ExtendedAdDto> getAds(@PathVariable Integer id) {
         return ResponseEntity.ok(adService.getAd(id));
     }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление объявления")
     public ResponseEntity<Void> removeAd(@PathVariable Integer id,
-                                         Authentication authentication){
+                                         Authentication authentication) {
         adService.removeAd(authentication.getName(), id);
         return ResponseEntity.noContent().build();
     }
@@ -59,14 +69,14 @@ public class AdsController {
     @PatchMapping("/{id}")
     @Operation(summary = "Обновление информации об объявлении")
     public ResponseEntity<AdDto> updateAds(@PathVariable Integer id,
-                                           @RequestBody CreateOrUpdateAdDto dto,
-                                           Authentication authentication){
+                                           @Valid @RequestBody CreateOrUpdateAdDto dto,
+                                           Authentication authentication) {
         return ResponseEntity.ok(adService.updateAd(authentication.getName(), id, dto));
     }
 
     @GetMapping("/me")
     @Operation(summary = "Получение объявлений авторизированного пользователя")
-    public ResponseEntity<AdsDto> getAdsMe(Authentication authentication){
+    public ResponseEntity<AdsDto> getAdsMe(Authentication authentication) {
         return ResponseEntity.ok(adService.getAdsMe(authentication.getName()));
     }
 
@@ -74,7 +84,7 @@ public class AdsController {
     @Operation(summary = "Обновление картинки объявления")
     public ResponseEntity<byte[]> updateImage(@PathVariable Integer id,
                                               @RequestPart("image") MultipartFile image,
-                                              Authentication authentication){
+                                              Authentication authentication) {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(adService.updateAdImage(authentication.getName(), id, image));

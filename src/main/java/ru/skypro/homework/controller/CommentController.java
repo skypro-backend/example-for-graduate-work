@@ -11,6 +11,8 @@ import ru.skypro.homework.dto.comments.CommentsDto;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDto;
 import ru.skypro.homework.service.CommentService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/ads")
 @Tag(name = "Комментарии")
@@ -27,7 +29,7 @@ public class CommentController {
     @PostMapping("/{id}/comments")
     @Operation(summary = "Добавление комментария к объявлению")
     public ResponseEntity<CommentDto> addComment(@PathVariable Integer id,
-                                                 @RequestBody CreateOrUpdateCommentDto dto,
+                                                 @Valid @RequestBody CreateOrUpdateCommentDto dto,
                                                  Authentication authentication) {
         return ResponseEntity.ok(commentService.addComment(authentication.getName(), id, dto));
     }
@@ -45,7 +47,7 @@ public class CommentController {
     @Operation(summary = "Обновление комментария")
     public ResponseEntity<CommentDto> updateComment(@PathVariable Integer adId,
                                                     @PathVariable Integer commentId,
-                                                    @RequestBody CreateOrUpdateCommentDto dto,
+                                                    @Valid @RequestBody CreateOrUpdateCommentDto dto,
                                                     Authentication authentication) {
         return ResponseEntity.ok(commentService.updateComment(authentication.getName(), adId, commentId, dto));
     }

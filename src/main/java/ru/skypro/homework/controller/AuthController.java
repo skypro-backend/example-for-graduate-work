@@ -13,6 +13,8 @@ import ru.skypro.homework.dto.users.Login;
 import ru.skypro.homework.dto.users.Register;
 import ru.skypro.homework.service.AuthService;
 
+import javax.validation.Valid;
+
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -23,14 +25,14 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Авторизация пользователя")
-    public ResponseEntity<Void> login(@RequestBody Login loginDto) {
+    public ResponseEntity<Void> login(@Valid @RequestBody Login loginDto) {
         authService.login(loginDto);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/register")
     @Operation(summary = "Регистрация пользователя")
-    public ResponseEntity<Void> register(@RequestBody Register register) {
+    public ResponseEntity<Void> register(@Valid @RequestBody Register register) {
         authService.register(register);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
