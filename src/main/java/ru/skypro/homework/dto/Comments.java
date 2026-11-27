@@ -1,0 +1,17 @@
+package ru.skypro.homework.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+import java.util.Collections;
+import java.util.List;
+
+@Data
+@Schema(description = "Список комментариев")
+public class Comments {
+    @Schema(description = "общее количество комментариев")
+    private Integer count = 0;
+
+    @Schema(description = "список комментариев")
+    private List<Comment> results = Collections.emptyList();
+}
