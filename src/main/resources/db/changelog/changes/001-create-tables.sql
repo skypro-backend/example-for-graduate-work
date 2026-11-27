@@ -1,3 +1,6 @@
+--liquibase formatted sql
+
+--changeset author:1
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(32) NOT NULL UNIQUE,
